@@ -1817,7 +1817,7 @@ static bool _alchemy_aux(obj_ptr obj, bool force)
 
     price = obj_value_real(obj);
 
-    if (price <= 0)
+    if (price <= 0 || no_selling)
     {
         msg_format("You turn %s to fool's gold.", o_name);
     }

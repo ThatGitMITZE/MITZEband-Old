@@ -2457,6 +2457,9 @@ option_type option_info[] =
     { &quickband,                   FALSE, OPT_PAGE_BIRTH, 6, 27,
     "quickband",                    "Makes the game much shorter and easier" },
 
+    { &no_selling,                  FALSE, OPT_PAGE_BIRTH, 6, 28,
+    "no_selling",                   "Prohibit selling to shops" },
+
     /*** Easy Object Auto-Destroyer ***/
 
     { &destroy_items,               FALSE, OPT_PAGE_AUTODESTROY, 7, 0,
