@@ -972,6 +972,7 @@ static void do_cmd_device_aux(obj_ptr obj)
     {
         if (flush_failure) flush();
         msg_print("The device has no charges left.");
+        energy_use = 0;
         return;
     }
 
