@@ -8565,7 +8565,7 @@ static cptr do_hex_spell(int spell, int mode)
                 msg_format("Finish casting '%^s'.", do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
                 p_ptr->magic_num1[0] &= ~(1L << HEX_RESTORE);
                 if (cont) p_ptr->magic_num2[0]--;
-                if (p_ptr->magic_num2) p_ptr->action = ACTION_NONE;
+                if (!p_ptr->magic_num2[0]) set_action(ACTION_NONE);
 
                 /* Redraw status */
                 p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
