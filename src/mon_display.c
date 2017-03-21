@@ -223,6 +223,8 @@ static void _display_type(monster_race *r_ptr, doc_ptr doc)
         vec_add(v, string_copy_s("<color:y>Good</color>"));
     if (r_ptr->flags3 & RF3_UNDEAD)
         vec_add(v, string_copy_s("<color:v>Undead</color>"));
+    if (r_ptr->flags3 & RF3_NONLIVING)
+        vec_add(v, string_copy_s("<color:U>Nonliving</color>"));
     if (r_ptr->flags3 & RF3_AMBERITE)
         vec_add(v, string_copy_s("<color:v>Amberite</color>"));
     if (r_ptr->flags3 & RF3_DRAGON)
