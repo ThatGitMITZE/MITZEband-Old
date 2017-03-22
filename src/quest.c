@@ -719,7 +719,10 @@ static quest_ptr _find_quest(int dungeon, int level)
 void quests_on_generate(int dungeon, int level)
 {
     quest_ptr q = _find_quest(dungeon, level);
-    assert(!_current);
+    /* N.B. level_gen() might fail for some reason, resulting in multiple
+     * consecutive calls here. We can either add another hook to notice the
+     * failed level_gen(), or try to detect this (unusual) error */
+    assert(!_current || (q && q->id == _current && q->status == QS_IN_PROGRESS));
     if (q)
     {
         _current = q->id;

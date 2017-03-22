@@ -1290,6 +1290,8 @@ static void _wiz_gather_stats(int which_dungeon, int level, int reps)
     dungeon_type = which_dungeon;
     for (i = 0; i < reps; i++)
     {
+        quests_on_leave();
+
         dun_level = level;
         prepare_change_floor_mode(CFM_RAND_PLACE);
         energy_use = 0;
