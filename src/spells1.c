@@ -1844,7 +1844,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
     bool seen = m_ptr->ml;
     bool seen_msg = seen;
 
-    bool slept = (bool)MON_CSLEEP(m_ptr);
+    bool slept = BOOL(MON_CSLEEP(m_ptr));
 
     /* Were the effects "obvious" (if seen)? */
     bool obvious = FALSE;
@@ -5893,9 +5893,9 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
     if (dam)
     {
         if (who > 0)
-            dam = mon_damage_mod_mon(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
+            dam = mon_damage_mod_mon(m_ptr, dam, typ == GF_PSY_SPEAR);
         else
-            dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
+            dam = mon_damage_mod(m_ptr, dam, typ == GF_PSY_SPEAR);
     }
     if (tmp > 0 && dam == 0)
         note = " is unharmed.";

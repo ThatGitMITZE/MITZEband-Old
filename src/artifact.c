@@ -1867,7 +1867,8 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     bool    a_cursed = FALSE;
     int     warrior_artifact_bias = 0;
     int     i;
-    bool    has_resistance = FALSE, boosted_ac = FALSE, boosted_dam = FALSE, boosted_hit = FALSE, esp_count = 0;
+    bool    has_resistance = FALSE, boosted_ac = FALSE, boosted_dam = FALSE, boosted_hit = FALSE;
+    int     esp_count = 0;
     int     lev = object_level;
     bool    is_falcon_sword = FALSE;
     int     max_a = MAX(o_ptr->to_a, 30);

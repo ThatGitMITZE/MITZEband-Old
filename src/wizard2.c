@@ -1605,7 +1605,7 @@ void do_cmd_debug(void)
 
     /* Wizard Light the Level */
     case 'w':
-        wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
+        wiz_lite(p_ptr->pclass == CLASS_NINJA);
         break;
 
     /* Increase Experience */
