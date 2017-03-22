@@ -4610,7 +4610,9 @@ void calc_bonuses(void)
             else if (!(have_flag(flgs, OF_RIDING)))
             {
                 int penalty;
-                if ((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY))
+                if ( p_ptr->pclass == CLASS_BEASTMASTER
+                  || p_ptr->pclass == CLASS_CAVALRY
+                  || skillmaster_riding_prof() >= RIDING_EXP_EXPERT )
                 {
                     penalty = 5;
                 }
@@ -4646,7 +4648,9 @@ void calc_bonuses(void)
     if (p_ptr->riding)
     {
         int penalty = 0;
-        if ((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY))
+        if ( p_ptr->pclass == CLASS_BEASTMASTER
+          || p_ptr->pclass == CLASS_CAVALRY
+          || skillmaster_riding_prof() >= RIDING_EXP_EXPERT )
         {
             if (p_ptr->shooter_info.tval_ammo != TV_ARROW) penalty = 5;
         }
