@@ -541,9 +541,9 @@ static _flag_info_t _brand_flags[] = {
     { OF_BRAND_FIRE,    "Brand Fire" },
     { OF_BRAND_COLD,    "Brand Cold" },
     { OF_BRAND_POIS,    "Brand Poison" },
-    { OF_BRAND_MANA,    "Brand Mana" },
+    { OF_BRAND_MANA,    "Brand Mana", object_is_melee_weapon },
     { OF_BRAND_CHAOS,   "Chaotic", object_is_melee_weapon },
-    { OF_BRAND_VAMP,    "Vampiric", object_is_melee_weapon },
+    { OF_BRAND_VAMP,    "Vampiric" },
     { OF_IMPACT,        "Impact", object_is_melee_weapon },
     { OF_STUN,          "Stun", object_is_melee_weapon },
     { OF_VORPAL,        "Vorpal", object_is_melee_weapon },
@@ -1027,7 +1027,8 @@ static bool _brands_p(object_type *o_ptr)
 {
     return object_is_melee_weapon(o_ptr)
         || object_is_ammo(o_ptr)
-        || object_is_bow(o_ptr);
+        || object_is_bow(o_ptr)
+        || o_ptr->tval == TV_RING;
 }
 
 static _command_t _commands[] = {

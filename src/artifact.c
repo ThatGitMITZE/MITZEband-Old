@@ -2358,13 +2358,13 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
                     add_flag(o_ptr->flags, OF_BLOWS);
                     has_pval = TRUE;
                 }
-                else if (one_in_(20))
+                else if (one_in_(50))
                 {
                     add_flag(o_ptr->flags, OF_XTRA_MIGHT);
                     if (!one_in_(7)) remove_flag(o_ptr->flags, OF_XTRA_SHOTS);
                     has_pval = TRUE;
                 }
-                else if (one_in_(20))
+                else if (one_in_(50))
                 {
                     add_flag(o_ptr->flags, OF_XTRA_SHOTS);
                     if (!one_in_(7)) remove_flag(o_ptr->flags, OF_XTRA_MIGHT);
@@ -2395,6 +2395,21 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
                     o_ptr->to_h += randint1(5) + m_bonus(5, lev);
                     o_ptr->to_d += randint1(5) + m_bonus(5, lev);
                 }
+                else if (one_in_(3))
+                {
+                    o_ptr->to_a += randint1(5) + m_bonus(5, lev);
+                }
+                else if (one_in_(20))
+                {
+                    switch (randint1(5))
+                    {
+                    case 1: add_flag(o_ptr->flags, OF_BRAND_ACID); break;
+                    case 2: add_flag(o_ptr->flags, OF_BRAND_ELEC); break;
+                    case 3: add_flag(o_ptr->flags, OF_BRAND_FIRE); break;
+                    case 4: add_flag(o_ptr->flags, OF_BRAND_COLD); break;
+                    case 5: add_flag(o_ptr->flags, OF_BRAND_VAMP); break;
+                    }
+                }
                 else
                 {
                     one_high_resistance(o_ptr);
@@ -2419,7 +2434,16 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
                     one_high_resistance(o_ptr);
                     break;
                 }
-            case 5: case 6:
+            case 5:
+                if (one_in_(2))
+                {
+                    random_plus(o_ptr);
+                    has_pval = TRUE;
+                }
+                else
+                    random_resistance(o_ptr);
+                break;
+            case 6:
                 random_resistance(o_ptr);
                 break;
             case 7:
