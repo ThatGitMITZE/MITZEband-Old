@@ -3178,13 +3178,13 @@ bool reforge_artifact(object_type *src, object_type *dest, int fame)
 
 bool create_replacement_art(int a_idx, object_type *o_ptr)
 {
-    object_type        forge1 = {0};
-    object_type        forge2 = {0};
-    object_type        best = {0}, worst = {0};
-    int                base_power, best_power, power = 0, worst_power = 10000000;
-    int                old_level;
-    artifact_type  *a_ptr = &a_info[a_idx];
-    int                i;
+    object_type    forge1 = {0};
+    object_type    forge2 = {0};
+    object_type    best = {0}, worst = {0};
+    int            base_power, best_power, power = 0, worst_power = 10000000;
+    int            old_level;
+    artifact_type *a_ptr = &a_info[a_idx];
+    int            i;
 
     if (!a_ptr->name) return FALSE;
     if (no_artifacts) return FALSE;
@@ -3205,9 +3205,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     best_power = -10000000;
     power = 0;
     old_level = object_level;
-
-    if (object_level < a_ptr->level)
-        object_level = a_ptr->level;
+    object_level = a_ptr->level;
 
     for (i = 0; i < 10000; i++)
     {
