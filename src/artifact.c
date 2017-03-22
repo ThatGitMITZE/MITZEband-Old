@@ -3322,7 +3322,7 @@ bool create_named_art(int a_idx, int y, int x)
 {
     if (no_artifacts) return FALSE;
 
-    if (random_artifacts)
+    if (random_artifacts && randint0(100) < random_artifact_pct)
     {
         object_type forge;
         if (create_replacement_art(a_idx, &forge))

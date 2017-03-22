@@ -1256,6 +1256,9 @@ static void _wiz_inspect_objects(int level)
         if (o_ptr->name2)
             stats_add_ego(o_ptr);
 
+        if (o_ptr->name1 || o_ptr->name3)
+            _wiz_stats_log_obj(level, o_ptr);
+
         if (0) _wiz_stats_log_speed(level, o_ptr);
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
         if (0) _wiz_stats_log_devices(level, o_ptr);
@@ -1265,13 +1268,13 @@ static void _wiz_inspect_objects(int level)
         if (0 && o_ptr->name2 && !object_is_device(o_ptr) && !object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_BOW)
+        if (0 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_BOW)
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_QUIVER)
+        if (0 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_QUIVER)
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
+        if (0 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))

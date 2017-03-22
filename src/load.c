@@ -222,6 +222,10 @@ static void rd_options(savefile_ptr file)
     delay_factor = savefile_read_byte(file);
     hitpoint_warn = savefile_read_byte(file);
     mana_warn = savefile_read_byte(file);
+    if (savefile_is_older_than(file, 6, 0, 1, 1))
+        random_artifact_pct = 100;
+    else
+        random_artifact_pct = savefile_read_byte(file);
 
     /*** Cheating options ***/
     c = savefile_read_u16b(file);
