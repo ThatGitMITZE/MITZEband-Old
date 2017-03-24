@@ -6543,9 +6543,12 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
        innate attacks, and are non-magical. Evasion and Nimble Dodge
        only work on innate attacks. Magic Resistance works on everything
        else.
+       96+1 = RF4_THROW
+       96+3 = RF4_ROCKET
+       96+4 = RF4_SHOOT
      */
     if ( (hack_m_spell >= 96+7 && hack_m_spell <= 96+31)
-      || hack_m_spell == 96+1 )
+      || hack_m_spell == 96+1 || hack_m_spell == 96+3 || hack_m_spell == 96+4)
     {
         bool evaded = FALSE; /* Demigod Scout with Evasion talent *and* Nimble Dodge cast? */
 
