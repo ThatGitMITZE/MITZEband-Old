@@ -46,7 +46,7 @@ void rune_calc_stats(object_type *o_ptr, s16b stats[MAX_STATS])
     }
     if (o_ptr->rune == RUNE_MIND)
     {
-        if (o_ptr->tval == TV_HELM)
+        if (object_is_helmet(o_ptr))
             stats[A_INT] += 2;
     }
     if (o_ptr->rune == RUNE_MIGHT)
@@ -215,7 +215,7 @@ bool rune_add(object_type *o_ptr, int which, bool prompt)    /* Birthing needs a
 
     case RUNE_SEEING:
         _add_flag(o_ptr, OF_RES_BLIND);
-        if (o_ptr->tval == TV_HELM)
+        if (object_is_helmet(o_ptr))
             _add_flag(o_ptr, OF_SEE_INVIS);
         break;
 
@@ -249,7 +249,7 @@ bool rune_add(object_type *o_ptr, int which, bool prompt)    /* Birthing needs a
 
     case RUNE_MIND:
         _add_flag(o_ptr, OF_TELEPATHY);
-        if (o_ptr->tval == TV_HELM)
+        if (object_is_helmet(o_ptr))
             _add_flag(o_ptr, OF_SUST_INT);
         break;
 
@@ -565,7 +565,7 @@ static void _rune_of_water_spell(int cmd, variant *res)
 
 static bool _rune_of_light_pred(object_type *o_ptr)
 {
-    if ( o_ptr->tval == TV_HELM
+    if ( object_is_helmet(o_ptr)
       || o_ptr->tval == TV_LITE )
     {
         return TRUE;
@@ -602,7 +602,7 @@ static bool _rune_of_shadow_pred(object_type *o_ptr)
 {
     if ( object_is_shield(o_ptr)
       || object_is_body_armour(o_ptr)
-      || o_ptr->tval == TV_HELM
+      || object_is_helmet(o_ptr)
       || o_ptr->tval == TV_CLOAK )
     {
         return TRUE;
@@ -674,7 +674,7 @@ static void _rune_of_earth_spell(int cmd, variant *res)
 
 static bool _rune_of_understanding_pred(object_type *o_ptr)
 {
-    if ( o_ptr->tval == TV_HELM
+    if ( object_is_helmet(o_ptr)
       || o_ptr->tval == TV_LITE )
     {
         return TRUE;
@@ -771,7 +771,7 @@ static void _rune_of_haste_spell(int cmd, variant *res)
 
 static bool _rune_of_seeing_pred(object_type *o_ptr)
 {
-    if ( o_ptr->tval == TV_HELM
+    if ( object_is_helmet(o_ptr)
       || o_ptr->tval == TV_LITE )
     {
         return TRUE;
@@ -869,7 +869,7 @@ static void _rune_of_life_spell(int cmd, variant *res)
 static bool _rune_of_stability_pred(object_type *o_ptr)
 {
     if ( object_is_body_armour(o_ptr)
-      || o_ptr->tval == TV_HELM
+      || object_is_helmet(o_ptr)
       || o_ptr->tval == TV_CLOAK
       || o_ptr->tval == TV_BOOTS )
     {
@@ -934,7 +934,7 @@ static bool _rune_of_death_pred(object_type *o_ptr)
     if ( object_is_melee_weapon(o_ptr)
       || object_is_shield(o_ptr)
       || object_is_body_armour(o_ptr)
-      || o_ptr->tval == TV_HELM )
+      || object_is_helmet(o_ptr) )
     {
         return TRUE;
     }
@@ -968,7 +968,7 @@ static void _rune_of_death_spell(int cmd, variant *res)
 
 static bool _rune_of_mind_pred(object_type *o_ptr)
 {
-    if ( o_ptr->tval == TV_HELM 
+    if ( object_is_helmet(o_ptr) 
       || o_ptr->tval == TV_LITE ) 
     {
         return TRUE;
@@ -1004,7 +1004,7 @@ static void _rune_of_mind_spell(int cmd, variant *res)
 static bool _rune_of_might_pred(object_type *o_ptr)
 {
     if ( object_is_body_armour(o_ptr) 
-      || o_ptr->tval == TV_HELM ) 
+      || object_is_helmet(o_ptr) ) 
     {
         return TRUE;
     }
@@ -1102,7 +1102,7 @@ static bool _rune_of_immortality_pred(object_type *o_ptr)
 {
     if ( object_is_shield(o_ptr) 
       || object_is_body_armour(o_ptr)
-      || o_ptr->tval == TV_HELM 
+      || object_is_helmet(o_ptr) 
       || o_ptr->tval == TV_CLOAK )
     {
         return TRUE;

@@ -680,9 +680,8 @@ static cptr _do_potion(int sval, int mode)
             int amt = _potion_power(damroll(5, 6) + 5);
 
             if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-                amt = (amt + 2)/3;
-
-            if (sp_player(amt))
+                msg_print("You are unaffected.");
+            else if (sp_player(amt))
             {
                 msg_print("You feel your mind clear.");
                 device_noticed = TRUE;
@@ -697,9 +696,8 @@ static cptr _do_potion(int sval, int mode)
             int amt = _potion_power(damroll(10, 10) + 15);
 
             if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-                amt = (amt + 2)/3;
-
-            if (sp_player(amt))
+                msg_print("You are unaffected.");
+            else if (sp_player(amt))
             {
                 msg_print("You feel your mind clear.");
                 device_noticed = TRUE;
@@ -4539,9 +4537,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (cast)
         {
             if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-                amt = (amt + 2)/3;
-
-            if (sp_player(_BOOST(amt)))
+                msg_print("You are unaffected.");
+            else if (sp_player(_BOOST(amt)))
             {
                 msg_print("You feel your mind clear.");
                 device_noticed = TRUE;
@@ -4560,9 +4557,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (cast)
         {
             if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-                amt = (amt + 2)/3;
-
-            if (sp_player(_BOOST(amt)))
+                msg_print("You are unaffected.");
+            else if (sp_player(_BOOST(amt)))
             {
                 msg_print("You feel your mind clear.");
                 device_noticed = TRUE;
