@@ -4515,6 +4515,7 @@ void calc_bonuses(void)
         }
 
         if ( i % 2 == 1
+          && p_ptr->weapon_info[i-1].wield_how != WIELD_NONE
           && o_ptr->tval == TV_SWORD
           && (o_ptr->sval == SV_MAIN_GAUCHE || o_ptr->sval == SV_WAKIZASHI) )
         {
