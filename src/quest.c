@@ -786,8 +786,12 @@ void quests_on_get_obj(obj_ptr obj)
     q = quests_get(_current);
     assert(q);
     assert(obj);
-    if (q->goal == QG_FIND_ART && (obj->name1 == q->goal_idx || obj->name3 == q->goal_idx))
+    if ( q->goal == QG_FIND_ART
+      && (obj->name1 == q->goal_idx || obj->name3 == q->goal_idx)
+      && q->status == QS_IN_PROGRESS )
+    {
         quest_complete(q, point(px, py));
+    }
 }
 
 bool quests_check_leave(void)

@@ -3950,6 +3950,7 @@ static int _collect_arts(int grp_cur, int art_idx[], bool show_all)
         if (!a_ptr->found)
         {
             if (!show_all) continue;
+            /*if (!a_ptr->generated) continue;*/
             if (!art_has_lore(a_ptr)) continue;
         }
         if (!create_named_art_aux_aux(i, &forge)) continue;
