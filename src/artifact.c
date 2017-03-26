@@ -3225,7 +3225,9 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     {
         forge1.to_a = MAX(10, forge1.to_a);
     }
-    base_power = MAX(7500, obj_value_real(&forge1));
+    base_power = obj_value_real(&forge1);
+    if (!obj_is_ammo(&forge1) && base_power < 7500)
+        base_power = 7500;
 
     best_power = -10000000;
     power = 0;
