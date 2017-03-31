@@ -132,9 +132,9 @@ static void _display_level(monster_race *r_ptr, doc_ptr doc)
     }
     else
         doc_insert(doc, "<color:y>?</color>");
-    if (spoiler_hack)
-        doc_printf(doc, " <color:G>(R%d)</color>", r_ptr->rarity);
     doc_newline(doc);
+    if (spoiler_hack)
+        doc_printf(doc, "Rarity  : <color:G>%d</color>\n", r_ptr->rarity);
 }
 static void _display_ac(monster_race *r_ptr, doc_ptr doc)
 {

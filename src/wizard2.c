@@ -1021,84 +1021,6 @@ static void do_cmd_wiz_create_feature(void)
     prev_mimic = tmp_mimic;
 }
 
-
-#define NUM_O_SET 8
-#define NUM_O_BIT 32
-
-/*
- * Hack -- Dump option bits usage
- */
-static void do_cmd_dump_options(void)
-{
-    int  i, j;
-    FILE *fff;
-    char buf[1024];
-    int  **exist;
-
-    /* Build the filename */
-    path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
-
-    /* File type is "TEXT" */
-    FILE_TYPE(FILE_TYPE_TEXT);
-
-    /* Open the file */
-    fff = my_fopen(buf, "a");
-
-    /* Oops */
-    if (!fff)
-    {
-        msg_format("Failed to open file %s.", buf);
-        msg_print(NULL);
-        return;
-    }
-
-    /* Allocate the "exist" array (2-dimension) */
-    C_MAKE(exist, NUM_O_SET, int *);
-    C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
-    for (i = 1; i < NUM_O_SET; i++) exist[i] = *exist + i * NUM_O_BIT;
-
-    /* Check for exist option bits */
-    for (i = 0; option_info[i].o_desc; i++)
-    {
-        option_type *ot_ptr = &option_info[i];
-        if (ot_ptr->o_var) exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
-    }
-
-    fprintf(fff, "[Option bits usage on PosChengband %d.%d.%d]\n\n",
-            VER_MAJOR, VER_MINOR, VER_PATCH);
-
-    fputs("Set - Bit (Page) Option Name\n", fff);
-    fputs("------------------------------------------------\n", fff);
-    /* Dump option bits usage */
-    for (i = 0; i < NUM_O_SET; i++)
-    {
-        for (j = 0; j < NUM_O_BIT; j++)
-        {
-            if (exist[i][j])
-            {
-                option_type *ot_ptr = &option_info[exist[i][j] - 1];
-                fprintf(fff, "  %d -  %02d (%4d) %s\n",
-                        i, j, ot_ptr->o_page, ot_ptr->o_text);
-            }
-            else
-            {
-                fprintf(fff, "  %d -  %02d\n", i, j);
-            }
-        }
-        fputc('\n', fff);
-    }
-
-    /* Free the "exist" array (2-dimension) */
-    C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
-    C_KILL(exist, NUM_O_SET, int *);
-
-    /* Close it */
-    my_fclose(fff);
-
-    msg_format("Option bits usage dump saved to file %s.", buf);
-}
-
-
 #ifdef ALLOW_SPOILERS
 
 /*
@@ -1374,10 +1296,17 @@ void do_cmd_debug(void)
 
     /* Create a named artifact */
     case 'C':
-        n = get_quantity("Which One? ", max_a_idx);
-        wiz_create_named_art(n);
+    {
+        char buf[81];
+        buf[0] = 0;
+        if (msg_input("Which artifact? ", buf, 80))
+        {
+            int idx = parse_lookup_artifact(buf, 0);
+            if (!idx) idx = atoi(buf);
+            wiz_create_named_art(idx);
+        }
         break;
-
+    }
     /* Detect everything */
     case 'd':
         detect_all(DETECT_RAD_ALL * 3);
@@ -1532,14 +1461,17 @@ void do_cmd_debug(void)
 
     /* Summon Named Monster */
     case 'n':
-        n = get_quantity("Which One? ", 2000);
-        do_cmd_wiz_named(n);
+    {
+        char buf[81];
+        buf[0] = 0;
+        if (msg_input("Which monster? ", buf, 80))
+        {
+            int idx = parse_lookup_monster(buf, 0);
+            if (!idx) idx = atoi(buf);
+            do_cmd_wiz_named(idx);
+        }
         break;
-
-    /* Dump option bits usage */
-    case 'O':
-        do_cmd_dump_options();
-        break;
+    }
 
     /* Object playing routines */
     case 'o':
