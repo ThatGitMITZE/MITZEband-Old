@@ -748,7 +748,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ang_eng.rc">
+    <ResourceCompile Include="poschengband.rc">
       <Filter>Header Files\Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

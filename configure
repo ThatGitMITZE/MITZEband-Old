@@ -4852,7 +4852,6 @@ fi
 
 MAINFILES="\$(BASEMAINFILES)"
 
-
 if test "$enable_curses" = "yes"; then
 
 # Check whether --with-ncurses-prefix was given.
@@ -6112,7 +6111,7 @@ $as_echo "#define USE_WIN 1" >>confdefs.h
 
     CFLAGS="${CFLAGS} -DWINDOWS -static -Iwin/include"
     LDFLAGS="${LDFLAGS} -Lwin/lib"
-    LIBS="${LIBS} -mwindows -lwinmm -lzlib -llibpng -lmsimg32"
+    LIBS="${LIBS} -mwindows -lwinmm"
     MAINFILES="\$(WINMAINFILES)"
 fi
 

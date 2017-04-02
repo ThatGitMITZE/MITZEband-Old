@@ -333,7 +333,7 @@
     <ClInclude Include="z-virt.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ang_eng.rc" />
+    <ResourceCompile Include="poschengband.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
