@@ -248,6 +248,7 @@ static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
     cost -= _check_flag_and_score(flgs, OF_VULN_SOUND, 5000, &count);
     cost -= _check_flag_and_score(flgs, OF_VULN_SHARDS, 5000, &count);
     cost -= _check_flag_and_score(flgs, OF_VULN_DISEN, 5000, &count);
+    if (cost < 0) cost = 0;
 
     return (u32b) cost;
 }
