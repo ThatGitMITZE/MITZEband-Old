@@ -283,7 +283,7 @@ static void _display(_ui_context_ptr context)
     doc_clear(doc);
     doc_insert(doc, "<style:table>");
     doc_printf(doc, "%*s<color:G>%s</color>\n\n",
-        (r.cx - 10)/2, "", inv_name(context->inv));
+        (doc_width(doc) - 10)/2, "", inv_name(context->inv));
 
     shop_display_inv(doc, context->inv, context->top, context->page_size);
     
