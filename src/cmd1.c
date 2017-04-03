@@ -5088,7 +5088,10 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
                 race_ptr->move_player();
 
             if (!dun_level && !p_ptr->wild_mode && !p_ptr->inside_arena && !p_ptr->inside_battle)
+            {
                 wilderness_move_player(ox, oy);
+                c_ptr = &cave[py][px]; /* re-aquire in case of wilderness scroll */
+            }
         }
 
         /* Window stuff */
