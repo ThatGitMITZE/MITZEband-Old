@@ -1493,7 +1493,9 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
         obj->sval = SV_POTION_SALT_WATER;
         obj->k_idx = lookup_kind(TV_POTION, SV_POTION_SALT_WATER);
     }
-    if (_add_obj(shop, obj))
+
+    price = obj_value(obj); /* correctly handle unidentified items */
+    if (price > 0 && _add_obj(shop, obj))
         inv_sort(shop->inv);
     return TRUE;
 }
