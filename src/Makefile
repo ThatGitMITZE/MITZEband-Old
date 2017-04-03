@@ -19,6 +19,9 @@ CFLAGS += -D_GNU_SOURCE=1 -DBUILD_ID=${VERSION} -I. -std=c99 -Wdeclaration-after
 #Use this for release code:
 #CFLAGS += -D_GNU_SOURCE=1 -DBUILD_ID=${VERSION} -I. -std=c99 -Wdeclaration-after-statement -DNDEBUG -O2 -fno-omit-frame-pointer
 
+#Use this for mingw XXX how does V handle this?
+#CFLAGS += -DBUILD_ID=${VERSION} -I. -std=c99 -Wdeclaration-after-statement -DNDEBUG -O2 -fno-omit-frame-pointer
+
 CLEAN = poschengband.o $(OBJECTS) win/poschengband.res
 DISTCLEAN = autoconf.h
 
