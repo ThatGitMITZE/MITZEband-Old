@@ -444,6 +444,12 @@ static void _drop(_ui_context_ptr context)
         if (!msg_input_num("Quantity", &amt, 1, prompt.obj->number)) return;
     }
 
+    if (inv_loc(context->inv) == INV_MUSEUM)
+    {
+        /* *identify* here rather than in _drop_aux in case the user splits a pile. */
+        obj_identify_fully(prompt.obj);
+    }
+
     if (amt < prompt.obj->number)
     {
         obj_t copy = *prompt.obj;
