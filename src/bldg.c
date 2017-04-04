@@ -2449,7 +2449,15 @@ static bool _gamble_shop_aux(object_type *o_ptr)
     {
         if (autopick_list[auto_pick_idx].action & DO_AUTODESTROY)
         {
-            msg_print("You destroy your prize.");
+            race_t  *race_ptr = get_race();
+            class_t *class_ptr = get_class();
+            bool     handled = FALSE;
+            if (!handled && race_ptr->destroy_object)
+                handled = race_ptr->destroy_object(o_ptr);
+            if (!handled && class_ptr->destroy_object)
+                handled = class_ptr->destroy_object(o_ptr);
+            if (!handled)
+                msg_format("You destroy %s.", buf);
             return TRUE;
         }
     }
