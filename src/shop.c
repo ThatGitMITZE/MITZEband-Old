@@ -1497,6 +1497,8 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
     price = obj_value(obj); /* correctly handle unidentified items */
     if (price > 0 && _add_obj(shop, obj))
         inv_sort(shop->inv);
+    else
+        obj->number = 0;
     return TRUE;
 }
 
