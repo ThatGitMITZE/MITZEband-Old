@@ -3546,6 +3546,7 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 
         /* Skip empty race */
         if (!r_ptr->name) continue;
+        if (!p_ptr->wizard && (r_ptr->flagsx & RFX_SUPPRESS)) continue;
 
         /* Require known monsters */
         if (!(mode & 0x02) && !easy_lore && !r_ptr->r_sights) continue;

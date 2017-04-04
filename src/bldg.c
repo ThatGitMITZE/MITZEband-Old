@@ -3098,6 +3098,8 @@ static bool research_mon(void)
         /* Empty monster */
         if (!r_ptr->name) continue;
 
+        if (r_ptr->flagsx & RFX_SUPPRESS) continue;
+
         /* XTRA HACK WHATSEARCH */
         /* Require non-unique monsters if needed */
         if (norm && (r_ptr->flags1 & (RF1_UNIQUE))) continue;
