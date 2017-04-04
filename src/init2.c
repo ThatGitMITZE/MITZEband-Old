@@ -20,6 +20,10 @@
 #include <sys/types.h>
 #endif
 
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
+
 #if defined (WINDOWS) && !defined (CYGWIN)
 # define my_mkdir(path, perms) mkdir(path)
 #elif defined(HAVE_MKDIR) || defined(MACH_O_CARBON) || defined (CYGWIN)
