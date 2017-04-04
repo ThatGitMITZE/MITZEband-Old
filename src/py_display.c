@@ -2121,6 +2121,9 @@ static void _build_options(doc_ptr doc)
     if (no_egos)
         doc_printf(doc, " No Egos:            Enabled\n");
 
+    if (reduce_uniques)
+        doc_printf(doc, " Reduce Uniques:     %d%%\n", reduce_uniques_pct);
+
     if (p_ptr->noscore)
         doc_printf(doc, "\n <color:v>You have done something illegal.</color>\n");
 

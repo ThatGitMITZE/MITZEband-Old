@@ -2448,6 +2448,9 @@ option_type option_info[] =
     { &no_egos,                            FALSE, OPT_PAGE_BIRTH, 6, 25,
     "no_egos",                            "Never create ego items" },
 
+    { &reduce_uniques,                FALSE, OPT_PAGE_BIRTH, 6, 26,
+    "reduce_uniques",                    "Reduce the number of uniques (randomly)" },
+
     /*** Easy Object Auto-Destroyer ***/
 
     { &destroy_items,               FALSE, OPT_PAGE_AUTODESTROY, 7, 0,

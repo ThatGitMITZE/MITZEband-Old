@@ -1033,7 +1033,6 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
 
         /* Assume some "obvious" flags */
         if (r_ptr->flags1 & RF1_UNIQUE)  copy.flags1 |= RF1_UNIQUE;
-        if (r_ptr->flags1 & RF1_QUESTOR) copy.flags1 |= RF1_QUESTOR;
         if (r_ptr->flags1 & RF1_MALE)    copy.flags1 |= RF1_MALE;
         if (r_ptr->flags1 & RF1_FEMALE)  copy.flags1 |= RF1_FEMALE;
 

@@ -307,6 +307,8 @@ byte random_artifact_pct = 100;
 bool no_artifacts;
 bool no_egos;
 bool enable_virtues;
+bool reduce_uniques;
+byte reduce_uniques_pct = 100; /* This is the pct of uniques to face */
 
 /*** Easy Object Auto-Destroyer ***/
 
