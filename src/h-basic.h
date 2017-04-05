@@ -51,6 +51,7 @@
  */
 #define HAVE_FCNTL_H
 #define HAVE_STAT
+#define HAVE_USLEEP
 
 #endif /* HAVE_CONFIG_H */
 

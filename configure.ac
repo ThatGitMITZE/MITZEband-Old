@@ -81,7 +81,7 @@ AC_CHECK_HEADERS([fcntl.h stdint.h])
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_TYPE_SIGNAL
-AC_CHECK_FUNCS([mkdir setresgid setegid stat])
+AC_CHECK_FUNCS([mkdir setresgid setegid stat mkstemp usleep])
 
 dnl needed because h-basic.h checks for this define for autoconf support.
 CFLAGS="$CFLAGS -DHAVE_CONFIG_H"

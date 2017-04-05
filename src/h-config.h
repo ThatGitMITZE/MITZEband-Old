@@ -261,7 +261,6 @@
 //# define FILE_TYPE(X) (_ftype = (X))
 //#else
 # define FILE_TYPE(X) ((void)0)
-#define HAVE_USLEEP
 //#endif
 
 
@@ -277,33 +276,6 @@
 #if defined(linux)
 # define HAS_STRICMP
 # define stricmp strcasecmp
-#endif
-
-
-/*
- * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
- *
- * Note that this is only relevant for "SET_UID" machines.
- * Note that new "SOLARIS" and "SGI" machines have "usleep()".
- */
-#if defined(SET_UID)
-# if !defined(HPUX) && !defined(ULTRIX) && !defined(ISC)
-#  define HAVE_USLEEP
-# endif
-#endif
-
-#ifdef USE_IBM
-# ifndef HAVE_USLEEP
-#  define HAVE_USLEEP /* Set for gcc (djgpp-v2), TY */
-# endif
-#endif
-
-/* XXX These should be set in autoconf.h, no? Anyway, mingw doesn't like mkstemp */
-#if defined(_GNU_SOURCE) && !defined(WINDOWS)
-#undef  HAVE_MKSTEMP
-#define HAVE_MKSTEMP 1
-#undef  HAVE_USLEEP
-#define HAVE_USLEEP 1
 #endif
 
 #endif /* INCLUDED_H_CONFIG_H */
