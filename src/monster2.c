@@ -1747,8 +1747,6 @@ s16b get_mon_num(int level)
     if (r_info[table[i].index].flags1 & RF1_UNIQUE)
         unique_count++;
 
-    assert(!(r_info[table[i].index].flagsx & RFX_SUPPRESS));
-
     /* Result */
     return (table[i].index);
 }
