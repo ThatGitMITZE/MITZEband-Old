@@ -1811,8 +1811,9 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
     bool            seen, pron;
     bool            named = FALSE;
 
-    /* Hack: See Issue 116 */
-    if (m_ptr->nickname && !(mode & MD_NO_PET_ABBREV))
+    /* Hack: Chengband requested to just show the pet's name (e.g. 'Stinky' vs
+     * 'Your super-duper multi-hued behemoth called Stinky') */
+    if (m_ptr->nickname && !(mode & MD_NO_PET_ABBREV) && !(mode & MD_PRON_VISIBLE))
     {
         sprintf(desc, "%s", quark_str(m_ptr->nickname));
         return;
