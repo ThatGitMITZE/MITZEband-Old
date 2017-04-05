@@ -2121,7 +2121,7 @@ void do_cmd_pet(void)
                     prt(buf, y + ctr, x);
                 }
 
-                prt("", y + MIN(ctr, 17), x);
+                prt("", y + MIN(ctr, 18), x);
             }
 
             /* Hide the list */
