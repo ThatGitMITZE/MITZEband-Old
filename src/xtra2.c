@@ -507,6 +507,7 @@ byte get_monster_drop_ct(monster_type *m_ptr)
     /* Hack: There are currently too many objects, IMO.
        Please rescale in r_info rather than the following! */
     if ( number > 2
+      && !quickband
       && !(r_ptr->flags1 & RF1_DROP_GREAT)
       && !(r_ptr->flags1 & RF1_UNIQUE) )
     {

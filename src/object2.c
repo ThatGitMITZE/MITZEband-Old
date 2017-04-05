@@ -1985,7 +1985,7 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
     int maxf2 = d_info[dungeon_type].obj_great;
 
     if (p_ptr->personality == PERS_MUNCHKIN) lev += randint0(p_ptr->lev/2+10);
-    if (quickband)
+    if (quickband && !(mode & AM_STOCK_TOWN))
     {
         lev += 10;
         maxf1 += 10;
