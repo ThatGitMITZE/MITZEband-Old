@@ -298,7 +298,8 @@
 # endif
 #endif
 
-#ifdef _GNU_SOURCE
+/* XXX These should be set in autoconf.h, no? Anyway, mingw doesn't like mkstemp */
+#if defined(_GNU_SOURCE) && !defined(WINDOWS)
 #undef  HAVE_MKSTEMP
 #define HAVE_MKSTEMP 1
 #undef  HAVE_USLEEP
