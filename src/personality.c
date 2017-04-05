@@ -384,6 +384,7 @@ static personality_ptr _get_munchkin_personality(void)
 
         me.life = 150;
         me.exp = 50;
+        me.flags = DEPRECATED;
 
         me.birth = _munchkin_birth;
         me.calc_bonuses = _munchkin_calc_bonuses;

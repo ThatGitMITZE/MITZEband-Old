@@ -612,6 +612,7 @@ static vec_ptr _pers_choices(void)
     for (i = 0; i < MAX_PERSONALITIES; i++)
     {
         personality_ptr pers_ptr = get_personality_aux(i);
+        if (pers_ptr->flags & DEPRECATED) continue;
         vec_add(v, pers_ptr);
     }
     vec_sort(v, (vec_cmp_f)_pers_cmp);

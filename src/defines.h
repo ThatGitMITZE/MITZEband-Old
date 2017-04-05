@@ -23,7 +23,7 @@
 
 #define GAME_MODE_BEGINNER  0
 #define GAME_MODE_NORMAL    1
-#define GAME_MODE_REAL_LIFE 2
+#define GAME_MODE_XXX       2
 #define GAME_MODE_MONSTER   3
 #define GAME_MODE_MAX       4
 
@@ -720,6 +720,8 @@
 #define CLASS_SENSE2_SLOW    0x0080
 #define CLASS_SENSE2_MED     0x0100
 #define CLASS_SENSE2_FAST    0x0200
+
+#define DEPRECATED           0x80000000 /* race, class, personality (TODO) */
 
 /* Mimicry uses races too ... Its just that players
    cannot choose these races during birth. */
