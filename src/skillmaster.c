@@ -400,7 +400,7 @@ static void _melee_init_class(class_t *class_ptr)
     class_ptr->stats[A_INT] += row.int_;
 
     pts = _get_skill_pts(_TYPE_MELEE, _MARTIAL_ARTS);
-    class_ptr->stats[A_DEX] += (pts + 1)/3;
+    class_ptr->stats[A_DEX] += pts/4;
 }
 
 typedef struct { int to_h; int to_d; int prof; int blows_max; int blows_mult; int ma_wgt; } _melee_info_t;
