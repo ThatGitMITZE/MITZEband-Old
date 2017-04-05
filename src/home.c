@@ -216,8 +216,8 @@ static void _ui(_ui_context_ptr context)
         {
             switch (cmd)
             {
-            case 'g': _get(context); break;
-            case 'd': _drop(context); break;
+            case 'g': case 'b': case 'p':  _get(context); break;
+            case 'd': case 's':  _drop(context); break;
             case 'x': _examine(context); break;
             case 'r': _remove(context); break;
             case '?':
