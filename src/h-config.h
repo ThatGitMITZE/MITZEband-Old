@@ -229,42 +229,27 @@
 #endif
 
 
-/*
+/**
  * Every system seems to use its own symbol as a path separator.
+ *
  * Default to the standard Unix slash, but attempt to change this
  * for various other systems.  Note that any system that uses the
- * "period" as a separator (i.e. ACORN) will have to pretend that
+ * "period" as a separator (i.e. RISCOS) will have to pretend that
  * it uses the slash, and do its own mapping of period <-> slash.
- * Note that the VM system uses a "flat" directory, and thus uses
- * the empty string for "PATH_SEP".
+ *
+ * It is most definitely wrong to have such things here.  Platform-specific
+ * code should handle shifting Angband filenames to platform ones. XXX
  */
 #undef PATH_SEP
 #define PATH_SEP "/"
-#ifdef MACINTOSH
-# undef PATH_SEP
-# define PATH_SEP ":"
-#endif
-#if defined(WINDOWS) || defined(WINNT)
-# undef PATH_SEP
-# define PATH_SEP "\\"
-#endif
-#if defined(MSDOS) || defined(OS2) || defined(USE_EMX)
-# undef PATH_SEP
-# define PATH_SEP "\\"
-#endif
-#ifdef AMIGA
-# undef PATH_SEP
-# define PATH_SEP "/"
-#endif
-#ifdef __GO32__
-# undef PATH_SEP
-# define PATH_SEP "/"
-#endif
-#ifdef VM
-# undef PATH_SEP
-# define PATH_SEP ""
-#endif
+#define PATH_SEPC '/'
 
+#ifdef WINDOWS
+# undef PATH_SEP
+# undef PATH_SEPC
+# define PATH_SEP "\\"
+# define PATH_SEPC '\\'
+#endif
 
 /*
  * The Macintosh allows the use of a "file type" when creating a file

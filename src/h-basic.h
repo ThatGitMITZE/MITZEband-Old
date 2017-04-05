@@ -12,30 +12,51 @@
  */
 
 #ifdef HAVE_CONFIG_H
+
 #include "autoconf.h"
-#endif /* HAVE_CONFIG_H */
+
+#else
 
 /**
- * Every system seems to use its own symbol as a path separator.
- *
- * Default to the standard Unix slash, but attempt to change this
- * for various other systems.  Note that any system that uses the
- * "period" as a separator (i.e. RISCOS) will have to pretend that
- * it uses the slash, and do its own mapping of period <-> slash.
- *
- * It is most definitely wrong to have such things here.  Platform-specific
- * code should handle shifting Angband filenames to platform ones. XXX
+ * Native MSVC compiler doesn't understand inline or snprintf
  */
-#undef PATH_SEP
-#define PATH_SEP "/"
-#define PATH_SEPC '/'
-
-#ifdef WINDOWS
-# undef PATH_SEP
-# undef PATH_SEPC
-# define PATH_SEP "\\"
-# define PATH_SEPC '\\'
+#ifdef _MSC_VER
+#	define inline __inline
+#	define snprintf _snprintf
 #endif
+
+/* Necessary? */
+#ifdef NDS
+# include <fat.h>
+# include <unistd.h>
+# include <reent.h>
+# include <sys/iosupport.h>
+# include <errno.h>
+#endif
+
+/**
+ * Using C99, assume we have stdint and stdbool
+ */
+# if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) \
+  || (defined(_MSC_VER) && _MSC_VER >= 1600L)
+#  define HAVE_STDINT_H
+# endif
+
+# if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+#  define HAVE_STDbool_H
+# endif
+
+/**
+ * Everyone except RISC OS has fcntl.h and sys/stat.h
+ */
+#define HAVE_FCNTL_H
+#define HAVE_STAT
+
+#endif /* HAVE_CONFIG_H */
+
+/* Use various POSIX functions if available */
+#undef _GNU_SOURCE
+#define _GNU_SOURCE
 
 /* System Configuration */
 #include "h-config.h"
