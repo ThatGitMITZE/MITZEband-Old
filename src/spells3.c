@@ -2445,26 +2445,26 @@ bool recharge_from_player(int power)
 {
     obj_prompt_t prompt = {0};
     int          amt, max;
-    char         resource[32];
+    cptr         resource = NULL;
 
     amt = power;
     if (p_ptr->prace == RACE_MON_LEPRECHAUN)
     {
         if (amt > p_ptr->au / 100)
             amt = p_ptr->au / 100;
-        sprintf(resource, "money");
+        resource = "money";
     }
     else if (p_ptr->pclass == CLASS_BLOOD_MAGE)
     {
         if (amt > p_ptr->chp)
             amt = p_ptr->chp;
-        sprintf(resource, "health");
+        resource = "health";
     }
     else
     {
         if (amt > p_ptr->csp)
             amt = p_ptr->csp;
-        sprintf(resource, "SP");
+        resource = "mana";
     }
 
     if (amt == 0) 
@@ -2484,7 +2484,6 @@ bool recharge_from_player(int power)
     obj_prompt(&prompt);
     if (!prompt.obj) return FALSE;
 
-    amt = power;
     max = device_max_sp(prompt.obj) - device_sp(prompt.obj);
     if (amt > max)
         amt = max;
