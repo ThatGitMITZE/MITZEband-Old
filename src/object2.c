@@ -609,6 +609,21 @@ static int _spellbook_max(int tval, int sval)
     return max;
 }
 
+static bool _is_stat_potion(int tval, int sval)
+{
+    if (tval != TV_POTION) return FALSE;
+    switch (sval)
+    {
+    case SV_POTION_INC_STR:
+    case SV_POTION_INC_INT:
+    case SV_POTION_INC_WIS:
+    case SV_POTION_INC_DEX:
+    case SV_POTION_INC_CON:
+    case SV_POTION_INC_CHR: return TRUE;
+    }
+    return FALSE;
+}
+
 /*
  * Choose an object kind that seems "appropriate" to the given level
  *
@@ -631,7 +646,8 @@ s16b get_obj_num(int level)
     if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
     /* Boost level */
-    if ((level > 0) && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+    if (quickband) level += 5;
+    if (level > 0 && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
     {
         /* Occasional "boost" */
         if (one_in_(GREAT_OBJ))
@@ -641,7 +657,8 @@ s16b get_obj_num(int level)
                 boost = 20;
             level += rand_range(boost/4, boost/2);
 
-            /* What a bizarre calculation
+            /* What a bizarre calculation ... yes, but this did allow
+             * you to find PDSM on DL1 which is no longer possible.
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH)); */
         }
     }
@@ -667,6 +684,10 @@ s16b get_obj_num(int level)
         if (easy_id && k_ptr->tval == TV_SCROLL && k_ptr->sval == SV_SCROLL_STAR_IDENTIFY) continue;
         /* Hack -- prevent embedded chests */
         if (opening_chest && (k_ptr->tval == TV_CHEST)) continue;
+
+        /* Probably the slowest thing in "slowband" is stat gain ... sigh */
+        if (quickband && _is_stat_potion(k_ptr->tval, k_ptr->sval))
+            p *= 2;
 
         /* TODO: Add some sort of max_num field to limit certain objects (I'm looking at you, spellbooks!)
            Note, this also ensures an even distribution of spellbook kinds for high level books! */
