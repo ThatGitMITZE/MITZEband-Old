@@ -83,7 +83,8 @@ F:q_doom1.txt
 
 N:20:25:Vapor Quest
 T:TOWN | GENERATE
-F:q_vapor.txt
+#F:q_vapor.txt
+F:q_vapor2.txt
 
 N:21:55:Doom Quest II
 T:TOWN | GENERATE
