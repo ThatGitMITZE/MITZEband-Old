@@ -2096,7 +2096,7 @@ static void _build_options(doc_ptr doc)
         doc_printf(doc, " Easy Lore:          On\n");
 
     if (quickband)
-        doc_printf(doc, " Quickband:          On\n");
+        doc_printf(doc, " <color:r>Quickband</color>:          On\n");
 
     if (no_wilderness)
         doc_printf(doc, " Wilderness:         Off\n");
@@ -2108,10 +2108,10 @@ static void _build_options(doc_ptr doc)
         doc_printf(doc, " Diving Only:        On\n");
 
     if (ironman_rooms)
-        doc_printf(doc, " Unusual Rooms:      On\n");
+        doc_printf(doc, " <color:r>Unusual Rooms</color>:      On\n");
 
     if (ironman_nightmare)
-        doc_printf(doc, " Nightmare Mode:     On\n");
+        doc_printf(doc, " <color:v>Nightmare Mode</color>:     On\n");
 
     doc_printf(doc, " Arena Levels:       %s\n", ironman_empty_levels ? "*Always*" :
                                                     empty_levels ? "Sometimes" : "Never");
