@@ -1418,7 +1418,7 @@ static void _display(_ui_context_ptr context)
     doc_printf(doc, "Gold Remaining: <color:y>%s</color>\n\n", buf);
     doc_insert(doc, "<color:keypress>b</color> to buy. ");
     if (no_selling)
-        doc_insert(doc, "<color:keypress>s</color> to donate. ");
+        doc_insert(doc, "<color:keypress>s</color> to give. ");
     else
         doc_insert(doc, "<color:keypress>s</color> to sell. ");
     doc_insert(doc, 
@@ -1462,7 +1462,7 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
 
     object_desc(name, obj, OD_COLOR_CODED);
     if (no_selling)
-        string_printf(s, "Really donate %s? <color:y>[y/n]</color>", name);
+        string_printf(s, "Really give %s? <color:y>[y/n]</color>", name);
     else
         string_printf(s, "Really sell %s for <color:R>%d</color> gp? <color:y>[y/n]</color>", name, price);
     c = msg_prompt(string_buffer(s), "ny", PROMPT_YES_NO);
@@ -1489,7 +1489,7 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
 
     object_desc(name, obj, OD_COLOR_CODED); /* again...in case *id* */
     if (no_selling)
-        msg_format("You donated %s.", name);
+        msg_format("You gave %s.", name);
     else
         msg_format("You sold %s for <color:R>%d</color> gold.", name, price);
 
@@ -1521,8 +1521,8 @@ static void _buy(_ui_context_ptr context)
 
     if (no_selling)
     {
-        prompt.prompt = "Donate which item?";
-        prompt.error = "You have nothing to donate.";
+        prompt.prompt = "Give which item?";
+        prompt.error = "You have nothing to give.";
     }
     else
     {
