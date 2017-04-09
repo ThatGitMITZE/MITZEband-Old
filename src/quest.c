@@ -1319,14 +1319,13 @@ static void _display_menu(_ui_context_ptr context)
             doc_printf(doc, "%c) <color:%c>", I2A(i), _quest_color(quest));
             if ((quest->flags & QF_RANDOM) && quest->goal == QG_KILL_MON)
             {
+                string_ptr s = string_alloc_format("%s", r_name + r_info[quest->goal_idx].name);
                 if (quest->goal_count > 1)
-                {
-                    string_ptr s = string_alloc_format("%s (%d)", r_name + r_info[quest->goal_idx].name, quest->goal_count);
-                    doc_printf(doc, "%-40.40s ", string_buffer(s));
-                    string_free(s);
-                }
+                    string_printf(s, " (%d)", quest->goal_count);
                 else
-                    doc_printf(doc, "%-40.40s ", r_name + r_info[quest->goal_idx].name);
+                    string_printf(s, " (L%d)", r_info[quest->goal_idx].level);
+                doc_printf(doc, "%-40.40s ", string_buffer(s));
+                string_free(s);
             }
             else
                 doc_printf(doc, "%-40.40s ", quest->name);
