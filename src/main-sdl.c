@@ -1,4 +1,4 @@
-/** \file main-sdl.c 
+/** \file main-sdl.c
     \brief Angband SDL port 
  
  * Copyright (c) 2007 Ben Harrison, Gregory Velichansky, Eric Stevens,
@@ -159,7 +159,6 @@ typedef enum
         FTYPE_HTML
 } file_type;
 
-static bool new_game = TRUE;
 
 #define MAX_COLORS 256
 #define MSG_MAX SOUND_MAX
@@ -1469,32 +1468,33 @@ static void SelectTerm(sdl_Button *sender)
 	
 static void TermActivate(sdl_Button *sender)
 {
-        int i, maxl = 0; 
-        for (i = 0; i < ANGBAND_TERM_MAX; i++)
-        {
-                int l = strlen(angband_term_name[i]); 
-                if (l > maxl) maxl = l;
-        }
-        int width = maxl * StatusBar.font.width + 20;
-        int height = ANGBAND_TERM_MAX * (StatusBar.font.height + 1);
-        
-        sdl_WindowInit(&PopUp, width, height, AppWin, StatusBar.font.name);
-        PopUp.left = sender->pos.x;
-	PopUp.top = sender->pos.y;
-	
-	for (i = 0; i < ANGBAND_TERM_MAX; i++)
-	{
-		int h = PopUp.font.height;
-		int b = sdl_ButtonBankNew(&PopUp.buttons);
-		sdl_Button *button = sdl_ButtonBankGet(&PopUp.buttons, b);
-		sdl_ButtonSize(button, width - 2 , h);
-		sdl_ButtonMove(button, 1, i * (h + 1));
-		sdl_ButtonCaption(button, angband_term_name[i]);
-		sdl_ButtonVisible(button, TRUE);
-		button->tag = i;
-		button->activate = SelectTerm;
-	}
-	popped = TRUE;
+    int i, maxl = 0; 
+    int width, height;
+    for (i = 0; i < ANGBAND_TERM_MAX; i++)
+    {
+        int l = strlen(angband_term_name[i]); 
+        if (l > maxl) maxl = l;
+    }
+    width = maxl * StatusBar.font.width + 20;
+    height = ANGBAND_TERM_MAX * (StatusBar.font.height + 1);
+    
+    sdl_WindowInit(&PopUp, width, height, AppWin, StatusBar.font.name);
+    PopUp.left = sender->pos.x;
+    PopUp.top = sender->pos.y;
+
+    for (i = 0; i < ANGBAND_TERM_MAX; i++)
+    {
+        int h = PopUp.font.height;
+        int b = sdl_ButtonBankNew(&PopUp.buttons);
+        sdl_Button *button = sdl_ButtonBankGet(&PopUp.buttons, b);
+        sdl_ButtonSize(button, width - 2 , h);
+        sdl_ButtonMove(button, 1, i * (h + 1));
+        sdl_ButtonCaption(button, angband_term_name[i]);
+        sdl_ButtonVisible(button, TRUE);
+        button->tag = i;
+        button->activate = SelectTerm;
+    }
+    popped = TRUE;
 }
 
 static void ResizeWin(term_window* win, int w, int h);
@@ -1556,31 +1556,32 @@ static void SelectFont(sdl_Button *sender)
 
 static void FontActivate(sdl_Button *sender)
 {
-        int i, maxl = 0; 
-        for (i = 0; i < num_fonts; i++)
-        {
-                int l = strlen(FontList[i]); 
-                if (l > maxl) maxl = l;
-        }
-        int width = maxl * StatusBar.font.width + 20;
-        int height = num_fonts * (StatusBar.font.height + 1);
+    int i, maxl = 0; 
+    int width, height;
+    for (i = 0; i < num_fonts; i++)
+    {
+        int l = strlen(FontList[i]); 
+        if (l > maxl) maxl = l;
+    }
+    width = maxl * StatusBar.font.width + 20;
+    height = num_fonts * (StatusBar.font.height + 1);
         
-        sdl_WindowInit(&PopUp, width, height, AppWin, StatusBar.font.name);
-        PopUp.left = sender->pos.x;
-	PopUp.top = sender->pos.y;
-	
-	for (i = 0; i < num_fonts; i++)
-	{
-		int h = PopUp.font.height;
-		int b = sdl_ButtonBankNew(&PopUp.buttons);
-		sdl_Button *button = sdl_ButtonBankGet(&PopUp.buttons, b);
-		sdl_ButtonSize(button, width - 2 , h);
-		sdl_ButtonMove(button, 1, i * (h + 1));
-		sdl_ButtonCaption(button, FontList[i]);
-		sdl_ButtonVisible(button, TRUE);
-		button->activate = SelectFont;
-	}
-	popped = TRUE;
+    sdl_WindowInit(&PopUp, width, height, AppWin, StatusBar.font.name);
+    PopUp.left = sender->pos.x;
+    PopUp.top = sender->pos.y;
+
+    for (i = 0; i < num_fonts; i++)
+    {
+        int h = PopUp.font.height;
+        int b = sdl_ButtonBankNew(&PopUp.buttons);
+        sdl_Button *button = sdl_ButtonBankGet(&PopUp.buttons, b);
+        sdl_ButtonSize(button, width - 2 , h);
+        sdl_ButtonMove(button, 1, i * (h + 1));
+        sdl_ButtonCaption(button, FontList[i]);
+        sdl_ButtonVisible(button, TRUE);
+        button->activate = SelectFont;
+    }
+    popped = TRUE;
 }
 
 #ifdef USE_GRAPHICS
@@ -1594,13 +1595,14 @@ static void SelectGfx(sdl_Button *sender)
 
 static void AcceptChanges(sdl_Button *sender)
 {
-        sdl_Button *button, *button1, *button2, *button3;
+        sdl_Button *button;
         bool do_update = FALSE;
         bool do_video_reset = FALSE;
-        bool check_size = FALSE;
         
 #ifdef USE_GRAPHICS
 #if 0
+        sdl_Button *button1, *button2, *button3;
+        bool check_size = FALSE;
         /* Check to see if tile size has changed */
         button1 = sdl_ButtonBankGet(&PopUp.buttons, MoreBigtile);
         button2 = sdl_ButtonBankGet(&PopUp.buttons, MoreDbltile);
@@ -1807,7 +1809,7 @@ static void MoreActivate(sdl_Button *sender)
         int width = 300;
         int height = 300;
         int i;
-        sdl_Button *button, *button1, *button2, *button3;
+        sdl_Button *button/*, *button1, *button2, *button3*/;
         
         Uint32 ucolour;
         Uint32 scolour;
@@ -2053,7 +2055,7 @@ static errr load_prefs(void)
 		/* Who? */
 		win->Term_idx = i;
 		
-		win->req_font = z_string_make(DEFAULT_FONT_FILE);
+		win->req_font = (char *)z_string_make(DEFAULT_FONT_FILE);
 		
 		if (i == 0)
 		{
@@ -2079,7 +2081,7 @@ static errr load_prefs(void)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "sdlinit.txt");
 	
 	/* XXXXX */
-        ANGBAND_DIR_USER_SDL = z_string_make(buf);
+        ANGBAND_DIR_USER_SDL = (char *)z_string_make(buf);
         
         /* Open the file */
         fff = my_fopen(buf, "r");
@@ -2158,7 +2160,7 @@ static errr load_prefs(void)
 		}
 		else if (strstr(buf, "Font"))
 		{
-			win->req_font = z_string_make(s);
+			win->req_font = (char *)z_string_make(s);
 		}
 		
 		
@@ -2237,7 +2239,6 @@ static int Movingy;
  */
 static void sdl_HandleMouseEvent(SDL_Event *event)
 {
-	term *old = Term;
 	term_window *win;
 	switch (event->type)
 	{
@@ -2761,6 +2762,7 @@ static void set_update_rect(term_window *win, SDL_Rect *rc)
 	}
 }
 
+#if 0
 /**
  * Given a position in the ISO Latin-1 character set, return
  * the correct character on this system.
@@ -2770,7 +2772,7 @@ static byte Term_xchar_sdl(byte c)
   /* The SDL port uses the Latin-1 standard.  I hope. */
   return (c);
 }
-
+#endif 
 
 /**
  * Clear a terminal window
@@ -3129,7 +3131,7 @@ static bool sound_sdl_init(bool no_cache)
 			if (no_cache)
 			{
 				/* Just save the path for later */
-				samples[event].paths[num] = z_string_make(path);
+				samples[event].paths[num] = (char *)z_string_make(path);
 			}
 			else
 			{
@@ -3377,7 +3379,7 @@ static errr Term_wipe_sdl(int col, int row, int n)
 /**
  * Draw some text to a window
  */
-static errr Term_text_sdl(int col, int row, int n, byte a, char *s)
+static errr Term_text_sdl(int col, int row, int n, byte a, cptr s)
 {
         term_window *win = (term_window*)(Term->data);
         Uint32 colour = text_colours[a];
@@ -3489,7 +3491,7 @@ static errr sdl_BuildTileset(term_window *win)
 	int x, y;
 	int ta, td;
 	int xx, yy;
-	GfxInfo *info = &GfxDesc[use_graphics];
+	GfxInfo *info = &GfxDesc[(int)use_graphics];
 	
 	/* Calculate the number of tiles across & down*/
 	ta = GfxSurface->w / info->width;
@@ -3702,8 +3704,8 @@ static void init_morewindows(void)
 {
         char buf[128];
         sdl_Button *button;
-        popped = FALSE;
   int x;
+        popped = FALSE;
         
         /* Make sure */
         sdl_WindowFree(&PopUp);
@@ -3795,12 +3797,12 @@ static void init_morewindows(void)
 static errr load_gfx(void)
 {
 	char buf[1024];
-	cptr filename = GfxDesc[use_graphics].gfxfile;
+	cptr filename = GfxDesc[(int)use_graphics].gfxfile;
 	SDL_Surface *temp;
 	Uint8 r, g, b;
 	Uint32 key;
 	Uint32 Pixel = 0;
-	int x = GfxDesc[use_graphics].x, y = GfxDesc[use_graphics].y;
+	int x = GfxDesc[(int)use_graphics].x, y = GfxDesc[(int)use_graphics].y;
 	
 	/* This may be called when GRAPHICS_NONE is set */
 	if (!filename) return (0);
@@ -3853,7 +3855,7 @@ static errr load_gfx(void)
 	SDL_FreeSurface(temp);
 	
 	/* Make sure we know what pref file to use */
-	ANGBAND_GRAF = GfxDesc[use_graphics].pref;
+	ANGBAND_GRAF = GfxDesc[(int)use_graphics].pref;
 	
 	/* Reset the graphics mapping for this tileset */
 	if (character_dungeon) reset_visuals();
@@ -3881,7 +3883,7 @@ static void init_gfx(void)
         //use_dbltile = FALSE;
         //use_trptile = FALSE;
 #else
-        GfxInfo *info = &GfxDesc[use_graphics];
+        GfxInfo *info = &GfxDesc[(int)use_graphics];
         int i;
 	
         /* Check for existence of required files */
@@ -4045,7 +4047,7 @@ DIR *my_dopen(const char *dirname)
 	return d;
 }
 
-bool my_dread(DIR *dir, char *fname, char *dirname, size_t len)
+bool my_dread(DIR *dir, char *fname, cptr dirname, size_t len)
 {
 	struct dirent *entry;
 	struct stat filedata;
@@ -4122,7 +4124,7 @@ static void init_paths(void)
 	{
 		/* Check for file extension */
 		if (suffix(buf, ".fon")||suffix(buf, ".FON"))
-			FontList[num_fonts++] = z_string_make(buf);
+			FontList[num_fonts++] = (char *)z_string_make(buf);
 
 		/* Don't grow to long */
 		if (num_fonts == MAX_FONTS) break;
