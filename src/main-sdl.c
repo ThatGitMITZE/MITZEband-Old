@@ -1,4 +1,4 @@
-/** \file main-sdl.c
+/** \file main-sdl.c 
     \brief Angband SDL port 
  
  * Copyright (c) 2007 Ben Harrison, Gregory Velichansky, Eric Stevens,
@@ -780,25 +780,25 @@ static errr sdl_FontDraw(sdl_Font *font, SDL_Surface *surface, Uint32 colour,
  */
 static void sdl_ButtonDraw(sdl_Button *button)
 {
-	SDL_Surface *surface = button->owner->window->surface;
-	sdl_Font *font = &button->owner->window->font;
-	
-	Uint32 colour = button->selected ? button->sel_colour : button->unsel_colour;
-	
-	if (!button->visible) return;
-	
-	SDL_FillRect(surface, &button->pos, colour);
+    SDL_Surface *surface = button->owner->window->surface;
+    sdl_Font *font = &button->owner->window->font;
+
+    Uint32 colour = button->selected ? button->sel_colour : button->unsel_colour;
+
+    if (!button->visible) return;
+
+    SDL_FillRect(surface, &button->pos, colour);
         
-        if (strlen(button->caption))
-        {
-                int max = button->pos.w / font->width;
-                int n = strlen(button->caption) > max ? max : strlen(button->caption);
-                int l = n * font->width / 2;
-                int x = button->pos.x + ((button->pos.w) / 2) - l;
-                
-		sdl_FontDraw(font, surface, button->cap_colour,
-					 x, button->pos.y + 1, n, button->caption);
-	}
+    if (strlen(button->caption))
+    {
+        unsigned max = button->pos.w / font->width;
+        int n = strlen(button->caption) > max ? max : strlen(button->caption);
+        int l = n * font->width / 2;
+        int x = button->pos.x + ((button->pos.w) / 2) - l;
+            
+        sdl_FontDraw(font, surface, button->cap_colour,
+                     x, button->pos.y + 1, n, button->caption);
+    }
 }
 
 /**
@@ -1160,13 +1160,13 @@ static void hook_quit(cptr str)
 	
 	save_prefs();
 	
-	string_free(ANGBAND_DIR_USER_SDL);
+	z_string_free(ANGBAND_DIR_USER_SDL);
 	
 	/* Free the surfaces of the windows */
 	for (i = 0; i < ANGBAND_TERM_MAX; i++)
 	{
 		term_windowFree(&windows[i]);
-		string_free(windows[i].req_font);
+		z_string_free(windows[i].req_font);
 	}
 	
 #ifdef USE_GRAPHICS
@@ -1193,7 +1193,7 @@ static void hook_quit(cptr str)
         
         for (i = 0; i < MAX_FONTS; i++)
         {
-                if (FontList[i]) string_free(FontList[i]);
+                if (FontList[i]) z_string_free(FontList[i]);
         }
 }
 
@@ -1530,9 +1530,9 @@ static void SelectFont(sdl_Button *sender)
 	int w, h;
 	
 	sdl_FontFree(&window->font);
-	string_free(window->req_font);
+	z_string_free(window->req_font);
 
-	window->req_font = string_make(sender->caption);
+	window->req_font = (char *)z_string_make(sender->caption);
 	
 	sdl_CheckFont(window->req_font, &w, &h);
 #ifdef USE_GRAPHICS	
@@ -2053,7 +2053,7 @@ static errr load_prefs(void)
 		/* Who? */
 		win->Term_idx = i;
 		
-		win->req_font = string_make(DEFAULT_FONT_FILE);
+		win->req_font = z_string_make(DEFAULT_FONT_FILE);
 		
 		if (i == 0)
 		{
@@ -2079,7 +2079,7 @@ static errr load_prefs(void)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "sdlinit.txt");
 	
 	/* XXXXX */
-        ANGBAND_DIR_USER_SDL = string_make(buf);
+        ANGBAND_DIR_USER_SDL = z_string_make(buf);
         
         /* Open the file */
         fff = my_fopen(buf, "r");
@@ -2158,7 +2158,7 @@ static errr load_prefs(void)
 		}
 		else if (strstr(buf, "Font"))
 		{
-			win->req_font = string_make(s);
+			win->req_font = z_string_make(s);
 		}
 		
 		
@@ -2672,9 +2672,6 @@ static errr sdl_HandleEvent(SDL_Event *event)
 			/* We are playing a game with an active character */
 			if (character_generated && inkey_flag)
 			{
-				/* Hack -- Forget messages */
-                                msg_flag = FALSE;
-                                
                                 /* Save the game */
                                 do_cmd_save_game(FALSE);
                         }
@@ -2974,7 +2971,7 @@ static void close_audio(void)
 			        Mix_FreeMusic(smp->mp3s[j]);
 			else
 			        Mix_FreeChunk(smp->wavs[j]);
-			string_free(smp->paths[j]);
+			z_string_free(smp->paths[j]);
 		}
 	}
 
@@ -3040,7 +3037,7 @@ static bool sound_sdl_init(bool no_cache)
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
 	//if (ANGBAND_DIR_XTRA_SOUND)
 	//	mem_free(ANGBAND_DIR_XTRA_SOUND);
-	ANGBAND_DIR_XTRA_SOUND = string_make(path);
+	ANGBAND_DIR_XTRA_SOUND = z_string_make(path);
 
 	/* Find and open the config file */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
@@ -3132,7 +3129,7 @@ static bool sound_sdl_init(bool no_cache)
 			if (no_cache)
 			{
 				/* Just save the path for later */
-				samples[event].paths[num] = string_make(path);
+				samples[event].paths[num] = z_string_make(path);
 			}
 			else
 			{
@@ -4098,11 +4095,11 @@ static void init_paths(void)
 	
 	/* Build the gfx path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
-	ANGBAND_DIR_XTRA_GRAF = string_make(path);
+	ANGBAND_DIR_XTRA_GRAF = z_string_make(path);
 	
 	/* Build the "font" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
-	ANGBAND_DIR_XTRA_FONT = string_make(path);
+	ANGBAND_DIR_XTRA_FONT = z_string_make(path);
 	
 	/* Build the filename */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, DEFAULT_FONT_FILE);
@@ -4125,7 +4122,7 @@ static void init_paths(void)
 	{
 		/* Check for file extension */
 		if (suffix(buf, ".fon")||suffix(buf, ".FON"))
-			FontList[num_fonts++] = string_make(buf);
+			FontList[num_fonts++] = z_string_make(buf);
 
 		/* Don't grow to long */
 		if (num_fonts == MAX_FONTS) break;
