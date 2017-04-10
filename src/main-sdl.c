@@ -138,7 +138,7 @@ static char *ANGBAND_DIR_USER_SDL;
 /**
  * Used as 'system' font
  */
-static cptr DEFAULT_FONT_FILE = "6x10x.fon";
+static cptr DEFAULT_FONT_FILE = "8x8xb.fon";
 
 #define MAX_FONTS 20
 char *FontList[MAX_FONTS];
@@ -3734,7 +3734,7 @@ static void init_morewindows(void)
     button = sdl_ButtonBankGet(&StatusBar.buttons, TermSelect);
     
     /* Initialize the 'term' button */
-    sdl_ButtonSize(button, 60, StatusHeight - 2);
+    sdl_ButtonSize(button, 120, StatusHeight - 2);
     x = 100 + (StatusBar.font.width * 5);
     sdl_ButtonMove(button, x, 1);
     sdl_ButtonVisible(button, TRUE);

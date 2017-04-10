@@ -105,3 +105,17 @@ P:^_C[up]
 
 A:\\+9
 P:^_C[[9]]
+
+# Other keys not working in sdl
+A:7
+P:^_[home]
+
+A:1
+P:^_[end]
+
+A:9
+P:^_[page_up]
+
+A:3
+P:^_[page_down]
+
