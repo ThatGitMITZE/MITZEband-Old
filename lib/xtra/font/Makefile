@@ -1,4 +1,4 @@
-MKPATH=../../mk/
+MKPATH=../../../mk/
 include $(MKPATH)buildsys.mk
 
 DATA = 5x8x.fon 6x10x.fon 6x12x.fon 6x13x.fon 6x13xb.fon 7x13x.fon \
