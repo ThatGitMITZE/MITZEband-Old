@@ -2228,7 +2228,7 @@ town_ptr towns_current_town(void)
         return towns_get_town(TOWN_RANDOM);
     else if (p_ptr->town_num)
         return towns_get_town(p_ptr->town_num);
-    return NULL;
+    return towns_get_town(TOWN_RANDOM); /* wilderness encounter */
 }
 
 
