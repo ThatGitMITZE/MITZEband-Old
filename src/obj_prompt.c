@@ -62,7 +62,6 @@ int obj_prompt(obj_prompt_ptr prompt)
         _display(&context);
 
         cmd = inkey_special(TRUE);
-        if (cmd == ' ') continue;
         if (prompt->cmd_handler)
         {
             tmp = prompt->cmd_handler(&context, cmd);
@@ -343,15 +342,19 @@ static int _basic_cmd(obj_prompt_context_ptr context, int cmd)
     case KTRL('L'):
         show_labels = !show_labels;
         return OP_CMD_HANDLED;
-    case SKEY_PGDOWN: case '3': {
+    case SKEY_PGDOWN: case '3': case ' ': {
         obj_prompt_tab_ptr tab = vec_get(context->tabs, context->tab);
         if (tab->page < tab->page_ct - 1)
             tab->page++;
+        else if (tab->page_ct > 1) /* wrap */
+            tab->page = 0;
         return OP_CMD_HANDLED; }
     case SKEY_PGUP: case '9': {
         obj_prompt_tab_ptr tab = vec_get(context->tabs, context->tab);
         if (tab->page > 0)
             tab->page--;
+        else if (tab->page_ct > 1) /* wrap */
+            tab->page = tab->page_ct - 1;
         return OP_CMD_HANDLED; }
     case '?':
         if (context->prompt->help)
