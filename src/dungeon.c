@@ -3187,7 +3187,8 @@ static void _dispatch_command(int old_now_turn)
         /* Begin Running -- Arg is Max Distance */
         case '.':
         {
-            do_cmd_run();
+            if (!p_ptr->wild_mode)
+                do_cmd_run();
             break;
         }
 
