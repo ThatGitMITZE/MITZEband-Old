@@ -204,6 +204,7 @@ bool auto_get_ammo;
 bool auto_get_objects;
 
 bool numpad_as_cursorkey;    /* Use numpad keys as cursor key in editor mode */
+bool use_pack_slots;
 
 
 /*** Map Screen Options ***/

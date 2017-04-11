@@ -168,11 +168,13 @@ static void _context_make(obj_prompt_context_ptr context)
             break;
         case INV_PACK:
             inv = pack_filter(filter);
-            inv_sort(inv);
+            if (!use_pack_slots)
+                inv_sort(inv);
             break;
         case INV_QUIVER:
             inv = quiver_filter(filter);
-            inv_sort(inv);
+            if (!use_pack_slots) /* quiver might contain non-matching ammo */
+                inv_sort(inv);
             break;
         }
         if (inv)

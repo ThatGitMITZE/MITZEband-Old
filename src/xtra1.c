@@ -2167,6 +2167,10 @@ static void _fix_inven_aux(void)
 {
     doc_ptr doc;
     int     w, h;
+    int     options = INV_IGNORE_INSCRIPTIONS;
+
+    if (!use_pack_slots)
+        options |= INV_NO_LABELS;
 
     Term_clear();
     Term_get_size(&w, &h);
@@ -2174,7 +2178,7 @@ static void _fix_inven_aux(void)
     doc = doc_alloc(w);
 
     doc_insert(doc, "<style:table>");
-    pack_display(doc, obj_exists, INV_IGNORE_INSCRIPTIONS | INV_NO_LABELS);
+    pack_display(doc, obj_exists, options);
     doc_insert(doc, "</style>");
     doc_sync_term(
         doc,
