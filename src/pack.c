@@ -331,6 +331,10 @@ bool pack_overflow(void)
     bool result = FALSE;
     char name[MAX_NLEN];
 
+    /* quest reward on a full pack ... the reward forces
+     * reinit_wilderness, but we better wait to drop the reward! */
+    if (p_ptr->leaving) return FALSE;
+
     while (vec_length(_overflow))
     {
         obj_ptr obj = vec_pop(_overflow);
