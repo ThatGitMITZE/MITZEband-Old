@@ -113,7 +113,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         }
         else
         {
-            mult = 20 + 3*p_ptr->concent;
+            mult = 10 + 5*p_ptr->concent;
             if (r_ptr && (r_ptr->flags3 & RF3_HURT_FIRE))
             {
                 mult *= 2;
@@ -130,7 +130,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         }
         else
         {
-            mult = 20 + 3*p_ptr->concent;
+            mult = 10 + 5*p_ptr->concent;
             if (r_ptr && (r_ptr->flags3 & RF3_HURT_COLD))
             {
                 mult *= 2;
@@ -147,9 +147,9 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         }
         else
         {
-            mult = 23 + 4*p_ptr->concent;
+            mult = 13 + 6*p_ptr->concent;
             if (have_flag(flgs, OF_BRAND_ELEC))
-                mult += 10;
+                mult += 15;
         }
         break;
     case SP_KILL_WALL:
@@ -167,7 +167,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
     case SP_EVILNESS:
         if (!r_ptr || (r_ptr->flags3 & RF3_GOOD))
         {
-            mult = 20 + 5*p_ptr->concent;
+            mult = 10 + 4*p_ptr->concent;
             if (m_ptr) mon_lore_3(m_ptr, RF3_GOOD);
             if (have_flag(flgs, OF_SLAY_GOOD))
                 mult += 10;
@@ -176,7 +176,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
     case SP_HOLYNESS:
         if (!r_ptr || (r_ptr->flags3 & RF3_EVIL))
         {
-            mult = 17 + 4*p_ptr->concent;
+            mult = 10 + 4*p_ptr->concent;
             if (m_ptr) mon_lore_3(m_ptr, RF3_EVIL);
             if (r_ptr && (r_ptr->flags3 & RF3_HURT_LITE))
             {
@@ -184,7 +184,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
                 mon_lore_3(m_ptr, RF3_HURT_LITE);
             }
             if (have_flag(flgs, OF_KILL_EVIL))
-                mult += 25;
+                mult += 20;
             if (have_flag(flgs, OF_SLAY_EVIL))
                 mult += 10;
         }
