@@ -2107,7 +2107,7 @@ void monster_death(int m_idx, bool drop_item)
         msg_print("*** CONGRATULATIONS ***");
         msg_print("You have won the game!");
         msg_print("You may retire (commit suicide) when you are ready.");
-        msg_add_tiny_screenshot(50, 24);
+        /*cf quest_complete: msg_add_tiny_screenshot(50, 24);*/
     }
 }
 
