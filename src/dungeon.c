@@ -3338,8 +3338,6 @@ static void _dispatch_command(int old_now_turn)
                 ring_browse();
             else if (p_ptr->pclass == CLASS_MAGIC_EATER)
                 magic_eater_browse();
-            else if (p_ptr->pclass == CLASS_SNIPER)
-                do_cmd_snipe_browse();
             else if (p_ptr->pclass == CLASS_RAGE_MAGE)
                 rage_mage_browse_spell();
             else if (p_ptr->pclass == CLASS_SKILLMASTER)
@@ -3363,6 +3361,7 @@ static void _dispatch_command(int old_now_turn)
                      p_ptr->pclass == CLASS_SCOUT ||
                      p_ptr->pclass == CLASS_MAULER ||
                      p_ptr->pclass == CLASS_MYSTIC ||
+                     p_ptr->pclass == CLASS_SNIPER ||
                      p_ptr->pclass == CLASS_TIME_LORD )
             {
                 /* This is the preferred entry point ... I'm still working on
@@ -3445,8 +3444,6 @@ static void _dispatch_command(int old_now_turn)
                     do_cmd_hissatsu();
                 else if (p_ptr->pclass == CLASS_BLUE_MAGE)
                     do_cmd_cast_learned();
-                else if (p_ptr->pclass == CLASS_SNIPER)
-                    do_cmd_snipe();
                 else if (p_ptr->pclass == CLASS_GRAY_MAGE)
                     gray_mage_cast_spell();
                 else if (p_ptr->pclass == CLASS_ARCHAEOLOGIST ||
@@ -3468,6 +3465,7 @@ static void _dispatch_command(int old_now_turn)
                             p_ptr->pclass == CLASS_MAULER ||
                             p_ptr->pclass == CLASS_MYSTIC ||
                             p_ptr->pclass == CLASS_PSION ||
+                            p_ptr->pclass == CLASS_SNIPER ||
                             p_ptr->pclass == CLASS_TIME_LORD )
                 {
                     /* This is the preferred entrypoint for spells ...

@@ -741,7 +741,9 @@ void do_cmd_spell(void)
         return;
     }
 
-    if (caster->options & CASTER_USE_HP)
+    if (caster->options & CASTER_USE_CONCENTRATION)
+        max_cost = p_ptr->concent;
+    else if (caster->options & CASTER_USE_HP)
         max_cost = p_ptr->chp;
     else if (caster->options & CASTER_USE_AU)
         max_cost = p_ptr->au;
@@ -763,7 +765,15 @@ void do_cmd_spell(void)
            Also note we now pay casting costs up front for mana casters.
            If the user cancels, then we return the cost below.
         */
-        if (caster->options & CASTER_USE_HP)
+        if (caster->options & CASTER_USE_CONCENTRATION)
+        {
+            if (spell->cost > p_ptr->concent)
+            {
+                msg_print("You need to concentrate more to use this power.");
+                return;
+            }
+        }
+        else if (caster->options & CASTER_USE_HP)
         {
             if (spell->cost > p_ptr->chp)
             {
@@ -806,8 +816,9 @@ void do_cmd_spell(void)
         {
             if (!cast_spell(spell->fn))
             {
-                /* Give back the spell cost, since the user canceled the spell */
-                if (!(caster->options & (CASTER_USE_HP | CASTER_USE_AU))) p_ptr->csp += spell->cost;
+                /* Give back the spell cost, since the user canceled the spell
+                 * There is no CASTER_USE_SP flag so we need to check all the alternatives */
+                if (!(caster->options & (CASTER_USE_HP | CASTER_USE_AU | CASTER_USE_CONCENTRATION))) p_ptr->csp += spell->cost;
                 return;
             }
             spell_stats_on_cast(spell);
@@ -829,9 +840,9 @@ void do_cmd_spell(void)
         if (caster->on_cast != NULL)
             (caster->on_cast)(spell);
 
-        p_ptr->redraw |= (PR_MANA);
-        p_ptr->redraw |= (PR_HP);
-        p_ptr->window |= (PW_SPELL);
+        p_ptr->redraw |= PR_MANA;
+        p_ptr->redraw |= PR_HP;
+        p_ptr->window |= PW_SPELL;
     }
 }
 

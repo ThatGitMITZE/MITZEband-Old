@@ -2977,8 +2977,7 @@ static void calc_mana(void)
         return;
     }
 
-    if ( (caster_ptr->options & CASTER_USE_HP)
-      || (caster_ptr->options & CASTER_USE_AU)
+    if ( (caster_ptr->options & (CASTER_USE_HP | CASTER_USE_AU | CASTER_USE_CONCENTRATION))
       || p_ptr->lev < caster_ptr->min_level)
     {
         p_ptr->msp = 0;

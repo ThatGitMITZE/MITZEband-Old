@@ -750,6 +750,7 @@ extern void fix_object_list(void);
 /* cmd4.c */
 extern cptr get_ordinal_number_suffix(int num);
 extern void do_cmd_redraw(void);
+extern void do_cmd_knowledge_shooter(void);
 extern void do_cmd_knowledge_weapon(void);
 extern void do_cmd_messages(int old_now_turn);
 extern void do_cmd_options_aux(int page, cptr info);
@@ -1516,6 +1517,7 @@ extern int bow_range(object_type *o_ptr);
 extern int bow_mult(object_type *o_ptr);
 extern void display_weapon_info(doc_ptr doc, int hand);
 extern int display_weapon_mode;
+extern int display_shooter_mode;
 extern void display_innate_attack_info(doc_ptr doc, int which);
 extern void display_shooter_info(doc_ptr doc);
 extern void init_blows_calc(object_type *o_ptr, weapon_info_t *info_ptr);
@@ -2089,9 +2091,7 @@ extern bool is_fired;
 /* snipe.c */
 extern void reset_concentration(bool msg);
 extern void display_snipe_list(void);
-extern int tot_dam_aux_snipe (int mult, monster_type *m_ptr);
-extern void do_cmd_snipe(void);
-extern void do_cmd_snipe_browse(void);
+extern int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr);
 extern int boost_concentration_damage(int tdam);
 
 /* hex.c */

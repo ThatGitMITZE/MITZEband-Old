@@ -2571,17 +2571,13 @@ void do_cmd_rest(void)
  */
 int breakage_chance(object_type *o_ptr)
 {
-    /* Examine the snipe type */
-    if (snipe_type)
-    {
-        if (snipe_type == SP_KILL_WALL) return 100;
-        if (snipe_type == SP_EXPLODE) return 100;
-        if (snipe_type == SP_PIERCE) return 100;
-        if (snipe_type == SP_FINAL) return 100;
-        if (snipe_type == SP_NEEDLE) return 100;
-        if (snipe_type == SP_EVILNESS) return 40;
-        if (snipe_type == SP_HOLYNESS) return 40;
-    }
+    if (shoot_hack == SP_KILL_WALL) return 100;
+    if (shoot_hack == SP_EXPLODE) return 100;
+    if (shoot_hack == SP_PIERCE) return 100;
+    if (shoot_hack == SP_FINAL) return 100;
+    if (shoot_hack == SP_NEEDLE) return 100;
+    if (shoot_hack == SP_EVILNESS) return 40;
+    if (shoot_hack == SP_HOLYNESS) return 40;
 
     if (shoot_hack == SHOOT_SHATTER) return 100;
     if (weaponmaster_get_toggle() == TOGGLE_EXPLODING_BOLT) return 100;
@@ -2922,7 +2918,12 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
     }
 
     /* Sniper */
-    if (snipe_type) mult = tot_dam_aux_snipe(mult, m_ptr);
+    if (p_ptr->pclass == CLASS_SNIPER && shoot_hack)
+    {
+        int n = sniper_multiplier(shoot_hack, o_ptr, m_ptr);
+        if (n > mult)
+            mult = n;
+    }
 
     /* Return the total damage */
     return (tdam * mult / 10);
@@ -2991,7 +2992,7 @@ bool do_cmd_fire_aux1(obj_ptr bow, obj_ptr arrows)
         if (!get_fire_dir(&dir))
         {
             energy_use = 0;
-            if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
+            if (shoot_hack == SP_AWAY) shoot_hack = SP_NONE;
             return FALSE;
         }
 
@@ -3019,7 +3020,7 @@ bool do_cmd_fire_aux1(obj_ptr bow, obj_ptr arrows)
     {
         msg_print("You are too scared!");
         energy_use = bow_energy(bow->sval)/p_ptr->shooter_info.num_fire;
-        if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
+        if (shoot_hack == SP_AWAY) shoot_hack = SP_NONE;
         return FALSE;
     }
 
@@ -3044,8 +3045,8 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
     bool stick_to = FALSE;
 
     /* Sniper - Cannot shoot a single arrow twice */
-    if ((snipe_type == SP_DOUBLE) && (arrows->number < 2)) snipe_type = SP_NONE;
-    if (snipe_type == SP_DOUBLE) num_shots = 2;
+    if ((shoot_hack == SP_DOUBLE) && (arrows->number < 2)) shoot_hack = SP_NONE;
+    if (shoot_hack == SP_DOUBLE) num_shots = 2;
 
     /* Describe the object */
     object_desc(o_name, arrows, OD_OMIT_PREFIX | OD_NO_PLURAL | OD_OMIT_INSCRIPTION);
@@ -3145,10 +3146,8 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
     if (!no_energy)
         energy_use = (bow_energy(bow->sval) / thits);
 
-    is_fired = TRUE;
-
     /* Sniper - Difficult to shot twice at 1 turn */
-    if (snipe_type == SP_DOUBLE)  p_ptr->concent = (p_ptr->concent + 1) / 2;
+    if (shoot_hack == SP_DOUBLE)  p_ptr->concent = (p_ptr->concent + 1) / 2;
 
     /* Sniper - Repeat shooting when double shots */
     for (i = 0; i < num_shots; i++)
@@ -3211,7 +3210,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
             nx = GRID_X(path_g[cur_dis]);
 
             /* Shatter Arrow */
-            if (snipe_type == SP_KILL_WALL)
+            if (shoot_hack == SP_KILL_WALL)
             {
                 c_ptr = &cave[ny][nx];
                 if (cave_have_flag_grid(c_ptr, FF_HURT_ROCK) && !c_ptr->m_idx)
@@ -3243,7 +3242,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
             cur_dis++;
 
             /* Sniper */
-            if (snipe_type == SP_LITE)
+            if (shoot_hack == SP_LITE)
             {
                 cave[ny][nx].info |= (CAVE_GLOW);
                 note_spot(ny, nx);
@@ -3272,12 +3271,12 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
             }
 
             /* Sniper */
-            if (snipe_type == SP_KILL_TRAP)
+            if (shoot_hack == SP_KILL_TRAP)
             {
                 project(0, 0, ny, nx, 0, GF_KILL_TRAP,
                     (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM), -1);
             }
-            if (snipe_type == SP_EVILNESS)
+            if (shoot_hack == SP_EVILNESS)
             {
                 cave[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
                 note_spot(ny, nx);
@@ -3422,7 +3421,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         else
                             tdam = 1;
                     }
-                    else if (snipe_type == SP_NEEDLE)
+                    else if (shoot_hack == SP_NEEDLE)
                     {
                         if ((randint1(randint1(r_ptr->level / (3 + p_ptr->concent)) + (8 - p_ptr->concent)) == 1)
                             && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
@@ -3479,7 +3478,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         tdam = mon_damage_mod(m_ptr, tdam, FALSE);
                     }
 
-                    if (snipe_type == SP_EXPLODE)
+                    if (shoot_hack == SP_EXPLODE)
                     {
                         u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
@@ -3523,7 +3522,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         project(0, randint1(2+p_ptr->lev/40), ny, nx, tdam, GF_MISSILE, flg, -1);
                         break;
                     }
-                    if (snipe_type == SP_HOLYNESS)
+                    if (shoot_hack == SP_HOLYNESS)
                     {
                         cave[ny][nx].info |= (CAVE_GLOW);
                         note_spot(ny, nx);
@@ -3638,7 +3637,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
 
                         set_target(m_ptr, py, px);
 
-                        if (snipe_type == SP_RUSH || shoot_hack == SHOOT_KNOCKBACK)
+                        if (shoot_hack == SP_RUSH || shoot_hack == SHOOT_KNOCKBACK)
                         {
                             int n = randint1(5) + 3;
                             int m_idx = c_ptr->m_idx;
@@ -3696,7 +3695,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                    not take place when artifact ammo has stuck to a unique! */
                 if (!stick_to)
                 {
-                    if (snipe_type == SP_PIERCE)
+                    if (shoot_hack == SP_PIERCE)
                     {
                         if(p_ptr->concent < 1) break;
                         p_ptr->concent--;
@@ -3849,9 +3848,9 @@ bool do_cmd_fire(void)
     result = do_cmd_fire_aux1(bow, prompt.obj);
     if (result && p_ptr->pclass == CLASS_SNIPER)
     {
-        if (snipe_type == SP_AWAY)
+        if (shoot_hack == SP_AWAY)
             teleport_player(10 + (p_ptr->concent * 2), 0L);
-        if (snipe_type == SP_FINAL)
+        if (shoot_hack == SP_FINAL)
         {
             msg_print("You experience a powerful recoil!");
             set_slow(p_ptr->slow + randint0(7) + 7, FALSE);

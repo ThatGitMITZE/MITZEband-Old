@@ -17,7 +17,6 @@
 
 #include <assert.h>
 
-static void do_cmd_knowledge_shooter(void);
 static void browser_cursor(char ch, int *column, int *grp_cur, int grp_cnt, int *list_cur, int list_cnt);
 
 /*
@@ -4343,7 +4342,7 @@ static void do_cmd_knowledge_uniques(void)
     fd_kill(file_name);
 }
 
-static void do_cmd_knowledge_shooter(void)
+void do_cmd_knowledge_shooter(void)
 {
     doc_ptr doc = doc_alloc(80);
 
