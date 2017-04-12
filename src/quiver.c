@@ -21,7 +21,9 @@ void quiver_display(doc_ptr doc, obj_p p, int flags)
  * quivers in the dungeon. */
 bool quiver_likes(obj_ptr obj)
 {
-    return equip_find_obj(TV_QUIVER, SV_ANY) && obj->tval == p_ptr->shooter_info.tval_ammo;
+    return equip_find_obj(TV_QUIVER, SV_ANY)
+        && obj->tval == p_ptr->shooter_info.tval_ammo
+        && obj_is_identified(obj);
 }
 
 bool quiver_tolerates(obj_ptr obj)
