@@ -2020,6 +2020,7 @@ static void auto_destroy_obj(object_type *o_ptr, int autopick_idx)
     }
     /* Now decided to destroy
     disturb(0,0);*/
+    obj_delayed_describe(o_ptr); /* mass identify */
 
     /* Artifact? */
     if (!can_player_destroy_object(o_ptr))
@@ -2172,7 +2173,7 @@ bool autopick_auto_id(object_type *o_ptr)
             identify_item(o_ptr);
             stats_on_use(scroll, 1);
             scroll->number--;
-            obj_release(scroll, 0);
+            obj_release(scroll, OBJ_RELEASE_DELAYED_MSG);
             return TRUE;
         }
 

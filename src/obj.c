@@ -85,6 +85,7 @@ void obj_release(obj_ptr obj, int options)
 {
     char name[MAX_NLEN];
     bool quiet = BOOL(options & OBJ_RELEASE_QUIET);
+    bool delayed = BOOL(options & OBJ_RELEASE_DELAYED_MSG);
 
     if (!obj) return;
     if (!quiet)
@@ -121,17 +122,21 @@ void obj_release(obj_ptr obj, int options)
         p_ptr->window |= PW_EQUIP;
         break;
     case INV_PACK:
-        if (!quiet)
+        if (!quiet && !delayed)
             msg_format("You have %s in your pack.", name);
         if (obj->number <= 0)
             pack_remove(obj->loc.slot);
+        else if (delayed)
+            obj->marked |= OM_DELAYED_MSG;
         p_ptr->window |= PW_INVEN;
         break;
     case INV_QUIVER:
-        if (!quiet)
+        if (!quiet && !delayed)
             msg_format("You have %s in your quiver.", name);
         if (obj->number <= 0)
             quiver_remove(obj->loc.slot);
+        else if (delayed)
+            obj->marked |= OM_DELAYED_MSG;
         p_ptr->window |= PW_EQUIP; /* a Quiver [32 of 110] */
         break;
     case INV_TMP_ALLOC:
@@ -652,6 +657,28 @@ int obj_combine(obj_ptr dest, obj_ptr obj, int loc)
         if (dest->discount < obj->discount) dest->discount = obj->discount;
     }
     return amt;
+}
+
+void obj_delayed_describe(obj_ptr obj)
+{
+    if (obj->marked & OM_DELAYED_MSG)
+    {
+        char name[MAX_NLEN];
+        object_desc(name, obj, OD_COLOR_CODED);
+        switch (obj->loc.where)
+        {
+        case INV_QUIVER:
+            msg_format("You have %s in your quiver (%c).", name, slot_label(obj->loc.slot));
+            break;
+        case INV_PACK:
+            msg_format("You have %s (%c).", name, slot_label(obj->loc.slot));
+            break;
+        case INV_EQUIP: /* this case should not occur ... */
+            msg_format("You are wearing %s (%c).", name, slot_label(obj->loc.slot));
+            break;
+        }
+        obj->marked &= ~OM_DELAYED_MSG;
+    }
 }
 
 /************************************************************************

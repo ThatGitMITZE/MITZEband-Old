@@ -129,11 +129,16 @@ static void _do_identify_aux(obj_ptr obj)
         msg_format("%^s: %s (%c).", equip_describe_slot(obj->loc.slot),
                 name, slot_label(obj->loc.slot));
         break;
-    case INV_PACK:
+/* case INV_PACK:
         msg_format("In your pack: %s.", name);
         break;
     case INV_QUIVER:
         msg_format("In your quiver: %s.", name);
+        break;*/
+    case INV_PACK:
+    case INV_QUIVER:
+        obj->marked |= OM_DELAYED_MSG;
+        p_ptr->notice |= PN_CARRY;
         break;
     case INV_FLOOR:
         msg_format("On the ground: %s.", name);

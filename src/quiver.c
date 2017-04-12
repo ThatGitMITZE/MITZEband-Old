@@ -147,16 +147,6 @@ slot_t quiver_random_slot(obj_p p)
 }
 
 /* Optimize */
-static void _describe(obj_ptr obj)
-{
-    if (obj->marked & OM_DELAYED_MSG)
-    {
-        char name[MAX_NLEN];
-        object_desc(name, obj, OD_COLOR_CODED);
-        msg_format("You have %s in your quiver (%c).", name, slot_label(obj->loc.slot));
-        obj->marked &= ~OM_DELAYED_MSG;
-    }
-}
 bool quiver_optimize(void)
 {
     if (inv_optimize(_inv))
@@ -168,7 +158,7 @@ bool quiver_optimize(void)
 }
 void quiver_delayed_describe(void)
 {
-    quiver_for_each(_describe);
+    quiver_for_each(obj_delayed_describe);
 }
 
 /* Properties of the Entire Inventory */

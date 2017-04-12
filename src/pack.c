@@ -108,7 +108,7 @@ void pack_get(obj_ptr obj)
         if (class_ptr->get_object)
             class_ptr->get_object(obj);
 
-        msg_format("You get %s.", name);
+        /*msg_format("You get %s.", name);*/
 
         quests_on_get_obj(obj);
         pack_carry(obj);
@@ -363,16 +363,6 @@ bool pack_overflow(void)
  * stacking and resorting. See PN_REORDER and PN_COMBINE, which
  * I've combined into a single method since it is unclear why 
  * they need to be separate. */
-static void _describe(obj_ptr obj)
-{
-    if (obj->marked & OM_DELAYED_MSG)
-    {
-        char name[MAX_NLEN];
-        object_desc(name, obj, OD_COLOR_CODED);
-        msg_format("You have %s (%c).", name, slot_label(obj->loc.slot));
-        obj->marked &= ~OM_DELAYED_MSG;
-    }
-}
 bool pack_optimize(void)
 {
     if (_lock)
@@ -394,7 +384,7 @@ void pack_delayed_describe(void)
     else
     {
         msg_boundary();
-        pack_for_each(_describe);
+        pack_for_each(obj_delayed_describe);
     }
 }
 
