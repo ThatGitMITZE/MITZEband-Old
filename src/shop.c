@@ -1487,7 +1487,9 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
     obj_identify_fully(obj);
     stats_on_purchase(obj);
 
-    object_desc(name, obj, OD_COLOR_CODED); /* again...in case *id* */
+    /* This message may seem like spam, but it is not. Selling an
+     * un-identified potion of augmentation, for example. */
+    object_desc(name, obj, OD_COLOR_CODED);
     if (no_selling)
         msg_format("You gave %s.", name);
     else
@@ -1552,6 +1554,12 @@ static void _buy(_ui_context_ptr context)
         {
             obj_identify_fully(prompt.obj);
             prompt.obj->number -= amt;
+            prompt.obj->marked |= OM_DELAYED_MSG;
+            p_ptr->notice |= PN_CARRY;
+            if (prompt.obj->loc.where == INV_QUIVER)
+                p_ptr->notice |= PN_OPTIMIZE_QUIVER;
+            else if (prompt.obj->loc.where == INV_PACK)
+                p_ptr->notice |= PN_OPTIMIZE_PACK;
         }
     }
     else

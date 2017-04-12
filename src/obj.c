@@ -663,20 +663,35 @@ void obj_delayed_describe(obj_ptr obj)
 {
     if (obj->marked & OM_DELAYED_MSG)
     {
-        char name[MAX_NLEN];
+        string_ptr msg = string_alloc();
+        char       name[MAX_NLEN];
+        bool       show_slot = FALSE;
+
         object_desc(name, obj, OD_COLOR_CODED);
+        if (obj->loc.where == INV_EQUIP) /* paranoia */
+            string_append_s(msg, "You are wearing");
+        else
+            string_append_s(msg, "You have");
+        string_printf(msg, " %s", name);
+        if (obj->loc.where == INV_QUIVER)
+            string_append_s(msg, " in your quiver");
+
         switch (obj->loc.where)
         {
         case INV_QUIVER:
-            msg_format("You have %s in your quiver (%c).", name, slot_label(obj->loc.slot));
-            break;
         case INV_PACK:
-            msg_format("You have %s (%c).", name, slot_label(obj->loc.slot));
+            show_slot = use_pack_slots;
             break;
-        case INV_EQUIP: /* this case should not occur ... */
-            msg_format("You are wearing %s (%c).", name, slot_label(obj->loc.slot));
+        case INV_EQUIP:
+            show_slot = TRUE;
             break;
         }
+        if (show_slot)
+            string_printf(msg, " (%c)", slot_label(obj->loc.slot));
+        string_append_c(msg, '.');
+        msg_print(string_buffer(msg));
+        string_free(msg);
+
         obj->marked &= ~OM_DELAYED_MSG;
     }
 }
