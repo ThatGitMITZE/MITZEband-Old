@@ -506,7 +506,16 @@ static int _choose_spell(spell_info* spells, int ct, cptr desc, int max_cost)
         }
 
         if (isupper(ch))
+        {
+            if (ct < 26) /* browse unless a big spell list */
+            {
+                choice = ch - 'A';
+                if (0 <= choice && choice < ct)
+                    _describe_spell(&spells[choice], _col_height(ct));
+                continue;
+            }
             choice = ch - 'A' + 26;
+        }
         else if (islower(ch))
             choice = ch - 'a';
         else if (ch >= '0' && ch <= '9')

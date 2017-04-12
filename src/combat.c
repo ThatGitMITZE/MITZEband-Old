@@ -1232,6 +1232,11 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "HurtRock", TERM_VIOLET, cols[0]);
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Nonliving", TERM_VIOLET, cols[0]);
     }
+    if (display_shooter_mode == SP_LITE)
+    {
+        int snipe = sniper_multiplier(display_shooter_mode, arrow, NULL) * 10;
+        _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "HurtLite", TERM_VIOLET, cols[0]);
+    }
     /* Second Column */
     to_h = to_h + to_h_bow + to_h_xtra;
 
