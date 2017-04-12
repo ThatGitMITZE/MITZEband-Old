@@ -2247,6 +2247,7 @@ enum {
  */
 #define PN_OPTIMIZE_PACK   0x0001
 #define PN_OPTIMIZE_QUIVER 0x0002
+#define PN_CARRY           0x0004
 /* xxx (many) */
 
 
@@ -2788,6 +2789,7 @@ enum summon_specific_e {
 #define OM_EGO_COUNTED     0x0100    /* Stats */
 #define OM_ART_COUNTED     0x0200    /* Stats */
 #define OM_EFFECT_COUNTED  0x0400    /* Stats */
+#define OM_DELAYED_MSG     0x0800    /* Describe inventory slot *after* resorting */
 
 
 /*

@@ -40,6 +40,7 @@ extern slot_t  quiver_random_slot(obj_p p);
  * I've combined into a single method since it is unclear why 
  * they need to be separate. */
 extern bool    quiver_optimize(void);
+extern void    quiver_delayed_describe(void);
 
 /* Properties of the Entire Inventory */
 extern int     quiver_weight(obj_p p);

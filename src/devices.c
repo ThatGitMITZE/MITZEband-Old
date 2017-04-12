@@ -130,10 +130,10 @@ static void _do_identify_aux(obj_ptr obj)
                 name, slot_label(obj->loc.slot));
         break;
     case INV_PACK:
-        msg_format("In your pack: %s (%c).", name, slot_label(obj->loc.slot));
+        msg_format("In your pack: %s.", name);
         break;
     case INV_QUIVER:
-        msg_format("In your quiver: %s (%c).", name, slot_label(obj->loc.slot));
+        msg_format("In your quiver: %s.", name);
         break;
     case INV_FLOOR:
         msg_format("On the ground: %s.", name);

@@ -75,6 +75,7 @@ extern int     pack_overflow_count(void);
  * but you can lock() the pack just to be safe. Be sure to unlock(). */
 extern void    pack_lock(void);
 extern bool    pack_optimize(void);
+extern void    pack_delayed_describe(void);
 extern void    pack_unlock(void);
 
 /* Properties of the Entire Inventory */

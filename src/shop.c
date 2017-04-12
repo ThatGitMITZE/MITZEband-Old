@@ -1681,7 +1681,7 @@ static bool _sell_aux(shop_ptr shop, obj_ptr obj)
         virtue_add(VIRTUE_NATURE, -1);
 
     pack_carry(obj);
-    msg_format("You have %s.", name);
+    /*msg_format("You have %s.", name);*/
     return TRUE;
 }
 

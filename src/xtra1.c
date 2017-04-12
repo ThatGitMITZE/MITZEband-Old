@@ -5045,6 +5045,13 @@ void notice_stuff(void)
         p_ptr->notice &= ~PN_OPTIMIZE_QUIVER;
         quiver_optimize();
     }
+    if ((p_ptr->notice & PN_CARRY) && !travel.run)
+    {
+        p_ptr->notice &= ~PN_CARRY;
+        pack_delayed_describe();
+        if (!(p_ptr->notice & PN_CARRY))
+            quiver_delayed_describe();
+    }
 }
 
 

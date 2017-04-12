@@ -73,6 +73,7 @@ void pack_carry_aux(obj_ptr obj)
         pack_push_overflow(obj);
     p_ptr->update |= PU_BONUS; /* Weight changed */
     p_ptr->window |= PW_INVEN;
+    p_ptr->notice |= PN_CARRY;
 }
 
 /* Helper for pack_get_floor ... probably s/b private but the autopicker needs it */
@@ -362,6 +363,16 @@ bool pack_overflow(void)
  * stacking and resorting. See PN_REORDER and PN_COMBINE, which
  * I've combined into a single method since it is unclear why 
  * they need to be separate. */
+static void _describe(obj_ptr obj)
+{
+    if (obj->marked & OM_DELAYED_MSG)
+    {
+        char name[MAX_NLEN];
+        object_desc(name, obj, OD_COLOR_CODED);
+        msg_format("You have %s (%c).", name, slot_label(obj->loc.slot));
+        obj->marked &= ~OM_DELAYED_MSG;
+    }
+}
 bool pack_optimize(void)
 {
     if (_lock)
@@ -372,10 +383,19 @@ bool pack_optimize(void)
     else if (inv_optimize(_inv))
     {
         p_ptr->window |= PW_INVEN;
-        /*cmsg_print(TERM_YELLOW, "You reorder your pack.");*/
         return TRUE;
     }
     return FALSE;
+}
+void pack_delayed_describe(void)
+{
+    if (_lock)
+        p_ptr->notice |= PN_CARRY;
+    else
+    {
+        msg_boundary();
+        pack_for_each(_describe);
+    }
 }
 
 /* Properties of the Entire Inventory */

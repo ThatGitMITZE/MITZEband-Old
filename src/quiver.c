@@ -62,6 +62,7 @@ void quiver_carry(obj_ptr obj)
     }
     obj->number += xtra;
     p_ptr->window |= PW_EQUIP; /* a Quiver [32 of 110] */
+    p_ptr->notice |= PN_CARRY;
 }
 
 void quiver_remove(slot_t slot)
@@ -146,6 +147,16 @@ slot_t quiver_random_slot(obj_p p)
 }
 
 /* Optimize */
+static void _describe(obj_ptr obj)
+{
+    if (obj->marked & OM_DELAYED_MSG)
+    {
+        char name[MAX_NLEN];
+        object_desc(name, obj, OD_COLOR_CODED);
+        msg_format("You have %s in your quiver (%c).", name, slot_label(obj->loc.slot));
+        obj->marked &= ~OM_DELAYED_MSG;
+    }
+}
 bool quiver_optimize(void)
 {
     if (inv_optimize(_inv))
@@ -154,6 +165,10 @@ bool quiver_optimize(void)
         return TRUE;
     }
     return FALSE;
+}
+void quiver_delayed_describe(void)
+{
+    quiver_for_each(_describe);
 }
 
 /* Properties of the Entire Inventory */

@@ -193,6 +193,7 @@ static void _add_aux(inv_ptr inv, obj_ptr obj, slot_t slot)
     if (slot >= vec_length(inv->objects))
         _grow(inv, slot);
     vec_set(inv->objects, slot, copy);
+    copy->marked |= OM_DELAYED_MSG;
 
     obj->number -= ct;
 }
@@ -239,6 +240,7 @@ slot_t inv_combine(inv_ptr inv, obj_ptr obj)
           && dest->number + obj->number <= OBJ_STACK_MAX )
         {
             obj_combine(dest, obj, inv->type);
+            dest->marked |= OM_DELAYED_MSG;
             return slot;
         }
     }
@@ -267,6 +269,7 @@ int inv_combine_ex(inv_ptr inv, obj_ptr obj)
         if (obj_can_combine(dest, obj, inv->type))
         {
             ct += obj_combine(dest, obj, inv->type);
+            dest->marked |= OM_DELAYED_MSG;
             if (!obj->number) break;
         }
     }

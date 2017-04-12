@@ -59,7 +59,7 @@ static void _concentrate(int cmd, variant *res)
             "In addition, you will land more critical shots as your aim improves.");
         break;
     case SPELL_INFO:
-        var_set_string(res, format("Max %dx", _max_concentration()));
+        var_set_string(res, format("(%d of %d)", p_ptr->concent, _max_concentration()));
         break;
     case SPELL_CAST: {
         int max = _max_concentration();
@@ -516,6 +516,13 @@ static int _get_powers(spell_info* spells, int max)
 /************************************************************************
  * Class
  ***********************************************************************/
+static void _character_dump(doc_ptr doc)
+{
+    spell_info spells[MAX_SPELLS];
+    int        ct = _get_spells(spells, MAX_SPELLS);
+
+    py_display_spells(doc, spells, ct);
+}
 class_t *sniper_get_class(void)
 {
     static class_t me = {0};
@@ -556,6 +563,7 @@ class_t *sniper_get_class(void)
         me.get_powers = _get_powers;
         me.caster_info = _caster_info;
         me.get_spells = _get_spells;
+        me.character_dump = _character_dump;
         init = TRUE;
     }
 
