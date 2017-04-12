@@ -716,6 +716,7 @@ extern void do_cmd_spike(void);
 extern void do_cmd_walk(bool pickup);
 extern void do_cmd_stay(bool pickup);
 extern void do_cmd_get(void);
+extern void do_cmd_autoget(void);
 extern void do_cmd_run(void);
 extern void do_cmd_rest(void);
 extern bool do_cmd_fire(void);

@@ -2412,6 +2412,13 @@ static bool _travel_next_obj(int mode)
 }
 void do_cmd_get(void)
 {
+    if (!cave[py][px].o_idx)
+        msg_print("You see no objects here. Try <color:keypress>^G</color> to auto-get nearby objects.");
+    if (pack_get_floor())
+        energy_use = 100;
+}
+void do_cmd_autoget(void)
+{
     /* Get any objects under foot first ... this is the old
      * 'g' behavior sans interaction with features (e.g. re-
      * enter a shop) */
@@ -2428,6 +2435,14 @@ void do_cmd_get(void)
         _travel_next_obj(TRAVEL_MODE_AUTOPICK);
     else if (auto_get_ammo)
         _travel_next_obj(TRAVEL_MODE_AMMO);
+    else
+    {
+        msg_print("<color:B>Warning:</color> You have specified neither the "
+            "<color:keyword>auto_get_ammo</color> nor the <color:keyword>"
+            "auto_get_objects</color> options. With neither option set, "
+            "<color:keypress>^G</color> behaves just like the normal "
+            "<color:keypress>g</color>et command.");
+    }
 }
 
 /*

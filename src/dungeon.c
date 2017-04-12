@@ -3205,6 +3205,11 @@ static void _dispatch_command(int old_now_turn)
             break;
         }
 
+        case KTRL('G'):
+        {
+            do_cmd_autoget();
+            break;
+        }
         /* Rest -- Arg is time */
         case 'R':
         {
