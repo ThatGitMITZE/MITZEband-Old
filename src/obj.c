@@ -127,7 +127,10 @@ void obj_release(obj_ptr obj, int options)
         if (obj->number <= 0)
             pack_remove(obj->loc.slot);
         else if (delayed)
+        {
             obj->marked |= OM_DELAYED_MSG;
+            p_ptr->notice |= PN_CARRY;
+        }
         p_ptr->window |= PW_INVEN;
         break;
     case INV_QUIVER:
@@ -136,7 +139,10 @@ void obj_release(obj_ptr obj, int options)
         if (obj->number <= 0)
             quiver_remove(obj->loc.slot);
         else if (delayed)
+        {
             obj->marked |= OM_DELAYED_MSG;
+            p_ptr->notice |= PN_CARRY;
+        }
         p_ptr->window |= PW_EQUIP; /* a Quiver [32 of 110] */
         break;
     case INV_TMP_ALLOC:

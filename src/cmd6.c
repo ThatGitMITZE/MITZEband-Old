@@ -653,7 +653,7 @@ static void do_cmd_quaff_potion_aux(obj_ptr obj)
             stats_on_pickup(obj);
 
         obj->number -= number;
-        obj_release(obj, 0);
+        obj_release(obj, OBJ_RELEASE_DELAYED_MSG);
     }
 }
 
@@ -847,7 +847,7 @@ static void do_cmd_read_scroll_aux(obj_ptr o_ptr)
     {
         stats_on_use(o_ptr, number);
         o_ptr->number -= number;
-        obj_release(o_ptr, 0);
+        obj_release(o_ptr, OBJ_RELEASE_DELAYED_MSG);
     }
 }
 
