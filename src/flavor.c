@@ -2070,6 +2070,15 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         strcat(tmp_val2, buf);
     }
 
+    if (object_is_device(o_ptr) && obj_is_identified_fully(o_ptr))
+    {
+        int  fail = device_calc_fail_rate(o_ptr);
+        if (mode & OD_COLOR_CODED)
+            strcat(tmp_val2, format("<color:B>%d.%d%%</color>", fail/10, fail%10));
+        else
+            strcat(tmp_val2, format("%d.%d%%", fail/10, fail%10));
+    }
+
     if (o_ptr->name3 && object_is_known(o_ptr) && abbrev_all)
     {
         cptr  t = a_name + a_info[o_ptr->name3].name;
