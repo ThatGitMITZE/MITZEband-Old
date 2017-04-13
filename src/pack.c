@@ -118,8 +118,25 @@ void pack_get(obj_ptr obj)
 
 static int _get_cmd_handler(obj_prompt_context_ptr context, int cmd)
 {
+    obj_prompt_tab_ptr tab = vec_get(context->tabs, context->tab);
     if (cmd == '*')
+    {
+        inv_for_each(tab->inv, pack_get);
         return OP_CMD_DISMISS;
+    }
+    else
+    {
+        slot_t slot = inv_label_slot(tab->inv, cmd);
+        if (slot)
+        {
+            obj_ptr obj = inv_obj(tab->inv, slot);
+            pack_get(obj);
+            inv_remove(tab->inv, slot);
+            if (!inv_count_slots(tab->inv, obj_exists))
+                return OP_CMD_DISMISS;
+            return OP_CMD_HANDLED;
+        }
+    }
     return OP_CMD_SKIPPED;
 }
 
@@ -147,12 +164,7 @@ static bool _get_floor(inv_ptr floor)
     switch (obj_prompt(&prompt))
     {
     case OP_CUSTOM:
-        inv_for_each(floor, pack_get);
-        return TRUE;
-
     case OP_SUCCESS:
-        assert(prompt.obj);
-        pack_get(prompt.obj);
         return TRUE;
     }
     return FALSE;
