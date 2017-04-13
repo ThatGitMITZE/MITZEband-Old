@@ -862,6 +862,9 @@ static void _drop(obj_ptr obj)
     object_desc(name, obj, OD_COLOR_CODED);
     msg_format("You drop %s.", name);
     drop_near(obj, 0, py, px);
+    p_ptr->update |= PU_BONUS; /* Weight changed */
+    if (obj->loc.where == INV_PACK)
+        p_ptr->window |= PW_INVEN;
 }
 
 void obj_drop(obj_ptr obj, int amt)
@@ -876,6 +879,14 @@ void obj_drop(obj_ptr obj, int amt)
         obj_t copy = *obj;
         copy.number = amt;
         obj->number -= amt;
+
+        obj->marked |= OM_DELAYED_MSG;
+        p_ptr->notice |= PN_CARRY;
+        if (obj->loc.where == INV_PACK)
+            p_ptr->notice |= PN_OPTIMIZE_PACK;
+        else if (obj->loc.where == INV_QUIVER)
+            p_ptr->notice |= PN_OPTIMIZE_QUIVER;
+
         copy.marked &= ~OM_WORN;
         _drop(&copy);
     }

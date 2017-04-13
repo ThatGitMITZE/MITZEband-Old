@@ -268,8 +268,9 @@ int inv_combine_ex(inv_ptr inv, obj_ptr obj)
         if (!dest) continue;
         if (obj_can_combine(dest, obj, inv->type))
         {
-            ct += obj_combine(dest, obj, inv->type);
-            dest->marked |= OM_DELAYED_MSG;
+            int n = obj_combine(dest, obj, inv->type);
+            ct += n;
+            if (n) dest->marked |= OM_DELAYED_MSG;
             if (!obj->number) break;
         }
     }

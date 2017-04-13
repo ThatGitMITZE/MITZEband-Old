@@ -92,6 +92,7 @@ void quiver_drop(obj_ptr obj)
 
     obj_drop(obj, amt);
 }
+
 /* Accessing, Iterating, Searching */
 obj_ptr quiver_obj(slot_t slot)
 {

@@ -175,7 +175,6 @@ bool pack_get_floor(void)
 void pack_drop(obj_ptr obj)
 {
     int  amt = obj->number;
-    bool msg = FALSE;
 
     assert(obj);
     assert(obj->loc.where == INV_PACK);
@@ -191,13 +190,7 @@ void pack_drop(obj_ptr obj)
         }
     }
 
-    if (amt < obj->number)
-        msg = TRUE;
     obj_drop(obj, amt);
-    if (msg)
-        pack_describe(obj);
-    p_ptr->update |= PU_BONUS; /* Weight changed */
-    p_ptr->window |= PW_INVEN;
 }
 
 void pack_describe(obj_ptr obj)
@@ -209,7 +202,7 @@ void pack_describe(obj_ptr obj)
     assert(1 <= obj->loc.slot && obj->loc.slot <= 26);
 
     object_desc(name, obj, OD_COLOR_CODED);
-    msg_format("You have %s in your pack (%c).", name, slot_label(obj->loc.slot));
+    msg_format("You have %s (%c).", name, slot_label(obj->loc.slot));
 }
 
 void pack_remove(slot_t slot)
