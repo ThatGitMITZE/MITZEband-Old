@@ -325,9 +325,9 @@ static void _display(_ui_context_ptr context)
 
 static void _get_aux(obj_ptr obj)
 {
-    char name[MAX_NLEN];
+    /*char name[MAX_NLEN];
     object_desc(name, obj, OD_COLOR_CODED);
-    msg_format("You get %s.", name);
+    msg_format("You get %s.", name);*/
     pack_carry(obj);
 }
 
