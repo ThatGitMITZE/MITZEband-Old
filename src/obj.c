@@ -657,6 +657,7 @@ int obj_combine(obj_ptr dest, obj_ptr obj, int loc)
 
         /* Hack -- blend "feelings" */
         if (obj->feeling) dest->feeling = obj->feeling;
+        if (obj->marked & OM_DELAYED_MSG) dest->marked |= OM_DELAYED_MSG;
 
         /* Hack -- could average discounts XXX XXX XXX */
         /* Hack -- save largest discount XXX XXX XXX */
