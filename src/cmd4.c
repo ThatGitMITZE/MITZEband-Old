@@ -3209,7 +3209,19 @@ void do_cmd_note(void)
  */
 void do_cmd_version(void)
 {
-    msg_format("You are playing PosChengband %d.%d.%d.", VER_MAJOR, VER_MINOR, VER_PATCH);
+    cptr xtra = "";
+    if (VER_MINOR == 0)
+    {
+        if (VER_PATCH == 0) xtra = " (Alpha)";
+        else xtra = " (Beta)";
+    }
+    msg_format("You are playing <color:B>PosChengband</color> <color:r>%d.%d.%d%s</color>.",
+        VER_MAJOR, VER_MINOR, VER_PATCH, xtra);
+    if (1)
+    {
+        rect_t r = ui_map_rect();
+        msg_format("Map display is %dx%d.", r.cx, r.cy);
+    }
 }
 
 

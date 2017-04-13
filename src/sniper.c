@@ -490,7 +490,7 @@ static caster_info * _caster_info(void)
     if (!init)
     {
         me.magic_desc = "sniping";
-        me.options = CASTER_USE_CONCENTRATION | CASTER_NO_SPELL_FAIL;
+        me.options = CASTER_USE_CONCENTRATION;
         me.which_stat = A_DEX;
         init = TRUE;
     }

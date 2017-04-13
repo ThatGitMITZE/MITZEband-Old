@@ -451,8 +451,7 @@ void equip_wield_ui(void)
     if (!obj) return;
     if (obj_is_ammo(obj))
     {
-        int  amt = obj->number;
-        char name[MAX_NLEN];
+        int amt = obj->number;
         assert(equip_find_obj(TV_QUIVER, SV_ANY));
         if (quiver_capacity() <= quiver_count(NULL))
         {
@@ -466,11 +465,7 @@ void equip_wield_ui(void)
             quiver_carry(&copy);
             amt -= copy.number; /* quiver might not hold the requested amt */
             obj->number -= amt;
-
-            copy.number = amt;
-            object_desc(name, &copy, OD_COLOR_CODED);
-            msg_format("You add %s to your quiver.", name);
-            obj_release(obj, obj->number ? 0 : OBJ_RELEASE_QUIET);
+            obj_release(obj, obj->number ? OBJ_RELEASE_DELAYED_MSG : OBJ_RELEASE_QUIET);
             energy_use = 50;
         }
     }
@@ -801,8 +796,7 @@ void _unwield(obj_ptr obj, bool drop)
 {
     if (obj->loc.where == INV_QUIVER)
     {
-        int  amt = obj->number;
-        char name[MAX_NLEN];
+        int amt = obj->number;
         assert(equip_find_obj(TV_QUIVER, SV_ANY));
         assert(!drop); /* quiver_drop ... not us. cf do_cmd_drop */
         if (msg_input_num("Quantity", &amt, 1, obj->number))
@@ -810,13 +804,10 @@ void _unwield(obj_ptr obj, bool drop)
             obj_t copy = *obj;
 
             copy.number = amt;
-            object_desc(name, &copy, OD_COLOR_CODED);
-            msg_format("You remove %s from your quiver.", name);
-
             pack_carry_aux(&copy); /* Hack: don't put ammo back in the quiver if we just removed it! */
 
             obj->number -= amt;
-            obj_release(obj, obj->number ? 0 : OBJ_RELEASE_QUIET);
+            obj_release(obj, obj->number ? OBJ_RELEASE_DELAYED_MSG : OBJ_RELEASE_QUIET);
             energy_use = 50;
         }
     }
