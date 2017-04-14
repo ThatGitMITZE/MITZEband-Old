@@ -2485,10 +2485,10 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
                Difficulty is the level of the effect, and determines the fail rate of the effect.
                We scale up the difficulty a bit depending on the level of the device. */
             o_ptr->activation.power = device_level(o_ptr);
-            o_ptr->activation.difficulty = _bounds_check(_rand_normal(entry->level, 10), 1, o_ptr->activation.power);
+            o_ptr->activation.difficulty = _bounds_check(_rand_normal(entry->level, 5), 1, o_ptr->activation.power);
             o_ptr->activation.difficulty += (o_ptr->activation.power - o_ptr->activation.difficulty) / 3;
 
-            o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 10), 1, 1000);
+            o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 5), 1, 1000);
             o_ptr->activation.extra = entry->extra;
 
             if (entry->flags & _NO_DESTROY)
