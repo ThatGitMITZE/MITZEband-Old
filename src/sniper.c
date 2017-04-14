@@ -114,13 +114,13 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         else
         {
             mult = 10 + 5*p_ptr->concent;
+            if (have_flag(flgs, OF_BRAND_FIRE))
+                mult += 10;
             if (r_ptr && (r_ptr->flags3 & RF3_HURT_FIRE))
             {
                 mult *= 2;
                 mon_lore_3(m_ptr, RF3_HURT_FIRE);
             }
-            if (have_flag(flgs, OF_BRAND_FIRE))
-                mult += 10;
         }
         break;
     case SP_COLD:
@@ -131,13 +131,13 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         else
         {
             mult = 10 + 5*p_ptr->concent;
+            if (have_flag(flgs, OF_BRAND_COLD))
+                mult += 10;
             if (r_ptr && (r_ptr->flags3 & RF3_HURT_COLD))
             {
                 mult *= 2;
                 mon_lore_3(m_ptr, RF3_HURT_COLD);
             }
-            if (have_flag(flgs, OF_BRAND_COLD))
-                mult += 10;
         }
         break;
     case SP_ELEC:
