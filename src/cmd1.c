@@ -6565,13 +6565,20 @@ static bool travel_abort(void)
     return FALSE;
 }
 
+static int travel_cost(point_t pt)
+{
+    return travel.cost[pt.y][pt.x];
+}
+
 void travel_step(void)
 {
     int i;
-    int dir = travel.dir;
+    int dir = 0;
     int old_run = travel.run;
+    int dirs[8] = { 2, 4, 6, 8, 1, 7, 9, 3 };
+    point_t pt_best = {0};
 
-    find_prevdir = dir;
+    find_prevdir = travel.dir;
 
     if (travel_abort())
     {
@@ -6583,25 +6590,27 @@ void travel_step(void)
 
     energy_use = 100;
 
-    for (i = 1; i <= 9; i++)
+    for (i = 0; i < 8; i++)
     {
-        if (i == 5) continue;
+        int     d = dirs[i];
+        point_t pt = point(px + ddx[d], py + ddy[d]);
 
-        if (travel.cost[py+ddy[i]][px+ddx[i]] < travel.cost[py+ddy[dir]][px+ddx[dir]])
+        if (!dir || travel_cost(pt) < travel_cost(pt_best))
         {
-            dir = i;
+            dir = d;
+            pt_best = pt;
         }
     }
 
     /* Travelling is bumping into jammed doors and getting stuck */
-    if (is_jammed_door(cave[py+ddy[dir]][px+ddx[dir]].feat))
+    if (is_jammed_door(cave[pt_best.y][pt_best.x].feat))
     {
         disturb(0, 0);
         return;
     }
 
     /* Closed door */
-    else if (is_closed_door(cave[py+ddy[dir]][px+ddx[dir]].feat))
+    else if (is_closed_door(cave[pt_best.y][pt_best.x].feat))
     {
         if (!easy_open)
         {
@@ -6610,7 +6619,7 @@ void travel_step(void)
         }
     }
     /* Travelling is bumping into mountains and permanent walls and getting stuck */
-    else if (!player_can_enter(cave[py+ddy[dir]][px+ddx[dir]].feat, 0))
+    else if (!player_can_enter(cave[pt_best.y][pt_best.x].feat, 0))
     {
         disturb(0, 0);
         return;
