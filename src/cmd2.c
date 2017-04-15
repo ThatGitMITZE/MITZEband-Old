@@ -2591,8 +2591,6 @@ int breakage_chance(object_type *o_ptr)
     if (shoot_hack == SP_PIERCE) return 100;
     if (shoot_hack == SP_FINAL) return 100;
     if (shoot_hack == SP_NEEDLE) return 100;
-    if (shoot_hack == SP_EVILNESS) return 40;
-    if (shoot_hack == SP_HOLYNESS) return 40;
 
     if (shoot_hack == SHOOT_SHATTER) return 100;
     if (weaponmaster_get_toggle() == TOGGLE_EXPLODING_BOLT) return 100;
@@ -2600,6 +2598,8 @@ int breakage_chance(object_type *o_ptr)
     if (weaponmaster_get_toggle() == TOGGLE_OVERDRAW) return 100;
 
     if (o_ptr->name2 == EGO_AMMO_ENDURANCE) return 0;
+    if (shoot_hack == SP_EVILNESS) return 40;
+    if (shoot_hack == SP_HOLYNESS) return 40;
     if (o_ptr->name2 == EGO_AMMO_EXPLODING) return 100;
 
     /* Examine the item type */
