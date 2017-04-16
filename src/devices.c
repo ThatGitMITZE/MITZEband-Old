@@ -54,9 +54,12 @@ int  effect_calc_fail_rate(effect_t *effect)
     if (chance < USE_DEVICE) chance = USE_DEVICE;
 
     if (chance > fail)
-        return fail * 1000 / (chance*2);
+        fail = fail * 1000 / (chance*2);
     else
-        return 1000 - chance * 1000 / (fail*2);
+        fail = 1000 - chance * 1000 / (fail*2);
+    if (p_ptr->stun > 50 && fail < 250) fail = 250;
+    else if (p_ptr->stun && fail < 150) fail = 150;
+    return fail;
 }
 
 int device_calc_fail_rate(object_type *o_ptr)
@@ -91,6 +94,8 @@ int device_calc_fail_rate(object_type *o_ptr)
         fail = (USE_DEVICE-1)*1000/chance;
 
     if (o_ptr->tval == TV_SCROLL && fail > 500) fail = 500;
+    if (p_ptr->stun > 50 && fail < 250) fail = 250;
+    else if (p_ptr->stun && fail < 150) fail = 150;
 
     return fail;
 }

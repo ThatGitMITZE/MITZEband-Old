@@ -190,7 +190,7 @@ int sniper_multiplier(int which, obj_ptr ammo, monster_type *m_ptr)
         }
         break;
     case SP_FINAL:
-        mult = 60;
+        mult = 70;
         break;
     }
 
