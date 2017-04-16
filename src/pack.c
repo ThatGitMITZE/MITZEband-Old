@@ -344,6 +344,17 @@ bool pack_overflow(void)
     while (vec_length(_overflow))
     {
         obj_ptr obj = vec_pop(_overflow);
+        /* Weird case: Wield an item from your full pack. This first
+         * removes the item from your equipment, placing it in your
+         * full pack (hence, into _overflow). Then it wears the selected
+         * object, freeing up an equipment slot. Your pack shouldn't
+         * overflow after all! */
+        if (!pack_is_full())
+        {
+            pack_carry_aux(obj);
+            free(obj);
+            continue;
+        }
         if (!result)
         {
             disturb(0, 0);
@@ -407,6 +418,11 @@ int pack_count(obj_p p)
 int pack_count_slots(obj_p p)
 {
     return inv_count_slots(_inv, p);
+}
+
+bool pack_is_full(void)
+{
+    return pack_count_slots(obj_exists) == PACK_MAX;
 }
 
 /* Savefiles */

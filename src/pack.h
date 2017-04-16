@@ -82,6 +82,7 @@ extern void    pack_unlock(void);
 extern int     pack_weight(obj_p p);
 extern int     pack_count(obj_p p);
 extern int     pack_count_slots(obj_p p);
+extern bool    pack_is_full(void);
 
 /* Savefiles */
 extern void    pack_load(savefile_ptr file);
