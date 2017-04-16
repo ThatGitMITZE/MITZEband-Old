@@ -177,7 +177,7 @@ bool pack_get_floor(void)
 
     autopick_get_floor(); /* no energy charge */
 
-    floor = inv_filter_floor(NULL);
+    floor = inv_filter_floor(point(px, py), NULL);
     result = _get_floor(floor);
     inv_free(floor);
 

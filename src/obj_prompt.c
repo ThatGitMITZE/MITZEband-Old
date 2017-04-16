@@ -157,7 +157,7 @@ static void _context_make(obj_prompt_context_ptr context)
         switch (context->prompt->where[i])
         {
         case INV_FLOOR:
-            inv = inv_filter_floor(filter);
+            inv = inv_filter_floor(point(px, py), filter);
             inv_sort(inv);
             break;
         case INV_EQUIP:

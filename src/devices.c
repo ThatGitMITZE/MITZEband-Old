@@ -156,7 +156,7 @@ static void _do_identify_aux(obj_ptr obj)
 
 void mass_identify(bool use_charges) /* shared with Sorcery spell */
 {
-    inv_ptr floor = inv_filter_floor(obj_exists);
+    inv_ptr floor = inv_filter_floor(point(px, py), obj_exists);
 
     _use_charges = use_charges;
     pack_for_each_that(_do_identify_aux, obj_is_unknown);

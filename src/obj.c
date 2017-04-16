@@ -290,6 +290,7 @@ bool obj_is_art(obj_ptr obj)     { return obj->name1 || obj->art_name; }
 bool obj_is_book(obj_ptr obj)    { return TV_BOOK_BEGIN <= obj->tval && obj->tval <= TV_BOOK_END; }
 bool obj_is_device(obj_ptr obj)  { return obj_is_wand(obj) || obj_is_rod(obj) || obj_is_staff(obj); }
 bool obj_is_ego(obj_ptr obj)     { return BOOL(obj->name2); }
+bool obj_is_found(obj_ptr obj)   { return BOOL(obj->marked & OM_FOUND); }
 bool obj_is_inscribed(obj_ptr obj) { return BOOL(obj->inscription); }
 bool obj_is_quiver(obj_ptr obj)  { return obj->tval == TV_QUIVER; }
 bool obj_is_rod(obj_ptr obj)     { return obj->tval == TV_ROD; }

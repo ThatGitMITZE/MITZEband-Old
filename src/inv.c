@@ -113,10 +113,10 @@ inv_ptr inv_filter(inv_ptr src, obj_p p)
 
 /* floor objects form a linked list. There is no slot structure to
  * preserve. This 'fake inventory' is useful for obj_prompt */
-inv_ptr inv_filter_floor(obj_p p)
+inv_ptr inv_filter_floor(point_t loc, obj_p p)
 {
     inv_ptr    result = malloc(sizeof(inv_t));
-    cave_type *c_ptr = &cave[py][px];
+    cave_type *c_ptr = &cave[loc.y][loc.x];
     int        this_o_idx, next_o_idx = 0;
 
     result->name = "Floor";
@@ -584,7 +584,8 @@ void inv_display(inv_ptr inv, slot_t start, slot_t stop, obj_p p, doc_ptr doc, i
     else if (show_weights)
         xtra = 9;  /* " 123.0 lbs" */
 
-    inv_calculate_labels(inv, start, stop, flags);
+    if (!(flags & (INV_NO_LABELS | INV_SHOW_SLOT)))
+        inv_calculate_labels(inv, start, stop, flags);
 
     doc_insert(doc, "<style:table>");
     for (slot = start; slot <= stop; slot++)
@@ -596,7 +597,9 @@ void inv_display(inv_ptr inv, slot_t start, slot_t stop, obj_p p, doc_ptr doc, i
 
         if (!obj)
         {
-            if (!(flags & INV_NO_LABELS))
+            if (flags & INV_SHOW_SLOT)
+                doc_printf(doc, " %d)", slot);
+            else if (!(flags & INV_NO_LABELS))
                 doc_printf(doc, " %c)", slot_label(slot - start + 1));
             doc_insert(doc, " ");
             if (show_item_graph)
@@ -619,7 +622,9 @@ void inv_display(inv_ptr inv, slot_t start, slot_t stop, obj_p p, doc_ptr doc, i
             }
             else
                 object_desc(name, obj, OD_COLOR_CODED);
-            if (!(flags & INV_NO_LABELS))
+            if (flags & INV_SHOW_SLOT)
+                doc_printf(doc, " %d)", slot);
+            else if (!(flags & INV_NO_LABELS))
                 doc_printf(doc, " %c)", inv_slot_label(inv, slot));
             doc_insert(doc, " ");
             if (show_item_graph)

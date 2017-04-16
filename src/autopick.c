@@ -2285,7 +2285,7 @@ static void _get_obj(obj_ptr obj)
 
 void autopick_get_floor(void)
 {
-    inv_ptr floor = inv_filter_floor(NULL);
+    inv_ptr floor = inv_filter_floor(point(px, py), NULL);
     inv_for_each(floor, _get_obj);
     inv_free(floor);
 }

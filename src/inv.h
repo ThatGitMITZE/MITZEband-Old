@@ -42,7 +42,7 @@ typedef struct inv_s inv_t, *inv_ptr; /* Hidden/Abstract */
 extern inv_ptr inv_alloc(cptr name, int type, int max);
 extern inv_ptr inv_copy(inv_ptr src);
 extern inv_ptr inv_filter(inv_ptr src, obj_p p);
-extern inv_ptr inv_filter_floor(obj_p p);     /* player's current tile */
+extern inv_ptr inv_filter_floor(point_t loc, obj_p p);     /* player's current tile */
 extern void    inv_free(inv_ptr inv);
 
 /* Adding, Removing and Sorting */
@@ -89,6 +89,7 @@ extern cptr    inv_name(inv_ptr inv);
 #define INV_SHOW_VALUE          0x0002
 #define INV_IGNORE_INSCRIPTIONS 0x0004
 #define INV_NO_LABELS           0x0008
+#define INV_SHOW_SLOT           0x0010
 extern void inv_display(
     /* What we display */
     inv_ptr inv,
