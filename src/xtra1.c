@@ -1,4 +1,5 @@
 
+
 /* File: misc.c */
 
 /*
@@ -1936,8 +1937,17 @@ static void prt_hp_bar(int row, int col)
     else if (pct > hitpoint_warn*10) a = TERM_YELLOW;
     else a = TERM_RED;
 
-    Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
-    Term_putstr(col + 2, row, len, a, "*********");
+    if (display_percentages)
+    {
+        char buf[20];
+        sprintf(buf, "%3d%%", pct);
+        Term_putstr(col + 2, row, strlen(buf), a, buf);
+    }
+    else
+    {
+        Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
+        Term_putstr(col + 2, row, len, a, "*********");
+    }
 }
 
 static void prt_sp_bar(int row, int col)
@@ -1960,8 +1970,17 @@ static void prt_sp_bar(int row, int col)
     else if (pct > mana_warn*10) a = TERM_YELLOW;
     else a = TERM_RED;
 
-    Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
-    Term_putstr(col + 2, row, len, a, "*********");
+    if (display_percentages)
+    {
+        char buf[20];
+        sprintf(buf, "%3d%%", pct);
+        Term_putstr(col + 2, row, strlen(buf), a, buf);
+    }
+    else
+    {
+        Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
+        Term_putstr(col + 2, row, len, a, "*********");
+    }
 }
 
 static void prt_food_bar(int row, int col)
@@ -1984,8 +2003,17 @@ static void prt_food_bar(int row, int col)
     else if (pct >= 10) attr = TERM_L_RED;
     else attr = TERM_VIOLET;
 
-    Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
-    Term_putstr(col + 2, row, len, attr, "*********");
+    if (display_percentages)
+    {
+        char buf[20];
+        sprintf(buf, "%3d%%", pct);
+        Term_putstr(col + 2, row, strlen(buf), attr, buf);
+    }
+    else
+    {
+        Term_putstr(col + 1, row, 11, TERM_WHITE, "[---------]");
+        Term_putstr(col + 2, row, len, attr, "*********");
+    }
 }
 
 static void prt_mon_health_bar(int m_idx, int row, int col)
@@ -2042,23 +2070,50 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
 
         Term_queue_bigchar(col, row, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 
-        if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
-        else if (m_ptr->paralyzed) attr = TERM_BLUE;
-        else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
-        else if (MON_STUNNED(m_ptr)) attr = TERM_L_BLUE;
-        else if (MON_CONFUSED(m_ptr)) attr = TERM_UMBER;
-        else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
-        else if (pct >= 100) attr = TERM_L_GREEN;
+        if (pct >= 100) attr = TERM_L_GREEN;
         else if (pct >= 60) attr = TERM_YELLOW;
         else if (pct >= 25) attr = TERM_ORANGE;
         else if (pct >= 10) attr = TERM_L_RED;
 
-        Term_putstr(col+1, row, 11, base_attr, "[---------]");
-
-        if (m_ptr->ego_whip_ct)
-            Term_putstr(col + 2, row, len, attr, "wwwwwwwww");
+        if (display_percentages)
+        {
+            char buf[20];
+            sprintf(buf, "%3d%%", pct);
+            col += 2;
+            Term_putstr(col, row, strlen(buf), attr, buf);
+            col += strlen(buf) + 1;
+            if (m_idx == target_who)
+                Term_queue_char(col++, row, TERM_L_RED, '*', 0, 0);
+            if (m_idx == p_ptr->riding)
+                Term_queue_char(col++, row, TERM_L_BLUE, '@', 0, 0);
+            if (MON_INVULNER(m_ptr))
+                Term_queue_char(col++, row, TERM_WHITE, 'I', 0, 0);
+            if (m_ptr->paralyzed)
+                Term_queue_char(col++, row, TERM_BLUE, 'P', 0, 0);
+            if (MON_CSLEEP(m_ptr))
+                Term_queue_char(col++, row, TERM_BLUE, 'Z', 0, 0); /* ZZZ */
+            if (MON_STUNNED(m_ptr))
+                Term_queue_char(col++, row, TERM_L_BLUE, 'S', 0, 0);
+            if (MON_CONFUSED(m_ptr))
+                Term_queue_char(col++, row, TERM_UMBER, 'C', 0, 0);
+            if (MON_MONFEAR(m_ptr))
+                Term_queue_char(col++, row, TERM_VIOLET, 'F', 0, 0);
+        }
         else
-            Term_putstr(col + 2, row, len, attr, "*********");
+        {
+            if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
+            else if (m_ptr->paralyzed) attr = TERM_BLUE;
+            else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
+            else if (MON_STUNNED(m_ptr)) attr = TERM_L_BLUE;
+            else if (MON_CONFUSED(m_ptr)) attr = TERM_UMBER;
+            else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
+            Term_putstr(col+1, row, 11, base_attr, "[---------]");
+
+            if (m_ptr->ego_whip_ct)
+                Term_putstr(col + 2, row, len, attr, "wwwwwwwww");
+            else
+                Term_putstr(col + 2, row, len, attr, "*********");
+        }
     }
 }
 
