@@ -1723,6 +1723,9 @@ void equip_on_change_race(void)
         inv_free(temp);
         temp = NULL;
 
+        if (!equip_find_obj(TV_QUIVER, SV_ANY))
+            quiver_remove_all();
+
         pack_overflow();
         for (slot = 1; slot <= pack_max(); slot++)
         {
@@ -1732,12 +1735,24 @@ void equip_on_change_race(void)
             if (!obj) continue;
             if (!(obj->marked & OM_WORN)) continue;
 
-            new_slot = equip_first_empty_slot(obj);
-            if (new_slot && obj->number == 1)
+            if (obj_is_ammo(obj))
             {
-                obj->marked &= ~OM_WORN;
-                equip_wield(obj, new_slot);
-                obj_release(obj, OBJ_RELEASE_QUIET);
+                if (equip_find_obj(TV_QUIVER, SV_ANY))
+                {
+                    obj->marked &= ~OM_WORN;
+                    quiver_carry(obj);
+                    obj_release(obj, OBJ_RELEASE_QUIET);
+                }
+            }
+            else
+            {
+                new_slot = equip_first_empty_slot(obj);
+                if (new_slot && obj->number == 1)
+                {
+                    obj->marked &= ~OM_WORN;
+                    equip_wield(obj, new_slot);
+                    obj_release(obj, OBJ_RELEASE_QUIET);
+                }
             }
         }
 

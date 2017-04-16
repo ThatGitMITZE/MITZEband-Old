@@ -19,6 +19,7 @@ extern bool    quiver_tolerates(obj_ptr obj);
 extern int     quiver_capacity(void);
 extern void    quiver_carry(obj_ptr obj); /* combines quiver, then carries pack, then overflows */
 extern void    quiver_remove(slot_t slot);
+extern void    quiver_remove_all(void); /* player lost quiver due to shapeshifting ... */
 extern void    quiver_drop(obj_ptr obj);
 
 /* Accessing, Iterating, Searching */

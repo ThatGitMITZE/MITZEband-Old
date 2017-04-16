@@ -72,6 +72,20 @@ void quiver_remove(slot_t slot)
     inv_remove(_inv, slot);
 }
 
+void quiver_remove_all(void)
+{
+    slot_t slot;
+    for (slot = 1; slot <= QUIVER_MAX; slot++)
+    {
+        obj_ptr obj = quiver_obj(slot);
+
+        if (!obj) continue;
+        obj->marked |= OM_WORN;
+        pack_carry_aux(obj);
+        obj_release(obj, OBJ_RELEASE_QUIET);
+    }
+}
+
 void quiver_drop(obj_ptr obj)
 {
     int amt = obj->number;
