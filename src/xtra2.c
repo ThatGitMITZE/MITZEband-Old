@@ -3687,6 +3687,10 @@ static int target_set_aux(int y, int x, int mode, cptr info)
         return 0;
     }
 
+    inv = inv_filter_floor(point(x, y), obj_is_found);
+    obj_ct = inv_count_slots(inv, obj_exists);
+    if (obj_ct)
+        x_info = "x,";
 
     /* Actual monsters */
     if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
@@ -3776,10 +3780,18 @@ static int target_set_aux(int y, int x, int mode, cptr info)
         }
 
         /* Always stop at "normal" keys */
-        if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x')) return query;
+        if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
+        {
+            inv_free(inv);
+            return query;
+        }
 
         /* Sometimes stop at "space" key */
-        if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
+        if ((query == ' ') && !(mode & (TARGET_LOOK)))
+        {
+            inv_free(inv);
+            return query;
+        }
 
         /* Change the intro */
         s1 = "It is ";
@@ -3819,10 +3831,18 @@ static int target_set_aux(int y, int x, int mode, cptr info)
             query = inkey();
 
             /* Always stop at "normal" keys */
-            if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x')) return query;
+            if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
+            {
+                inv_free(inv);
+                return query;
+            }
 
             /* Sometimes stop at "space" key */
-            if ((query == ' ') && !(mode & (TARGET_LOOK))) return query;
+            if ((query == ' ') && !(mode & (TARGET_LOOK)))
+            {
+                inv_free(inv);
+                return query;
+            }
 
             /* Change the intro */
             s2 = "also carrying ";
@@ -3834,8 +3854,6 @@ static int target_set_aux(int y, int x, int mode, cptr info)
 
     /* Show objects on this grid. If multiple, show a list. If the
      * list won't fit on the screen, <CR> scrolls the list */
-    inv = inv_filter_floor(point(x, y), obj_is_found);
-    obj_ct = inv_count_slots(inv, obj_exists);
     if (obj_ct == 1)
     {
         obj_ptr obj = inv_obj(inv, 1);
