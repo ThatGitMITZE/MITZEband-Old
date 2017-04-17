@@ -455,42 +455,28 @@ critical_t critical_shot(int weight, int plus)
     if (p_ptr->pclass == CLASS_SNIPER && p_ptr->shooter_info.tval_ammo == TV_BOLT) i = i * 3 / 2;
     if (weaponmaster_get_toggle() == TOGGLE_CAREFUL_AIM)
         i *= 3;
+    if (p_ptr->pclass == CLASS_ARCHER) i += i * p_ptr->lev / 100;
 
     /* Critical hit */
     if (randint1(5000) <= i)
     {
         k = weight * randint1(500);
+        result.mul = 150 + k * 200 / 2000;
 
-        if (k < 400)
-        {
-            result.desc = "It was a <color:y>fair</color> shot!";
-            result.mul = 175;
-        }
-        else if (k < 700)
-        {
+        if (result.mul < 200)
             result.desc = "It was a <color:y>decent</color> shot!";
-            result.mul = 200;
-        }
-        else if (k < 1000)
-        {
+        /* k >= 500 */
+        else if (result.mul < 240)
             result.desc = "It was a <color:R>good</color> shot!";
-            result.mul = 225;
-        }
-        else if (k < 1350)
-        {
+        /* k >= 900 */
+        else if (result.mul < 270)
             result.desc = "It was a <color:r>great</color> shot!";
-            result.mul = 250;
-        }
-        else if (k < 1800)
-        {
+        /* k >= 1200 */
+        else if (result.mul < 300)
             result.desc = "It was a <color:v>superb</color> shot!";
-            result.mul = 300;
-        }
-        else /* requires 0.4+lb ammo: steel bolt or sheaf arrow or sling ammo */
-        {
+        /* k >= 1500 */
+        else
             result.desc = "It was a <color:v>*GREAT*</color> shot!";
-            result.mul = 350;
-        }
     }
 
     return result;
