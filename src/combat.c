@@ -891,7 +891,7 @@ void display_innate_attack_info(doc_ptr doc, int which)
         int min3 = 9*(min_base + a->to_d)/4 + p_ptr->to_d_m; /* 1 + .75 + .5 = 2.25 = 9/4 */
         int max3 = 9*(max_base + a->to_d)/4 + p_ptr->to_d_m;
         doc_printf(cols[0], "<color:r> %-7.7s</color>: %d\n",
-                _effect_name(a->effect[i]),
+                _effect_name(a->effect[0]),
                 blows * (min3 + max3)/200
         );
     }
