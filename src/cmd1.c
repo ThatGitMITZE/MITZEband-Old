@@ -2247,11 +2247,17 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
 
         for (j = 0; j < blows; j++)
         {
+            int ac = MON_AC(r_ptr, m_ptr);
+
             if (m_ptr->fy != old_fy || m_ptr->fx != old_fx) break; /* Teleport Effect? */
 
             to_h = a->to_h + p_ptr->to_h_m;
             chance = p_ptr->skills.thn + (to_h * BTH_PLUS_ADJ);
-            if (fuiuchi || test_hit_norm(chance, MON_AC(r_ptr, m_ptr), m_ptr->ml))
+
+            if (prace_is_(RACE_MON_GOLEM))
+                ac = ac * (100 - p_ptr->lev) / 100;
+
+            if (fuiuchi || test_hit_norm(chance, ac, m_ptr->ml))
             {
                 int dd = a->dd + p_ptr->innate_attack_info.to_dd;
 

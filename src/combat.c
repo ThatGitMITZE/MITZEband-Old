@@ -8,6 +8,9 @@ int hit_chance_innate(int to_h, int ac)
 
     if (chance <= 0) return 0;
 
+    if (prace_is_(RACE_MON_GOLEM))
+        ac = ac * (100 - p_ptr->lev) / 100;
+
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
     if (p_ptr->personality == PERS_LAZY) odds = (19*odds+10)/20;
     if (odds < 50) odds = 50;
