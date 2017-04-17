@@ -3192,6 +3192,8 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
         if (!return_ammo)
             arrows->number--;
 
+        stats_on_use(arrows, 1);
+
         /* Sound */
         sound(SOUND_SHOOT);
 
