@@ -800,7 +800,7 @@ void _unwield(obj_ptr obj, bool drop)
         int amt = obj->number;
         assert(equip_find_obj(TV_QUIVER, SV_ANY));
         assert(!drop); /* quiver_drop ... not us. cf do_cmd_drop */
-        if (msg_input_num("Quantity", &amt, 1, obj->number))
+        if (obj->number == 1 || msg_input_num("Quantity", &amt, 1, obj->number))
         {
             obj_t copy = *obj;
 
