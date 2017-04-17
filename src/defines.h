@@ -1606,6 +1606,7 @@ enum {
 #define SV_STEEL_BOLT    2
 #define SV_MITHRIL_BOLT  3
 #define SV_SEEKER_BOLT   4
+#define SV_ADAMANTINE_BOLT 5
 
 /* TV_SHOT */
 #define SV_PEBBLE        1
