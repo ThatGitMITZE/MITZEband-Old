@@ -6337,6 +6337,14 @@ $as_echo "#define USE_STATS 0" >>confdefs.h
     fi
 fi
 
+# We are careful not to sanitize the temp programs that configure creates,
+# since there is at least one case where configure generates a memory leak.
+# asan then changes the return value of the process from 0 to 1 causing
+# configure to fail. But I think we are done with this checking now, so add
+# in the SANITIZE_FLAGS in the appropriate places:
+CFLAGS="${CFLAGS} ${SANITIZE_FLAGS}"
+LDFLAGS="${LDFLAGS} ${SANITIZE_FLAGS}"
+
 MAINFILES=${MAINFILES}
 
 ac_config_files="$ac_config_files mk/buildsys.mk mk/extra.mk mk/sinclude.mk"

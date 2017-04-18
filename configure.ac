@@ -357,6 +357,14 @@ if test "$enable_stats" = "yes"; then
     fi
 fi
 
+# We are careful not to sanitize the temp programs that configure creates,
+# since there is at least one case where configure generates a memory leak.
+# asan then changes the return value of the process from 0 to 1 causing 
+# configure to fail. But I think we are done with this checking now, so add
+# in the SANITIZE_FLAGS in the appropriate places:
+CFLAGS="${CFLAGS} ${SANITIZE_FLAGS}"
+LDFLAGS="${LDFLAGS} ${SANITIZE_FLAGS}"
+
 AC_SUBST(MAINFILES, ${MAINFILES})
 AC_CONFIG_FILES([mk/buildsys.mk mk/extra.mk mk/sinc@&t@lude.mk])
 AC_OUTPUT
