@@ -50,6 +50,7 @@ extern slot_t  inv_add(inv_ptr inv, obj_ptr obj);
 extern void    inv_add_at(inv_ptr inv, obj_ptr obj, slot_t slot);
 extern slot_t  inv_combine(inv_ptr inv, obj_ptr obj);
 extern int     inv_combine_ex(inv_ptr inv, obj_ptr obj);
+extern bool    inv_can_combine(inv_ptr inv, obj_ptr obj);
 extern void    inv_remove(inv_ptr inv, slot_t slot);
 extern void    inv_clear(inv_ptr inv);
 extern bool    inv_optimize(inv_ptr inv);

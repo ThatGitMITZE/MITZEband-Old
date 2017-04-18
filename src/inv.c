@@ -248,6 +248,31 @@ slot_t inv_combine(inv_ptr inv, obj_ptr obj)
     return 0;
 }
 
+bool inv_can_combine(inv_ptr inv, obj_ptr obj)
+{
+    slot_t slot;
+
+    assert(obj->number);
+    assert(!(inv->flags & _FILTER));
+
+    /* Assume that inv is optimized. This means that if obj
+     * could be combined into an existing pile, then there
+     * is only one possible candidate pile. In other words,
+     * if there are multiple piles of the same object, all
+     * but one contain 99 items. */
+    for (slot = 1; slot < vec_length(inv->objects); slot++)
+    {
+        obj_ptr dest = vec_get(inv->objects, slot);
+        if (!dest) continue;
+        if ( obj_can_combine(dest, obj, inv->type)
+          && dest->number + obj->number <= OBJ_STACK_MAX )
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 /* This version will combine the obj pile (if pile it be)
  * into as many slots as possible, splitting the pile in
  * the process. I think stores need this behaviour. We
