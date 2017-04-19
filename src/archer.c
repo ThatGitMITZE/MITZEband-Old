@@ -33,6 +33,7 @@ static bool _create_arrows(void)
     msg_format("You make %s.", name);
     pack_carry(&forge);
 
+    stats_on_use(prompt.obj, 1);
     prompt.obj->number--;
     obj_release(prompt.obj, 0);
     return TRUE;
@@ -64,6 +65,7 @@ static bool _create_bolts(void)
     msg_format("You make %s.", name);
     pack_carry(&forge);
 
+    stats_on_use(prompt.obj, 1);
     prompt.obj->number--;
     obj_release(prompt.obj, 0);
     return TRUE;
