@@ -1339,7 +1339,7 @@ void change_floor(void)
         {
             if (!p_ptr->blind)
             {
-                msg_print("Suddenly the stairs is blocked!");
+                msg_print("Suddenly the stairs are blocked!");
             }
             else
             {
