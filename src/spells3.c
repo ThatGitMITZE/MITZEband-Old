@@ -1164,10 +1164,20 @@ void phlogiston(void)
         msg_print("Nothing happens.");
 }
 
-
 /*
  * Brand the current weapon
  */
+static bool _can_brand_weapon(obj_ptr obj)
+{
+    if (!object_is_melee_weapon(obj)) return FALSE;
+    if (!object_is_nameless(obj)) return FALSE;
+    if (object_is_(obj, TV_SWORD, SV_POISON_NEEDLE)) return FALSE;
+    if (object_is_(obj, TV_SWORD, SV_RUNESWORD)) return FALSE;
+    /* Hengband: if (object_is_(obj, TV_SWORD, SV_DIAMOND_EDGE)) return FALSE;*/
+    if (have_flag(obj->flags, OF_NO_REMOVE)) return FALSE;
+    return TRUE;
+}
+
 bool brand_weapon(int brand_type)
 {
     obj_prompt_t prompt = {0};
@@ -1175,7 +1185,7 @@ bool brand_weapon(int brand_type)
 
     prompt.prompt = "Enchant which weapon?";
     prompt.error = "You have nothing to enchant.";
-    prompt.filter = object_allow_enchant_melee_weapon;
+    prompt.filter = _can_brand_weapon;
     prompt.where[0] = INV_PACK;
     prompt.where[1] = INV_EQUIP;
     prompt.where[2] = INV_QUIVER;
@@ -1184,14 +1194,7 @@ bool brand_weapon(int brand_type)
     obj_prompt(&prompt);
     if (!prompt.obj) return FALSE;
 
-    if (prompt.obj->name1 || prompt.obj->name2)
-    {
-    }
-    else if (have_flag(prompt.obj->flags, OF_NO_REMOVE))
-    {
-        msg_print("You are already excellent!");
-    }
-    else if (brand_type == -1)
+    if (brand_type == -1)
     {
         result = brand_weapon_aux(prompt.obj);
     }
@@ -1208,6 +1211,7 @@ bool brand_weapon(int brand_type)
         virtue_add(VIRTUE_ENCHANTMENT, 2);
         obj_identify_fully(prompt.obj);
         obj_display(prompt.obj);
+        obj_release(prompt.obj, OBJ_RELEASE_ENCHANT);
     }
     else
     {
@@ -1215,18 +1219,16 @@ bool brand_weapon(int brand_type)
         msg_print("The Branding failed.");
         virtue_add(VIRTUE_ENCHANTMENT, -2);
     }
-    android_calc_exp();
     return TRUE;
 }
 /* Hack for old branding spells attempting to make now non-existent ego types! */
 bool brand_weapon_slaying(int brand_flag, int res_flag)
 {
     obj_prompt_t prompt = {0};
-    bool         result = FALSE;
 
     prompt.prompt = "Enchant which weapon?";
     prompt.error = "You have nothing to enchant.";
-    prompt.filter = object_allow_enchant_melee_weapon;
+    prompt.filter = _can_brand_weapon;
     prompt.where[0] = INV_PACK;
     prompt.where[1] = INV_EQUIP;
     prompt.where[2] = INV_FLOOR;
@@ -1234,48 +1236,18 @@ bool brand_weapon_slaying(int brand_flag, int res_flag)
     obj_prompt(&prompt);
     if (!prompt.obj) return FALSE;
 
-    if (prompt.obj->name1 || prompt.obj->name2)
-    {
-    }
-    else if (have_flag(prompt.obj->flags, OF_NO_REMOVE))
-    {
-        msg_print("You are already excellent!");
-    }
-    else
-    {
-        prompt.obj->name2 = EGO_WEAPON_SLAYING;
-        add_flag(prompt.obj->flags, brand_flag);
-        if (res_flag != OF_INVALID)
-            add_flag(prompt.obj->flags, res_flag);
-        result = TRUE;
-    }
-    if (result)
-    {
-        enchant(prompt.obj, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
-        prompt.obj->discount = 99;
+    prompt.obj->name2 = EGO_WEAPON_SLAYING;
+    add_flag(prompt.obj->flags, brand_flag);
+    if (res_flag != OF_INVALID)
+        add_flag(prompt.obj->flags, res_flag);
 
-        virtue_add(VIRTUE_ENCHANTMENT, 2);
-        obj_identify_fully(prompt.obj);
-        obj_display(prompt.obj);
-    }
-    else
-    {
-        if (flush_failure) flush();
-        msg_print("The Branding failed.");
-        virtue_add(VIRTUE_ENCHANTMENT, -2);
-    }
-    switch (prompt.obj->loc.where)
-    {
-    case INV_EQUIP:
-        p_ptr->update |= PU_BONUS;
-        p_ptr->window |= PW_EQUIP;
-        android_calc_exp();
-        break;
-    case INV_PACK:
-        p_ptr->window |= PW_INVEN;
-        p_ptr->notice |= PN_OPTIMIZE_PACK;
-        break;
-    }
+    enchant(prompt.obj, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+    prompt.obj->discount = 99;
+
+    virtue_add(VIRTUE_ENCHANTMENT, 2);
+    obj_identify_fully(prompt.obj);
+    obj_display(prompt.obj);
+    obj_release(prompt.obj, OBJ_RELEASE_ENCHANT);
     return TRUE;
 }
 bool brand_weapon_aux(object_type *o_ptr)
