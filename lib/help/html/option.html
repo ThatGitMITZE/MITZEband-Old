@@ -203,19 +203,19 @@ off after the creation is finished!
   direction if only one known trap is near you.
   
 <a name="auto_get_ammo"></a>  </font><font color="#ffcc80">Automatically get nearby ammo </font><font color="#8a8a8a">(auto_get_ammo)
-  </font><font color="#ffffff">This option enhances the Get Objects command (</font><font color="#ff9200">g</font><font color="#ffffff">) to automatically 
-  travel to nearby, visible ammo which is inscribed with </font><font color="#ff9200">=g </font><font color="#ffffff">(i.e., ammo 
-  which you have instructed the autopicker to automatically pickup). 
-  This enhancement is useful for archer builds after all nearby 
-  monsters have been slain. You might consider using the stronger 
-  </font><font color="#ff4040">auto_get_objects </font><font color="#ffffff">option instead.
+  </font><font color="#ffffff">This option instructs the Auto-Get Objects command (</font><font color="#ff9200">^G</font><font color="#ffffff">) to 
+  automatically travel to nearby, visible ammo which is inscribed with 
+  </font><font color="#ff9200">=g </font><font color="#ffffff">(i.e., ammo which you have instructed the autopicker to 
+  automatically pickup). This enhancement is useful for archer builds 
+  after all nearby monsters have been slain. You might consider using 
+  the stronger </font><font color="#ff4040">auto_get_objects </font><font color="#ffffff">option instead.
   
 <a name="auto_get_objects"></a>  </font><font color="#ffcc80">Automatically get nearby objects </font><font color="#8a8a8a">(auto_get_objects)
-  </font><font color="#ffffff">This option enhances the Get Objects command (</font><font color="#ff9200">g</font><font color="#ffffff">) to automatically 
-  travel to nearby visible objects which you have registered to either 
-  pickup or destroy. This option subsumes (and extends) the 
-  </font><font color="#ff4040">auto_get_ammo </font><font color="#ffffff">option since ammo inscribed with </font><font color="#ff9200">=g </font><font color="#ffffff">is certainly 
-  registered for auto-pickup.
+  </font><font color="#ffffff">This option instructs the Auto-Get Objects command (</font><font color="#ff9200">^G</font><font color="#ffffff">) to 
+  automatically travel to nearby visible objects which you have 
+  registered to either pickup or destroy. This option subsumes (and 
+  extends) the </font><font color="#ff4040">auto_get_ammo </font><font color="#ffffff">option since ammo inscribed with </font><font color="#ff9200">=g </font><font color="#ffffff">is 
+  certainly registered for auto-pickup.
   
 <a name="easy_floor"></a>  </font><font color="#ffcc80">Display floor stacks in a list </font><font color="#8a8a8a">(easy_floor)
   </font><font color="#ffffff">Lets you select an item from a stack on the floor by browsing a list. 
@@ -227,6 +227,23 @@ off after the creation is finished!
   </font><font color="#ffffff">This option makes numpad keys work as cursor movement keys while text 
   editing mode. Which include auto-picker editor, inputing an 
   inscription, a macro action, and etc.
+  
+<a name="use_pack_slots"></a>  </font><font color="#ffcc80">Use and Display Inventory Slots </font><font color="#8a8a8a">(use_pack_slots)
+  </font><font color="#ffffff">With this option, the object prompt will use and display the current 
+  inventory slot for objects in question. For example, if your food 
+  happens to currently be in slot h), the the </font><font color="#ff9200">E</font><font color="#ffffff">at command will require 
+  you to press </font><font color="#ff9200">h </font><font color="#ffffff">to use this item. Without this option, each object 
+  prompt will begin labels at a). Some players prefer to keep the 
+  inventory slot, even though it constantly shifts as you add and 
+  remove new objects to your pack. Other players prefer to have 
+  commands use the same labels for the same objects upon successive 
+  calls (For example, pick up a spellbook and your food is now in the 
+  i) slot. This may puzzle you, since the last time you were hungry you 
+  pressed </font><font color="#ff9200">Eh</font><font color="#ffffff">, but now you need to press </font><font color="#ff9200">Ei</font><font color="#ffffff">. With this option turned 
+  off, eating rations of food will always be </font><font color="#ff9200">Ea </font><font color="#ffffff">... at least until you 
+  pick up some mushrooms! However, if you do, then your eye will 
+  quickly perceive the presence of two items in the object prompt next 
+  time you </font><font color="#ff9200">E</font><font color="#ffffff">at).
   
 <a name="MapScreen"></a></font><font color="#c00000">Map &amp; Screen Options
   
