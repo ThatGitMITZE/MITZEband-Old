@@ -494,7 +494,7 @@ void do_cmd_study(void)
         int new_rank = EXP_LEVEL_UNSKILLED;
         cptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32, SPELL_NAME);
 
-        if (old_exp >= max_exp)
+        if (old_exp >= max_exp || !enable_spell_prof)
         {
             msg_format("You don't need to study this %s anymore.", p);
             return;
@@ -1041,49 +1041,51 @@ void do_cmd_cast(void)
 
         virtue_on_cast_spell(use_realm, need_mana, chance);
 
-        if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
+        if (enable_spell_prof && (mp_ptr->spell_xtra & MAGIC_GAIN_EXP))
         {
             s16b cur_exp = p_ptr->spell_exp[(increment ? 32 : 0)+spell];
             s16b exp_gain = 0;
-            static s32b last_pexp = 0;
-            s32b last_turn = p_ptr->spell_turn[(increment ? 32 : 0)+spell];
+            cptr msg = NULL;
 
-            /* Hack: Try to eliminate spell spamming for experience.
-               The experience check is for blasting monsters with consecutive Mana Bursts
-               which should be granting spell experience, provided one is damaging monsters.
-
-               The turn check is for utility spells (Teleport & Detect tactics) since one
-               might be doing a bunch of legitimate casting without fighting monsters.
-
-               The quest check is to prohibit spamming on completed quest levels.
-
-               Note: Androids will probably always fail to pass the xp check! Hmm ...
-               Note: One still might be able to macro up a cast followed by a rest command.
-            */
-            if ( last_pexp != p_ptr->exp
-              || (!quests_get_current() && game_turn > last_turn + 50 + randint1(50)) )
+            if (cur_exp < SPELL_EXP_BEGINNER)
             {
-                if (cur_exp < SPELL_EXP_BEGINNER)
-                    exp_gain += 60;
-                else if (cur_exp < SPELL_EXP_SKILLED)
-                {
-                    if ((MAX(base_level, dun_level) > 4) && ((MAX(base_level, dun_level) + 10) > p_ptr->lev))
-                        exp_gain = 8;
-                }
-                else if (cur_exp < SPELL_EXP_EXPERT)
-                {
-                    if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && ((MAX(base_level, dun_level) + 5) > s_ptr->slevel))
-                        exp_gain = 2;
-                }
-                else if ((cur_exp < SPELL_EXP_MASTER) && !increment)
-                {
-                    if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && (MAX(base_level, dun_level) > s_ptr->slevel))
-                        exp_gain = 1;
-                }
-                p_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
+                exp_gain += 60;
+                if (cur_exp + exp_gain >= SPELL_EXP_BEGINNER)
+                    msg = "a beginner";
             }
-            last_pexp = p_ptr->exp;
-            p_ptr->spell_turn[(increment ? 32 : 0)+spell] = game_turn;
+            else if (cur_exp < SPELL_EXP_SKILLED)
+            {
+                if ((MAX(base_level, dun_level) > 4) && ((MAX(base_level, dun_level) + 10) > p_ptr->lev))
+                {
+                    exp_gain = 8;
+                    if (cur_exp + exp_gain >= SPELL_EXP_SKILLED)
+                        msg = "skilled";
+                }
+            }
+            else if (cur_exp < SPELL_EXP_EXPERT)
+            {
+                if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && ((MAX(base_level, dun_level) + 5) > s_ptr->slevel))
+                {
+                    exp_gain = 2;
+                    if (cur_exp + exp_gain >= SPELL_EXP_EXPERT)
+                        msg = "an expert";
+                }
+            }
+            else if ((cur_exp < SPELL_EXP_MASTER) && !increment)
+            {
+                if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && (MAX(base_level, dun_level) > s_ptr->slevel))
+                {
+                    exp_gain = 1;
+                    if (cur_exp + exp_gain >= SPELL_EXP_MASTER)
+                        msg = "a master";
+                }
+            }
+            p_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
+            if (msg)
+            {
+                msg_format("You are now <color:B>%s</color> in <color:R>%s</color>.", msg,
+                    do_spell(use_realm, spell % 32, SPELL_NAME));
+            }
         }
     }
 

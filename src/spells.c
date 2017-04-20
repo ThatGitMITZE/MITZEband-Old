@@ -61,7 +61,8 @@ void spell_stats_on_load(savefile_ptr file)
         stats->ct_fail = savefile_read_s32b(file);
         stats->skill = savefile_read_s32b(file);
         stats->max_skill = savefile_read_s32b(file);
-        stats->last_turn = savefile_read_s32b(file);
+        if (savefile_is_older_than(file, 6, 0, 6, 1))
+            savefile_read_s32b(file);
 
         str_map_add(map, name, stats);
     }
@@ -86,7 +87,6 @@ void spell_stats_on_save(savefile_ptr file)
         savefile_write_s32b(file, stats->ct_fail);
         savefile_write_s32b(file, stats->skill);
         savefile_write_s32b(file, stats->max_skill);
-        savefile_write_s32b(file, stats->last_turn);
     }
     str_map_iter_free(iter);
 }
@@ -104,52 +104,6 @@ void spell_stats_on_cast(spell_info *spell)
     spell_stats_ptr stats = spell_stats(spell);
 
     stats->ct_cast++;
-}
-
-void spell_stats_gain_skill(spell_info *spell)
-{
-    static int      last_pexp = 0;
-    spell_stats_ptr stats = spell_stats(spell);
-
-    /* Hack: Try to eliminate spell spamming for experience.
-       The experience check is for blasting monsters with consecutive Mana Bursts
-       which should be granting spell experience, provided one is damaging monsters.
-
-       The turn check is for utility spells (Teleport & Detect tactics) since one
-       might be doing a bunch of legitimate casting without fighting monsters.
-
-       Note: Androids will probably always fail to pass the xp check! Hmm ...
-       Note: One still might be able to macro up a cast followed by a rest command.
-    */
-    if ( last_pexp != p_ptr->exp
-      || (!quests_get_current() && game_turn > stats->last_turn + 50 + randint1(50)) )
-    {
-        int skill = 0;
-        int dlvl = MAX(base_level, dun_level);
-
-        if (stats->skill < SPELL_EXP_BEGINNER)
-            skill += 60;
-        else if (stats->skill < SPELL_EXP_SKILLED)
-        {
-            if (dlvl > 4 && dlvl + 10 > p_ptr->lev)
-                skill = 8;
-        }
-        else if (stats->skill < SPELL_EXP_EXPERT)
-        {
-            if (dlvl + 5 > p_ptr->lev && dlvl + 5 > spell->level)
-                skill = 2;
-        }
-        else if (stats->skill < SPELL_EXP_MASTER)
-        {
-            if (dlvl + 5 > p_ptr->lev && dlvl > spell->level)
-                skill = 1;
-        }
-        stats->skill += skill;
-        if (stats->skill > stats->max_skill)
-            stats->skill = stats->max_skill;
-    }
-    last_pexp = p_ptr->exp;
-    stats->last_turn = game_turn;
 }
 
 void spell_stats_on_fail(spell_info *spell)
@@ -1093,9 +1047,16 @@ static void _dump_book(doc_ptr doc, int realm, int book)
     else
     {
         if (caster_ptr && (caster_ptr->options & CASTER_USE_HP))
-            doc_printf(doc, "<color:G>    %-23.23s Profic Lvl  HP Fail %-15.15s  Cast Fail</color>\n", k_name + k_info[k_idx].name, "Desc");
-        else
+        {
+            if (enable_spell_prof)
+                doc_printf(doc, "<color:G>    %-23.23s Profic Lvl  HP Fail %-15.15s  Cast Fail</color>\n", k_name + k_info[k_idx].name, "Desc");
+            else
+                doc_printf(doc, "<color:G>    %-23.23s Lvl  HP Fail %-15.15s  Cast Fail</color>\n", k_name + k_info[k_idx].name, "Desc");
+        }
+        else if (enable_spell_prof)
             doc_printf(doc, "<color:G>    %-23.23s Profic Lvl  SP Fail %-15.15s  Cast Fail</color>\n", k_name + k_info[k_idx].name, "Desc");
+        else
+            doc_printf(doc, "<color:G>    %-23.23s Lvl  SP Fail %-15.15s  Cast Fail</color>\n", k_name + k_info[k_idx].name, "Desc");
     }
 
     for (i = 0; i < 8; i++)
@@ -1193,7 +1154,7 @@ static void _dump_book(doc_ptr doc, int realm, int book)
                 )
             );
         }
-        else
+        else if (enable_spell_prof)
         {
             spell_stats_ptr stats = spell_stats_old(realm, s_idx);
             strcat(
@@ -1204,6 +1165,25 @@ static void _dump_book(doc_ptr doc, int realm, int book)
                     do_spell(realm, s_idx, SPELL_NAME),
                     (max ? '!' : ' '),
                     proficiency,
+                    s_ptr->slevel,
+                    cost,
+                    spell_chance(s_idx, realm),
+                    comment,
+                    stats->ct_cast,
+                    stats->ct_fail,
+                    spell_stats_fail(stats)
+                )
+            );
+        }
+        else
+        {
+            spell_stats_ptr stats = spell_stats_old(realm, s_idx);
+            strcat(
+                line,
+                format(
+                    "<color:%c>%-23s %3d %3d %3d%% %-15.15s %5d %4d %3d%%</color>",
+                    color,
+                    do_spell(realm, s_idx, SPELL_NAME),
                     s_ptr->slevel,
                     cost,
                     spell_chance(s_idx, realm),

@@ -328,6 +328,7 @@ extern bool no_artifacts;
 extern bool no_egos;
 extern bool no_selling;
 extern bool enable_virtues;
+extern bool enable_spell_prof;
 extern bool reduce_uniques;
 extern byte reduce_uniques_pct;
 extern bool quickband;
