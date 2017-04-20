@@ -3182,6 +3182,7 @@ static int _calc_xtra_hp(int amt)
     case CLASS_ARCHER:
     case CLASS_WEAPONSMITH:
     case CLASS_WEAPONMASTER:
+    case CLASS_RAGE_MAGE:
         w1 = 2; w2 = 1; w3 = 0;
         break;
 

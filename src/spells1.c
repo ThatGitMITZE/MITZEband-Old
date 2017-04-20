@@ -1999,9 +1999,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
             }
             else
             {
-                int div = 100/r_ptr->freq_spell;
-                /*msg_format("Mana Clash: Freq=%d, 1 in %d", r_ptr->freq_spell, div);*/
-                dam /= div + 1;
+                dam = dam * r_ptr->freq_spell / 100;
             }
             break;
         }
@@ -5140,7 +5138,8 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
                 mon_lore_r(m_ptr, RFR_RES_ALL);
                 break;
             }
-            if (mon_save_p(m_ptr->r_idx, A_STR))
+            if ( mon_save_p(m_ptr->r_idx, A_STR)
+              && (!p_ptr->shero || mon_save_p(m_ptr->r_idx, A_STR)) )
             {
                 msg_format("%^s resists!", m_name);
                 dam = 0;
@@ -5149,8 +5148,11 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
             }
             else
             {
+                int dur = 2 + randint1(2);
+                /* XXX Better odds of success is probably enough.
+                 * if (p_ptr->shero) dur *= 2; */
+                m_ptr->anti_magic_ct = dur;
                 msg_format("%^s can no longer cast spells!", m_name);
-                m_ptr->anti_magic_ct = 2 + randint1(2);
                 dam = 0;
                 return TRUE;
             }

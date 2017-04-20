@@ -415,7 +415,7 @@ static void _mana_clash_spell(int cmd, variant *res)
         int dir;
         var_set_bool(res, FALSE);
         if (!get_fire_dir(&dir)) return;
-        fire_ball(GF_MANA_CLASH, dir, 24 * p_ptr->lev, 2); /* damage later divided by Y + 1 in spells1!project_m where Y is spell freq */
+        fire_ball(GF_MANA_CLASH, dir, 18 * p_ptr->lev, 2); /* dam = dam * spell_freq / 100 in spells1.c */
         var_set_bool(res, TRUE);
         break;
     }
@@ -1150,11 +1150,12 @@ static void _player_action(int energy_use)
 
 static void _calc_bonuses(void)
 {
+    int squish = 5 + py_prorata_level(55);
     p_ptr->spell_cap += 3;
 
     /* Squishy */
-    p_ptr->to_a -= p_ptr->lev + 10;
-    p_ptr->dis_to_a -= p_ptr->lev + 10;
+    p_ptr->to_a -= squish;
+    p_ptr->dis_to_a -= squish;
 
     if (p_ptr->tim_resist_curses)
     {
