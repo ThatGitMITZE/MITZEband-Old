@@ -6477,6 +6477,27 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         set_fast(4, FALSE);
     }
 
+    /* Magic Resistance for the Rune Knight works differently than for
+     * other classes (notably golems). They gain this thru their {absorption}
+     * rune which absorbs not just magical energy, but elemental attacks
+     * (e.g. breaths) as well. Restricting their mana gain to only magical
+     * attacks is far too annoyingly rare to matter much for 99% of the game.
+     * Of course, this makes it easier for the Rune-Knight to scum mana ...
+     * I can only appeal to your sense of honor in this regard!
+     * We check this first, before applying evasion or even reflection!
+     *
+     * XXX Damage has not been reduced yet for distance. Let's even leave
+     * that alone for the time being. SP regain should be quicker than before. */
+    if ( p_ptr->pclass == CLASS_RUNE_KNIGHT
+      && p_ptr->magic_resistance
+      && hack_m_spell != 96+4 ) /* Exception: RF4_SHOOT just feels wrong for {absorption} */
+    {
+        int x = dam * p_ptr->magic_resistance / 100;
+        dam -= x;
+        if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
+            sp_player(MAX(x, 2 + p_ptr->lev/10));
+    }
+
     if ((p_ptr->reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(4))
     {
         byte t_y, t_x;
@@ -6549,6 +6570,10 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
        96+1 = RF4_THROW
        96+3 = RF4_ROCKET
        96+4 = RF4_SHOOT
+       
+       Note: See above for comments on the Rune-Knight. They absorb before
+       they evade (for demigods) and we need to exclude them in the magic
+       resistance check in the else branch below.
      */
     if ( (hack_m_spell >= 96+7 && hack_m_spell <= 96+31)
       || hack_m_spell == 96+1 || hack_m_spell == 96+3 || hack_m_spell == 96+4)
@@ -6572,15 +6597,9 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
             dam -= dam * (10 + randint1(10))/100;
         }
     }
-    else
+    else if (p_ptr->pclass != CLASS_RUNE_KNIGHT && p_ptr->magic_resistance)
     {
-        if (p_ptr->magic_resistance)
-        {
-            int x = dam * p_ptr->magic_resistance / 100;
-            dam -= x;
-            if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-                sp_player(MAX(x, 3 + p_ptr->lev/5));
-        }
+        dam -= dam * p_ptr->magic_resistance / 100;
     }
 
 

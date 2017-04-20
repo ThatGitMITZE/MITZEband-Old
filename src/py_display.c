@@ -347,7 +347,23 @@ static _flagzilla_ptr _flagzilla_alloc(void)
         object_type *o_ptr = equip_obj(i);
 
         if (o_ptr)
+        {
             obj_flags_known(o_ptr, flagzilla->obj_flgs[i]);
+            switch (o_ptr->rune)
+            {
+            case RUNE_ABSORPTION:
+                add_flag(flagzilla->obj_flgs[i], OF_MAGIC_RESISTANCE);
+                break;
+            case RUNE_SHADOW:
+                if (object_is_body_armour(o_ptr) || o_ptr->tval == TV_CLOAK)
+                    add_flag(flagzilla->obj_flgs[i], OF_STEALTH);
+                break;
+            case RUNE_HASTE:
+                if (o_ptr->tval == TV_BOOTS)
+                    add_flag(flagzilla->obj_flgs[i], OF_SPEED);
+                break;
+            }
+        }
     }
 
     return flagzilla;

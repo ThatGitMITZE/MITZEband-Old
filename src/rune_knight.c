@@ -1229,13 +1229,13 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
       { { 33,  30, 75, identify_fully_spell },
         { 35,  33, 45, dimension_door_spell },
         { 36,  70, 75, glyph_of_warding_spell },
-        { 38,  65, 85, mana_branding_spell },
-        { 40,  40, 80, eye_for_an_eye_spell },
+        { 39,  40, 80, eye_for_an_eye_spell },
+        { 41,  60, 80, polymorph_demon_spell },
         { 42, 100, 80, clairvoyance_spell },
         { 43, 100, 45, living_trump_spell },
-        { 45,  58, 85, mana_storm_II_spell },
-        { 47, 100, 90, wraithform_spell },
-        { 49,  80, 85, polymorph_demonlord_spell },
+        { 45,  40, 70, destruction_spell },
+        { 47,  80, 70, massacre_spell }, 
+        { 50,  58, 80, mana_storm_II_spell },
         { -1,   0,  0, NULL },
       }
     },
@@ -1392,9 +1392,9 @@ class_t *rune_knight_get_class(void)
                   "equipment, the Rune Knight can become an avatar of destruction, or an "
                   "invulnerable bastion. Unlike the Warrior-Mage and all other casters, the "
                   "Rune Knight's mana does not regenerate on its own; rather, the Rune Knight "
-                  "must siphon mana from magical attacks directed at him. The Rune Knight has "
-                  "a fixed (though very large) selection of spells that he can use his mana on, "
-                  "in addition to his unique Rune spells.";
+                  "must siphon mana from magical or elemental attacks directed at him. "
+                  "The Rune Knight has a fixed (though very large) selection of spells that he "
+                  "can use his mana on, in addition to his unique Rune spells.";
 
         me.stats[A_STR] = 2;
         me.stats[A_INT] = 2;

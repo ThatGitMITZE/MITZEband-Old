@@ -5056,7 +5056,8 @@ void calc_bonuses(void)
     if (p_ptr->pass_wall && !p_ptr->kill_wall) p_ptr->no_flowed = TRUE;
     */
 
-    /* Apply some maximums ... */
+    /* Apply some maximums ... Note: Rune-Knights must limit to just 15%
+     * Otherwise, they could use double or even triple {absorption}! */
     if ( p_ptr->magic_resistance > 15
       && !prace_is_(RACE_MON_GOLEM)
       && !prace_is_(MIMIC_MIST)
