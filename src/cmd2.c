@@ -3917,6 +3917,11 @@ static bool travel_flow_aux(int y, int x, int n, bool wall)
     if (!in_bounds(y, x)) return wall;
     if (!(c_ptr->info & CAVE_AWARE)) return wall;
 
+    /* Don't travel thru traps ... code will attempt a disarm, but this
+     * can be dangerous for some players. Often, there is an alternate
+     * route around the trap anyway ... */
+    if (is_known_trap(c_ptr)) return wall;
+
     /* Ignore "pre-stamped" entries */
     if (travel.cost[y][x] != TRAVEL_UNABLE) return wall;
 
