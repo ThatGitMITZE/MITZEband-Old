@@ -413,7 +413,14 @@ static void _display_frequency(monster_race *r_ptr, doc_ptr doc)
      * Spells: 25.00% (11 of 21 moves) (easy_lore turned on)
      * Spells: 52.38% (11 of 21 moves) (easy_lore turned off)
      * One of these is grossly inaccurate. People have complained ...
-     * (BTW, _easy_lore() is much broader than easy_lore) */
+     * (BTW, _easy_lore() is much broader than easy_lore)
+     *
+     * UPDATE: If a monster has no non-innate attacks, you can correct the frequency
+     * as follows: f = 2 f*f / 100. So, Light Hounds spell 1_IN_5 for f = 20. This
+     * really needs to be f = 2 * 20 * 20 / 100 = 8. cf mspells1.c where I commented
+     * on this oddness (Hengband). Orc shooters are even worse: 1_IN_15 is actually
+     * more like 1 in 139! But 33% casting only goes down to ~22%, which is probably
+     * what is was designed for. */
     if ( spoiler_hack
       || easy_lore
       || (!r_ptr->r_spell_turns && (r_ptr->r_xtra1 & MR1_LORE)) ) /* probing */
