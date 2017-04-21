@@ -37,21 +37,29 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 
 /* Fail Rates ... Scaled by 10 (95.2% returned as 952)
  * cf design/devices.ods */
+int _difficulty(int d)
+{
+    if (d > 60)
+        return 600 + (d - 60) * 17;
+    else
+        return d * 10;
+}
 int  effect_calc_fail_rate(effect_t *effect)
 {
     int chance, fail;
+    int min = USE_DEVICE * 10;
 
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
 
-    chance = p_ptr->skills.dev;
+    chance = p_ptr->skills.dev * 10;
     if (p_ptr->confused) chance = chance / 2;
     if (p_ptr->stun) chance = chance * 2 / 3;
 
-    fail = effect->difficulty;
+    fail = _difficulty(effect->difficulty);
     if (chance > fail) fail -= (chance - fail)*2;
     else chance -= (fail - chance)*2;
-    if (fail < USE_DEVICE) fail = USE_DEVICE;
-    if (chance < USE_DEVICE) chance = USE_DEVICE;
+    if (fail < min) fail = min;
+    if (chance < min) chance = min;
 
     if (chance > fail)
         fail = fail * 1000 / (chance*2);
@@ -73,7 +81,7 @@ int device_calc_fail_rate(object_type *o_ptr)
 
         obj_flags(o_ptr, flgs);
         if (have_flag(flgs, OF_EASY_SPELL))
-            effect.difficulty -= effect.difficulty * o_ptr->pval / 10;
+            effect.difficulty -= MAX(o_ptr->pval, effect.difficulty * 10 * o_ptr->pval / 300);
 
         if (o_ptr->curse_flags & OFC_CURSED)
             effect.difficulty += effect.difficulty / 5;
@@ -2306,10 +2314,10 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BEAM_GRAVITY,          55,  25,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_METEOR,                55,  26,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_BREATHE_ONE_MULTIHUED, 60,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
-    {EFFECT_GENOCIDE_ONE,          60,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
-    {EFFECT_BALL_WATER,            65,  28,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
-    {EFFECT_BALL_DISINTEGRATE,     70,  35,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
-    {EFFECT_ROCKET,                85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_GENOCIDE_ONE,          65,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BALL_WATER,            70,  28,     2,   0,     0, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BALL_DISINTEGRATE,     75,  35,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_ROCKET,                85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
     {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
     {0}
 };
@@ -2342,10 +2350,10 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_BALL_NETHER,           45,  31,     1,  60,     0, 0},
     {EFFECT_BALL_DISEN,            47,  32,     1,  60,     0, _DROP_GOOD},
     {EFFECT_ENLIGHTENMENT,         50,  33,     2,  70,     0, 0},
-    {EFFECT_BALL_SOUND,            52,  35,     2,  80,     0, _DROP_GOOD},
-    {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,     0, _DROP_GOOD},
+    {EFFECT_BALL_SOUND,            52,  35,     2,  90,     0, _DROP_GOOD},
+    {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,  90,     0, _DROP_GOOD},
     {EFFECT_SPEED_HERO,            70,  40,     2,   0,     0, _DROP_GOOD | _DROP_GREAT},
-    {EFFECT_GREAT_CLARITY,         80,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_BALL_MANA,             80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT},
@@ -2391,17 +2399,17 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_SPEED,                 40,  19,     1,  60,     0, 0},
     {EFFECT_IDENTIFY_FULL,         40,  20,     2,  70,     0, 0},
     {EFFECT_REMOVE_CURSE,          40,  20,     2,  50,     0, 0},
-    {EFFECT_DISPEL_DEMON,          50,  21,     2,  70,     0, 0},
-    {EFFECT_DISPEL_UNDEAD,         50,  21,     2,  70,     0, 0},
+    {EFFECT_DISPEL_DEMON,          45,  21,     2,  70,     0, 0},
+    {EFFECT_DISPEL_UNDEAD,         45,  21,     2,  70,     0, 0},
     {EFFECT_DISPEL_LIFE,           50,  22,     2,  70,     0, 0},
-    {EFFECT_DISPEL_EVIL,           50,  23,     2,  80,     0, 0},
-    {EFFECT_DISPEL_MONSTERS,       50,  24,     2,  80,     0, 0},
-    {EFFECT_HOLINESS,              50,  25,     2,  80,     0, _DROP_GOOD},
+    {EFFECT_DISPEL_EVIL,           55,  23,     2,  80,     0, 0},
+    {EFFECT_DISPEL_MONSTERS,       55,  24,     2,  80,     0, 0},
+    {EFFECT_HOLINESS,              45,  25,     2,  80,     0, _DROP_GOOD},
     {EFFECT_DESTRUCTION,           50,  25,     2,   0,     0, _DROP_GOOD},
     {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD},
-    {EFFECT_HEAL_CURING,           60,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT},
-    {EFFECT_BANISH_EVIL,           65,  31,     2,  80,     0, _DROP_GOOD},
-    {EFFECT_BANISH_ALL,            65,  32,     3,   0,     0, _DROP_GOOD},
+    {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_BANISH_EVIL,           60,  31,     2,  80,     0, _DROP_GOOD},
+    {EFFECT_BANISH_ALL,            70,  32,     3,   0,     0, _DROP_GOOD},
     {EFFECT_MANA_STORM,            85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
     {EFFECT_STARBURST,             85,  41,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
     {EFFECT_DARKNESS_STORM,        85,  42,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
@@ -2491,7 +2499,11 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
                We scale up the difficulty a bit depending on the level of the device. */
             o_ptr->activation.power = device_level(o_ptr);
             o_ptr->activation.difficulty = _bounds_check(_rand_normal(entry->level, 5), 1, o_ptr->activation.power);
-            o_ptr->activation.difficulty += (o_ptr->activation.power - o_ptr->activation.difficulty) / 3;
+            if (o_ptr->activation.power > o_ptr->activation.difficulty + 3)
+            {
+                o_ptr->activation.difficulty += 3*(o_ptr->activation.power - o_ptr->activation.difficulty) / 4;
+                o_ptr->activation.difficulty += randint0((o_ptr->activation.power - o_ptr->activation.difficulty) / 4);
+            }
 
             o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 5), 1, 1000);
             o_ptr->activation.extra = entry->extra;
@@ -2828,9 +2840,6 @@ int device_value(object_type *o_ptr, int options)
 
                 /* More charges than base gives more value */
                 result = result * charges / MAX(1, base_charges);
-
-                /* More difficult than base gives less value, but the effect is small */
-                result -= result * (o_ptr->activation.difficulty - base_level) * 3 / 100;
             }
         }
     }
@@ -4404,7 +4413,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_HEAL_CURING:
     {
-        int amt = _extra(effect, 50 + 7*effect->power/2);
+        int amt = _extra(effect, 4*effect->power);
         if (quickband) amt = amt * 5 / 3;
         if (amt < 100)
         {
@@ -5337,7 +5346,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_WATER:
     {
-        int dam = _extra(effect, 100 + 3*effect->power/2);
+        int dam = _extra(effect, 100 + 2*effect->power);
         if (name) return "Whirlpool";
         if (desc) return "It fires a huge ball of water.";
         if (info) return info_damage(0, 0, _BOOST(dam));

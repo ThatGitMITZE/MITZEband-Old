@@ -1114,7 +1114,8 @@ static void _wiz_stats_log_books(int level, object_type *o_ptr, int max3, int ma
 }
 static void _wiz_stats_log_devices(int level, object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_WAND && o_ptr->activation.type == EFFECT_ROCKET)
+    /*if (o_ptr->tval == TV_WAND && o_ptr->activation.type == EFFECT_ROCKET)*/
+    if (obj_is_device(o_ptr) && o_ptr->activation.difficulty >= 60)
         _wiz_stats_log_obj(level, o_ptr);
 }
 static void _wiz_stats_log_arts(int level, object_type *o_ptr)
