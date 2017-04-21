@@ -2388,7 +2388,7 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_ENLIGHTENMENT,         20,  10,     1,  50,     0, _STOCK_TOWN},
     {EFFECT_STARLITE,              20,  10,     1,  40,     0, 0},
     {EFFECT_EARTHQUAKE,            20,  10,     1,  40,     0, 0},
-    {EFFECT_HEAL,                  20,  10,     2,  60,    50, 0}, /* Cure Wounds for 50hp */
+    {EFFECT_HEAL,                  20,  10,     2,  60,     0, 0}, /* Cure Wounds for ~50hp */
     {EFFECT_CURING,                25,  12,     1,  50,     0, 0}, /* Curing no longer heals */
     {EFFECT_SUMMON_HOUNDS,         27,  25,     2,  40,     0, 0},
     {EFFECT_SUMMON_HYDRAS,         27,  25,     3,  40,     0, 0},
@@ -4372,7 +4372,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         break;
     case EFFECT_HEAL:
     {
-        int amt = _extra(effect, 50);
+        int amt = _extra(effect, 25 + effect->power);
         if (name) return (amt < 100) ? "Cure Wounds" : "Healing";
         if (desc) return "It heals your hitpoints and cures cuts.";
         if (info) return info_heal(0, 0, _BOOST(amt));
@@ -4396,10 +4396,9 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_CURING:
     {
-        int amt = _extra(effect, 50);
         if (name) return "Curing";
         if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
-        if (value) return format("%d", 500 + 10*amt);
+        if (value) return format("%d", 1000);
         if (color) return format("%d", TERM_L_GREEN);
         if (cast)
         {
