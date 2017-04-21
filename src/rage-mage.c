@@ -1245,8 +1245,8 @@ class_t *rage_mage_get_class(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 20,  24,  40,  -1,  12,   2,  50,  30 };
-    skills_t xs = {  7,  10,  15,   0,   0,   0,  15,  15 };
+    skills_t bs = { 20,  20,  40,  -1,  12,   2,  50,  30 };
+    skills_t xs = {  7,   8,  15,   0,   0,   0,  15,  15 };
 
         me.name = "Rage-Mage";
         me.desc = "The Rage Mage is part of a secret sect descending from the Barbarians "

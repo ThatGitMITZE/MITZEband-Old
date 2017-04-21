@@ -4030,6 +4030,7 @@ void calc_bonuses(void)
     {
         int ct = 0;
         int to_d = 3 + p_ptr->lev/5;
+        int pct = p_ptr->pclass == CLASS_RAGE_MAGE ? 50 : 100; /* XXX tweak me */
 
         res_add_immune(RES_FEAR);
 
@@ -4061,13 +4062,14 @@ void calc_bonuses(void)
         if (p_ptr->prace != RACE_MON_BEHOLDER)
             p_ptr->to_d_m  += 3+(p_ptr->lev/5);
         p_ptr->shooter_info.dis_to_h  -= 12;
-        p_ptr->to_a -= 10;
-        p_ptr->dis_to_a -= 10;
-        p_ptr->skills.stl -= 7;
-        p_ptr->skills.dev -= 20;
-        p_ptr->skills.sav -= 30;
-        p_ptr->skills.srh -= 15;
-        p_ptr->skills.fos -= 15;
+        /* Note: The Rage Mage is no longer skill smashed by Berserk */
+        p_ptr->to_a -= 10 * pct / 100;
+        p_ptr->dis_to_a -= 10 * pct / 100;
+        p_ptr->skills.stl -= 7 * pct / 100;
+        p_ptr->skills.dev -= 20 * pct / 100;
+        p_ptr->skills.sav -= 30 * pct / 100;
+        p_ptr->skills.srh -= 15 * pct / 100;
+        p_ptr->skills.fos -= 15 * pct / 100;
         p_ptr->skill_tht -= 20;
         p_ptr->skill_dig += 30;
     }
