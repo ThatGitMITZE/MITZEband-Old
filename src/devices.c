@@ -4421,7 +4421,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_HEAL_CURING:
     {
-        int amt = _extra(effect, 4*effect->power);
+        int amt = _extra(effect, 30 + 4*effect->power);
         if (quickband) amt = amt * 5 / 3;
         if (amt < 100)
         {

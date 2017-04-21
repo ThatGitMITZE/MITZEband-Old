@@ -2337,7 +2337,7 @@ E:BALL_DARK:50:100:250
 E:Your collar harness is covered in pitch-darkness...
 
 N:219:Charmed Pendant
-I:40:0:3
+I:40:0:2
 W:50:50:2:100000
 P:0:0d0:0:0:5
 F:INT | CHR | INFRA | SEARCH | HIDE_TYPE | FULL_NAME |
