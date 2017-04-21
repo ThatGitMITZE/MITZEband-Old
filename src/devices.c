@@ -952,8 +952,15 @@ static cptr _do_potion(int sval, int mode)
             device_noticed = TRUE;
             if (p_ptr->pclass == CLASS_WILD_TALENT)
                 wild_talent_new_life();
+            /* XXX Originally, this was here as an act of mercy for players new to this class.
+             * However, it is hugely scummable since you can pick the powers useful in early play
+             * and then new life to switch over to those useful in late game. Several psion powers
+             * are huge in the early game, but not so much later on. Players will abuse this. Also,
+             * the Skillmaster has exactly the same permanent-irreversible-don't-screw-up-your-choices
+             * game mechanic and receive no such love. Keeping things for the Wild Talent makes
+             * sense though, since they are random (and don't get a say in the matter anyway).
             if (p_ptr->pclass == CLASS_PSION && get_check("Relearn Powers? "))
-                psion_relearn_powers();
+                psion_relearn_powers();*/
         }
         break;
     case SV_POTION_NEO_TSUYOSHI:
