@@ -39,19 +39,21 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
  * cf design/devices.ods */
 int _difficulty(int d)
 {
-    if (d > 60)
-        return 600 + (d - 60) * 17;
-    else
-        return d * 10;
+    /* A non-linear difficulty protects the high level end game
+     * devices from inappropriate usage. -Rockets are now much
+     * harder to use (and _Healing only marginally more difficult).
+     * Formerly, OF_MAGIC_MASTERY was useless to device classes
+     * like the mage. No longer! 100 -> 130, but with cubic weighting. */
+    return d + 30 * d * d / 100 * d / 10000;
 }
 int  effect_calc_fail_rate(effect_t *effect)
 {
     int chance, fail;
-    int min = USE_DEVICE * 10;
+    int min = USE_DEVICE;
 
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
 
-    chance = p_ptr->skills.dev * 10;
+    chance = p_ptr->skills.dev;
     if (p_ptr->confused) chance = chance / 2;
     if (p_ptr->stun) chance = chance * 2 / 3;
 
