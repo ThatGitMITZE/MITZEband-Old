@@ -1997,9 +1997,9 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
                 note = " is immune.";
                 dam = 0;
             }
-            else
+            else /* 900 max dam coming in ... ~600 max dam going out */
             {
-                dam = dam * r_ptr->freq_spell / 100;
+                dam = dam * MIN(66, r_ptr->freq_spell) / 100;
             }
             break;
         }
