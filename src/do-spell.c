@@ -5262,6 +5262,10 @@ static cptr do_arcane_spell(int spell, int mode)
     return "";
 }
 
+static bool _can_enchant(obj_ptr obj) {
+    if (object_is_(obj, TV_SWORD, SV_POISON_NEEDLE)) return FALSE;
+    return object_is_weapon_armour_ammo(obj);
+}
 bool craft_enchant(int max, int inc)
 {
     obj_prompt_t prompt = {0};
@@ -5271,7 +5275,7 @@ bool craft_enchant(int max, int inc)
 
     prompt.prompt = "Enchant which item?";
     prompt.error = "You have nothing to enchant.";
-    prompt.filter = object_is_weapon_armour_ammo;
+    prompt.filter = _can_enchant;
     prompt.where[0] = INV_PACK;
     prompt.where[1] = INV_EQUIP;
     prompt.where[2] = INV_QUIVER;
