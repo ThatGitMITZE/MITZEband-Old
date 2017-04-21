@@ -2773,6 +2773,7 @@ static bool enchant_item(obj_p filter, int cost, int to_hit, int to_dam, int to_
     {
         int idx = -1;
         int old_cost;
+        int unit_cost_sum = 0;
         _enchant_choice_t choices[25];
         object_type copy = {0};
         menu_t menu = { "Enchant How Much?", NULL, 
@@ -2823,10 +2824,14 @@ static bool enchant_item(obj_p filter, int cost, int to_hit, int to_dam, int to_
             else
             {
                 int new_cost = new_object_cost(&copy, COST_REAL);
-                int unit_cost = new_cost - old_cost;
+                int unit_cost_add = new_cost - old_cost;
                 int min_cost = (i+1)*cost;
+                int unit_cost;
+                old_cost = new_cost;
 
-                unit_cost *= m;
+                unit_cost_add *= m;
+                unit_cost_sum += unit_cost_add;
+                unit_cost = unit_cost_sum;
 
                 unit_cost = town_service_price(unit_cost);
 
