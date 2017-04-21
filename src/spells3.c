@@ -1681,6 +1681,7 @@ void identify_pack(void)
 {
     pack_for_each(_identify_obj);
     equip_for_each(_identify_obj);
+    quiver_for_each(_identify_obj);
 }
 
 
