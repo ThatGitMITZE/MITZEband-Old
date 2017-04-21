@@ -1506,7 +1506,7 @@ static void _possessor_stats_table(FILE* fp)
     {
         monster_race *r_ptr = &r_info[i];
 
-        if (r_ptr->flags9 & RF9_DROP_CORPSE)
+        /*XXX if (r_ptr->flags9 & RF9_DROP_CORPSE)*/
         {
             int ac = 0, dam = 0, attacks = 0, j;
 
@@ -1524,7 +1524,7 @@ static void _possessor_stats_table(FILE* fp)
             }
 
             fprintf(fp, "\"%s\",%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%d,%d,=\"%d+%d\",=\"%d+%d\",=\"%d+%d\",%d,%d,%d,=\"%d+%d\",=\"%d+%d\"\n",
-                r_name + r_ptr->name, i, r_ptr->level,
+                i == MON_ECHIZEN ? "Combat Echizen" : r_name + r_ptr->name, i, r_ptr->level,
                 r_ptr->speed - 110, ac, attacks, dam,
                 b_name + b_info[r_ptr->body.body_idx].name,
                 r_ptr->body.stats[A_STR], r_ptr->body.stats[A_INT], r_ptr->body.stats[A_WIS],

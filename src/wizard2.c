@@ -1151,6 +1151,21 @@ static void _wiz_kill_monsters(int level)
         if (slot) rune_sword_kill(equip_obj(slot), r_ptr);
     }
 }
+static bool _is_stat_potion(obj_ptr obj)
+{
+    if (obj->tval != TV_POTION) return FALSE;
+    switch (obj->sval)
+    {
+    case SV_POTION_INC_STR:
+    case SV_POTION_INC_INT:
+    case SV_POTION_INC_WIS:
+    case SV_POTION_INC_DEX:
+    case SV_POTION_INC_CON:
+    case SV_POTION_INC_CHR: return TRUE;
+    }
+    return FALSE;
+}
+
 static void _wiz_inspect_objects(int level)
 {
     race_t  *race_ptr = get_race();
@@ -1202,6 +1217,9 @@ static void _wiz_inspect_objects(int level)
 
         if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
+
+        if (_is_stat_potion(o_ptr))
+           do_device(o_ptr, SPELL_CAST, 0);
 
         if (race_ptr->destroy_object)
             race_ptr->destroy_object(o_ptr);

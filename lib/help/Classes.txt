@@ -720,7 +720,7 @@ Another unique aspect of the Rage Mage concerns their Mana pool. Unlike normal s
 
   <indent><style:table><color:G>Stats                   Skills</color>
 Strength     <color:v> +3</color>        Disarming   <color:r>Bad          </color>
-Intelligence <color:w> -2</color>        Device      <color:o>Fair         </color>
+Intelligence <color:w> -2</color>        Device      <color:r>Bad          </color>
 Wisdom       <color:w> -2</color>        Save        <color:g>Superb       </color>
 Dexterity    <color:w> -2</color>        Stealth     <color:r>Bad          </color>
 Constitution <color:w> +2</color>        Searching   <color:R>Poor         </color>
@@ -878,7 +878,7 @@ Warlock       <color:R>Poor         </color> <color:g>Superb       </color> <col
 Archaeologist <color:g>Superb       </color> <color:G>Excellent    </color> <color:o>Fair         </color> <color:y>Very Good    </color>
 Bard          <color:R>Poor         </color> <color:G>Excellent    </color> <color:o>Fair         </color> <color:D>Very Bad     </color>
 Imitator      <color:R>Poor         </color> <color:y>Good         </color> <color:o>Fair         </color> <color:o>Fair         </color>
-Rage-Mage     <color:r>Bad          </color> <color:o>Fair         </color> <color:g>Superb       </color> <color:r>Bad          </color>
+Rage-Mage     <color:r>Bad          </color> <color:r>Bad          </color> <color:g>Superb       </color> <color:r>Bad          </color>
 Skillmaster   <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:R>Poor         </color>
 Tourist       <color:r>Bad          </color> <color:r>Bad          </color> <color:r>Bad          </color> <color:o>Fair         </color>
 Wild-Talent   <color:o>Fair         </color> <color:y>Good         </color> <color:o>Fair         </color> <color:o>Fair         </color>

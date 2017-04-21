@@ -1205,7 +1205,7 @@ Other
   
     Stats                   Skills
     Strength      +3        Disarming   Bad          
-    Intelligence  -2        Device      Fair         
+    Intelligence  -2        Device      Bad          
     Wisdom        -2        Save        Superb       
     Dexterity     -2        Stealth     Bad          
     Constitution  +2        Searching   Poor         
@@ -1391,7 +1391,7 @@ Warlock       Poor          Superb        Excellent     Very Good
 Archaeologist Superb        Excellent     Fair          Very Good    
 Bard          Poor          Excellent     Fair          Very Bad     
 Imitator      Poor          Good          Fair          Fair         
-Rage-Mage     Bad           Fair          Superb        Bad          
+Rage-Mage     Bad           Bad           Superb        Bad          
 Skillmaster   Very Bad      Very Bad      Very Bad      Poor         
 Tourist       Bad           Bad           Bad           Fair         
 Wild-Talent   Fair          Good          Fair          Fair         
