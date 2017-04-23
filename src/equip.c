@@ -287,7 +287,7 @@ int equip_first_slot(obj_ptr obj)
     return equip_next_slot(obj, 0);
 }
 
-int equip_next_slot(obj_ptr obj, int last)
+int equip_next_slot(obj_ptr obj, slot_t last)
 {
     slot_t slot;
     for (slot = last + 1; slot <= _template->max; slot++)

@@ -1166,6 +1166,43 @@ static bool _is_stat_potion(obj_ptr obj)
     return FALSE;
 }
 
+static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
+{
+    obj_ptr old = equip_obj(slot);
+    if (old)
+    {
+        int score, old_score;
+        if (object_is_melee_weapon(old) && !object_is_melee_weapon(obj)) return FALSE;
+        if (object_is_shield(old) && !object_is_shield(obj)) return FALSE;
+        score = obj_value_real(obj);
+        old_score = obj_value_real(old);
+        if (score > old_score)
+        {
+            equip_wield(obj, slot);
+            return TRUE;
+        }
+    }
+    else
+    {
+        equip_wield(obj, slot);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static void _wiz_improve_gear(obj_ptr obj)
+{
+    slot_t slot = equip_first_slot(obj);
+    if (slot)
+    {
+        if (!_wiz_improve_gear_aux(obj, slot))
+        {
+            slot = equip_next_slot(obj, slot);
+            if (slot) _wiz_improve_gear_aux(obj, slot);
+        }
+    }
+}
+
 static void _wiz_inspect_objects(int level)
 {
     race_t  *race_ptr = get_race();
@@ -1219,7 +1256,10 @@ static void _wiz_inspect_objects(int level)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (_is_stat_potion(o_ptr))
-           do_device(o_ptr, SPELL_CAST, 0);
+            do_device(o_ptr, SPELL_CAST, 0);
+
+        if (1 && !object_is_nameless(o_ptr))
+            _wiz_improve_gear(o_ptr);
 
         if (race_ptr->destroy_object)
             race_ptr->destroy_object(o_ptr);
@@ -1227,6 +1267,8 @@ static void _wiz_inspect_objects(int level)
         if (class_ptr->destroy_object)
             class_ptr->destroy_object(o_ptr);
     }
+    pack_overflow();
+    if (p_ptr->cursed) remove_all_curse();
 }
 static void _wiz_gather_stats(int which_dungeon, int level, int reps)
 {
