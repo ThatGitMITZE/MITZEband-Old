@@ -2594,7 +2594,7 @@ static void calc_spells(void)
     if (levels < 0) levels = 0;
 
     /* Extract total allowed spells */
-    num_allowed = (adj_mag_study[p_ptr->stat_ind[mp_ptr->spell_stat]] * levels / 2);
+    num_allowed = (adj_mag_study[p_ptr->stat_ind[get_spell_stat()]] * levels / 2);
 
     if ((p_ptr->pclass != CLASS_SAMURAI) && (mp_ptr->spell_book != TV_LIFE_BOOK))
     {
@@ -4204,7 +4204,7 @@ void calc_bonuses(void)
             p_ptr->stat_ind[i] = ind;
             if (i == A_CON)
                 p_ptr->update |= (PU_HP);
-            else if (mp_ptr->spell_stat == i)
+            else if (get_spell_stat() == i)
                 p_ptr->update |= (PU_MANA | PU_SPELLS);
         }
     }

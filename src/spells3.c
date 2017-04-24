@@ -3077,7 +3077,7 @@ s16b spell_chance(int spell, int use_realm)
     chance -= 3 * (p_ptr->lev - s_ptr->slevel);
 
     /* Reduce failure rate by INT/WIS adjustment */
-    chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+    chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[caster_ptr->which_stat]] - 1);
 
     if (p_ptr->riding)
         chance += MAX(r_info[m_list[p_ptr->riding].r_idx].level - skills_riding_current() / 100 - 10, 0);
@@ -3105,16 +3105,15 @@ s16b spell_chance(int spell, int use_realm)
     }
 
     /* Extract the minimum failure rate */
-    minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
+    minfail = adj_mag_fail[p_ptr->stat_ind[caster_ptr->which_stat]];
 
     /*
      * Non mage/priest characters never get too good
      * (added high mage, mindcrafter)
      */
-    if (mp_ptr->spell_xtra & MAGIC_FAIL_5PERCENT)
-    {
-        if (minfail < 5) minfail = 5;
-    }
+    if (caster_ptr && minfail < caster_ptr->min_fail)
+        minfail = caster_ptr->min_fail;
+
     if (prace_is_(RACE_DEMIGOD) && p_ptr->psubrace == DEMIGOD_ATHENA && minfail > 0)
         minfail -= 1;
 
