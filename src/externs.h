@@ -807,6 +807,7 @@ extern bool restore_mana(void);
 
 /* devices.c */
 extern int  device_calc_fail_rate(object_type *o_ptr); /*95.2% returned as 952*/
+extern int  device_calc_fail_rate_aux(int skill, int difficulty);
 extern bool device_try(object_type *o_ptr);
 extern bool device_use(object_type *o_ptr, int boost);
 extern bool device_known;

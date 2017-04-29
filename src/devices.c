@@ -46,27 +46,37 @@ int _difficulty(int d)
      * like the mage. No longer! 100 -> 130, but with cubic weighting. */
     return d + 30 * d * d / 100 * d / 10000;
 }
-int  effect_calc_fail_rate(effect_t *effect)
+/* in progress: I find this calculation hard to grok ... let's
+ * rephrase in terms of skill vs. difficulty and expose a simple
+ * api so I can view fail(s,d) (a function of 2 variables).
+ * cf ^A"d for online spoiler tables (wizard1.c) */
+int device_calc_fail_rate_aux(int skill, int difficulty)
 {
-    int chance, fail;
     int min = USE_DEVICE;
+    int fail = 0;
+    difficulty = _difficulty(difficulty);
+    if (skill > difficulty) difficulty -= (skill - difficulty)*2;
+    else skill -= (difficulty - skill)*2;
+    if (difficulty < min) difficulty = min;
+    if (skill < min) skill = min;
+    if (skill > difficulty)
+        fail = difficulty * 500 / skill;
+    else
+        fail = 1000 - skill * 500 / difficulty;
+    return fail;
+}
+
+int effect_calc_fail_rate(effect_t *effect)
+{
+    int skill = p_ptr->skills.dev;
+    int fail;
 
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
 
-    chance = p_ptr->skills.dev;
-    if (p_ptr->confused) chance = chance / 2;
-    if (p_ptr->stun) chance = chance * 2 / 3;
+    if (p_ptr->confused) skill = 3 * skill / 4;
+    if (p_ptr->stun) skill = 4 * skill / 5; /* XXX vary with amount of stunning */
 
-    fail = _difficulty(effect->difficulty);
-    if (chance > fail) fail -= (chance - fail)*2;
-    else chance -= (fail - chance)*2;
-    if (fail < min) fail = min;
-    if (chance < min) chance = min;
-
-    if (chance > fail)
-        fail = fail * 1000 / (chance*2);
-    else
-        fail = 1000 - chance * 1000 / (fail*2);
+    fail = device_calc_fail_rate_aux(skill, effect->difficulty);
     if (p_ptr->stun > 50 && fail < 250) fail = 250;
     else if (p_ptr->stun && fail < 150) fail = 150;
     return fail;

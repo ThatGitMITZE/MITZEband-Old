@@ -48,7 +48,7 @@ point_t size(int cx, int cy)
  * with the current skill:
         static point_t tbl[9] = {
             {0, 1280}, {1000, 640}, {2000, 320}, {3000, 160}, {4000, 80},
-            {5000, 40}, {6000, 20}, {7000, 10}, {8000, 5} };
+            {5000, 40}, {6000, 20}, {7000, 10}, {8000, 1} };
         int step = interpolate(skill, tbl, 9);
         skill += step/10;
         if ((step % 10) && randint0(10) < (step % 10))

@@ -819,6 +819,71 @@ static void spoil_mon_desc(void)
 }
 
 /************************************************************************
+ * Devices
+ ************************************************************************/
+static char _fail_color(int fail)
+{
+    if (fail < 30) return 'w';
+    if (fail < 80) return 'W';
+    if (fail < 150) return 'U';
+    if (fail < 250) return 'y';
+    if (fail < 350) return 'o';
+    if (fail < 500) return 'R';
+    if (fail < 750) return 'r';
+    return 'v';
+}
+static void spoil_device_fail()
+{
+    doc_ptr doc = doc_alloc(80);
+    int     d, s;
+
+    doc_change_name(doc, "devices.html");
+    doc_insert(doc, "<style:table>");
+    doc_insert(doc, "<topic:d_vs_s><color:r>Difficulty vs Skill</color>\n");
+    for (d = 1; d <= 100; d++)
+    {
+        if (d%25 == 1)
+        {
+            doc_insert(doc, "\n<color:G>Dev ");
+            for (s = 20; s <= 160; s+=10)
+                doc_printf(doc, "%4d ", s);
+            doc_insert(doc, "</color>\n");
+        }
+        doc_printf(doc, "<color:B>%3d</color> ", d);
+        for (s = 20; s <= 160; s+=10)
+        {
+            int fail = device_calc_fail_rate_aux(s, d);
+            doc_printf(doc, "<color:%c>%2d.%d</color> ", _fail_color(fail), fail/10, fail%10);
+        }
+        doc_newline(doc);
+    }
+
+    doc_insert(doc, "\n<topic:s_vs_d><color:r>Skill vs Difficulty</color>\n");
+    for (s = 26; s <= 160; s++)
+    {
+        if (s%25 == 1)
+        {
+            doc_insert(doc, "\n<color:G>Skl ");
+            for (d = 30; d <= 100; d+=5)
+                doc_printf(doc, "%4d ", d);
+            doc_insert(doc, "</color>\n");
+        }
+        doc_printf(doc, "<color:B>%3d</color> ", s);
+        for (d = 30; d <= 100; d+=5)
+        {
+            int fail = device_calc_fail_rate_aux(s, d);
+            doc_printf(doc, "<color:%c>%2d.%d</color> ", _fail_color(fail), fail/10, fail%10);
+        }
+        doc_newline(doc);
+    }
+    doc_insert(doc, "</style>");
+    doc_printf(doc, "\n<color:D>Generated for PosChengband %d.%d.%d</color>\n",
+                     VER_MAJOR, VER_MINOR, VER_PATCH);
+    doc_display(doc, "Device Faile Rates", 0);
+    doc_free(doc);
+}
+
+/************************************************************************
  * Monster Lore
  ************************************************************************/
 static void spoil_mon_info(void)
@@ -1271,6 +1336,7 @@ void do_cmd_spoilers(void)
         prt("(A) Artifact Tables", row++, col);
         prt("(o) Objects", row++, col);
         prt("(O) Object Tables", row++, col);
+        prt("(d) Device Fail Rates", row++, col);
         row++;
 
         c_prt(TERM_RED, "Monster Spoilers", row++, col - 2);
@@ -1314,6 +1380,9 @@ void do_cmd_spoilers(void)
             break;
         case 'o':
             spoil_obj_desc("obj-desc.spo");
+            break;
+        case 'd':
+            spoil_device_fail();
             break;
 
         /* Monster Spoilers */
