@@ -1750,6 +1750,27 @@ void do_cmd_debug(void)
         do_cmd_redraw();
         break;
     }
+    case '_':
+    {
+        static point_t tbl[9] = {
+            {0, 1280}, {1000, 640}, {2000, 320}, {3000, 160}, {4000, 80},
+            {5000, 40}, {6000, 20}, {7000, 10}, {8000, 5} };
+        int skill = 0, max = 8000, i = 0;
+        if (!msg_input_num("Start: ", &skill, 0, 8000)) return;
+        if (!msg_input_num("Stop: ", &max, skill, 8000)) return;
+        while (skill <= max)
+        {
+            int step = interpolate(skill, tbl, 9);
+            skill += step/10;
+            if ((step % 10) && randint0(10) < (step % 10))
+                skill++;
+            i++;
+            msg_format("%d", skill);
+        }
+        msg_boundary();
+        msg_format("%d steps", i);
+        break;
+    }
     default:
         msg_print("That is not a valid debug command.");
         break;
