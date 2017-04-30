@@ -5384,14 +5384,16 @@ bool lose_all_info(void)
     virtue_add(VIRTUE_KNOWLEDGE, -5);
     virtue_add(VIRTUE_ENLIGHTENMENT, -5);
 
-    pack_for_each(_forget);
-    equip_for_each(_forget);
-    quiver_for_each(_forget);
+    if (!p_ptr->auto_id)
+    {
+        pack_for_each(_forget);
+        equip_for_each(_forget);
+        quiver_for_each(_forget);
 
-    p_ptr->update |= PU_BONUS;
-    p_ptr->notice |= PN_OPTIMIZE_PACK;
-    p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_OBJECT_LIST);
-
+        p_ptr->update |= PU_BONUS;
+        p_ptr->notice |= PN_OPTIMIZE_PACK;
+        p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_OBJECT_LIST);
+    }
     wiz_dark();
 
     return TRUE;
