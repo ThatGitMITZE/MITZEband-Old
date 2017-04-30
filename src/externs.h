@@ -2524,15 +2524,16 @@ extern void skills_bow_gain(int sval);
 
 extern int skills_weapon_current(int tval, int sval);
 extern int skills_weapon_max(int tval, int sval);
-extern void skills_weapon_gain(int tval, int sval);
+extern void skills_weapon_gain(int tval, int sval, int rlvl);
 extern void skills_weapon_init(int tval, int sval, int skill);
 extern bool skills_weapon_is_icky(int tval, int sval);
 extern int skills_weapon_calc_bonus(int tval, int sval);
 extern cptr skills_weapon_describe_current(int tval, int sval);
 
+extern void skills_shield_init(int sval, int current, int max);
 extern int skills_shield_current(int sval);
 extern int skills_shield_max(int sval);
-extern void skills_shield_gain(int sval);
+extern void skills_shield_gain(int sval, int rlvl);
 extern int skills_shield_calc_bonus(int sval);
 extern cptr skills_shield_describe_current(int sval);
 
@@ -2552,7 +2553,7 @@ extern int skills_riding_max(void);
 
 extern int skills_innate_current(cptr name);
 extern int skills_innate_max(cptr name);
-extern void skills_innate_gain(cptr name);
+extern void skills_innate_gain(cptr name, int rlvl);
 extern void skills_innate_init(cptr name, int current, int max);
 extern int skills_innate_calc_bonus(cptr name);
 extern cptr skills_innate_calc_name(innate_attack_ptr attack); /* Note: Uses a shared buffer so result valid only until the next call */

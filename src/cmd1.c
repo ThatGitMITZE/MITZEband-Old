@@ -2228,8 +2228,7 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
         if (a->flags & INNATE_SKIP) continue;
         if (m_ptr->fy != old_fy || m_ptr->fx != old_fx) break; /* Teleport Effect? */
 
-        if (r_ptr->level + 10 > p_ptr->lev)
-            skills_innate_gain(skills_innate_calc_name(a));
+        skills_innate_gain(skills_innate_calc_name(a), r_ptr->level);
 
         for (j = 0; j < blows; j++)
         {
@@ -2870,13 +2869,10 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
     if (o_ptr)
     {
-        if (r_ptr->level + 10 > p_ptr->lev)
-        {
-            if (weaponmaster_get_toggle() == TOGGLE_SHIELD_BASH && o_ptr->tval == TV_SHIELD)
-                skills_shield_gain(o_ptr->sval);
-            else
-                skills_weapon_gain(o_ptr->tval, o_ptr->sval);
-        }
+        if (weaponmaster_get_toggle() == TOGGLE_SHIELD_BASH && o_ptr->tval == TV_SHIELD)
+            skills_shield_gain(o_ptr->sval, r_ptr->level);
+        else
+            skills_weapon_gain(o_ptr->tval, o_ptr->sval, r_ptr->level);
     }
     else
     {

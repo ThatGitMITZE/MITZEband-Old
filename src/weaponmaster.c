@@ -2747,6 +2747,13 @@ void _on_birth(void)
             p_ptr->weapon_exp[kind.tval-TV_WEAPON_BEGIN][kind.sval] = WEAPON_EXP_BEGINNER;
     }
 
+    if (p_ptr->psubclass == WEAPONMASTER_SHIELDS)
+    {
+        skills_shield_init(SV_SMALL_LEATHER_SHIELD, WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
+        skills_shield_init(SV_SMALL_METAL_SHIELD, WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
+        skills_shield_init(SV_LARGE_LEATHER_SHIELD, WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
+        skills_shield_init(SV_LARGE_METAL_SHIELD, WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
+    }
     weaponmaster_adjust_skills();
 
     py_birth_obj_aux(TV_SOFT_ARMOR, SV_LEATHER_JACK, 1);
@@ -2780,7 +2787,7 @@ void weaponmaster_adjust_skills(void)
         break;
 
     case _WEAPONMASTER_SHIELDS:
-        /* TODO: We do not keep skills for shields. Probably never will, either ... */
+        /* This only needs to be done once, in _birth. */
         break;
     }
 
@@ -2788,7 +2795,7 @@ void weaponmaster_adjust_skills(void)
     for (i = 0; i < _MAX_OBJECTS_PER_SPECIALITY; i++)
     {
         kind = _specialities[p_ptr->psubclass].objects[i];
-        if (kind.tval == 0) break;
+        if (kind.tval == 0 || kind.tval == TV_SHIELD) break;
 
         s_info[p_ptr->pclass].w_max[kind.tval-TV_WEAPON_BEGIN][kind.sval] = WEAPON_EXP_MASTER;
     }
