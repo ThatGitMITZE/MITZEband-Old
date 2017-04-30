@@ -6918,7 +6918,7 @@ D:A strange reptilian hybrid with five heads dripping venom.
 N:441:Gachapin
 G:R:G
 I:120:110d9:10:90:20:250
-W:29:2:999:500:0:0
+W:29:255:999:500:0:0
 B:SHOW:LOSE_INT
 B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
