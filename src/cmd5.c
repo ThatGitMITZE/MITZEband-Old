@@ -1041,50 +1041,75 @@ void do_cmd_cast(void)
 
         virtue_on_cast_spell(use_realm, need_mana, chance);
 
+        /* Casting spells for no purpose other than gaining proficiency is considered
+         * a scum ... You should not do this! If you cannot restrain yourself, then
+         * disable spell proficiency by turning off the enable_spell_prof birth option.
+         * But for those players who like an interesting game, I tweaked the progression
+         * and depth limits quite a bit. I'll publish my design spreadsheet once I have
+         * time to clean it up ...*/
         if (enable_spell_prof && (mp_ptr->spell_xtra & MAGIC_GAIN_EXP))
         {
-            s16b cur_exp = p_ptr->spell_exp[(increment ? 32 : 0)+spell];
+            int  index = (increment ? 32 : 0)+spell;
+            s16b cur_exp = p_ptr->spell_exp[index];
+            int  dlvl = MAX(base_level, dun_level); /* gain prof in wilderness ... */
             s16b exp_gain = 0;
-            cptr msg = NULL;
 
-            if (cur_exp < SPELL_EXP_BEGINNER)
-            {
-                exp_gain += 60;
-                if (cur_exp + exp_gain >= SPELL_EXP_BEGINNER)
-                    msg = "a beginner";
-            }
-            else if (cur_exp < SPELL_EXP_SKILLED)
-            {
-                if ((MAX(base_level, dun_level) > 4) && ((MAX(base_level, dun_level) + 10) > p_ptr->lev))
+            if (dlvl) /* ... but not in town */
+            {  /* You'll need to spreadsheet this to see if this is any good ...
+                * Try a cross tab spell level vs dun level. Here is a rough summary
+                * of minimum dlvl to reach desired proficiency (but remember that
+                * interpolation smooths things out. So you can reach 1530 prof with
+                * a L50 spell on DL90, for instance):
+                * SLvl  Be  Sk  Ex  Ma
+                *   50  24  57  73 100
+                *   40  19  47  61  84
+                *   30  14  37  49  68
+                *   20   9  27  36  51
+                *   10   4  17  24  35
+                *    5   1  12  18  27
+                *    1   1   8  13  20 */
+                int ratio = (17 + s_ptr->slevel) * 100 / (10 + dlvl);
+                point_t max_tbl[4] = { {60, 1600}, {100, 1200}, {200, 900}, {300, 0} };
+                int max_exp = interpolate(ratio, max_tbl, 4);
+
+                if (cur_exp < max_exp)
                 {
-                    exp_gain = 8;
-                    if (cur_exp + exp_gain >= SPELL_EXP_SKILLED)
-                        msg = "skilled";
+                    point_t gain_tbl[9] = { /* 0->900->1200->1400->1600 */
+                        {0, 128}, {200, 64}, {400, 32}, {600, 16},
+                        {800, 8}, {1000, 4}, {1200, 2}, {1400, 1}, {1600, 1} };
+                    exp_gain = interpolate(cur_exp, gain_tbl, 9);
+                }
+                else if (p_ptr->wizard)
+                {
+                    msg_format("<color:B>When casting an <color:R>L%d</color> spell on "
+                        "<color:R>DL%d</color> your max proficiency is <color:R>%d</color> "
+                        "(Current: <color:R>%d</color>).</color> <color:D>%d</color>",
+                        s_ptr->slevel, dlvl, max_exp, cur_exp, ratio);
                 }
             }
-            else if (cur_exp < SPELL_EXP_EXPERT)
+
+            if (exp_gain)
             {
-                if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && ((MAX(base_level, dun_level) + 5) > s_ptr->slevel))
+                int  old_level = spell_exp_level(cur_exp);
+                int  new_level = old_level;
+
+                p_ptr->spell_exp[index] += exp_gain;
+                if (p_ptr->spell_exp[index] > SPELL_EXP_MASTER)
+                    p_ptr->spell_exp[index] = SPELL_EXP_MASTER;
+                new_level = spell_exp_level(p_ptr->spell_exp[index]);
+                if (new_level > old_level)
                 {
-                    exp_gain = 2;
-                    if (cur_exp + exp_gain >= SPELL_EXP_EXPERT)
-                        msg = "an expert";
+                    cptr desc[5] = { "Unskilled", "a Beginner", "Skilled", "an Expert", "a Master" };
+                    msg_format("You are now <color:B>%s</color> in <color:R>%s</color>.",
+                        desc[new_level],
+                        do_spell(use_realm, spell % 32, SPELL_NAME));
                 }
-            }
-            else if ((cur_exp < SPELL_EXP_MASTER) && !increment)
-            {
-                if (((MAX(base_level, dun_level) + 5) > p_ptr->lev) && (MAX(base_level, dun_level) > s_ptr->slevel))
+                else if (p_ptr->wizard)
                 {
-                    exp_gain = 1;
-                    if (cur_exp + exp_gain >= SPELL_EXP_MASTER)
-                        msg = "a master";
+                    msg_format("You now have <color:B>%d</color> proficiency in <color:R>%s</color>.",
+                        p_ptr->spell_exp[index],
+                        do_spell(use_realm, spell % 32, SPELL_NAME));
                 }
-            }
-            p_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
-            if (msg)
-            {
-                msg_format("You are now <color:B>%s</color> in <color:R>%s</color>.", msg,
-                    do_spell(use_realm, spell % 32, SPELL_NAME));
             }
         }
     }
