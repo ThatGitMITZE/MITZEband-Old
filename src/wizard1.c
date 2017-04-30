@@ -818,6 +818,165 @@ static void spoil_mon_desc(void)
     doc_free(doc);
 }
 
+/******************************************************************************
+ * Spoilers: Monster max damage by resistance type
+ * The goal here is to not list all possible damage types. Rather, the goal
+ * is to give the player an idea of when certain resistances are desirable
+ * as well as how to play with resistance holes
+ ******************************************************************************/
+static void _display_res(doc_ptr doc, int res)
+{
+    int pct = res_pct_known(res);
+    char color = 'D';
+    if (pct == 100)
+        color = 'v';
+    else if (pct < 0)
+        color = 'D';
+    else if (res_is_low(res))
+    {
+        if (pct >= 72)
+            color =  'r';
+        else if (pct >= 65)
+            color =  'R';
+        else if (pct >= 50)
+            color =  'y';
+    }
+    else
+    {
+        if (pct >= 45)
+            color =  'r';
+        else if (pct >= 40)
+            color =  'R';
+        else if (pct >= 30)
+            color =  'y';
+    }
+    doc_printf(doc, " <color:%c>%3d</color>", color, pct);
+}
+static void _display_dam(doc_ptr doc, int res, int amt)
+{
+    int dam = amt - amt * res_pct_known(res) / 100;
+    int ratio = dam * 100 / p_ptr->chp;
+    char color;
+    if (ratio > 100) color = 'v';
+    else if (ratio > 75) color = 'r';
+    else if (ratio > 50) color = 'R';
+    else if (ratio > 35) color = 'o';
+    else if (ratio > 20) color = 'y';
+    else if (ratio > 10) color = 'U';
+    else if (dam == 0) color = 'D';
+    else color = 'w';
+    doc_printf(doc, " <color:%c>%3d</color>", color, dam);
+}
+
+static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
+{
+    int i, j;
+    for (i = 0; i < vec_length(v); i++)
+    {
+        mon_race_ptr r = vec_get(v, i);
+        int          hp = 0;
+        int          dam[RES_MAX] = {0};
+
+        if (r->flags1 & RF1_FORCE_MAXHP)
+            hp = r->hdice * r->hside;
+        else
+            hp = r->hdice * (1 + r->hside)/2;
+
+        /* Damage Logic Duplicated from mspells1.c */
+        if (r->flags4 & RF4_ROCKET)
+            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 4, 600));
+        if (r->flags4 & RF4_BR_ACID)
+            dam[RES_ACID] = MAX(dam[RES_ACID], MIN(hp / 4, 900));
+        if (r->flags4 & RF4_BR_ELEC)
+            dam[RES_ELEC] = MAX(dam[RES_ELEC], MIN(hp / 4, 900));
+        if (r->flags4 & RF4_BR_FIRE)
+            dam[RES_FIRE] = MAX(dam[RES_FIRE], MIN(hp / 4, 900));
+        if (r->flags4 & RF4_BR_COLD)
+            dam[RES_COLD] = MAX(dam[RES_COLD], MIN(hp / 4, 900));
+        if (r->flags4 & RF4_BR_POIS)
+            dam[RES_POIS] = MAX(dam[RES_POIS], MIN(hp / 5, 600));
+        if (r->flags4 & RF4_BR_NETH)
+            dam[RES_NETHER] = MAX(dam[RES_NETHER], MIN(hp / 7, 550));
+        if (r->flags4 & RF4_BR_LITE)
+            dam[RES_LITE] = MAX(dam[RES_LITE], MIN(hp / 6, 400));
+        if (r->flags4 & RF4_BR_DARK)
+            dam[RES_DARK] = MAX(dam[RES_DARK], MIN(hp / 6, 400));
+        if (r->flags4 & RF4_BR_CONF)
+            dam[RES_CONF] = MAX(dam[RES_CONF], MIN(hp / 6, 400));
+        if (r->flags4 & RF4_BR_SOUN)
+            dam[RES_SOUND] = MAX(dam[RES_SOUND], MIN(hp / 6, 450));
+        if (r->flags4 & RF4_BR_CHAO)
+            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], MIN(hp / 6, 600));
+        if (r->flags4 & RF4_BR_DISE)
+            dam[RES_DISEN] = MAX(dam[RES_DISEN], MIN(hp / 6, 500));
+        if (r->flags4 & RF4_BR_NEXU)
+            dam[RES_NEXUS] = MAX(dam[RES_NEXUS], MIN(hp / 3, 250));
+        if (r->flags4 & RF4_BR_SHAR)
+            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 6, 500));
+        if (r->flags4 & RF4_BR_NUKE)
+            dam[RES_POIS] = MAX(dam[RES_POIS], MIN(hp / 5, 600));
+        if (r->flags5 & RF5_BA_DARK)
+            dam[RES_DARK] = MAX(dam[RES_DARK], r->level*4 + 105);
+        if (r->flags5 & RF5_BA_LITE)
+            dam[RES_LITE] = MAX(dam[RES_LITE], r->level*4 + 105);
+        if (r->flags4 & RF4_BA_CHAO)
+        {
+            int d;
+            if (r->flags2 & RF2_POWERFUL) d = r->level * 3;
+            else d = r->level * 2;
+            d += 55;
+            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], d);
+        }
+
+        if (i%25 == 0)
+        {
+            doc_printf(doc, "\n<tab:21><color:B>%3d %5d</color>", p_ptr->lev, p_ptr->chp);
+            for (j = RES_ACID; j <= RES_DISEN; j++)
+                _display_res(doc, j);
+            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP  Ac  El  Fi  Co  Po  Li  Dk  Cf  Nt  Nx  So  Sh  Ca  Di</color>\n", "Name");
+        }
+
+        doc_printf(doc, "%-20.20s %3d %5d", r_name + r->name, r->level, hp);
+        for (j = RES_ACID; j <= RES_DISEN; j++)
+            _display_dam(doc, j, dam[j]);
+        doc_newline(doc);
+    }
+}
+
+#define RF4_DAM_MASK \
+    (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | \
+     RF4_BR_POIS | RF4_BR_NETH | RF4_BR_LITE | RF4_BR_DARK | \
+     RF4_BR_CONF | RF4_BR_SOUN | RF4_BR_CHAO | RF4_BR_DISE | \
+     RF4_BR_NEXU | RF4_BR_SHAR | RF4_BR_NUKE | RF4_BR_DISI | \
+     RF4_ROCKET | RF4_BA_CHAO)
+
+#define RF5_DAM_MASK (RF5_BA_DARK | RF5_BA_LITE)
+
+static bool _mon_dam_p(mon_race_ptr r)
+{
+    if (r->flags4 & RF4_DAM_MASK) return TRUE;
+    if (r->flags5 & RF5_DAM_MASK) return TRUE;
+    return FALSE;
+}
+
+static void spoil_mon_dam(void)
+{
+    doc_ptr doc = doc_alloc(100);
+    vec_ptr v = _mon_table(_mon_dam_p); 
+
+    doc_change_name(doc, "mon-damage.html");
+    doc_insert(doc, "<style:table>");
+
+    _spoil_mon_dam_aux(doc, v);
+
+    doc_insert(doc, "</style>");
+    doc_printf(doc, "\n<color:D>Generated for PosChengband Version %d.%d.%d</color>\n\n",
+                     VER_MAJOR, VER_MINOR, VER_PATCH);
+    doc_display(doc, "Monster Tables", 0);
+    doc_free(doc);
+    vec_free(v);
+}
+
 /************************************************************************
  * Devices
  ************************************************************************/
@@ -1336,13 +1495,13 @@ void do_cmd_spoilers(void)
         prt("(A) Artifact Tables", row++, col);
         prt("(o) Objects", row++, col);
         prt("(O) Object Tables", row++, col);
-        prt("(d) Device Fail Rates", row++, col);
         row++;
 
         c_prt(TERM_RED, "Monster Spoilers", row++, col - 2);
         prt("(m) Brief Descriptions", row++, col);
         prt("(M) Full Descriptions", row++, col);
         prt("(e) Evolution", row++, col);
+        prt("(d) Damage by Resistance", row++, col);
         row++;
 
         c_prt(TERM_RED, "Class Spoilers", row++, col - 2);
@@ -1355,6 +1514,7 @@ void do_cmd_spoilers(void)
 
         c_prt(TERM_RED, "Miscellaneous", row++, col - 2);
         prt("(1) Option Bits", row++, col);
+        prt("(2) Device Fail Rates", row++, col);
         row++;
 
         /* Prompt */
@@ -1381,9 +1541,6 @@ void do_cmd_spoilers(void)
         case 'o':
             spoil_obj_desc("obj-desc.spo");
             break;
-        case 'd':
-            spoil_device_fail();
-            break;
 
         /* Monster Spoilers */
         case 'm':
@@ -1394,6 +1551,9 @@ void do_cmd_spoilers(void)
             break;
         case 'e':
             spoil_mon_evol();
+            break;
+        case 'd':
+            spoil_mon_dam();
             break;
 
         /* Class Spoilers */
@@ -1407,6 +1567,9 @@ void do_cmd_spoilers(void)
         /* Miscellaneous */
         case '1':
             spoil_option_bits();
+            break;
+        case '2':
+            spoil_device_fail();
             break;
 
         /* Oops */
