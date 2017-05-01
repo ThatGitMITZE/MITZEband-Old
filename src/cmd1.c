@@ -781,6 +781,9 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, i
         case DRACONIAN_STRIKE_POIS:
             add_flag(flgs, OF_BRAND_POIS);
             break;
+        case PY_ATTACK_MANA:
+            add_flag(flgs, OF_BRAND_MANA);
+            break;
         }
     }
     /* Chaos Weapons now have random slay effects, and the slay so
@@ -3029,7 +3032,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
             if ( have_flag(flgs, OF_BRAND_VAMP)
               || chaos_effect == 1
               || mode == HISSATSU_DRAIN
-              || mode == DRACONIAN_STRIKE_VAMP
+              || mode == PY_ATTACK_VAMP
               || hex_spelling(HEX_VAMP_BLADE)
               || weaponmaster_get_toggle() == TOGGLE_BLOOD_BLADE
               || mauler_get_toggle() == MAULER_TOGGLE_DRAIN )
@@ -3047,7 +3050,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                   || have_flag(flgs, OF_VORPAL2)
                   || hex_spelling(HEX_RUNESWORD)
                   || p_ptr->vorpal
-                  || mode == DRACONIAN_STRIKE_VORPAL )
+                  || mode == PY_ATTACK_VORPAL )
                 {
                     if (randint1(vorpal_chance*3/2) == 1)
                         vorpal_cut = TRUE;

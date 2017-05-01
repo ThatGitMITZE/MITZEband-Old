@@ -6489,16 +6489,13 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
      * We check this first, before applying evasion or even reflection!
      *
      * XXX Damage has not been reduced yet for distance. Let's even leave
-     * that alone for the time being. SP regain should be quicker than before. */
-    if ( p_ptr->pclass == CLASS_RUNE_KNIGHT
-      && p_ptr->magic_resistance
-      && hack_m_spell != 96+4 ) /* Exception: RF4_SHOOT just feels wrong for {absorption} */
-    {
-        int x = dam * p_ptr->magic_resistance / 100;
-        dam -= x;
-        if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
-            sp_player(MAX(x, 2 + p_ptr->lev/10));
-    }
+     * that alone for the time being. SP regain should be quicker than before.
+     *
+     * XXX Not sure about the who check (who > 0 is the m_idx). Currently, it
+     * is ignored, but might be useful to prevent players scumming weak casters.
+     */
+    if (p_ptr->pclass == CLASS_RUNE_KNIGHT && who > 0)
+        dam = rune_knight_absorption(who, typ, dam);
 
     if ((p_ptr->reflect || ((p_ptr->special_defense & KATA_FUUJIN) && !p_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(4))
     {

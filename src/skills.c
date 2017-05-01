@@ -303,32 +303,34 @@ void skills_weapon_gain(int tval, int sval, int rlvl)
     assert(tval != TV_BOW);
 
     if (p_ptr->pclass == CLASS_SKILLMASTER) return;
-    if (rlvl < _weapon_min_rlvl(p_ptr->lev))
-    {
-        if (p_ptr->wizard)
-            msg_format("<color:B>You must fight level <color:R>%d</color> monsters to gain weapon proficiency.</color>", _weapon_min_rlvl(p_ptr->lev));
-        return;
-    }
 
     max = skills_weapon_max(tval, sval);
     cur = p_ptr->weapon_exp[tval-TV_WEAPON_BEGIN][sval];
 
-    if (cur >= _weapon_max_skill(rlvl))
-    {
-        if (p_ptr->wizard)
-        {
-            msg_format("<color:B>Against level <color:R>%d</color> foes, you can only train weapon "
-                "proficiency to <color:R>%d</color> (Current Skill: <color:R>%d</color>).</color>",
-                rlvl, _weapon_max_skill(rlvl), cur);
-        }
-        return;
-    }
-
     if (cur < max)
     {
-        int step = _weapon_gain_amt(cur);
-        int add = step / 10;
+        int step;
+        int add;
 
+        if (rlvl < _weapon_min_rlvl(p_ptr->lev))
+        {
+            if (p_ptr->wizard)
+                msg_format("<color:B>You must fight level <color:R>%d</color> monsters to gain weapon proficiency.</color>", _weapon_min_rlvl(p_ptr->lev));
+            return;
+        }
+        if (cur >= _weapon_max_skill(rlvl))
+        {
+            if (p_ptr->wizard)
+            {
+                msg_format("<color:B>Against level <color:R>%d</color> foes, you can only train weapon "
+                    "proficiency to <color:R>%d</color> (Current Skill: <color:R>%d</color>).</color>",
+                    rlvl, _weapon_max_skill(rlvl), cur);
+            }
+            return;
+        }
+
+        step = _weapon_gain_amt(cur);
+        add = step / 10;
         if (step%10 && randint0(10) < step%10) add++;
 
         if (add > 0)
@@ -781,29 +783,31 @@ void skills_innate_gain(cptr name, int rlvl)
         str_map_add(_innate_map(), name, info);
     }
 
-    if (rlvl < _weapon_min_rlvl(p_ptr->lev))
-    {
-        if (p_ptr->wizard)
-            msg_format("<color:B>You must fight level <color:R>%d</color> monsters to gain weapon proficiency.</color>", _weapon_min_rlvl(p_ptr->lev));
-        return;
-    }
-
-    if (info->current >= _weapon_max_skill(rlvl))
-    {
-        if (p_ptr->wizard)
-        {
-            msg_format("<color:B>Against level <color:R>%d</color> foes, you can only train weapon "
-                "proficiency to <color:R>%d</color> (Current Skill: <color:R>%d</color>).</color>",
-                rlvl, _weapon_max_skill(rlvl), info->current);
-        }
-        return;
-    }
-
     if (info->current < info->max)
     {
-        int step = _weapon_gain_amt(info->current);
-        int add = step / 10;
+        int step;
+        int add;
 
+        if (rlvl < _weapon_min_rlvl(p_ptr->lev))
+        {
+            if (p_ptr->wizard)
+                msg_format("<color:B>You must fight level <color:R>%d</color> monsters to gain weapon proficiency.</color>", _weapon_min_rlvl(p_ptr->lev));
+            return;
+        }
+
+        if (info->current >= _weapon_max_skill(rlvl))
+        {
+            if (p_ptr->wizard)
+            {
+                msg_format("<color:B>Against level <color:R>%d</color> foes, you can only train weapon "
+                    "proficiency to <color:R>%d</color> (Current Skill: <color:R>%d</color>).</color>",
+                    rlvl, _weapon_max_skill(rlvl), info->current);
+            }
+            return;
+        }
+
+        step = _weapon_gain_amt(info->current);
+        add = step / 10;
         if (step%10 && randint0(10) < step%10) add++;
 
         if (add > 0)

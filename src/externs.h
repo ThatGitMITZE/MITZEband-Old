@@ -2456,6 +2456,7 @@ extern cptr     rune_desc(int which);
 extern void     rune_calc_bonuses(object_type *o_ptr);
 extern void     rune_calc_stats(object_type *o_ptr, s16b stats[MAX_STATS]);
 extern class_t *rune_knight_get_class(void);
+extern int      rune_knight_absorption(int m_idx, int type, int dam);
 
 extern void     samurai_concentration_spell(int cmd, variant *res);
 extern void     cast_concentration(void);
