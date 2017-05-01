@@ -67,7 +67,7 @@ If this rune is carried in your pack then your gear receives increased protectio
 
 <color:B>Haste</color>
 <color:R>Gloves</color>        <color:G>L25</color> +2 DEX
-<color:R>Boots</color>         <color:G>L45</color> +3 Speed
+<color:R>Boots</color>         <color:G>L25</color> +3L/50 Speed
 
 <color:B>Seeing</color>
 <color:R>Helmets</color>       <color:G>L27</color> Resist Blindness; See Invisible
@@ -189,8 +189,8 @@ In this section, the various runes are grouped according to equipment slot. This
 <color:R>Boots</color>
 <color:B>Protection</color>    <color:G>L5</color>  AC Bonus; Protection from Corrosion
 <color:B>Air</color>           <color:G>L11</color> Levitation
+<color:B>Haste</color>         <color:G>L25</color> +3L/50 Speed
 <color:B>Stability</color>     <color:G>L32</color> Resist Nexus
-<color:B>Haste</color>         <color:G>L45</color> +3 Speed
 
 <color:R>Lights</color>
 <color:B>Fire</color>          <color:G>L9</color>  Fiery Aura

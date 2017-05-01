@@ -81,7 +81,7 @@ protection against accidental destruction by elemental attacks.
 
 Haste
 Gloves        L25 +2 DEX
-Boots         L45 +3 Speed
+Boots         L25 +3L/50 Speed
 
 Seeing
 Helmets       L27 Resist Blindness; See Invisible
@@ -212,8 +212,8 @@ Water         L45 Acid Brand
 Boots
 Protection    L5  AC Bonus; Protection from Corrosion
 Air           L11 Levitation
+Haste         L25 +3L/50 Speed
 Stability     L32 Resist Nexus
-Haste         L45 +3 Speed
 
 Lights
 Fire          L9  Fiery Aura
