@@ -1727,7 +1727,7 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
         { 30, 10,  0, _blow_earth_spell },
         { 35, 20,  0, _blow_death_spell },
         { 40, 30,  0, _blow_elec_spell },
-        { 45, 50, 60, _blow_air_spell },
+        { 45, 50, 80, _blow_air_spell },
         { 50, 30,  0, _blow_mana_spell },
         { -1,  0,  0, NULL },
       }
