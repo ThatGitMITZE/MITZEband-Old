@@ -534,6 +534,7 @@
 #define SPELL_HELP_DESC      18
 #define SPELL_VALUE          19      /* For valuing object activations */
 #define SPELL_ON_BROWSE      20      /* Custom Handler for browsing the spell */
+#define SPELL_STAT_NAME      21      /* In case display name (SPELL_NAME) is duplicated/renamed */
 
 /*
  * Indexes of the various "stats" (hard-coded by savefiles, etc).

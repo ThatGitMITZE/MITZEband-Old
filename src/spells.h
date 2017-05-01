@@ -14,6 +14,7 @@ extern int get_spell_energy(ang_spell spell);
 extern int get_spell_cost_extra(ang_spell spell);
 extern int get_spell_fail_min(ang_spell spell);
 extern cptr get_spell_name(ang_spell spell); /* buffer reset on each call */
+extern cptr get_spell_stat_name(ang_spell spell); /* buffer reset on each call */
 extern cptr get_spell_desc(ang_spell spell); /* buffer reset on each call */
 extern cptr get_spell_spoiler_name(ang_spell spell); /* buffer reset on each call */
 extern void spell_stats_on_birth(void);

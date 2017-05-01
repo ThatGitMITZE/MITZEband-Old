@@ -31,7 +31,7 @@ spell_stats_ptr spell_stats_aux(cptr name)
 
 spell_stats_ptr spell_stats(spell_info *spell)
 {
-    cptr name = get_spell_name(spell->fn);
+    cptr name = get_spell_stat_name(spell->fn);
     return spell_stats_aux(name);
 }
 
@@ -196,6 +196,7 @@ void default_spell(int cmd, variant *res) /* Base class */
         var_set_bool(res, FALSE);
         break;
 
+    case SPELL_STAT_NAME: /* must return NULL so clients can requery with SPELL_NAME */
     default:
         var_clear(res);
         break;
@@ -260,6 +261,19 @@ cptr get_spell_name(ang_spell spell)
     variant v;
     var_init(&v);
     spell(SPELL_NAME, &v);
+    sprintf(buf, "%s", var_get_string(&v));
+    var_clear(&v);
+    return buf;
+}
+
+cptr get_spell_stat_name(ang_spell spell)
+{
+    static char buf[255];
+    variant v;
+    var_init(&v);
+    spell(SPELL_STAT_NAME, &v);
+    if (var_is_null(&v)) /* cf default_spell above */
+        spell(SPELL_NAME, &v);
     sprintf(buf, "%s", var_get_string(&v));
     var_clear(&v);
     return buf;

@@ -375,6 +375,9 @@ static void _obj_absorption_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Absorption");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_absorption");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Absorption on chosen melee weapon, body armor or shield. This rune grants a special magical defense that absorbs damage from all monster spells restoring your mana in the process.");
         break;
@@ -408,6 +411,9 @@ static void _obj_protection_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Protection");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_protection");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Protection on chosen armor making it immune to acid while slightly enhancing its protective capabilities.");
@@ -445,6 +451,9 @@ static void _obj_regeneration_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Regeneration");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_regeneration");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Regeneration on chosen item granting powers of regeneration.");
@@ -487,6 +496,9 @@ static void _obj_fire_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Fire");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_fire");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Fire on chosen item granting special fire based powers.");
         break;
@@ -521,6 +533,9 @@ static void _obj_air_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Air");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_air");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Air on chosen item granting special wind based powers.");
@@ -559,6 +574,9 @@ static void _obj_water_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Water");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_water");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Water on chosen item granting special acid based powers.");
         break;
@@ -592,6 +610,9 @@ static void _obj_light_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Light");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_light");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Light on chosen item granting special light based powers.");
@@ -629,6 +650,9 @@ static void _obj_shadow_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Shadow");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_shadow");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Shadow on chosen item granting special darkness based powers.");
         break;
@@ -665,6 +689,9 @@ static void _obj_earth_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Earth");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_earth");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Earth on chosen item granting special shard based powers.");
         break;
@@ -699,6 +726,9 @@ static void _obj_understanding_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Understanding");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_understanding");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Understanding on chosen item granting special knowledge based powers.");
         break;
@@ -723,6 +753,9 @@ static void _obj_elemental_protection_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Preservation");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_preservation");
         break;
     case SPELL_DESC:
         var_set_string(res, "Creates a standalone rune. As long as you have this rune in your inventory, your inventory items are less likely to be destroyed by elemental attacks.");
@@ -759,6 +792,9 @@ static void _obj_haste_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Haste");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_haste");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Haste on chosen item granting special speed based powers.");
         break;
@@ -793,6 +829,9 @@ static void _obj_seeing_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Seeing");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_seeing");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Seeing on chosen item granting powers of sight.");
         break;
@@ -817,6 +856,9 @@ static void _obj_sacrifice_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Sacrifice");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_sacrifice");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Sacrifice on an artifact. You can now destroy (with 'k' command) the artifact, and if you do so, you restore HP and SP.");
@@ -852,6 +894,9 @@ static void _obj_life_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Life");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_life");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Life on chosen item protecting your living essence.");
@@ -889,6 +934,9 @@ static void _obj_stability_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Stability");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_stability");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Stability on chosen item protecting you from the vicissitudes of the world around you.");
         break;
@@ -913,6 +961,9 @@ static void _obj_reflection_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Reflection");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_reflection");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Reflection on your shield. Your shield gains the Reflection property.");
@@ -950,6 +1001,9 @@ static void _obj_death_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Death");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_death");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Death on chosen item granting powers of the nether world.");
         break;
@@ -983,6 +1037,9 @@ static void _obj_mind_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Mind");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_mind");
         break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Mind on chosen item granting powers of thought and awareness.");
@@ -1018,6 +1075,9 @@ static void _obj_might_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Might");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_might");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Might on chosen item granting powers of strength and fortitude.");
         break;
@@ -1052,6 +1112,9 @@ static void _obj_destruction_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Destruction");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_destruction");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Destruction on chosen item granting great combat powers.");
         break;
@@ -1076,6 +1139,9 @@ static void _obj_good_fortune_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Luck");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_luck");
         break;
     case SPELL_DESC:
         var_set_string(res, "Creates a standalone rune. As long as you have this rune in your inventory you will experience better luck during your adventures.");
@@ -1114,6 +1180,9 @@ static void _obj_immortality_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Immortality");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_obj_immortality");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Places a Rune of Immortality on chosen item granting power over time itself.");
         break;
@@ -1147,6 +1216,9 @@ void _self_darkness_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Darkness");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_darkness");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Darkness on your person, granting enhanced stealth.");
         break;
@@ -1168,6 +1240,9 @@ void _self_seeing_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Seeing");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_seeing");
         break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Seeing on your person, granting telepathic powers.");
@@ -1191,6 +1266,9 @@ void _self_understanding_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Understanding");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_understanding");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Understanding on your person, granting knowledge of yourself.");
         break;
@@ -1205,6 +1283,9 @@ void _self_haste_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Haste");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_haste");
         break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Haste on your person, granting enhanced speed of motion.");
@@ -1227,6 +1308,9 @@ void _self_protection_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Protection");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_protection");
         break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Protection on your person, granting temporary resistance to the basic elements.");
@@ -1254,6 +1338,9 @@ void _self_earth_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Earth");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_earth");
+        break;
     case SPELL_DESC:
         var_set_string(res, "Place a temporary Rune of Earth on your person, hardening your skin to ward off enemy blows.");
         break;
@@ -1276,6 +1363,9 @@ void _self_life_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Life");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_life");
+        break;
     case SPELL_DESC:
         var_set_string(res, "By placing a temporary Rune of Life on your person, you may recover that which was lost.");
         break;
@@ -1290,6 +1380,9 @@ void _self_daemon_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Daemon");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_daemon");
         break;
     case SPELL_DESC:
         var_set_string(res, "By placing a temporary Demonic Rune on your person you transform yourself into a more powerful form.");
@@ -1312,6 +1405,9 @@ void _self_might_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Might");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_self_might");
         break;
     case SPELL_DESC:
         var_set_string(res, "By placing a temporary Rune of Might on your person you gain the strength of giants.");
@@ -1369,6 +1465,9 @@ void _feat_light_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Light");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_light");
+        break;
     case SPELL_DESC:
         var_set_string(res, "By placing a Rune of Light at your current location you may light up your surroundings.");
         break;
@@ -1383,6 +1482,9 @@ void _feat_water_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Water");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_water");
         break;
     case SPELL_DESC:
         var_set_string(res, "This rune washes away all in its path.");
@@ -1399,6 +1501,9 @@ void _feat_earth_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Earth");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_earth");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This rune blocks the passage of your foes.");
         break;
@@ -1413,6 +1518,9 @@ void _feat_fire_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Fire");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_fire");
         break;
     case SPELL_DESC:
         var_set_string(res, "This rune burns the surrounding landscape.");
@@ -1429,6 +1537,9 @@ void _feat_air_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Air");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_air");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This rune summons air where once there was none.");
         break;
@@ -1443,6 +1554,9 @@ void _feat_stability_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Stability");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_stability");
         break;
     case SPELL_DESC:
         var_set_string(res, "This rune creates solid footing of the most ordinary sort.");
@@ -1459,6 +1573,9 @@ void _feat_life_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Life");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_life");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This rune causes rapid plant growth wherever it is placed.");
         break;
@@ -1474,6 +1591,9 @@ void _feat_protection_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Protection");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_protection");
+        break;
     case SPELL_DESC:
         var_set_string(res, "By placing a Rune of Protection at your current location you may block the passage of all save the mightiest of enemies.");
         break;
@@ -1488,6 +1608,9 @@ void _feat_destruction_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Destruction");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_feat_destruction");
         break;
     case SPELL_DESC:
         var_set_string(res, "By placing a highly unstable Rune of Destruction at your current location you may destroy your nearby surroundings.");
@@ -1507,6 +1630,9 @@ void _blow_confusion_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Confusion");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_confusion");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to baffle your enemies.");
         break;
@@ -1524,6 +1650,9 @@ void _blow_fire_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Fire");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_fire");
         break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to burn your enemies.");
@@ -1543,6 +1672,9 @@ void _blow_water_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Water");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_water");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to corrode your enemies.");
         break;
@@ -1560,6 +1692,9 @@ void _blow_earth_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Earth");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_earth");
         break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to cut your enemies.");
@@ -1579,6 +1714,9 @@ void _blow_death_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Death");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_death");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to drain life from your enemies.");
         break;
@@ -1596,6 +1734,9 @@ void _blow_elec_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Lightning");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_lightning");
         break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune enhances your melee attacks to shock your enemies.");
@@ -1615,6 +1756,9 @@ void _blow_air_spell(int cmd, variant *res)
     case SPELL_NAME:
         var_set_string(res, "Air");
         break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_air");
+        break;
     case SPELL_DESC:
         var_set_string(res, "This temporary rune allows you to attack all adjacent foes in a whirlwind of destruction.");
         break;
@@ -1629,6 +1773,9 @@ void _blow_mana_spell(int cmd, variant *res)
     {
     case SPELL_NAME:
         var_set_string(res, "Mana");
+        break;
+    case SPELL_STAT_NAME:
+        var_set_string(res, "_blow_mana");
         break;
     case SPELL_DESC:
         var_set_string(res, "Your most powerful battle rune uses your mana to powerfully rend your enemies.");
