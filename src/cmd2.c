@@ -162,7 +162,7 @@ void do_cmd_go_down(void)
         quests_on_leave(); /* QS_COMPLETED and taking the victory stairs? */
 
         /* Go down */
-        if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
+        if (have_flag(f_ptr->flags, FF_SHAFT) && quests_allow_downshaft()) down_num += 2;
         else down_num += 1;
 
         if (!dun_level)
@@ -199,7 +199,8 @@ void do_cmd_go_down(void)
         }
         else
         {
-            if (have_flag(f_ptr->flags, FF_SHAFT))
+            /* XXX It is CFM_SHAFT, not down_num, that determines that we descend by 2 */
+            if (have_flag(f_ptr->flags, FF_SHAFT) && quests_allow_downshaft())
             {
                 /* Create a way back */
                 prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);

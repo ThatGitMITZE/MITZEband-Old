@@ -924,7 +924,7 @@ void leave_floor(void)
         }
 
         /* Mark shaft up/down */
-        if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
+        if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT) && quests_allow_downshaft())
         {
             prepare_change_floor_mode(CFM_SHAFT);
         }
