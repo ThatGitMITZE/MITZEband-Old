@@ -125,10 +125,10 @@ void quest_reward(quest_ptr q)
     reward = quest_get_reward(q);
     if (reward)
     {
-        char name[MAX_NLEN];
+        /*char name[MAX_NLEN];*/
         obj_identify_fully(reward);
-        object_desc(name, reward, OD_COLOR_CODED);
-        msg_format("You receive %s as a reward.", name);
+        /*object_desc(name, reward, OD_COLOR_CODED);
+        msg_format("You receive %s as a reward.", name);*/
         pack_carry(reward);
         obj_free(reward);
     }

@@ -1826,7 +1826,7 @@ static void _process_wanted_corpse(obj_ptr obj)
     msg_format("You earned %d point%s total.", num, num > 1 ? "s" : "");
 
     object_desc(name, &prize, OD_COLOR_CODED);
-    msg_format("You get %s.", name);
+    /*msg_format("You get %s.", name);*/
     pack_carry(&prize);
 }
 static bool kankin(void)

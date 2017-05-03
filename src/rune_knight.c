@@ -13,7 +13,7 @@ int rune_knight_absorption(int m_idx, int type, int dam)
 
     if (p_ptr->pclass != CLASS_RUNE_KNIGHT) return dam;
     if (!p_ptr->magic_resistance) return dam;
-    if (type == GF_MISSILE || type == GF_ARROW) return dam;
+    if (type == GF_MISSILE || type == GF_ARROW || type == GF_ROCK) return dam;
 
     drain = dam * p_ptr->magic_resistance / 100;
     /* XXX Decline mana gain if player is scumming weak casters? */
@@ -1837,13 +1837,13 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
     { "Runes of Enhancement",
       "Place runes on yourself for temporary or one time effects.",
       TERM_L_GREEN, {
-        { 10,  10, 20, _self_darkness_spell },
-        { 20,  15, 30, _self_seeing_spell },
+        { 10,   5, 20, _self_darkness_spell },
+        { 20,   9, 30, _self_seeing_spell },
         { 25,  50, 35, _self_understanding_spell },
         { 30,  25, 35, _self_haste_spell },
-        { 32,  20, 35, _self_protection_spell },
-        { 37,  30, 50, _self_earth_spell },
-        { 39,  40, 50, _self_life_spell },
+        { 32,  15, 35, _self_protection_spell },
+        { 37,  20, 50, _self_earth_spell },
+        { 39,  15, 50, _self_life_spell },
         { 41,  60, 70, _self_daemon_spell },
         { 50, 100, 80, _self_might_spell },
         { -1,   0,  0, NULL },
@@ -1853,14 +1853,14 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
       "These runes of change allow you to permanently alter your surroundings.",
       TERM_UMBER, { 
         {  5,  1, 20, _feat_light_spell },
-        {  7, 10, 30, _feat_water_spell },
-        { 15, 20, 50, _feat_earth_spell },
-        { 20, 25, 50, _feat_fire_spell },
-        { 25, 30, 60, _feat_air_spell },
-        { 30, 40, 65, _feat_stability_spell },
-        { 35, 50, 70, _feat_life_spell },
+        {  7,  5, 30, _feat_water_spell },
+        { 15, 15, 50, _feat_earth_spell },
+        { 20, 10, 50, _feat_fire_spell },
+        { 25, 15, 60, _feat_air_spell },
+        { 30, 15, 65, _feat_stability_spell },
+        { 35, 20, 70, _feat_life_spell },
         { 40, 70, 70, _feat_protection_spell },
-        { 45, 60, 80, _feat_destruction_spell },
+        { 45, 35, 80, _feat_destruction_spell },
         { -1,  0,  0, NULL },
       }
     },
@@ -1868,14 +1868,14 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
       "These runes allow you to effect adjacent enemies. By creating a temporary rune "
       "attached to your melee weapon, you may make a single attack with enhanced power.",
       TERM_RED, {
-        { 10, 10,  0, _blow_confusion_spell },
-        { 15, 12,  0, _blow_fire_spell },
-        { 25, 15,  0, _blow_water_spell },
-        { 30, 10,  0, _blow_earth_spell },
-        { 35, 20,  0, _blow_death_spell },
-        { 40, 30,  0, _blow_elec_spell },
-        { 45, 50, 80, _blow_air_spell },
-        { 50, 30,  0, _blow_mana_spell },
+        { 10,  5,  0, _blow_confusion_spell },
+        { 15,  7,  0, _blow_fire_spell },
+        { 25,  9,  0, _blow_water_spell },
+        { 30,  5,  0, _blow_earth_spell },
+        { 35, 12,  0, _blow_death_spell },
+        { 40, 20,  0, _blow_elec_spell },
+        { 45, 30, 80, _blow_air_spell },
+        { 50, 20,  0, _blow_mana_spell },
         { -1,  0,  0, NULL },
       }
     },
