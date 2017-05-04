@@ -40,7 +40,7 @@ static bool is_owner(building_type *bldg)
         return (TRUE);
     }
 
-    if (bldg->member_race[race_idx] == BUILDING_OWNER)
+    if (race_idx < MAX_RACES && bldg->member_race[race_idx] == BUILDING_OWNER)
     {
         return (TRUE);
     }
@@ -64,7 +64,7 @@ static bool is_member(building_type *bldg)
         return (TRUE);
     }
 
-    if (bldg->member_race[race_idx])
+    if (race_idx < MAX_RACES && bldg->member_race[race_idx])
     {
         return (TRUE);
     }
