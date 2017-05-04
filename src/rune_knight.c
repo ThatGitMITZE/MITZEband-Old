@@ -850,6 +850,7 @@ static void _obj_seeing_spell(int cmd, variant *res)
     }
 }
 
+/* XXX see comments in the spell table below ...
 static void _obj_sacrifice_spell(int cmd, variant *res)
 {
     switch (cmd)
@@ -877,6 +878,7 @@ static void _obj_sacrifice_spell(int cmd, variant *res)
         _rune_default_spell(cmd, res);
     }
 }
+*/
 
 static bool _obj_life_pred(object_type *o_ptr)
 {
@@ -1821,9 +1823,17 @@ static _spell_group _spell_groups[_MAX_SPELL_GROUPS] = {
         { 23,   0, 0, _obj_elemental_protection_spell },
         { 25,   0, 0, _obj_haste_spell },
         { 27,   0, 0, _obj_seeing_spell },
-        { 29,   0, 0, _obj_sacrifice_spell },
-        { 31,   0, 0, _obj_life_spell },
-        { 32,   0, 0, _obj_stability_spell },
+        /* XXX I really don't like the playstyle that {Sacrifice} encourages:
+         * viz., a tedious process of storing up mana, denying interesting spell
+         * casting opportunities, in order to stock pile for the end game. Look,
+         * there will be hundreds of junk artifacts, yet it takes about 30 minutes
+         * to recover full mana for each rune (Might be faster later on ... and, no,
+         * I don't scum for sp). How long should the game be? Personally, I found
+         * myself using {Sacrifice} to speed up equipment reshuffles, which is
+         * probably not the intended purpose!
+        { 29,   0, 0, _obj_sacrifice_spell }, */
+        { 29,   0, 0, _obj_life_spell },
+        { 31,   0, 0, _obj_stability_spell },
         { 33,   0, 0, _obj_reflection_spell },
         { 35,   0, 0, _obj_death_spell },
         { 37,   0, 0, _obj_mind_spell },
