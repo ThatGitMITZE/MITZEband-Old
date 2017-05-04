@@ -13,7 +13,7 @@ int rune_knight_absorption(int m_idx, int type, int dam)
 
     if (p_ptr->pclass != CLASS_RUNE_KNIGHT) return dam;
     if (!p_ptr->magic_resistance) return dam;
-    if (type == GF_MISSILE || type == GF_ARROW || type == GF_ROCK) return dam;
+    if (type == GF_ARROW || type == GF_ROCK) return dam;
 
     drain = dam * p_ptr->magic_resistance / 100;
     /* XXX Decline mana gain if player is scumming weak casters? */
