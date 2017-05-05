@@ -2108,7 +2108,6 @@ static void _stats_init(void)
         }
         case CLASS_MAGE:
         case CLASS_HIGH_MAGE:
-        case CLASS_SORCERER:
         case CLASS_BLUE_MAGE:
         case CLASS_GRAY_MAGE:
         case CLASS_YELLOW_MAGE:
@@ -2117,6 +2116,12 @@ static void _stats_init(void)
         case CLASS_NECROMANCER:
         {
             int stats[6] = { 16, 17, 9, 9, 16, 9 };
+            _stats_init_aux(stats);
+            break;
+        }
+        case CLASS_SORCERER:
+        {
+            int stats[6] = { 16, 9, 9, 9, 16, 17 };
             _stats_init_aux(stats);
             break;
         }
