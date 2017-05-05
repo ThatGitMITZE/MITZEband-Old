@@ -2666,9 +2666,7 @@ static void _ego_create_crown(object_type *o_ptr, int level)
         if (one_in_(3))
             add_flag(o_ptr->flags, OF_DEC_STR);
 
-        if (one_in_(5))
-            add_flag(o_ptr->flags, OF_MAGIC_MASTERY);
-        else if (one_in_(66))
+        if (one_in_(30))
         {
             add_flag(o_ptr->flags, OF_SPELL_POWER);
             add_flag(o_ptr->flags, OF_DEC_CON);
