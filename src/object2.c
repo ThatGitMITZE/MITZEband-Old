@@ -1632,8 +1632,12 @@ static bool make_artifact_special(object_type *o_ptr)
             if (!one_in_(d)) continue;
         }
 
-        if (random_artifacts && randint0(100) < random_artifact_pct)
+        if ( random_artifacts
+          && !(a_ptr->gen_flags & OFG_FIXED_ART)
+          && randint0(100) < random_artifact_pct )
+        {
             create_replacement_art(i, o_ptr);
+        }
         else
             create_named_art_aux(i, o_ptr);
 
@@ -1689,8 +1693,12 @@ static bool make_artifact(object_type *o_ptr)
 
         if (!one_in_(a_ptr->rarity)) continue;
 
-        if (random_artifacts && randint0(100) < random_artifact_pct)
+        if ( random_artifacts
+          && !(a_ptr->gen_flags & OFG_FIXED_ART)
+          && randint0(100) < random_artifact_pct )
+        {
             create_replacement_art(i, o_ptr);
+        }
         else
             create_named_art_aux(i, o_ptr);
 

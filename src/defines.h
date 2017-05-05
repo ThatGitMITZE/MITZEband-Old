@@ -3083,7 +3083,7 @@ enum obj_flags_e {
 #define OFG_RANDOM_CURSE2       0x00008000     /* Item is Random Cursed */
 #define OFG_AWARE               0x00010000
 #define OFG_TOWN                0x00020000     /* Item is allowed to be stocked in town */
-
+#define OFG_FIXED_ART           0x00040000     /* Never replace this art when using random_artifacts */
 
 /* Object Flags for Curses (OFC_*) */
 #define MAX_CURSE 17

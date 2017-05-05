@@ -3322,9 +3322,12 @@ bool create_named_art_aux(int a_idx, object_type *o_ptr)
 
 bool create_named_art(int a_idx, int y, int x)
 {
+    assert(0 <= a_idx && a_idx < max_a_idx);
     if (no_artifacts) return FALSE;
 
-    if (random_artifacts && randint0(100) < random_artifact_pct)
+    if ( random_artifacts
+      && !(a_info[a_idx].gen_flags & OFG_FIXED_ART)
+      && randint0(100) < random_artifact_pct )
     {
         object_type forge;
         if (create_replacement_art(a_idx, &forge))
