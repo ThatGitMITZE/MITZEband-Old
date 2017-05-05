@@ -4738,7 +4738,7 @@ void calc_bonuses(void)
 
             if (p_ptr->pclass == CLASS_FORCETRAINER)
             {
-                p_ptr->weapon_info[i].base_blow += MIN(400, 400 * blow_base / 60);
+                p_ptr->weapon_info[i].base_blow += MIN(400, 400 * blow_base / 57);
                 if (p_ptr->magic_num1[0])
                 {
                     p_ptr->weapon_info[i].to_d += (p_ptr->magic_num1[0]/5);
