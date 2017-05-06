@@ -120,7 +120,7 @@ static cptr _thb_skill_desc(int base, int xtra) { return _skill_desc(base + 5*xt
 static cptr _class_thb_skill_desc(class_t *class_ptr) { return _thb_skill_desc(class_ptr->base_skills.thb, class_ptr->extra_skills.thb); }
 static cptr _mon_race_thb_skill_desc(race_t *race_ptr) { return _thb_skill_desc(race_ptr->skills.thb, race_ptr->extra_skills.thb); }
 
-static cptr _thb_skill_desc2(int base) { return _skill_desc(base + 5, 2); }
+static cptr _thb_skill_desc2(int base) { return _skill_desc(base + 9, 2); }
 static cptr _race_thb_skill_desc(race_t *race_ptr) { return _thb_skill_desc2(race_ptr->skills.thb); }
 static cptr _pers_thb_skill_desc(personality_ptr pers_ptr) { return _thb_skill_desc2(pers_ptr->skills.thb*2); }
 
