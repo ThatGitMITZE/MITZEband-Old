@@ -4519,12 +4519,13 @@ void calc_bonuses(void)
             p_ptr->shooter_info.breakage = 90 - (p_ptr->skills.thb - 80)/2;
 
         /* Experimental: Everbody gets extra shots based on bow skill. This
-         * makes Race and Personality choices relevant.
+         * makes Race and Personality choices relevant. Note: equip_calc_bonuses
+         * has possibly already boosted num_fire ...
          * Best Race: High-Elf +25
          * Best Personality: Lucky +30
          * Best Class: Archer 262 */
-        if (p_ptr->shooter_info.num_fire < p_ptr->skills.thb && !p_ptr->shooter_info.heavy_shoot && !heavy_armor())
-            p_ptr->shooter_info.num_fire = p_ptr->skills.thb;
+        if (p_ptr->skills.thb > 100 && !p_ptr->shooter_info.heavy_shoot && !heavy_armor())
+            p_ptr->shooter_info.num_fire += p_ptr->skills.thb - 100;
 
         if (race_ptr != NULL && race_ptr->calc_shooter_bonuses != NULL)
             race_ptr->calc_shooter_bonuses(o_ptr, &p_ptr->shooter_info);

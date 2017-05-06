@@ -257,7 +257,7 @@ static void _build_general2(doc_ptr doc)
 
         /* Display */
         _display_skill(doc, "Melee", skills.thn, 12);
-        _display_skill(doc, "Ranged", skills.thb, 12);
+        _display_skill(doc, "Archery", skills.thb, 12);
         _display_skill(doc, "SavingThrow", skills.sav, 7);
         _display_skill(doc, "Stealth", skills.stl, 1);
         _display_skill(doc, "Perception", skills.fos, 6);
