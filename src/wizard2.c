@@ -1033,6 +1033,21 @@ extern void do_cmd_spoilers(void);
 
 static doc_ptr _wiz_doc = NULL;
 static bool    _wiz_show_scores = TRUE;
+static int     _wiz_obj_count = 0;
+static int     _wiz_obj_score = 0;
+
+static void _wiz_doc_init(doc_ptr doc)
+{
+    _wiz_doc = doc;
+    _wiz_obj_count = 0;
+    _wiz_obj_score = 0;
+}
+
+static void _wiz_doc_obj_summary(void)
+{
+    doc_printf(_wiz_doc, "\n\n<color:R>%d</color> objects. <color:R>%d</color> average score.\n",
+        _wiz_obj_count, _wiz_obj_score / _wiz_obj_count);
+}
 
 static char _score_color(int score)
 {
@@ -1083,10 +1098,12 @@ static void _wiz_stats_log_obj(int level, object_type *o_ptr)
     char buf[MAX_NLEN];
     if (!_wiz_doc) return;
     object_desc(buf, o_ptr, OD_COLOR_CODED);
+    _wiz_obj_count++;
     if (_wiz_show_scores)
     {
         int  score;
         score = obj_value_real(o_ptr);
+        _wiz_obj_score += score;
         doc_printf(_wiz_doc, "C%2d D%2d O%2d <color:%c>%6d</color>: <indent><style:indent>%s</style></indent>\n",
             p_ptr->lev, level, o_ptr->level, _score_color(score), score, buf);
     }
@@ -1178,6 +1195,8 @@ static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
         old_score = obj_value_real(old);
         if (score > old_score)
         {
+            old->marked |= OM_COUNTED;
+            equip_drop(old); /* prevent pack from filling with 'junk' */
             equip_wield(obj, slot);
             return TRUE;
         }
@@ -1216,6 +1235,7 @@ static void _wiz_inspect_objects(int level)
         if (!o_ptr->k_idx) continue;
         if (o_ptr->tval == TV_GOLD) continue;
         if (o_ptr->held_m_idx) continue;
+        if (o_ptr->marked & OM_COUNTED) continue; /* skip player drops */
 
         /* Skip Vaults ...
         if (cave[o_ptr->iy][o_ptr->ix].info & CAVE_ICKY) continue;*/
@@ -1231,14 +1251,15 @@ static void _wiz_inspect_objects(int level)
         if (o_ptr->name2)
             stats_add_ego(o_ptr);
 
+        /* Logging: I simply hand-edit this and recompile as desired */
         if (0 && (o_ptr->name1 || o_ptr->name3))
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
-        if (1) _wiz_stats_log_devices(level, o_ptr);
+        if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
-        if (0) _wiz_stats_log_rand_arts(level, o_ptr);
+        if (1) _wiz_stats_log_rand_arts(level, o_ptr);
 
         if (0 && o_ptr->name2 && !object_is_device(o_ptr) && !object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
@@ -1255,6 +1276,10 @@ static void _wiz_inspect_objects(int level)
         if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
+        /* Use Resources: Quaff stat potions and improve equipment (mindlessly).
+         * This makes it easier for me to poke around a bit after a stat run.
+         * Destroying objects is for Death-swords or other race/classes that
+         * gain powers that way. */
         if (_is_stat_potion(o_ptr))
             do_device(o_ptr, SPELL_CAST, 0);
 
@@ -1634,29 +1659,27 @@ void do_cmd_debug(void)
         int lev;
         int max_depth = get_quantity("Max Depth? ", 100);
 
-        _wiz_doc = doc_alloc(80);
+        _wiz_doc_init(doc_alloc(80));
         doc_insert(_wiz_doc, "<style:wide>");
 
         _stats_reset_monster_levels();
         _stats_reset_object_levels();
         statistics_hack = TRUE; /* No messages, no damage, no prompts for stat gains, no AFC */
-#if 1
-        for (lev = dun_level + 2; lev <= max_depth; lev += 2)
+
+        for (lev = MAX(1, dun_level); lev <= max_depth; lev += 1)
         {
             int reps = 1;
 
-            if (lev % 10 == 0) reps += 2;
-            if (lev % 20 == 0) reps += 2;
-            if (lev % 30 == 0) reps += 7;
+            if (lev % 10 == 0) reps += 1;
+            if (lev % 20 == 0) reps += 1;
+            if (lev % 30 == 0) reps += 2;
 
             _wiz_gather_stats(DUNGEON_ANGBAND, lev, reps);
         }
-#else
-        for (lev = 5; lev <= 100; lev += 5)
-            _wiz_gather_stats(DUNGEON_ANGBAND, lev, 5);
-#endif
+        _wiz_doc_obj_summary();
         statistics_hack = FALSE;
 
+#if 0
         {
             _tally_t mon_total_tally = {0};
             _tally_t obj_total_tally = {0};
@@ -1718,6 +1741,7 @@ void do_cmd_debug(void)
             }
             doc_newline(_wiz_doc);
         }
+#endif
 
         doc_insert(_wiz_doc, "</style>");
         if (doc_line_count(_wiz_doc))
@@ -1735,10 +1759,11 @@ void do_cmd_debug(void)
            current dungeon. You still want to start with a fresh character. */
         int reps = get_quantity("How many reps? ", 100);
 
-        _wiz_doc = doc_alloc(80);
+        _wiz_doc_init(doc_alloc(80));
 
         statistics_hack = TRUE;
         _wiz_gather_stats(dungeon_type, dun_level, reps);
+        _wiz_doc_obj_summary();
         statistics_hack = FALSE;
 
         if (doc_line_count(_wiz_doc))
