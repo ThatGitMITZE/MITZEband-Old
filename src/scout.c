@@ -569,8 +569,8 @@ class_t *scout_get_class(void)
     /* static info never changes */
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 30,  33,  34,   6,  50,  24,  50,  50 };
-    skills_t xs = { 15,  11,  10,   0,   0,   0,  20,  20 };
+    skills_t bs = { 30,  33,  34,   6,  50,  24,  50,  65 };
+    skills_t xs = { 15,  11,  10,   0,   0,   0,  20,  25 };
 
         me.name = "Scout";
         me.desc = "The scout is the vanguard of any attack, and excels at stealth and observation "

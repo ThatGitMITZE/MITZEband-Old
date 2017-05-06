@@ -506,12 +506,12 @@ static void _shoot_init_class(class_t *class_ptr)
 {
     typedef struct { int base_thb; int xtra_thb; } _shoot_skill_t;
     static _shoot_skill_t _tbl[6] = {
-        { 20, 11 },
-        { 40, 15 },
-        { 50, 20 },
-        { 55, 25 },
-        { 60, 27 },
-        { 70, 28 }
+        { 20, 11 }, /*  75 */
+        { 40, 15 }, /* 115 */
+        { 50, 20 }, /* 150 */
+        { 55, 25 }, /* 180 */
+        { 60, 27 }, /* 195 */
+        { 70, 28 }  /* 210 */
     };
     int pts = MIN(5, _get_group_pts(_TYPE_SHOOT));
     _shoot_skill_t row = _tbl[pts];
