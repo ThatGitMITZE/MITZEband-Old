@@ -47,7 +47,7 @@ race_t *klackon_get_race(void)
         me.stats[A_CHR] =  1;
 
         me.skills.dis = 10;
-        me.skills.dev = 5;
+        me.skills.dev = -3;
         me.skills.sav = 3;
         me.skills.stl = 0;
         me.skills.srh = -1;
@@ -809,7 +809,7 @@ race_t *tonberry_get_race(void)
         me.stats[A_CHR] =  0;
 
         me.skills.dis = -5;
-        me.skills.dev =  3;
+        me.skills.dev = -5;
         me.skills.sav =  3;
         me.skills.stl =  1;
         me.skills.srh = -2;

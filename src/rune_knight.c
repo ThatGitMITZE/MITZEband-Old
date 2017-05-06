@@ -1617,8 +1617,12 @@ void _feat_destruction_spell(int cmd, variant *res)
     case SPELL_DESC:
         var_set_string(res, "By placing a highly unstable Rune of Destruction at your current location you may destroy your nearby surroundings.");
         break;
+    case SPELL_CAST:
+        destroy_area(py, px, 12 + randint1(4), spell_power(8 * p_ptr->lev));
+        var_set_bool(res, TRUE);
+        break;
     default:
-        destruction_spell(cmd, res);
+        default_spell(cmd, res);
     }
 }
 
@@ -2034,8 +2038,8 @@ class_t *rune_knight_get_class(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 30,  35,  36,   2,  18,  16,  50,  35};
-    skills_t xs = {  7,  10,  10,   0,   0,   0,  15,  11};
+    skills_t bs = { 30,  25,  36,   2,  18,  16,  50,  35};
+    skills_t xs = {  7,  11,  10,   0,   0,   0,  15,  11};
 
         me.name = "Rune-Knight";
         me.desc = 

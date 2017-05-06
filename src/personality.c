@@ -313,7 +313,7 @@ static personality_ptr _get_mighty_personality(void)
         me.skills.stl = -1;
         me.skills.srh = -2;
         me.skills.fos = -2;
-        me.skills.thn = 10;
+        me.skills.thn = 15;
         me.skills.thb =  0;
 
         me.life = 102;

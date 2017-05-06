@@ -5396,7 +5396,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_DISINTEGRATE:
     {
-        int dam = _extra(effect, 200 + 3*effect->power/2);
+        int dam = _extra(effect, 125 + effect->power*2);
         if (name) return "Disintegrate";
         if (desc) return "It fires a powerful ball of disintegration.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5961,7 +5961,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_ROCKET:
     {
-        int dam = _extra(effect, 275 + effect->power*3/2);
+        int dam = _extra(effect, 225 + effect->power*2);
         if (name) return "Rocket";
         if (desc) return "It fires a rocket.";
         if (info) return info_damage(0, 0, _BOOST(dam));
