@@ -3252,7 +3252,6 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
 
     if (spec && !p_ptr->shooter_info.heavy_shoot)
     {
-        p_ptr->shooter_info.num_fire += p_ptr->lev * 2;
         if (p_ptr->psubclass == WEAPONMASTER_SLINGS && p_ptr->lev >= 40)
             p_ptr->shooter_info.num_fire += 50;
 

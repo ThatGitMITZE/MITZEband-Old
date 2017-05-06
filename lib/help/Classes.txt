@@ -50,7 +50,7 @@ Duelists favor light armors and cannot equip a shield. They gain no extra bonus 
 
   <indent><style:table><color:G>Stats                   Skills</color>
 Strength     <color:v> +2</color>        Disarming   <color:y>Good         </color>
-Intelligence <color:w> +1</color>        Device      <color:y>Very Good    </color>
+Intelligence <color:w> +1</color>        Device      <color:o>Fair         </color>
 Wisdom       <color:w> -2</color>        Save        <color:r>Bad          </color>
 Dexterity    <color:w> +2</color>        Stealth     <color:y>Good         </color>
 Constitution <color:w> -3</color>        Searching   <color:o>Fair         </color>
@@ -468,7 +468,7 @@ Dexterity    <color:w> +3</color>        Stealth     <color:G>Excellent    </col
 Constitution <color:w> +0</color>        Searching   <color:G>Excellent    </color>
 Charisma     <color:w> +0</color>        Perception  <color:o>Fair         </color>
 Life Rating  104%       Melee       <color:y>Very Good    </color>
-Base HP        8        Bows        <color:G>Excellent    </color>
+Base HP        8        Bows        <color:g>Superb       </color>
 Experience   130%
 </style></indent>
 </indent>
@@ -841,7 +841,7 @@ Wild-Talent    -1   +1   +1   +1   -2   +1  100%   +4  110%
               <color:w>Disarming     Device        Save          Stealth      </color>
 Berserker     <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:D>Very Bad     </color>
 Blood-Knight  <color:y>Good         </color> <color:r>Bad          </color> <color:o>Fair         </color> <color:o>Fair         </color>
-Duelist       <color:y>Good         </color> <color:y>Very Good    </color> <color:r>Bad          </color> <color:y>Good         </color>
+Duelist       <color:y>Good         </color> <color:o>Fair         </color> <color:r>Bad          </color> <color:y>Good         </color>
 Mauler        <color:y>Good         </color> <color:o>Fair         </color> <color:y>Very Good    </color> <color:R>Poor         </color>
 Rune-Knight   <color:o>Fair         </color> <color:y>Good         </color> <color:o>Fair         </color> <color:o>Fair         </color>
 Samurai       <color:y>Good         </color> <color:r>Bad          </color> <color:o>Fair         </color> <color:o>Fair         </color>
@@ -918,7 +918,7 @@ Magic-Eater   <color:o>Fair         </color> <color:R>Poor         </color> <col
 Priest        <color:R>Poor         </color> <color:r>Bad          </color> <color:o>Fair         </color> <color:R>Poor         </color>
 Ninja         <color:G>Excellent    </color> <color:y>Good         </color> <color:g>Superb       </color> <color:G>Excellent    </color>
 Rogue         <color:y>Good         </color> <color:o>Fair         </color> <color:G>Excellent    </color> <color:G>Excellent    </color>
-Scout         <color:G>Excellent    </color> <color:o>Fair         </color> <color:y>Very Good    </color> <color:G>Excellent    </color>
+Scout         <color:G>Excellent    </color> <color:o>Fair         </color> <color:y>Very Good    </color> <color:g>Superb       </color>
 Chaos-Warrior <color:R>Poor         </color> <color:R>Poor         </color> <color:G>Excellent    </color> <color:y>Good         </color>
 Paladin       <color:R>Poor         </color> <color:r>Bad          </color> <color:G>Excellent    </color> <color:y>Good         </color>
 Ranger        <color:o>Fair         </color> <color:R>Poor         </color> <color:y>Very Good    </color> <color:g>Superb       </color>
@@ -942,4 +942,4 @@ Wild-Talent   <color:o>Fair         </color> <color:R>Poor         </color> <col
 </style>
 
 
-<color:s>Automatically generated for PosChengband 6.0.6.</color>
+<color:s>Automatically generated for PosChengband 6.0.7.</color>

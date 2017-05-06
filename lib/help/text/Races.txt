@@ -728,7 +728,7 @@ Other Races
   
     Stats                   Skills
     Strength      +2        Disarming   Excellent    
-    Intelligence  -1        Device      Good         
+    Intelligence  -1        Device      Bad          
     Wisdom        -1        Save        Fair         
     Dexterity     +1        Stealth     Poor         
     Constitution  +2        Searching   Very Bad     
@@ -790,7 +790,7 @@ Other Races
   
     Stats                   Skills
     Strength      +4        Disarming   Bad          
-    Intelligence  +0        Device      Fair         
+    Intelligence  +0        Device      Bad          
     Wisdom        -2        Save        Fair         
     Dexterity     -4        Stealth     Fair         
     Constitution  +5        Searching   Very Bad     
@@ -901,10 +901,10 @@ Draconian    Bad           Poor          Fair          Bad
 Doppelganger Very Bad      Very Bad      Very Bad      Excellent    
 Ent          Bad           Fair          Good          Bad          
 Golem        Bad           Bad           Good          Bad          
-Klackon      Excellent     Good          Fair          Poor         
+Klackon      Excellent     Bad           Fair          Poor         
 Kutar        Bad           Good          Good          Excellent    
 Mindflayer   Excellent     Superb        Excellent     Fair         
-Tonberry     Bad           Fair          Fair          Fair         
+Tonberry     Bad           Bad           Fair          Fair         
 Yeek         Fair          Fair          Good          Good         
 
 
@@ -955,5 +955,5 @@ Yeek         Good          Heroic        Bad           Bad             20'
 
 
 
-Automatically generated for PosChengband 6.0.6.
+Automatically generated for PosChengband 6.0.7.
 

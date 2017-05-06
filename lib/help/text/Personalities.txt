@@ -42,7 +42,7 @@ rate.
   Dexterity     +0        Stealth     Bad          
   Constitution  +1        Searching   Bad          
   Charisma      +1        Perception  Bad          
-  Life Rating  102%       Melee       Superb       
+  Life Rating  102%       Melee       Heroic       
   Experience   100%       Bows        Poor         
   
 Shrewd
@@ -249,7 +249,7 @@ Table 3 - Personality Skill Bonus Table II
 
              Searching     Perception    Melee         Bows         
 Ordinary     Fair          Fair          Poor          Poor         
-Mighty       Bad           Bad           Superb        Poor         
+Mighty       Bad           Bad           Heroic        Poor         
 Shrewd       Bad           Excellent     Very Bad      Very Bad     
 Pious        Very Good     Bad           Very Bad      Very Bad     
 Nimble       Excellent     Excellent     Poor          Superb       
@@ -265,5 +265,5 @@ Hasty        Very Bad      Bad           Very Bad      Very Bad
 
 
 
-Automatically generated for PosChengband 6.0.6.
+Automatically generated for PosChengband 6.0.7.
 

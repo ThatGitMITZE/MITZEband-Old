@@ -517,7 +517,7 @@ Klackons are bizarre semi-intelligent ant-like insectoid creatures. They make gr
 
   <indent><style:table><color:G>Stats                   Skills</color>
 Strength      +2        Disarming   <color:G>Excellent    </color>
-Intelligence  -1        Device      <color:y>Good         </color>
+Intelligence  -1        Device      <color:r>Bad          </color>
 Wisdom        -1        Save        <color:o>Fair         </color>
 Dexterity     +1        Stealth     <color:R>Poor         </color>
 Constitution  +2        Searching   <color:D>Very Bad     </color>
@@ -559,7 +559,7 @@ Tonberries are lizard-like creatures who possess enormous strength and have a pr
 
   <indent><style:table><color:G>Stats                   Skills</color>
 Strength      +4        Disarming   <color:r>Bad          </color>
-Intelligence  +0        Device      <color:o>Fair         </color>
+Intelligence  +0        Device      <color:r>Bad          </color>
 Wisdom        -2        Save        <color:o>Fair         </color>
 Dexterity     -4        Stealth     <color:o>Fair         </color>
 Constitution  +5        Searching   <color:D>Very Bad     </color>
@@ -666,10 +666,10 @@ Draconian    <color:r>Bad          </color> <color:R>Poor         </color> <colo
 Doppelganger <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:D>Very Bad     </color> <color:G>Excellent    </color>
 Ent          <color:r>Bad          </color> <color:o>Fair         </color> <color:y>Good         </color> <color:r>Bad          </color>
 Golem        <color:r>Bad          </color> <color:r>Bad          </color> <color:y>Good         </color> <color:r>Bad          </color>
-Klackon      <color:G>Excellent    </color> <color:y>Good         </color> <color:o>Fair         </color> <color:R>Poor         </color>
+Klackon      <color:G>Excellent    </color> <color:r>Bad          </color> <color:o>Fair         </color> <color:R>Poor         </color>
 Kutar        <color:r>Bad          </color> <color:y>Good         </color> <color:y>Good         </color> <color:G>Excellent    </color>
 Mindflayer   <color:G>Excellent    </color> <color:g>Superb       </color> <color:G>Excellent    </color> <color:o>Fair         </color>
-Tonberry     <color:r>Bad          </color> <color:o>Fair         </color> <color:o>Fair         </color> <color:o>Fair         </color>
+Tonberry     <color:r>Bad          </color> <color:r>Bad          </color> <color:o>Fair         </color> <color:o>Fair         </color>
 Yeek         <color:o>Fair         </color> <color:o>Fair         </color> <color:y>Good         </color> <color:y>Good         </color>
 
 </style>
@@ -720,4 +720,4 @@ Yeek         <color:y>Good         </color> <color:b>Heroic       </color> <colo
 </style>
 
 
-<color:s>Automatically generated for PosChengband 6.0.6.</color>
+<color:s>Automatically generated for PosChengband 6.0.7.</color>

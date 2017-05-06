@@ -525,15 +525,15 @@ static void _shoot_init_class(class_t *class_ptr)
     class_ptr->base_skills.stl += (pts + 1) / 2;
 }
 
-typedef struct { int to_h; int to_d; int prof; int shots; } _shoot_info_t;
+typedef struct { int to_h; int to_d; int prof; } _shoot_info_t;
 static _shoot_info_t _shoot_info[6] = {
-    {  0,  0, 2000,   0 },
+    {  0,  0, 2000 },
 
-    {  0,  0, 4000,   0 },
-    {  0,  0, 5000,  25 },
-    {  0,  0, 6000,  50 },
-    {  0,  0, 7000,  75 },
-    {  0,  0, 8000, 100 }
+    {  0,  0, 4000 },
+    {  0,  0, 5000 },
+    {  0,  0, 6000 },
+    {  0,  0, 7000 },
+    {  0,  0, 8000 }
 };
 
 static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
@@ -550,7 +550,6 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
         p_ptr->shooter_info.dis_to_h += row.to_h;
         p_ptr->shooter_info.to_d += row.to_d;
         p_ptr->shooter_info.dis_to_d += row.to_d;
-        p_ptr->shooter_info.num_fire += row.shots * p_ptr->lev / 50;
     }
 }
 

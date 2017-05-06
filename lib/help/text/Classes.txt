@@ -100,7 +100,7 @@ Melee
   
     Stats                   Skills
     Strength      +2        Disarming   Good         
-    Intelligence  +1        Device      Very Good    
+    Intelligence  +1        Device      Fair         
     Wisdom        -2        Save        Bad          
     Dexterity     +2        Stealth     Good         
     Constitution  -3        Searching   Fair         
@@ -782,7 +782,7 @@ Stealth
     Constitution  +0        Searching   Excellent    
     Charisma      +0        Perception  Fair         
     Life Rating  104%       Melee       Very Good    
-    Base HP        8        Bows        Excellent    
+    Base HP        8        Bows        Superb       
     Experience   130%
     
   
@@ -1364,7 +1364,7 @@ Table 2 - Class Skill Bonus Table I
               Disarming     Device        Save          Stealth      
 Berserker     Very Bad      Very Bad      Very Bad      Very Bad     
 Blood-Knight  Good          Bad           Fair          Fair         
-Duelist       Good          Very Good     Bad           Good         
+Duelist       Good          Fair          Bad           Good         
 Mauler        Good          Fair          Very Good     Poor         
 Rune-Knight   Fair          Good          Fair          Fair         
 Samurai       Good          Bad           Fair          Fair         
@@ -1441,7 +1441,7 @@ Magic-Eater   Fair          Poor          Fair          Poor
 Priest        Poor          Bad           Fair          Poor         
 Ninja         Excellent     Good          Superb        Excellent    
 Rogue         Good          Fair          Excellent     Excellent    
-Scout         Excellent     Fair          Very Good     Excellent    
+Scout         Excellent     Fair          Very Good     Superb       
 Chaos-Warrior Poor          Poor          Excellent     Good         
 Paladin       Poor          Bad           Excellent     Good         
 Ranger        Fair          Poor          Very Good     Superb       
@@ -1465,5 +1465,5 @@ Wild-Talent   Fair          Poor          Very Good     Very Good
 
 
 
-Automatically generated for PosChengband 6.0.6.
+Automatically generated for PosChengband 6.0.7.
 

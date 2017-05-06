@@ -4518,6 +4518,14 @@ void calc_bonuses(void)
         if (p_ptr->skills.thb > 80)
             p_ptr->shooter_info.breakage = 90 - (p_ptr->skills.thb - 80)/2;
 
+        /* Experimental: Everbody gets extra shots based on bow skill. This
+         * makes Race and Personality choices relevant.
+         * Best Race: High-Elf +25
+         * Best Personality: Lucky +30
+         * Best Class: Archer 262 */
+        if (p_ptr->shooter_info.num_fire < p_ptr->skills.thb && !p_ptr->shooter_info.heavy_shoot && !heavy_armor())
+            p_ptr->shooter_info.num_fire = p_ptr->skills.thb;
+
         if (race_ptr != NULL && race_ptr->calc_shooter_bonuses != NULL)
             race_ptr->calc_shooter_bonuses(o_ptr, &p_ptr->shooter_info);
 
@@ -4526,29 +4534,6 @@ void calc_bonuses(void)
 
         if (p_ptr->shooter_info.breakage < 0) p_ptr->shooter_info.breakage = 0;
         if (p_ptr->shooter_info.num_fire < 0) p_ptr->shooter_info.num_fire = 0;
-
-#if 1
-        /* Experimental: Everbody gets extra shots based on bow skill. This
-         * makes Race and Personality choices relevant.
-         * Best Race: High-Elf +25
-         * Best Personality: Lucky +30
-         * Best Class: Archer 262 */
-        p_ptr->shooter_info.num_fire = 100; /* undo class_t.calc_shooter_bonuses */
-        if (p_ptr->shooter_info.num_fire < p_ptr->skills.thb)
-        {
-            bool ok = TRUE;
-
-            /* Some classes have shooter restrictions */
-            if (p_ptr->pclass == CLASS_ROGUE && p_ptr->shooter_info.tval_ammo != TV_SHOT) ok = FALSE;
-            if (p_ptr->pclass == CLASS_RANGER && p_ptr->shooter_info.tval_ammo != TV_ARROW) ok = FALSE;
-            if (weaponmaster_is_(WEAPONMASTER_SLINGS) && p_ptr->shooter_info.tval_ammo != TV_SHOT) ok = FALSE;
-            if (weaponmaster_is_(WEAPONMASTER_BOWS) && p_ptr->shooter_info.tval_ammo != TV_ARROW) ok = FALSE;
-            if (weaponmaster_is_(WEAPONMASTER_CROSSBOWS) && p_ptr->shooter_info.tval_ammo != TV_BOLT) ok = FALSE;
-            /* XXX Snipers? They have 212 archery skills, so this is a big boost! */
-
-            if (ok) p_ptr->shooter_info.num_fire = p_ptr->skills.thb;
-        }
-#endif
     }
 
     /* Blows Calculation */
