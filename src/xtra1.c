@@ -3482,7 +3482,8 @@ void calc_bonuses(void)
     p_ptr->shooter_info.to_d = 0;
     p_ptr->shooter_info.dis_to_h = 0;
     p_ptr->shooter_info.dis_to_d = 0;
-    p_ptr->shooter_info.num_fire = 100;
+    p_ptr->shooter_info.base_shot = 100;
+    p_ptr->shooter_info.xtra_shot = 0;
     p_ptr->shooter_info.heavy_shoot = FALSE;
     p_ptr->shooter_info.to_mult = 0;
     p_ptr->shooter_info.tval_ammo = 0;
@@ -4471,7 +4472,8 @@ void calc_bonuses(void)
             p_ptr->shooter_info.to_h  += 2 * (hold - o_ptr->weight / 10);
             p_ptr->shooter_info.dis_to_h  += 2 * (hold - o_ptr->weight / 10);
             p_ptr->shooter_info.heavy_shoot = TRUE;
-            p_ptr->shooter_info.num_fire = 100;
+            p_ptr->shooter_info.base_shot = 100;
+            p_ptr->shooter_info.xtra_shot = 0;
         }
 
         /* Hack: hold is also used for inventory weapons and other stuff, so undo
@@ -4519,22 +4521,21 @@ void calc_bonuses(void)
             p_ptr->shooter_info.breakage = 90 - (p_ptr->skills.thb - 80)/2;
 
         /* Experimental: Everbody gets extra shots based on bow skill. This
-         * makes Race and Personality choices relevant. Note: equip_calc_bonuses
-         * has possibly already boosted num_fire ...
+         * makes Race and Personality choices relevant.
          * Best Race: High-Elf +25
          * Best Personality: Lucky +30
          * Best Class: Archer 262 */
-        if (p_ptr->skills.thb > 100 && !p_ptr->shooter_info.heavy_shoot && !heavy_armor())
-            p_ptr->shooter_info.num_fire += p_ptr->skills.thb - 100;
+        if (p_ptr->shooter_info.base_shot < p_ptr->skills.thb && !p_ptr->shooter_info.heavy_shoot && !heavy_armor())
+            p_ptr->shooter_info.base_shot = p_ptr->skills.thb;
 
-        if (race_ptr != NULL && race_ptr->calc_shooter_bonuses != NULL)
+        if (race_ptr->calc_shooter_bonuses)
             race_ptr->calc_shooter_bonuses(o_ptr, &p_ptr->shooter_info);
 
-        if (class_ptr != NULL && class_ptr->calc_shooter_bonuses != NULL)
+        if (class_ptr->calc_shooter_bonuses)
             class_ptr->calc_shooter_bonuses(o_ptr, &p_ptr->shooter_info);
 
         if (p_ptr->shooter_info.breakage < 0) p_ptr->shooter_info.breakage = 0;
-        if (p_ptr->shooter_info.num_fire < 0) p_ptr->shooter_info.num_fire = 0;
+        if (p_ptr->shooter_info.base_shot < 0) p_ptr->shooter_info.base_shot = 0;
     }
 
     /* Blows Calculation */

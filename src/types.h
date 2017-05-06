@@ -924,12 +924,15 @@ typedef struct {
     int dis_to_h;
     int dis_to_d;
     int to_mult;
-    int num_fire;
+    int base_shot;
+    int xtra_shot;
     byte tval_ammo;
     int breakage; /* pct of normal breakage odds ... default is 100 */
     bool heavy_shoot;
     u32b flags[OF_ARRAY_SIZE];
 } shooter_info_t;
+
+#define NUM_SHOTS (p_ptr->shooter_info.base_shot + p_ptr->shooter_info.xtra_shot)
 
 typedef struct {
     int to_dd;

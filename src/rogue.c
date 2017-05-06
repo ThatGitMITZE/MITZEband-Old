@@ -739,7 +739,7 @@ cptr do_burglary_spell(int spell, int mode)
 static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
 {
     if (p_ptr->shooter_info.tval_ammo != TV_SHOT )
-        p_ptr->shooter_info.num_fire = 100;
+        p_ptr->shooter_info.base_shot = 100;
 }
 
 static void _calc_bonuses(void)

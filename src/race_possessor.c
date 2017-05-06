@@ -1379,12 +1379,12 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
         if ( r_ptr->body.class_idx == CLASS_RANGER
           && p_ptr->shooter_info.tval_ammo != TV_ARROW )
         {
-            p_ptr->shooter_info.num_fire = 100;
+            p_ptr->shooter_info.base_shot = 100;
         }
         if ( r_ptr->body.class_idx == CLASS_ROGUE
           && p_ptr->shooter_info.tval_ammo != TV_SHOT )
         {
-            p_ptr->shooter_info.num_fire = 100;
+            p_ptr->shooter_info.base_shot = 100;
         }
     }
 }

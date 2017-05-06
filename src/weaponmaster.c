@@ -3250,11 +3250,9 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
 {
     int spec = _check_speciality_aux(o_ptr);
 
+    if (!spec) p_ptr->shooter_info.base_shot = 100;
     if (spec && !p_ptr->shooter_info.heavy_shoot)
     {
-        if (p_ptr->psubclass == WEAPONMASTER_SLINGS && p_ptr->lev >= 40)
-            p_ptr->shooter_info.num_fire += 50;
-
         p_ptr->shooter_info.to_d += p_ptr->lev/5;
         p_ptr->shooter_info.dis_to_d += p_ptr->lev/5;
         p_ptr->shooter_info.to_h += p_ptr->lev/5;
@@ -3267,10 +3265,10 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
             case TOGGLE_RAPID_RELOAD:
                 p_ptr->shooter_info.to_h -= 10;
                 p_ptr->shooter_info.dis_to_h -= 10;
-                p_ptr->shooter_info.num_fire += p_ptr->shooter_info.num_fire * (10 + p_ptr->lev/3) / 100;
+                p_ptr->shooter_info.base_shot += p_ptr->shooter_info.base_shot * (10 + p_ptr->lev/3) / 100;
                 break;
             case TOGGLE_EXPLODING_BOLT:
-                p_ptr->shooter_info.num_fire -= p_ptr->lev;
+                p_ptr->shooter_info.base_shot -= p_ptr->lev;
                 break;
             case TOGGLE_OVERDRAW:
                 p_ptr->shooter_info.to_mult += 100;
@@ -3280,7 +3278,7 @@ static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
             case TOGGLE_CAREFUL_AIM:
                 p_ptr->shooter_info.to_h += 20;
                 p_ptr->shooter_info.dis_to_h += 20;
-                p_ptr->shooter_info.num_fire -= p_ptr->lev * 2;
+                p_ptr->shooter_info.base_shot -= p_ptr->lev * 2;
                 break;
             }
         }
@@ -3569,7 +3567,7 @@ static void _move_player(void)
     if (_get_toggle() == TOGGLE_SHOT_ON_THE_RUN)
     {
         int idx = -1;
-        int num_shots = 1 + p_ptr->shooter_info.num_fire / 400;
+        int num_shots = 1 + NUM_SHOTS / 400;
         obj_ptr ammo;
         int i;
 

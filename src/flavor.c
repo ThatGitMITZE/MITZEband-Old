@@ -1757,7 +1757,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         int ds = o_ptr->ds;
 
         if (p_ptr->big_shot && o_ptr->tval == p_ptr->shooter_info.tval_ammo)
-            dd *= 2;
+            ds += 2;
 
         if (hand >= 0 && hand < MAX_HANDS && !(mode & OD_THROWING))
         {
