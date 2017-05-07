@@ -1871,9 +1871,9 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     int     esp_count = 0;
     int     lev = object_level;
     bool    is_falcon_sword = FALSE;
-    int     max_a = MAX(o_ptr->to_a, 30);
-    int     max_h = MAX(o_ptr->to_h, 32);
-    int     max_d = MAX(o_ptr->to_d, 32);
+    int     max_a = 15 + m_bonus(15, object_level);
+    int     max_h = 15 + m_bonus(15, object_level);
+    int     max_d = 15 + m_bonus(15, object_level);
 
     if (no_artifacts) return 0;
     if (have_flag(o_ptr->flags, OF_NO_REMOVE)) return 0;
@@ -2670,9 +2670,14 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     /* give it some plusses... */
     if (object_is_armour(o_ptr))
     {
-        if (!boosted_ac)
-            o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
-
+        if (!boosted_ac && o_ptr->to_a < max_a)
+        {
+            int n = max_a - o_ptr->to_a;
+            n = (n+2)/3;
+            o_ptr->to_a += n;
+            o_ptr->to_a += randint0(n);
+            o_ptr->to_a += randint0(n);
+        }
         if (o_ptr->to_a > max_a)
             o_ptr->to_a = max_a;
     }
@@ -3201,6 +3206,9 @@ bool reforge_artifact(object_type *src, object_type *dest, int fame)
     return result;
 }
 
+int original_score = 0;
+int replacement_score = 0;
+
 bool create_replacement_art(int a_idx, object_type *o_ptr)
 {
     object_type    forge1 = {0};
@@ -3229,6 +3237,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     if (!obj_is_ammo(&forge1) && base_power < 7500)
         base_power = 7500;
 
+    original_score += base_power;
     best_power = -10000000;
     power = 0;
     old_level = object_level;
@@ -3251,8 +3260,9 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
             worst_power = power;
         }
 
-        if (power > base_power * 4 / 5 && power < base_power * 2)
+        if (power > base_power * 4 / 5 && power < base_power * 7 / 5)
         {
+            replacement_score += power;
             object_level = old_level;
             object_copy(o_ptr, &forge2);
             o_ptr->name3 = a_idx;
@@ -3262,6 +3272,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     }
 
     /* Failed! Return best or worst */
+    original_score -= base_power;
     object_level = old_level;
     if (worst_power > base_power)
         object_copy(o_ptr, &worst);

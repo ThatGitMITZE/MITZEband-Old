@@ -1047,6 +1047,8 @@ static void _wiz_doc_obj_summary(void)
 {
     doc_printf(_wiz_doc, "\n\n<color:R>%d</color> objects. <color:R>%d</color> average score.\n",
         _wiz_obj_count, _wiz_obj_score / _wiz_obj_count);
+    if (original_score)
+        doc_printf(_wiz_doc, "<color:R>%d%%</color> replacement power.\n", replacement_score * 100 / original_score);
 }
 
 static char _score_color(int score)
@@ -1259,7 +1261,10 @@ static void _wiz_inspect_objects(int level)
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
         if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
-        if (1) _wiz_stats_log_rand_arts(level, o_ptr);
+        if (0) _wiz_stats_log_rand_arts(level, o_ptr);
+
+        if (1 && o_ptr->name3)
+            _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name2 && !object_is_device(o_ptr) && !object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);

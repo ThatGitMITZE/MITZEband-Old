@@ -945,11 +945,21 @@ s32b armor_cost(object_type *o_ptr, int options)
         cost_calc_hook(dbg_msg);
     }
 
-    /* +AC ... Note, negative ac should decrease the cost! */
-    if (have_flag(flgs, OF_IGNORE_ACID))
-        a += 200*to_a + 20 * to_a * ABS(to_a);
-    else
-        a += 100*to_a + 10 * to_a * ABS(to_a);
+    /* +AC
+     * XXX A few unusual outliers (Dasai +64 and Julian +40)
+     * skew any sort of exponential formula.
+     * XXX [8, +64] vs [40, +32] ... in other words, perhaps we should
+     * consider the total ac when scoring? */
+    {
+        point_t tbl[8] = { {1, 200}, {5, 1500}, {10, 4000}, {15, 7500}, {20, 11000},
+                           {25, 15000}, {30, 20000}, {100, 90000} };
+        int boost = interpolate(ABS(to_a), tbl, 8);
+        if (!have_flag(flgs, OF_IGNORE_ACID))
+            boost /= 2;
+        if (to_a < 0)
+            boost *= -1;
+        a += boost;
+    }
 
     if (cost_calc_hook)
     {

@@ -1868,6 +1868,8 @@ extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
 extern bool mon_spell_mon(int m_idx, int options);
 
 /* artifact.c */
+extern int original_score;
+extern int replacement_score;
 extern bool immunity_hack;
 extern void one_sustain(object_type *o_ptr);
 extern void one_high_resistance(object_type *o_ptr);

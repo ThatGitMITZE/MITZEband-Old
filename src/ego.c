@@ -2807,6 +2807,10 @@ static void _ego_create_helmet(object_type *o_ptr, int level)
             o_ptr->to_d += m_bonus(7, level);
             break;
         case EGO_HELMET_VAMPIRE:
+            if (one_in_(2))
+                add_flag(o_ptr->flags, OF_RES_COLD);
+            if (one_in_(2))
+                add_flag(o_ptr->flags, OF_RES_NETHER);
             if (one_in_(3))
                 add_flag(o_ptr->flags, OF_VULN_LITE);
             if (one_in_(6))
