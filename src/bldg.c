@@ -2682,6 +2682,35 @@ static bool _reforge_artifact(void)
         return FALSE;
     }
 
+    if (p_ptr->wizard)
+    {
+        doc_ptr doc = doc_alloc(80);
+        int     i;
+        int     ct = 100;
+        int     base = obj_value_real(src);
+        int     total = 0;
+        char    buf[MAX_NLEN];
+
+        object_desc(buf, src, OD_COLOR_CODED);
+        doc_printf(doc, "Reforging %s (%d):\n", buf, base);
+        for (i = 0; i < ct; i++)
+        {
+            obj_t forge = *dest;
+            int   score = 0;
+            reforge_artifact(src, &forge, p_ptr->fame);
+            obj_identify_fully(&forge);
+            score = obj_value_real(&forge);
+            total += score;
+            object_desc(buf, &forge, OD_COLOR_CODED);
+            doc_printf(doc, "%d) <indent><style:indent>%s (%d%%)</style></indent>\n",
+                i + 1, buf, score * 100 / base);
+        }
+        doc_printf(doc, "\n\n<color:B>Average Reforge: <color:R>%d%%</color></color>\n",
+            total * 100 / (base * ct));
+        doc_display(doc, "Reforging", 0);
+        doc_free(doc);
+        return FALSE;
+    }
     if (!reforge_artifact(src, dest, p_ptr->fame))
     {
         msg_print("The reforging failed!");

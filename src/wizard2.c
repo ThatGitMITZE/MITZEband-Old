@@ -1045,8 +1045,11 @@ static void _wiz_doc_init(doc_ptr doc)
 
 static void _wiz_doc_obj_summary(void)
 {
-    doc_printf(_wiz_doc, "\n\n<color:R>%d</color> objects. <color:R>%d</color> average score.\n",
-        _wiz_obj_count, _wiz_obj_score / _wiz_obj_count);
+    if (_wiz_obj_count)
+    {
+        doc_printf(_wiz_doc, "\n\n<color:R>%d</color> objects. <color:R>%d</color> average score.\n",
+            _wiz_obj_count, _wiz_obj_score / _wiz_obj_count);
+    }
     if (original_score)
         doc_printf(_wiz_doc, "<color:R>%d%%</color> replacement power.\n", replacement_score * 100 / original_score);
 }
