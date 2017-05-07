@@ -2216,6 +2216,7 @@ static int _choose_random(int bias)
     for (i = 0; ; i++)
     {
         if (!_effect_info[i].type) break;
+        if (_effect_info[i].level < object_level / 3) continue;
         if (bias && !(_effect_info[i].bias & bias)) continue;
         if (!_effect_info[i].rarity) continue;
 
@@ -2228,6 +2229,7 @@ static int _choose_random(int bias)
     for (i = 0; ; i++)
     {
         if (!_effect_info[i].type) break;
+        if (_effect_info[i].level < object_level / 3) continue;
         if (bias && !(_effect_info[i].bias & bias)) continue;
         if (!_effect_info[i].rarity) continue;
 

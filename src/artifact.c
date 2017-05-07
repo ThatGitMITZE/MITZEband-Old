@@ -1547,13 +1547,13 @@ static void random_slay(object_type *o_ptr)
             case 2:
             case 3:
                 add_flag(o_ptr->flags, OF_XTRA_MIGHT);
-                if (!one_in_(7)) remove_flag(o_ptr->flags, OF_XTRA_SHOTS);
+                if (!one_in_(2)) remove_flag(o_ptr->flags, OF_XTRA_SHOTS);
                 if (!artifact_bias && one_in_(9))
                     artifact_bias = BIAS_RANGER;
                 break;
             default:
                 add_flag(o_ptr->flags, OF_XTRA_SHOTS);
-                if (!one_in_(7)) remove_flag(o_ptr->flags, OF_XTRA_MIGHT);
+                if (!one_in_(2)) remove_flag(o_ptr->flags, OF_XTRA_MIGHT);
                 has_pval = TRUE;
                 if (!artifact_bias && one_in_(9))
                     artifact_bias = BIAS_RANGER;
@@ -2675,7 +2675,7 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
             int n = max_a - o_ptr->to_a;
             n = (n+2)/3;
             o_ptr->to_a += n;
-            o_ptr->to_a += randint0(n);
+            o_ptr->to_a += randint1(n);
             o_ptr->to_a += randint0(n);
         }
         if (o_ptr->to_a > max_a)
@@ -3272,12 +3272,17 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     }
 
     /* Failed! Return best or worst */
-    original_score -= base_power;
     object_level = old_level;
     if (worst_power > base_power)
+    {
+        replacement_score += worst_power;
         object_copy(o_ptr, &worst);
+    }
     else
+    {
+        replacement_score += best_power;
         object_copy(o_ptr, &best);
+    }
 
     o_ptr->name3 = a_idx;
     o_ptr->weight = forge1.weight;
