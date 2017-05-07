@@ -251,10 +251,11 @@ static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
     return (u32b) cost;
 }
 
-s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr)
+s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr, int options)
 {
     char dbg_msg[512];
     s32b y;
+    bool known = obj_is_identified(o_ptr) || (options & COST_REAL);
 
     y = _activation_p(flgs, o_ptr);
     if (y != 0)
@@ -267,7 +268,7 @@ s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr)
         }
     }
 
-    if (obj_is_identified(o_ptr))
+    if (known)
     {
         int xtra = 0;
         if (o_ptr->name2 == EGO_ROBE_TWILIGHT)
@@ -363,7 +364,7 @@ s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr)
         }
     }
 
-    if (obj_is_identified(o_ptr) && o_ptr->curse_flags & OFC_PERMA_CURSE)
+    if (known && (o_ptr->curse_flags & OFC_PERMA_CURSE))
     {
         p = p * 8 / 10;
         if (cost_calc_hook)
@@ -376,7 +377,7 @@ s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr)
     if (o_ptr->tval != TV_LITE && !object_is_jewelry(o_ptr))
     {
         /* Do we know this is an artifact? */
-        if ( (obj_is_identified(o_ptr) && object_is_artifact(o_ptr))
+        if ( (known && object_is_artifact(o_ptr))
           || (o_ptr->feeling & (FEEL_SPECIAL | FEEL_TERRIBLE)) )
         {
         }
@@ -634,7 +635,7 @@ s32b jewelry_cost(object_type *o_ptr, int options)
         }
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 
@@ -766,7 +767,7 @@ s32b lite_cost(object_type *o_ptr, int options)
         }
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 
@@ -893,7 +894,7 @@ s32b quiver_cost(object_type *o_ptr, int options)
         }
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 s32b armor_cost(object_type *o_ptr, int options)
@@ -1090,7 +1091,7 @@ s32b armor_cost(object_type *o_ptr, int options)
         }
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 
@@ -1338,7 +1339,7 @@ s32b weapon_cost(object_type *o_ptr, int options)
         cost_calc_hook(dbg_msg);
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 
@@ -1596,7 +1597,7 @@ s32b bow_cost(object_type *o_ptr, int options)
         cost_calc_hook(dbg_msg);
     }
 
-    p = _finalize_p(p, flgs, o_ptr);
+    p = _finalize_p(p, flgs, o_ptr, options);
     return p;
 }
 

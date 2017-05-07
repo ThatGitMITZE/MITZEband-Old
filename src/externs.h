@@ -1905,6 +1905,7 @@ extern bool create_named_art_aux_aux(int a_idx, object_type *o_ptr);
 extern bool create_replacement_art(int a_idx, object_type *o_ptr);
 extern bool reforge_artifact(object_type *src, object_type *dest, int fame);
 extern void get_random_name(char *return_name, object_type *o_ptr, int power);
+extern int get_slot_power(obj_ptr obj);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);

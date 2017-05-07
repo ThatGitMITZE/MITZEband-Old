@@ -307,10 +307,10 @@ static _power_limit_t _art_power_limits[] = {
     { 40,     0,  20000 },
     { 50,  7500,  30000 },
     { 60, 10000,  50000 },
-    { 70, 12500,  80000 },
-    { 80, 15000,      0 },
-    { 90, 20000,      0 },
-    {999, 25000,      0 }
+    { 70, 20000,  80000 },
+    { 80, 30000,      0 },
+    { 90, 40000,      0 },
+    {999, 40000,      0 }
 };
 
 static void _art_create_random(object_type *o_ptr, int level, int power)
@@ -318,6 +318,7 @@ static void _art_create_random(object_type *o_ptr, int level, int power)
     int  i;
     u32b mode = CREATE_ART_NORMAL;
     int  min = 0, max = 0;
+    int  pct = get_slot_power(o_ptr);
 
     for (i = 0; ; i++)
     {
@@ -333,6 +334,11 @@ static void _art_create_random(object_type *o_ptr, int level, int power)
         if (min < 5000) min = 5000;
         max *= 2;
     }
+
+    /* normalize based on the slot for this object (cf artifact.c)
+     * weapons/armor are 100%; amulets/lights 50%; etc. */
+    min = min * pct / 100;
+    max = max * pct / 100;
 
     if (power < 0)
         mode = CREATE_ART_CURSED;

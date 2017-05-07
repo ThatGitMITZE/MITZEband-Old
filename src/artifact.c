@@ -3156,6 +3156,12 @@ static int _get_weight(obj_ptr obj)
     }
     return 80;
 }
+/* This might also benefit the rand-art power channels in ego.c */
+int get_slot_power(obj_ptr obj)
+{
+    int w = _get_weight(obj);
+    return 100 * w / 80;
+}
 bool reforge_artifact(object_type *src, object_type *dest, int fame)
 {
     bool        result = FALSE;
