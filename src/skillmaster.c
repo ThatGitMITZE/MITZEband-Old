@@ -504,12 +504,12 @@ void _melee_get_flags(u32b flgs[OF_ARRAY_SIZE])
  ***********************************************************************/
 typedef struct { int base_thb; int xtra_thb; int prof; } _shoot_info_t;
 static _shoot_info_t _shoot_info[6] = {
-    { 20, 11, 2000 },
-    { 40, 15, 4000 },
-    { 50, 20, 5000 },
-    { 55, 25, 6000 },
-    { 60, 27, 7000 },
-    { 70, 28, 8000 }
+    { 20, 10, 2000 },
+    { 40, 12, 4000 }, /* 100 */
+    { 50, 15, 5000 }, /* 125 */
+    { 60, 18, 6000 }, /* 150 */
+    { 65, 22, 7000 }, /* 175 */
+    { 70, 26, 8000 }  /* 200 */
 };
 static void _shoot_init_class(class_t *class_ptr)
 {
