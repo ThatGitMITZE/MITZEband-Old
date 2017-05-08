@@ -472,6 +472,8 @@ typedef struct {
     char name[MAX_NLEN];
     int  score;
     int  k_idx; /* For rand-arts and egos ... */
+    int  level;
+    int  pct;   /* replacement arts */
 } _art_info_t, *_art_info_ptr;
 static int _art_score_cmp(_art_info_ptr l, _art_info_ptr r)
 {
@@ -528,6 +530,7 @@ static void _spoil_table_aux(doc_ptr doc, cptr title, _obj_p pred, int options)
                 entry->score = obj_value_real(&forge);
             object_desc(entry->name, &forge, OD_COLOR_CODED);
             entry->k_idx = forge.k_idx;
+            entry->level = a_info[i].level;
             vec_add(entries, entry);
 
             if (a_info[entry->id].found)
@@ -561,6 +564,27 @@ static void _spoil_table_aux(doc_ptr doc, cptr title, _obj_p pred, int options)
                 entry->score = obj_value_real(o_ptr);
             object_desc(entry->name, o_ptr, OD_COLOR_CODED);
             entry->k_idx = o_ptr->k_idx;
+            entry->level = o_ptr->level;
+            entry->pct = 0;
+            if (o_ptr->name3)
+            {
+                obj_t forge = {0};
+                if (create_named_art_aux(o_ptr->name3, &forge))
+                {
+                    int base_score;
+                    if (object_is_weapon_ammo(&forge))
+                    {
+                        forge.to_h = MAX(10, forge.to_h);
+                        forge.to_d = MAX(10, forge.to_d);
+                    }
+                    if (object_is_armour(&forge))
+                    {
+                        forge.to_a = MAX(10, forge.to_a);
+                    }
+                    base_score = obj_value_real(&forge);
+                    entry->pct = entry->score * 100 / base_score;
+                }
+            }
             vec_add(entries, entry);
 
             ct_rnd++;
@@ -591,6 +615,7 @@ static void _spoil_table_aux(doc_ptr doc, cptr title, _obj_p pred, int options)
                 entry->score = obj_value_real(o_ptr);
             object_desc(entry->name, o_ptr, OD_COLOR_CODED);
             entry->k_idx = o_ptr->k_idx;
+            entry->level = o_ptr->level;
             vec_add(entries, entry);
 
             ct_ego++;
@@ -611,12 +636,15 @@ static void _spoil_table_aux(doc_ptr doc, cptr title, _obj_p pred, int options)
 
             if (entry->id == ART_RANDOM)
             {
-                doc_printf(doc, "<color:v>%3d) %7d</color>         %3d ", i+1, entry->score, k_info[entry->k_idx].counts.found);
+                if (entry->pct)
+                    doc_printf(doc, "<color:v>%3d) %7d</color> %3d %3d %3d ", i+1, entry->score, entry->level, entry->pct, k_info[entry->k_idx].counts.found);
+                else
+                    doc_printf(doc, "<color:v>%3d) %7d</color> %3d     %3d ", i+1, entry->score, entry->level, k_info[entry->k_idx].counts.found);
                 doc_printf(doc, "<indent><style:indent>%s</style></indent>\n", entry->name);
             }
             else if (entry->id == ART_EGO)
             {
-                doc_printf(doc, "<color:B>%3d) %7d</color>         %3d ", i+1, entry->score, k_info[entry->k_idx].counts.found);
+                doc_printf(doc, "<color:B>%3d) %7d</color> %3d     %3d ", i+1, entry->score, entry->level, k_info[entry->k_idx].counts.found);
                 doc_printf(doc, "<indent><style:indent>%s</style></indent>\n", entry->name);
             }
             else

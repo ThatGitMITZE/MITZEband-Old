@@ -1858,6 +1858,35 @@ void curse_object(object_type *o_ptr)
     }
 }
 
+static int _slot_normalize(int amt, int pct)
+{
+    int n = amt * 10 * pct / 100;
+    amt = n / 10;
+    if (n%10 && randint0(10) < n%10) amt++;
+    return amt;
+}
+
+static int _roll_powers(obj_ptr obj, int lev)
+{
+    int powers;
+    int pct = get_slot_power(obj);
+    int spread = _slot_normalize(6, pct);
+    int max_powers = _slot_normalize(12, pct);
+
+    powers = randint1(spread) + 1;
+
+    while (one_in_(powers) || one_in_(7 * 90/lev) || one_in_(10 * 70/lev))
+        powers++;
+
+    if (one_in_(WEIRD_LUCK))
+        powers *= 2;
+
+    if (powers > max_powers)
+        powers = max_powers;
+
+    return powers;
+}
+
 s32b create_artifact(object_type *o_ptr, u32b mode)
 {
     char    new_name[1024];
@@ -2073,14 +2102,7 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
         a_cursed = TRUE;
     }
 
-    powers = randint1(5) + 1;
-    powers = MAX(2, powers * get_slot_power(o_ptr) / 100);
-
-    while (one_in_(powers) || one_in_(7 * 90/lev) || one_in_(10 * 70/lev))
-        powers++;
-
-    if (one_in_(WEIRD_LUCK))
-        powers *= 2;
+    powers = _roll_powers(o_ptr, lev);
 
     /* Playtesting shows that FA, SI and HL are too rare ... let's boost these a bit */
     switch (o_ptr->tval)
@@ -3321,6 +3343,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
             object_copy(o_ptr, &forge2);
             o_ptr->name3 = a_idx;
             o_ptr->weight = forge1.weight;
+            o_ptr->level = a_ptr->level;
             return TRUE;
         }
     }
@@ -3340,6 +3363,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
 
     o_ptr->name3 = a_idx;
     o_ptr->weight = forge1.weight;
+    o_ptr->level = a_ptr->level;
 
     return TRUE;
 }

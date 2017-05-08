@@ -2028,7 +2028,8 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
     /* Maximum "level" for various things */
     if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
 
-    o_ptr->level = lev; /* Wizard statistics ... */
+    if (!o_ptr->level)
+        o_ptr->level = lev; /* Wizard statistics ... */
 
     /* Base chance of being "good" */
     f1 = lev + 10;
