@@ -1858,6 +1858,49 @@ void curse_object(object_type *o_ptr)
     }
 }
 
+typedef struct {
+    cptr  name;
+    obj_p pred;
+    int   weight;
+} _slot_weight_t, *_slot_weight_ptr;
+static _slot_weight_t _slot_weight_tbl[] = {
+    {"Weapons", object_is_melee_weapon, 80},
+    {"Shields", object_is_shield, 40},
+    {"Bows", object_is_bow, 45},
+    {"Rings", object_is_ring, 80}, /* rings of power */
+    {"Amulets", object_is_amulet, 40},
+    {"Lights", object_is_lite, 30},
+    {"Body Armor", object_is_body_armour, 80},
+    {"Cloaks", object_is_cloak, 35},
+    {"Helmets", object_is_helmet, 40},
+    {"Gloves", object_is_gloves, 35},
+    {"Boots", object_is_boots, 40},
+    {NULL}
+};
+static int _get_slot_weight(obj_ptr obj)
+{
+    int i;
+    for (i = 0; ; i++)
+    {
+        _slot_weight_ptr row = &_slot_weight_tbl[i];
+        if (!row->name) break;
+        if (row->pred(obj)) return row->weight;
+    }
+    return 80;
+}
+/* This might also benefit the rand-art power channels in ego.c */
+int get_slot_power(obj_ptr obj)
+{
+    int w = _get_slot_weight(obj);
+    if (object_is_melee_weapon(obj))
+    {
+        int d = k_info[obj->k_idx].dd * k_info[obj->k_idx].ds;
+        if (d < 12)
+            w = w * d / 12;
+    }
+    return 100 * w / 80;
+}
+
 static int _slot_normalize(int amt, int pct)
 {
     int n = amt * 10 * pct / 100;
@@ -1869,7 +1912,7 @@ static int _slot_normalize(int amt, int pct)
 static int _roll_powers(obj_ptr obj, int lev)
 {
     int powers;
-    int pct = get_slot_power(obj);
+    int pct = _get_slot_weight(obj) * 100 / 80;
     int spread = _slot_normalize(6, pct);
     int max_powers = _slot_normalize(12, pct);
 
@@ -3134,48 +3177,6 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
     }
 }
 
-typedef struct {
-    cptr  name;
-    obj_p pred;
-    int   weight;
-} _reforge_weight_t, *_reforge_weight_ptr;
-static _reforge_weight_t _reforge_weight_tbl[] = {
-    {"Weapons", object_is_melee_weapon, 80},
-    {"Shields", object_is_shield, 40},
-    {"Bows", object_is_bow, 45},
-    {"Rings", object_is_ring, 80}, /* rings of power */
-    {"Amulets", object_is_amulet, 40},
-    {"Lights", object_is_lite, 30},
-    {"Body Armor", object_is_body_armour, 80},
-    {"Cloaks", object_is_cloak, 35},
-    {"Helmets", object_is_helmet, 40},
-    {"Gloves", object_is_gloves, 35},
-    {"Boots", object_is_boots, 40},
-    {NULL}
-};
-static int _get_weight(obj_ptr obj)
-{
-    int i;
-    for (i = 0; ; i++)
-    {
-        _reforge_weight_ptr row = &_reforge_weight_tbl[i];
-        if (!row->name) break;
-        if (row->pred(obj)) return row->weight;
-    }
-    return 80;
-}
-/* This might also benefit the rand-art power channels in ego.c */
-int get_slot_power(obj_ptr obj)
-{
-    int w = _get_weight(obj);
-    if (object_is_melee_weapon(obj))
-    {
-        int d = k_info[obj->k_idx].dd * k_info[obj->k_idx].ds;
-        if (d < 12)
-            w = w * d / 12;
-    }
-    return 100 * w / 80;
-}
 bool reforge_artifact(object_type *src, object_type *dest, int fame)
 {
     bool        result = FALSE;
@@ -3184,8 +3185,8 @@ bool reforge_artifact(object_type *src, object_type *dest, int fame)
     int         base_power, best_power = -10000000, power = 0, worst_power = 10000000;
     int         min_power, max_power;
     int         old_level, i;
-    int         src_weight = _get_weight(src);
-    int         dest_weight = _get_weight(dest);
+    int         src_weight = _get_slot_weight(src);
+    int         dest_weight = _get_slot_weight(dest);
 
     /* Score the Original */
     base_power = obj_value_real(src);
