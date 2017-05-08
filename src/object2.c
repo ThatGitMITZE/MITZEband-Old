@@ -1563,6 +1563,7 @@ void object_mention(object_type *o_ptr)
 
 static void dragon_resist(object_type * o_ptr)
 {
+    int ct = 0;
     do
     {
         if (o_ptr->tval == TV_SWORD && o_ptr->sval == SV_DRAGON_FANG && one_in_(3))
@@ -1571,8 +1572,9 @@ static void dragon_resist(object_type * o_ptr)
             one_dragon_ele_resistance(o_ptr);
         else
             one_high_resistance(o_ptr);
+        ct++;
     }
-    while (one_in_(2));
+    while (one_in_(1 + ct));
 }
 
 /*

@@ -1264,7 +1264,7 @@ static void _wiz_inspect_objects(int level)
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
         if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
-        if (1) _wiz_stats_log_rand_arts(level, o_ptr);
+        if (0) _wiz_stats_log_rand_arts(level, o_ptr);
 
         if (0 && o_ptr->name3)
             _wiz_stats_log_obj(level, o_ptr);
@@ -1282,6 +1282,9 @@ static void _wiz_inspect_objects(int level)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))
+            _wiz_stats_log_obj(level, o_ptr);
+
+        if (1 && object_is_dragon_armor(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
         /* Use Resources: Quaff stat potions and improve equipment (mindlessly).
