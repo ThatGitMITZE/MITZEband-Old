@@ -1895,6 +1895,8 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
 
     if (lev > 127)
         lev = 127; /* no going to heaven or hell for uber nutso craziness */
+    if (lev < 1)
+        lev = 1;   /* town? */
 
     /* Reset artifact bias */
     artifact_bias = 0;
@@ -2072,29 +2074,13 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     }
 
     powers = randint1(5) + 1;
+    powers = MAX(2, powers * get_slot_power(o_ptr) / 100);
 
-    while (one_in_(powers) || one_in_(7 * 90/MAX(MIN(127, object_level), 1)) || one_in_(10 * 70/MAX(MIN(127, object_level), 1)))
+    while (one_in_(powers) || one_in_(7 * 90/lev) || one_in_(10 * 70/lev))
         powers++;
 
     if (one_in_(WEIRD_LUCK))
         powers *= 2;
-
-    if ( (o_ptr->tval == TV_LITE && o_ptr->sval != SV_LITE_JUDGE)
-      || o_ptr->tval == TV_AMULET
-      || o_ptr->tval == TV_RING )
-    {
-        if (!one_in_(WEIRD_LUCK))
-        {
-            if (powers > 3) powers = powers*3/4;
-            if (powers > 5 && o_ptr->tval != TV_RING) powers = 5;
-
-            /* Artifacting high rings of damage used to be possible ... Perhaps it someday will again?*/
-            if (o_ptr->to_d)
-                o_ptr->to_d = randint1((o_ptr->to_d + 1)/2) + randint1(o_ptr->to_d/2);
-            if (o_ptr->to_a)
-                o_ptr->to_a = randint1((o_ptr->to_a + 1)/2) + randint1(o_ptr->to_a/2);
-        }
-    }
 
     /* Playtesting shows that FA, SI and HL are too rare ... let's boost these a bit */
     switch (o_ptr->tval)
@@ -3133,7 +3119,7 @@ typedef struct {
 } _reforge_weight_t, *_reforge_weight_ptr;
 static _reforge_weight_t _reforge_weight_tbl[] = {
     {"Weapons", object_is_melee_weapon, 80},
-    {"Shields", object_is_shield, 35},
+    {"Shields", object_is_shield, 40},
     {"Bows", object_is_bow, 45},
     {"Rings", object_is_ring, 80}, /* rings of power */
     {"Amulets", object_is_amulet, 40},
@@ -3160,6 +3146,12 @@ static int _get_weight(obj_ptr obj)
 int get_slot_power(obj_ptr obj)
 {
     int w = _get_weight(obj);
+    if (object_is_melee_weapon(obj))
+    {
+        int d = k_info[obj->k_idx].dd * k_info[obj->k_idx].ds;
+        if (d < 12)
+            w = w * d / 12;
+    }
     return 100 * w / 80;
 }
 bool reforge_artifact(object_type *src, object_type *dest, int fame)
