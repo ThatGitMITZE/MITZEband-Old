@@ -2015,6 +2015,7 @@ struct device_effect_info_s
     int      extra;
     int      flags;
     counts_t counts;
+    int      prob;
 };
 
 typedef struct device_effect_info_s  device_effect_info_t;

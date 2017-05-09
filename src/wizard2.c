@@ -1137,7 +1137,7 @@ static void _wiz_stats_log_books(int level, object_type *o_ptr, int max3, int ma
 static void _wiz_stats_log_devices(int level, object_type *o_ptr)
 {
     /*if (o_ptr->tval == TV_WAND && o_ptr->activation.type == EFFECT_ROCKET)*/
-    if (obj_is_device(o_ptr) && o_ptr->activation.difficulty >= 60)
+    if (obj_is_device(o_ptr)/* && o_ptr->activation.difficulty >= 60*/)
         _wiz_stats_log_obj(level, o_ptr);
 }
 static void _wiz_stats_log_arts(int level, object_type *o_ptr)
@@ -1216,14 +1216,12 @@ static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
 
 static void _wiz_improve_gear(obj_ptr obj)
 {
-    slot_t slot = equip_first_slot(obj);
-    if (slot)
+    slot_t slot;
+    /* hydras have many heads ... */
+    for (slot = equip_first_slot(obj); slot; slot = equip_next_slot(obj, slot))
     {
-        if (!_wiz_improve_gear_aux(obj, slot))
-        {
-            slot = equip_next_slot(obj, slot);
-            if (slot) _wiz_improve_gear_aux(obj, slot);
-        }
+        if (_wiz_improve_gear_aux(obj, slot))
+            break;
     }
 }
 
@@ -1262,9 +1260,9 @@ static void _wiz_inspect_objects(int level)
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
-        if (0) _wiz_stats_log_devices(level, o_ptr);
+        if (1) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
-        if (1) _wiz_stats_log_rand_arts(level, o_ptr);
+        if (0) _wiz_stats_log_rand_arts(level, o_ptr);
 
         if (0 && o_ptr->name3)
             _wiz_stats_log_obj(level, o_ptr);
