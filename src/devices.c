@@ -1952,8 +1952,8 @@ static _effect_info_t _effect_info[] =
     {"CURE_FEAR_POIS",  EFFECT_CURE_FEAR_POIS,      30, 100,  1, BIAS_PRIESTLY},
     {"REMOVE_CURSE",    EFFECT_REMOVE_CURSE,        30, 200,  1, BIAS_PRIESTLY},
     {"REMOVE_ALL_CURSE",EFFECT_REMOVE_ALL_CURSE,    70, 500,  4, BIAS_PRIESTLY},
-    {"CLARITY",         EFFECT_CLARITY,             20, 100, 12, BIAS_PRIESTLY | BIAS_MAGE},
-    {"GREAT_CLARITY",   EFFECT_GREAT_CLARITY,       80, 500, 64, BIAS_PRIESTLY | BIAS_MAGE},
+    {"CLARITY",         EFFECT_CLARITY,             20,  15, 12, BIAS_PRIESTLY | BIAS_MAGE},
+    {"GREAT_CLARITY",   EFFECT_GREAT_CLARITY,       80,  75, 64, BIAS_PRIESTLY | BIAS_MAGE},
 
     /* Offense: Bolts                               Lv    T   R  Bias */
     {"BOLT_MISSILE",    EFFECT_BOLT_MISSILE,         1,  10,  1, BIAS_MAGE | BIAS_ARCHER},
@@ -2489,6 +2489,10 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
 {
     int i, n;
     int tot = 0;
+
+    /* occassionally, let a weaker effect show up at higher levels */
+    if (one_in_(5))
+        level = (level + 2)/3 + randint0(level/3);
 
     for (i = 0; ; i++)
     {
@@ -3901,7 +3905,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_SPEED_HERO:
     {
-        int power = _extra(effect, 20);
+        int power = _extra(effect, effect->power/2);
         if (name) return "Heroic Speed";
         if (desc) return "It grants temporary speed and heroism.";
         if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));

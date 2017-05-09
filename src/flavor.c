@@ -2066,7 +2066,10 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         if (strlen(tmp_val2) > 0)
             strcat(tmp_val2, " ");
         
-        sprintf(buf, "A:%s", do_effect(&e, SPELL_NAME, 0));
+        if (mode & OD_COLOR_CODED)
+            sprintf(buf, "<color:B>A:%s</color>", do_effect(&e, SPELL_NAME, 0));
+        else
+            sprintf(buf, "A:%s", do_effect(&e, SPELL_NAME, 0));
         strcat(tmp_val2, buf);
     }
 

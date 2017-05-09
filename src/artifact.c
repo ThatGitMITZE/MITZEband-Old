@@ -2857,11 +2857,18 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     total_flags = new_object_cost(o_ptr, COST_REAL);
     if (cheat_peek) msg_format("Score: %d", total_flags);
 
-    if (object_is_jewelry(o_ptr))
+    if (o_ptr->tval == TV_RING)
     {
         if (total_flags <= 0) power_level = 0;
         else if (total_flags < 15000) power_level = 1;
         else if (total_flags < 60000) power_level = 2;
+        else power_level = 3;
+    }
+    else if (o_ptr->tval == TV_AMULET)
+    {
+        if (total_flags <= 0) power_level = 0;
+        else if (total_flags < 8000) power_level = 1;
+        else if (total_flags < 25000) power_level = 2;
         else power_level = 3;
     }
     else if (!object_is_weapon_ammo(o_ptr))
