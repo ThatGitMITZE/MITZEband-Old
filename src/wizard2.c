@@ -1805,6 +1805,9 @@ void do_cmd_debug(void)
         msg_format("%d steps", i);
         break;
     }
+    case '+':
+        mutate_player();
+        break;
     default:
         msg_print("That is not a valid debug command.");
         break;
