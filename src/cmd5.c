@@ -1110,6 +1110,11 @@ void do_cmd_cast(void)
                         p_ptr->spell_exp[index],
                         do_spell(use_realm, spell % 32, SPELL_NAME));
                 }
+                else if (p_ptr->spell_exp[index]/100 > cur_exp/100)
+                {
+                    msg_format("<color:B>You are getting more proficient with <color:R>%s</color>.</color>",
+                        do_spell(use_realm, spell % 32, SPELL_NAME));
+                }
             }
         }
     }
