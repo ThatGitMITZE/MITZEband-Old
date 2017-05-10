@@ -1052,10 +1052,33 @@ bool apply_disenchant(int mode)
 void mutate_player(void)
 {
     int max1, cur1, max2, cur2, ii, jj, i;
+    bool sustains[6] = {0};
 
-    /* Pick a pair of stats */
-    ii = randint0(6);
-    for (jj = ii; jj == ii; jj = randint0(6)) /* loop */;
+    /* Pick a pair of stats. Sustains give players a chance to protect
+     * key stats in the early game (e.g. mages are forced to hyper focus
+     * stat boosts on Int and swapping 18/50 with 12 might as well just
+     * kill the player). Nexus is common around DL30 while stat potions
+     * are not.*/
+    sustains[A_STR] = p_ptr->sustain_str;
+    sustains[A_INT] = p_ptr->sustain_int;
+    sustains[A_WIS] = p_ptr->sustain_wis;
+    sustains[A_DEX] = p_ptr->sustain_dex;
+    sustains[A_CON] = p_ptr->sustain_con;
+    sustains[A_CHR] = p_ptr->sustain_chr;
+
+    for (;;)
+    {
+        ii = randint0(6);
+        if (!sustains[ii]) break;
+        if (one_in_(6)) break;
+    }
+    for (;;)
+    {
+        jj = randint0(6);
+        if (jj == ii) continue;
+        if (!sustains[jj]) break;
+        if (one_in_(6)) break;
+    }
 
     max1 = p_ptr->stat_max[ii];
     cur1 = p_ptr->stat_cur[ii];
@@ -1073,6 +1096,11 @@ void mutate_player(void)
         if(p_ptr->stat_cur[i] > p_ptr->stat_max_max[i]) p_ptr->stat_cur[i] = p_ptr->stat_max_max[i];
     }
 
+    if (p_ptr->wizard)
+    {
+        msg_format("<color:v>Swapped <color:R>%s</color> with <color:R>%s</color>.</color>",
+            stat_abbrev_true[ii], stat_abbrev_true[jj]);
+    }
     p_ptr->update |= (PU_BONUS);
 }
 
