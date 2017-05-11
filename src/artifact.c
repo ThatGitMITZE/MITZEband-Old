@@ -2786,7 +2786,10 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
         int lower1 = 20, lower2 = 10;
 
         if (o_ptr->tval == TV_RING || o_ptr->tval == TV_AMULET)
-            lower1 = 25; lower2 = 20;
+        {
+            lower1 = 25;
+            lower2 = 20;
+        }
 
         while ((o_ptr->to_d+o_ptr->to_h) > lower1)
         {

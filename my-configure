@@ -4,6 +4,8 @@ if [ "$1" == "mingw" ]; then
         --host=i586-mingw32msvc --with-no-install
 elif [ "$1" == "gcc" ]; then
     ./configure --enable-sdl --with-no-install
+    #./configure SANITIZE_FLAGS="-fsanitize=undefined -fsanitize=address" \
+    #    CC=gcc-6 --enable-sdl --with-no-install
 elif [ "$1" == "clang" ]; then
     # Note: Never pass sanitizer flags to CFLAGS as sanitizing configure causes it to fail.
     # Instead, configure will append SANITIZE_FLAGS to CFLAGS and LDFLAGS once it has finished
