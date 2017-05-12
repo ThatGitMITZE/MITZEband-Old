@@ -1260,9 +1260,12 @@ static void _wiz_inspect_objects(int level)
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
-        if (1) _wiz_stats_log_devices(level, o_ptr);
+        if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
         if (0) _wiz_stats_log_rand_arts(level, o_ptr);
+
+        if (1 && object_is_(o_ptr, TV_BOW, SV_HARP))
+            _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name3)
             _wiz_stats_log_obj(level, o_ptr);

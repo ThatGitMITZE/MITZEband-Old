@@ -234,7 +234,7 @@ I:19:50:4
 W:80:250:100:100000
 P:0:x0.00:0:0:0
 F:SPEED | STEALTH | RES_SHARDS |
-F:INSTA_ART | XTRA_POWER | XTRA_H_RES | NO_ENCHANT
+F:INSTA_ART | NO_ENCHANT
 E:ROCKET:60:15:300
 E:I'll fire CRIMSON! SEKKAKUDAKARA!
 
@@ -2591,7 +2591,7 @@ W:80:5:40:200000
 P:0:x0.00:0:0:0
 F:STR | INT | CHR |
 F:SUST_STR | SUST_INT | SUST_CHR | FREE_ACT | HOLD_LIFE |
-F:RES_DARK | RES_NETHER | RES_BLIND
+F:RES_DARK | RES_NETHER | RES_BLIND | FIXED_ART
 E:RESTORE_MANA:50:777
 E:Your harps plays a restoring melody...
 D:Maglor, son of Feanor and Nerdanel, was the greatest poet and bard of the Noldor.
@@ -2603,7 +2603,7 @@ W:70:5:40:200000
 P:0:x0.00:0:0:0
 F:WIS | CON | CHR |
 F:SUST_WIS | SUST_CON | SUST_CHR | SEE_INVIS | REFLECT |
-F:RES_FIRE | RES_ELEC | RES_LITE | RES_POIS
+F:RES_FIRE | RES_ELEC | RES_LITE | RES_POIS | FIXED_ART
 E:HEAL_CURING_HERO:50:300:777
 E:Your harp plays a restoring melody...
 D:Daeron is mentioned as the greatest minstrel of all the Children of Iluvatar,
@@ -2888,7 +2888,7 @@ N:273:'Railgun'
 I:19:51:2
 W:85:150:100:80000
 P:0:x0.00:0:0:0
-F:DEX | SPEED | SUST_DEX | IM_FIRE | RES_LITE | NO_ENCHANT
+F:IM_FIRE | RES_LITE | NO_ENCHANT
 F:INSTA_ART
 E:BEAM_LITE:50:15:300
 E:Your gun glows with blinding light...

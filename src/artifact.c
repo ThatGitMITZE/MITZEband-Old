@@ -3309,18 +3309,6 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
         forge1.to_a = MAX(10, forge1.to_a);
     }
     base_power = obj_value_real(&forge1);
-    /* Harps and Guns seem to replace too strongly. The best I can figure, the
-     * activation costs are the problem (e.g. Restore Mana is 20k, Angelic Healing is
-     * 32k.) These costs make sense, but create_artifact will almost never replace them
-     * with an equivalent activation. Instead, you get a ridiculous amount of resists
-     * and stats/speed.
-     * XXX: Crimson's activation is 15k, Railgun's 12k. */
-    switch (a_idx)
-    {
-    case ART_CRIMSON: case ART_RAILGUN: case ART_DAERON: case ART_MAGLOR:
-        base_power /= 2;
-        break;
-    }
     if (!obj_is_ammo(&forge1) && base_power < 7500)
         base_power = 7500;
 

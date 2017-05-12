@@ -4043,11 +4043,13 @@ static void do_cmd_knowledge_artifacts(void)
 
     if (random_artifacts)
     {
+        /* FIXED_ART ... 
         if (random_artifact_pct >= 100)
         {
             cmsg_print(TERM_L_RED, "You won't find any fixed artifacts this game.");
             return;
         }
+        */
     }
     else if (no_artifacts)
     {
