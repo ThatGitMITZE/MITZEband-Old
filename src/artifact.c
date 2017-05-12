@@ -1865,9 +1865,9 @@ typedef struct {
 } _slot_weight_t, *_slot_weight_ptr;
 static _slot_weight_t _slot_weight_tbl[] = {
     {"Weapons", object_is_melee_weapon, 80},
-    {"Shields", object_is_shield, 40},
+    {"Shields", object_is_shield, 45},
     {"Bows", object_is_bow, 45},
-    {"Rings", object_is_ring, 80}, /* rings of power */
+    {"Rings", object_is_ring, 40},
     {"Amulets", object_is_amulet, 40},
     {"Lights", object_is_lite, 30},
     {"Body Armor", object_is_body_armour, 80},
