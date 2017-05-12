@@ -3964,7 +3964,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Heroic Song";
         if (desc) return "It grants temporary speed, blessing and heroism.";
         if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
-        if (value) return format("%d", 7500 + 50*power);
+        if (value) return format("%d", 5000 + 30*power);
         if (color) return format("%d", TERM_L_RED);
         if (cast)
         {
@@ -3996,7 +3996,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Enlarge Weapon";
         if (desc) return "It temporarily increases the damage dice of your melee weapon.";
         if (info) return format("Dur %d", _BOOST(power));
-        if (value) return format("%d", 5000 + 500*power);
+        if (value) return format("%d", 2000 + 250*power);
         if (color) return format("%d", TERM_ORANGE);
         if (cast)
         {
@@ -4041,7 +4041,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Globe of Invulnerability";
         if (desc) return "It generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.";
         if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
-        if (value) return format("%d", 15000 + 1000*power);
+        if (value) return format("%d", 10000 + 500*power);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {
@@ -4130,7 +4130,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_SUMMON_DAWN:
         if (name) return "Summon Legion of the Dawn";
         if (desc) return "It attempts to summon Warriors of the Dawn for assistance.";
-        if (value) return format("%d", 5000);
+        if (value) return format("%d", 2500);
         if (cast)
         {
             if (summon_specific(-1, py, px, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET)))
@@ -4438,7 +4438,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return (amt < 100) ? "Cure Wounds" : "Healing";
         if (desc) return "It heals your hitpoints and cures cuts.";
         if (info) return info_heal(0, 0, _BOOST(amt));
-        if (value) return format("%d", 30*amt);
+        if (value) return format("%d", 15*amt);
         if (color) return format("%d", TERM_YELLOW);
         if (cast)
         {
@@ -4489,7 +4489,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             if (desc) return "It heals your hitpoints and cures your ailments.";
         }
         if (info) return info_heal(0, 0, _BOOST(amt));
-        if (value) return format("%d", 40*amt);
+        if (value) return format("%d", 500 + 15*amt);
         if (color) return format("%d", TERM_YELLOW);
         if (cast)
         {
@@ -4518,7 +4518,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Angelic Healing";
         if (desc) return "It heals your hitpoints, cures what ails you, and makes you heroic.";
         if (info) return info_heal(0, 0, _BOOST(amt));
-        if (value) return format("%d", 1000 + 40*amt);
+        if (value) return format("%d", 750 + 15*amt);
         if (color) return format("%d", TERM_YELLOW);
         if (cast)
         {
@@ -4536,7 +4536,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_RESTORE_MANA:
         if (name) return "Restore Mana";
         if (desc) return "It completely restores your mana. It also partially recharges any devices in your pack.";
-        if (value) return format("%d", 20000);
+        if (value) return format("%d", 10000);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {
@@ -4617,7 +4617,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Clarity";
         if (desc) return "It clears your mind, restoring some mana.";
         if (info) return format("%dsp", _BOOST(amt));
-        if (value) return format("%d", 100*amt);
+        if (value) return format("%d", 1000 + 50*amt);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {
@@ -4637,7 +4637,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Great Clarity";
         if (desc) return "It clears your mind, restoring some mana.";
         if (info) return format("%dsp", _BOOST(amt));
-        if (value) return format("%d", 100*amt);
+        if (value) return format("%d", 1000 + 50*amt);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {

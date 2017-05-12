@@ -899,7 +899,7 @@ static cptr k_info_gen_flags[] =
     "AWARE",
     "TOWN",
     "FIXED_ART",
-    "XXX",
+    "FIXED_ACT",
     "XXX",
     "XXX",
     "XXX",

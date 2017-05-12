@@ -225,10 +225,10 @@ static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_flag_and_score(flgs, OF_RES_FEAR, 1000, &count);
 
     count = 0; /* Otherwise, immunities *and* lots of resists are absurd :) */
-    cost += _check_flag_and_score(flgs, OF_IM_ACID,  25000, &count);
-    cost += _check_flag_and_score(flgs, OF_IM_ELEC,  30000, &count);
-    cost += _check_flag_and_score(flgs, OF_IM_FIRE,  30000, &count);
-    cost += _check_flag_and_score(flgs, OF_IM_COLD,  35000, &count);
+    cost += _check_flag_and_score(flgs, OF_IM_ACID,  12000, &count);
+    cost += _check_flag_and_score(flgs, OF_IM_ELEC,  15000, &count);
+    cost += _check_flag_and_score(flgs, OF_IM_FIRE,  13000, &count);
+    cost += _check_flag_and_score(flgs, OF_IM_COLD,  14000, &count);
 
     count = 0;
     cost -= _check_flag_and_score(flgs, OF_VULN_ACID, 5000, &count);

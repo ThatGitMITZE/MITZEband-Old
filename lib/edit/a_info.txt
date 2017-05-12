@@ -222,7 +222,7 @@ N:15:Palantir of Westernesse
 I:39:8:3
 W:60:50:10:60000
 P:0:1d1:0:0:0
-F:WIS | CHR | TELEPATHY | INSTA_ART | FULL_NAME
+F:WIS | CHR | TELEPATHY | INSTA_ART | FULL_NAME | FIXED_ACT
 E:LIST_UNIQUES:60:200
 E:Some strange places show up in your mind, and you see ...
 D:A shining white ball of unbreakable crystal, the ancient palantiri,
@@ -234,7 +234,7 @@ I:19:50:4
 W:80:250:100:100000
 P:0:x0.00:0:0:0
 F:SPEED | STEALTH | RES_SHARDS |
-F:INSTA_ART | NO_ENCHANT
+F:INSTA_ART | NO_ENCHANT | FIXED_ACT
 E:ROCKET:60:15:300
 E:I'll fire CRIMSON! SEKKAKUDAKARA!
 
@@ -2889,7 +2889,7 @@ I:19:51:2
 W:85:150:100:80000
 P:0:x0.00:0:0:0
 F:IM_FIRE | RES_LITE | NO_ENCHANT
-F:INSTA_ART
+F:INSTA_ART | FIXED_ACT
 E:BEAM_LITE:50:15:300
 E:Your gun glows with blinding light...
 
