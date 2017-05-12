@@ -1500,12 +1500,12 @@ void monster_death(int m_idx, bool drop_item)
             break;
 
         case MON_BRAND:
-            if (!one_in_(3))
+            /*if (!one_in_(3))
             {
                 a_idx = ART_BRAND;
                 chance = 25;
             }
-            else
+            else*/
             {
                 a_idx = ART_WEREWINDLE;
                 chance = 33;
