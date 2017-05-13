@@ -2492,7 +2492,8 @@ static bool kind_is_tailored(int k_idx)
     case TV_RAGE_BOOK:
     case TV_BURGLARY_BOOK:
         return check_book_realm(k_ptr->tval, k_ptr->sval)
-            && k_ptr->sval >= SV_BOOK_MIN_GOOD;
+            && k_ptr->sval >= SV_BOOK_MIN_GOOD
+            && k_ptr->counts.found < 3;
 
     case TV_WAND:
         return devicemaster_is_(DEVICEMASTER_WANDS)
@@ -2580,8 +2581,8 @@ bool kind_is_great(int k_idx)
         case TV_RAGE_BOOK:
         case TV_BURGLARY_BOOK:
         {
-            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return TRUE; /* Third Spellbooks: I want ?Acquirement to grant these! */
-            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return TRUE;   /* Fourth Spellbooks */
+            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < 2; /* Third Spellbooks: I want ?Acquirement to grant these! */
+            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < 2;   /* Fourth Spellbooks */
             return (FALSE);
         }
         case TV_POTION:
@@ -2678,8 +2679,8 @@ bool kind_is_good(int k_idx)
         case TV_RAGE_BOOK:
         case TV_BURGLARY_BOOK:
         {
-            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return TRUE; /* Third Spellbooks */
-            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return TRUE;   /* Fourth Spellbooks */
+            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < 2; /* Third Spellbooks */
+            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < 2;   /* Fourth Spellbooks */
             return (FALSE);
         }
         case TV_POTION:
@@ -3348,6 +3349,60 @@ static bool _kind_theme_junk(int k_idx) {
     return FALSE;
 
 }
+
+static bool _needs_book(void)
+{
+    int tval, k_idx;
+    if (p_ptr->pclass == CLASS_SORCERER)
+    {
+        return TRUE;
+    }
+    else if (p_ptr->pclass == CLASS_RED_MAGE)
+    {
+        return FALSE;
+    }
+    else if (p_ptr->pclass == CLASS_GRAY_MAGE)
+    {
+        for (tval = TV_BOOK_BEGIN; tval < TV_BOOK_END; tval++)
+        {
+            if (!gray_mage_is_allowed_book(tval, 0)) continue;
+            k_idx = lookup_kind(tval, 2);
+            if (k_info[k_idx].counts.found > 2) continue;
+            k_idx = lookup_kind(tval, 3);
+            if (k_info[k_idx].counts.found > 1) continue;
+            return TRUE;
+        }
+        return FALSE;
+    }
+    else if (p_ptr->pclass == CLASS_SKILLMASTER)
+    {
+        for (tval = TV_BOOK_BEGIN; tval < TV_BOOK_END; tval++)
+        {
+            if (!skillmaster_is_allowed_book(tval, 0)) continue;
+            k_idx = lookup_kind(tval, 2);
+            if (k_info[k_idx].counts.found > 2) continue;
+            k_idx = lookup_kind(tval, 3);
+            if (k_info[k_idx].counts.found > 1) continue;
+            return TRUE;
+        }
+        return FALSE;
+    }
+    if (p_ptr->realm1)
+    {
+        k_idx = lookup_kind(REALM1_BOOK, 2);
+        if (k_info[k_idx].counts.found < 3) return TRUE;
+        k_idx = lookup_kind(REALM1_BOOK, 3);
+        if (k_info[k_idx].counts.found < 2) return TRUE;
+    }
+    if (p_ptr->realm2)
+    {
+        k_idx = lookup_kind(REALM2_BOOK, 2);
+        if (k_info[k_idx].counts.found < 3) return TRUE;
+        k_idx = lookup_kind(REALM2_BOOK, 3);
+        if (k_info[k_idx].counts.found < 2) return TRUE;
+    }
+    return FALSE;
+}
 /****************** End of Themed Drops ***************************************/
 
 static _kind_p _choose_obj_kind(u32b mode)
@@ -3507,7 +3562,7 @@ static _kind_p _choose_obj_kind(u32b mode)
         }
         if (!_kind_hook1)
         {
-            if (is_magic(p_ptr->realm1) && one_in_(10))
+            if (_needs_book() && one_in_(10))
                 _kind_hook1 = kind_is_book;
             else if (_is_device_class() && one_in_(7))
                 _kind_hook1 = kind_is_wand_rod_staff;

@@ -2643,6 +2643,7 @@ static void calc_spells(void)
         /* Efficiency -- all done */
         if (!p_ptr->spell_learned1 && !p_ptr->spell_learned2) break;
         if (p_ptr->pclass == CLASS_RAGE_MAGE) break;
+        if (p_ptr->pclass == CLASS_GRAY_MAGE) break;
 
         /* Access the spell */
         j = p_ptr->spell_order[i];
@@ -2714,6 +2715,7 @@ static void calc_spells(void)
         if (p_ptr->new_spells >= 0) break;
 
         if (p_ptr->pclass == CLASS_RAGE_MAGE) break;
+        if (p_ptr->pclass == CLASS_GRAY_MAGE) break;
 
         /* Efficiency -- all done */
         if (!p_ptr->spell_learned1 && !p_ptr->spell_learned2) break;
@@ -2770,6 +2772,7 @@ static void calc_spells(void)
         /* None left to remember */
         if (p_ptr->new_spells <= 0) break;
         if (p_ptr->pclass == CLASS_RAGE_MAGE) break;
+        if (p_ptr->pclass == CLASS_GRAY_MAGE) break;
 
         /* Efficiency -- all done */
         if (!p_ptr->spell_forgotten1 && !p_ptr->spell_forgotten2) break;
@@ -2837,7 +2840,7 @@ static void calc_spells(void)
 
     k = 0;
 
-    if (p_ptr->realm2 == REALM_NONE)
+    if (p_ptr->realm2 == REALM_NONE && p_ptr->realm1)
     {
         /* Count spells that can be learned */
         for (j = 0; j < 32; j++)
