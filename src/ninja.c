@@ -533,6 +533,9 @@ static void _calc_bonuses(void)
         p_ptr->skills.stl += p_ptr->lev/10;
         if (p_ptr->lev >= 25)
             p_ptr->free_act = TRUE;
+        /* Ninjas are not archers, and have relatively poor thb skills.
+         * However, they excel at throwing (tht)! */
+        p_ptr->skill_tht += 30 + p_ptr->lev;
     }
     if (!equip_find_obj(TV_SHIELD, SV_ANY))
     {
@@ -612,8 +615,8 @@ class_t *ninja_get_class(void)
     /* static info never changes */
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 45,  24,  36,   8,  48,  32,  70,  66 };
-    skills_t xs = { 15,  10,  10,   0,   0,   0,  25,  18 };
+    skills_t bs = { 45,  24,  36,   8,  48,  32,  70,  35 };
+    skills_t xs = { 15,  10,  10,   0,   0,   0,  25,  11 };
 
         me.name = "Ninja";
         me.desc = "A Ninja is a fearful assassin lurking in darkness. He or she can "
