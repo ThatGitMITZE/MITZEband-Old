@@ -2219,6 +2219,9 @@ void obj_create_weapon(object_type *o_ptr, int level, int power, int mode)
             _ego_create_harp(o_ptr, level);
         else
             _ego_create_bow(o_ptr, level);
+        /* rescale damage ... heavy crossbows shoot 0.75 while slings shoot 1.40x
+         * damage on the bow should reflect this! */
+        o_ptr->to_d = o_ptr->to_d * bow_energy(o_ptr->sval) / 7150;
         break;
 
     case TV_BOLT:
