@@ -2866,7 +2866,7 @@ static void process_monster(int m_idx)
          * player? This would make them more interesting/useful
          * (e.g. Gandalf). The random stuff just looks silly
          * when there are no enemies around. */
-        if (!get_enemy_dir(m_idx, mm) && !get_moves(m_idx, mm))
+        if (!get_enemy_dir(m_idx, mm)/* && !get_moves(m_idx, mm) */)
             mm[0] = mm[1] = mm[2] = mm[3] = 5;
     }
     /* Normal movement */
