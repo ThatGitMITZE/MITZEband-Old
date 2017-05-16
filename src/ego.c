@@ -1161,7 +1161,8 @@ static void _create_amulet_aux(object_type *o_ptr, int level, int power, int mod
             case 5:
                 if (abs(power) >= 2 && one_in_(2) && level >= 30)
                 {
-                    do { one_high_resistance(o_ptr); } while (one_in_(3));
+                    int ct = 0;
+                    do { one_high_resistance(o_ptr); powers--; ct++; } while (one_in_(2 + ct));
                     break;
                 }
             default:
