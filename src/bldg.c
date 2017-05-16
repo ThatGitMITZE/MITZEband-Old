@@ -2658,6 +2658,12 @@ static bool _reforge_artifact(void)
         return FALSE;
     }
 
+    if (object_is_ammo(dest))
+    {
+        msg_print("I'm a weaponsmith not a fletcher. Perhaps you should check elsewhere?");
+        return FALSE;
+    }
+
     if (have_flag(dest->flags, OF_NO_REMOVE))
     {
         msg_print("You cannot be reforged!");
