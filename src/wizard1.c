@@ -882,7 +882,8 @@ static void _display_res(doc_ptr doc, int res)
 }
 static void _display_dam(doc_ptr doc, int res, int amt)
 {
-    int dam = amt - amt * res_pct_known(res) / 100;
+    int pct = (res == RES_INVALID) ? 0 : res_pct_known(res);
+    int dam = amt - amt * pct / 100;
     int ratio = dam * 100 / p_ptr->chp;
     char color;
     if (ratio > 100) color = 'v';
@@ -920,7 +921,9 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         mon_race_ptr r = vec_get(v, i);
         int          hp = 0;
         int          melee = 0;
+        int          unresist = 0;
         int          dam[RES_MAX] = {0};
+        bool         powerful = BOOL(r->flags2 & RF2_POWERFUL);
 
         if (r->flags1 & RF1_FORCE_MAXHP)
             hp = r->hdice * r->hside;
@@ -972,7 +975,8 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
             }
             melee += dam;
         }
-        /* Damage Logic Duplicated from mspells1.c */
+        /* Damage Logic Duplicated from mspells1.c ... and this is incomplete
+         * pending a monster spell re-write. */
         if (r->flags4 & RF4_ROCKET)
             dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 4, 600));
         if (r->flags4 & RF4_BR_ACID)
@@ -1018,18 +1022,49 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
             dam[RES_CHAOS] = MAX(dam[RES_CHAOS], d);
         }
 
+        if (r->flags4 & RF4_THROW)
+            unresist = MAX(unresist, r->level*3);
+        if (r->flags4 & RF4_BR_STORM)
+            unresist = MAX(unresist, MIN(hp / 5, 300));
+        if (r->flags4 & RF4_BR_INER)
+            unresist = MAX(unresist, MIN(hp / 6, 200));
+        if (r->flags4 & RF4_BR_GRAV)
+            unresist = MAX(unresist, MIN(hp / 3, 200));
+        if (r->flags4 & RF4_BR_PLAS)
+            unresist = MAX(unresist, MIN(hp / 6, 200));
+        if (r->flags4 & RF4_BR_WALL)
+            unresist = MAX(unresist, MIN(hp / 3, 200));
+        if (r->flags4 & RF4_BR_MANA)
+            unresist = MAX(unresist, MIN(hp / 3, 250));
+        if (r->flags4 & RF4_BR_DISI)
+            unresist = MAX(unresist, MIN(hp / 6, 150));
+
+        if (r->flags5 & RF5_BA_WATE)
+        {
+            int d = powerful ? r->level * 3 : r->level * 2;
+            unresist = MAX(unresist, (d + 1)/2 + 50);
+        }
+        if (r->flags5 & RF5_BO_MANA)
+        {
+            int d = r->level * 7 / 2;
+            unresist = MAX(unresist, (d + 1)/2 + 50);
+        }
+        if (r->flags5 & RF5_BA_MANA)
+            unresist = MAX(unresist, r->level*4 + 105);
+
         if (i%25 == 0)
         {
             doc_printf(doc, "\n<tab:21><color:B>%3d %5d      </color>", p_ptr->lev, p_ptr->chp);
             for (j = RES_ACID; j <= RES_DISEN; j++)
                 _display_res(doc, j);
-            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP Melee  Ac  El  Fi  Co  Po  Li  Dk  Cf  Nt  Nx  So  Sh  Ca  Di</color>\n", "Name");
+            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP Melee  Ac  El  Fi  Co  Po  Li  Dk  Cf  Nt  Nx  So  Sh  Ca  Di  Un</color>\n", "Name");
         }
 
         doc_printf(doc, "%-20.20s %3d %5d", r_name + r->name, r->level, hp);
         _display_melee_dam(doc, melee);
         for (j = RES_ACID; j <= RES_DISEN; j++)
             _display_dam(doc, j, dam[j]);
+        _display_dam(doc, RES_INVALID, unresist);
         doc_newline(doc);
     }
 }
