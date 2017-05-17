@@ -886,7 +886,8 @@ static void _create_ring_aux(object_type *o_ptr, int level, int power, int mode)
                 one_high_resistance(o_ptr);
                 if (abs(power) >= 2)
                 {
-                    do { one_high_resistance(o_ptr); --power; } while(one_in_(3));
+                    int ct = 0;
+                    do { one_high_resistance(o_ptr); --power; ct++; } while(one_in_(2 + ct));
                 }
                 break;
             case 2:
