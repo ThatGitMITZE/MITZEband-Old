@@ -896,13 +896,30 @@ static void _display_dam(doc_ptr doc, int res, int amt)
     doc_printf(doc, " <color:%c>%3d</color>", color, dam);
 }
 
+static void _display_melee_dam(doc_ptr doc, int dam)
+{
+    int ratio = dam * 100 / p_ptr->chp;
+    char color;
+    if (ratio > 50) color = 'v';
+    else if (ratio > 40) color = 'r';
+    else if (ratio > 30) color = 'R';
+    else if (ratio > 20) color = 'o';
+    else if (ratio > 10) color = 'y';
+    else if (ratio >  5) color = 'U';
+    else if (dam == 0) color = 'D';
+    else color = 'w';
+    doc_printf(doc, " <color:%c>%5d</color>", color, dam);
+}
+
 static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
 {
     int i, j;
+    int ac = p_ptr->ac + p_ptr->to_a;
     for (i = 0; i < vec_length(v); i++)
     {
         mon_race_ptr r = vec_get(v, i);
         int          hp = 0;
+        int          melee = 0;
         int          dam[RES_MAX] = {0};
 
         if (r->flags1 & RF1_FORCE_MAXHP)
@@ -910,6 +927,51 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         else
             hp = r->hdice * (1 + r->hside)/2;
 
+        for (j = 0; j < 4; j++)
+        {
+            int dam;
+            if (!r->blow[j].effect) continue;
+            if (r->blow[j].method == RBM_EXPLODE) continue;
+            if (r->blow[j].method == RBM_SHOOT) continue;
+
+            dam = r->blow[j].d_dice * (r->blow[j].d_side + 1) / 2;
+            switch (r->blow[j].effect)
+            {
+            case RBE_HURT: case RBE_SHATTER:
+                dam -= dam * (ac < 150 ? ac : 150) / 250;
+                break;
+            case RBE_SUPERHURT: {
+                int f1 = r->level * 2 + 300;
+                int f2 = f1 - (ac + 200);
+                int p1 = f2 * 100 / f1;
+                int p2 = 100 - p1;
+                int d1 = dam - dam * (ac < 200 ? ac : 200) / 333;
+                int d2 = dam - dam * (ac < 150 ? ac : 150) / 250;
+
+                d1 *= 2;
+                dam = p1 * d1 / 100 + p2 * d2 / 100;
+                break; }
+            case RBE_DR_MANA:
+                dam = 0;
+                break;
+            case RBE_ACID:
+                dam -= dam * res_pct_known(RES_ACID) / 100;
+                break;
+            case RBE_ELEC:
+                dam -= dam * res_pct_known(RES_ELEC) / 100;
+                break;
+            case RBE_FIRE:
+                dam -= dam * res_pct_known(RES_FIRE) / 100;
+                break;
+            case RBE_COLD:
+                dam -= dam * res_pct_known(RES_COLD) / 100;
+                break;
+            case RBE_POISON:
+                dam -= dam * res_pct_known(RES_POIS) / 100;
+                break;
+            }
+            melee += dam;
+        }
         /* Damage Logic Duplicated from mspells1.c */
         if (r->flags4 & RF4_ROCKET)
             dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 4, 600));
@@ -958,13 +1020,14 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
 
         if (i%25 == 0)
         {
-            doc_printf(doc, "\n<tab:21><color:B>%3d %5d</color>", p_ptr->lev, p_ptr->chp);
+            doc_printf(doc, "\n<tab:21><color:B>%3d %5d      </color>", p_ptr->lev, p_ptr->chp);
             for (j = RES_ACID; j <= RES_DISEN; j++)
                 _display_res(doc, j);
-            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP  Ac  El  Fi  Co  Po  Li  Dk  Cf  Nt  Nx  So  Sh  Ca  Di</color>\n", "Name");
+            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP Melee  Ac  El  Fi  Co  Po  Li  Dk  Cf  Nt  Nx  So  Sh  Ca  Di</color>\n", "Name");
         }
 
         doc_printf(doc, "%-20.20s %3d %5d", r_name + r->name, r->level, hp);
+        _display_melee_dam(doc, melee);
         for (j = RES_ACID; j <= RES_DISEN; j++)
             _display_dam(doc, j, dam[j]);
         doc_newline(doc);
@@ -982,6 +1045,7 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
 
 static bool _mon_dam_p(mon_race_ptr r)
 {
+    return TRUE;
     if (r->flags4 & RF4_DAM_MASK) return TRUE;
     if (r->flags5 & RF5_DAM_MASK) return TRUE;
     return FALSE;
