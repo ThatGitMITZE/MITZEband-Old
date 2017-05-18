@@ -1169,6 +1169,7 @@ static void _wiz_kill_monsters(int level)
         if (0 && r_ptr->level > level) continue;
         if (r_ptr->id == MON_DAWN) continue; /* inflates pct of humans */
 
+        r_ptr->r_sights++;
         _stats_note_monster_level(level, r_ptr->level);
         mon_take_hit(i, m_ptr->hp + 1, &fear, NULL);
         if (slot) rune_sword_kill(equip_obj(slot), r_ptr);
@@ -1223,6 +1224,57 @@ static void _wiz_improve_gear(obj_ptr obj)
     {
         if (_wiz_improve_gear_aux(obj, slot))
             break;
+    }
+}
+
+static obj_ptr _pack_obj = NULL;
+static bool _improve_pack_p(obj_ptr obj)
+{
+    assert(_pack_obj);
+    return obj->tval == _pack_obj->tval && obj->sval == _pack_obj->sval;
+}
+
+static void _wiz_improve_pack(obj_ptr obj)
+{
+    if (obj->tval == TV_POTION || obj->tval == TV_SCROLL)
+    {
+        int ct;
+        _pack_obj = obj;
+        ct = pack_count(_improve_pack_p);
+        if (ct + obj->number < 99)
+            pack_carry_aux(obj);
+    }
+    else if (obj_is_device(obj))
+    {
+        int slot = pack_find_device(obj->activation.type);
+
+        if (!slot)
+            pack_carry_aux(obj);
+        else
+        {
+            obj_ptr old = pack_obj(slot);
+            int score, old_score;
+            score = obj_value_real(obj);
+            old_score = obj_value_real(old);
+            if (score > old_score)
+            {
+                old->marked |= OM_COUNTED;
+                pack_drop(old);
+                pack_carry_aux(obj);
+            }
+        }
+    }
+    else if (obj_is_readable_book(obj))
+    {
+        int ct;
+        _pack_obj = obj;
+        ct = pack_count(_improve_pack_p);
+        if (ct < 2)
+            pack_carry_aux(obj);
+    }
+    else
+    {
+        pack_carry_aux(obj);
     }
 }
 
@@ -1292,15 +1344,24 @@ static void _wiz_inspect_objects(int level)
          * gain powers that way. */
         if (_is_stat_potion(o_ptr))
             do_device(o_ptr, SPELL_CAST, 0);
-
         if (1 && !object_is_nameless(o_ptr))
             _wiz_improve_gear(o_ptr);
 
-        if (race_ptr->destroy_object)
-            race_ptr->destroy_object(o_ptr);
+        if (o_ptr->number)
+        {
+            int auto_pick_idx = is_autopick(o_ptr);
+            if (auto_pick_idx >= 0 && autopick_list[auto_pick_idx].action & DO_AUTOPICK)
+                _wiz_improve_pack(o_ptr);
+        }
 
-        if (class_ptr->destroy_object)
-            class_ptr->destroy_object(o_ptr);
+        if (o_ptr->number)
+        {
+            if (race_ptr->destroy_object)
+                race_ptr->destroy_object(o_ptr);
+
+            if (class_ptr->destroy_object)
+                class_ptr->destroy_object(o_ptr);
+        }
     }
     pack_overflow();
     if (p_ptr->cursed) remove_all_curse();

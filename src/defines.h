@@ -3508,7 +3508,7 @@ enum obj_flags_e {
 #define RF9_XXX29               0x01000000
 #define RF9_XXX30               0x20000000
 #define RF9_XXX31               0x40000000
-#define RF9_XXX32               0x80000000
+#define RF9_DEPRECATED          0x80000000
 
 /* Themed drops ... r_info[].drop_theme
    Note: If you reorder these, you'll need to touch r_info.txt as well.

@@ -606,7 +606,7 @@ static cptr r_info_flags9[] =
     "XXX29",
     "XXX30",
     "XXX31",
-    "XXX32",
+    "DEPRECATED",
 };
 
 static cptr r_drop_themes[R_DROP_MAX] =

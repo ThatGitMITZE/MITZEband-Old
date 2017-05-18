@@ -3323,7 +3323,10 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
         object_prep(&forge2, forge1.k_idx);
         create_artifact(&forge2, CREATE_ART_GOOD);
         if (a_ptr->gen_flags & OFG_FIXED_ACT)
+        {
             forge2.activation = a_ptr->activation;
+            add_flag(forge2.flags, OF_ACTIVATE); /* for object lore */
+        }
         power = obj_value_real(&forge2);
 
         if (power > best_power)

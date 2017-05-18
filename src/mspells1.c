@@ -1938,7 +1938,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
             disturb(1, 0);
             if (blind) msg_format("%^s shoots something.", m_name);
             else msg_format("%^s fires a rocket.", m_name);
-            dam = MIN(m_ptr->hp / 4, 600);
+            dam = MIN(m_ptr->hp / 6, 600);
             breath(y, x, m_idx, GF_ROCKET,
                 dam, 2, FALSE, MS_ROCKET, learnable);
             update_smart_learn(m_idx, DRS_SHARD);

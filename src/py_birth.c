@@ -2585,9 +2585,8 @@ static void _reduce_uniques(void)
         monster_race *r_ptr = &r_info[i];
         int           bucket;
 
-        assert (!(r_ptr->flagsx & RFX_SUPPRESS));
-
         if (!r_ptr->name) continue;
+        if (r_ptr->flagsx & RFX_SUPPRESS) continue;  /* RF9_DEPRECATED */
         if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
         if (r_ptr->flags1 & RF1_FIXED_UNIQUE) continue;
         if (r_ptr->flagsx & RFX_WANTED) continue;
@@ -2661,6 +2660,18 @@ static void _birth_finalize(void)
     towns_init();
     home_init();
     virtue_init();
+
+    /* Suppress any deprecated monsters for this new game. Upgrading an existing
+     * game should continue to generate deprecated monsters, since they may be wanted
+     * or questors. We do this before choosing questors and bounty uniques, of course. */
+    for (i = 0; i < max_r_idx; i++)
+    {
+        monster_race *r_ptr = &r_info[i];
+
+        if (r_ptr->flags9 & RF9_DEPRECATED)
+            r_ptr->flagsx |= RFX_SUPPRESS;
+    }
+
     quests_on_birth();
     determine_bounty_uniques(); /* go before reducing uniques for speed ... (e.g. 10% uniques) */
     _reduce_uniques(); /* quests go first, rolling up random quest uniques without restriction */
