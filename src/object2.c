@@ -2489,11 +2489,14 @@ static bool kind_is_tailored(int k_idx)
     case TV_MUSIC_BOOK:
     case TV_HISSATSU_BOOK:
     case TV_HEX_BOOK:
-    case TV_RAGE_BOOK:
     case TV_BURGLARY_BOOK:
         return check_book_realm(k_ptr->tval, k_ptr->sval)
             && k_ptr->sval >= SV_BOOK_MIN_GOOD
             && k_ptr->counts.found < 3;
+    case TV_RAGE_BOOK:
+        return check_book_realm(k_ptr->tval, k_ptr->sval)
+            && k_ptr->sval >= SV_BOOK_MIN_GOOD
+            && k_ptr->counts.found < 8;
 
     case TV_WAND:
         return devicemaster_is_(DEVICEMASTER_WANDS)
@@ -2578,12 +2581,18 @@ bool kind_is_great(int k_idx)
         case TV_MUSIC_BOOK:
         case TV_HISSATSU_BOOK:
         case TV_HEX_BOOK:
-        case TV_RAGE_BOOK:
         case TV_BURGLARY_BOOK:
         {
             if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < 2; /* Third Spellbooks: I want ?Acquirement to grant these! */
             if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < 2;   /* Fourth Spellbooks */
-            return (FALSE);
+            return FALSE;
+        }
+        case TV_RAGE_BOOK:
+        {
+            int max = (p_ptr->pclass == CLASS_RAGE_MAGE) ? 8 : 2;
+            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < max; /* Third Spellbooks: I want ?Acquirement to grant these! */
+            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < max;   /* Fourth Spellbooks */
+            return FALSE;
         }
         case TV_POTION:
         {
@@ -2676,12 +2685,18 @@ bool kind_is_good(int k_idx)
         case TV_MUSIC_BOOK:
         case TV_HISSATSU_BOOK:
         case TV_HEX_BOOK:
-        case TV_RAGE_BOOK:
         case TV_BURGLARY_BOOK:
         {
             if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < 2; /* Third Spellbooks */
             if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < 2;   /* Fourth Spellbooks */
-            return (FALSE);
+            return FALSE;
+        }
+        case TV_RAGE_BOOK:
+        {
+            int max = (p_ptr->pclass == CLASS_RAGE_MAGE) ? 8 : 2;
+            if (k_ptr->sval == SV_BOOK_MIN_GOOD) return k_ptr->counts.found < max; /* Third Spellbooks: I want ?Acquirement to grant these! */
+            if (k_ptr->sval >= SV_BOOK_MIN_GOOD + 1) return k_ptr->counts.found < max;   /* Fourth Spellbooks */
+            return FALSE;
         }
         case TV_POTION:
         {
@@ -3353,7 +3368,7 @@ static bool _kind_theme_junk(int k_idx) {
 static bool _needs_book(void)
 {
     int tval, k_idx;
-    if (p_ptr->pclass == CLASS_SORCERER)
+    if (p_ptr->pclass == CLASS_SORCERER || p_ptr->pclass == CLASS_RAGE_MAGE)
     {
         return TRUE;
     }

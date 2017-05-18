@@ -1259,7 +1259,7 @@ static void _wiz_inspect_objects(int level)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
-        if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
+        if (1) _wiz_stats_log_books(level, o_ptr, 20, 20);
         if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
         if (0) _wiz_stats_log_rand_arts(level, o_ptr);
@@ -1279,7 +1279,7 @@ static void _wiz_inspect_objects(int level)
         if (0 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && o_ptr->name2 == EGO_AMULET_DEVOTION && object_is_jewelry(o_ptr))
+        if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && object_is_dragon_armor(o_ptr))
