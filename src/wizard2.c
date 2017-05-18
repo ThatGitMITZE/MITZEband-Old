@@ -1167,6 +1167,7 @@ static void _wiz_kill_monsters(int level)
         /* Skip out of depth monsters */
         r_ptr = &r_info[m_ptr->r_idx];
         if (0 && r_ptr->level > level) continue;
+        if (r_ptr->id == MON_DAWN) continue; /* inflates pct of humans */
 
         _stats_note_monster_level(level, r_ptr->level);
         mon_take_hit(i, m_ptr->hp + 1, &fear, NULL);
