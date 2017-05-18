@@ -3239,7 +3239,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
     if (!r_idx) return 0;
 
     /* Sanity */
-    if (pack_idx && pack_info_list[pack_idx].count > 40) return 0;
+    if (pack_idx && pack_info_list[pack_idx].count > 30) return 0;
 
     /* Paranoia */
     if (!r_ptr->name) return 0;
@@ -3936,14 +3936,21 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
                 /* Place a single escort */
                 (void)place_monster_one(place_monster_m_idx, ny, nx, z, pack_idx, mode);
 
-                /* Place a "group" of escorts if needed */
+                /* I'm removing the following. Really, having Great Cthulhu or Gothmog come
+                 * with an entourage of up to 150 monsters is just plain absurd, and asking for 
+                 * a stray accidental bad teleport death. Pack sizes have been capped for quite
+                 * a while (at 40), but allowing RF1_ESCORTS to process destroys pack diversity.
+                 * Better if we just skip that flag altogether, giving up to 32 monsters in the 
+                 * pack. Usually only 20 to 22 seem to show up, presumably due to scatter()
+                 * picking an occupied spot.
+                 *
+                 * Place a "group" of escorts if needed
                 if ((r_info[z].flags1 & RF1_FRIENDS) ||
                     (r_ptr->flags1 & RF1_ESCORTS))
                 {
-                    /* Place a group of monsters */
                     if (dungeon_type != DUNGEON_ARENA)
                         (void)place_monster_group(place_monster_m_idx, ny, nx, z, pack_idx, mode);
-                }
+                } */
             }
             pack_choose_ai(m_idx);
         }
@@ -4463,7 +4470,7 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
     }
     else
     {
-        if (!(r_ptr->flags7 & RF7_GUARDIAN) && r_ptr->cur_num < r_ptr->max_num)
+        if ((!(r_ptr->flags7 & RF7_GUARDIAN) || no_wilderness) && r_ptr->cur_num < r_ptr->max_num)
             result = place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
 
         if (!result && (r_ptr->flags1 & RF1_UNIQUE) && one_in_(2))

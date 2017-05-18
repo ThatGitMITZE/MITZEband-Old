@@ -8133,7 +8133,7 @@ D:evil deep within your body.
 N:509:Water troll
 G:T:B
 I:110:36d10:20:50:50:300
-W:33:2:999:420:2000:538
+W:33:1:999:420:2000:538
 B:HIT:HURT:1d9
 B:HIT:HURT:1d9
 B:HIT:HURT:2d2
