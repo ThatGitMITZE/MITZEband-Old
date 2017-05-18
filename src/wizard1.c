@@ -912,6 +912,16 @@ static void _display_melee_dam(doc_ptr doc, int dam)
     doc_printf(doc, " <color:%c>%5d</color>", color, dam);
 }
 
+static int _avg_dam_roll(int dd, int ds) { return dd * (ds + 1) / 2; }
+static int _avg_dam(int dd, int ds, int xtra, int mult)
+{
+    int d = _avg_dam_roll(dd, ds);
+    d += xtra;
+    d *= mult;
+    return d;
+}
+static int _max_breath(int hp, int div, int max) { return MIN(hp/div, max); }
+
 static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
 {
     int i, j;
@@ -924,6 +934,9 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         int          unresist = 0;
         int          dam[RES_MAX] = {0};
         bool         powerful = BOOL(r->flags2 & RF2_POWERFUL);
+        int          power_mult = powerful ? 2 : 1; /* elemental balls and bolts */
+        int          power_mult2 = powerful ? 3 : 2; /* some high level balls */
+        int          power_div = powerful ? 2 : 3; /* cause, you know, diversity is a good thing */
 
         if (r->flags1 & RF1_FORCE_MAXHP)
             hp = r->hdice * r->hside;
@@ -937,7 +950,7 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
             if (r->blow[j].method == RBM_EXPLODE) continue;
             if (r->blow[j].method == RBM_SHOOT) continue;
 
-            dam = r->blow[j].d_dice * (r->blow[j].d_side + 1) / 2;
+            dam = _avg_dam_roll(r->blow[j].d_dice, r->blow[j].d_side);
             switch (r->blow[j].effect)
             {
             case RBE_HURT: case RBE_SHATTER:
@@ -975,82 +988,125 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
             }
             melee += dam;
         }
-        /* Damage Logic Duplicated from mspells1.c ... and this is incomplete
-         * pending a monster spell re-write. */
+        /* Damage Logic Duplicated from mspells1.c */
         if (r->flags4 & RF4_ROCKET)
-            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 4, 600));
+            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], _max_breath(hp, 4, 600));
         if (r->flags4 & RF4_BR_ACID)
-            dam[RES_ACID] = MAX(dam[RES_ACID], MIN(hp / 4, 900));
+            dam[RES_ACID] = MAX(dam[RES_ACID], _max_breath(hp, 4, 900));
         if (r->flags4 & RF4_BR_ELEC)
-            dam[RES_ELEC] = MAX(dam[RES_ELEC], MIN(hp / 4, 900));
+            dam[RES_ELEC] = MAX(dam[RES_ELEC], _max_breath(hp, 4, 900));
         if (r->flags4 & RF4_BR_FIRE)
-            dam[RES_FIRE] = MAX(dam[RES_FIRE], MIN(hp / 4, 900));
+            dam[RES_FIRE] = MAX(dam[RES_FIRE], _max_breath(hp, 4, 900));
         if (r->flags4 & RF4_BR_COLD)
-            dam[RES_COLD] = MAX(dam[RES_COLD], MIN(hp / 4, 900));
+            dam[RES_COLD] = MAX(dam[RES_COLD], _max_breath(hp, 4, 900));
         if (r->flags4 & RF4_BR_POIS)
-            dam[RES_POIS] = MAX(dam[RES_POIS], MIN(hp / 5, 600));
+            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 5, 600));
         if (r->flags4 & RF4_BR_NETH)
-            dam[RES_NETHER] = MAX(dam[RES_NETHER], MIN(hp / 7, 550));
+            dam[RES_NETHER] = MAX(dam[RES_NETHER], _max_breath(hp, 7, 550));
         if (r->flags4 & RF4_BR_LITE)
-            dam[RES_LITE] = MAX(dam[RES_LITE], MIN(hp / 6, 400));
+            dam[RES_LITE] = MAX(dam[RES_LITE], _max_breath(hp, 6, 400));
         if (r->flags4 & RF4_BR_DARK)
-            dam[RES_DARK] = MAX(dam[RES_DARK], MIN(hp / 6, 400));
+            dam[RES_DARK] = MAX(dam[RES_DARK], _max_breath(hp, 6, 400));
         if (r->flags4 & RF4_BR_CONF)
-            dam[RES_CONF] = MAX(dam[RES_CONF], MIN(hp / 6, 400));
+            dam[RES_CONF] = MAX(dam[RES_CONF], _max_breath(hp, 6, 400));
         if (r->flags4 & RF4_BR_SOUN)
-            dam[RES_SOUND] = MAX(dam[RES_SOUND], MIN(hp / 6, 450));
+            dam[RES_SOUND] = MAX(dam[RES_SOUND], _max_breath(hp, 6, 450));
         if (r->flags4 & RF4_BR_CHAO)
-            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], MIN(hp / 6, 600));
+            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], _max_breath(hp, 6, 600));
         if (r->flags4 & RF4_BR_DISE)
-            dam[RES_DISEN] = MAX(dam[RES_DISEN], MIN(hp / 6, 500));
+            dam[RES_DISEN] = MAX(dam[RES_DISEN], _max_breath(hp, 6, 500));
         if (r->flags4 & RF4_BR_NEXU)
-            dam[RES_NEXUS] = MAX(dam[RES_NEXUS], MIN(hp / 3, 250));
+            dam[RES_NEXUS] = MAX(dam[RES_NEXUS], _max_breath(hp, 3, 250));
         if (r->flags4 & RF4_BR_SHAR)
-            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], MIN(hp / 6, 500));
+            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], _max_breath(hp, 6, 500));
         if (r->flags4 & RF4_BR_NUKE)
-            dam[RES_POIS] = MAX(dam[RES_POIS], MIN(hp / 5, 600));
+            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 5, 600));
+
+
+        if (r->flags5 & RF5_BA_ACID)
+            dam[RES_ACID] = MAX(dam[RES_ACID], _avg_dam(1, 3*r->level, 15, power_mult));
+        if (r->flags5 & RF5_BA_ELEC)
+            dam[RES_ELEC] = MAX(dam[RES_ELEC], _avg_dam(1, 3*r->level/2, 8, power_mult));
+        if (r->flags5 & RF5_BA_FIRE)
+            dam[RES_FIRE] = MAX(dam[RES_FIRE], _avg_dam(1, 7*r->level/2, 10, power_mult));
+        if (r->flags5 & RF5_BA_COLD)
+            dam[RES_COLD] = MAX(dam[RES_COLD], _avg_dam(1, 3*r->level/2, 10, power_mult));
+        if (r->flags5 & RF5_BA_POIS)
+            dam[RES_POIS] = MAX(dam[RES_POIS], _avg_dam(12, 2, 0, power_mult));
+        if (r->flags4 & RF4_BA_NUKE)
+            dam[RES_POIS] = MAX(dam[RES_POIS], _avg_dam(10, 6, r->level, power_mult));
+        if (r->flags5 & RF5_BA_NETH)
+            dam[RES_NETHER] = MAX(dam[RES_NETHER], _avg_dam_roll(10, 10) + 50 + r->level*power_mult);
+
+        if (r->flags5 & RF5_BO_ACID)
+            dam[RES_ACID] = MAX(dam[RES_ACID], _avg_dam(7, 8, r->level/3, power_mult));
+        if (r->flags5 & RF5_BO_ELEC)
+            dam[RES_ELEC] = MAX(dam[RES_ELEC], _avg_dam(4, 8, r->level/3, power_mult));
+        if (r->flags5 & RF5_BO_FIRE)
+            dam[RES_FIRE] = MAX(dam[RES_FIRE], _avg_dam(9, 8, r->level/3, power_mult));
+        if (r->flags5 & RF5_BO_COLD)
+            dam[RES_COLD] = MAX(dam[RES_COLD], _avg_dam(6, 8, r->level/3, power_mult));
+        if (r->flags5 & RF5_BO_ICEE)
+            dam[RES_COLD] = MAX(dam[RES_COLD], _avg_dam_roll(6, 6) + r->level * 3 / power_div);
+        if (r->flags5 & RF5_BO_NETH)
+            dam[RES_NETHER] = MAX(dam[RES_NETHER], 30 + _avg_dam_roll(5, 5) + r->level * 4 / power_div);
+
         if (r->flags5 & RF5_BA_DARK)
-            dam[RES_DARK] = MAX(dam[RES_DARK], r->level*4 + 105);
+            dam[RES_DARK] = MAX(dam[RES_DARK], _avg_dam_roll(10, 10) + r->level*4 + 50);
         if (r->flags5 & RF5_BA_LITE)
-            dam[RES_LITE] = MAX(dam[RES_LITE], r->level*4 + 105);
+            dam[RES_LITE] = MAX(dam[RES_LITE], _avg_dam_roll(10, 10) + r->level*4 + 50);
         if (r->flags4 & RF4_BA_CHAO)
-        {
-            int d;
-            if (r->flags2 & RF2_POWERFUL) d = r->level * 3;
-            else d = r->level * 2;
-            d += 55;
-            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], d);
-        }
+            dam[RES_CHAOS] = MAX(dam[RES_CHAOS], _avg_dam_roll(10, 10) + r->level*power_mult2);
 
         if (r->flags4 & RF4_THROW)
             unresist = MAX(unresist, r->level*3);
         if (r->flags4 & RF4_BR_STORM)
-            unresist = MAX(unresist, MIN(hp / 5, 300));
+            unresist = MAX(unresist, _max_breath(hp, 5, 300));
         if (r->flags4 & RF4_BR_INER)
-            unresist = MAX(unresist, MIN(hp / 6, 200));
+            unresist = MAX(unresist, _max_breath(hp, 6, 200));
         if (r->flags4 & RF4_BR_GRAV)
-            unresist = MAX(unresist, MIN(hp / 3, 200));
+            unresist = MAX(unresist, _max_breath(hp, 3, 200));
         if (r->flags4 & RF4_BR_PLAS)
-            unresist = MAX(unresist, MIN(hp / 6, 200));
+            unresist = MAX(unresist, _max_breath(hp, 6, 200));
         if (r->flags4 & RF4_BR_WALL)
-            unresist = MAX(unresist, MIN(hp / 3, 200));
+            unresist = MAX(unresist, _max_breath(hp, 3, 200));
         if (r->flags4 & RF4_BR_MANA)
-            unresist = MAX(unresist, MIN(hp / 3, 250));
+            unresist = MAX(unresist, _max_breath(hp, 3, 250));
         if (r->flags4 & RF4_BR_DISI)
-            unresist = MAX(unresist, MIN(hp / 6, 150));
+            unresist = MAX(unresist, _max_breath(hp, 6, 150));
+
+        if (r->flags5 & RF5_MIND_BLAST)
+            unresist = MAX(unresist, _avg_dam_roll(7, 7));
+        if (r->flags5 & RF5_BRAIN_SMASH)
+            unresist = MAX(unresist, _avg_dam_roll(12, 12));
+        if (r->flags5 & RF5_CAUSE_1)
+            unresist = MAX(unresist, _avg_dam_roll(3, 8));
+        if (r->flags5 & RF5_CAUSE_2)
+            unresist = MAX(unresist, _avg_dam_roll(8, 8));
+        if (r->flags5 & RF5_CAUSE_3)
+            unresist = MAX(unresist, _avg_dam_roll(10, 15));
+        if (r->flags5 & RF5_CAUSE_4)
+            unresist = MAX(unresist, _avg_dam_roll(15, 15));
+        if (r->flags5 & RF5_MISSILE)
+            unresist = MAX(unresist, _avg_dam_roll(2, 6) + r->level/3);
 
         if (r->flags5 & RF5_BA_WATE)
-        {
-            int d = powerful ? r->level * 3 : r->level * 2;
-            unresist = MAX(unresist, (d + 1)/2 + 50);
-        }
+            unresist = MAX(unresist, _avg_dam_roll(1, r->level*power_mult2) +  50);
+        if (r->flags5 & RF5_BO_WATE)
+            unresist = MAX(unresist, _avg_dam_roll(10, 10) + r->level * 3 / power_div);
+        if (r->flags5 & RF5_BO_PLAS)
+            unresist = MAX(unresist, 10 + _avg_dam_roll(8, 7) + r->level * 3 / power_div);
         if (r->flags5 & RF5_BO_MANA)
-        {
-            int d = r->level * 7 / 2;
-            unresist = MAX(unresist, (d + 1)/2 + 50);
-        }
+            unresist = MAX(unresist, _avg_dam_roll(1, 7*r->level/2) + 50);
         if (r->flags5 & RF5_BA_MANA)
-            unresist = MAX(unresist, r->level*4 + 105);
+            unresist = MAX(unresist, _avg_dam_roll(10, 10) + r->level*4 + 50);
+        if (r->flags6 & RF6_HAND_DOOM)
+            unresist = MAX(unresist, p_ptr->chp / 2); 
+        if (r->flags6 & RF6_PSY_SPEAR)
+        {
+            unresist = MAX(unresist, powerful ?  (_avg_dam_roll(1, 2*r->level) + 150)
+                                              :  (_avg_dam_roll(1, 3*r->level/2) + 100));
+        }
 
         if (i%25 == 0)
         {
