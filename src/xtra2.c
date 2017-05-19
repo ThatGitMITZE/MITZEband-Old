@@ -1552,7 +1552,7 @@ void monster_death(int m_idx, bool drop_item)
 
         case MON_MASTER_TONBERRY:
             a_idx = ART_MASTER_TONBERRY;
-            chance = 25;
+            chance = 10;
             break;
 
         case MON_ZEUS:
@@ -1855,7 +1855,7 @@ void monster_death(int m_idx, bool drop_item)
             break;
         case MON_DESTROYER:
             a_idx = ART_DESTROYER;
-            chance = 5;
+            chance = 1;
             break;
         case MON_VLAD:
             a_idx = ART_STONEMASK;

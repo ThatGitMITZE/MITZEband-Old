@@ -4305,7 +4305,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
     if ( (who > 0 && hack_m_spell) /* monster cast a spell ... probably a summon spell */
       || who == -1 )               /* player did something ... probably a summon spell/activation */
     {
-        if (p_ptr->anti_summon && !one_in_(7))
+        if (p_ptr->anti_summon && !one_in_(3))
         {
             msg_format("The summoning is blocked!");
             return FALSE;
@@ -4455,7 +4455,7 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 
     if (r_idx >= max_r_idx) return FALSE;
     if (p_ptr->inside_arena) return FALSE;
-    if (p_ptr->anti_summon && !one_in_(7))
+    if (p_ptr->anti_summon && !one_in_(3))
     {
         msg_format("The summoning is blocked!");
         return FALSE;
