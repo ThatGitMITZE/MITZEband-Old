@@ -19639,7 +19639,7 @@ D:nearly indestructible.
 
 N:1086:Talos, Masterwork Spellwarp Automaton
 G:g:y
-I:115:200d100:30:250:20:2000
+I:115:150d100:30:250:20:2000
 W:90:15:999:40000:0:0
 B:HIT:SHATTER:15d15
 B:HIT:SHATTER:15d15
@@ -19654,7 +19654,7 @@ P:Copy:Golem:Mauler
 P:Life:120
 P:Body:Monk
 S:1_IN_6 |
-S:BA_MANA | BR_DISI | BR_CHAO | PSY_SPEAR | DISPEL | S_KIN
+S:BR_MANA | BR_DISI | BR_CHAO | DISPEL | S_KIN
 D:A giant figure of a man, shaped from bronze. Your spells
 D:fall short, and your blood runs cold as you behold this
 D:colossal behemoth striding slowly, but purposefully, towards you.
