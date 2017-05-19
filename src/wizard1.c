@@ -990,17 +990,17 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         }
         /* Damage Logic Duplicated from mspells1.c */
         if (r->flags4 & RF4_ROCKET)
-            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], _max_breath(hp, 4, 600));
+            dam[RES_SHARDS] = MAX(dam[RES_SHARDS], _max_breath(hp, 6, 600));
         if (r->flags4 & RF4_BR_ACID)
-            dam[RES_ACID] = MAX(dam[RES_ACID], _max_breath(hp, 4, 900));
+            dam[RES_ACID] = MAX(dam[RES_ACID], _max_breath(hp, 5, 900));
         if (r->flags4 & RF4_BR_ELEC)
-            dam[RES_ELEC] = MAX(dam[RES_ELEC], _max_breath(hp, 4, 900));
+            dam[RES_ELEC] = MAX(dam[RES_ELEC], _max_breath(hp, 5, 900));
         if (r->flags4 & RF4_BR_FIRE)
-            dam[RES_FIRE] = MAX(dam[RES_FIRE], _max_breath(hp, 4, 900));
+            dam[RES_FIRE] = MAX(dam[RES_FIRE], _max_breath(hp, 5, 900));
         if (r->flags4 & RF4_BR_COLD)
-            dam[RES_COLD] = MAX(dam[RES_COLD], _max_breath(hp, 4, 900));
+            dam[RES_COLD] = MAX(dam[RES_COLD], _max_breath(hp, 5, 900));
         if (r->flags4 & RF4_BR_POIS)
-            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 5, 600));
+            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 6, 600));
         if (r->flags4 & RF4_BR_NETH)
             dam[RES_NETHER] = MAX(dam[RES_NETHER], _max_breath(hp, 7, 550));
         if (r->flags4 & RF4_BR_LITE)
@@ -1020,7 +1020,7 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         if (r->flags4 & RF4_BR_SHAR)
             dam[RES_SHARDS] = MAX(dam[RES_SHARDS], _max_breath(hp, 6, 500));
         if (r->flags4 & RF4_BR_NUKE)
-            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 5, 600));
+            dam[RES_POIS] = MAX(dam[RES_POIS], _max_breath(hp, 6, 600));
 
 
         if (r->flags5 & RF5_BA_ACID)
@@ -1061,7 +1061,7 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         if (r->flags4 & RF4_THROW)
             unresist = MAX(unresist, r->level*3);
         if (r->flags4 & RF4_BR_STORM)
-            unresist = MAX(unresist, _max_breath(hp, 5, 300));
+            unresist = MAX(unresist, _max_breath(hp, 7, 300));
         if (r->flags4 & RF4_BR_INER)
             unresist = MAX(unresist, _max_breath(hp, 6, 200));
         if (r->flags4 & RF4_BR_GRAV)
@@ -1121,30 +1121,22 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         for (j = RES_ACID; j <= RES_DISEN; j++)
             _display_dam(doc, j, dam[j]);
         _display_dam(doc, RES_INVALID, unresist);
+        if (r->freq_spell && r->freq_spell < 50)
+            doc_printf(doc, " %d%% %d%%", r->freq_spell, 2 * r->freq_spell * r->freq_spell / 100);
+        else if (r->freq_spell)
+            doc_printf(doc, " %d%%", r->freq_spell);
         doc_newline(doc);
     }
 }
 
-#define RF4_DAM_MASK \
-    (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | \
-     RF4_BR_POIS | RF4_BR_NETH | RF4_BR_LITE | RF4_BR_DARK | \
-     RF4_BR_CONF | RF4_BR_SOUN | RF4_BR_CHAO | RF4_BR_DISE | \
-     RF4_BR_NEXU | RF4_BR_SHAR | RF4_BR_NUKE | RF4_BR_DISI | \
-     RF4_ROCKET | RF4_BA_CHAO)
-
-#define RF5_DAM_MASK (RF5_BA_DARK | RF5_BA_LITE)
-
 static bool _mon_dam_p(mon_race_ptr r)
 {
-    return TRUE;
-    if (r->flags4 & RF4_DAM_MASK) return TRUE;
-    if (r->flags5 & RF5_DAM_MASK) return TRUE;
-    return FALSE;
+    return !(r->flags9 & RF9_DEPRECATED);
 }
 
 static void spoil_mon_dam(void)
 {
-    doc_ptr doc = doc_alloc(100);
+    doc_ptr doc = doc_alloc(120);
     vec_ptr v = _mon_table(_mon_dam_p); 
 
     doc_change_name(doc, "mon-damage.html");
