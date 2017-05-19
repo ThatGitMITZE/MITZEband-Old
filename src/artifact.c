@@ -1360,7 +1360,7 @@ static void random_misc(object_type * o_ptr)
 
 static void random_slay_aux(object_type *o_ptr)
 {
-    switch (randint1(29 + object_level/10))
+    switch (randint1(29 + object_level/15))
     {
         case 1:
         case 2:
@@ -1371,8 +1371,11 @@ static void random_slay_aux(object_type *o_ptr)
             add_flag(o_ptr->flags, OF_SLAY_HUMAN);
             break;
         case 5:
-            add_flag(o_ptr->flags, OF_SLAY_EVIL);
-            break;
+            if (one_in_(5)) /* low level slay evil is rare ... */
+            {
+                add_flag(o_ptr->flags, OF_SLAY_EVIL);
+                break;
+            }
         case 6:
             add_flag(o_ptr->flags, OF_SLAY_ORC);
             break;
@@ -1498,7 +1501,7 @@ static void random_slay_aux(object_type *o_ptr)
                 add_flag(o_ptr->flags, OF_BRAND_WILD);
             else
             {
-                if (randint1(2500) <= object_level)
+                if (randint1(1250) <= object_level - 50)
                     add_flag(o_ptr->flags, OF_KILL_EVIL);
                 else
                     add_flag(o_ptr->flags, OF_SLAY_EVIL);
