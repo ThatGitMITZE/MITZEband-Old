@@ -164,11 +164,9 @@ void init_blows_calc(object_type *o_ptr, weapon_info_t *info_ptr)
         break;
 
     case CLASS_ROGUE:
-        info_ptr->blows_calc.max = 525;
+        info_ptr->blows_calc.max = MAX(400, 500 + (150 - o_ptr->weight));
         info_ptr->blows_calc.wgt = 40;
         info_ptr->blows_calc.mult = 30;
-        if (o_ptr->weight < 50)
-            info_ptr->blows_calc.max = 600;
         break;
 
     case CLASS_SCOUT:
