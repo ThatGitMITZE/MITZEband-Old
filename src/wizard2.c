@@ -1219,6 +1219,15 @@ static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
 static void _wiz_improve_gear(obj_ptr obj)
 {
     slot_t slot;
+    if (obj_is_shooter(obj))
+    {
+        if (p_ptr->pclass == CLASS_ROGUE && !obj_is_sling(obj)) return;
+        if (p_ptr->pclass == CLASS_RANGER && !obj_is_bow(obj)) return;
+        if (weaponmaster_is_(WEAPONMASTER_BOWS) && !obj_is_bow(obj)) return;
+        if (weaponmaster_is_(WEAPONMASTER_SLINGS) && !obj_is_sling(obj)) return;
+        if (weaponmaster_is_(WEAPONMASTER_CROSSBOWS) && !obj_is_crossbow(obj)) return;
+    }
+    if (obj->name1 == ART_POWER || have_flag(obj->flags, OF_NO_SUMMON)) return;
     /* hydras have many heads ... */
     for (slot = equip_first_slot(obj); slot; slot = equip_next_slot(obj, slot))
     {

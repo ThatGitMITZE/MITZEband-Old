@@ -608,7 +608,7 @@ static void random_plus(object_type * o_ptr)
         {
             if (slaying_hack == 0)
             {
-                if (one_in_(3))
+                if (one_in_(13))
                 {
                     add_flag(o_ptr->flags, OF_BLOWS);
                     if (!artifact_bias && one_in_(11))
@@ -2300,34 +2300,15 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
                     && (is_falcon_sword || !have_flag(o_ptr->flags, OF_BLOWS))
                     && randint1(225) < lev)
                 {
-                    int odds = o_ptr->dd * o_ptr->ds / 2;
-                    if (odds < 3) odds = 3;
-                    /* spiked code from EGO_SLAYING_WEAPON */
-                    if (slaying_hack == 0 && one_in_(odds)) /* double damage */
+                    o_ptr->dd++;
+                    o_ptr->ds++;
+                    slaying_hack += 2;
+                    while (one_in_(o_ptr->dd * o_ptr->ds / 2)) /* nerfed */
                     {
-                        powers -= o_ptr->dd - 1;
-                        slaying_hack += o_ptr->dd;
-                        o_ptr->dd *= 2;
-                    }
-                    else
-                    {
-                        powers++;
-                        powers++;
-                        do
-                        {
-                            o_ptr->dd++;
-                            powers--;
-                            slaying_hack++;
-                        }
-                        while (one_in_(o_ptr->dd));
-
-                        do
-                        {
-                            o_ptr->ds++;
-                            powers--;
-                            slaying_hack++;
-                        }
-                        while (one_in_(o_ptr->ds));
+                        if (one_in_(2)) o_ptr->dd++;
+                        else o_ptr->ds++;
+                        powers--;
+                        slaying_hack++;
                     }
                 }
                 else if (!boosted_dam && !boosted_hit && randint1(225) < lev)
@@ -3290,6 +3271,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     object_type    forge2 = {0};
     object_type    best = {0}, worst = {0};
     int            base_power, best_power, power = 0, worst_power = 10000000;
+    int            min_power, max_power;
     int            old_level;
     artifact_type *a_ptr = &a_info[a_idx];
     int            i;
@@ -3311,6 +3293,8 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     base_power = obj_value_real(&forge1);
     if (!obj_is_ammo(&forge1) && base_power < 7500)
         base_power = 7500;
+    min_power = MAX(base_power * 4 / 5, base_power - 10000);
+    max_power = MIN(base_power * 6 / 5, base_power + 10000);
 
     original_score += base_power;
     best_power = -10000000;
@@ -3318,7 +3302,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
     old_level = object_level;
     object_level = a_ptr->level;
 
-    for (i = 0; i < 10000; i++)
+    for (i = 0; i < 3000; i++)
     {
         object_prep(&forge2, forge1.k_idx);
         create_artifact(&forge2, CREATE_ART_GOOD);
@@ -3340,7 +3324,7 @@ bool create_replacement_art(int a_idx, object_type *o_ptr)
             worst_power = power;
         }
 
-        if (power > base_power * 4 / 5 && power < base_power * 7 / 5)
+        if (min_power <= power && power <= max_power)
         {
             replacement_score += power;
             object_level = old_level;

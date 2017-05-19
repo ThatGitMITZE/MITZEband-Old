@@ -473,7 +473,7 @@ s32b jewelry_cost(object_type *o_ptr, int options)
     q = _abilities_q(flgs);
     if (have_flag(flgs, OF_NO_MAGIC)) q += 7000;
     if (have_flag(flgs, OF_NO_TELE)) q += 5000;
-    if (have_flag(flgs, OF_NO_SUMMON)) q += 50000;
+    if (have_flag(flgs, OF_NO_SUMMON)) q += 20000;
     p += q;
 
     if (cost_calc_hook)
@@ -694,7 +694,7 @@ s32b lite_cost(object_type *o_ptr, int options)
     q = _abilities_q(flgs);
     if (have_flag(flgs, OF_NO_MAGIC)) q += 7000;
     if (have_flag(flgs, OF_NO_TELE)) q += 5000;
-    if (have_flag(flgs, OF_NO_SUMMON)) q += 1000000;
+    if (have_flag(flgs, OF_NO_SUMMON)) q += 20000;
     p += q;
 
     if (cost_calc_hook)
@@ -821,7 +821,6 @@ s32b quiver_cost(object_type *o_ptr, int options)
     q = _abilities_q(flgs);
     if (have_flag(flgs, OF_NO_MAGIC)) q += 7000;
     if (have_flag(flgs, OF_NO_TELE)) q += 5000;
-    if (have_flag(flgs, OF_NO_SUMMON)) q += 1000000;
     p += q;
 
     if (cost_calc_hook)
@@ -1095,6 +1094,17 @@ s32b armor_cost(object_type *o_ptr, int options)
     return p;
 }
 
+static double _inc_slay(double amt, int *count)
+{
+    double result = amt;
+    int    i;
+
+    (*count)++;
+    for (i = *count; i > 1; i--)
+        result = result * 0.7;
+    return result;
+}
+
 s32b weapon_cost(object_type *o_ptr, int options)
 {
     s32b y, w, p, q;
@@ -1134,49 +1144,56 @@ s32b weapon_cost(object_type *o_ptr, int options)
         double d = (double)o_ptr->dd * ((double)o_ptr->ds + 1.0)/2;
         double x;
         double s = 1.0;
+        int    ct = 0;
 
         /* Figure average damage per strike. Not really because we are stacking slays
-           albeit weighted by my off the cuff estimates of utility */
-        if (have_flag(flgs, OF_KILL_ORC)) s += (4.0 * .01);
-        else if (have_flag(flgs, OF_SLAY_ORC)) s += (2.0 * .01);
+           albeit weighted by my off the cuff estimates of utility
+           Update: Choose best slays first, and then decrease each increment based
+           on the count of slays found so far. For example, Falis or Crisdurian, while
+           good, were overscored before. After all, for any given strike, only the best
+           slay/brand counts! And when reforging, this prevents generation of tightly
+           focused OP replacements. */
+        if (have_flag(flgs, OF_KILL_EVIL)) s += _inc_slay(2.5 * 0.8, &ct);
+        else if (have_flag(flgs, OF_SLAY_EVIL)) s += _inc_slay(1.0 * 0.8, &ct);
 
-        if (have_flag(flgs, OF_KILL_TROLL)) s += (4.0 * .02);
-        else if (have_flag(flgs, OF_SLAY_TROLL)) s += (2.0 * .02);
+        if (have_flag(flgs, OF_KILL_UNDEAD)) s += _inc_slay(4.0 * .1, &ct);
+        else if (have_flag(flgs, OF_SLAY_UNDEAD)) s += _inc_slay(2.0 * .1, &ct);
 
-        if (have_flag(flgs, OF_KILL_ANIMAL)) s += (3.0 * .1);
-        else if (have_flag(flgs, OF_SLAY_ANIMAL)) s += (1.5 * .1);
+        if (have_flag(flgs, OF_KILL_DEMON)) s += _inc_slay(4.0 * .15, &ct);
+        else if (have_flag(flgs, OF_SLAY_DEMON)) s += _inc_slay(2.0 * .15, &ct);
 
-        if (have_flag(flgs, OF_KILL_HUMAN)) s += (3.0 * .1);
-        else if (have_flag(flgs, OF_SLAY_HUMAN)) s += (1.5 * .1);
+        if (have_flag(flgs, OF_SLAY_LIVING)) s += _inc_slay(1.0 * 0.7, &ct);
+        if (have_flag(flgs, OF_SLAY_GOOD)) s += _inc_slay(1.0 * 0.1, &ct);
+        if (have_flag(flgs, OF_BRAND_ACID)) s += _inc_slay(1.5 * .15, &ct);
+        if (have_flag(flgs, OF_BRAND_ELEC)) s += _inc_slay(1.5 * .2, &ct);
+        if (have_flag(flgs, OF_BRAND_FIRE)) s += _inc_slay(1.5 * .1, &ct);
+        if (have_flag(flgs, OF_BRAND_COLD)) s += _inc_slay(1.5 * .1, &ct);
 
-        if (have_flag(flgs, OF_KILL_UNDEAD)) s += (4.0 * .1);
-        else if (have_flag(flgs, OF_SLAY_UNDEAD)) s += (2.0 * .1);
+        if (have_flag(flgs, OF_KILL_DRAGON)) s += _inc_slay(4.0 * .1, &ct);
+        else if (have_flag(flgs, OF_SLAY_DRAGON)) s += _inc_slay(2.0 * .1, &ct);
 
-        if (have_flag(flgs, OF_KILL_DEMON)) s += (4.0 * .15);
-        else if (have_flag(flgs, OF_SLAY_DEMON)) s += (2.0 * .15);
+        if (have_flag(flgs, OF_KILL_HUMAN)) s += _inc_slay(3.0 * .1, &ct);
+        else if (have_flag(flgs, OF_SLAY_HUMAN)) s += _inc_slay(1.5 * .1, &ct);
 
-        if (have_flag(flgs, OF_KILL_GIANT)) s += (4.0 * .075);
-        else if (have_flag(flgs, OF_SLAY_GIANT)) s += (2.0 * 0.075);
+        if (have_flag(flgs, OF_KILL_GIANT)) s += _inc_slay(4.0 * .075, &ct);
+        else if (have_flag(flgs, OF_SLAY_GIANT)) s += _inc_slay(2.0 * 0.075, &ct);
 
-        if (have_flag(flgs, OF_KILL_DRAGON)) s += (4.0 * .1);
-        else if (have_flag(flgs, OF_SLAY_DRAGON)) s += (2.0 * .1);
+        if (have_flag(flgs, OF_BRAND_POIS)) s += _inc_slay(1.5 * .075, &ct);
 
-        if (have_flag(flgs, OF_BRAND_POIS)) s += (1.5 * .1);
-        if (have_flag(flgs, OF_BRAND_ACID)) s += (1.5 * .15);
-        if (have_flag(flgs, OF_BRAND_ELEC)) s += (1.5 * .2);
-        if (have_flag(flgs, OF_BRAND_FIRE)) s += (1.5 * .1);
-        if (have_flag(flgs, OF_BRAND_COLD)) s += (1.5 * .1);
+        if (have_flag(flgs, OF_KILL_ORC)) s += _inc_slay(4.0 * .01, &ct);
+        else if (have_flag(flgs, OF_SLAY_ORC)) s += _inc_slay(2.0 * .01, &ct);
 
+        if (have_flag(flgs, OF_KILL_TROLL)) s += _inc_slay(4.0 * .1, &ct);
+        else if (have_flag(flgs, OF_SLAY_TROLL)) s += _inc_slay(2.0 * .1, &ct);
+
+        if (have_flag(flgs, OF_KILL_ANIMAL)) s += _inc_slay(3.0 * .2, &ct);
+        else if (have_flag(flgs, OF_SLAY_ANIMAL)) s += _inc_slay(1.5 * .2, &ct);
+
+        /* the following stack, so should increment at full strength */
         if (have_flag(flgs, OF_BRAND_CHAOS)) s += 0.2;
         if (have_flag(flgs, OF_BRAND_VAMP)) s += 0.1; /* Not really a slay, but vamp works better on higher dice */
 
-        if (have_flag(flgs, OF_KILL_EVIL)) s += (2.5 * 0.8);
-        else if (have_flag(flgs, OF_SLAY_EVIL)) s += (1.0 * 0.8);
-
         if (o_ptr->name1 == ART_ETERNAL_BLADE) s += (1.0 * 0.8); /* BR_TIME */
-
-        if (have_flag(flgs, OF_SLAY_GOOD)) s += (1.0 * 0.20);
-        if (have_flag(flgs, OF_SLAY_LIVING)) s += (1.0 * 0.70);
 
         if (have_flag(flgs, OF_BRAND_MANA))
         {
