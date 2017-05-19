@@ -3358,7 +3358,7 @@ static cptr do_chaos_spell(int spell, int mode)
         if (desc) return "Fires an extremely powerful ball of chaos.";
 
         {
-            int dam = spell_power(p_ptr->chp + p_ptr->to_d_spell);
+            int dam = spell_power(3*p_ptr->chp/4 + p_ptr->to_d_spell);
             int rad = spell_power(2);
 
             if (info) return info_damage(0, 0, dam);
