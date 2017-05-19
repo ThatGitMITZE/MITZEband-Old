@@ -683,7 +683,7 @@ cptr do_burglary_spell(int spell, int mode)
                     if (cave_empty_bold2(my, mx)) break;
                 }
                 if (attempt < 0) continue;
-                summon_specific(-1, my, mx, plev*2, SUMMON_THIEF, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
+                summon_specific(-1, my, mx, plev*3/2, SUMMON_THIEF, PM_FORCE_PET | PM_HASTE);
             }
         }
         break;

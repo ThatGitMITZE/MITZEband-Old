@@ -4318,7 +4318,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 
     /* Save the "summon" type */
     summon_specific_type = type;
-    if (type == SUMMON_BIZARRE1 && who == -1)
+    if ((type == SUMMON_BIZARRE1 || type == SUMMON_THIEF) && who == -1)
         _ignore_depth_hack = TRUE;
 
     /* Limit monster summons. But try to bring one back if possible */
