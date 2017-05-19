@@ -2300,13 +2300,12 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
                 break;
             case 3:
                 if ( slaying_hack == 0 /* OK: Slaying can now only happen once! */
-                    && (is_falcon_sword || !have_flag(o_ptr->flags, OF_BLOWS))
-                    && randint1(225) < lev)
+                    && (is_falcon_sword || !have_flag(o_ptr->flags, OF_BLOWS)))
                 {
-                    o_ptr->dd++;
-                    o_ptr->ds++;
-                    slaying_hack += 2;
-                    while (one_in_(o_ptr->dd * o_ptr->ds / 2)) /* nerfed */
+                    slaying_hack++;
+                    if (one_in_(2)) o_ptr->dd++;
+                    else o_ptr->ds++;
+                    while (randint0(1000) < 4000 / (o_ptr->dd * o_ptr->ds))
                     {
                         if (one_in_(2)) o_ptr->dd++;
                         else o_ptr->ds++;

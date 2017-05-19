@@ -575,6 +575,14 @@ static void _reroll_aux(object_type *o_ptr, int flags, int min)
             *o_ptr = forge;
             return;
         }
+        else if (object_is_melee_weapon(o_ptr))
+        {
+            if (forge.dd * forge.ds > best_score)
+            {
+                best_score = forge.dd * forge.ds;
+                best = forge;
+            }
+        }
         else if (score > best_score)
         {
             best_score = score;
@@ -634,7 +642,7 @@ static int _smith_reroll(object_type *o_ptr)
             {
                 min = atoi(buf);
                 if (min < 0) min = 0;
-                else if (min > 200000) min = 200000;
+                else if (min > 500000) min = 500000;
             }
             break;
         }
