@@ -3763,7 +3763,7 @@ enum r_drop_e
  * Including "breath" spells
  */
 #define RF4_NOMAGIC_MASK \
-    (RF4_BREATH_MASK | RF4_SHRIEK | RF4_ROCKET | RF4_SHOOT)
+    (RF4_BREATH_MASK | RF4_SHRIEK | RF4_ROCKET | RF4_SHOOT | RF4_THROW)
 
 #define RF5_NOMAGIC_MASK \
     (RF5_BREATH_MASK)
