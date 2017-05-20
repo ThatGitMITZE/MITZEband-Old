@@ -1202,8 +1202,8 @@ static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
         old_score = obj_value_real(old);
         if (score > old_score)
         {
-            old->marked |= OM_COUNTED;
-            equip_drop(old); /* prevent pack from filling with 'junk' */
+            home_carry(old);
+            equip_remove(slot);
             equip_wield(obj, slot);
             return TRUE;
         }
@@ -1219,14 +1219,29 @@ static bool _wiz_improve_gear_aux(obj_ptr obj, slot_t slot)
 static void _wiz_improve_gear(obj_ptr obj)
 {
     slot_t slot;
-    if (obj_is_shooter(obj))
+
+    /* XXX this is tedious ... */
+    if (object_is_gloves(obj))
     {
-        if (p_ptr->pclass == CLASS_ROGUE && !obj_is_sling(obj)) return;
-        if (p_ptr->pclass == CLASS_RANGER && !obj_is_bow(obj)) return;
-        if (weaponmaster_is_(WEAPONMASTER_BOWS) && !obj_is_bow(obj)) return;
-        if (weaponmaster_is_(WEAPONMASTER_SLINGS) && !obj_is_sling(obj)) return;
-        if (weaponmaster_is_(WEAPONMASTER_CROSSBOWS) && !obj_is_crossbow(obj)) return;
+        class_t *class_ptr = get_class();
+        caster_info *caster = NULL;
+
+        if (class_ptr->caster_info)
+            caster = class_ptr->caster_info();
+
+        if (caster && caster->options & CASTER_GLOVE_ENCUMBRANCE)
+        {
+            u32b flags[OF_ARRAY_SIZE];
+            obj_flags(obj, flags);
+            if ( !have_flag(flags, OF_FREE_ACT)
+              && !have_flag(flags, OF_DEX)
+              && !have_flag(flags, OF_MAGIC_MASTERY) )
+            {
+                return;
+            }
+        }
     }
+
     if (obj->name1 == ART_POWER || have_flag(obj->flags, OF_NO_SUMMON)) return;
     /* hydras have many heads ... */
     for (slot = equip_first_slot(obj); slot; slot = equip_next_slot(obj, slot))
@@ -1250,8 +1265,10 @@ static void _wiz_improve_pack(obj_ptr obj)
         int ct;
         _pack_obj = obj;
         ct = pack_count(_improve_pack_p);
-        if (ct + obj->number < 99)
+        if (ct + obj->number < 30)
             pack_carry_aux(obj);
+        else
+            home_carry(obj);
     }
     else if (obj_is_device(obj))
     {
@@ -1267,8 +1284,8 @@ static void _wiz_improve_pack(obj_ptr obj)
             old_score = obj_value_real(old);
             if (score > old_score)
             {
-                old->marked |= OM_COUNTED;
-                pack_drop(old);
+                home_carry(old);
+                pack_remove(slot);
                 pack_carry_aux(obj);
             }
         }
@@ -1353,14 +1370,25 @@ static void _wiz_inspect_objects(int level)
          * gain powers that way. */
         if (_is_stat_potion(o_ptr))
             do_device(o_ptr, SPELL_CAST, 0);
-        if (1 && !object_is_nameless(o_ptr))
-            _wiz_improve_gear(o_ptr);
 
+        /* Use the autopicker to 'improve' this character. For example, you can
+         * conditionally have rogues only use weapons less than a certain weight
+         * and only shoot slings. */
         if (o_ptr->number)
         {
             int auto_pick_idx = is_autopick(o_ptr);
             if (auto_pick_idx >= 0 && autopick_list[auto_pick_idx].action & DO_AUTOPICK)
-                _wiz_improve_pack(o_ptr);
+            {
+                if (object_is_wearable(o_ptr))
+                    _wiz_improve_gear(o_ptr);
+                else
+                    _wiz_improve_pack(o_ptr);
+            }
+            else if ( (auto_pick_idx < 0 || !(autopick_list[auto_pick_idx].action & DO_AUTODESTROY))
+                   && object_is_wearable(o_ptr) )
+            {
+                _wiz_improve_gear(o_ptr);
+            }
         }
 
         if (o_ptr->number)
@@ -1373,6 +1401,7 @@ static void _wiz_inspect_objects(int level)
         }
     }
     pack_overflow();
+    home_optimize();
     if (p_ptr->cursed) remove_all_curse();
 }
 static void _wiz_gather_stats(int which_dungeon, int level, int reps)
@@ -1855,30 +1884,6 @@ void do_cmd_debug(void)
         do_cmd_redraw();
         break;
     }
-    case '_':
-    {
-        static point_t tbl[9] = {
-            {0, 1280}, {1000, 640}, {2000, 320}, {3000, 160}, {4000, 80},
-            {5000, 40}, {6000, 20}, {7000, 10}, {8000, 1} };
-        int skill = 0, max = 8000, i = 0;
-        if (!msg_input_num("Start: ", &skill, 0, 8000)) return;
-        if (!msg_input_num("Stop: ", &max, skill, 8000)) return;
-        while (skill < max)
-        {
-            int step = interpolate(skill, tbl, 9);
-            skill += step/10;
-            if ((step % 10) && randint0(10) < (step % 10))
-                skill++;
-            i++;
-            msg_format("%d", skill);
-        }
-        msg_boundary();
-        msg_format("%d steps", i);
-        break;
-    }
-    case '+':
-        mutate_player();
-        break;
     default:
         msg_print("That is not a valid debug command.");
         break;

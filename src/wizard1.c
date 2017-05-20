@@ -1124,7 +1124,10 @@ static void _spoil_mon_dam_aux(doc_ptr doc, vec_ptr v)
         if (r->freq_spell && r->freq_spell < 50)
             doc_printf(doc, " %d%% %d%%", r->freq_spell, 2 * r->freq_spell * r->freq_spell / 100);
         else if (r->freq_spell)
-            doc_printf(doc, " %d%%", r->freq_spell);
+        {
+            char color = r->freq_spell > 70 ? 'v' : 'r';
+            doc_printf(doc, " <color:%c>%d%%</color>", color, r->freq_spell);
+        }
         doc_newline(doc);
     }
 }

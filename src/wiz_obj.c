@@ -558,7 +558,7 @@ static int _smith_brands(object_type *o_ptr)
 
 static void _reroll_aux(object_type *o_ptr, int flags, int min)
 {
-    int attempts = 1000; /* param? */
+    int attempts = 1 * 1000; /* param?  better gcc -O2 if more than 1k */
     int i, score, best_score = -1; /* scores are never negative */
     object_type forge, best = {0};
 
