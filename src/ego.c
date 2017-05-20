@@ -515,7 +515,7 @@ static void _ego_create_jewelry_defender(object_type *o_ptr, int level, int powe
             add_flag(o_ptr->flags, OF_LEVITATION);
         while (one_in_(2))
             one_sustain(o_ptr);
-        o_ptr->to_a = 5 + randint1(7) + m_bonus(7, level);
+        o_ptr->to_a = randint1(7) + m_bonus(7, level);
         switch (randint1(4))
         {
         case 1: /* Classic Defender */
@@ -1314,17 +1314,17 @@ static void _create_amulet_aux(object_type *o_ptr, int level, int power, int mod
                 if (!o_ptr->pval) o_ptr->pval = _jewelry_pval(4, level);
                 break;
             case 6:
-                o_ptr->to_a += randint1(5) + m_bonus(5, level);
+                o_ptr->to_a += 1 + m_bonus(4, level);
                 break;
             }
         }
-        if (o_ptr->to_a > 15) o_ptr->to_a = 15;
+        if (o_ptr->to_a > 12) o_ptr->to_a = 12;
         if (one_in_(ACTIVATION_CHANCE*2))
             effect_add(o_ptr, EFFECT_BERSERK);
         break;
     case EGO_AMULET_SACRED:
         add_flag(o_ptr->flags, OF_BLESSED);
-        o_ptr->to_a = 5;
+        o_ptr->to_a = randint1(5);
         if (one_in_(2)) add_flag(o_ptr->flags, OF_LITE);
         for (powers = _jewelry_powers(5, level, power); powers > 0; --powers)
         {
@@ -1372,10 +1372,10 @@ static void _create_amulet_aux(object_type *o_ptr, int level, int power, int mod
                     add_flag(o_ptr->flags, OF_HOLD_LIFE);
                 break;
             default:
-                o_ptr->to_a += randint1(5) + m_bonus(5, level);
+                o_ptr->to_a += 1 + m_bonus(5, level);
             }
         }
-        if (o_ptr->to_a > 20) o_ptr->to_a = 20;
+        if (o_ptr->to_a > 15) o_ptr->to_a = 15;
         if (one_in_(ACTIVATION_CHANCE))
             effect_add_random(o_ptr, BIAS_LAW);
         break;
