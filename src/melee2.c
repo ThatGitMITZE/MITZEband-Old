@@ -1851,15 +1851,15 @@ bool mon_attack_mon(int m_idx, int t_idx)
             case RBE_SUPERHURT:
                 if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13))
                 {
-                    int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
-                    damage = MAX(damage, tmp_damage * 2);
+                    int pct = ac_melee_pct_aux(ac, 60, 200);
+                    damage = MAX(damage * 2 * pct / 100, damage);
                     break;
                 }
 
                 /* Fall through */
 
             case RBE_HURT:
-                damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+                damage = damage * ac_melee_pct(ac) / 100;
                 break;
 
             case RBE_POISON:
@@ -1918,7 +1918,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 break;
 
             case RBE_SHATTER:
-                damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+                damage = damage * ac_melee_pct(ac) / 100;
                 if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
                 break;
 

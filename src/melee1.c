@@ -12,7 +12,6 @@
 
 #include "angband.h"
 
-
 /*
  * Critical blow. All hits that do 95% of total possible damage,
  * and which also do at least 20 damage, or, sometimes, N damage.
@@ -120,6 +119,22 @@ static cptr desc_moan[] =
     "mumbles something about mushrooms"
 
 };
+
+/* Player AC reduces the melee damage of HURT, SUPERHURT and SHATTER
+ * attacks. Damage from other attack types is *not* reduced. */ 
+int ac_melee_pct_aux(int ac, int max_reduce, int max_ac)
+{
+    int pct;
+    if (ac > max_ac) ac = max_ac;
+    if (ac < 0) ac = 0;
+    pct = max_reduce*ac/max_ac;
+    return 100 - pct;
+}
+
+int ac_melee_pct(int ac)
+{
+    return ac_melee_pct_aux(ac, 60, 180);
+}
 
 int reduce_melee_dam_p(int dam)
 {
@@ -482,30 +497,33 @@ bool make_attack_normal(int m_idx)
                 }
                 case RBE_SUPERHURT:
                 {
-                    if (((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) && !CHECK_MULTISHADOW())
+                    if ((randint1(rlev*2+300) > ac+200 || one_in_(13)) && !CHECK_MULTISHADOW())
                     {
-                        int tmp_damage = damage - (damage * ((ac < 200) ? ac : 200) / 333);
+                        int pct = ac_melee_pct_aux(ac, 60, 200);
+                        int tmp_damage = damage * pct / 100;
 
                         msg_print("It was a critical hit!");
 
+                        /* XXX I'm guessing we are trying to at least completely negate
+                         * all the effects af AC damage reduction. But, if the player's
+                         * AC is really poor, then we'll do even more damage!
+                         * e.g. If player gets standard 60% ac reduction, then they take
+                         * the full attack damage, which is 250% of normal. However, they
+                         * always take at least 200% of expected damage. Ouch! */
                         tmp_damage = MAX(damage, tmp_damage*2);
                         tmp_damage = reduce_melee_dam_p(tmp_damage);
 
-                        /* Take damage */
                         get_damage += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
                         break;
                     }
                 }
                 case RBE_HURT:
                 {
-                    /* Obvious */
+                    int pct = ac_melee_pct(ac);
+
                     obvious = TRUE;
-
-                    /* Hack -- Player armor reduces total damage */
-                    damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+                    damage = damage * pct / 100;
                     damage = reduce_melee_dam_p(damage);
-
-                    /* Take damage */
                     get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
                     break;
@@ -1215,22 +1233,15 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_SHATTER:
                 {
-                    /* Obvious */
+                    int pct = ac_melee_pct(ac);
+
                     obvious = TRUE;
-
-                    /* Hack -- Reduce damage based on the player armor class */
-                    damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-
-                    /* Take damage */
+                    damage = damage * pct / 100;
                     damage = reduce_melee_dam_p(damage);
                     get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
-                    /* Radius 8 earthquake centered at the monster */
                     if (damage > 23 || explode)
-                    {
                         earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
-                    }
-
                     break;
                 }
 

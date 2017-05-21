@@ -2282,7 +2282,7 @@ static bool eval_ac(int iAC)
     /* AC lower than zero has no effect */
     if (iAC < 0) iAC = 0;
 
-    protection = 100 * MIN(iAC, 150) / 250;
+    protection = 100 - ac_melee_pct(iAC);
 
     screen_save();
     clear_bldg(0, 22);
