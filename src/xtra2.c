@@ -479,7 +479,7 @@ cptr extract_note_dies(monster_race *r_ptr)
 
         for (i = 0; i < 4; i++)
         {
-            if (r_ptr->blow[i].method == RBM_EXPLODE)
+            if (r_ptr->blows[i].method == RBM_EXPLODE)
             {
                 return " explodes into tiny shreds.";
             }
@@ -838,12 +838,12 @@ void monster_death(int m_idx, bool drop_item)
     /* Let monsters explode! */
     for (i = 0; i < 4; i++)
     {
-        if (r_ptr->blow[i].method == RBM_EXPLODE)
+        if (r_ptr->blows[i].method == RBM_EXPLODE)
         {
             int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-            int typ = mbe_info[r_ptr->blow[i].effect].explode_type;
-            int d_dice = r_ptr->blow[i].d_dice;
-            int d_side = r_ptr->blow[i].d_side;
+            int typ = mbe_info[r_ptr->blows[i].effects[0].effect].explode_type;
+            int d_dice = r_ptr->blows[i].effects[0].dd;
+            int d_side = r_ptr->blows[i].effects[0].ds;
             int damage = damroll(d_dice, d_side);
 
             project(m_idx, 3, y, x, damage, typ, flg, -1);
@@ -2734,10 +2734,10 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 
         for (i = 0; i < 4; i++)
         {
-            if (r_ptr->blow[i].d_dice != 0) innocent = FALSE; /* Murderer! */
+            if (r_ptr->blows[i].effects[0].dd != 0) innocent = FALSE; /* Murderer! */
 
-            if ((r_ptr->blow[i].effect == RBE_EAT_ITEM)
-                || (r_ptr->blow[i].effect == RBE_EAT_GOLD))
+            if ((r_ptr->blows[i].effects[0].effect == RBE_EAT_ITEM)
+                || (r_ptr->blows[i].effects[0].effect == RBE_EAT_GOLD))
 
                 thief = TRUE; /* Thief! */
         }
@@ -2786,7 +2786,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
 
             for (i = 0; i < 4; i++)
             {
-                if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
+                if (r_ptr->blows[i].method == RBM_EXPLODE) explode = TRUE;
             }
 
             /* Special note at death */

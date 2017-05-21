@@ -72,6 +72,7 @@ static bool _know_armor_hp(monster_race *r_ptr)
     return FALSE;
 }
 
+#if 0
 static bool _know_damage(monster_race *r_ptr, int i)
 {
     int l = r_ptr->level + 4;
@@ -90,6 +91,7 @@ static bool _know_damage(monster_race *r_ptr, int i)
 
     return FALSE;
 }
+#endif
 
 static bool _know_alertness(monster_race *r_ptr)
 {
@@ -753,22 +755,22 @@ static cptr _effect_desc(int effect)
     switch (effect)
     {
     case RBE_SUPERHURT:   return "Critical Hits";
-    case RBE_HURT:        return "";
-    case RBE_POISON:      return "Poison";
-    case RBE_UN_BONUS:    return "Disenchant";
+    case RBE_HURT:        return "Hurt";
+    case RBE_POISON:      return "<color:g>Poison</color>";
+    case RBE_UN_BONUS:    return "<color:v>Disenchant</color>";
     case RBE_UN_POWER:    return "Drain Charges";
     case RBE_EAT_GOLD:    return "Steal Gold";
     case RBE_EAT_ITEM:    return "Steal Items";
     case RBE_EAT_FOOD:    return "Eat Your Food";
     case RBE_EAT_LITE:    return "Absorb Light";
     case RBE_ACID:        return "Shoot Acid";
-    case RBE_ELEC:        return "Electrocute";
-    case RBE_FIRE:        return "Burn";
-    case RBE_COLD:        return "Freeze";
+    case RBE_ELEC:        return "<color:b>Electrocute</color>";
+    case RBE_FIRE:        return "<color:R>Burn</color>";
+    case RBE_COLD:        return "<color:W>Freeze</color>";
     case RBE_BLIND:       return "Blind";
-    case RBE_CONFUSE:     return "Confuse";
+    case RBE_CONFUSE:     return "<color:U>Confuse</color>";
     case RBE_TERRIFY:     return "Terrify";
-    case RBE_PARALYZE:    return "Paralyze";
+    case RBE_PARALYZE:    return "<color:v>Paralyze</color>";
     case RBE_LOSE_STR:    return "Reduce Strength";
     case RBE_LOSE_INT:    return "Reduce Intelligence";
     case RBE_LOSE_WIS:    return "Reduce Wisdom";
@@ -780,11 +782,13 @@ static cptr _effect_desc(int effect)
     case RBE_EXP_10:
     case RBE_EXP_20:
     case RBE_EXP_40:
-    case RBE_EXP_80:      return "Lower Experience";
+    case RBE_EXP_80:      return "<color:D>Lower Experience</color>";
     case RBE_DISEASE:     return "Disease";
     case RBE_TIME:        return "Time";
     case RBE_EXP_VAMP:    return "Drain Life Force";
     case RBE_DR_MANA:     return "Drain Mana";
+    case RBE_CUT:         return "<color:r>Cuts</color>";
+    case RBE_STUN:        return "<color:B>Stuns</color>";
     }
     return "";
 }
@@ -792,10 +796,10 @@ static int _ct_known_attacks(monster_race *r_ptr)
 {
     int ct = 0;
     int i;
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_MON_BLOWS; i++)
     {
-        if (!r_ptr->blow[i].method) continue;
-        if (r_ptr->blow[i].method == RBM_SHOOT) continue;
+        if (!r_ptr->blows[i].method) continue;
+        if (r_ptr->blows[i].method == RBM_SHOOT) continue;
         if (r_ptr->r_blows[i] || _easy_lore(r_ptr)) ct++;
     }
     return ct;
@@ -806,33 +810,34 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
         doc_insert(doc, "Attacks : <color:D>None</color>\n");
     else if (_ct_known_attacks(r_ptr))
     {
-        int i;
-        doc_printf(doc, "Attacks : <color:G>%-7.7s %-5.5s Effect</color>\n", "Type", "Dam");
-        for (i = 0; i < 4; i++)
+        int i,j;
+        /* XXX Damage display needs some rethinking ... */
+        doc_printf(doc, "Attacks : <color:G>%-7.7s Effect</color>\n", "Type");
+        for (i = 0; i < MAX_MON_BLOWS; i++)
         {
-            if (!r_ptr->blow[i].method) continue;
-            if (r_ptr->blow[i].method == RBM_SHOOT) continue;
+            mon_blow_ptr blow = &r_ptr->blows[i];
+            vec_ptr      v;
+
+            if (!blow->method) continue;
+            if (blow->method == RBM_SHOOT) continue;
             if (!_easy_lore(r_ptr) && !r_ptr->r_blows[i]) continue;
 
-            if (_know_damage(r_ptr, i))
+            v = vec_alloc((vec_free_f)string_free);
+            for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-                char dam[10] = {0};
-                int dd = r_ptr->blow[i].d_dice;
-                int ds = r_ptr->blow[i].d_side;
-
-                if (dd && ds)
-                    sprintf(dam, "%dd%d", dd, ds);
-
-                doc_printf(doc, "          %-7.7s %-5.5s %s\n",
-                    _method_desc(r_ptr->blow[i].method), dam, _effect_desc(r_ptr->blow[i].effect));
+                mon_blow_effect_ptr effect = &blow->effects[j];
+                if (!effect->effect) continue;
+                vec_add(v, string_copy_s(_effect_desc(effect->effect)));
             }
-            else
+            doc_printf(doc, "          %-7.7s",  _method_desc(blow->method));
+            if (vec_length(v))
             {
-                doc_printf(doc, "          %-7.7s ", _method_desc(r_ptr->blow[i].method));
-                doc_insert(doc, "<color:y>  ?  </color> ");
-                doc_insert(doc, _effect_desc(r_ptr->blow[i].effect));
-                doc_newline(doc);
+                doc_insert(doc, " <indent><style:indent>");
+                _print_list(v, doc, ',', '\0');
+                doc_insert(doc, "</style></indent>");
             }
+            doc_newline(doc);
+            vec_free(v);
         }
     }
     else

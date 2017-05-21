@@ -246,16 +246,16 @@ static bool _is_monk(void)
     }
     return FALSE;
 }
-
-static bool _blow_is_masked(monster_blow *blow_ptr)
+#if 0
+static bool _blow_is_masked(mon_blow_ptr blow)
 {
-    switch (blow_ptr->effect)
+    switch (blow->effects[0].effect)
     {
     case RBE_EAT_LITE:
         return TRUE;
     }
 
-    switch (blow_ptr->method)
+    switch (blow->method)
     {
     case 0:
     /*case RBM_EXPLODE:*/
@@ -287,9 +287,10 @@ static bool _blow_is_masked(monster_blow *blow_ptr)
 
     return FALSE;
 }
-
+#endif
 void possessor_calc_innate_attacks(void)
 {
+#if 0
     monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
     monster_blow  blows[4] = {{0}};
     int           cts[4] = {0};
@@ -325,15 +326,15 @@ void possessor_calc_innate_attacks(void)
 
     for (i = 0; i < ct; i++)
     {
-        monster_blow    *blow_ptr = &blows[i];
+        mon_blow_ptr     blow = &blows[i];
         innate_attack_t  a = {0};
 
-        if (_blow_is_masked(blow_ptr))
+        if (_blow_is_masked(blow))
             continue;
 
-        a.dd = blow_ptr->d_dice;
-        a.ds = blow_ptr->d_side;
-        a.to_h += mbe_info[blow_ptr->effect].power / 3;
+        a.dd = blow->d_dice;
+        a.ds = blow->d_side;
+        a.to_h += mbe_info[blow->effect].power / 3;
         a.to_h += r_ptr->level / 2;
 
         switch (blow_ptr->method)
@@ -565,6 +566,7 @@ void possessor_calc_innate_attacks(void)
             a.blows /= 2;
         p_ptr->innate_attacks[p_ptr->innate_attack_ct++] = a;
     }
+#endif
 }
 
 /**********************************************************************
@@ -1874,12 +1876,12 @@ void possessor_explode(int dam)
         int           i;
         monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
 
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < MAX_MON_BLOWS; i++)
         {
-            if (r_ptr->blow[i].method == RBM_EXPLODE)
+            if (r_ptr->blows[i].method == RBM_EXPLODE)
             {
                 int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-                int typ = mbe_info[r_ptr->blow[i].effect].explode_type;
+                int typ = mbe_info[r_ptr->blows[i].effects[0].effect].explode_type;
                 project(0, 3, py, px, dam, typ, flg, -1);
                 break;
             }

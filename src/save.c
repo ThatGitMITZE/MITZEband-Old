@@ -499,12 +499,12 @@ static void wr_extra(savefile_ptr file)
             savefile_write_byte(file, r_ptr->hside); /* Probably not required ... */
             savefile_write_s16b(file, r_ptr->ac);
             savefile_write_byte(file, r_ptr->speed); /* Probably not required ... */
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < MAX_MON_BLOWS; i++)
             {
-                savefile_write_byte(file, r_ptr->blow[i].method);
-                savefile_write_byte(file, r_ptr->blow[i].effect);
-                savefile_write_byte(file, r_ptr->blow[i].d_dice);
-                savefile_write_byte(file, r_ptr->blow[i].d_side);
+                savefile_write_byte(file, r_ptr->blows[i].method);
+                savefile_write_byte(file, r_ptr->blows[i].effects[0].effect);
+                savefile_write_byte(file, r_ptr->blows[i].effects[0].dd);
+                savefile_write_byte(file, r_ptr->blows[i].effects[0].ds);
             }
             savefile_write_u32b(file, r_ptr->flags3);
             savefile_write_u32b(file, r_ptr->flagsr);

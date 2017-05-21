@@ -1438,6 +1438,7 @@ static void _possessor_stats_table(FILE* fp)
             if (r_ptr->flags9 & RF9_POS_GAIN_AC)
                 ac = r_ptr->ac;
 
+            #if 0
             for (j = 0; j < 4; j++)
             {
                 if (!r_ptr->blow[j].effect) continue;
@@ -1447,6 +1448,7 @@ static void _possessor_stats_table(FILE* fp)
                 dam += r_ptr->blow[j].d_dice * (r_ptr->blow[j].d_side + 1) / 2;
                 attacks++;
             }
+            #endif
 
             fprintf(fp, "\"%s\",%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%d,%d,%d,%d,=\"%d+%d\",=\"%d+%d\",=\"%d+%d\",%d,%d,%d,=\"%d+%d\",=\"%d+%d\"\n",
                 i == MON_ECHIZEN ? "Combat Echizen" : r_name + r_ptr->name, i, r_ptr->level,

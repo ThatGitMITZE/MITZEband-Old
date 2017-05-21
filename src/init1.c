@@ -84,6 +84,15 @@ static cptr r_info_blow_method[] =
     NULL
 };
 
+static int _get_r_blow_method(cptr name)
+{
+    int i;
+    for (i = 0; ; i++)
+    {
+        if (!r_info_blow_method[i]) return 0;
+        if (streq(r_info_blow_method[i], name)) return i;
+    }
+}
 
 /*
  * Monster Blow Effects
@@ -124,8 +133,20 @@ static cptr r_info_blow_effect[] =
     "EXP_VAMP",
     "DR_MANA",
     "SUPERHURT",
+    "CUT",
+    "STUN",
     NULL
 };
+
+static int _get_r_blow_effect(cptr name)
+{
+    int i;
+    for (i = 0; ; i++)
+    {
+        if (!r_info_blow_effect[i]) return 0;
+        if (streq(r_info_blow_effect[i], name)) return i;
+    }
+}
 
 
 /*
@@ -3655,6 +3676,118 @@ errr parse_b_info(char *buf, header *head)
     return 0;
 }
 
+/* BITE(60) or perhaps just BITE */
+errr parse_mon_blow_method(char *command, mon_blow_ptr blow)
+{
+    char *name;
+    char *args[10];
+    int   arg_ct = parse_args(command, &name, args, 10);
+
+    if (arg_ct < 0)
+    {
+        msg_format("Error: Malformed argument %s. Missing )?", name);
+        return PARSE_ERROR_GENERIC;
+    }
+
+    blow->method = _get_r_blow_method(name);
+    if (!blow->method)
+    {
+        msg_format("Error: Unknown monster blow method %s.", name);
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+    }
+
+    if (arg_ct > 1)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS; /* too many, actually */
+
+    if (arg_ct)
+    {
+        cptr arg = args[0];
+        blow->power = atoi(arg);
+    }
+    return 0;
+}
+
+/*   V------------------- buf
+ * B:BITE:SUPERHURT:15d10   <===== The old syntax, supported for *sanity*
+ * B:BITE(60):HURT(15d10):HURT(15d10, 20%):STUN(5d5, 10%)  <=== New syntax, multiple effects
+ *   ^------------------- buf
+ */
+errr parse_mon_blow(char *buf, mon_blow_ptr blow)
+{
+    errr  rc = 0;
+    char *commands[10];
+    int   command_ct = z_string_split(buf, commands, 10, ":");
+    int   i, j, dd, ds, pct; /* sscanf probably wants int*, not byte* */
+
+    if (command_ct < 1)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+    rc = parse_mon_blow_method(commands[0], blow);
+    if (rc) return rc;
+
+    /* Look for legacy format. I don't have time to convert all the old stuff!! */
+    if (command_ct == 3 && sscanf(commands[2], "%dd%d", &dd, &ds))
+    {
+        blow->effects[0].effect = _get_r_blow_effect(commands[1]);
+        if (!blow->effects[0].effect)
+        {
+            msg_format("Error: Unknown monster blow effect %s.", commands[1]);
+            return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        }
+        blow->power = mbe_info[blow->effects[0].effect].power;
+        blow->effects[0].dd = dd;
+        blow->effects[0].ds = ds;
+        return rc;
+    }
+
+    if (command_ct - 1 > MAX_MON_BLOW_EFFECTS)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+    for (i = 1; i < command_ct; i++)
+    {
+        char *command = commands[i];
+        char *name;
+        char *args[10];
+        int   arg_ct = parse_args(command, &name, args, 10);
+        mon_blow_effect_ptr effect = &blow->effects[i-1];
+
+        if (arg_ct < 0)
+        {
+            msg_format("Error: Malformed argument %s. Missing )?", name);
+            return PARSE_ERROR_GENERIC;
+        }
+
+        effect->effect = _get_r_blow_effect(name);
+        if (!effect->effect)
+        {
+            msg_format("Error: Unknown monster blow effect %s.", name);
+            return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        }
+        if (arg_ct > 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        for (j = 0; j < arg_ct; j++)
+        {
+            char arg[100], sentinel = '~', check;
+            /* sscanf tricks learned from vanilla ... */
+            sprintf(arg, "%s%c", args[j], sentinel);
+            
+            if (2 == sscanf(arg, "%d%%%c", &pct, &check) && check == sentinel)
+                effect->pct = MAX(0, MIN(100, pct));
+            else if (3 == sscanf(arg, "%dd%d%c", &dd, &ds, &check) && check == sentinel)
+            {
+                effect->dd = MAX(0, MIN(100, dd)); /* 100d100 max */
+                effect->ds = MAX(0, MIN(100, ds));
+            }
+            else
+            {
+                msg_format("Error: Unknown argument %s.", args[j]);
+                return PARSE_ERROR_GENERIC;
+            }
+        }
+    }
+
+    return rc;
+}
 /*
  * Initialize the "r_info" array, by parsing an ascii "template" file
  */
@@ -3941,62 +4074,17 @@ errr parse_r_info(char *buf, header *head)
         r_ptr->next_r_idx = nextmon;
     }
 
-    /* Process 'B' for "Blows" (up to four lines) */
+    /* Process 'B' for "Blows" (up to MAX_MON_BLOWS lines) */
     else if (buf[0] == 'B')
     {
-        int n1, n2;
+        errr rc = 0;
 
         /* Find the next empty blow slot (if any) */
-        for (i = 0; i < 4; i++) if (!r_ptr->blow[i].method) break;
+        for (i = 0; i < MAX_MON_BLOWS; i++) if (!r_ptr->blows[i].method) break;
+        if (i == MAX_MON_BLOWS) return (1);
 
-        /* Oops, no more slots */
-        if (i == 4) return (1);
-
-        /* Analyze the first field */
-        for (s = t = buf+2; *t && (*t != ':'); t++) /* loop */;
-
-        /* Terminate the field (if necessary) */
-        if (*t == ':') *t++ = '\0';
-
-        /* Analyze the method */
-        for (n1 = 0; r_info_blow_method[n1]; n1++)
-        {
-            if (streq(s, r_info_blow_method[n1])) break;
-        }
-
-        /* Invalid method */
-        if (!r_info_blow_method[n1]) return (1);
-
-        /* Analyze the second field */
-        for (s = t; *t && (*t != ':'); t++) /* loop */;
-
-        /* Terminate the field (if necessary) */
-        if (*t == ':') *t++ = '\0';
-
-        /* Analyze effect */
-        for (n2 = 0; r_info_blow_effect[n2]; n2++)
-        {
-            if (streq(s, r_info_blow_effect[n2])) break;
-        }
-
-        /* Invalid effect */
-        if (!r_info_blow_effect[n2]) return (1);
-
-        /* Analyze the third field */
-        for (s = t; *t && (*t != 'd'); t++) /* loop */;
-
-        /* Terminate the field (if necessary) */
-        if (*t == 'd') *t++ = '\0';
-
-        /* Save the method */
-        r_ptr->blow[i].method = n1;
-
-        /* Save the effect */
-        r_ptr->blow[i].effect = n2;
-
-        /* Extract the damage dice and sides */
-        r_ptr->blow[i].d_dice = atoi(s);
-        r_ptr->blow[i].d_side = atoi(t);
+        rc = parse_mon_blow(buf + 2, &r_ptr->blows[i]);
+        if (rc) return rc;
     }
 
     /* Process 'F' for "Basic Flags" (multiple lines) */

@@ -385,26 +385,23 @@ struct object_type
 };
 #define object_is_(O, T, S) ((O)->tval == (T) && (O)->sval == (S))
 
-/*
- * Monster blow structure
- *
- *    - Method (RBM_*)
- *    - Effect (RBE_*)
- *    - Damage Dice
- *    - Damage Sides
- */
-
-typedef struct monster_blow monster_blow;
-
-struct monster_blow
-{
-    byte method;
+/* Monster blows ... Redone */
+#define MAX_MON_BLOW_EFFECTS 4
+#define MAX_MON_BLOWS        4
+typedef struct {
     byte effect;
-    byte d_dice;
-    byte d_side;
-};
+    byte dd;
+    byte ds;
+    byte pct; /* 0 => 100% (as does 100) */
+} mon_blow_effect_t, *mon_blow_effect_ptr;
 
+typedef struct {
+    byte method;
+    byte power;
+    mon_blow_effect_t effects[MAX_MON_BLOW_EFFECTS];
+} mon_blow_t, *mon_blow_ptr;
 
+/* XXX remove! */
 typedef struct mbe_info_type mbe_info_type;
 
 struct mbe_info_type
@@ -510,7 +507,7 @@ struct monster_race
                                  For example, this unique is a questor. Or this
                                  unique is suppressed and won't appear in this game. */
 
-    monster_blow blow[4];
+    mon_blow_t blows[MAX_MON_BLOWS];
 
     s16b next_r_idx;
     u32b next_exp;
@@ -559,7 +556,7 @@ struct monster_race
     u32b r_move_turns;        /* Includes attacking the player */
                               /* Now we can report accurate observed spell frequencies! */
 
-    byte r_blows[4];          /* Number of times each blow type was seen */
+    byte r_blows[MAX_MON_BLOWS];/* Number of times each blow type was seen */
 
     u32b r_flags1;            /* Observed racial flags */
     u32b r_flags2;            /* Observed racial flags */

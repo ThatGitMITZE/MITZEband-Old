@@ -1726,15 +1726,15 @@ bool _design_monkey_clone(void)
 
     for (i = 0; i < 4 && i < blows; i++)
     {
-        r_ptr->blow[i].method = 0;
+        r_ptr->blows[i].method = 0;
     }
 
     for (i = 0; i < 4; i++)
     {
-        r_ptr->blow[i].method = RBM_HIT;
-        r_ptr->blow[i].effect = RBE_HURT;
-        r_ptr->blow[i].d_dice = dd;
-        r_ptr->blow[i].d_side = ds;
+        r_ptr->blows[i].method = RBM_HIT;
+        r_ptr->blows[i].effects[0].effect = RBE_HURT;
+        r_ptr->blows[i].effects[0].dd = dd;
+        r_ptr->blows[i].effects[0].ds = ds;
     }
 
     /* Resistances */

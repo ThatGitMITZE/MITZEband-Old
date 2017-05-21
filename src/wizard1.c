@@ -1121,7 +1121,7 @@ typedef struct {
 
 static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
 {
-    int i, j;
+    int i, j, k;
     int ac = p_ptr->ac + p_ptr->to_a;
     int ac2 = 3*ac/4;
     for (i = 0; i < vec_length(v); i++)
@@ -1139,65 +1139,67 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
         else
             hp = r->hdice * (1 + r->hside)/2;
 
-        for (j = 0; j < 4; j++)
+        for (j = 0; j < MAX_MON_BLOWS; j++)
         {
-            int dam, dam1, dam2;
-            monster_blow blow = r->blow[j];
+            int dam = 0, dam1 = 0, dam2 = 0;
+            mon_blow_ptr blow = &r->blows[j];
             int skill, chance;
 
             if (r->freq_spell == 100) break;
-            if (!blow.effect) continue;
-            if (blow.method == RBM_EXPLODE) continue;
-            if (blow.method == RBM_SHOOT) continue;
+            if (!blow->method) continue;
+            if (blow->method == RBM_EXPLODE) continue;
+            if (blow->method == RBM_SHOOT) continue;
 
-            dam = _avg_dam_roll(blow.d_dice, blow.d_side);
-
-            /* reduce for resistances */
-            switch (blow.effect)
+            for (k = 0; k < MAX_MON_BLOW_EFFECTS; k++)
             {
-            case RBE_DR_MANA:
-                dam = 0;
-                break;
-            case RBE_ACID:
-                dam -= dam * res_pct_known(RES_ACID) / 100;
-                break;
-            case RBE_ELEC:
-                dam -= dam * res_pct_known(RES_ELEC) / 100;
-                break;
-            case RBE_FIRE:
-                dam -= dam * res_pct_known(RES_FIRE) / 100;
-                break;
-            case RBE_COLD:
-                dam -= dam * res_pct_known(RES_COLD) / 100;
-                break;
-            case RBE_POISON:
-                dam1 -= dam1 * res_pct_known(RES_POIS) / 100;
-                break;
-            }
+                mon_blow_effect_ptr effect = &blow->effects[k];
+                int                 effect_dam;
 
-            /* reduce for player AC, keeping old and new amounts so I can
-             * see the effects of changes side by side */
-            dam1 = dam2 = dam;
-            switch (blow.effect)
-            {
-            case RBE_HURT: case RBE_SHATTER:
-                dam1 = dam * ac_melee_pct_aux(ac, 60, 150) / 100;
-                dam2 = dam * ac_melee_pct(ac) / 100;
-                break;
-            case RBE_SUPERHURT: {
-                int f1 = r->level * 2 + 300;
-                int f2 = f1 - (ac + 200);
-                int p1 = f2 * 100 / f1;
-                int p2 = 100 - p1;
-                int d1 = MAX(dam * 2 * ac_melee_pct_aux(ac, 60, 200) / 100, dam);
-                int d2 = dam * ac_melee_pct_aux(ac, 60, 150) / 100;
+                if (!effect->effect) continue;
+                /* skip non-damaging effects */
+                if (effect->effect == RBE_DR_MANA) continue;
+                if (effect->effect == RBE_STUN) continue;
+                if (effect->effect == RBE_CUT) continue;
 
-                dam1 = p1 * d1 / 100 + p2 * d2 / 100;
-                d2 = dam * ac_melee_pct(ac) / 100;
-                dam2 = p1 * d1 / 100 + p2 * d2 / 100;
-                break; }
+                effect_dam = _avg_dam_roll(effect->dd, effect->ds);
+
+                /* reduce for resistances */
+                switch (effect->effect)
+                {
+                case RBE_ACID:
+                    effect_dam -= effect_dam * res_pct_known(RES_ACID) / 100;
+                    break;
+                case RBE_ELEC:
+                    effect_dam -= effect_dam * res_pct_known(RES_ELEC) / 100;
+                    break;
+                case RBE_FIRE:
+                    effect_dam -= effect_dam * res_pct_known(RES_FIRE) / 100;
+                    break;
+                case RBE_COLD:
+                    effect_dam -= effect_dam * res_pct_known(RES_COLD) / 100;
+                    break;
+                case RBE_POISON:
+                    effect_dam -= effect_dam * res_pct_known(RES_POIS) / 100;
+                    break;
+                }
+                if (effect->pct)
+                    effect_dam = effect_dam * effect->pct / 100;
+
+                /* reduce for player AC, keeping old and new amounts so I can
+                 * see the effects of changes side by side */
+                dam += effect_dam;
+                switch (effect->effect)
+                {
+                case RBE_HURT: case RBE_SHATTER: case RBE_SUPERHURT:
+                    dam1 += effect_dam * ac_melee_pct_aux(ac, 60, 150) / 100;
+                    dam2 += effect_dam * ac_melee_pct(ac) / 100;
+                    break;
+                default:
+                    dam1 += effect_dam;
+                    dam2 += effect_dam;
+                }
             }
-            skill = mbe_info[blow.effect].power;
+            skill = blow->power;
             skill += 3 * r->level;
             if (skill > ac2)
                 chance = 50 + 19*(1000 - ac2*1000/skill)/20;

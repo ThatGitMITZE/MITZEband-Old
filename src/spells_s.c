@@ -159,9 +159,9 @@ void shoot_arrow_spell(int cmd, variant *res)
             int i;
             for (i = 0; i < 4; i++)
             {
-                if (r_ptr->blow[i].method == RBM_SHOOT)
+                if (r_ptr->blows[i].method == RBM_SHOOT)
                 {
-                    var_set_string(res, info_damage(r_ptr->blow[i].d_dice, r_ptr->blow[i].d_side, 0));
+                    var_set_string(res, info_damage(r_ptr->blows[i].effects[0].dd, r_ptr->blows[i].effects[0].ds, 0));
                     return;
                 }
             }
@@ -193,9 +193,9 @@ void shoot_arrow_spell(int cmd, variant *res)
             int i;
             for (i = 0; i < 4; i++)
             {
-                if (r_ptr->blow[i].method == RBM_SHOOT)
+                if (r_ptr->blows[i].method == RBM_SHOOT)
                 {
-                    dam = damroll(r_ptr->blow[i].d_dice, r_ptr->blow[i].d_side);
+                    dam = damroll(r_ptr->blows[i].effects[0].dd, r_ptr->blows[i].effects[0].ds);
                     break;
                 }
             }

@@ -524,12 +524,12 @@ static void rd_extra(savefile_ptr file)
             r_ptr->hside = savefile_read_byte(file);
             r_ptr->ac = savefile_read_s16b(file);
             r_ptr->speed = savefile_read_byte(file);
-            for (i = 0; i < 4; i++)
+            for (i = 0; i < MAX_MON_BLOWS; i++)
             {
-                r_ptr->blow[i].method = savefile_read_byte(file);
-                r_ptr->blow[i].effect = savefile_read_byte(file);
-                r_ptr->blow[i].d_dice = savefile_read_byte(file);
-                r_ptr->blow[i].d_side = savefile_read_byte(file);
+                r_ptr->blows[i].method = savefile_read_byte(file);
+                r_ptr->blows[i].effects[0].effect = savefile_read_byte(file);
+                r_ptr->blows[i].effects[0].dd = savefile_read_byte(file);
+                r_ptr->blows[i].effects[0].ds = savefile_read_byte(file);
             }
             r_ptr->flags3 = savefile_read_u32b(file);
             r_ptr->flagsr = savefile_read_u32b(file);

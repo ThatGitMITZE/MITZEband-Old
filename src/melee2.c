@@ -1491,6 +1491,7 @@ static int check_hit2(int power, int level, int ac, int stun)
 /* Monster attacks monster */
 bool mon_attack_mon(int m_idx, int t_idx)
 {
+#if 0
     monster_type    *m_ptr = &m_list[m_idx];
     monster_type    *t_ptr = &m_list[t_idx];
 
@@ -2162,7 +2163,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
             teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
         }
     }
-
+#endif
     return TRUE;
 }
 

@@ -905,7 +905,7 @@ bool mon_spell_mon(int m_idx, int options)
             sound(SOUND_SHOOT);
         }
 
-        dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
+        dam = damroll(r_ptr->blows[0].effects[0].dd, r_ptr->blows[0].effects[0].ds);
         monst_bolt_monst(m_idx, y, x, GF_ARROW, dam, MS_SHOOT, learnable);
 
         break;

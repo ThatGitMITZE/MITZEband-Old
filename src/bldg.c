@@ -1209,7 +1209,7 @@ static bool gamble_comm(int cmd)
 
 static bool vault_aux_battle(int r_idx)
 {
-    int i;
+    int i, j;
     int dam = 0;
 
     monster_race *r_ptr = &r_info[r_idx];
@@ -1227,10 +1227,14 @@ static bool vault_aux_battle(int r_idx)
     if (r_ptr->flags7 & (RF7_AQUATIC)) return (FALSE);
     if (r_ptr->flags7 & (RF7_CHAMELEON)) return (FALSE);
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_MON_BLOWS; i++)
     {
-        if (r_ptr->blow[i].method == RBM_EXPLODE) return (FALSE);
-        if (r_ptr->blow[i].effect != RBE_DR_MANA) dam += r_ptr->blow[i].d_dice;
+        if (r_ptr->blows[i].method == RBM_EXPLODE) return (FALSE);
+        for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
+        {
+            if (r_ptr->blows[i].effects[j].effect != RBE_DR_MANA)
+                dam += r_ptr->blows[i].effects[j].dd;
+        }
     }
     if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
 

@@ -1109,23 +1109,23 @@ bool mon_is_type(int r_idx, int type)
         if (r_ptr->d_char == 'p')
         {
             int i;
-            for (i = 0; i < 4; i++)
-                if (r_ptr->blow[i].method == RBM_SHOOT) return TRUE;
+            for (i = 0; i < MAX_MON_BLOWS; i++)
+                if (r_ptr->blows[i].method == RBM_SHOOT) return TRUE;
         }
         break;
     case SUMMON_KAMIKAZE:
     {
         int i;
-        for (i = 0; i < 4; i++)
-            if (r_ptr->blow[i].method == RBM_EXPLODE) return TRUE;
+        for (i = 0; i < MAX_MON_BLOWS; i++)
+            if (r_ptr->blows[i].method == RBM_EXPLODE) return TRUE;
         break;
     }
     case SUMMON_KAMIKAZE_LIVING:
         if (monster_living(r_ptr))
         {
             int i;
-            for (i = 0; i < 4; i++)
-                if (r_ptr->blow[i].method == RBM_EXPLODE) return TRUE;
+            for (i = 0; i < MAX_MON_BLOWS; i++)
+                if (r_ptr->blows[i].method == RBM_EXPLODE) return TRUE;
         }
         break;
     case SUMMON_MANES:
@@ -2100,10 +2100,10 @@ int lore_do_probe(int r_idx)
     r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
 
     /* Observe "maximal" attacks */
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < MAX_MON_BLOWS; i++)
     {
         /* Examine "actual" blows */
-        if (r_ptr->blow[i].effect || r_ptr->blow[i].method)
+        if (r_ptr->blows[i].effects[0].effect || r_ptr->blows[i].method)
         {
             /* Maximal observations */
             if (r_ptr->r_blows[i] != MAX_UCHAR) n++;
@@ -2973,7 +2973,7 @@ static bool monster_hook_chameleon_lord(int r_idx)
 
     if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5) return FALSE;
 
-    if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+    if ((r_ptr->blows[0].method == RBM_EXPLODE) || (r_ptr->blows[1].method == RBM_EXPLODE) || (r_ptr->blows[2].method == RBM_EXPLODE) || (r_ptr->blows[3].method == RBM_EXPLODE))
         return FALSE;
 
     if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
@@ -3003,7 +3003,7 @@ static bool monster_hook_chameleon(int r_idx)
     if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
 
-    if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+    if ((r_ptr->blows[0].method == RBM_EXPLODE) || (r_ptr->blows[1].method == RBM_EXPLODE) || (r_ptr->blows[2].method == RBM_EXPLODE) || (r_ptr->blows[3].method == RBM_EXPLODE))
         return FALSE;
 
     if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
@@ -3143,7 +3143,7 @@ static bool monster_hook_tanuki(int r_idx)
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
     if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
 
-    if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
+    if ((r_ptr->blows[0].method == RBM_EXPLODE) || (r_ptr->blows[1].method == RBM_EXPLODE) || (r_ptr->blows[2].method == RBM_EXPLODE) || (r_ptr->blows[3].method == RBM_EXPLODE))
         return FALSE;
 
     return (*(get_monster_hook()))(r_idx);

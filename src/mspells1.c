@@ -1959,7 +1959,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
                 if (blind) msg_format("%^s makes a strange noise.", m_name);
                 else msg_format("%^s fires an arrow.", m_name);
 
-                dam = damroll(r_ptr->blow[0].d_dice, r_ptr->blow[0].d_side);
+                dam = damroll(r_ptr->blows[0].effects[0].dd, r_ptr->blows[0].effects[0].ds);
                 if (m_ptr->r_idx == MON_ARTEMIS)
                     artemis_bolt(m_idx, GF_ARROW, dam, MS_SHOOT, learnable);
                 else

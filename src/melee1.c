@@ -13,44 +13,6 @@
 #include "angband.h"
 
 /*
- * Critical blow. All hits that do 95% of total possible damage,
- * and which also do at least 20 damage, or, sometimes, N damage.
- * This is used only to determine "cuts" and "stuns".
- */
-static int monster_critical(int dice, int sides, int dam)
-{
-    int max = 0;
-    int total = dice * sides;
-
-    /* Must do at least 95% of perfect */
-    if (dam < total * 19 / 20) return (0);
-
-    /* Weak blows rarely work */
-    if ((dam < 20) && (randint0(100) >= dam)) return (0);
-
-    /* Perfect damage */
-    if ((dam >= total) && (dam >= 40)) max++;
-
-    /* Super-charge */
-    if (dam >= 20)
-    {
-        while (randint0(100) < 2) max++;
-    }
-
-    /* Critical damage */
-    if (dam > 45) return (6 + max);
-    if (dam > 33) return (5 + max);
-    if (dam > 25) return (4 + max);
-    if (dam > 18) return (3 + max);
-    if (dam > 11) return (2 + max);
-    return (1 + max);
-}
-
-
-
-
-
-/*
  * Determine if a monster attack against the player succeeds.
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
@@ -171,8 +133,7 @@ bool make_attack_normal(int m_idx)
 
     int ap_cnt, ht_cnt;
 
-    int k, tmp, ac, rlev;
-    int do_cut, do_stun;
+    int j, k, ac, rlev;
 
     s32b gold;
 
@@ -188,7 +149,7 @@ bool make_attack_normal(int m_idx)
     bool touched = FALSE, fear = FALSE, alive = TRUE;
     bool explode = FALSE;
     bool do_silly_attack = (one_in_(2) && p_ptr->image);
-    int get_damage = 0;
+    int total_dam = 0;
 
     /* Not allowed to attack */
     if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
@@ -231,19 +192,15 @@ bool make_attack_normal(int m_idx)
     /* Scan through all four blows */
     nemesis_hack = FALSE;
     ht_cnt = 0;
-    for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
+    for (ap_cnt = 0; ap_cnt < MAX_MON_BLOWS; ap_cnt++)
     {
         bool obvious = FALSE;
 
+        int method;
         int power = 0;
-        int damage = 0;
+        int blow_dam = 0; /* total physical damage for this blow */
 
         cptr act = NULL;
-
-        int effect;
-        int method;
-        int d_dice;
-        int d_side;
 
         /* Revenge aura only gives a single retaliatory attempt per player strike
            We'll cycle thru monster attacks on each revenge strike, and the revenge
@@ -256,14 +213,12 @@ bool make_attack_normal(int m_idx)
         if (retaliation_hack)
         {
             ap_cnt = retaliation_count;
-            if (ap_cnt >= 4) return FALSE;
+            if (ap_cnt >= MAX_MON_BLOWS) return FALSE;
         }
 
         /* Extract the attack infomation */
-        effect = r_ptr->blow[ap_cnt].effect;
-        method = r_ptr->blow[ap_cnt].method;
-        d_dice = r_ptr->blow[ap_cnt].d_dice;
-        d_side = r_ptr->blow[ap_cnt].d_side;
+        method = r_ptr->blows[ap_cnt].method;
+        power = r_ptr->blows[ap_cnt].power;
 
         if (!m_ptr->r_idx) break;
 
@@ -273,13 +228,7 @@ bool make_attack_normal(int m_idx)
         /* Hack -- no more attacks */
         if (!method) break;
 
-        if (is_pet(m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (method == RBM_EXPLODE))
-        {
-            method = RBM_HIT;
-            d_dice /= 10;
-        }
-
-        /* Stop if player is dead or gone */
+        /* Stop if player is dead or gone (e.g. SHATTER knocks player back) */
         if (!p_ptr->playing || p_ptr->is_dead) break;
         if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) break;
 
@@ -289,7 +238,7 @@ bool make_attack_normal(int m_idx)
         if (method == RBM_SHOOT)
         {
             if (retaliation_hack) break;
-             continue;
+            continue;
         }
 
         if (retaliation_hack)
@@ -299,14 +248,12 @@ bool make_attack_normal(int m_idx)
             mon_lore_2(m_ptr, RF2_AURA_REVENGE);
         }
 
-        /* Extract the attack "power" */
-        power = mbe_info[effect].power;
-
         /* Total armor */
         ac = p_ptr->ac + p_ptr->to_a;
 
         /* Monster hits player */
-        if (!effect || check_hit(power, rlev, MON_STUNNED(m_ptr), m_idx))
+        if ( !r_ptr->blows[ap_cnt].effects[0].effect  /* XXX B:BEG or B:INSULT */
+          || check_hit(power, rlev, MON_STUNNED(m_ptr), m_idx))
         {
             /* Always disturbing */
             disturb(1, 0);
@@ -324,14 +271,11 @@ bool make_attack_normal(int m_idx)
             }
             ht_cnt++;
 
-            do_cut = do_stun = 0;
-
             /* Describe the attack method */
             switch (method)
             {
             case RBM_HIT:
                 act = "hits";
-                do_cut = do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_HIT);
                 break;
@@ -343,24 +287,20 @@ bool make_attack_normal(int m_idx)
             case RBM_PUNCH:
                 act = "punches";
                 touched = TRUE;
-                do_stun = 1;
                 sound(SOUND_HIT);
                 break;
             case RBM_KICK:
                 act = "kicks";
                 touched = TRUE;
-                do_stun = 1;
                 sound(SOUND_HIT);
                 break;
             case RBM_CLAW:
                 act = "claws";
                 touched = TRUE;
-                do_cut = 1;
                 sound(SOUND_CLAW);
                 break;
             case RBM_BITE:
                 act = "bites";
-                do_cut = 1;
                 touched = TRUE;
                 sound(SOUND_BITE);
                 break;
@@ -372,18 +312,15 @@ bool make_attack_normal(int m_idx)
             case RBM_SLASH:
                 act = "slashes";
                 touched = TRUE;
-                do_cut = 1;
                 sound(SOUND_CLAW);
                 break;
             case RBM_BUTT:
                 act = "butts";
-                do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_HIT);
                 break;
             case RBM_CRUSH:
                 act = "crushes";
-                do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_CRUSH);
                 break;
@@ -467,40 +404,35 @@ bool make_attack_normal(int m_idx)
             /* Hack -- assume all attacks are obvious */
             obvious = TRUE;
 
-            /* Roll out the damage */
-            damage = damroll(d_dice, d_side);
-
-            if ( p_ptr->pclass == CLASS_DUELIST
-              && p_ptr->duelist_target_idx == m_idx )
+            for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-                damage -= damage/3;
-            }
+                mon_blow_effect_t e = r_ptr->blows[ap_cnt].effects[j];
+                int               effect_dam;
 
-            /*
-             * Skip the effect when exploding, since the explosion
-             * already causes the effect.
-             */
-            if (explode)
-                damage = 0;
-            /* Apply appropriate damage */
-            switch (effect)
-            {
-                case 0:
+                if (!e.effect) break;
+                if (!p_ptr->playing || p_ptr->is_dead) break;
+                if (nemesis_hack) break;
+                if (p_ptr->leaving) break;
+                if (e.pct && randint1(100) > e.pct) continue;
+
+                effect_dam = damroll(e.dd, e.ds);
+
+                if ( p_ptr->pclass == CLASS_DUELIST
+                  && p_ptr->duelist_target_idx == m_idx )
                 {
-                    /* Hack -- Assume obvious */
-                    obvious = TRUE;
-
-                    /* Hack -- No damage */
-                    damage = 0;
-
-                    break;
+                    effect_dam -= effect_dam/3;
                 }
-                case RBE_SUPERHURT:
+
+                if (explode) /* XXX Explosion already causes the effect ... but then why process at all? */
+                    effect_dam = 0;
+
+                switch (e.effect)
                 {
+                case RBE_SUPERHURT: /* XXX Replace with multiple HURT effects ... */
                     if ((randint1(rlev*2+300) > ac+200 || one_in_(13)) && !CHECK_MULTISHADOW())
                     {
                         int pct = ac_melee_pct_aux(ac, 60, 200);
-                        int tmp_damage = damage * pct / 100;
+                        int tmp_damage = effect_dam * pct / 100;
 
                         msg_print("It was a critical hit!");
 
@@ -510,50 +442,38 @@ bool make_attack_normal(int m_idx)
                          * e.g. If player gets standard 60% ac reduction, then they take
                          * the full attack damage, which is 250% of normal. However, they
                          * always take at least 200% of expected damage. Ouch! */
-                        tmp_damage = MAX(damage, tmp_damage*2);
+                        tmp_damage = MAX(effect_dam, tmp_damage*2);
                         tmp_damage = reduce_melee_dam_p(tmp_damage);
 
-                        get_damage += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
+                        blow_dam += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
                         break;
                     }
-                }
-                case RBE_HURT:
-                {
+                case RBE_HURT: {
                     int pct = ac_melee_pct(ac);
 
                     obvious = TRUE;
-                    damage = damage * pct / 100;
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = effect_dam * pct / 100;
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
-                    break;
-                }
+                    break; }
 
                 case RBE_POISON:
-                {
                     if (explode) break;
 
-                    /* Take "poison" effect */
                     if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
                     {
                         if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5, FALSE))
-                        {
                             obvious = TRUE;
-                        }
                     }
 
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
-                    /* Learn about the player */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     update_smart_learn(m_idx, DRS_POIS);
 
                     break;
-                }
 
-                case RBE_UN_BONUS:
-                {
+                case RBE_UN_BONUS: /* RBE_DISENCHANT */
                     if (explode) break;
 
                     if (one_in_(3))
@@ -578,28 +498,22 @@ bool make_attack_normal(int m_idx)
                     {
                         if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())
                         {
-                            /* Apply disenchantment */
                             if (apply_disenchant(0))
                             {
-                                /* Hack -- Update AC */
+                                /* XXX Hack -- Update AC */
                                 update_stuff();
                                 obvious = TRUE;
                             }
                         }
                     }
 
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
-                    /* Learn about the player */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     update_smart_learn(m_idx, DRS_DISEN);
 
                     break;
-                }
 
-                case RBE_UN_POWER:
-                {
+                case RBE_UN_POWER: /* RBE_DRAIN_CHARGES */ {
                     u32b flgs[OF_ARRAY_SIZE];
                     char buf[MAX_NLEN];
                     bool drained = FALSE;
@@ -607,8 +521,8 @@ bool make_attack_normal(int m_idx)
                                               so all monsters should probably do some damage here as well. */
 
                     /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -685,40 +599,29 @@ bool make_attack_normal(int m_idx)
                         set_food(MAX(0, MIN(p_ptr->food - 1000, p_ptr->food/2)));
                     }
 
-                    break;
-                }
+                    break; }
 
                 case RBE_EAT_GOLD:
-                {
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
 
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    /* Obvious */
                     obvious = TRUE;
 
                     if (r_ptr->flags2 & RF2_THIEF)
                         mon_lore_2(m_ptr, RF2_THIEF);
 
-                    /* Saving throw (unless paralyzed) based on dex and level */
                     if (!p_ptr->paralyzed &&
                         (randint0(100) < (adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
                                   p_ptr->lev)))
                     {
-                        /* Saving throw message */
                         msg_print("You quickly protect your money pouch!");
-
-
-                        /* Occasional blink anyway */
                         if (randint0(3)) blinked = TRUE;
                     }
-
-                    /* Eat gold */
                     else
                     {
                         gold = (p_ptr->au / 10) + randint1(25);
@@ -746,25 +649,18 @@ bool make_attack_normal(int m_idx)
                             virtue_add(VIRTUE_SACRIFICE, 2);
                         }
 
-                        /* Redraw gold */
                         p_ptr->redraw |= (PR_GOLD);
-
-                        /* Window stuff */
                         if (prace_is_(RACE_MON_LEPRECHAUN))
                             p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
 
-                        /* Blink away */
                         blinked = TRUE;
                     }
 
                     break;
-                }
 
                 case RBE_EAT_ITEM:
-                {
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
@@ -774,26 +670,16 @@ bool make_attack_normal(int m_idx)
                     if (r_ptr->flags2 & RF2_THIEF)
                         mon_lore_2(m_ptr, RF2_THIEF);
 
-                    /* Saving throw (unless paralyzed) based on dex and level */
                     if (!p_ptr->paralyzed &&
                         (randint0(100) < (adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
                                   p_ptr->lev)))
                     {
-                        /* Saving throw message */
                         msg_print("You grab hold of your backpack!");
-
-
-                        /* Occasional "blink" anyway */
                         blinked = TRUE;
-
-                        /* Obvious */
                         obvious = TRUE;
-
-                        /* Done */
                         break;
                     }
 
-                    /* Find an item */
                     for (k = 0; k < 10; k++)
                     {
                         s16b    o_idx;
@@ -808,72 +694,45 @@ bool make_attack_normal(int m_idx)
 
                         object_desc(o_name, obj, OD_OMIT_PREFIX);
 
-                        /* Message */
                         msg_format("%sour %s was stolen!",
                                ((obj->number > 1) ? "One of y" : "Y"),
                                o_name);
 
                         virtue_add(VIRTUE_SACRIFICE, 1);
 
-                        /* Make an object */
                         o_idx = o_pop();
-
-                        /* Success */
                         if (o_idx)
                         {
                             object_type *j_ptr;
-
-                            /* Get new object */
                             j_ptr = &o_list[o_idx];
 
-                            /* Copy object */
                             object_copy(j_ptr, obj);
 
-                            /* Modify number */
                             j_ptr->number = 1;
-
-                            /* Forget mark */
                             j_ptr->marked = OM_TOUCHED;
-
-                            /* Memorize monster */
                             j_ptr->held_m_idx = m_idx;
-
-                            /* Build stack */
                             j_ptr->next_o_idx = m_ptr->hold_o_idx;
-
-                            /* Build stack */
                             m_ptr->hold_o_idx = o_idx;
                         }
 
-                        /* Steal the items */
                         obj->number--;
                         obj_release(obj, OBJ_RELEASE_QUIET);
 
-                        /* Obvious */
                         obvious = TRUE;
-
-                        /* Blink away */
                         blinked = TRUE;
-
-                        /* Done */
                         break;
                     }
-
                     break;
-                }
 
                 case RBE_EAT_FOOD:
-                {
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (r_ptr->flags2 & RF2_THIEF)
                         mon_lore_2(m_ptr, RF2_THIEF);
 
-                    /* Steal some food */
                     for (k = 0; k < 10; k++)
                     {
                         slot_t  slot = pack_random_slot(NULL);
@@ -885,34 +744,24 @@ bool make_attack_normal(int m_idx)
                         if (obj->tval != TV_FOOD && !(obj->tval == TV_CORPSE && obj->sval)) continue;
                         if (object_is_artifact(obj)) continue;
 
-                        /* Get a description */
                         object_desc(o_name, obj, OD_OMIT_PREFIX | OD_NAME_ONLY | OD_COLOR_CODED);
-
-                        /* Message */
                         msg_format("%sour %s was eaten!",
                                ((obj->number > 1) ? "One of y" : "Y"),
                                o_name);
 
-                        /* Steal the items */
                         obj->number--;
                         obj_release(obj, OBJ_RELEASE_QUIET);
 
-                        /* Obvious */
                         obvious = TRUE;
-
-                        /* Done */
                         break;
                     }
-
                     break;
-                }
 
-                case RBE_EAT_LITE:
-                {
+                case RBE_EAT_LITE: {
                     int slot = equip_find_obj(TV_LITE, SV_ANY);
 
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (slot)
@@ -928,531 +777,317 @@ bool make_attack_normal(int m_idx)
                                 msg_print("Your light dims.");
                                 obvious = TRUE;
                             }
-                            p_ptr->window |= (PW_EQUIP);
+                            p_ptr->window |= PW_EQUIP;
                         }
                     }
-                    break;
-                }
+                    break; }
 
                 case RBE_ACID:
-                {
                     if (explode) break;
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Message */
                     msg_print("You are covered in acid!");
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += acid_dam(effect_dam, ddesc, -1);
 
-                    /* Special damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += acid_dam(damage, ddesc, -1);
-
-                    /* Hack -- Update AC */
-                    update_stuff();
-
-                    /* Learn about the player */
+                    update_stuff(); /* XXX AC changed (... this could wait) */
                     update_smart_learn(m_idx, DRS_ACID);
-
                     break;
-                }
 
                 case RBE_ELEC:
-                {
                     if (explode) break;
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Message */
                     msg_print("You are struck by electricity!");
-                    /* Special damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += elec_dam(damage, ddesc, -1);
-
-                    /* Learn about the player */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += elec_dam(effect_dam, ddesc, -1);
                     update_smart_learn(m_idx, DRS_ELEC);
-
                     break;
-                }
 
                 case RBE_FIRE:
-                {
                     if (explode) break;
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Message */
                     msg_print("You are enveloped in flames!");
-
-                    /* Special damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += fire_dam(damage, ddesc, -1);
-
-                    /* Learn about the player */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += fire_dam(effect_dam, ddesc, -1);
                     update_smart_learn(m_idx, DRS_FIRE);
-
                     break;
-                }
 
                 case RBE_COLD:
-                {
                     if (explode) break;
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Message */
                     msg_print("You are covered with frost!");
-
-                    /* Special damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += cold_dam(damage, ddesc, -1);
-
-                    /* Learn about the player */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += cold_dam(effect_dam, ddesc, -1);
                     update_smart_learn(m_idx, DRS_COLD);
-
                     break;
-                }
 
                 case RBE_BLIND:
-                {
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead) break;
-
-                    /* Increase "blind" */
                     if (!res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                     {
                         if (set_blind(p_ptr->blind + 10 + randint1(rlev), FALSE))
-                        {
-                            /* nanka */
                             obvious = TRUE;
-                        }
                     }
-
-                    /* Learn about the player */
                     update_smart_learn(m_idx, DRS_BLIND);
-
                     break;
-                }
 
-                case RBE_CONFUSE:
-                {
+                case RBE_CONFUSE: /* XXX Consider changing titans: B:HIT:HURT(XdY):CONFUSE(XdY) */
                     if (explode) break;
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam); /* XXX Make effect_dam the confuse amount */
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead) break;
-
-                    /* Increase "confused" */
                     if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
                     {
                         if (set_confused(p_ptr->confused + 3 + randint1(rlev), FALSE))
-                        {
                             obvious = TRUE;
-                        }
                     }
-
-                    /* Learn about the player */
                     update_smart_learn(m_idx, DRS_CONF);
-
                     break;
-                }
 
                 case RBE_TERRIFY:
-                {
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead) break;
 
-                    /* Increase "afraid" */
-                    if (CHECK_MULTISHADOW())
-                    {
-                        /* Do nothing */
-                    }
-                    else
+                    if (!CHECK_MULTISHADOW())
                     {
                         fear_terrify_p(m_ptr);
                         obvious = TRUE;
                     }
-
-                    /* Learn about the player */
                     update_smart_learn(m_idx, DRS_FEAR);
-
                     break;
-                }
 
-                case RBE_PARALYZE:
-                {
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                case RBE_PARALYZE: /* XXX Replace with B:GAZE:HURT(XdY):PARALYZE:CONFUSE:STUN(20) */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    if (p_ptr->is_dead) break;
-
-                    /* Increase "paralyzed" */
-                    if (CHECK_MULTISHADOW())
-                    {
-                        /* Do nothing */
-                    }
-                    else if (p_ptr->free_act)
+                    if (p_ptr->free_act)
                     {
                         msg_print("You are unaffected!");
                         equip_learn_flag(OF_FREE_ACT);
-
                         obvious = TRUE;
                     }
                     else if (randint0(100 + r_ptr->level/2) < p_ptr->skills.sav)
                     {
                         msg_print("You resist the effects!");
-
                         obvious = TRUE;
                     }
-                    else
+                    else if (!p_ptr->paralyzed)
                     {
-                        if (!p_ptr->paralyzed)
-                        {
-                            if (set_paralyzed(randint1(3), FALSE))
-                            {
-                                obvious = TRUE;
-                            }
-                        }
+                        if (set_paralyzed(randint1(3), FALSE))
+                            obvious = TRUE;
                     }
-
-                    /* Learn about the player */
                     update_smart_learn(m_idx, DRS_FREE);
-
                     break;
-                }
 
-                case RBE_LOSE_STR:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_STR)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_INT:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_INT)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_WIS:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_WIS)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_DEX:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_DEX)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_CON:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_CON)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_CHR:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    /* Damage (stat) */
                     if (do_dec_stat(A_CHR)) obvious = TRUE;
-
                     break;
-                }
 
                 case RBE_LOSE_ALL:
-                {
-                    /* Damage (physical) */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    /* Damage (stats) */
                     if (do_dec_stat(A_STR)) obvious = TRUE;
                     if (do_dec_stat(A_DEX)) obvious = TRUE;
                     if (do_dec_stat(A_CON)) obvious = TRUE;
                     if (do_dec_stat(A_INT)) obvious = TRUE;
                     if (do_dec_stat(A_WIS)) obvious = TRUE;
                     if (do_dec_stat(A_CHR)) obvious = TRUE;
-
                     break;
-                }
 
-                case RBE_SHATTER:
-                {
+                case RBE_SHATTER: {
                     int pct = ac_melee_pct(ac);
 
                     obvious = TRUE;
-                    damage = damage * pct / 100;
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+                    effect_dam = effect_dam * pct / 100;
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
 
-                    if (damage > 23 || explode)
+                    if (effect_dam > 23 || explode)
                         earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
-                    break;
-                }
+                    break; }
 
-                case RBE_EXP_10:
-                {
+                case RBE_EXP_10: { /* XXX Replace with B:HIT(60):HURT(5d5):EXP(XdY) */
                     s32b d = damroll(10, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    (void)drain_exp(d, d / 10, 95);
-                    break;
-                }
+                    drain_exp(d, d / 10, 95);
+                    break; }
 
-                case RBE_EXP_20:
-                {
+                case RBE_EXP_20: {
                     s32b d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    (void)drain_exp(d, d / 10, 90);
-                    break;
-                }
+                    drain_exp(d, d / 10, 90);
+                    break; }
 
-                case RBE_EXP_40:
-                {
+                case RBE_EXP_40: {
                     s32b d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    (void)drain_exp(d, d / 10, 75);
-                    break;
-                }
+                    drain_exp(d, d / 10, 75);
+                    break; }
 
-                case RBE_EXP_80:
-                {
+                case RBE_EXP_80: {
                     s32b d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    (void)drain_exp(d, d / 10, 50);
-                    break;
-                }
+                    drain_exp(d, d / 10, 50);
+                    break; }
 
                 case RBE_DISEASE:
-                {
-                    /* Take some damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    /* Take "poison" effect */
                     if (!res_save_default(RES_POIS))
                     {
                         if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5, FALSE))
-                        {
                             obvious = TRUE;
-                        }
                     }
 
-                    /* Damage CON (10% chance)*/
-                    if ((randint1(100) < 11) && (p_ptr->prace != RACE_ANDROID))
+                    if (randint1(100) < 11 && p_ptr->prace != RACE_ANDROID)
                     {
-                        /* 1% chance for perm. damage */
                         bool perm = one_in_(10);
                         if (dec_stat(A_CON, randint1(10), perm))
                         {
                             msg_print("You feel strange sickness.");
-
                             obvious = TRUE;
                         }
                     }
-
                     break;
-                }
+
                 case RBE_TIME:
-                {
                     if (explode) break;
                     if (!res_save_default(RES_TIME) && !CHECK_MULTISHADOW())
                     {
                         switch (randint1(10))
                         {
-                            case 1: case 2: case 3: case 4: case 5:
-                            {
-                                if (p_ptr->prace == RACE_ANDROID) break;
-                                msg_print("You feel life has clocked back.");
+                        case 1: case 2: case 3: case 4: case 5:
+                            if (p_ptr->prace == RACE_ANDROID) break;
+                            msg_print("You feel life has clocked back.");
 
-                                lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
-                                break;
+                            lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
+                            break;
+
+                        case 6: case 7: case 8: case 9: {
+                            int stat = randint0(6);
+                            switch (stat)
+                            {
+                            case A_STR: act = "strong"; break;
+                            case A_INT: act = "bright"; break;
+                            case A_WIS: act = "wise"; break;
+                            case A_DEX: act = "agile"; break;
+                            case A_CON: act = "hale"; break;
+                            case A_CHR: act = "confident"; break;
                             }
 
-                            case 6: case 7: case 8: case 9:
+                            msg_format("You're not as %s as you used to be...", act);
+
+                            p_ptr->stat_cur[stat] = (p_ptr->stat_cur[stat] * 3) / 4;
+                            if (p_ptr->stat_cur[stat] < 3) p_ptr->stat_cur[stat] = 3;
+                            p_ptr->update |= (PU_BONUS);
+                            break; }
+
+                        case 10:
+                            msg_print("You're not as powerful as you used to be...");
+
+
+                            for (k = 0; k < 6; k++)
                             {
-                                int stat = randint0(6);
-
-                                switch (stat)
-                                {
-                                    case A_STR: act = "strong"; break;
-                                    case A_INT: act = "bright"; break;
-                                    case A_WIS: act = "wise"; break;
-                                    case A_DEX: act = "agile"; break;
-                                    case A_CON: act = "hale"; break;
-                                    case A_CHR: act = "confident"; break;
-
-                                }
-
-                                msg_format("You're not as %s as you used to be...", act);
-
-
-                                p_ptr->stat_cur[stat] = (p_ptr->stat_cur[stat] * 3) / 4;
-                                if (p_ptr->stat_cur[stat] < 3) p_ptr->stat_cur[stat] = 3;
-                                p_ptr->update |= (PU_BONUS);
-                                break;
+                                p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 7) / 8;
+                                if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;
                             }
-
-                            case 10:
-                            {
-                                msg_print("You're not as powerful as you used to be...");
-
-
-                                for (k = 0; k < 6; k++)
-                                {
-                                    p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 7) / 8;
-                                    if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;
-                                }
-                                p_ptr->update |= (PU_BONUS);
-                                break;
-                            }
+                            p_ptr->update |= (PU_BONUS);
+                            break;
                         }
                     }
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     break;
-                }
-                case RBE_EXP_VAMP:
-                {
+
+                case RBE_EXP_VAMP: {
                     s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     bool resist_drain;
 
-                    /* Obvious */
                     obvious = TRUE;
-
-                    /* Take damage */
-                    damage = reduce_melee_dam_p(damage);
-                    get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
+                    effect_dam = reduce_melee_dam_p(effect_dam);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     resist_drain = !drain_exp(d, d / 10, 50);
-
-                    /* Heal the attacker? */
                     if (get_race()->flags & RACE_IS_NONLIVING)
                         resist_drain = TRUE;
 
-                    if ((damage > 5) && !resist_drain)
+                    if (effect_dam > 5 && !resist_drain)
                     {
                         bool did_heal = FALSE;
 
                         if (m_ptr->hp < m_ptr->maxhp) did_heal = TRUE;
-
-                        /* Heal */
-                        m_ptr->hp += damroll(4, damage / 6);
+                        m_ptr->hp += damroll(4, effect_dam / 6);
                         if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-                        /* Redraw (later) if needed */
                         check_mon_health_redraw(m_idx);
-
-                        /* Special message */
                         if (m_ptr->ml && did_heal)
-                        {
                             msg_format("%^s appears healthier.", m_name);
-
-                        }
                     }
+                    break; }
 
-                    break;
-                }
                 case RBE_DR_MANA:
-                {
-                    /* Obvious */
                     obvious = TRUE;
-
                     if (CHECK_MULTISHADOW())
                     {
                         msg_print("The attack hits Shadow, you are unharmed!");
@@ -1467,101 +1102,34 @@ bool make_attack_normal(int m_idx)
                     }
                     else
                     {
-                        do_cut = 0;
-                        sp_player(-damage);
+                        sp_player(-effect_dam);
                     }
-
-                    /* Learn about the player */
                     update_smart_learn(m_idx, DRS_MANA);
-
                     break;
-                }
-            }
-
-            /* Hack -- only one of cut or stun */
-            if (do_cut && do_stun)
-            {
-                /* Cancel cut */
-                if (randint0(100) < 50)
-                {
-                    do_cut = 0;
-                }
-
-                /* Cancel stun */
-                else
-                {
-                    do_stun = 0;
-                }
-            }
-
-            /* Handle cut */
-            if (do_cut)
-            {
-                int k = 0;
-
-                /* Critical hit (zero if non-critical) */
-                tmp = monster_critical(d_dice, d_side, damage);
-
-                /* Roll for damage */
-                switch (tmp)
-                {
-                    case 0: k = 0; break;
-                    case 1: k = randint1(5); break;
-                    case 2: k = randint1(5) + 5; break;
-                    case 3: k = randint1(20) + 20; break;
-                    case 4: k = randint1(50) + 50; break;
-                    case 5: k = randint1(100) + 100; break;
-                    case 6: k = 300; break;
-                    default: k = 500; break;
-                }
-
-                /* Apply the cut */
-                if (k) (void)set_cut(p_ptr->cut + k, FALSE);
-            }
-
-            /* Handle stun */
-            if (do_stun)
-            {
-                int k = 0;
-
-                /* Critical hit (zero if non-critical) */
-                tmp = monster_critical(d_dice, d_side, damage);
-
-                /* Roll for damage */
-                switch (tmp)
-                {
-                    case 0: k = 0; break;
-                    case 1: k = randint1(5); break;
-                    case 2: k = randint1(5) + 10; break;
-                    case 3: k = randint1(10) + 20; break;
-                    case 4: k = randint1(15) + 30; break;
-                    case 5: k = randint1(20) + 40; break;
-                    case 6: k = 80; break;
-                    default: k = 110; break;
-                }
-
-                /* Apply the stun */
-                if (k && p_ptr->stun < 100)
-                    set_stun(p_ptr->stun + k, FALSE);
-            }
-
+                case RBE_CUT:
+                    set_cut(p_ptr->cut + effect_dam, FALSE);
+                    break;
+                case RBE_STUN:
+                    if (p_ptr->stun < 100)
+                        set_stun(p_ptr->stun + effect_dam, FALSE);
+                    break;
+                } /* switch (effect) */
+            } /* for each effect */
+            total_dam += blow_dam;
             if (explode)
             {
                 sound(SOUND_EXPLODE);
-
                 if (mon_take_hit(m_idx, m_ptr->hp + 1, &fear, NULL))
                 {
                     blinked = FALSE;
                     alive = FALSE;
                 }
             }
-
-            if (touched)
+            else if (touched)
             {
                 bool do_retaliate = FALSE;
 
-                /* Hack for Bowmaster */
-                weaponmaster_do_readied_shot(m_ptr);
+                weaponmaster_do_readied_shot(m_ptr); /* XXX Bowmaster */
 
                 if (weaponmaster_get_toggle() == TOGGLE_TRADE_BLOWS)
                 {
@@ -1604,7 +1172,7 @@ bool make_attack_normal(int m_idx)
 
                 if (p_ptr->tim_blood_revenge && alive && !p_ptr->is_dead && monster_living(r_ptr))
                 {   /* Scale the damage based on cuts and monster deadliness */
-                    int dam = damage * p_ptr->cut / CUT_SEVERE;
+                    int dam = blow_dam * p_ptr->cut / CUT_SEVERE;
 
                     /* Balance out a weak melee attack */
                     if (dam < p_ptr->cut / 10)
@@ -1922,7 +1490,6 @@ bool make_attack_normal(int m_idx)
                     disturb(1, 0);
                     msg_format("%^s misses%s", m_name, retaliation_hack ? ".<color:g>)</color>" : ".");
                 }
-                damage = 0;
                 break;
             case RBM_DROOL:
                 if (m_ptr->ml)
@@ -1930,7 +1497,6 @@ bool make_attack_normal(int m_idx)
                     disturb(1, 0);
                     msg_format("%^s slobbers ineffectually%s", m_name, retaliation_hack ? ".<color:g>)</color>" : ".");
                 }
-                damage = 0;
                 break;
             case RBM_WAIL:
                 if (m_ptr->ml)
@@ -1938,7 +1504,6 @@ bool make_attack_normal(int m_idx)
                     disturb(1, 0);
                     msg_format("%^s wails ineffectually%s", m_name, retaliation_hack ? ".<color:g>)</color>" : ".");
                 }
-                damage = 0;
                 break;
             case RBM_GAZE:
                 if (m_ptr->ml)
@@ -1948,7 +1513,6 @@ bool make_attack_normal(int m_idx)
                     monster_desc(tmp, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
                     msg_format("You avoid %s gaze%s", tmp, retaliation_hack ? ".<color:g>)</color>" : ".");
                 }
-                damage = 0;
                 break;
             }
         }
@@ -1958,15 +1522,15 @@ bool make_attack_normal(int m_idx)
             int options = 0;
             if (do_silly_attack) options |= MON_BLOW_SILLY;
             if (obvious) options |= MON_BLOW_OBVIOUS;
-            if (damage) options |= MON_BLOW_DAMAGE;
+            if (blow_dam) options |= MON_BLOW_DAMAGE;
             mon_lore_blows(m_ptr, ap_cnt, options);
         }
 
-        if (p_ptr->riding && damage)
+        if (p_ptr->riding && blow_dam)
         {
             char m_name[80];
             monster_desc(m_name, &m_list[p_ptr->riding], 0);
-            if (rakuba((damage > 200) ? 200 : damage, FALSE))
+            if (rakuba((blow_dam > 200) ? 200 : blow_dam, FALSE))
             {
                 msg_format("You have fallen from %s.", m_name);
             }
@@ -1982,10 +1546,10 @@ bool make_attack_normal(int m_idx)
     }
 
     /* Hex - revenge damage stored */
-    revenge_store(get_damage);
+    revenge_store(total_dam);
 
     if (IS_REVENGE()
-        && get_damage > 0 && !p_ptr->is_dead)
+        && total_dam > 0 && !p_ptr->is_dead)
     {
         char m_name_self[80];
 
@@ -1993,7 +1557,7 @@ bool make_attack_normal(int m_idx)
         monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
         msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
-        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL, -1);
+        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(total_dam), GF_MISSILE, PROJECT_KILL, -1);
         if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
     }
 
@@ -2050,5 +1614,6 @@ bool make_attack_normal(int m_idx)
     }
 
     /* Assume we attacked */
-    return (TRUE);
+    return TRUE;
 }
+
