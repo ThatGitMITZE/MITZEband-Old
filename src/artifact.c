@@ -1956,9 +1956,6 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     int     esp_count = 0;
     int     lev = object_level;
     bool    is_falcon_sword = FALSE;
-    int     max_a = 15 + m_bonus(15, object_level);
-    int     max_h = 15 + m_bonus(15, object_level);
-    int     max_d = 15 + m_bonus(15, object_level);
 
     if (no_artifacts) return 0;
     if (have_flag(o_ptr->flags, OF_NO_REMOVE)) return 0;
@@ -2735,9 +2732,11 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     if (object_is_armour(o_ptr))
     {
         int a = randint1(5) + m_bonus(5, lev) + m_bonus(10, lev);
+        int max = 20;
+        if (object_is_body_armour(o_ptr)) max += 5;
         o_ptr->to_a += a;
-        if (o_ptr->to_a > max_a)
-            o_ptr->to_a = max_a;
+        if (o_ptr->to_a > max)
+            o_ptr->to_a = max;
     }
     else if (object_is_weapon_ammo(o_ptr))
     {
@@ -2745,10 +2744,10 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
         int d = randint1(5) + m_bonus(5, lev) + m_bonus(10, lev);
         o_ptr->to_h += h;
         o_ptr->to_d += d;
-        if (o_ptr->to_h > max_h)
-            o_ptr->to_h = max_h;
-        if (o_ptr->to_d > max_d)
-            o_ptr->to_d = max_d;
+        if (o_ptr->to_h > 25)
+            o_ptr->to_h = 25;
+        if (o_ptr->to_d > 25)
+            o_ptr->to_d = 25;
 
         if ((have_flag(o_ptr->flags, OF_WIS)) && (o_ptr->pval > 0)) add_flag(o_ptr->flags, OF_BLESSED);
     }
