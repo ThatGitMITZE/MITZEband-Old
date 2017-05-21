@@ -1241,8 +1241,9 @@ static void _wiz_improve_gear(obj_ptr obj)
             }
         }
     }
+    if (object_is_melee_weapon(obj) && skills_weapon_is_icky(obj->tval, obj->sval)) return;
 
-    if (obj->name1 == ART_POWER || have_flag(obj->flags, OF_NO_SUMMON)) return;
+    if (obj->name1 == ART_POWER || obj->name1 == ART_STONEMASK || have_flag(obj->flags, OF_NO_SUMMON)) return;
     /* hydras have many heads ... */
     for (slot = equip_first_slot(obj); slot; slot = equip_next_slot(obj, slot))
     {
@@ -1882,6 +1883,20 @@ void do_cmd_debug(void)
 
         viewport_verify();
         do_cmd_redraw();
+        break;
+    }
+    case '_':
+    {
+        int i;
+        /* I had a star-spawn knock me out once with a single 11d6 blow.
+         * Odds? About 1 in 250,000 plus, I think a 1 int 50 'supercharge' */
+        for (i = 0; i < 1000 * 1000; i++)
+        {
+            int d = damroll(11, 6);
+            if (d >= 66 * 19 / 20)
+                msg_format("%d) 11d6 = %d", i, d);
+        }
+        msg_print("Done");
         break;
     }
     default:
