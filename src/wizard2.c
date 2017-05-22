@@ -1317,7 +1317,11 @@ static void _wiz_inspect_objects(int level)
         object_type *o_ptr = &o_list[i];
 
         if (!o_ptr->k_idx) continue;
-        if (o_ptr->tval == TV_GOLD) continue;
+        if (o_ptr->tval == TV_GOLD)
+        {
+            pack_get(o_ptr);
+            continue;
+        }
         if (o_ptr->held_m_idx) continue;
         if (o_ptr->marked & OM_COUNTED) continue; /* skip player drops */
 

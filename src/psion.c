@@ -189,7 +189,7 @@ bool psion_drain(void)
 int psion_do_drain(int spell_idx, int dam)
 {
     int result = dam;
-    if (psion_drain() && !spell_is_inate(spell_idx))
+    if (psion_drain() && !spell_is_innate(spell_idx))
     {
         int drain = dam * 5 * p_ptr->magic_num2[_DRAIN] / 100;
         result -= drain;

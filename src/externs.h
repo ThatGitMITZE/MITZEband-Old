@@ -1861,7 +1861,7 @@ extern bool clean_shot(int y1, int x1, int y2, int x2, bool friend);
 extern bool summon_possible(int y1, int x1);
 extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(int m_idx);
-extern bool spell_is_inate(u16b spell);
+extern bool spell_is_innate(u16b spell);
 extern bool make_attack_spell(int m_idx, bool ticked_off);
 
 /* mspells2.c */

@@ -2844,7 +2844,8 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
             if (!mut_present(MUT_EVASION) || one_in_(2))
             {
                 msg_print("You are <color:v>severely crushed</color>!");
-                damage = 200;
+                damage = 50 + damroll(3, 50);
+                (void)set_stun(p_ptr->stun + damroll(7, 7), FALSE);
             }
         }
 
@@ -2865,7 +2866,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                     {
                         msg_print("You are <color:R>bashed by rubble</color>!");
                         damage = damroll(10, 4);
-                        (void)set_stun(p_ptr->stun + randint1(50), FALSE);
+                        (void)set_stun(p_ptr->stun + damroll(5, 5), FALSE);
                     }
                     break;
                 }
@@ -2875,7 +2876,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                     {
                         msg_print("You are <color:R>crushed between the floor and ceiling</color>!");
                         damage = damroll(10, 4);
-                        (void)set_stun(p_ptr->stun + randint1(50), FALSE);
+                        (void)set_stun(p_ptr->stun + damroll(5, 5), FALSE);
                     }
                     break;
                 }

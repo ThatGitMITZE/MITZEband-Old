@@ -782,7 +782,7 @@ bool mon_spell_mon(int m_idx, int options)
     if (disturb_minor && p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
     /* Check for spell failure (inate attacks never fail) */
-    if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
+    if (!spell_is_innate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
     {
         if (see_m) msg_format("%^s tries to cast a spell, but fails.", m_name);
 
@@ -790,13 +790,13 @@ bool mon_spell_mon(int m_idx, int options)
     }
 
     /* Hex: Anti Magic Barrier */
-    if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
+    if (!spell_is_innate(thrown_spell) && magic_barrier(m_idx))
     {
         if (see_m) msg_format("Your anti-magic barrier blocks the spell which %^s casts.");
         return (TRUE);
     }
 
-    if (!spell_is_inate(thrown_spell) && psion_check_disruption(m_idx))
+    if (!spell_is_innate(thrown_spell) && psion_check_disruption(m_idx))
     {
         msg_format("Your psionic disruption blocks the spell which %^s casts.", m_name);
         return TRUE;

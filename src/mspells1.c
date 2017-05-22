@@ -1271,9 +1271,9 @@ static int choose_attack_spell(int m_idx, byte spells[], byte num, bool ticked_o
 
 
 /*
- * Return TRUE if a spell is inate spell.
+ * Return TRUE if a spell is innate spell.
  */
-bool spell_is_inate(u16b spell)
+bool spell_is_innate(u16b spell)
 {
     if (spell < 32 * 4) /* Set RF4 */
     {
@@ -1288,7 +1288,7 @@ bool spell_is_inate(u16b spell)
         if ((1L << (spell - 32 * 5)) & RF6_NOMAGIC_MASK) return TRUE;
     }
 
-    /* This spell is not "inate" */
+    /* This spell is not "innate" */
     return FALSE;
 }
 
@@ -1405,7 +1405,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     char            tmp[MAX_NLEN];
     char            m_name[MAX_NLEN];
     char            m_poss[80];
-    bool            no_inate = FALSE;
+    bool            no_innate = FALSE;
     bool            do_spell = DO_SPELL_NONE;
     int             dam = 0;
     u32b mode = 0L;
@@ -1455,12 +1455,12 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     if (!is_aware(m_ptr)) return FALSE;
 
 
-    /* Sometimes forbid inate attacks (breaths)
+    /* Sometimes forbid innate attacks (breaths)
      * XXX This is really counter-intuitive for some monsters.
      * For example, an orc that RF4_SHOOTs 1 in 15 actually only
      * does so 0.72% of the time (expected 6%). Turning 1_IN_15
      * into 1_IN_138.889 is rather weird ...*/
-    if (randint0(100) >= (r_ptr->freq_spell * 2)) no_inate = TRUE;
+    if (randint0(100) >= (r_ptr->freq_spell * 2)) no_innate = TRUE;
 
     /* XXX XXX XXX Handle "track_target" option (?) */
 
@@ -1651,8 +1651,8 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     /* Extract the monster level */
     rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-    /* Forbid inate attacks sometimes */
-    if (no_inate)
+    /* Forbid innate attacks sometimes */
+    if (no_innate)
     {
         f4 &= ~(RF4_NOMAGIC_MASK);
         f5 &= ~(RF5_NOMAGIC_MASK);
@@ -1781,7 +1781,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
         if (!f4 && !f5 && !f6) return (FALSE);
     }
 
-    /* Extract the "inate" spells */
+    /* Extract the "innate" spells */
     for (k = 0; k < 32; k++)
     {
         if (f4 & (1L << k)) spell[num++] = k + 32 * 3;
@@ -1858,8 +1858,8 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     /* Hack -- Stupid monsters will never fail (for jellies and such) */
     if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
-    /* Check for spell failure (inate attacks never fail) */
-    if (!spell_is_inate(thrown_spell)
+    /* Check for spell failure (innate attacks never fail) */
+    if (!spell_is_innate(thrown_spell)
         && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
     {
         disturb(1, 0);
@@ -1869,13 +1869,13 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     }
 
     /* Hex: Anti Magic Barrier */
-    if (!spell_is_inate(thrown_spell) && magic_barrier(m_idx))
+    if (!spell_is_innate(thrown_spell) && magic_barrier(m_idx))
     {
         msg_format("Your anti-magic barrier blocks the spell which %^s casts.", m_name);
         return (TRUE);
     }
 
-    if (!spell_is_inate(thrown_spell) && psion_check_disruption(m_idx))
+    if (!spell_is_innate(thrown_spell) && psion_check_disruption(m_idx))
     {
         msg_format("Your psionic disruption blocks the spell which %^s casts.", m_name);
         return TRUE;

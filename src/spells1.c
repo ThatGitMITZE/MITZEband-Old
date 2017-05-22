@@ -6895,7 +6895,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
             {
                 /* auras should usually focus on player ... perhaps less
                  * S:DISPEL and more A:DISENCHANT? */
-                disenchant_player();
+                if (!res_save_default(RES_DISEN) || one_in_(5))
+                    disenchant_player();
             }
             else if (!res_save_default(RES_DISEN) && !CHECK_MULTISHADOW())
                 (void)apply_disenchant(0);

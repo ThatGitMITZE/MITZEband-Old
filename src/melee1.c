@@ -478,7 +478,7 @@ bool make_attack_normal(int m_idx)
 
                     if (one_in_(3))
                     {
-                        if ((res_save_default(RES_DISEN) || CHECK_MULTISHADOW()) && one_in_(2))
+                        if ((res_save_default(RES_DISEN) || CHECK_MULTISHADOW()) && !one_in_(5))
                         {
                         }
                         else if (prace_is_(RACE_MON_SWORD) && one_in_(2) && sword_disenchant())
@@ -596,7 +596,7 @@ bool make_attack_normal(int m_idx)
                       && !prace_is_(RACE_MON_JELLY) )
                     {
                         msg_print("Food drains from your belly!");
-                        set_food(MAX(0, MIN(p_ptr->food - 1000, p_ptr->food/2)));
+                        set_food(MAX(0, MIN(p_ptr->food - 1000, p_ptr->food*2/3)));
                     }
 
                     break; }
