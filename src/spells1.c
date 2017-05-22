@@ -6445,6 +6445,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
     /* Player needs a "description" (he is blind) */
     bool fuzzy = FALSE;
+    bool aura = BOOL(flg & PROJECT_AURA);
 
     /* Source monster */
     monster_type *m_ptr = NULL;
@@ -6656,30 +6657,35 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_ACID:
         {
             if (fuzzy) msg_print("You are hit by acid!");
+            if (aura) msg_print("You are <color:G>dissolved</color>!");
             get_damage = acid_dam(dam, killer, monspell);
             break;
         }
         case GF_FIRE:
         {
             if (fuzzy) msg_print("You are hit by fire!");
+            if (aura) msg_print("You are <color:r>burned</color>!");
             get_damage = fire_dam(dam, killer, monspell);
             break;
         }
         case GF_COLD:
         {
             if (fuzzy) msg_print("You are hit by cold!");
+            if (aura) msg_print("You are <color:W>frozen</color>!");
             get_damage = cold_dam(dam, killer, monspell);
             break;
         }
         case GF_ELEC:
         {
             if (fuzzy) msg_print("You are hit by lightning!");
+            if (aura) msg_print("You are <color:b>shocked</color>!");
             get_damage = elec_dam(dam, killer, monspell);
             break;
         }
         case GF_POIS:
         {
             if (fuzzy) msg_print("You are hit by poison!");
+            if (aura) msg_print("You are <color:G>poisoned</color>!");
             dam = res_calc_dam(RES_POIS, dam);
             if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
                 do_dec_stat(A_CON);
@@ -6693,6 +6699,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_NUKE:
         {
             if (fuzzy) msg_print("You are hit by radiation!");
+            if (aura) msg_print("You are <color:G>irradiated</color>!");
             dam = res_calc_dam(RES_POIS, dam);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
@@ -6707,7 +6714,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                     else
                         mutate_player();
                 }
-                inven_damage(set_acid_destroy, 2, RES_POIS);
+                if (!aura) inven_damage(set_acid_destroy, 2, RES_POIS);
             }
             break;
         }
@@ -6721,6 +6728,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_HOLY_FIRE:
         {
             if (fuzzy) msg_print("You are hit by something!");
+            if (aura) msg_print("You are <color:y>burned</color>!");
             if (p_ptr->align > 10)
                 dam /= 2;
             else if (p_ptr->align < -10)
@@ -6731,6 +6739,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_HELL_FIRE:
         {
             if (fuzzy) msg_print("You are hit by something!");
+            if (aura) msg_print("You are <color:D>burned</color>!");
             if (p_ptr->align > 10)
                 dam *= 2;
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -6750,6 +6759,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_PLASMA:
         {
             if (fuzzy) msg_print("You are hit by something *HOT*!");
+            if (aura) msg_print("You are <color:R>burned</color>!");
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
             {
@@ -6757,12 +6767,13 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                 (void)set_stun(p_ptr->stun + k, FALSE);
             }
 
-            inven_damage(set_acid_destroy, 3, RES_FIRE);
+            if (!aura) inven_damage(set_acid_destroy, 3, RES_FIRE);
             break;
         }
         case GF_NETHER:
         {
             if (fuzzy) msg_print("You are hit by nether forces!");
+            if (aura) msg_print("You are <color:D>drained</color>!");
             dam = res_calc_dam(RES_NETHER, dam);
             if (!res_save_default(RES_NETHER) && !CHECK_MULTISHADOW())
                 drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
@@ -6787,6 +6798,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_CHAOS:
         {
             if (fuzzy) msg_print("You are hit by a wave of anarchy!");
+            if (aura) msg_print("You are <color:v>unmade</color>!");
             dam = res_calc_dam(RES_CHAOS, dam);
             if (!CHECK_MULTISHADOW())
             {
@@ -6809,8 +6821,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                 if (!res_save_default(RES_NETHER) && !res_save_default(RES_CHAOS))
                     drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
 
-                inven_damage(set_elec_destroy, 2, RES_CHAOS);
-                inven_damage(set_fire_destroy, 2, RES_CHAOS);
+                if (!aura)
+                {
+                    inven_damage(set_elec_destroy, 2, RES_CHAOS);
+                    inven_damage(set_fire_destroy, 2, RES_CHAOS);
+                }
             }
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             break;
@@ -6839,29 +6854,32 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_SHARDS:
         {
             if (fuzzy) msg_print("You are hit by something sharp!");
+            if (aura) msg_print("You are <color:U>shredded</color>!");
             dam = res_calc_dam(RES_SHARDS, dam);
             if (!res_save_default(RES_SHARDS) && !CHECK_MULTISHADOW())
                 (void)set_cut(p_ptr->cut + dam, FALSE);
-            inven_damage(set_cold_destroy, 2, RES_SHARDS);
+            if (!aura) inven_damage(set_cold_destroy, 2, RES_SHARDS);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             break;
         }
         case GF_SOUND:
         {
             if (fuzzy) msg_print("You are hit by a loud noise!");
+            /*if (aura) ... */
             dam = res_calc_dam(RES_SOUND, dam);
             if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
             {
                 int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
                 (void)set_stun(p_ptr->stun + k, FALSE);
             }
-            inven_damage(set_cold_destroy, 2, RES_SOUND);
+            if (!aura) inven_damage(set_cold_destroy, 2, RES_SOUND);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             break;
         }
         case GF_CONFUSION:
         {
             if (fuzzy) msg_print("You are hit by something puzzling!");
+            /*if (aura) ... */
             dam = res_calc_dam(RES_CONF, dam);
             if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
                 (void)set_confused(p_ptr->confused + randint1(20) + 10, FALSE);
@@ -6871,8 +6889,15 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_DISENCHANT:
         {
             if (fuzzy) msg_print("You are hit by something static!");
+            if (aura) msg_print("You are <color:v>disenchanted</color>!");
             dam = res_calc_dam(RES_DISEN, dam);
-            if (!res_save_default(RES_DISEN) && !CHECK_MULTISHADOW())
+            if (aura && !one_in_(7) && !CHECK_MULTISHADOW())
+            {
+                /* auras should usually focus on player ... perhaps less
+                 * S:DISPEL and more A:DISENCHANT? */
+                disenchant_player();
+            }
+            else if (!res_save_default(RES_DISEN) && !CHECK_MULTISHADOW())
                 (void)apply_disenchant(0);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             break;
@@ -6880,6 +6905,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_NEXUS:
         {
             if (fuzzy) msg_print("You are hit by something strange!");
+            if (aura) msg_print("You are <color:v>scrambled</color>!");
             dam = res_calc_dam(RES_NEXUS, dam);
             if (!res_save_default(RES_NEXUS) && !CHECK_MULTISHADOW())
                 apply_nexus(m_ptr);
@@ -6909,6 +6935,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_INERT:
         {
             if (fuzzy) msg_print("You are hit by something slow!");
+            /*if (aura) ... */
             if (!CHECK_MULTISHADOW())
                 (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -6917,6 +6944,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_LITE:
         {
             if (fuzzy) msg_print("You are hit by something!");
+            if (aura) msg_print("You are <color:y>dazzled</color>!");
             dam = res_calc_dam(RES_LITE, dam);
             if (!blind && !res_save_default(RES_LITE) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                 (void)set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
@@ -6940,6 +6968,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_DARK:
         {
             if (fuzzy) msg_print("You are hit by something!");
+            if (aura) msg_print("You are <color:D>benighted</color>!");
             dam = res_calc_dam(RES_DARK, dam);
             if (!blind && !res_save_default(RES_DARK) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                 (void)set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
@@ -6962,6 +6991,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_TIME:
         {
             if (fuzzy) msg_print("You are hit by a blast from the past!");
+            if (aura) msg_print("You are <color:B>chronosmashed</color>!");
             dam = res_calc_dam(RES_TIME, dam);
             if (!res_save_default(RES_TIME) && !CHECK_MULTISHADOW())
             {
@@ -7028,6 +7058,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_GRAVITY:
         {
             if (fuzzy) msg_print("You are hit by something heavy!");
+            /*if (aura) ... */
             msg_print("Gravity warps around you.");
             if (!CHECK_MULTISHADOW())
             {
@@ -7145,6 +7176,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         case GF_ICE:
         {
             if (fuzzy) msg_print("You are hit by something sharp and cold!");
+            if (aura) msg_print("You are <color:W>frozen</color>!");
             get_damage = cold_dam(dam, killer, monspell);
             if (!CHECK_MULTISHADOW())
             {
@@ -7175,17 +7207,17 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if (CHECK_MULTISHADOW())
             {
-                msg_print("The attack hits Shadow, you are unharmed!");
+                if (!aura) msg_print("The attack hits Shadow, you are unharmed!");
             }
             else if (psion_mental_fortress())
             {
-                msg_print("Your mental fortress is impenetrable!");
+                if (!aura) msg_print("Your mental fortress is impenetrable!");
             }
             else if ( prace_is_(RACE_DEMIGOD)
                     && p_ptr->psubrace == DEMIGOD_HERA
                     && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
             {
-                msg_print("You keep your wits about you!");
+                if (!aura) msg_print("You keep your wits about you!");
             }
             else if (p_ptr->csp)
             {
@@ -7207,32 +7239,18 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                     p_ptr->csp -= dam;
                 }
 
-                learn_spell(monspell);
+                if (!aura) learn_spell(monspell);
 
-                /* Redraw mana */
                 p_ptr->redraw |= (PR_MANA);
-
-                /* Window stuff */
                 p_ptr->window |= (PW_SPELL);
 
-                if (who > 0)
+                if (who > 0 && m_ptr->hp < m_ptr->maxhp)
                 {
-                    /* Heal the monster */
-                    if (m_ptr->hp < m_ptr->maxhp)
-                    {
-                        /* Heal */
-                        m_ptr->hp += (6 * dam);
-                        if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-                        /* Redraw (later) if needed */
-                        check_mon_health_redraw(who);
-
-                        /* Special message */
-                        if (m_ptr->ml)
-                        {
-                            msg_format("%^s appears healthier.", m_name);
-                        }
-                    }
+                    m_ptr->hp += (6 * dam);
+                    if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+                    check_mon_health_redraw(who);
+                    if (m_ptr->ml)
+                        msg_format("%^s appears healthier.", m_name);
                 }
             }
 
@@ -7243,31 +7261,31 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
-            }
-            else
-            {
-                if (!CHECK_MULTISHADOW())
+                if (!aura)
                 {
-                    msg_print("Your mind is blasted by psyonic energy.");
-
-                    if (!res_save_default(RES_CONF))
-                        (void)set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
-
-                    if (!res_save_default(RES_CHAOS) && one_in_(3))
-                        (void)set_image(p_ptr->image + randint0(25) + 15, FALSE);
-
-                    p_ptr->csp -= 50;
-                    if (p_ptr->csp < 0)
-                    {
-                        p_ptr->csp = 0;
-                        p_ptr->csp_frac = 0;
-                    }
-                    p_ptr->redraw |= PR_MANA;
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
                 }
-                get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             }
+            else if (!CHECK_MULTISHADOW())
+            {
+                msg_print("Your mind is blasted by psionic energy.");
+
+                if (!res_save_default(RES_CONF))
+                    (void)set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
+
+                if (!res_save_default(RES_CHAOS) && one_in_(3))
+                    (void)set_image(p_ptr->image + randint0(25) + 15, FALSE);
+
+                p_ptr->csp -= 50;
+                if (p_ptr->csp < 0)
+                {
+                    p_ptr->csp = 0;
+                    p_ptr->csp_frac = 0;
+                }
+                p_ptr->redraw |= PR_MANA;
+            }
+            get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             break;
         }
 
@@ -7276,8 +7294,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {
@@ -7285,7 +7306,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                   && p_ptr->psubrace == DEMIGOD_HERA
                   && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
                 {
-                    msg_print("You keep your wits about you!");
+                    if (!aura) msg_print("You keep your wits about you!");
                 }
                 else if (!CHECK_MULTISHADOW())
                 {
@@ -7329,8 +7350,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {
@@ -7345,8 +7369,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {
@@ -7361,8 +7388,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {
@@ -7377,8 +7407,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
             {
-                msg_print("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {
@@ -7393,8 +7426,11 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         {
             if ((randint0(100 + rlev/2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
             {
-                msg_format("You resist the effects!");
-                learn_spell(monspell);
+                if (!aura)
+                {
+                    msg_print("You resist the effects!");
+                    learn_spell(monspell);
+                }
             }
             else
             {

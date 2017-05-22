@@ -406,8 +406,8 @@ bool make_attack_normal(int m_idx)
 
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-                mon_blow_effect_t e = r_ptr->blows[ap_cnt].effects[j];
-                int               effect_dam;
+                mon_effect_t e = r_ptr->blows[ap_cnt].effects[j];
+                int          effect_dam;
 
                 if (!e.effect) break;
                 if (!p_ptr->playing || p_ptr->is_dead) break;
@@ -473,7 +473,7 @@ bool make_attack_normal(int m_idx)
 
                     break;
 
-                case RBE_UN_BONUS: /* RBE_DISENCHANT */
+                case RBE_DISENCHANT:
                     if (explode) break;
 
                     if (one_in_(3))
@@ -513,7 +513,7 @@ bool make_attack_normal(int m_idx)
 
                     break;
 
-                case RBE_UN_POWER: /* RBE_DRAIN_CHARGES */ {
+                case RBE_DRAIN_CHARGES: {
                     u32b flgs[OF_ARRAY_SIZE];
                     char buf[MAX_NLEN];
                     bool drained = FALSE;

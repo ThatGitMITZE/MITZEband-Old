@@ -1868,8 +1868,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 pt = GF_POIS;
                 break;
 
-            case RBE_UN_BONUS:
-            case RBE_UN_POWER:
+            case RBE_DISENCHANT:
+            case RBE_DRAIN_CHARGES:
                 pt = GF_DISENCHANT;
                 break;
 

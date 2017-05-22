@@ -2024,6 +2024,7 @@ void touch_zap_player(int m_idx)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    int           i;
 
     if ((r_ptr->flags2 & RF2_AURA_REVENGE) && !MON_CONFUSED(m_ptr) && randint0(120) < r_ptr->level)
     {
@@ -2096,6 +2097,18 @@ void touch_zap_player(int m_idx)
                 handle_stuff();
             }
         }
+    }
+
+    for (i = 0; i < MAX_MON_AURAS; i++)
+    {
+        mon_effect_ptr aura = &r_ptr->auras[i];
+        int            dam;
+        int            flg = PROJECT_KILL | PROJECT_PLAYER | PROJECT_HIDE | PROJECT_AIMED | PROJECT_JUMP;
+        if (!aura->effect) continue;
+        if (aura->pct && randint1(100) > aura->pct) continue;
+        dam = damroll(aura->dd, aura->ds);
+        if (!dam) continue;
+        project(m_idx, 0, py, px, dam, aura->effect, flg | PROJECT_AURA, -1);
     }
 }
 
@@ -2932,7 +2945,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     /* Attack once for each legal blow */
     while ((num++ < num_blow) && !p_ptr->is_dead)
     {
-    bool do_whirlwind = FALSE;
+        bool do_whirlwind = FALSE;
 
         /* We now check fear on every blow, and only lose energy equal to the number of blows attempted.
            Monsters with AURA_FEAR can induce fear any time the player damages them! */
@@ -3914,6 +3927,8 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
             touch_zap_player(c_ptr->m_idx);
             touch_ct++;
+            if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) /* monster aura moved us! */
+                return success_hit;
 
             if (can_drain && (drain_result > 0))
             {

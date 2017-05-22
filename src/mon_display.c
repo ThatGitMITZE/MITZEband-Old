@@ -757,8 +757,8 @@ static cptr _effect_desc(int effect)
     case RBE_SUPERHURT:   return "Critical Hits";
     case RBE_HURT:        return "Hurt";
     case RBE_POISON:      return "<color:g>Poison</color>";
-    case RBE_UN_BONUS:    return "<color:v>Disenchant</color>";
-    case RBE_UN_POWER:    return "Drain Charges";
+    case RBE_DISENCHANT:  return "<color:v>Disenchant</color>";
+    case RBE_DRAIN_CHARGES: return "Drain Charges";
     case RBE_EAT_GOLD:    return "Steal Gold";
     case RBE_EAT_ITEM:    return "Steal Items";
     case RBE_EAT_FOOD:    return "Eat Your Food";
@@ -825,7 +825,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
             v = vec_alloc((vec_free_f)string_free);
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-                mon_blow_effect_ptr effect = &blow->effects[j];
+                mon_effect_ptr effect = &blow->effects[j];
                 if (!effect->effect) continue;
                 vec_add(v, string_copy_s(_effect_desc(effect->effect)));
             }

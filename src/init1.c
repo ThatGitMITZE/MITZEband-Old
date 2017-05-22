@@ -49,6 +49,50 @@
 
 
 /*** Helper arrays for parsing ascii template files ***/
+static int _get_gf_type(cptr which)
+{
+    struct { cptr name; int id; } _table[] = {
+        {"ELEC", GF_ELEC},
+        {"POIS", GF_POIS},
+        {"ACID", GF_ACID},
+        {"COLD", GF_COLD},
+        {"FIRE", GF_FIRE},
+        {"PLASMA", GF_PLASMA},
+        {"LITE", GF_LITE},
+        {"SHARDS", GF_SHARDS},
+        {"SOUND", GF_SOUND},
+        {"CONFUSION", GF_CONFUSION},
+        {"FORCE", GF_FORCE},
+        {"INERT", GF_INERT},
+        {"MANA", GF_MANA},
+        {"ICE", GF_ICE},
+        {"CHAOS", GF_CHAOS},
+        {"DISENCHANT", GF_DISENCHANT},
+        {"NEXUS", GF_NEXUS},
+        {"TIME", GF_TIME},
+        {"GRAVITY", GF_GRAVITY},
+        {"NUKE", GF_NUKE},
+        {"HOLY_FIRE", GF_HOLY_FIRE},
+        {"HELL_FIRE", GF_HELL_FIRE},
+        {"PSI", GF_PSI},
+        {"PSI_DRAIN", GF_PSI_DRAIN},
+        {"DRAIN_MANA", GF_DRAIN_MANA},
+        {"MIND_BLAST", GF_MIND_BLAST},
+        {"BRAIN_SMASH", GF_BRAIN_SMASH},
+        {"CAUSE_1", GF_CAUSE_1},
+        {"CAUSE_2", GF_CAUSE_2},
+        {"CAUSE_3", GF_CAUSE_3},
+        {"CAUSE_4", GF_CAUSE_4},
+        {"HAND_DOOM", GF_HAND_DOOM},
+        {"AMNESIA", GF_AMNESIA},
+        {0}};
+    int i;
+    for (i = 0;; i++)
+    {
+        if (!_table[i].name) return 0;
+        if (streq(_table[i].name, which)) return _table[i].id;
+    }
+}
 
 /*
  * Monster Blow Methods
@@ -102,8 +146,8 @@ static cptr r_info_blow_effect[] =
     "",
     "HURT",
     "POISON",
-    "UN_BONUS",
-    "UN_POWER",
+    "DISENCHANT",
+    "DRAIN_CHARGES",
     "EAT_GOLD",
     "EAT_ITEM",
     "EAT_FOOD",
@@ -3677,7 +3721,7 @@ errr parse_b_info(char *buf, header *head)
 }
 
 /* BITE(60) or perhaps just BITE */
-errr parse_mon_blow_method(char *command, mon_blow_ptr blow)
+static errr parse_mon_blow_method(char *command, mon_blow_ptr blow)
 {
     char *name;
     char *args[10];
@@ -3712,7 +3756,7 @@ errr parse_mon_blow_method(char *command, mon_blow_ptr blow)
  * B:BITE(60):HURT(15d10):HURT(15d10, 20%):STUN(5d5, 10%)  <=== New syntax, multiple effects
  *   ^------------------- buf
  */
-errr parse_mon_blow(char *buf, mon_blow_ptr blow)
+static errr parse_mon_blow(char *buf, mon_blow_ptr blow)
 {
     errr  rc = 0;
     char *commands[10];
@@ -3749,7 +3793,7 @@ errr parse_mon_blow(char *buf, mon_blow_ptr blow)
         char *name;
         char *args[10];
         int   arg_ct = parse_args(command, &name, args, 10);
-        mon_blow_effect_ptr effect = &blow->effects[i-1];
+        mon_effect_ptr effect = &blow->effects[i-1];
 
         if (arg_ct < 0)
         {
@@ -3777,6 +3821,75 @@ errr parse_mon_blow(char *buf, mon_blow_ptr blow)
             {
                 effect->dd = MAX(0, MIN(100, dd)); /* 100d100 max */
                 effect->ds = MAX(0, MIN(100, ds));
+            }
+            else
+            {
+                msg_format("Error: Unknown argument %s.", args[j]);
+                return PARSE_ERROR_GENERIC;
+            }
+        }
+        /* For convenience, use the implied power on the first effect for the
+         * overall blow power. For example: B:BITE:HURT(7d7) == B:BITE(60):HURT(7d7) */
+        if (i == 1 && !blow->power)
+            blow->power = mbe_info[effect->effect].power;
+    }
+
+    return rc;
+}
+/*   V---buf
+ * A:INERT(3d4, 20%):FIRE(3d4):GRAVITY(3d4, 25%)
+ * Multiple auras on a single line. Assume all only a single A: line per monster.
+ * Up to MAX_MON_AURAS allowed. Effects are GF_**** (see list above).
+ */
+static errr parse_mon_auras(char *buf, mon_race_ptr r_ptr)
+{
+    errr  rc = 0;
+    char *commands[10];
+    int   command_ct = z_string_split(buf, commands, 10, ":");
+    int   i, j, dd, ds, pct; /* sscanf probably wants int*, not byte* */
+
+    if (command_ct > MAX_MON_AURAS)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+    for (i = 0; i < command_ct; i++)
+    {
+        char *command = commands[i];
+        char *name;
+        char *args[10];
+        int   arg_ct = parse_args(command, &name, args, 10);
+        mon_effect_ptr aura = &r_ptr->auras[i];
+
+        if (arg_ct < 0)
+        {
+            msg_format("Error: Malformed argument %s. Missing )?", name);
+            return PARSE_ERROR_GENERIC;
+        }
+        if (aura->effect)
+        {
+            msg_print("Duplicate A: line. Put all auras on a single line, please!");
+            return PARSE_ERROR_GENERIC;
+        }
+
+        aura->effect = _get_gf_type(name);
+        if (!aura->effect)
+        {
+            msg_format("Error: Unknown monster aura effect %s.", name);
+            return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        }
+        if (arg_ct > 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        for (j = 0; j < arg_ct; j++)
+        {
+            char arg[100], sentinel = '~', check;
+            /* sscanf tricks learned from vanilla ... */
+            sprintf(arg, "%s%c", args[j], sentinel);
+            
+            if (2 == sscanf(arg, "%d%%%c", &pct, &check) && check == sentinel)
+                aura->pct = MAX(0, MIN(100, pct));
+            else if (3 == sscanf(arg, "%dd%d%c", &dd, &ds, &check) && check == sentinel)
+            {
+                aura->dd = MAX(0, MIN(100, dd)); /* 100d100 max */
+                aura->ds = MAX(0, MIN(100, ds));
             }
             else
             {
@@ -4087,6 +4200,11 @@ errr parse_r_info(char *buf, header *head)
         if (rc) return rc;
     }
 
+    /* Process 'A' for "Auras" (up to MAX_MON_AURAS, all on a single line) */
+    else if (buf[0] == 'A')
+    {
+        return parse_mon_auras(buf + 2, r_ptr);
+    }
     /* Process 'F' for "Basic Flags" (multiple lines) */
     else if (buf[0] == 'F')
     {

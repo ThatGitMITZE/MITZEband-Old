@@ -514,10 +514,10 @@ void possessor_calc_innate_attacks(void)
         case RBE_SUPERHURT:
             a.to_d += a.dd * (a.ds + 1) / 4;
             break;
-        case RBE_UN_BONUS:
+        case RBE_DISENCHANT:
             a.effect[0] = GF_DISENCHANT;
             break;
-        case RBE_UN_POWER:
+        case RBE_DRAIN_CHARGES:
             a.effect[1] = GF_DRAIN_MANA;
             break;
         case RBE_EAT_GOLD:

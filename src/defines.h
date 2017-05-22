@@ -2126,25 +2126,26 @@ enum {
  *   PATH: Only used for printing project path
  *   FAST: Hide "visual" of flying bolts until blast
  */
-#define PROJECT_JUMP        0x01
-#define PROJECT_BEAM        0x02
-#define PROJECT_THRU        0x04
-#define PROJECT_STOP        0x08
-#define PROJECT_GRID        0x10
-#define PROJECT_ITEM        0x20
-#define PROJECT_KILL        0x40
-#define PROJECT_HIDE        0x80
-#define PROJECT_DISI        0x100
-#define PROJECT_PLAYER      0x200
-#define PROJECT_AIMED       0x400
-#define PROJECT_REFLECTABLE 0x800
-#define PROJECT_NO_HANGEKI  0x1000
-#define PROJECT_PATH        0x2000
-#define PROJECT_FAST        0x4000
-#define PROJECT_LOS         0x8000
-#define PROJECT_FULL_DAM    0x10000
-#define PROJECT_NO_PAIN     0x20000  /* Omit the pain messages. Note: Mon vs Mon melee is implemented with project()! */
-#define PROJECT_SHORT_MON_NAME 0x40000 /* "It falls asleep" rather than "The Icky Blue Mean Monster falls asleep." */
+#define PROJECT_JUMP           0x000001
+#define PROJECT_BEAM           0x000002
+#define PROJECT_THRU           0x000004
+#define PROJECT_STOP           0x000008
+#define PROJECT_GRID           0x000010
+#define PROJECT_ITEM           0x000020
+#define PROJECT_KILL           0x000040
+#define PROJECT_HIDE           0x000080
+#define PROJECT_DISI           0x000100
+#define PROJECT_PLAYER         0x000200
+#define PROJECT_AIMED          0x000400
+#define PROJECT_REFLECTABLE    0x000800
+#define PROJECT_NO_HANGEKI     0x001000
+#define PROJECT_PATH           0x002000
+#define PROJECT_FAST           0x004000
+#define PROJECT_LOS            0x008000
+#define PROJECT_FULL_DAM       0x010000
+#define PROJECT_NO_PAIN        0x020000  /* Omit the pain messages. Note: Mon vs Mon melee is implemented with project()! */
+#define PROJECT_SHORT_MON_NAME 0x040000 /* "It falls asleep" rather than "The Icky Blue Mean Monster falls asleep." */
+#define PROJECT_AURA           0x080000 /* projection is actually an aura, and will require a message */
 
 
 /*
@@ -3181,8 +3182,8 @@ enum obj_flags_e {
  */
 #define RBE_HURT         1
 #define RBE_POISON       2
-#define RBE_UN_BONUS     3
-#define RBE_UN_POWER     4
+#define RBE_DISENCHANT   3
+#define RBE_DRAIN_CHARGES 4
 #define RBE_EAT_GOLD     5
 #define RBE_EAT_ITEM     6
 #define RBE_EAT_FOOD     7

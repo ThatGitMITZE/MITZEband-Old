@@ -1152,8 +1152,8 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
 
             for (k = 0; k < MAX_MON_BLOW_EFFECTS; k++)
             {
-                mon_blow_effect_ptr effect = &blow->effects[k];
-                int                 effect_dam;
+                mon_effect_ptr effect = &blow->effects[k];
+                int            effect_dam;
 
                 if (!effect->effect) continue;
                 /* skip non-damaging effects */
@@ -1242,6 +1242,17 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
                 int dam = base_dam - base_dam * pct / 100;
                 auras += dam;
             }
+        }
+        for (j = 0; j < MAX_MON_AURAS; j++)
+        {
+            mon_effect_ptr aura = &r->auras[j];
+            int dam;
+            if (!aura->effect) continue;
+            dam = _avg_dam_roll(aura->dd, aura->ds);
+            if (aura->pct)
+                dam = dam * aura->pct / 100;
+            /* XXX resistance? need a map from GF_* -> RES_*. */
+            auras += dam;
         }
 
         if (i%25 == 0)

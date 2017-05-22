@@ -388,17 +388,18 @@ struct object_type
 /* Monster blows ... Redone */
 #define MAX_MON_BLOW_EFFECTS 4
 #define MAX_MON_BLOWS        4
+#define MAX_MON_AURAS        3
 typedef struct {
     byte effect;
     byte dd;
     byte ds;
     byte pct; /* 0 => 100% (as does 100) */
-} mon_blow_effect_t, *mon_blow_effect_ptr;
+} mon_effect_t, *mon_effect_ptr;
 
 typedef struct {
     byte method;
     byte power;
-    mon_blow_effect_t effects[MAX_MON_BLOW_EFFECTS];
+    mon_effect_t effects[MAX_MON_BLOW_EFFECTS];
 } mon_blow_t, *mon_blow_ptr;
 
 /* XXX remove! */
@@ -508,6 +509,7 @@ struct monster_race
                                  unique is suppressed and won't appear in this game. */
 
     mon_blow_t blows[MAX_MON_BLOWS];
+    mon_effect_t auras[MAX_MON_AURAS];
 
     s16b next_r_idx;
     u32b next_exp;
