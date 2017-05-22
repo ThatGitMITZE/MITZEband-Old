@@ -963,7 +963,10 @@ static void process_world_aux_hp_and_sp(void)
     {
         cut_info_t cut = cut_info(p_ptr->cut);
         if (cut.dam)
+        {
+            /*msg_format("<color:r> %d Cut Damage</color>", cut.dam);*/
             take_hit(DAMAGE_NOESCAPE, cut.dam, "a fatal wound", -1);
+        }
     }
 
 

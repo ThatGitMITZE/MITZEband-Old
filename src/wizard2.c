@@ -1244,6 +1244,7 @@ static void _wiz_improve_gear(obj_ptr obj)
     if (object_is_melee_weapon(obj) && skills_weapon_is_icky(obj->tval, obj->sval)) return;
 
     if (obj->name1 == ART_POWER || obj->name1 == ART_STONEMASK || have_flag(obj->flags, OF_NO_SUMMON)) return;
+    if (obj->name2 == EGO_RING_NAZGUL) return;
     /* hydras have many heads ... */
     for (slot = equip_first_slot(obj); slot; slot = equip_next_slot(obj, slot))
     {

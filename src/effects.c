@@ -4521,53 +4521,49 @@ bool set_stun(int v, bool do_dec)
  */
 cut_info_t cut_info(int cut)
 {
+    point_t tbl[7] = { {CUT_GRAZE, 1}, {CUT_LIGHT, 3}, {CUT_BAD, 7}, {CUT_NASTY, 16},
+                       {CUT_SEVERE, 32}, {CUT_DEEP_GASH, 80}, {CUT_MORTAL_WOUND, 200} };
     cut_info_t result = {0};
+    if (cut) result.dam = interpolate(cut, tbl, 7);
     if (cut >= CUT_MORTAL_WOUND)
     {
         result.level = CUT_MORTAL_WOUND;
-        result.dam = 200;
         result.desc = "Mortal Wound";
         result.attr = TERM_L_RED;
     }
     else if (cut >= CUT_DEEP_GASH)
     {
         result.level = CUT_DEEP_GASH;
-        result.dam = 80;
         result.desc = "Deep Gash";
         result.attr = TERM_RED;
     }
     else if (cut >= CUT_SEVERE)
     {
         result.level = CUT_SEVERE;
-        result.dam = 32;
         result.desc = "Severe Cut";
         result.attr = TERM_RED;
     }
     else if (cut >= CUT_NASTY)
     {
         result.level = CUT_NASTY;
-        result.dam = 16;
         result.desc = "Nasty Cut";
         result.attr = TERM_ORANGE;
     }
     else if (cut >= CUT_BAD)
     {
         result.level = CUT_BAD;
-        result.dam = 7;
         result.desc = "Bad Cut";
         result.attr = TERM_ORANGE;
     }
     else if (cut >= CUT_LIGHT)
     {
         result.level = CUT_LIGHT;
-        result.dam = 3;
         result.desc = "Light Cut";
         result.attr = TERM_YELLOW;
     }
     else if (cut >= CUT_GRAZE)
     {
         result.level = CUT_GRAZE;
-        result.dam = 1;
         result.desc = "Graze";
         result.attr = TERM_YELLOW;
     }
