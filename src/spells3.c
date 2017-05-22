@@ -3128,8 +3128,8 @@ s16b spell_chance(int spell, int use_realm)
     if (chance < minfail) chance = minfail;
 
     /* Stunning makes spells harder */
-    if (p_ptr->stun > 50) chance += 25;
-    else if (p_ptr->stun) chance += 15;
+    if (p_ptr->stun)
+        chance += 50 * p_ptr->stun / 100;
 
     /* Always a 5 percent chance of working */
     if (chance > 95) chance = 95;

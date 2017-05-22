@@ -2254,6 +2254,8 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
 
             to_h = a->to_h + p_ptr->to_h_m;
             chance = p_ptr->skills.thn + (to_h * BTH_PLUS_ADJ);
+            if (p_ptr->stun)
+                chance -= chance * MIN(100, p_ptr->stun) / 150;
 
             if (prace_is_(RACE_MON_GOLEM))
                 ac = ac * (100 - p_ptr->lev) / 100;
@@ -2319,6 +2321,11 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                 }
 
                 dam = base_dam + p_ptr->to_d_m;
+                if (p_ptr->stun)
+                {
+                    dam -= dam * MIN(100, p_ptr->stun) / 150;
+                    base_dam -= base_dam * MIN(100, p_ptr->stun) / 150;
+                }
 
                 /* More slop for Draconian Metamorphosis ... */
                 if ( p_ptr->pclass == CLASS_NINJA
@@ -2929,6 +2936,8 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     if (p_ptr->sutemi) chance = MAX(chance * 3 / 2, chance + 60);
 
     chance += virtue_current(VIRTUE_VALOUR) / 10;
+    if (p_ptr->stun)
+        chance -= chance * MIN(100, p_ptr->stun) / 150;
 
     num_blow = _get_num_blow(hand, mode);
 
@@ -3629,6 +3638,9 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
             if (mode == WEAPONMASTER_CRUSADERS_STRIKE)
                 k = k * 3 / 2;
+
+            if (p_ptr->stun)
+                k -= k * MIN(100, p_ptr->stun) / 150;
 
             dam_tot += k;
 

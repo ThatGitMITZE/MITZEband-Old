@@ -6,6 +6,8 @@ int hit_chance_innate(int to_h, int ac)
     int chance = p_ptr->skills.thn + to_h * BTH_PLUS_ADJ;
     int odds;
 
+    if (p_ptr->stun)
+        chance -= chance * MIN(100, p_ptr->stun) / 150;
     if (chance <= 0) return 0;
 
     if (prace_is_(RACE_MON_GOLEM))
@@ -23,6 +25,8 @@ int hit_chance(int hand, int to_h, int ac)
     int odds;
 
     chance = chance * p_ptr->weapon_info[hand].dual_wield_pct / 1000;
+    if (p_ptr->stun)
+        chance -= chance * MIN(100, p_ptr->stun) / 150;
     chance += virtue_current(VIRTUE_VALOUR) / 10;
     if (chance <= 0) return 0;
 
@@ -37,6 +41,8 @@ int throw_hit_chance(int to_h, int ac, int range)
     int chance = p_ptr->skill_tht + (p_ptr->shooter_info.to_h + to_h) * BTH_PLUS_ADJ - range;
     int odds;
 
+    if (p_ptr->stun)
+        chance -= chance * MIN(100, p_ptr->stun) / 150;
     if (chance <= 0) return 0;
 
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
@@ -55,6 +61,8 @@ int bow_hit_chance(int sval, int to_h, int ac)
     else
         chance = (p_ptr->skills.thb + ((skills_bow_current(sval) - (WEAPON_EXP_MASTER / 2)) / 200 + to_h) * BTH_PLUS_ADJ);
 
+    if (p_ptr->stun)
+        chance -= chance * MIN(100, p_ptr->stun) / 150;
     if (chance <= 0) return 0;
     if (p_ptr->concent)
     {
@@ -462,6 +470,11 @@ static void _display_weapon_slay(int base_mult, int slay_mult, bool force, int b
 
     min = blows * (mult*dd/100 + to_d) / 100;
     max = blows * (mult*dd*ds/100 + to_d) / 100;
+    if (p_ptr->stun)
+    {
+        min -= min * MIN(100, p_ptr->stun) / 150;
+        max -= max * MIN(100, p_ptr->stun) / 150;
+    }
     if (weaponmaster_get_toggle() == TOGGLE_ORDER_BLADE)
         min = max;
 
@@ -874,6 +887,15 @@ void display_innate_attack_info(doc_ptr doc, int which)
     max_base = mult * dd * a->ds / 100;
     max = max_base + to_d;
     max2 = 2*(max_base + a->to_d) + p_ptr->to_d_m;
+    if (p_ptr->stun)
+    {
+        min_base -= min_base * MIN(100, p_ptr->stun) / 150;
+        max_base -= max_base * MIN(100, p_ptr->stun) / 150;
+        min -= min * MIN(100, p_ptr->stun) / 150;
+        max -= max * MIN(100, p_ptr->stun) / 150;
+        min2 -= min2 * MIN(100, p_ptr->stun) / 150;
+        max2 -= max2 * MIN(100, p_ptr->stun) / 150;
+    }
 
     if (a->effect[0] == GF_OLD_CONF) /* Hack for Umber Hulk ... */
     {
@@ -1022,8 +1044,10 @@ static void _display_missile_slay(int bow_mult, int slay_mult, int crit_mult,
     dam += to_d;
     dam = dam * bow_mult / 100;
 
-
     dam += to_d_xtra;
+    if (p_ptr->stun)
+        dam -= dam * MIN(100, p_ptr->stun) / 150;
+
     doc_printf(doc, " <color:%c>%-8.8s</color>", attr_to_attr_char(color), name);
     doc_printf(doc, ": %d/%d\n", dam, shots * dam / 100);
 }

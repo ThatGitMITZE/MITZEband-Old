@@ -3957,40 +3957,6 @@ void calc_bonuses(void)
         }
     }
 
-    /* Apply temporary "stun" */
-    if (p_ptr->stun > 50)
-    {
-        for (i = 0; i < MAX_HANDS; i++)
-        {
-            p_ptr->weapon_info[i].to_h -= 20;
-            p_ptr->weapon_info[i].dis_to_h -= 20;
-            p_ptr->weapon_info[i].to_d -= 20;
-            p_ptr->weapon_info[i].dis_to_d -= 20;
-        }
-        p_ptr->shooter_info.to_h  -= 20;
-        p_ptr->to_h_m  -= 20;
-        p_ptr->shooter_info.dis_to_h  -= 20;
-        p_ptr->to_d_m -= 20;
-        p_ptr->shooter_info.to_d -= 20;
-        p_ptr->shooter_info.dis_to_d -= 20;
-    }
-    else if (p_ptr->stun)
-    {
-        for (i = 0; i < MAX_HANDS; i++)
-        {
-            p_ptr->weapon_info[i].to_h -= 5;
-            p_ptr->weapon_info[i].dis_to_h -= 5;
-            p_ptr->weapon_info[i].to_d -= 5;
-            p_ptr->weapon_info[i].dis_to_d -= 5;
-        }
-        p_ptr->shooter_info.to_h -= 5;
-        p_ptr->to_h_m -= 5;
-        p_ptr->shooter_info.dis_to_h -= 5;
-        p_ptr->to_d_m -= 5;
-        p_ptr->shooter_info.to_d -= 5;
-        p_ptr->shooter_info.dis_to_d -= 5;
-    }
-
     if (IS_WRAITH())
     {
         res_add_immune(RES_DARK);

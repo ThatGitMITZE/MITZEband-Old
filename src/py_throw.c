@@ -225,6 +225,8 @@ bool _init_context(py_throw_ptr context)
             context->to_d += ((p_ptr->lev+30)*(p_ptr->lev+30)-900)/55; /* +100 at CL50 */
         }
     }
+    if (p_ptr->stun)
+        context->skill -= context->skill * MIN(100, p_ptr->stun) / 150;
 
     return TRUE;
 }
@@ -307,6 +309,9 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
 
         if (context->mod_damage_f)
             tdam = context->mod_damage_f(context, tdam);
+
+        if (p_ptr->stun)
+            tdam -= tdam * MIN(100, p_ptr->stun) / 150;
 
         if (tdam < 0) tdam = 0;
         tdam = mon_damage_mod(m_ptr, tdam, FALSE);
@@ -496,6 +501,8 @@ static void _display_weapon_slay(int base_mult, int slay_mult, bool force, int t
 
     dam = mult * dd * (ds + 1)/200 + to_d;
     dam = throw_mult * dam / 100;
+    if (p_ptr->stun)
+        dam -= dam * MIN(100, p_ptr->stun) / 150;
 
     doc_printf(doc, "<color:%c> %-7.7s</color>", attr_to_attr_char(color), name);
     doc_printf(doc, ": %d/%d [%d.%02dx]\n",

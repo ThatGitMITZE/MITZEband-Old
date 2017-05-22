@@ -74,11 +74,13 @@ int effect_calc_fail_rate(effect_t *effect)
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
 
     if (p_ptr->confused) skill = 3 * skill / 4;
-    if (p_ptr->stun) skill = 4 * skill / 5; /* XXX vary with amount of stunning */
 
     fail = device_calc_fail_rate_aux(skill, effect->difficulty);
-    if (p_ptr->stun > 50 && fail < 250) fail = 250;
-    else if (p_ptr->stun && fail < 150) fail = 150;
+    if (p_ptr->stun)
+    {
+        fail += 500 * p_ptr->stun / 100;
+        if (fail > 950) fail = 950;
+    }
     return fail;
 }
 
@@ -106,17 +108,18 @@ int device_calc_fail_rate(object_type *o_ptr)
     if (lev > 50) lev = 50 + (lev - 50)/2;
     chance = p_ptr->skills.dev;
     if (p_ptr->confused) chance = chance / 2;
-    if (p_ptr->stun) chance = chance * 2 / 3;
     chance = chance - lev;
     if (chance < USE_DEVICE)
         fail = 1000 - 1000/(3 * (USE_DEVICE - chance + 1));
     else
         fail = (USE_DEVICE-1)*1000/chance;
 
+    if (p_ptr->stun)
+    {
+        fail += 500 * p_ptr->stun / 100;
+        if (fail > 950) fail = 950;
+    }
     if (o_ptr->tval == TV_SCROLL && fail > 500) fail = 500;
-    if (p_ptr->stun > 50 && fail < 250) fail = 250;
-    else if (p_ptr->stun && fail < 150) fail = 150;
-
     return fail;
 }
 

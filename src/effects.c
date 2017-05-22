@@ -4500,8 +4500,8 @@ bool set_stun(int v, bool do_dec)
     /* Disturb */
     if (disturb_state) disturb(0, 0);
 
-    /* Recalculate bonuses */
-    p_ptr->update |= (PU_BONUS);
+    /* Recalculate bonuses
+    p_ptr->update |= (PU_BONUS);*/
 
     /* Redraw the "stun" */
     p_ptr->redraw |= PR_EFFECTS;
