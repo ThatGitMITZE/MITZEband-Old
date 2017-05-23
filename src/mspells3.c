@@ -524,8 +524,8 @@ static int get_learned_power(int *sn)
                     /* Minimum failure rate */
                     if (chance < minfail) chance = minfail;
 
-                    /* Stunning makes spells harder */
-                    if (p_ptr->stun > 50) chance += 25;
+                    /* XXX Stunning makes spells harder */
+                    if (p_ptr->stun >= STUN_HEAVY) chance += 25;
                     else if (p_ptr->stun) chance += 15;
 
                     /* Always a 5 percent chance of working */
@@ -1514,8 +1514,8 @@ bool do_cmd_cast_learned(void)
     /* Minimum failure rate */
     if (chance < minfail) chance = minfail;
 
-    /* Stunning makes spells harder */
-    if (p_ptr->stun > 50) chance += 25;
+    /* XXX Stunning makes spells harder */
+    if (p_ptr->stun >= STUN_HEAVY) chance += 25;
     else if (p_ptr->stun) chance += 15;
 
     /* Always a 5 percent chance of working */

@@ -1890,20 +1890,6 @@ void do_cmd_debug(void)
         do_cmd_redraw();
         break;
     }
-    case '_':
-    {
-        int i;
-        /* I had a star-spawn knock me out once with a single 11d6 blow.
-         * Odds? About 1 in 250,000 plus, I think a 1 int 50 'supercharge' */
-        for (i = 0; i < 1000 * 1000; i++)
-        {
-            int d = damroll(11, 6);
-            if (d >= 66 * 19 / 20)
-                msg_format("%d) 11d6 = %d", i, d);
-        }
-        msg_print("Done");
-        break;
-    }
     default:
         msg_print("That is not a valid debug command.");
         break;

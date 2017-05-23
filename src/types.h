@@ -712,7 +712,7 @@ struct monster_type
     byte ego_whip_ct;
     byte ego_whip_pow;
     byte anti_magic_ct;
-    byte anger_ct;
+    byte anger;
 
     u32b forgot4;
     u32b forgot5;

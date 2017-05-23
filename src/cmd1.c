@@ -2972,7 +2972,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
             }
         }
 
-        if (p_ptr->stun >= 100) /* Grand Master Mystic retaliation knocked the player out! */
+        if (p_ptr->stun >= STUN_KNOCKED_OUT) /* Grand Master Mystic retaliation knocked the player out! */
             break;
 
         if (p_ptr->paralyzed)
@@ -3939,8 +3939,8 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
             touch_zap_player(c_ptr->m_idx);
             touch_ct++;
-            if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) /* monster aura moved us! */
-                return success_hit;
+            /* XXX if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1)  monster aura moved us!
+                return success_hit; */
 
             if (can_drain && (drain_result > 0))
             {

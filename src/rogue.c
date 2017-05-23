@@ -93,7 +93,7 @@ static cptr _rogue_pick_pocket(int power)
               && ((r_ptr->flags1 & RF1_UNIQUE) || mon_save_aux(m_ptr->r_idx, power)) )
             {
                 msg_format("%^s wakes up and looks very mad!", m_name);
-                m_ptr->anger_ct++;
+                m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
             }
             else
                 msg_format("%^s wakes up.", m_name);
@@ -116,7 +116,7 @@ static cptr _rogue_pick_pocket(int power)
         if (allow_ticked_off(r_ptr))
         {
             msg_format("Failed! %^s wakes up and looks very mad!", m_name);
-            m_ptr->anger_ct++;
+            m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
         }
         else
             msg_format("Failed! %^s wakes up.", m_name);
@@ -124,7 +124,7 @@ static cptr _rogue_pick_pocket(int power)
     else if (allow_ticked_off(r_ptr))
     {
         msg_format("Failed! %^s looks very mad!", m_name);
-        m_ptr->anger_ct++;
+        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
     }
     else
     {
@@ -207,7 +207,7 @@ static cptr _rogue_negotiate(void)
                 if (mon_save_p(m_ptr->r_idx, A_CHR))
                 {
                     msg_format("%^s says 'Fool! Never trust a thief!'", m_name);
-                    m_ptr->anger_ct++;
+                    m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
                 }
                 else
                 {
@@ -221,7 +221,7 @@ static cptr _rogue_negotiate(void)
             else
             {
                 msg_format("%^s says 'Scoundrel!'", m_name);
-                m_ptr->anger_ct++;
+                m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
             }
         }
         else
@@ -232,7 +232,7 @@ static cptr _rogue_negotiate(void)
     else
     {
         msg_format("%^s is insulted you would ask such a question!", m_name);
-        m_ptr->anger_ct++;
+        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
     }
     return "";
 }

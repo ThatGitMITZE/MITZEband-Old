@@ -1110,7 +1110,7 @@ bool make_attack_normal(int m_idx)
                     set_cut(p_ptr->cut + effect_dam, FALSE);
                     break;
                 case RBE_STUN:
-                    if (p_ptr->stun < 100)
+                    if (p_ptr->stun < STUN_KNOCKED_OUT)
                         set_stun(p_ptr->stun + effect_dam, FALSE);
                     break;
                 } /* switch (effect) */
@@ -1577,7 +1577,7 @@ bool make_attack_normal(int m_idx)
 
     if (ht_cnt == 0 && !p_ptr->is_dead && allow_ticked_off(r_ptr) && one_in_(2))
     {
-        m_ptr->anger_ct++;
+        m_ptr->anger = MIN(100, m_ptr->anger + 5 + m_ptr->anger / 3); 
     }
 
     /* Blink away */

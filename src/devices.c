@@ -477,7 +477,7 @@ static cptr _do_potion(int sval, int mode)
             msg_print("Massive explosions rupture your body!");
             take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "a potion of Detonation", -1);
 
-            set_stun(p_ptr->stun + 75, FALSE);
+            set_stun(MAX(p_ptr->stun, STUN_MASSIVE), FALSE);
             set_cut(p_ptr->cut + 5000, FALSE);
             device_noticed = TRUE;
         }

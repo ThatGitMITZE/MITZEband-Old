@@ -336,13 +336,8 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
 
             if (tdam > 0 && m_ptr->cdis > 1 && allow_ticked_off(r_ptr))
             {
-                if (mut_present(MUT_PEERLESS_SNIPER))
-                {
-                }
-                else
-                {
-                    m_ptr->anger_ct++;
-                }
+                if (!mut_present(MUT_PEERLESS_SNIPER))
+                    m_ptr->anger = MIN(100, m_ptr->anger + 5 + m_ptr->anger / 3); 
             }
 
             if (fear && m_ptr->ml)

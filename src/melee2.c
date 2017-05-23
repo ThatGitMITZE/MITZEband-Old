@@ -1178,7 +1178,7 @@ static bool get_moves(int m_idx, int *mm)
         }
         if ( pack_ptr->ai == AI_GUARD_POS
           && m_ptr->cdis > 3    /* abandon guarding if the player gets close ... */
-          && !m_ptr->anger_ct ) /* ... or if we get ticked off. */
+          && m_ptr->anger < 10 ) /* ... or if we get ticked off. */
         {
             x = m_ptr->fx - pack_ptr->guard_x;
             y = m_ptr->fy - pack_ptr->guard_y;
@@ -2649,7 +2649,7 @@ static void process_monster(int m_idx)
         int freq = r_ptr->freq_spell;
         int freq_n = 100 / r_ptr->freq_spell; /* recover S:1_IN_X field */
         pack_info_t *pack_ptr = pack_info_ptr(m_idx);
-        bool ticked_off = m_ptr->anger_ct ? TRUE : FALSE;
+        bool ticked_off = m_ptr->anger ? TRUE : FALSE;  /* XXX Pass anger to spell selector ... */
         bool blocked_magic = FALSE;
 
         if (is_glyph_grid(&cave[py][px]))
@@ -2686,7 +2686,7 @@ static void process_monster(int m_idx)
         freq = MIN(freq, 2*r_ptr->freq_spell);
 
         /* But angry monsters will eventually spell if they get too pissed off */
-        freq += m_ptr->anger_ct * 10;
+        freq += m_ptr->anger;
 
         /* Hack for Rage Mage Anti-magic Ray ... */
         if (m_ptr->anti_magic_ct)
@@ -2743,7 +2743,7 @@ static void process_monster(int m_idx)
                 /* Being Ticked Off will affect spell selection */
                 if (aware && make_attack_spell(m_idx, ticked_off))
                 {
-                    m_ptr->anger_ct = 0;
+                    m_ptr->anger = 0;
                     return;
                 }
                 /*
@@ -2946,7 +2946,7 @@ static void process_monster(int m_idx)
                 else if (ct_open < 1 + randint1(4))
                 {
                     /* not enough summoning opportunities, so hold off unless angered */
-                    if (!m_ptr->anger_ct)
+                    if (!m_ptr->anger)
                         continue;
                     if (!one_in_(3))
                         continue;
@@ -3871,7 +3871,7 @@ void process_monsters(void)
             monster_desc(m_name, m_ptr, 0);
             msg_format("%^s gets back up and looks mad as hell.", m_name);
             m_ptr->mflag2 &= ~MFLAG2_TRIPPED;
-            m_ptr->anger_ct++;
+            m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
             continue;
         }
 

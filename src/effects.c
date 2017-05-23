@@ -4342,11 +4342,67 @@ bool set_oppose_pois(int v, bool do_dec)
  * Set "p_ptr->stun", notice observable changes
  *
  * Note the special code to only notice "range" changes.
+ * Note that stun effects no longer require PU_BONUS. Instead
+ * the effects are computed on the fly in various areas of the system.
  */
+stun_info_t stun_info(int stun)
+{
+    stun_info_t result = {0};
+    if (stun >= STUN_KNOCKED_OUT)
+    {
+        result.level = STUN_KNOCKED_OUT;
+        result.name = "Knocked Out";  /* <== PR_EFFECTS */
+        result.msg = "knocked out";   /* <== You have been %s */
+        result.attr = TERM_VIOLET;
+    }
+    else if (stun >= STUN_MASSIVE)
+    {
+        result.level = STUN_MASSIVE;
+        result.name = "Massive Stun";
+        result.msg = "massively stunned";
+        result.attr = TERM_RED;
+    }
+    else if (stun >= STUN_HEAVY)
+    {
+        result.level = STUN_HEAVY;
+        result.name = "Heavy Stun";
+        result.msg = "heavily stunned";
+        result.attr = TERM_L_RED;
+    }
+    else if (stun >= STUN_MODERATE)
+    {
+        result.level = STUN_MODERATE;
+        result.name = "Stun";
+        result.msg = "stunned";
+        result.attr = TERM_ORANGE;
+    }
+    else if (stun >= STUN_LIGHT)
+    {
+        result.level = STUN_LIGHT;
+        result.name = "Light Stun";
+        result.msg = "lightly stunned";
+        result.attr = TERM_YELLOW;
+    }
+    else if (stun >= STUN_DAZE)
+    {
+        result.level = STUN_DAZE;
+        result.name = "Dazed";
+        result.msg = "dazed";
+        result.attr = TERM_L_UMBER;
+    }
+    else
+    {
+        assert(result.level == STUN_NONE);
+    }
+    return result;
+}
+
 bool set_stun(int v, bool do_dec)
 {
-    int old_aux, new_aux, slot;
-    bool notice = FALSE;
+    stun_info_t old_stun = stun_info(p_ptr->stun);
+    stun_info_t new_stun;
+    slot_t      slot;
+    bool        notice = FALSE;
 
     /* Hack -- Force good values */
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -4358,79 +4414,12 @@ bool set_stun(int v, bool do_dec)
     if (slot && equip_obj(slot)->rune == RUNE_WATER) v = 0;
     if (psion_mental_fortress()) v = 0;
 
-    /* Knocked out */
-    if (p_ptr->stun > 100)
+    new_stun = stun_info(v);
+
+    /* Increase stun level */
+    if (new_stun.level > old_stun.level)
     {
-        old_aux = 3;
-    }
-
-    /* Heavy stun */
-    else if (p_ptr->stun > 50)
-    {
-        old_aux = 2;
-    }
-
-    /* Stun */
-    else if (p_ptr->stun > 0)
-    {
-        old_aux = 1;
-    }
-
-    /* None */
-    else
-    {
-        old_aux = 0;
-    }
-
-    /* Knocked out */
-    if (v > 100)
-    {
-        new_aux = 3;
-    }
-
-    /* Heavy stun */
-    else if (v > 50)
-    {
-        new_aux = 2;
-    }
-
-    /* Stun */
-    else if (v > 0)
-    {
-        new_aux = 1;
-    }
-
-    /* None */
-    else
-    {
-        new_aux = 0;
-    }
-
-    /* Increase stun */
-    if (new_aux > old_aux)
-    {
-        /* Describe the state */
-        switch (new_aux)
-        {
-            /* Stun */
-            case 1:
-            msg_print("You have been <color:y>stunned</color>.");
-
-            break;
-
-            /* Heavy stun */
-            case 2:
-            msg_print("You have been <color:R>heavily stunned</color>.");
-
-            break;
-
-            /* Knocked out */
-            case 3:
-            msg_print("You have been <color:v>knocked out</color>.");
-
-            break;
-        }
-
+        msg_format("You have been <color:%c>%s</color>.", attr_to_attr_char(new_stun.attr), new_stun.msg);
         if (randint1(1000) < v || one_in_(16))
         {
             msg_print("A vicious blow hits your head.");
@@ -4459,58 +4448,32 @@ bool set_stun(int v, bool do_dec)
             p_ptr->redraw |= (PR_STATUS);
             p_ptr->action = ACTION_NONE;
         }
-
-        /* Sniper */
         if (p_ptr->concent) reset_concentration(TRUE);
-
-        /* Hex */
         if (hex_spelling_any()) stop_hex_spell_all();
-
-        /* Notice */
         notice = TRUE;
     }
 
-    /* Decrease stun */
-    else if (new_aux < old_aux)
+    /* Decrease stun level */
+    else if (new_stun.level < old_stun.level)
     {
-        if (old_aux == 3 && new_aux < 3 && new_aux > 0)
-            msg_print("You are no longer knocked out.");
+        if (old_stun.level == STUN_KNOCKED_OUT && new_stun.level > STUN_NONE)
+            msg_format("You are no longer <color:%c>%s</color>.", attr_to_attr_char(old_stun.attr), old_stun.msg); 
 
-        /* Describe the state */
-        switch (new_aux)
+        if  (new_stun.level == STUN_NONE)
         {
-            /* None */
-            case 0:
-            msg_print("You are no longer stunned.");
-
+            msg_format("You are no longer <color:%c>%s</color>.", attr_to_attr_char(old_stun.attr), old_stun.msg);
             if (disturb_state) disturb(0, 0);
-            break;
         }
-
-        /* Notice */
         notice = TRUE;
     }
 
-    /* Use the value */
     p_ptr->stun = v;
-
-    /* No change */
     if (!notice) return (FALSE);
 
-    /* Disturb */
     if (disturb_state) disturb(0, 0);
-
-    /* Recalculate bonuses
-    p_ptr->update |= (PU_BONUS);*/
-
-    /* Redraw the "stun" */
     p_ptr->redraw |= PR_EFFECTS;
-
-    /* Handle stuff */
     handle_stuff();
-
-    /* Result */
-    return (TRUE);
+    return TRUE;
 }
 
 
@@ -5783,7 +5746,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
     }
 
     
-    if (p_ptr->wizard && damage > 10)
+    if (p_ptr->wizard /*&& damage > 10*/)
         msg_format("You take %d damage.", damage);
 
     p_ptr->chp -= damage;

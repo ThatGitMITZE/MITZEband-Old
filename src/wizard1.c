@@ -13,7 +13,7 @@
  * don't blame -BEN- :) */
 
 #include "angband.h"
-
+#include <math.h>
 
 #ifdef ALLOW_SPOILERS
 
@@ -1320,6 +1320,90 @@ static void spoil_mon_melee_dam(void)
     vec_free(v);
 }
 
+typedef struct {
+    double mean;
+    double variance;
+    double sigma;
+    int    max;
+} _stat_t, *_stat_ptr;
+_stat_t _calc_stats(vec_ptr v)
+{
+    _stat_t r;
+    int n = vec_length(v);
+    int i, max = 0;
+    double tx2 = 0.0, tx = 0.0;
+    for (i = 0; i < n; i++)
+    {
+        int x = vec_get_int(v, i);
+        tx += (double)x;
+        tx2 += (double)x*(double)x;
+        if (x > max) max = x;
+    }
+    r.mean = tx/(double)n;
+    r.variance = tx2/(double)n - r.mean;  /* XXX check this ... */
+    r.sigma = sqrt(r.variance);
+    r.max = max;
+    return r;
+}
+static void spoil_mon_anger(void)
+{
+    /* I tried to spreadsheet this, but I must be too dumb to get accurate results! */
+    doc_ptr doc = doc_alloc(80);
+    doc_ptr cols[2];
+    int boosts[] = { 0, 5, 7, 10, 12, 15, -1 };
+    int freqs[] = { 10, 15, 20, 25, 30, 33, 35, 40, 50, -1 };
+    int doc_idx = 1, boost_idx, freq_idx;
+    cols[0] = doc_alloc(36);
+    cols[1] = doc_alloc(36);
+    for (boost_idx = 0;; boost_idx++)
+    {
+        int boost = boosts[boost_idx];
+        if (boost < 0) break;
+        doc_idx = !doc_idx;
+        doc_printf(cols[doc_idx], "<color:R>Anger Boost: <color:B>%d</color></color>\n", boost);
+        doc_insert(cols[doc_idx], "<color:G>Base Actual Mean  Std Max</color>\n");
+        for (freq_idx = 0;; freq_idx++)
+        {
+            vec_ptr runs = vec_alloc(NULL);
+            _stat_t stat;
+            int i, j, cast = 0, total = 0;
+            int freq = freqs[freq_idx];
+            if (freq < 0) break;
+            for (i = 0; i < 10000; i++)
+            {
+                int a = 0;    /* anger */
+                for (j = 0; ; j++) /* loop until we cast a spell */
+                {
+                    total++;
+                    if (randint0(100) < freq + a)
+                    {
+                        vec_add_int(runs, j+1);
+                        cast++;
+                        break;
+                    }
+                    /* angering each turn ... there are lots of ways to do
+                     * this, but the following vastly decreases stat.max while
+                     * only slightly affecting stat.mean and stat.sigma */
+                    a += boost + a/2;
+                }
+            }
+            stat = _calc_stats(runs);
+            doc_printf(cols[doc_idx], "%4d  %2d.%d%% %.2f %.2f %3d\n",
+                freq, cast*100/total, (cast*1000/total)%10, stat.mean, stat.sigma, stat.max);
+            vec_free(runs);
+        }
+        doc_newline(cols[doc_idx]);
+    }
+    doc_insert_cols(doc, cols, 2, 0);
+    doc_insert(doc, "The stats are on the number of turns it takes to actually cast a spell. "
+                    "This is very important for mage-like distance tactics where very long runs "
+                    "of no player damage are to be avoided.\n");
+    doc_display(doc, "Dynamic Spell Frequencies", 0);
+    doc_free(cols[0]);
+    doc_free(cols[1]);
+    doc_free(doc);
+}
+
 /************************************************************************
  * Devices
  ************************************************************************/
@@ -1846,6 +1930,7 @@ void do_cmd_spoilers(void)
         prt("(e) Evolution", row++, col);
         prt("(d) Damage by Resistance", row++, col);
         prt("(D) Damage by Melee", row++, col);
+        prt("(f) Spell Frequency", row++, col);
         row++;
 
         c_prt(TERM_RED, "Class Spoilers", row++, col - 2);
@@ -1901,6 +1986,9 @@ void do_cmd_spoilers(void)
             break;
         case 'D':
             spoil_mon_melee_dam();
+            break;
+        case 'f':
+            spoil_mon_anger();
             break;
 
         /* Class Spoilers */

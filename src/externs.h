@@ -1719,6 +1719,8 @@ extern bool set_oppose_elec(int v, bool do_dec);
 extern bool set_oppose_fire(int v, bool do_dec);
 extern bool set_oppose_cold(int v, bool do_dec);
 extern bool set_oppose_pois(int v, bool do_dec);
+typedef struct { int level; cptr name; cptr msg; byte attr; } stun_info_t;
+extern stun_info_t stun_info(int v);
 extern bool set_stun(int v, bool do_dec);
 extern bool set_cut(int v, bool do_dec);
 typedef struct { int level; int dam; cptr desc; byte attr; } cut_info_t;

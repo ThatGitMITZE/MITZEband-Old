@@ -1771,16 +1771,9 @@ static void prt_cut(int row, int col)
 
 static void prt_stun(int row, int col)
 {
-    int s = p_ptr->stun;
-
-    if (s > 100)
-        c_put_str(TERM_RED, "Knocked out ", row, col);
-
-    else if (s > 50)
-        c_put_str(TERM_ORANGE, "Heavy Stun", row, col);
-
-    else if (s)
-        c_put_str(TERM_ORANGE, "Stun", row, col);
+    stun_info_t s = stun_info(p_ptr->stun);
+    if (s.level == STUN_NONE) return; /* paranoia */
+    c_put_str(s.attr, s.name, row, col);
 }
 
 static void prt_fear(int row, int col)

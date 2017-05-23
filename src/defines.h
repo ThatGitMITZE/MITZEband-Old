@@ -5374,7 +5374,7 @@ enum mon_save_fields_e {
     SAVE_MON_STOLEN_CT,
     SAVE_MON_PEXP,
     SAVE_MON_PARALYZED,
-    SAVE_MON_ANGER_CT,
+    SAVE_MON_ANGER,
 };
 
 /* Sub-alignment flags for neutral monsters */
@@ -5535,6 +5535,14 @@ enum mon_save_fields_e {
 #define CUT_LIGHT          10
 #define CUT_GRAZE           1
 #define CUT_NONE            0
+
+#define STUN_KNOCKED_OUT 100
+#define STUN_MASSIVE      75
+#define STUN_HEAVY        50
+#define STUN_MODERATE     25
+#define STUN_LIGHT        10
+#define STUN_DAZE          1
+#define STUN_NONE          0
 
 /* object_type.rune */
 #define RUNE_ABSORPTION           1

@@ -1674,7 +1674,7 @@ static void process_world_aux_timeout(void)
     }
 
     /* Stun */
-    if (p_ptr->stun > 0 && p_ptr->stun < 100)
+    if (p_ptr->stun > STUN_NONE && p_ptr->stun < STUN_KNOCKED_OUT)
     {
         int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
 
@@ -4320,7 +4320,7 @@ static void process_player(void)
             set_paralyzed(p_ptr->paralyzed - 1, TRUE);
         }
         /* Knocked Out */
-        else if (p_ptr->stun >= 100)
+        else if (p_ptr->stun >= STUN_KNOCKED_OUT)
         {
             energy_use = 100;
             set_stun(p_ptr->stun - 25, TRUE);

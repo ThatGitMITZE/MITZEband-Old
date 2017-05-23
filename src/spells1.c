@@ -6169,9 +6169,9 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
                 if (allow_ticked_off(r_ptr))
                 {
                     if (!mut_present(MUT_SUBTLE_CASTING))
-                        m_ptr->anger_ct++;
+                        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
                     if (splashed)
-                        m_ptr->anger_ct++;
+                        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
                     /* Attempt to deal with Dungeon Guardians splash exploit.
                        Dungeon guardians use AI_GUARD_POS, so cannot be lured
                        away from the dungeon entrance. Attempting this exploit
@@ -6181,9 +6181,9 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
                     {
                         pack_info_t *pack_ptr = pack_info_ptr(c_ptr->m_idx);
                         if (pack_ptr && pack_ptr->ai == AI_GUARD_POS)
-                            m_ptr->anger_ct += 10;
+                            m_ptr->anger = 100;
                         else
-                            m_ptr->anger_ct++;
+                            m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
                     }
                 }
                 /* Splashing Uniques out of LOS makes them rethink their approach */
@@ -6193,7 +6193,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 
                     if (pack_ptr)
                     {
-                        int odds = MAX(1, 7 - m_ptr->anger_ct);
+                        int odds = MAX(1, 7 - m_ptr->anger/10);
 
                         if (!allow_ticked_off(r_ptr)) /* Paranoia ... These should already be seeking! */
                             odds = 1;
@@ -6978,10 +6978,19 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                 vampire_take_dark_damage(dam);
             break;
         }
+        case GF_ELDRITCH:
+            if (aura && m_ptr)
+                sanity_blast(m_ptr, FALSE);
+            dam = 0;
+            break;
+        case GF_STUN:
+            if (aura) set_stun(p_ptr->stun + dam, FALSE);
+            dam = 0;
+            break;
         case GF_AMNESIA:
             if (randint0(100 + r_ptr->level/2) < duelist_skill_sav(who))
             {
-                msg_print("You resist the effects!");
+                if (!aura) msg_print("You resist the effects!");
             }
             else if (lose_all_info())
             {
@@ -7278,7 +7287,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                 if (!res_save_default(RES_CHAOS) && one_in_(3))
                     (void)set_image(p_ptr->image + randint0(25) + 15, FALSE);
 
-                p_ptr->csp -= 50;
+                p_ptr->csp -= aura ? 10 : 50;
                 if (p_ptr->csp < 0)
                 {
                     p_ptr->csp = 0;
@@ -7312,7 +7321,10 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
                 else if (!CHECK_MULTISHADOW())
                 {
                     msg_print("Your mind is blasted by psionic energy.");
-                    p_ptr->csp -= 100;
+                    if (aura)
+                        p_ptr->csp -= 10;
+                    else
+                        p_ptr->csp -= 100;
                     if (p_ptr->csp < 0)
                     {
                         p_ptr->csp = 0;

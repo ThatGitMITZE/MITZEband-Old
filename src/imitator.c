@@ -135,8 +135,8 @@ static int get_mane_power(int *sn, bool revenge)
                     /* Minimum failure rate */
                     if (chance < minfail) chance = minfail;
 
-                    /* Stunning makes spells harder */
-                    if (p_ptr->stun > 50) chance += 25;
+                    /* XXX Stunning makes spells harder */
+                    if (p_ptr->stun >= STUN_HEAVY) chance += 25;
                     else if (p_ptr->stun) chance += 15;
 
                     /* Always a 5 percent chance of working */

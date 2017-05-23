@@ -54,9 +54,7 @@ static void _kiss_spell(int cmd, variant *res)
                     }
 
                     if (allow_ticked_off(r_ptr))
-                    {
-                        m_ptr->anger_ct++;
-                    }
+                        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
 
                 }
                 else

@@ -74,8 +74,6 @@ static int _get_gf_type(cptr which)
         {"NUKE", GF_NUKE},
         {"HOLY_FIRE", GF_HOLY_FIRE},
         {"HELL_FIRE", GF_HELL_FIRE},
-        {"PSI", GF_PSI},
-        {"PSI_DRAIN", GF_PSI_DRAIN},
         {"DRAIN_MANA", GF_DRAIN_MANA},
         {"MIND_BLAST", GF_MIND_BLAST},
         {"BRAIN_SMASH", GF_BRAIN_SMASH},
@@ -85,6 +83,8 @@ static int _get_gf_type(cptr which)
         {"CAUSE_4", GF_CAUSE_4},
         {"HAND_DOOM", GF_HAND_DOOM},
         {"AMNESIA", GF_AMNESIA},
+        {"ELDRITCH", GF_ELDRITCH},
+        {"STUN", GF_STUN},
         {0}};
     int i;
     for (i = 0;; i++)
