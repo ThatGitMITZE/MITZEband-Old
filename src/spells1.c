@@ -6656,36 +6656,36 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     {
         case GF_ACID:
         {
-            if (fuzzy) msg_print("You are hit by acid!");
             if (aura) msg_print("You are <color:G>dissolved</color>!");
+            else if (fuzzy) msg_print("You are hit by acid!");
             get_damage = acid_dam(dam, killer, monspell);
             break;
         }
         case GF_FIRE:
         {
-            if (fuzzy) msg_print("You are hit by fire!");
             if (aura) msg_print("You are <color:r>burned</color>!");
+            else if (fuzzy) msg_print("You are hit by fire!");
             get_damage = fire_dam(dam, killer, monspell);
             break;
         }
         case GF_COLD:
         {
-            if (fuzzy) msg_print("You are hit by cold!");
             if (aura) msg_print("You are <color:W>frozen</color>!");
+            else if (fuzzy) msg_print("You are hit by cold!");
             get_damage = cold_dam(dam, killer, monspell);
             break;
         }
         case GF_ELEC:
         {
-            if (fuzzy) msg_print("You are hit by lightning!");
             if (aura) msg_print("You are <color:b>shocked</color>!");
+            else if (fuzzy) msg_print("You are hit by lightning!");
             get_damage = elec_dam(dam, killer, monspell);
             break;
         }
         case GF_POIS:
         {
-            if (fuzzy) msg_print("You are hit by poison!");
             if (aura) msg_print("You are <color:G>poisoned</color>!");
+            else if (fuzzy) msg_print("You are hit by poison!");
             dam = res_calc_dam(RES_POIS, dam);
             if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
                 do_dec_stat(A_CON);
@@ -6698,8 +6698,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_NUKE:
         {
-            if (fuzzy) msg_print("You are hit by radiation!");
             if (aura) msg_print("You are <color:G>irradiated</color>!");
+            else if (fuzzy) msg_print("You are hit by radiation!");
             dam = res_calc_dam(RES_POIS, dam);
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
@@ -6727,8 +6727,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_HOLY_FIRE:
         {
-            if (fuzzy) msg_print("You are hit by something!");
-            if (aura) msg_print("You are <color:y>burned</color>!");
+            if (aura) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "greatly burned" : "burned");
+            else if (fuzzy) msg_print("You are hit by something!");
             if (p_ptr->align > 10)
                 dam /= 2;
             else if (p_ptr->align < -10)
@@ -6738,8 +6738,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_HELL_FIRE:
         {
-            if (fuzzy) msg_print("You are hit by something!");
-            if (aura) msg_print("You are <color:D>burned</color>!");
+            if (aura) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "greatly burned" : "burned");
+            else if (fuzzy) msg_print("You are hit by something!");
             if (p_ptr->align > 10)
                 dam *= 2;
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -6758,8 +6758,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_PLASMA:
         {
-            if (fuzzy) msg_print("You are hit by something *HOT*!");
             if (aura) msg_print("You are <color:R>burned</color>!");
+            else if (fuzzy) msg_print("You are hit by something *HOT*!");
             get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
             if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
             {
@@ -6772,8 +6772,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_NETHER:
         {
-            if (fuzzy) msg_print("You are hit by nether forces!");
             if (aura) msg_print("You are <color:D>drained</color>!");
+            else if (fuzzy) msg_print("You are hit by nether forces!");
             dam = res_calc_dam(RES_NETHER, dam);
             if (!res_save_default(RES_NETHER) && !CHECK_MULTISHADOW())
                 drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
@@ -6797,8 +6797,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_CHAOS:
         {
-            if (fuzzy) msg_print("You are hit by a wave of anarchy!");
             if (aura) msg_print("You are <color:v>unmade</color>!");
+            else if (fuzzy) msg_print("You are hit by a wave of anarchy!");
             dam = res_calc_dam(RES_CHAOS, dam);
             if (!CHECK_MULTISHADOW())
             {
@@ -6853,8 +6853,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_SHARDS:
         {
-            if (fuzzy) msg_print("You are hit by something sharp!");
             if (aura) msg_print("You are <color:U>shredded</color>!");
+            else if (fuzzy) msg_print("You are hit by something sharp!");
             dam = res_calc_dam(RES_SHARDS, dam);
             if (!res_save_default(RES_SHARDS) && !CHECK_MULTISHADOW())
                 (void)set_cut(p_ptr->cut + dam, FALSE);
@@ -6864,7 +6864,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_SOUND:
         {
-            if (fuzzy) msg_print("You are hit by a loud noise!");
+            if (!aura && fuzzy) msg_print("You are hit by a loud noise!");
             /*if (aura) ... */
             dam = res_calc_dam(RES_SOUND, dam);
             if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
@@ -6878,7 +6878,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_CONFUSION:
         {
-            if (fuzzy) msg_print("You are hit by something puzzling!");
+            if (!aura && fuzzy) msg_print("You are hit by something puzzling!");
             /*if (aura) ... */
             dam = res_calc_dam(RES_CONF, dam);
             if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
@@ -6888,8 +6888,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_DISENCHANT:
         {
-            if (fuzzy) msg_print("You are hit by something static!");
             if (aura) msg_print("You are <color:v>disenchanted</color>!");
+            else if (fuzzy) msg_print("You are hit by something static!");
             dam = res_calc_dam(RES_DISEN, dam);
             if (aura && !one_in_(7) && !CHECK_MULTISHADOW())
             {
@@ -6905,8 +6905,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_NEXUS:
         {
-            if (fuzzy) msg_print("You are hit by something strange!");
             if (aura) msg_print("You are <color:v>scrambled</color>!");
+            else if (fuzzy) msg_print("You are hit by something strange!");
             dam = res_calc_dam(RES_NEXUS, dam);
             if (!res_save_default(RES_NEXUS) && !CHECK_MULTISHADOW())
                 apply_nexus(m_ptr);
@@ -6935,7 +6935,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_INERT:
         {
-            if (fuzzy) msg_print("You are hit by something slow!");
+            if (!aura && fuzzy) msg_print("You are hit by something slow!");
             /*if (aura) ... */
             if (!CHECK_MULTISHADOW())
                 (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
@@ -6944,8 +6944,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_LITE:
         {
-            if (fuzzy) msg_print("You are hit by something!");
             if (aura) msg_print("You are <color:y>dazzled</color>!");
+            else if (fuzzy) msg_print("You are hit by something!");
             dam = res_calc_dam(RES_LITE, dam);
             if (!blind && !res_save_default(RES_LITE) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                 (void)set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
@@ -6968,8 +6968,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_DARK:
         {
-            if (fuzzy) msg_print("You are hit by something!");
             if (aura) msg_print("You are <color:D>benighted</color>!");
+            else if (fuzzy) msg_print("You are hit by something!");
             dam = res_calc_dam(RES_DARK, dam);
             if (!blind && !res_save_default(RES_DARK) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                 (void)set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
@@ -7000,8 +7000,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
             break;
         case GF_TIME:
         {
-            if (fuzzy) msg_print("You are hit by a blast from the past!");
             if (aura) msg_print("You are <color:B>chronosmashed</color>!");
+            else if (fuzzy) msg_print("You are hit by a blast from the past!");
             dam = res_calc_dam(RES_TIME, dam);
             if (!res_save_default(RES_TIME) && !CHECK_MULTISHADOW())
             {
@@ -7067,7 +7067,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         }
         case GF_GRAVITY:
         {
-            if (fuzzy) msg_print("You are hit by something heavy!");
+            if (!aura && fuzzy) msg_print("You are hit by something heavy!");
             /*if (aura) ... */
             msg_print("Gravity warps around you.");
             if (!CHECK_MULTISHADOW())
@@ -7185,8 +7185,8 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         /* Ice -- cold plus stun plus cuts */
         case GF_ICE:
         {
-            if (fuzzy) msg_print("You are hit by something sharp and cold!");
             if (aura) msg_print("You are <color:W>frozen</color>!");
+            else if (fuzzy) msg_print("You are hit by something sharp and cold!");
             get_damage = cold_dam(dam, killer, monspell);
             if (!CHECK_MULTISHADOW())
             {

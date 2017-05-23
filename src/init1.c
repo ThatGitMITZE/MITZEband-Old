@@ -85,6 +85,7 @@ static int _get_gf_type(cptr which)
         {"AMNESIA", GF_AMNESIA},
         {"ELDRITCH", GF_ELDRITCH},
         {"STUN", GF_STUN},
+        {"NETHER", GF_NETHER},
         {0}};
     int i;
     for (i = 0;; i++)

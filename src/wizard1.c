@@ -1280,7 +1280,6 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
 
 static bool _mon_dam_p(mon_race_ptr r)
 {
-    return TRUE;
     return !(r->flags9 & RF9_DEPRECATED);
 }
 
