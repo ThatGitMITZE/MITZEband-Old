@@ -16441,8 +16441,8 @@ N:901:Samurai
 G:p:s
 I:110:40d10:12:60:10:170
 W:25:2:60:350:0:0
-B:SLASH:HURT:4d6
-B:SLASH:HURT:4d6
+B:SLASH:HURT(2d6):ELEC(8d6, 25%):CUT(4d4, 50%)
+B:SLASH:HURT(2d6):FIRE(4d6, 50%):CUT(4d4, 50%)
 F:MALE | ONLY_ITEM | DROP_90 | DROP_CORPSE | DROP_SKELETON | GOOD | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | HAS_LITE_1 |
 D:A warrior clad in ornate but effective armour, holding katana so sharp it
