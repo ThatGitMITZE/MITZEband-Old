@@ -760,7 +760,7 @@ static cptr _effect_desc(int effect)
     case RBE_DISENCHANT:  return "<color:v>Disenchant</color>";
     case RBE_DRAIN_CHARGES: return "Drain Charges";
     case RBE_EAT_GOLD:    return "Steal Gold";
-    case RBE_EAT_ITEM:    return "Steal Items";
+    case RBE_EAT_ITEM:    return "Steal Item";
     case RBE_EAT_FOOD:    return "Eat Your Food";
     case RBE_EAT_LITE:    return "Absorb Light";
     case RBE_ACID:        return "Shoot Acid";
@@ -787,8 +787,8 @@ static cptr _effect_desc(int effect)
     case RBE_TIME:        return "Time";
     case RBE_EXP_VAMP:    return "Drain Life Force";
     case RBE_DR_MANA:     return "Drain Mana";
-    case RBE_CUT:         return "<color:r>Cuts</color>";
-    case RBE_STUN:        return "<color:B>Stuns</color>";
+    case RBE_CUT:         return "<color:r>Cut</color>";
+    case RBE_STUN:        return "<color:B>Stun</color>";
     }
     return "";
 }
@@ -827,6 +827,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
             {
                 mon_effect_ptr effect = &blow->effects[j];
                 if (!effect->effect) continue;
+                if (effect->effect == RBE_HURT) continue;
                 vec_add(v, string_copy_s(_effect_desc(effect->effect)));
             }
             doc_printf(doc, "          %-7.7s",  _method_desc(blow->method));

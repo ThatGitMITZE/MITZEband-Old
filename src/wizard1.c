@@ -1256,7 +1256,7 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
         }
 
         if (i%25 == 0)
-            doc_printf(doc, "\n<color:G>%-30.30s Lvl    HP Speed  AC Damage   Damage   Auras </color>\n", "Name");
+            doc_printf(doc, "\n<color:G>%-30.30s Lvl    HP Speed  AC   Exp Damage   Damage   Auras </color>\n", "Name");
 
         if (r->flags9 & RF9_DEPRECATED)
             color = 'D';
@@ -1270,6 +1270,15 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
             doc_printf(doc, " %3d", r->ac);
         else
             doc_insert(doc, " <color:y>***</color>"); /* metal babble */
+        {
+            int plev = spoiler_hack ? 50 : p_ptr->max_plv;
+            int xp = r->mexp * r->level / (plev + 2);
+            char buf[10];
+
+            if (quickband) xp *= 2;
+            big_num_display(xp, buf);
+            doc_printf(doc, " %5.5s", buf);
+        }
         _display_melee_dam(doc, melee1.reduced, melee2.reduced);
         _display_melee_dam(doc, melee1.effective, melee2.effective);
         if (auras)
@@ -1281,6 +1290,9 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
 static bool _mon_dam_p(mon_race_ptr r)
 {
     return !(r->flags9 & RF9_DEPRECATED);
+    return TRUE;
+    return r->d_char == 'C';
+    return BOOL(r->flags2 & RF2_CAMELOT);
 }
 
 static void spoil_mon_spell_dam(void)

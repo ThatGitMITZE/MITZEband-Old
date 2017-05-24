@@ -228,6 +228,7 @@ static personality_ptr _get_lazy_personality(void)
 
         me.birth = _lazy_birth;
         me.calc_bonuses = _lazy_calc_bonuses;
+        me.flags = DEPRECATED;
 
         init = TRUE;
     }
