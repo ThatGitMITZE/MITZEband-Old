@@ -2103,12 +2103,11 @@ void touch_zap_player(int m_idx)
     {
         mon_effect_ptr aura = &r_ptr->auras[i];
         int            dam;
-        int            flg = PROJECT_KILL | PROJECT_PLAYER | PROJECT_HIDE | PROJECT_AIMED | PROJECT_JUMP;
         if (!aura->effect) continue;
         if (aura->pct && randint1(100) > aura->pct) continue;
         dam = damroll(aura->dd, aura->ds);
         if (!dam) continue;
-        project(m_idx, 0, py, px, dam, aura->effect, flg | PROJECT_AURA, -1);
+        gf_damage_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA);
     }
 }
 
