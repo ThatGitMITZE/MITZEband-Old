@@ -4952,7 +4952,7 @@ D:The size of a large bird, this fly drips caustic acid.
 
 N:323:Stone golem
 G:g:s
-I:100:28d8:12:75:10:350
+I:110:28d8:12:75:10:350
 W:19:2:70:100:0:0
 B:HIT:HURT(6d6):STUN(1d5, 25%)
 F:COLD_BLOOD | EMPTY_MIND | BASH_DOOR |
@@ -8504,7 +8504,7 @@ D:This little creature has a fiendish gleam in its eyes.
 
 N:530:Eog golem
 G:g:D
-I:100:100d20:12:125:10:700
+I:110:100d20:12:125:10:700
 W:35:4:999:1200:0:0
 B:HIT:HURT(14d14):STUN(2d6, 35%)
 F:ONLY_GOLD | DROP_2D2 |
@@ -16490,7 +16490,7 @@ D:down your spine.
 
 N:906:Lava golem
 G:g:r
-I:90:25d15:20:40:10:400
+I:110:25d15:20:40:10:400
 W:22:2:70:120:0:0
 B:HIT:HURT(7d7):FIRE(7d7):STUN(1d6, 25%)
 F:EMPTY_MIND | BASH_DOOR
@@ -16549,7 +16549,7 @@ P:Body:Icky
 
 N:910:Aquatic golem
 G:g:b
-I:100:25d10:35:50:10:400
+I:110:25d10:35:50:10:400
 W:19:1:70:100:0:0
 B:HIT:HURT(8d8):STUN(1d6, 25%)
 F:COLD_BLOOD | EMPTY_MIND | AQUATIC | NONLIVING
