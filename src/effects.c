@@ -5646,6 +5646,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
 
     /* Paranoia */
     if (p_ptr->is_dead) return 0;
+    if (!damage) return 0;
 
     if (p_ptr->sutemi) damage *= 2;
     if (p_ptr->special_defense & KATA_IAI) damage += (damage + 4) / 5;
@@ -5746,7 +5747,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
     }
 
     
-    if (p_ptr->wizard /*&& damage > 10*/)
+    if (p_ptr->wizard && damage > 0)
         msg_format("You take %d damage.", damage);
 
     p_ptr->chp -= damage;

@@ -59,6 +59,7 @@ static int _get_gf_type(cptr which)
         {"FIRE", GF_FIRE},
         {"PLASMA", GF_PLASMA},
         {"LITE", GF_LITE},
+        {"DARK", GF_DARK},
         {"SHARDS", GF_SHARDS},
         {"SOUND", GF_SOUND},
         {"CONFUSION", GF_CONFUSION},
