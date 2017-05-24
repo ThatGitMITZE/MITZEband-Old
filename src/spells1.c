@@ -2599,15 +2599,15 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
     if (m_ptr->hp < 0) return (FALSE);
 
     /* Get the monster name (BEFORE polymorphing) */
-    if (flags & PROJECT_SHORT_MON_NAME)
-    {
-        monster_desc(m_name, m_ptr, MD_PRON_VISIBLE);
-        monster_desc(m_name_object, m_ptr, MD_PRON_VISIBLE | MD_OBJECTIVE);
-    }
-    else
+    if (flags & GF_DAMAGE_SPELL)
     {
         monster_desc(m_name, m_ptr, 0);
         monster_desc(m_name_object, m_ptr, 0);
+    }
+    else
+    {
+        monster_desc(m_name, m_ptr, MD_PRON_VISIBLE);
+        monster_desc(m_name_object, m_ptr, MD_PRON_VISIBLE | MD_OBJECTIVE);
     }
     /* Get the monster possessive ("his"/"her"/"its") */
     monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
@@ -6632,7 +6632,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
 
             if (do_time)
             {
-                if (!(flags & PROJECT_NO_PAIN))
+                if (flags & GF_DAMAGE_SPELL)
                     note = " seems weakened.";
                 m_ptr->maxhp -= do_time;
                 if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
@@ -6863,7 +6863,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 msg_format("%^s%s", m_name, note);
 
             /* Hack -- Pain message */
-            else if (known && dam && !(flags & PROJECT_NO_PAIN))
+            else if (known && dam && !(flags & GF_DAMAGE_SPELL))
             {
                 message_pain(c_ptr->m_idx, dam);
             }

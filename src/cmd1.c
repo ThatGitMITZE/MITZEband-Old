@@ -2160,6 +2160,11 @@ void wizard_report_damage(int amt)
 #endif
 }
 
+static bool _gf_innate(mon_ptr m, int type, int dam)
+{
+    return gf_damage_m(GF_WHO_PLAYER, point(m->fx, m->fy), type, dam, GF_DAMAGE_ATTACK);
+}
+
 static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
 {
     int             dam, base_dam, effect_pow, to_h, chance;
@@ -2521,19 +2526,19 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                     case GF_OLD_CONF:
                     case GF_OLD_SLOW:
                     case GF_STUN:
-                        project(0, 0, m_ptr->fy, m_ptr->fx, effect_pow, e, PROJECT_KILL|PROJECT_HIDE|PROJECT_SHORT_MON_NAME, -1);
+                        _gf_innate(m_ptr, e, effect_pow);
                         *mdeath = (m_ptr->r_idx == 0);
                         break;
                     case GF_DRAIN_MANA:
                     {
                         int amt = MIN(effect_pow, max_drain_amt - drain_amt);
-                        if (amt && project(0, 0, m_ptr->fy, m_ptr->fx, amt, e, PROJECT_KILL|PROJECT_HIDE|PROJECT_NO_PAIN|PROJECT_SHORT_MON_NAME, -1))
+                        if (amt && _gf_innate(m_ptr, e, amt))
                             drain_amt += amt;
                         *mdeath = (m_ptr->r_idx == 0);
                         break;
                     }
                     case GF_OLD_DRAIN:
-                        if (monster_living(r_ptr) && project(0, 0, m_ptr->fy, m_ptr->fx, effect_pow, e, PROJECT_KILL|PROJECT_HIDE|PROJECT_NO_PAIN|PROJECT_SHORT_MON_NAME, -1))
+                        if (monster_living(r_ptr) && _gf_innate(m_ptr, e, effect_pow))
                         {
                             int amt = MIN(effect_pow, max_drain_amt - drain_amt);
                             if (prace_is_(MIMIC_BAT))
@@ -2557,11 +2562,11 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                         if (base_dam > 50 || one_in_(7))
                         {
                             delay_quake = TRUE;
-                            project(0, 0, m_ptr->fy, m_ptr->fx, base_dam, GF_STUN, PROJECT_KILL|PROJECT_HIDE|PROJECT_NO_PAIN|PROJECT_SHORT_MON_NAME, -1);
+                            _gf_innate(m_ptr, GF_STUN, base_dam);
                         }
                         break;
-                    default:                             /* v--- Check for pure elemental attack (e.g. Fire vortex) */
-                        project(0, 0, m_ptr->fy, m_ptr->fx, k ? effect_pow : dam, e, PROJECT_KILL|PROJECT_HIDE|PROJECT_NO_PAIN|PROJECT_SHORT_MON_NAME, -1);
+                    default:              /* v--- Check for pure elemental attack (e.g. Fire vortex) */
+                        _gf_innate(m_ptr, e, k ? effect_pow : dam);
                         *mdeath = (m_ptr->r_idx == 0);
                         /* Polymorph effect? */
                         if (m_ptr->r_idx && m_ptr->r_idx != old_r_idx)
@@ -2618,11 +2623,11 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
     if (delay_quake)
         earthquake(py, px, 10);
     if (delay_sleep && !*mdeath)
-        project(0, 0, m_ptr->fy, m_ptr->fx, delay_sleep, GF_OLD_SLEEP, PROJECT_KILL|PROJECT_HIDE|PROJECT_SHORT_MON_NAME, -1);
+        _gf_innate(m_ptr, GF_OLD_SLEEP, delay_sleep);
     if (delay_stasis && !*mdeath)
-        project(0, 0, m_ptr->fy, m_ptr->fx, delay_stasis, GF_STASIS, PROJECT_KILL|PROJECT_HIDE|PROJECT_SHORT_MON_NAME, -1);
+        _gf_innate(m_ptr, GF_STASIS, delay_stasis);
     if (delay_paralysis && !*mdeath)
-        project(0, 0, m_ptr->fy, m_ptr->fx, delay_paralysis, GF_PARALYSIS, PROJECT_KILL|PROJECT_HIDE|PROJECT_SHORT_MON_NAME, -1);
+        _gf_innate(m_ptr, GF_PARALYSIS, delay_paralysis);
     if (steal_ct && !*mdeath)
     {
         if (mon_save_p(m_ptr->r_idx, A_DEX))
@@ -3744,7 +3749,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (o_ptr && o_ptr->name1 == ART_ETERNAL_BLADE)
                 {
                     /* Hack: Time Brand. Effectively a 2x slay ... k2 is damage from dice alone.*/
-                    project(0, 0, y, x, k2, GF_TIME, PROJECT_HIDE | PROJECT_STOP | PROJECT_KILL | PROJECT_GRID | PROJECT_NO_PAIN, -1);
+                    gf_damage_m(GF_WHO_PLAYER, point(x,y), GF_TIME, k2, GF_DAMAGE_ATTACK);
                     *mdeath = (m_ptr->r_idx == 0);
                     if (*mdeath) break;
                 }

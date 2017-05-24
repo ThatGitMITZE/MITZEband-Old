@@ -1489,6 +1489,10 @@ static int check_hit2(int power, int level, int ac, int stun)
 
 
 /* Monster attacks monster */
+static bool _mon_gf_mon(int who, mon_ptr tgt, int type, int dam)
+{
+    return gf_damage_m(who, point(tgt->fx, tgt->fy), type, dam, GF_DAMAGE_ATTACK);
+}
 bool mon_attack_mon(int m_idx, int t_idx)
 {
     monster_type    *m_ptr = &m_list[m_idx];
@@ -1845,26 +1849,20 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     pt = 0;
                     break;
                 }
-
                 if (pt)
                 {
                     /* Do damage if not exploding */
                     if (!explode)
-                    {
-                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                            damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
-                    }
+                        _mon_gf_mon(m_idx, t_ptr, pt, damage);
 
                     switch (effect_type)
                     {
                     case BLOW_EFFECT_TYPE_FEAR:
-                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                            damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                        _mon_gf_mon(m_idx, t_ptr, GF_TURN_ALL, damage);
                         break;
 
                     case BLOW_EFFECT_TYPE_SLEEP:
-                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                            r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                        _mon_gf_mon(m_idx, t_ptr, GF_OLD_SLEEP, r_ptr->level);
                         break;
 
                     case BLOW_EFFECT_TYPE_HEAL:
@@ -1906,16 +1904,14 @@ bool mon_attack_mon(int m_idx, int t_idx)
                         {
                             if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
                             {
+                                int dd = 1 + tr_ptr->level/26;
+                                int ds = 1 + tr_ptr->level/17;
+                                int dam = damroll(dd, ds);
                                 if (see_either)
-                                {
                                     msg_format("%^s is <color:r>burned</color>!", m_name);
-                                }
                                 if (m_ptr->ml)
                                     mon_lore_2(t_ptr, RF2_AURA_FIRE);
-                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                    damroll (1 + ((tr_ptr->level) / 26),
-                                    1 + ((tr_ptr->level) / 17)),
-                                    GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                                _mon_gf_mon(t_idx, m_ptr, GF_FIRE, dam);
                             }
                             else
                             {
@@ -1928,16 +1924,14 @@ bool mon_attack_mon(int m_idx, int t_idx)
                         {
                             if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
                             {
+                                int dd = 1 + tr_ptr->level/26;
+                                int ds = 1 + tr_ptr->level/17;
+                                int dam = damroll(dd, ds);
                                 if (see_either)
-                                {
                                     msg_format("%^s is <color:w>frozen</color>!", m_name);
-                                }
                                 if (m_ptr->ml)
                                     mon_lore_3(t_ptr, RF3_AURA_COLD);
-                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                    damroll (1 + ((tr_ptr->level) / 26),
-                                    1 + ((tr_ptr->level) / 17)),
-                                    GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                                _mon_gf_mon(t_idx, m_ptr, GF_COLD, dam);
                             }
                             else
                             {
@@ -1950,16 +1944,14 @@ bool mon_attack_mon(int m_idx, int t_idx)
                         {
                             if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
                             {
+                                int dd = 1 + tr_ptr->level/26;
+                                int ds = 1 + tr_ptr->level/17;
+                                int dam = damroll(dd, ds);
                                 if (see_either)
-                                {
                                     msg_format("%^s is <color:b>zapped</color>!", m_name);
-                                }
                                 if (m_ptr->ml)
                                     mon_lore_2(t_ptr, RF2_AURA_ELEC);
-                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                    damroll (1 + ((tr_ptr->level) / 26),
-                                    1 + ((tr_ptr->level) / 17)),
-                                    GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                                _mon_gf_mon(t_idx, m_ptr, GF_ELEC, dam);
                             }
                             else
                             {
@@ -1973,8 +1965,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
                             if (!aura.effect) continue;
                             if (aura.pct && randint1(100) > aura.pct) continue;
                             dam = damroll(aura.dd, aura.ds);
-                            project(t_idx, 0, m_ptr->fy, m_ptr->fx, dam, aura.effect,
-                                PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                            _mon_gf_mon(t_idx, m_ptr, aura.effect, dam);
                         }
                     }
                 }

@@ -1319,13 +1319,15 @@ extern sint project_path(u16b *gp, int range, int y1, int x1, int y2, int x2, in
 extern int dist_to_line(int y, int x, int y1, int x1, int y2, int x2);
 extern bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int monspell);
 extern bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see_s_msg);
-#define GF_DAMAGE_SPELL  0x08000000 /* chosen so as not to collide with PROJECT_* flags */
-#define GF_DAMAGE_ATTACK 0x04000000
-#define GF_DAMAGE_AURA   0x02000000
-extern int gf_damage_p(int who, int type, int dam, int flags);
-extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
 extern int project_length;
 extern bool binding_field(int dam);
+
+#define GF_WHO_PLAYER    0    /* > 0 is m_idx; < 0 is special */
+#define GF_DAMAGE_SPELL  0x01 /* not really flags at the moment ... */
+#define GF_DAMAGE_ATTACK 0x02
+#define GF_DAMAGE_AURA   0x04
+extern int gf_damage_p(int who, int type, int dam, int flags);
+extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
 
 /* spells2.c */
 extern void message_pain(int m_idx, int dam);

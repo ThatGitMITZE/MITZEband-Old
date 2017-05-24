@@ -2143,10 +2143,6 @@ enum {
 #define PROJECT_FAST           0x004000
 #define PROJECT_LOS            0x008000
 #define PROJECT_FULL_DAM       0x010000
-#define PROJECT_NO_PAIN        0x020000  /* Omit the pain messages. Note: Mon vs Mon melee is implemented with project()! */
-#define PROJECT_SHORT_MON_NAME 0x040000 /* "It falls asleep" rather than "The Icky Blue Mean Monster falls asleep." */
-#define PROJECT_AURA           0x080000 /* projection is actually an aura, and will require a message */
-
 
 /*
  * Special caster ID for project()
