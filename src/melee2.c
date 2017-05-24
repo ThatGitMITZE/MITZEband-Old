@@ -1491,14 +1491,13 @@ static int check_hit2(int power, int level, int ac, int stun)
 /* Monster attacks monster */
 bool mon_attack_mon(int m_idx, int t_idx)
 {
-#if 0
     monster_type    *m_ptr = &m_list[m_idx];
     monster_type    *t_ptr = &m_list[t_idx];
 
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
 
-    int             ap_cnt;
+    int             ap_cnt, j;
     int             ac, rlev, pt, to_dd = 0;
     char            m_name[80], t_name[80];
     bool            blinked;
@@ -1573,16 +1572,11 @@ bool mon_attack_mon(int m_idx, int t_idx)
     {
         bool obvious = FALSE;
 
+        int method;
         int power = 0;
         int damage = 0;
 
         cptr act = NULL;
-
-        /* Extract the attack infomation */
-        int effect;
-        int method;
-        int d_dice;
-        int d_side;
 
         if (retaliation_hack)
         {
@@ -1590,10 +1584,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
             if (ap_cnt >= 4) return FALSE;
         }
 
-        effect = r_ptr->blow[ap_cnt].effect;
-        method = r_ptr->blow[ap_cnt].method;
-        d_dice = r_ptr->blow[ap_cnt].d_dice + to_dd;
-        d_side = r_ptr->blow[ap_cnt].d_side;
+        method = r_ptr->blows[ap_cnt].method;
+        power = r_ptr->blows[ap_cnt].power;
 
         if (!m_ptr->r_idx) break;
 
@@ -1607,7 +1599,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
         if (method == RBM_SHOOT)
         {
             if (retaliation_hack) break;
-             continue;
+            continue;
         }
 
         if (retaliation_hack && see_either)
@@ -1616,205 +1608,114 @@ bool mon_attack_mon(int m_idx, int t_idx)
             mon_lore_2(m_ptr, RF2_AURA_REVENGE);
         }
 
-        /* Extract the attack "power" */
-        power = mbe_info[effect].power;
-
         /* Monster hits */
-        if (!effect || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)))
+        if ( !r_ptr->blows[ap_cnt].effects[0].effect  /* XXX B:BEG or B:INSULT */
+          || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)) )
         {
-            /* Wake it up */
             (void)set_monster_csleep(t_idx, 0);
 
             if (t_ptr->ml)
-            {
-                /* Redraw the health bar */
                 check_mon_health_redraw(t_idx);
-            }
 
-            /* Describe the attack method */
             switch (method)
             {
             case RBM_HIT:
-                {
-                    act = "hits";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "hits";
+                touched = TRUE;
+                break;
             case RBM_TOUCH:
-                {
-                    act = "touches";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "touches";
+                touched = TRUE;
+                break;
             case RBM_PUNCH:
-                {
-                    act = "punches";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "punches";
+                touched = TRUE;
+                break;
             case RBM_KICK:
-                {
-                    act = "kicks";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "kicks";
+                touched = TRUE;
+                break;
             case RBM_CLAW:
-                {
-                    act = "claws";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "claws";
+                touched = TRUE;
+                break;
             case RBM_BITE:
-                {
-                    act = "bites";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "bites";
+                touched = TRUE;
+                break;
             case RBM_STING:
-                {
-                    act = "stings";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "stings";
+                touched = TRUE;
+                break;
             case RBM_SLASH:
-                {
-                    act = "slashes";
-                    break;
-                }
-
+                act = "slashes";
+                break;
             case RBM_BUTT:
-                {
-                    act = "butts";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "butts";
+                touched = TRUE;
+                break;
             case RBM_CRUSH:
-                {
-                    act = "crushes";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "crushes";
+                touched = TRUE;
+                break;
             case RBM_ENGULF:
-                {
-                    act = "engulfs";
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "engulfs";
+                touched = TRUE;
+                break;
             case RBM_CHARGE:
-                {
-                    act = "charges";
-
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "charges";
+                touched = TRUE;
+                break;
             case RBM_CRAWL:
-                {
-                    act = "crawls";
-
-                    touched = TRUE;
-                    break;
-                }
-
+                act = "crawls";
+                touched = TRUE;
+                break;
             case RBM_DROOL:
-                {
-                    act = "drools";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "drools";
+                touched = FALSE;
+                break;
             case RBM_SPIT:
-                {
-                    act = "spits";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "spits";
+                touched = FALSE;
+                break;
             case RBM_EXPLODE:
-                {
-                    if (see_either) disturb(1, 0);
-                    act = "explodes";
-
-                    explode = TRUE;
-                    touched = FALSE;
-                    break;
-                }
-
+                if (see_either) disturb(1, 0);
+                act = "explodes";
+                explode = TRUE;
+                touched = FALSE;
+                break;
             case RBM_GAZE:
-                {
-                    act = "gazes";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "gazes";
+                touched = FALSE;
+                break;
             case RBM_WAIL:
-                {
-                    act = "wails";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "wails";
+                touched = FALSE;
+                break;
             case RBM_SPORE:
-                {
-                    act = "releases spores";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "releases spores";
+                touched = FALSE;
+                break;
             case RBM_XXX4:
-                {
-                    act = "projects XXX4's at %s.";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "projects XXX4's at %s.";
+                touched = FALSE;
+                break;
             case RBM_BEG:
-                {
-                    act = "begs";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "begs";
+                touched = FALSE;
+                break;
             case RBM_INSULT:
-                {
-                    act = "insults";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "insults";
+                touched = FALSE;
+                break;
             case RBM_MOAN:
-                {
-                    act = "moans";
-
-                    touched = FALSE;
-                    break;
-                }
-
+                act = "moans";
+                touched = FALSE;
+                break;
             case RBM_SHOW:
-                {
-                    act = "sings";
-
-                    touched = FALSE;
-                    break;
-                }
+                act = "sings";
+                touched = FALSE;
+                break;
             }
 
             /* Message */
@@ -1833,238 +1734,251 @@ bool mon_attack_mon(int m_idx, int t_idx)
             /* Hack -- assume all attacks are obvious */
             obvious = TRUE;
 
-            /* Roll out the damage */
-            damage = damroll(d_dice, d_side);
-
-            /* Assume no effect */
-            effect_type = BLOW_EFFECT_TYPE_NONE;
-
-            pt = GF_MISSILE;
-
-            /* Apply appropriate damage */
-            switch (effect)
+            for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-            case 0:
-            case RBE_DR_MANA:
-                damage = pt = 0;
-                break;
+                mon_effect_t e = r_ptr->blows[ap_cnt].effects[j];
 
-            case RBE_SUPERHURT:
-                if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13))
+                if (!e.effect) break;
+                if (e.pct && randint1(100) > e.pct) continue;
+
+                damage = damroll(e.dd + to_dd, e.ds);
+                effect_type = BLOW_EFFECT_TYPE_NONE;
+                pt = GF_MISSILE;
+                switch (e.effect)
                 {
-                    int pct = ac_melee_pct_aux(ac, 60, 200);
-                    damage = MAX(damage * 2 * pct / 100, damage);
-                    break;
-                }
-
-                /* Fall through */
-
-            case RBE_HURT:
-                damage = damage * ac_melee_pct(ac) / 100;
-                break;
-
-            case RBE_POISON:
-            case RBE_DISEASE:
-                pt = GF_POIS;
-                break;
-
-            case RBE_DISENCHANT:
-            case RBE_DRAIN_CHARGES:
-                pt = GF_DISENCHANT;
-                break;
-
-            case RBE_EAT_ITEM:
-            case RBE_EAT_GOLD:
-                if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
-                break;
-
-            case RBE_EAT_FOOD:
-            case RBE_EAT_LITE:
-            case RBE_BLIND:
-            case RBE_LOSE_STR:
-            case RBE_LOSE_INT:
-            case RBE_LOSE_WIS:
-            case RBE_LOSE_DEX:
-            case RBE_LOSE_CON:
-            case RBE_LOSE_CHR:
-            case RBE_LOSE_ALL:
-                break;
-
-            case RBE_ACID:
-                pt = GF_ACID;
-                break;
-
-            case RBE_ELEC:
-                pt = GF_ELEC;
-                break;
-
-            case RBE_FIRE:
-                pt = GF_FIRE;
-                break;
-
-            case RBE_COLD:
-                pt = GF_COLD;
-                break;
-
-            case RBE_CONFUSE:
-                pt = GF_CONFUSION;
-                break;
-
-            case RBE_TERRIFY:
-                effect_type = BLOW_EFFECT_TYPE_FEAR;
-                break;
-
-            case RBE_PARALYZE:
-                effect_type = BLOW_EFFECT_TYPE_SLEEP;
-                break;
-
-            case RBE_SHATTER:
-                damage = damage * ac_melee_pct(ac) / 100;
-                if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
-                break;
-
-            case RBE_EXP_10:
-            case RBE_EXP_20:
-            case RBE_EXP_40:
-            case RBE_EXP_80:
-                pt = GF_NETHER;
-                break;
-
-            case RBE_TIME:
-                pt = GF_TIME;
-                break;
-
-            case RBE_EXP_VAMP:
-                pt = GF_OLD_DRAIN;
-                effect_type = BLOW_EFFECT_TYPE_HEAL;
-                break;
-
-            default:
-                pt = 0;
-                break;
-            }
-
-            if (pt)
-            {
-                /* Do damage if not exploding */
-                if (!explode)
-                {
-                    project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                        damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
-                }
-
-                switch (effect_type)
-                {
-                case BLOW_EFFECT_TYPE_FEAR:
-                    project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                        damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                case 0:
+                case RBE_DR_MANA:
+                    damage = pt = 0;
                     break;
 
-                case BLOW_EFFECT_TYPE_SLEEP:
-                    project(m_idx, 0, t_ptr->fy, t_ptr->fx,
-                        r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                    break;
-
-                case BLOW_EFFECT_TYPE_HEAL:
-                    if ((monster_living(tr_ptr)) && (damage > 2))
+                case RBE_SUPERHURT:
+                    if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13))
                     {
-                        bool did_heal = FALSE;
-
-                        if (m_ptr->hp < m_ptr->maxhp) did_heal = TRUE;
-
-                        /* Heal */
-                        m_ptr->hp += damroll(4, damage / 6);
-                        if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-                        /* Redraw (later) if needed */
-                        check_mon_health_redraw(m_idx);
-
-                        /* Special message */
-                        if (see_m && did_heal)
-                        {
-                            msg_format("%^s appears healthier.", m_name);
-                        }
-                    }
-                    break;
-                }
-
-                if (touched)
-                {
-                    if (tr_ptr->flags2 & RF2_AURA_REVENGE && !retaliation_hack)
-                    {
-                        retaliation_hack = TRUE;
-                        mon_attack_mon(t_idx, m_idx);
-                        retaliation_count++;
-                        retaliation_hack = FALSE;
+                        int pct = ac_melee_pct_aux(ac, 60, 200);
+                        damage = MAX(damage * 2 * pct / 100, damage);
+                        break;
                     }
 
-                    /* Aura fire */
-                    if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx)
+                    /* Fall through */
+
+                case RBE_HURT:
+                    damage = damage * ac_melee_pct(ac) / 100;
+                    break;
+
+                case RBE_POISON:
+                case RBE_DISEASE:
+                    pt = GF_POIS;
+                    break;
+
+                case RBE_DISENCHANT:
+                case RBE_DRAIN_CHARGES:
+                    pt = GF_DISENCHANT;
+                    break;
+
+                case RBE_EAT_ITEM:
+                case RBE_EAT_GOLD:
+                    if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
+                    break;
+
+                case RBE_EAT_FOOD:
+                case RBE_EAT_LITE:
+                case RBE_BLIND:
+                case RBE_LOSE_STR:
+                case RBE_LOSE_INT:
+                case RBE_LOSE_WIS:
+                case RBE_LOSE_DEX:
+                case RBE_LOSE_CON:
+                case RBE_LOSE_CHR:
+                case RBE_LOSE_ALL:
+                    break;
+
+                case RBE_ACID:
+                    pt = GF_ACID;
+                    break;
+
+                case RBE_ELEC:
+                    pt = GF_ELEC;
+                    break;
+
+                case RBE_FIRE:
+                    pt = GF_FIRE;
+                    break;
+
+                case RBE_COLD:
+                    pt = GF_COLD;
+                    break;
+
+                case RBE_CONFUSE:
+                    pt = GF_CONFUSION;
+                    break;
+
+                case RBE_TERRIFY:
+                    effect_type = BLOW_EFFECT_TYPE_FEAR;
+                    break;
+
+                case RBE_PARALYZE:
+                    effect_type = BLOW_EFFECT_TYPE_SLEEP;
+                    break;
+
+                case RBE_SHATTER:
+                    damage = damage * ac_melee_pct(ac) / 100;
+                    if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
+                    break;
+
+                case RBE_EXP_10:
+                case RBE_EXP_20:
+                case RBE_EXP_40:
+                case RBE_EXP_80:
+                    pt = GF_NETHER;
+                    break;
+
+                case RBE_TIME:
+                    pt = GF_TIME;
+                    break;
+
+                case RBE_EXP_VAMP:
+                    pt = GF_OLD_DRAIN;
+                    effect_type = BLOW_EFFECT_TYPE_HEAL;
+                    break;
+
+                default:
+                    pt = 0;
+                    break;
+                }
+
+                if (pt)
+                {
+                    /* Do damage if not exploding */
+                    if (!explode)
                     {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
+                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+                            damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                    }
+
+                    switch (effect_type)
+                    {
+                    case BLOW_EFFECT_TYPE_FEAR:
+                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+                            damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                        break;
+
+                    case BLOW_EFFECT_TYPE_SLEEP:
+                        project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+                            r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                        break;
+
+                    case BLOW_EFFECT_TYPE_HEAL:
+                        if ((monster_living(tr_ptr)) && (damage > 2))
                         {
-                            if (see_either)
+                            bool did_heal = FALSE;
+
+                            if (m_ptr->hp < m_ptr->maxhp) did_heal = TRUE;
+
+                            /* Heal */
+                            m_ptr->hp += damroll(4, damage / 6);
+                            if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+
+                            /* Redraw (later) if needed */
+                            check_mon_health_redraw(m_idx);
+
+                            /* Special message */
+                            if (see_m && did_heal)
                             {
-                                msg_format("%^s is <color:r>burned</color>!", m_name);
+                                msg_format("%^s appears healthier.", m_name);
                             }
-                            if (m_ptr->ml)
-                                mon_lore_2(t_ptr, RF2_AURA_FIRE);
-                            project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                damroll (1 + ((tr_ptr->level) / 26),
-                                1 + ((tr_ptr->level) / 17)),
-                                GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
                         }
-                        else
-                        {
-                            mon_lore_r(m_ptr, RFR_EFF_IM_FIRE_MASK);
-                        }
+                        break;
                     }
 
-                    /* Aura cold */
-                    if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx)
+                    if (touched)
                     {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+                        int k;
+                        if (tr_ptr->flags2 & RF2_AURA_REVENGE && !retaliation_hack)
                         {
-                            if (see_either)
-                            {
-                                msg_format("%^s is <color:w>frozen</color>!", m_name);
-                            }
-                            if (m_ptr->ml)
-                                mon_lore_3(t_ptr, RF3_AURA_COLD);
-                            project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                damroll (1 + ((tr_ptr->level) / 26),
-                                1 + ((tr_ptr->level) / 17)),
-                                GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                            retaliation_hack = TRUE;
+                            mon_attack_mon(t_idx, m_idx);
+                            retaliation_count++;
+                            retaliation_hack = FALSE;
                         }
-                        else
-                        {
-                            mon_lore_r(m_ptr, RFR_EFF_IM_COLD_MASK);
-                        }
-                    }
 
-                    /* Aura elec */
-                    if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx)
-                    {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+                        /* Aura fire */
+                        if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx)
                         {
-                            if (see_either)
+                            if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
                             {
-                                msg_format("%^s is <color:b>zapped</color>!", m_name);
+                                if (see_either)
+                                {
+                                    msg_format("%^s is <color:r>burned</color>!", m_name);
+                                }
+                                if (m_ptr->ml)
+                                    mon_lore_2(t_ptr, RF2_AURA_FIRE);
+                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+                                    damroll (1 + ((tr_ptr->level) / 26),
+                                    1 + ((tr_ptr->level) / 17)),
+                                    GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
                             }
-                            if (m_ptr->ml)
-                                mon_lore_2(t_ptr, RF2_AURA_ELEC);
-                            project(t_idx, 0, m_ptr->fy, m_ptr->fx,
-                                damroll (1 + ((tr_ptr->level) / 26),
-                                1 + ((tr_ptr->level) / 17)),
-                                GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                            else
+                            {
+                                mon_lore_r(m_ptr, RFR_EFF_IM_FIRE_MASK);
+                            }
                         }
-                        else
+
+                        /* Aura cold */
+                        if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx)
                         {
-                            mon_lore_r(m_ptr, RFR_EFF_IM_ELEC_MASK);
+                            if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
+                            {
+                                if (see_either)
+                                {
+                                    msg_format("%^s is <color:w>frozen</color>!", m_name);
+                                }
+                                if (m_ptr->ml)
+                                    mon_lore_3(t_ptr, RF3_AURA_COLD);
+                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+                                    damroll (1 + ((tr_ptr->level) / 26),
+                                    1 + ((tr_ptr->level) / 17)),
+                                    GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                            }
+                            else
+                            {
+                                mon_lore_r(m_ptr, RFR_EFF_IM_COLD_MASK);
+                            }
+                        }
+
+                        /* Aura elec */
+                        if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx)
+                        {
+                            if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
+                            {
+                                if (see_either)
+                                {
+                                    msg_format("%^s is <color:b>zapped</color>!", m_name);
+                                }
+                                if (m_ptr->ml)
+                                    mon_lore_2(t_ptr, RF2_AURA_ELEC);
+                                project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+                                    damroll (1 + ((tr_ptr->level) / 26),
+                                    1 + ((tr_ptr->level) / 17)),
+                                    GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
+                            }
+                            else
+                            {
+                                mon_lore_r(m_ptr, RFR_EFF_IM_ELEC_MASK);
+                            }
+                        }
+                        for (k = 0; k < MAX_MON_AURAS; k++)
+                        {
+                            mon_effect_t aura = tr_ptr->auras[k];
+                            int          dam;
+                            if (!aura.effect) continue;
+                            if (aura.pct && randint1(100) > aura.pct) continue;
+                            dam = damroll(aura.dd, aura.ds);
+                            project(t_idx, 0, m_ptr->fy, m_ptr->fx, dam, aura.effect,
+                                PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED | PROJECT_NO_PAIN, -1);
                         }
                     }
                 }
-            }
+            } /* for each effect */
         }
 
         /* Monster missed monster */
@@ -2163,7 +2077,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
             teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
         }
     }
-#endif
     return TRUE;
 }
 
