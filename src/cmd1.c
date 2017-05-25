@@ -3082,7 +3082,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 martial_arts *ma_ptr = &ma_blows[monk_get_attack_idx()];
                 int resist_stun = 0;
 
-                if (r_ptr->flags1 & RF1_UNIQUE) resist_stun += (10*r_ptr->level);
+                if (r_ptr->flags1 & RF1_UNIQUE) resist_stun += 3*r_ptr->level;
                 if (r_ptr->flags3 & RF3_NO_CONF) resist_stun += 33;
                 if (r_ptr->flags3 & RF3_NO_SLEEP) resist_stun += 33;
                 if ((r_ptr->flags3 & RF3_UNDEAD) || (r_ptr->flags3 & RF3_NONLIVING))
@@ -3163,15 +3163,15 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (r_ptr->flags3 & RF3_NO_STUN) stun_effect = 0;
                 if (r_ptr->flagsr & RFR_RES_SOUN) stun_effect = 0;
 
-                if (mon_save_p(m_ptr->r_idx, A_DEX))
-                    stun_effect = 0;
+                /*if (mon_save_p(m_ptr->r_idx, A_DEX))
+                    stun_effect = 0;*/
 
                 if (stun_effect && ((k + p_ptr->weapon_info[hand].to_d) < m_ptr->hp))
                 {
-                    if (p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
+                    if (2*p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
                     {
-                        if (MON_STUNNED(m_ptr))
-                            stun_effect /= 4;
+                        /*if (MON_STUNNED(m_ptr))
+                            stun_effect /= 2;*/
 
                         if (stun_effect == 0)
                         {

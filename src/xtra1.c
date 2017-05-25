@@ -2075,6 +2075,12 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
             col += 2;
             Term_putstr(col, row, strlen(buf), attr, buf);
             col += strlen(buf) + 1;
+            if (MON_STUNNED(m_ptr))
+            {
+                sprintf(buf, "%d%%", MON_STUNNED(m_ptr));
+                Term_putstr(col, row, strlen(buf), TERM_L_BLUE, buf);
+                col += strlen(buf) + 1;
+            }
             if (m_idx == target_who)
                 Term_queue_char(col++, row, TERM_L_RED, '*', 0, 0);
             if (m_idx == p_ptr->riding)
@@ -2085,8 +2091,6 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
                 Term_queue_char(col++, row, TERM_BLUE, 'P', 0, 0);
             if (MON_CSLEEP(m_ptr))
                 Term_queue_char(col++, row, TERM_BLUE, 'Z', 0, 0); /* ZZZ */
-            if (MON_STUNNED(m_ptr))
-                Term_queue_char(col++, row, TERM_L_BLUE, 'S', 0, 0);
             if (MON_CONFUSED(m_ptr))
                 Term_queue_char(col++, row, TERM_UMBER, 'C', 0, 0);
             if (MON_MONFEAR(m_ptr))

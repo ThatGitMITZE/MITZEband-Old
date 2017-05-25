@@ -1466,13 +1466,13 @@ static int check_hit2(int power, int level, int ac, int stun)
     /* Percentile dice */
     k = randint0(100);
 
-    if (stun && one_in_(2)) return FALSE;
-
     /* Hack -- Always miss or hit */
     if (k < 10) return (k < 5);
 
     /* Calculate the "attack quality" */
     i = (power + (level * 3));
+    if (stun)
+        i -= i * MIN(100, stun) / 150;
 
     /* Power and Level compete against Armor */
     if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
@@ -1497,6 +1497,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     monster_type    *t_ptr = &m_list[t_idx];
+    int              stun = MON_STUNNED(m_ptr);
 
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
     monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -1614,7 +1615,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
 
         /* Monster hits */
         if ( !r_ptr->blows[ap_cnt].effects[0].effect  /* XXX B:BEG or B:INSULT */
-          || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)) )
+          || check_hit2(power, rlev, ac, stun) )
         {
             (void)set_monster_csleep(t_idx, 0);
 
@@ -1746,6 +1747,9 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 if (e.pct && randint1(100) > e.pct) continue;
 
                 damage = damroll(e.dd + to_dd, e.ds);
+                if (stun)
+                    damage -= damage * MIN(100, stun) / 150;
+
                 effect_type = BLOW_EFFECT_TYPE_NONE;
                 pt = GF_MISSILE;
                 switch (e.effect)
@@ -2320,13 +2324,6 @@ static void process_monster(int m_idx)
         {
             r_ptr->r_wake++;
         }
-    }
-
-    /* Handle "stun" */
-    if (MON_STUNNED(m_ptr))
-    {
-        /* Sometimes skip move */
-        if (one_in_(2)) return;
     }
 
     if (is_riding_mon)
@@ -4313,20 +4310,17 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
 
     case MTIMED_STUNNED:
     {
+        int stun = MON_STUNNED(m_ptr);
         int rlev = r_info[m_ptr->r_idx].level;
-
-        /* Recover from stun */
-        if (set_monster_stunned(m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (MON_STUNNED(m_ptr) - 1)))
+        int dec = 1 + rlev/10;
+        if (randint0(10000) < rlev * rlev) /* shake it off ... */
+            dec = MAX(dec, stun/2);
+        if (set_monster_stunned(m_idx, MON_STUNNED(m_ptr) - dec))
         {
-            /* Message if visible */
             if (is_seen(m_ptr))
             {
                 char m_name[80];
-
-                /* Acquire the monster name */
                 monster_desc(m_name, m_ptr, 0);
-
-                /* Dump a message */
                 msg_format("%^s is no longer stunned.", m_name);
             }
         }

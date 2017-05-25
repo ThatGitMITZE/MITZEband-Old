@@ -1857,10 +1857,13 @@ bool make_attack_spell(int m_idx, bool ticked_off)
 
     /* Hack -- Stupid monsters will never fail (for jellies and such) */
     if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
+    if (MON_STUNNED(m_ptr))
+        failrate += 50 * MIN(100, MON_STUNNED(m_ptr))/100;
+    if (spell_is_innate(thrown_spell)) failrate = 0;
+    if (in_no_magic_dungeon) failrate = 100;
 
     /* Check for spell failure (innate attacks never fail) */
-    if (!spell_is_innate(thrown_spell)
-        && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
+    if (failrate && randint0(100) < failrate)
     {
         disturb(1, 0);
         mon_lore_aux_spell(r_ptr);

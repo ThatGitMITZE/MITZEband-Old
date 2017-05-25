@@ -26,6 +26,8 @@ int check_hit(int power, int level, int stun, int m_idx)
 
     /* Calculate the "attack quality" */
     i = (power + (level * 3));
+    if (stun)
+        i -= i*MIN(100, stun) / 150;
 
     /* Total armor */
     ac = p_ptr->ac + p_ptr->to_a;
@@ -36,8 +38,6 @@ int check_hit(int power, int level, int stun, int m_idx)
     {
         ac += 100;
     }
-
-    if (stun && one_in_(2)) return FALSE;
 
     /* Hack -- Always miss or hit */
     if (k < 10) return (k < 5);
@@ -128,8 +128,8 @@ static int _aura_dam_p(void)
 bool make_attack_normal(int m_idx)
 {
     monster_type *m_ptr = &m_list[m_idx];
-
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    int           stun = MON_STUNNED(m_ptr);
 
     int ap_cnt, ht_cnt;
 
@@ -253,7 +253,7 @@ bool make_attack_normal(int m_idx)
 
         /* Monster hits player */
         if ( !r_ptr->blows[ap_cnt].effects[0].effect  /* XXX B:BEG or B:INSULT */
-          || check_hit(power, rlev, MON_STUNNED(m_ptr), m_idx))
+          || check_hit(power, rlev, stun, m_idx))
         {
             /* Always disturbing */
             disturb(1, 0);
@@ -416,6 +416,8 @@ bool make_attack_normal(int m_idx)
                 if (e.pct && randint1(100) > e.pct) continue;
 
                 effect_dam = damroll(e.dd, e.ds);
+                if (stun)
+                    effect_dam -= effect_dam*MIN(100, stun) / 150;
 
                 if ( p_ptr->pclass == CLASS_DUELIST
                   && p_ptr->duelist_target_idx == m_idx )
