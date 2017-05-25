@@ -1856,23 +1856,21 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_POIS:
         if (touch) msg_print("You are <color:G>poisoned</color>!");
         else if (fuzzy) msg_print("You are hit by poison!");
+        if (CHECK_MULTISHADOW()) break;
         dam = res_calc_dam(RES_POIS, dam);
+        set_poisoned(p_ptr->poisoned + dam, FALSE);
         if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
             do_dec_stat(A_CON);
-        result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
-        if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
-            set_poisoned(p_ptr->poisoned + randint0(dam) + 10, FALSE);
         if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_POIS);
         break;
     case GF_NUKE:
         if (touch) msg_print("You are <color:G>irradiated</color>!");
         else if (fuzzy) msg_print("You are hit by radiation!");
+        if (CHECK_MULTISHADOW()) break;
         dam = res_calc_dam(RES_POIS, dam);
-        result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
-        if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
+        set_poisoned(p_ptr->poisoned + dam, FALSE);
+        if (!res_save_default(RES_POIS))
         {
-            set_poisoned(p_ptr->poisoned + randint0(dam) + 10, FALSE);
-
             if (one_in_(5))
             {
                 msg_print("You undergo a freakish metamorphosis!");

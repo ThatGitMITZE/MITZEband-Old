@@ -1886,7 +1886,13 @@ static void prt_effects(void)
     if (p_ptr->confused)
         c_put_str(TERM_VIOLET, "Confused", row++, col);
     if (p_ptr->poisoned)
-        c_put_str(TERM_GREEN, "Poisoned", row++, col);
+    {
+        char tmp[20];
+        sprintf(tmp, "%d", p_ptr->poisoned);
+        c_put_str(TERM_GREEN, "Poison:", row, col);
+        c_put_str(TERM_L_GREEN, tmp, row, col + 7);
+        row++;
+    }
     if (p_ptr->food >= PY_FOOD_FULL || p_ptr->food < PY_FOOD_ALERT)
         prt_food(row++, col);
     if (p_ptr->wizard)

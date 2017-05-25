@@ -861,7 +861,7 @@ bool set_poisoned(int v, bool do_dec)
     bool notice = FALSE;
 
     /* Hack -- Force good values */
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+    v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
 
     if (p_ptr->is_dead) return FALSE;
 

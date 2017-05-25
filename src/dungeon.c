@@ -950,12 +950,15 @@ static void process_world_aux_hp_and_sp(void)
 
     /*** Damage over Time ***/
 
-    /* Take damage from poison */
+    /* Take damage from poison.
+     * Note: Poison is now a delayed damage pool. No longer is there
+     * any immediate damage. It's also much harder to 'cure'. */
     if (p_ptr->poisoned && !IS_INVULN())
     {
-        /* Take damage */
-        take_hit(DAMAGE_NOESCAPE, 1, "poison", -1);
-
+        int pct = rand_range(2, 6);
+        int amt = MAX(1, p_ptr->poisoned * pct / 100);
+        take_hit(DAMAGE_NOESCAPE, amt, "poison", -1);
+        set_poisoned(p_ptr->poisoned - amt, TRUE);
     }
 
     /* Take damage from cuts */
@@ -1663,15 +1666,6 @@ static void process_world_aux_timeout(void)
     }
 
     /*** Poison and Stun and Cut ***/
-
-    /* Poison */
-    if (p_ptr->poisoned)
-    {
-        int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
-
-        /* Apply some healing */
-        (void)set_poisoned(p_ptr->poisoned - adjust, TRUE);
-    }
 
     /* Stun */
     if (p_ptr->stun > STUN_NONE && p_ptr->stun < STUN_KNOCKED_OUT)

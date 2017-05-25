@@ -1727,8 +1727,7 @@ static void hit_trap(bool break_trap)
                         msg_print("The poison does not affect you!");
                     else
                     {
-                        dam = dam * 2;
-                        (void)set_poisoned(p_ptr->poisoned + randint1(dam), FALSE);
+                        (void)set_poisoned(p_ptr->poisoned + dam, FALSE);
                     }
                 }
 

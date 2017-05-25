@@ -1060,7 +1060,7 @@ static cptr do_life_spell(int spell, int mode)
         {
             if (cast)
             {
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
             }
         }
         break;
@@ -2198,7 +2198,7 @@ static cptr do_nature_spell(int spell, int mode)
                 if (p_ptr->pclass != CLASS_BLOOD_MAGE)
                     hp_player(damroll(dice, sides));
                 set_cut(0, TRUE);
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
             }
         }
         break;
@@ -2367,7 +2367,7 @@ static cptr do_nature_spell(int spell, int mode)
 
     case 15:
         if (name) return "Herbal Healing";
-        if (desc) return "Heals HP greatly. And heals cut, stun and poison completely.";
+        if (desc) return "Heals HP greatly. And heals cut, stun and perhaps poison.";
 
         {
             int heal = spell_power(500);
@@ -2379,7 +2379,7 @@ static cptr do_nature_spell(int spell, int mode)
                 hp_player(heal);
                 set_stun(0, TRUE);
                 set_cut(0, TRUE);
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
             }
         }
         break;
@@ -4963,7 +4963,7 @@ static cptr do_arcane_spell(int spell, int mode)
         {
             if (cast)
             {
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
             }
         }
         break;
@@ -5583,7 +5583,7 @@ static cptr do_craft_spell(int spell, int mode)
             if (cast)
             {
                 fear_clear_p();
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
                 set_stun(0, TRUE);
                 set_cut(0, TRUE);
                 set_image(0, TRUE);
@@ -6615,7 +6615,7 @@ static cptr do_crusade_spell(int spell, int mode)
             if (cast)
             {
                 set_cut(0, TRUE);
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
                 set_stun(0, TRUE);
             }
         }
@@ -6769,7 +6769,6 @@ static cptr do_crusade_spell(int spell, int mode)
                 dispel_evil(spell_power(randint1(dam_sides) + p_ptr->to_d_spell));
                 if (p_ptr->pclass != CLASS_BLOOD_MAGE)
                     hp_player(heal);
-                set_poisoned(0, TRUE);
                 set_stun(0, TRUE);
                 set_cut(0, TRUE);
             }
@@ -8341,7 +8340,6 @@ static cptr do_hex_spell(int spell, int mode)
             hp_player(damroll(4, 10));
             set_stun(0, TRUE);
             set_cut(0, TRUE);
-            set_poisoned(0, TRUE);
         }
         break;
 

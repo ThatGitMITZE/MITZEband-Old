@@ -106,7 +106,7 @@ void _blood_bath_spell(int cmd, variant *res)
     {
         bool chg = FALSE;
         if (do_res_stat(A_CON)) chg = TRUE;
-        if (set_poisoned(0, TRUE)) chg = TRUE;
+        if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE)) chg = TRUE;
         if (!chg) msg_print("You don't need a bath just yet.");
         var_set_bool(res, TRUE);
         break;

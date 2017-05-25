@@ -903,9 +903,10 @@ bool make_attack_normal(int m_idx)
                     blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    if (!res_save_default(RES_POIS))
+                    /* XXX should we do both immediate and delayed damage? */
                     {
-                        if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5, FALSE))
+                        int d = res_calc_dam(RES_POIS, effect_dam);
+                        if (set_poisoned(p_ptr->poisoned + d, FALSE))
                             obvious = TRUE;
                     }
 

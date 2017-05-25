@@ -314,7 +314,6 @@ static cptr _do_potion(int sval, int mode)
             {
                 msg_print("The potion makes you vomit!");
                 set_food(PY_FOOD_STARVE - 1);
-                set_poisoned(0, TRUE);
                 set_paralyzed(randint1(4), FALSE);
                 device_noticed = TRUE;
             }
@@ -521,14 +520,16 @@ static cptr _do_potion(int sval, int mode)
         if (desc) return "It reduces poison when you quaff it.";
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned / 2, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE))
+                device_noticed = TRUE;
         }
         break;
     case SV_POTION_CURE_POISON:
         if (desc) return "It cures poison when you quaff it.";
         if (cast)
         {
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+                device_noticed = TRUE;
         }
         break;
     case SV_POTION_BOLDNESS:
@@ -632,7 +633,6 @@ static cptr _do_potion(int sval, int mode)
             if (hp_player(_potion_power(damroll(6, 8)))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;
@@ -646,7 +646,6 @@ static cptr _do_potion(int sval, int mode)
             if (hp_player(_potion_power(200))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
         }
         break;
@@ -659,7 +658,6 @@ static cptr _do_potion(int sval, int mode)
             if (hp_player(_potion_power(amt))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;
@@ -936,7 +934,8 @@ static cptr _do_potion(int sval, int mode)
         {
             if (hp_player(_potion_power(amt))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+                device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
@@ -4468,7 +4467,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (cast)
         {
             if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+                device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
@@ -4504,7 +4504,6 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             {
                 if (set_cut(0, TRUE)) device_noticed = TRUE;
                 if (set_confused(0, TRUE)) device_noticed = TRUE;
-                if (set_poisoned(0, TRUE)) device_noticed = TRUE;
                 if (set_stun(0, TRUE)) device_noticed = TRUE;
             }
             else
@@ -4529,7 +4528,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+                device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;
             if (set_hero(_BOOST(randint1(25) + 25), FALSE)) device_noticed = TRUE;
@@ -4554,7 +4554,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (color) return format("%d", res_color(RES_POIS));
         if (cast)
         {
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+                device_noticed = TRUE;
         }
         break;
     case EFFECT_CURE_FEAR:
@@ -4578,7 +4579,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (color) return format("%d", res_color(RES_FEAR));
         if (cast)
         {
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
+            if (set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE))
+                device_noticed = TRUE;
             if (p_ptr->afraid)
             {
                 fear_clear_p();
@@ -6107,7 +6109,6 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         {
             if (dispel_evil(_BOOST(dam))) device_noticed = TRUE;
             if (set_protevil(p_ptr->protevil + _BOOST(dam/2), FALSE)) device_noticed = TRUE;
-            if (set_poisoned(0, TRUE)) device_noticed = TRUE;
             if (hp_player(_BOOST(dam))) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;

@@ -272,7 +272,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
             case SV_FOOD_AMBROSIA:
             {
                 msg_print("That tastes divine!");
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
                 hp_player(damroll(15, 15));
                 do_res_stat(A_STR);
                 do_res_stat(A_INT);
@@ -288,7 +288,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
             case SV_FOOD_WAYBREAD:
             {
                 msg_print("That tastes good.");
-                set_poisoned(0, TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
                 hp_player(damroll(4, 8));
                 ident = TRUE;
                 break;

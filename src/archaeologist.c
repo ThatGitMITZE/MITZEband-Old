@@ -464,9 +464,9 @@ static void _first_aid_spell(int cmd, variant *res)
         if (p_ptr->lev >= 8)
             set_cut(0, TRUE);
         if (p_ptr->lev >= 12 && p_ptr->lev < 16)
-            set_poisoned(p_ptr->poisoned / 2, TRUE);
+            set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
         if (p_ptr->lev >= 16)
-            set_poisoned(0, TRUE);
+            set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
         if (p_ptr->lev >= 20)
             set_blind(0, TRUE);
         if (p_ptr->lev >= 30)
