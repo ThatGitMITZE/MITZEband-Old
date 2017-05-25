@@ -390,7 +390,7 @@ struct object_type
 #define MAX_MON_BLOWS        4
 #define MAX_MON_AURAS        3
 typedef struct {
-    byte effect;
+    s16b effect; /* either RBE_* or GF_* */
     byte dd;
     byte ds;
     byte pct; /* 0 => 100% (as does 100) */
@@ -401,16 +401,6 @@ typedef struct {
     byte power;
     mon_effect_t effects[MAX_MON_BLOW_EFFECTS];
 } mon_blow_t, *mon_blow_ptr;
-
-/* XXX remove! */
-typedef struct mbe_info_type mbe_info_type;
-
-struct mbe_info_type
-{
-    int power;        /* The attack "power" */
-    int explode_type; /* Explosion effect */
-};
-
 
 /*
  * Monster "race" information, including racial memories

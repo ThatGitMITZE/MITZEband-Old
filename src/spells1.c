@@ -1797,7 +1797,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     mon_race_ptr r_ptr = NULL;
     int          rlev = 1;
     char         m_name[80];
-    bool         aura = BOOL(flags & GF_DAMAGE_AURA);
+    bool         touch = BOOL(flags & (GF_DAMAGE_AURA | GF_DAMAGE_ATTACK));
     bool         fuzzy = BOOL(p_ptr->blind);
 
     if (who > 0)
@@ -1830,39 +1830,42 @@ int gf_damage_p(int who, int type, int dam, int flags)
     switch (type)
     {
     case GF_ACID:
-        if (aura) msg_print("You are <color:G>dissolved</color>!");
+        if (touch) msg_print("You are <color:G>dissolved</color>!");
         else if (fuzzy) msg_print("You are hit by acid!");
         result = acid_dam(dam, m_name, _mon_spell_hack);
+        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_ACID);
         break;
     case GF_FIRE:
-        if (aura) msg_print("You are <color:r>burned</color>!");
+        if (touch) msg_print("You are <color:r>burned</color>!");
         else if (fuzzy) msg_print("You are hit by fire!");
         result = fire_dam(dam, m_name, _mon_spell_hack);
+        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_FIRE);
         break;
     case GF_COLD:
-        if (aura) msg_print("You are <color:W>frozen</color>!");
+        if (touch) msg_print("You are <color:W>frozen</color>!");
         else if (fuzzy) msg_print("You are hit by cold!");
         result = cold_dam(dam, m_name, _mon_spell_hack);
+        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_COLD);
         break;
     case GF_ELEC:
-        if (aura) msg_print("You are <color:b>shocked</color>!");
+        if (touch) msg_print("You are <color:b>shocked</color>!");
         else if (fuzzy) msg_print("You are hit by lightning!");
         result = elec_dam(dam, m_name, _mon_spell_hack);
+        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_ELEC);
         break;
     case GF_POIS:
-        if (aura) msg_print("You are <color:G>poisoned</color>!");
+        if (touch) msg_print("You are <color:G>poisoned</color>!");
         else if (fuzzy) msg_print("You are hit by poison!");
         dam = res_calc_dam(RES_POIS, dam);
         if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
             do_dec_stat(A_CON);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
-        {
             set_poisoned(p_ptr->poisoned + randint0(dam) + 10, FALSE);
-        }
+        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_POIS);
         break;
     case GF_NUKE:
-        if (aura) msg_print("You are <color:G>irradiated</color>!");
+        if (touch) msg_print("You are <color:G>irradiated</color>!");
         else if (fuzzy) msg_print("You are hit by radiation!");
         dam = res_calc_dam(RES_POIS, dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
@@ -1878,7 +1881,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
                 else
                     mutate_player();
             }
-            if (!aura) inven_damage(set_acid_destroy, 2, RES_POIS);
+            if (!touch) inven_damage(set_acid_destroy, 2, RES_POIS);
         }
         break;
     case GF_MISSILE:
@@ -1887,7 +1890,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_HOLY_FIRE:
-        if (aura) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "greatly burned" : "burned");
+        if (touch) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
         if (p_ptr->align > 10)
             dam /= 2;
@@ -1896,7 +1899,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_HELL_FIRE:
-        if (aura) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "greatly burned" : "burned");
+        if (touch) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
         if (p_ptr->align > 10)
             dam *= 2;
@@ -1912,7 +1915,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_PLASMA:
-        if (aura) msg_print("You are <color:R>burned</color>!");
+        if (touch) msg_print("You are <color:R>burned</color>!");
         else if (fuzzy) msg_print("You are hit by something *HOT*!");
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
@@ -1921,10 +1924,10 @@ int gf_damage_p(int who, int type, int dam, int flags)
             (void)set_stun(p_ptr->stun + k, FALSE);
         }
 
-        if (!aura) inven_damage(set_acid_destroy, 3, RES_FIRE);
+        if (!touch) inven_damage(set_acid_destroy, 3, RES_FIRE);
         break;
     case GF_NETHER:
-        if (aura) msg_print("You are <color:D>drained</color>!");
+        if (touch) msg_print("You are <color:D>drained</color>!");
         else if (fuzzy) msg_print("You are hit by nether forces!");
         dam = res_calc_dam(RES_NETHER, dam);
         if (!res_save_default(RES_NETHER) && !CHECK_MULTISHADOW())
@@ -1945,7 +1948,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_CHAOS:
-        if (aura) msg_print("You are <color:v>unmade</color>!");
+        if (touch) msg_print("You are <color:v>unmade</color>!");
         else if (fuzzy) msg_print("You are hit by a wave of anarchy!");
         dam = res_calc_dam(RES_CHAOS, dam);
         if (!CHECK_MULTISHADOW())
@@ -1969,7 +1972,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             if (!res_save_default(RES_NETHER) && !res_save_default(RES_CHAOS))
                 drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
 
-            if (!aura)
+            if (!touch)
             {
                 inven_damage(set_elec_destroy, 2, RES_CHAOS);
                 inven_damage(set_fire_destroy, 2, RES_CHAOS);
@@ -1997,51 +2000,49 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_SHARDS:
-        if (aura) msg_print("You are <color:U>shredded</color>!");
+        if (touch) msg_print("You are <color:U>shredded</color>!");
         else if (fuzzy) msg_print("You are hit by something sharp!");
         dam = res_calc_dam(RES_SHARDS, dam);
         if (!res_save_default(RES_SHARDS) && !CHECK_MULTISHADOW())
             (void)set_cut(p_ptr->cut + dam, FALSE);
-        if (!aura) inven_damage(set_cold_destroy, 2, RES_SHARDS);
+        if (!touch) inven_damage(set_cold_destroy, 2, RES_SHARDS);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_SOUND:
-        if (!aura && fuzzy) msg_print("You are hit by a loud noise!");
-        /*if (aura) ... */
+        if (!touch && fuzzy) msg_print("You are hit by a loud noise!");
+        /*if (touch) ... */
         dam = res_calc_dam(RES_SOUND, dam);
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
         {
             int k = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
             (void)set_stun(p_ptr->stun + k, FALSE);
         }
-        if (!aura) inven_damage(set_cold_destroy, 2, RES_SOUND);
+        if (!touch) inven_damage(set_cold_destroy, 2, RES_SOUND);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_CONFUSION:
-        if (!aura && fuzzy) msg_print("You are hit by something puzzling!");
-        /*if (aura) ... */
+        if (!touch && fuzzy) msg_print("You are hit by something puzzling!");
+        /*if (touch) ... */
         dam = res_calc_dam(RES_CONF, dam);
         if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
             (void)set_confused(p_ptr->confused + randint1(20) + 10, FALSE);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_DISENCHANT:
-        if (aura) msg_print("You are <color:v>disenchanted</color>!");
+        if (touch) msg_print("You are <color:v>disenchanted</color>!");
         else if (fuzzy) msg_print("You are hit by something static!");
         dam = res_calc_dam(RES_DISEN, dam);
-        if (aura && !one_in_(7) && !CHECK_MULTISHADOW())
+        if (!(flags & GF_DAMAGE_SPELL) && !one_in_(5) && !CHECK_MULTISHADOW())
         {
-            /* auras should usually focus on player ... perhaps less
-             * S:DISPEL and more A:DISENCHANT? */
             if (!res_save_default(RES_DISEN) || one_in_(5))
                 disenchant_player();
         }
-        else if (!res_save_default(RES_DISEN) && !CHECK_MULTISHADOW())
-            (void)apply_disenchant(0);
+        else if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())
+            apply_disenchant(0);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_NEXUS:
-        if (aura) msg_print("You are <color:v>scrambled</color>!");
+        if (touch) msg_print("You are <color:v>scrambled</color>!");
         else if (fuzzy) msg_print("You are hit by something strange!");
         dam = res_calc_dam(RES_NEXUS, dam);
         if (!res_save_default(RES_NEXUS) && !CHECK_MULTISHADOW())
@@ -2065,14 +2066,14 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_INERT:
-        if (!aura && fuzzy) msg_print("You are hit by something slow!");
-        /*if (aura) ... */
+        if (!touch && fuzzy) msg_print("You are hit by something slow!");
+        /*if (touch) ... */
         if (!CHECK_MULTISHADOW())
             (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_LITE:
-        if (aura) msg_print("You are <color:y>dazzled</color>!");
+        if (touch) msg_print("You are <color:y>dazzled</color>!");
         else if (fuzzy) msg_print("You are hit by something!");
         dam = res_calc_dam(RES_LITE, dam);
         if (!p_ptr->blind && !res_save_default(RES_LITE) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
@@ -2082,7 +2083,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (prace_is_(RACE_MON_VAMPIRE))
             vampire_take_light_damage(dam);
 
-        if (IS_WRAITH() && !CHECK_MULTISHADOW() && !aura)
+        if (IS_WRAITH() && !CHECK_MULTISHADOW() && !touch)
         {
             p_ptr->wraith_form = 0;
             wild_reset_counter(WILD_WRAITH);
@@ -2094,7 +2095,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_DARK:
-        if (aura) msg_print("You are <color:D>benighted</color>!");
+        if (touch) msg_print("You are <color:D>benighted</color>!");
         else if (fuzzy) msg_print("You are hit by something!");
         dam = res_calc_dam(RES_DARK, dam);
         if (!p_ptr->blind && !res_save_default(RES_DARK) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
@@ -2104,16 +2105,16 @@ int gf_damage_p(int who, int type, int dam, int flags)
             vampire_take_dark_damage(dam);
         break;
     case GF_ELDRITCH:
-        if (aura && m_ptr)
+        if (touch && m_ptr)
             sanity_blast(m_ptr, FALSE);
         break;
     case GF_STUN:
-        if (aura) set_stun(p_ptr->stun + dam, FALSE);
+        if (touch) set_stun(p_ptr->stun + dam, FALSE);
         break;
     case GF_AMNESIA:
         if (randint0(100 + r_ptr->level/2) < duelist_skill_sav(who))
         {
-            if (!aura) msg_print("You resist the effects!");
+            if (!touch) msg_print("You resist the effects!");
         }
         else if (lose_all_info())
         {
@@ -2121,9 +2122,8 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_TIME:
-        if (aura) msg_print("You are <color:B>chronosmashed</color>!");
+        if (touch) msg_print("You are <color:B>chronosmashed</color>!");
         else if (fuzzy) msg_print("You are hit by a blast from the past!");
-        dam = res_calc_dam(RES_TIME, dam);
         if (!res_save_default(RES_TIME) && !CHECK_MULTISHADOW())
         {
             int k;
@@ -2162,6 +2162,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
                 break;
             }
         }
+        dam = res_calc_dam(RES_TIME, dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_STORM:
@@ -2180,8 +2181,8 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_GRAVITY:
-        if (!aura && fuzzy) msg_print("You are hit by something heavy!");
-        /*if (aura) ... */
+        if (!touch && fuzzy) msg_print("You are hit by something heavy!");
+        /*if (touch) ... */
         msg_print("Gravity warps around you.");
         if (!CHECK_MULTISHADOW())
         {
@@ -2244,7 +2245,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_MANA:
     case GF_SEEKER:
     case GF_SUPER_RAY:
-        if (fuzzy) msg_print("You are hit by an aura of magic!");
+        if (fuzzy) msg_print("You are hit by an touch of magic!");
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_PSY_SPEAR:
@@ -2258,15 +2259,15 @@ int gf_damage_p(int who, int type, int dam, int flags)
         inven_damage(set_cold_destroy, 2, RES_SHARDS);
         break;
     case GF_ICE:
-        if (aura) msg_print("You are <color:W>frozen</color>!");
+        if (touch) msg_print("You are <color:W>frozen</color>!");
         else if (fuzzy) msg_print("You are hit by something sharp and cold!");
         result = cold_dam(dam, m_name, _mon_spell_hack);
         if (!CHECK_MULTISHADOW())
         {
             if (!res_save_default(RES_SHARDS))
-                (void)set_cut(p_ptr->cut + damroll(5, 8), FALSE);
+                set_cut(p_ptr->cut + (touch ? damroll(3, 5) : damroll(5, 8)), FALSE);
             if (!res_save_default(RES_SOUND))
-                (void)set_stun(p_ptr->stun + randint1(15), FALSE);
+                set_stun(p_ptr->stun + (touch ? randint1(7) : randint1(15)), FALSE);
             inven_damage(set_cold_destroy, 3, RES_COLD);
         }
         break;
@@ -2278,17 +2279,17 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_DRAIN_MANA:
         if (CHECK_MULTISHADOW())
         {
-            if (!aura) msg_print("The attack hits Shadow, you are unharmed!");
+            if (!touch) msg_print("The attack hits Shadow, you are unharmed!");
         }
         else if (psion_mental_fortress())
         {
-            if (!aura) msg_print("Your mental fortress is impenetrable!");
+            if (!touch) msg_print("Your mental fortress is impenetrable!");
         }
         else if ( prace_is_(RACE_DEMIGOD)
                 && p_ptr->psubrace == DEMIGOD_HERA
                 && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
         {
-            if (!aura) msg_print("You keep your wits about you!");
+            if (!touch) msg_print("You keep your wits about you!");
         }
         else if (p_ptr->csp)
         {
@@ -2303,7 +2304,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             else
                 p_ptr->csp -= dam;
 
-            if (!aura) learn_spell(_mon_spell_hack);
+            if (!touch) learn_spell(_mon_spell_hack);
 
             p_ptr->redraw |= (PR_MANA);
             p_ptr->window |= (PW_SPELL);
@@ -2321,7 +2322,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_MIND_BLAST:
         if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2337,7 +2338,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             if (!res_save_default(RES_CHAOS) && one_in_(3))
                 (void)set_image(p_ptr->image + randint0(25) + 15, FALSE);
 
-            p_ptr->csp -= aura ? 10 : 50;
+            p_ptr->csp -= touch ? 10 : 50;
             if (p_ptr->csp < 0)
             {
                 p_ptr->csp = 0;
@@ -2350,7 +2351,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_BRAIN_SMASH:
         if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2362,12 +2363,12 @@ int gf_damage_p(int who, int type, int dam, int flags)
               && p_ptr->psubrace == DEMIGOD_HERA
               && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
             {
-                if (!aura) msg_print("You keep your wits about you!");
+                if (!touch) msg_print("You keep your wits about you!");
             }
             else if (!CHECK_MULTISHADOW())
             {
                 msg_print("Your mind is blasted by psionic energy.");
-                if (aura)
+                if (touch)
                     p_ptr->csp -= 10;
                 else
                     p_ptr->csp -= 100;
@@ -2405,7 +2406,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_CAUSE_1:
         if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2420,7 +2421,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_CAUSE_2:
         if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2435,7 +2436,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_CAUSE_3:
         if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2450,7 +2451,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_CAUSE_4:
         if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);
@@ -2465,7 +2466,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_HAND_DOOM:
         if ((randint0(100 + rlev/2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
         {
-            if (!aura)
+            if (!touch)
             {
                 msg_print("You resist the effects!");
                 learn_spell(_mon_spell_hack);

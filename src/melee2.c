@@ -1769,12 +1769,10 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     damage = damage * ac_melee_pct(ac) / 100;
                     break;
 
-                case RBE_POISON:
                 case RBE_DISEASE:
                     pt = GF_POIS;
                     break;
 
-                case RBE_DISENCHANT:
                 case RBE_DRAIN_CHARGES:
                     pt = GF_DISENCHANT;
                     break;
@@ -1794,22 +1792,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 case RBE_LOSE_CON:
                 case RBE_LOSE_CHR:
                 case RBE_LOSE_ALL:
-                    break;
-
-                case RBE_ACID:
-                    pt = GF_ACID;
-                    break;
-
-                case RBE_ELEC:
-                    pt = GF_ELEC;
-                    break;
-
-                case RBE_FIRE:
-                    pt = GF_FIRE;
-                    break;
-
-                case RBE_COLD:
-                    pt = GF_COLD;
                     break;
 
                 case RBE_CONFUSE:
@@ -1836,17 +1818,13 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     pt = GF_NETHER;
                     break;
 
-                case RBE_TIME:
-                    pt = GF_TIME;
-                    break;
-
                 case RBE_EXP_VAMP:
                     pt = GF_OLD_DRAIN;
                     effect_type = BLOW_EFFECT_TYPE_HEAL;
                     break;
 
                 default:
-                    pt = 0;
+                    pt = e.effect;
                     break;
                 }
                 if (pt)

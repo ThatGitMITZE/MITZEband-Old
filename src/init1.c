@@ -54,6 +54,7 @@ static int _get_gf_type(cptr which)
     struct { cptr name; int id; } _table[] = {
         {"ELEC", GF_ELEC},
         {"POIS", GF_POIS},
+        {"POISON", GF_POIS},
         {"ACID", GF_ACID},
         {"COLD", GF_COLD},
         {"FIRE", GF_FIRE},
@@ -87,6 +88,7 @@ static int _get_gf_type(cptr which)
         {"ELDRITCH", GF_ELDRITCH},
         {"STUN", GF_STUN},
         {"NETHER", GF_NETHER},
+        {"DAM", GF_MISSILE}, /* Like HURT but with no AC damage reduction */
         {0}};
     int i;
     for (i = 0;; i++)
@@ -140,58 +142,45 @@ static int _get_r_blow_method(cptr name)
     }
 }
 
-/*
- * Monster Blow Effects
- */
-static cptr r_info_blow_effect[] =
-{
-    "",
-    "HURT",
-    "POISON",
-    "DISENCHANT",
-    "DRAIN_CHARGES",
-    "EAT_GOLD",
-    "EAT_ITEM",
-    "EAT_FOOD",
-    "EAT_LITE",
-    "ACID",
-    "ELEC",
-    "FIRE",
-    "COLD",
-    "BLIND",
-    "CONFUSE",
-    "TERRIFY",
-    "PARALYZE",
-    "LOSE_STR",
-    "LOSE_INT",
-    "LOSE_WIS",
-    "LOSE_DEX",
-    "LOSE_CON",
-    "LOSE_CHR",
-    "LOSE_ALL",
-    "SHATTER",
-    "EXP_10",
-    "EXP_20",
-    "EXP_40",
-    "EXP_80",
-    "DISEASE",
-    "TIME",
-    "EXP_VAMP",
-    "DR_MANA",
-    "SUPERHURT",
-    "CUT",
-    "STUN",
-    NULL
-};
-
-static int _get_r_blow_effect(cptr name)
+static int _get_r_blow_effect(cptr which)
 {
     int i;
-    for (i = 0; ; i++)
+    struct { cptr name; int id; } _table[] = {
+        {"HURT", RBE_HURT},
+        {"DRAIN_CHARGES", RBE_DRAIN_CHARGES},
+        {"EAT_GOLD", RBE_EAT_GOLD},
+        {"EAT_ITEM", RBE_EAT_ITEM},
+        {"EAT_FOOD", RBE_EAT_FOOD},
+        {"EAT_LITE", RBE_EAT_LITE},
+        {"BLIND", RBE_BLIND},
+        {"CONFUSE", RBE_CONFUSE},
+        {"TERRIFY", RBE_TERRIFY},
+        {"PARALYZE", RBE_PARALYZE},
+        {"LOSE_STR", RBE_LOSE_STR},
+        {"LOSE_INT", RBE_LOSE_INT},
+        {"LOSE_WIS", RBE_LOSE_WIS},
+        {"LOSE_DEX", RBE_LOSE_DEX},
+        {"LOSE_CON", RBE_LOSE_CON},
+        {"LOSE_CHR", RBE_LOSE_CHR},
+        {"LOSE_ALL", RBE_LOSE_ALL},
+        {"SHATTER", RBE_SHATTER},
+        {"EXP_10", RBE_EXP_10},
+        {"EXP_20", RBE_EXP_20},
+        {"EXP_40", RBE_EXP_40},
+        {"EXP_80", RBE_EXP_80},
+        {"DISEASE", RBE_DISEASE},
+        {"EXP_VAMP", RBE_EXP_VAMP},
+        {"DR_MANA", RBE_DR_MANA},
+        {"SUPERHURT", RBE_SUPERHURT},
+        {"CUT", RBE_CUT},
+        {"STUN", RBE_STUN},
+        {0}};
+    for (i = 0;; i++)
     {
-        if (!r_info_blow_effect[i]) return 0;
-        if (streq(r_info_blow_effect[i], name)) return i;
+        if (!_table[i].name) break;
+        if (streq(_table[i].name, which)) return _table[i].id;
     }
+    return _get_gf_type(which);
 }
 
 
@@ -3753,6 +3742,41 @@ static errr parse_mon_blow_method(char *command, mon_blow_ptr blow)
     return 0;
 }
 
+/* historically in mbe_info ... */
+static int _default_blow_power(int effect)
+{
+    switch (effect)
+    {
+    case RBE_SUPERHURT:
+    case RBE_HURT:
+    case RBE_SHATTER:
+        return 60;
+    case RBE_LOSE_STR:
+    case RBE_LOSE_INT:
+    case RBE_LOSE_WIS:
+    case RBE_LOSE_DEX:
+    case RBE_LOSE_CON:
+    case RBE_LOSE_CHR:
+    case GF_ACID:
+        return 0;
+    case GF_ELEC:
+    case GF_FIRE:
+    case GF_COLD:
+    case RBE_CONFUSE:
+    case RBE_TERRIFY:
+        return 10;
+    case RBE_BLIND:
+    case RBE_PARALYZE:
+    case RBE_LOSE_ALL:
+        return 2;
+    case GF_DISENCHANT:
+        return 20;
+    case RBE_DRAIN_CHARGES:
+        return 15;
+    }
+    return 5;
+}
+
 /*   V------------------- buf
  * B:BITE:SUPERHURT:15d10   <===== The old syntax, supported for *sanity*
  * B:BITE(60):HURT(15d10):HURT(15d10, 20%):STUN(5d5, 10%)  <=== New syntax, multiple effects
@@ -3780,7 +3804,7 @@ static errr parse_mon_blow(char *buf, mon_blow_ptr blow)
             msg_format("Error: Unknown monster blow effect %s.", commands[1]);
             return PARSE_ERROR_UNDEFINED_DIRECTIVE;
         }
-        blow->power = mbe_info[blow->effects[0].effect].power;
+        blow->power = _default_blow_power(blow->effects[0].effect);
         blow->effects[0].dd = dd;
         blow->effects[0].ds = ds;
         return rc;
@@ -3833,7 +3857,7 @@ static errr parse_mon_blow(char *buf, mon_blow_ptr blow)
         /* For convenience, use the implied power on the first effect for the
          * overall blow power. For example: B:BITE:HURT(7d7) == B:BITE(60):HURT(7d7) */
         if (i == 1 && !blow->power)
-            blow->power = mbe_info[effect->effect].power;
+            blow->power = _default_blow_power(effect->effect);
     }
 
     return rc;

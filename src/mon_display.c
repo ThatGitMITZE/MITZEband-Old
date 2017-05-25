@@ -756,17 +756,11 @@ static cptr _effect_desc(int effect)
     {
     case RBE_SUPERHURT:   return "Critical Hits";
     case RBE_HURT:        return "Hurt";
-    case RBE_POISON:      return "<color:g>Poison</color>";
-    case RBE_DISENCHANT:  return "<color:v>Disenchant</color>";
     case RBE_DRAIN_CHARGES: return "Drain Charges";
     case RBE_EAT_GOLD:    return "Steal Gold";
     case RBE_EAT_ITEM:    return "Steal Item";
     case RBE_EAT_FOOD:    return "Eat Your Food";
     case RBE_EAT_LITE:    return "Absorb Light";
-    case RBE_ACID:        return "Shoot Acid";
-    case RBE_ELEC:        return "<color:b>Electrocute</color>";
-    case RBE_FIRE:        return "<color:R>Burn</color>";
-    case RBE_COLD:        return "<color:W>Freeze</color>";
     case RBE_BLIND:       return "Blind";
     case RBE_CONFUSE:     return "<color:U>Confuse</color>";
     case RBE_TERRIFY:     return "Terrify";
@@ -784,11 +778,11 @@ static cptr _effect_desc(int effect)
     case RBE_EXP_40:
     case RBE_EXP_80:      return "<color:D>Lower Experience</color>";
     case RBE_DISEASE:     return "Disease";
-    case RBE_TIME:        return "Time";
     case RBE_EXP_VAMP:    return "Drain Life Force";
     case RBE_DR_MANA:     return "Drain Mana";
     case RBE_CUT:         return "<color:r>Cut</color>";
     case RBE_STUN:        return "<color:B>Stun</color>";
+    default:              return gf_name(effect);
     }
     return "";
 }

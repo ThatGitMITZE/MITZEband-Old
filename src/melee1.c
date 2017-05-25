@@ -458,61 +458,6 @@ bool make_attack_normal(int m_idx)
 
                     break; }
 
-                case RBE_POISON:
-                    if (explode) break;
-
-                    if (!res_save_default(RES_POIS) && !CHECK_MULTISHADOW())
-                    {
-                        if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5, FALSE))
-                            obvious = TRUE;
-                    }
-
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
-                    update_smart_learn(m_idx, DRS_POIS);
-
-                    break;
-
-                case RBE_DISENCHANT:
-                    if (explode) break;
-
-                    if (one_in_(3))
-                    {
-                        if ((res_save_default(RES_DISEN) || CHECK_MULTISHADOW()) && !one_in_(5))
-                        {
-                        }
-                        else if (prace_is_(RACE_MON_SWORD) && one_in_(2) && sword_disenchant())
-                        {
-                            obvious = TRUE;
-                        }
-                        else if (prace_is_(RACE_MON_RING) && one_in_(2) && ring_disenchant())
-                        {
-                            obvious = TRUE;
-                        }
-                        else if (disenchant_player())
-                        {
-                            obvious = TRUE;
-                        }
-                    }
-                    else
-                    {
-                        if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())
-                        {
-                            if (apply_disenchant(0))
-                            {
-                                /* XXX Hack -- Update AC */
-                                update_stuff();
-                                obvious = TRUE;
-                            }
-                        }
-                    }
-
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
-                    update_smart_learn(m_idx, DRS_DISEN);
-
-                    break;
-
                 case RBE_DRAIN_CHARGES: {
                     u32b flgs[OF_ARRAY_SIZE];
                     char buf[MAX_NLEN];
@@ -782,44 +727,6 @@ bool make_attack_normal(int m_idx)
                     }
                     break; }
 
-                case RBE_ACID:
-                    if (explode) break;
-                    obvious = TRUE;
-                    msg_print("You are covered in acid!");
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += acid_dam(effect_dam, ddesc, -1);
-
-                    update_stuff(); /* XXX AC changed (... this could wait) */
-                    update_smart_learn(m_idx, DRS_ACID);
-                    break;
-
-                case RBE_ELEC:
-                    if (explode) break;
-                    obvious = TRUE;
-                    msg_print("You are struck by electricity!");
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += elec_dam(effect_dam, ddesc, -1);
-                    update_smart_learn(m_idx, DRS_ELEC);
-                    break;
-
-                case RBE_FIRE:
-                    if (explode) break;
-                    obvious = TRUE;
-                    msg_print("You are enveloped in flames!");
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += fire_dam(effect_dam, ddesc, -1);
-                    update_smart_learn(m_idx, DRS_FIRE);
-                    break;
-
-                case RBE_COLD:
-                    if (explode) break;
-                    obvious = TRUE;
-                    msg_print("You are covered with frost!");
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += cold_dam(effect_dam, ddesc, -1);
-                    update_smart_learn(m_idx, DRS_COLD);
-                    break;
-
                 case RBE_BLIND:
                     effect_dam = reduce_melee_dam_p(effect_dam);
                     blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
@@ -1011,55 +918,6 @@ bool make_attack_normal(int m_idx)
                     }
                     break;
 
-                case RBE_TIME:
-                    if (explode) break;
-                    if (!res_save_default(RES_TIME) && !CHECK_MULTISHADOW())
-                    {
-                        switch (randint1(10))
-                        {
-                        case 1: case 2: case 3: case 4: case 5:
-                            if (p_ptr->prace == RACE_ANDROID) break;
-                            msg_print("You feel life has clocked back.");
-
-                            lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
-                            break;
-
-                        case 6: case 7: case 8: case 9: {
-                            int stat = randint0(6);
-                            switch (stat)
-                            {
-                            case A_STR: act = "strong"; break;
-                            case A_INT: act = "bright"; break;
-                            case A_WIS: act = "wise"; break;
-                            case A_DEX: act = "agile"; break;
-                            case A_CON: act = "hale"; break;
-                            case A_CHR: act = "confident"; break;
-                            }
-
-                            msg_format("You're not as %s as you used to be...", act);
-
-                            p_ptr->stat_cur[stat] = (p_ptr->stat_cur[stat] * 3) / 4;
-                            if (p_ptr->stat_cur[stat] < 3) p_ptr->stat_cur[stat] = 3;
-                            p_ptr->update |= (PU_BONUS);
-                            break; }
-
-                        case 10:
-                            msg_print("You're not as powerful as you used to be...");
-
-
-                            for (k = 0; k < 6; k++)
-                            {
-                                p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 7) / 8;
-                                if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;
-                            }
-                            p_ptr->update |= (PU_BONUS);
-                            break;
-                        }
-                    }
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
-                    break;
-
                 case RBE_EXP_VAMP: {
                     s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     bool resist_drain;
@@ -1113,6 +971,12 @@ bool make_attack_normal(int m_idx)
                     if (p_ptr->stun < STUN_KNOCKED_OUT)
                         set_stun(p_ptr->stun + effect_dam, FALSE);
                     break;
+                default: /* using GF_* ... damage 0 is OK: B:BITE:HURT(4d4):DISENCHANT */
+                    if (!explode)
+                    {
+                        effect_dam = reduce_melee_dam_p(effect_dam);
+                        gf_damage_p(m_idx, e.effect, effect_dam, GF_DAMAGE_ATTACK);
+                    }
                 } /* switch (effect) */
             } /* for each effect */
             total_dam += blow_dam;

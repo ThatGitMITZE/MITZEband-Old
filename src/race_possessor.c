@@ -1881,7 +1881,7 @@ void possessor_explode(int dam)
             if (r_ptr->blows[i].method == RBM_EXPLODE)
             {
                 int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-                int typ = mbe_info[r_ptr->blows[i].effects[0].effect].explode_type;
+                int typ = r_ptr->blows[i].effects[0].effect;
                 project(0, 3, py, px, dam, typ, flg, -1);
                 break;
             }

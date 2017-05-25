@@ -1166,20 +1166,26 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
                 /* reduce for resistances */
                 switch (effect->effect)
                 {
-                case RBE_ACID:
+                case GF_ACID:
                     effect_dam -= effect_dam * res_pct_known(RES_ACID) / 100;
                     break;
-                case RBE_ELEC:
+                case GF_ELEC:
                     effect_dam -= effect_dam * res_pct_known(RES_ELEC) / 100;
                     break;
-                case RBE_FIRE:
+                case GF_FIRE:
                     effect_dam -= effect_dam * res_pct_known(RES_FIRE) / 100;
                     break;
-                case RBE_COLD:
+                case GF_COLD: case GF_ICE:
                     effect_dam -= effect_dam * res_pct_known(RES_COLD) / 100;
                     break;
-                case RBE_POISON:
+                case GF_POIS:
                     effect_dam -= effect_dam * res_pct_known(RES_POIS) / 100;
+                    break;
+                case GF_DISENCHANT:
+                    effect_dam -= effect_dam * res_pct_known(RES_DISEN) / 100;
+                    break;
+                case GF_TIME:
+                    effect_dam -= effect_dam * res_pct_known(RES_TIME) / 100;
                     break;
                 }
                 if (effect->pct)
@@ -1264,7 +1270,9 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
             color = 'U';
         else if (r->id > 1132)
             color = 'B';
-        doc_printf(doc, "<color:%c>%-30.30s</color> %3d %5d", color, r_name + r->name, r->level, hp);
+        doc_printf(doc, "<color:%c>%-30.30s</color>", color, r_name + r->name);
+        color = (r->flags1 & RF1_FORCE_DEPTH) ? 'r' : 'w';
+        doc_printf(doc, " <color:%c>%3d</color> %5d", color, r->level, hp);
         _display_speed(doc, r->speed - 110);
         if (r->ac < 999)
             doc_printf(doc, " %3d", r->ac);

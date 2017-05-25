@@ -3175,42 +3175,40 @@ enum obj_flags_e {
 
 /*
  * New monster blow effects
+ * Note: monster blows can either use one of
+ * the following, or they can directly use a 
+ * GF_* attack code. Assert MAX_GF < 5000.
  */
-#define RBE_HURT         1
-#define RBE_POISON       2
-#define RBE_DISENCHANT   3
-#define RBE_DRAIN_CHARGES 4
-#define RBE_EAT_GOLD     5
-#define RBE_EAT_ITEM     6
-#define RBE_EAT_FOOD     7
-#define RBE_EAT_LITE     8
-#define RBE_ACID         9
-#define RBE_ELEC        10
-#define RBE_FIRE        11
-#define RBE_COLD        12
-#define RBE_BLIND       13
-#define RBE_CONFUSE     14
-#define RBE_TERRIFY     15
-#define RBE_PARALYZE    16
-#define RBE_LOSE_STR    17
-#define RBE_LOSE_INT    18
-#define RBE_LOSE_WIS    19
-#define RBE_LOSE_DEX    20
-#define RBE_LOSE_CON    21
-#define RBE_LOSE_CHR    22
-#define RBE_LOSE_ALL    23
-#define RBE_SHATTER     24
-#define RBE_EXP_10      25
-#define RBE_EXP_20      26
-#define RBE_EXP_40      27
-#define RBE_EXP_80      28
-#define RBE_DISEASE     29
-#define RBE_TIME        30
-#define RBE_EXP_VAMP    31
-#define RBE_DR_MANA     32
-#define RBE_SUPERHURT   33
-#define RBE_CUT         34
-#define RBE_STUN        35
+enum {
+    RBE_HURT = 5000,
+    RBE_DRAIN_CHARGES,
+    RBE_EAT_GOLD,
+    RBE_EAT_ITEM,
+    RBE_EAT_FOOD,
+    RBE_EAT_LITE,
+    RBE_BLIND,
+    RBE_CONFUSE, /* XXX replace with CONFUSION */
+    RBE_TERRIFY, /* XXX GF_FEAR? */
+    RBE_PARALYZE, /* XXX GF_PARALYSIS */
+    RBE_LOSE_STR,
+    RBE_LOSE_INT,
+    RBE_LOSE_WIS,
+    RBE_LOSE_DEX,
+    RBE_LOSE_CON,
+    RBE_LOSE_CHR,
+    RBE_LOSE_ALL,
+    RBE_SHATTER,
+    RBE_EXP_10,  /* XXX DR_EXP(10d60), etc. */
+    RBE_EXP_20,
+    RBE_EXP_40,
+    RBE_EXP_80,
+    RBE_DISEASE,
+    RBE_EXP_VAMP, /* XXX Add VAMP(XdY) as well off player hp */
+    RBE_DR_MANA,
+    RBE_SUPERHURT, /* XXX deprecated */
+    RBE_CUT,
+    RBE_STUN,
+};
 
 /*** Monster flag values (hard-coded) ***/
 

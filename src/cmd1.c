@@ -2026,76 +2026,70 @@ void touch_zap_player(int m_idx)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int           i;
 
+    /* beholders gaze on their enemies without touching (even as a ranged py_attack())
+     * staffmasters gain a quick strike that avoids monster auras
+     * other classes, like samurai, have a range 2 attack, but this is still a touch */
+    if (p_ptr->prace == RACE_MON_BEHOLDER || p_ptr->lightning_reflexes)
+        return;
+
     if ((r_ptr->flags2 & RF2_AURA_REVENGE) && !MON_CONFUSED(m_ptr) && randint0(120) < r_ptr->level)
     {
-        if (p_ptr->lightning_reflexes)
-        {
-        }
-        else
-        {
-            retaliation_hack = TRUE;
-            make_attack_normal(m_idx);
-            retaliation_count++; /* Indexes which blow to use per retaliation, but start at 0 ... See py_attack() for initialization.*/
-            retaliation_hack = FALSE;
-        }
+        retaliation_hack = TRUE;
+        make_attack_normal(m_idx);
+        retaliation_count++; /* Indexes which blow to use per retaliation, but start at 0 ... See py_attack() for initialization.*/
+        retaliation_hack = FALSE;
     }
 
     if ((r_ptr->flags2 & (RF2_AURA_FIRE | RF2_AURA_ELEC)) || (r_ptr->flags3 & RF3_AURA_COLD))
     {
-        if (p_ptr->lightning_reflexes)
+        int dd = 1 + r_ptr->level/26;
+        int ds = 1 + r_ptr->level/17;
+        int fire_dam = 0, cold_dam = 0, elec_dam = 0;
+
+        if (r_ptr->flags2 & RF2_AURA_FIRE)
         {
+            fire_dam = res_calc_dam(RES_FIRE, damroll(dd, ds));
+            if (fire_dam > 0)
+                mon_lore_2(m_ptr, RF2_AURA_FIRE);
         }
-        else
+        if (r_ptr->flags3 & RF3_AURA_COLD)
         {
-            int dd = 1 + r_ptr->level/26;
-            int ds = 1 + r_ptr->level/17;
-            int fire_dam = 0, cold_dam = 0, elec_dam = 0;
+            cold_dam = res_calc_dam(RES_COLD, damroll(dd, ds));
+            if (cold_dam > 0)
+                mon_lore_3(m_ptr, RF3_AURA_COLD);
+        }
+        if (r_ptr->flags2 & RF2_AURA_ELEC)
+        {
+            elec_dam = res_calc_dam(RES_ELEC, damroll(dd, ds));
+            if (elec_dam > 0)
+                mon_lore_2(m_ptr, RF2_AURA_ELEC);
+        }
 
-            if (r_ptr->flags2 & RF2_AURA_FIRE)
+        if (fire_dam + cold_dam + elec_dam)
+        {
+            char m_name[MAX_NLEN];
+            char buf[100];
+
+            buf[0] = '\0';
+            if (fire_dam)
+                strcat(buf, "<color:r>burned</color>");
+            if (cold_dam)
             {
-                fire_dam = res_calc_dam(RES_FIRE, damroll(dd, ds));
-                if (fire_dam > 0)
-                    mon_lore_2(m_ptr, RF2_AURA_FIRE);
+                if (strlen(buf))
+                    strcat(buf, elec_dam ? ", " : " and ");
+                strcat(buf, "<color:w>frozen</color>");
             }
-            if (r_ptr->flags3 & RF3_AURA_COLD)
+            if (elec_dam)
             {
-                cold_dam = res_calc_dam(RES_COLD, damroll(dd, ds));
-                if (cold_dam > 0)
-                    mon_lore_3(m_ptr, RF3_AURA_COLD);
-            }
-            if (r_ptr->flags2 & RF2_AURA_ELEC)
-            {
-                elec_dam = res_calc_dam(RES_ELEC, damroll(dd, ds));
-                if (elec_dam > 0)
-                    mon_lore_2(m_ptr, RF2_AURA_ELEC);
+                if (strlen(buf))
+                    strcat(buf, " and ");
+                strcat(buf, "<color:b>shocked</color>");
             }
 
-            if (fire_dam + cold_dam + elec_dam)
-            {
-                char m_name[MAX_NLEN];
-                char buf[100];
-
-                buf[0] = '\0';
-                if (fire_dam)
-                    strcat(buf, "<color:r>burned</color>");
-                if (cold_dam)
-                {
-                    if (strlen(buf))
-                        strcat(buf, elec_dam ? ", " : " and ");
-                    strcat(buf, "<color:w>frozen</color>");
-                }
-                if (elec_dam)
-                {
-                    if (strlen(buf))
-                        strcat(buf, " and ");
-                    strcat(buf, "<color:b>shocked</color>");
-                }
-
-                msg_format("You are %s.", buf);
-                monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-                take_hit(DAMAGE_NOESCAPE, fire_dam + cold_dam + elec_dam, m_name, -1);
-                handle_stuff();
-            }
+            msg_format("You are %s.", buf);
+            monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+            take_hit(DAMAGE_NOESCAPE, fire_dam + cold_dam + elec_dam, m_name, -1);
+            handle_stuff();
         }
     }
 
@@ -2577,7 +2571,6 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                         }
                     }
                 }
-                /* TODO: Should rings of power brand innate attacks? */
                 touch_zap_player(m_idx);
 
                 if (a->flags & INNATE_EXPLODE)

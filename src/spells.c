@@ -600,10 +600,10 @@ int calculate_fail_rate_aux(int caster_lvl, int spell_lvl, int base_fail, int st
             min -= 1;
     }
 
+    if (fail < min) fail = min;
     if (p_ptr->stun)
         fail += 50 * p_ptr->stun / 100;
 
-    if (fail < min) fail = min;
     if (fail > 95) fail = 95;
 
     /* Some effects violate the Min/Max Fail Rates */

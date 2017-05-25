@@ -106,7 +106,6 @@ extern cptr silly_attacks[MAX_SILLY_ATTACK];
 extern monster_power monster_powers[MAX_MONSPELLS];
 extern cptr monster_powers_short[MAX_MONSPELLS];
 extern cptr ident_info[];
-extern mbe_info_type mbe_info[];
 extern byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
@@ -1322,10 +1321,29 @@ extern bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, b
 extern int project_length;
 extern bool binding_field(int dam);
 
-#define GF_WHO_PLAYER    0    /* > 0 is m_idx; < 0 is special */
-#define GF_DAMAGE_SPELL  0x01 /* not really flags at the moment ... */
-#define GF_DAMAGE_ATTACK 0x02
-#define GF_DAMAGE_AURA   0x04
+/* Directly damage the player or a monster with a GF_* attack type, 
+ * bypassing the project() code. This is needed for monster melee,
+ * monster auras, and player innate attacks where project() is overly
+ * complicated and error prone if flg is incorrectly set.
+ *
+ * We still need a "who" done it parameter. This is either the player (0)
+ * or a monster index (m_idx > 0). Occasionally, it might be a special
+ * negative code when using project(), but not for the gf_damage_* routines.
+ */
+#define GF_WHO_PLAYER    0
+
+/* We also need information on whether the effect is spell/breath based,
+ * or whether it is the result of melee contact. Mostly, this if for message
+ * purposes, but, occasionally, it has gameplay effects. For example, GF_DISENCHANT
+ * will usually dispel_player() on a touch effect (GF_DAMAGE_ATTACK or _AURA)
+ * while it always apply_disenchant()s on a breath (GF_DAMAGE_SPELL).
+ * The flags param only contains the following GF_DAMAGE_* flags, and never
+ * needs any of the PROJECT_* stuff. At the moment, using bits is inappropriate
+ * as the options are mutually exclusive, but other options may follow in the future.
+ */
+#define GF_DAMAGE_SPELL  0x01 /* Monster spell or breath from a project() */
+#define GF_DAMAGE_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
+#define GF_DAMAGE_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
 extern int gf_damage_p(int who, int type, int dam, int flags);
 extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
 

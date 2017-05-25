@@ -15,7 +15,7 @@
 #include <assert.h>
 
 #define REWARD_CHANCE 10
-#define OLYMPIAN_CHANCE 35
+#define OLYMPIAN_CHANCE 20 /* Olympians are now a bit easier */
 
  /* Experience required to advance from level to level + 1
     Note the table is off by 1, so we encapsulate that fact.
@@ -841,7 +841,7 @@ void monster_death(int m_idx, bool drop_item)
         if (r_ptr->blows[i].method == RBM_EXPLODE)
         {
             int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-            int typ = mbe_info[r_ptr->blows[i].effects[0].effect].explode_type;
+            int typ = r_ptr->blows[i].effects[0].effect;
             int d_dice = r_ptr->blows[i].effects[0].dd;
             int d_side = r_ptr->blows[i].effects[0].ds;
             int damage = damroll(d_dice, d_side);
