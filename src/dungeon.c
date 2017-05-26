@@ -954,9 +954,11 @@ static void process_world_aux_hp_and_sp(void)
      * Note: Poison is now a delayed damage pool. No longer is there
      * any immediate damage. It's also much harder to 'cure'. */
     if (p_ptr->poisoned && !IS_INVULN())
-    {
-        int pct = rand_range(2, 6);
-        int amt = MAX(1, p_ptr->poisoned * pct / 100);
+    {   /*                   v--- make waiting for poison to clear less tedious */
+        int amt = MAX(MAX(1, p_ptr->mhp/150), p_ptr->poisoned/15);
+        /* Take 15 "game turns" for the entire effect ------^ */
+        if (amt > p_ptr->poisoned) amt = p_ptr->poisoned;
+        /*msg_format("<color:G> %d Poison Damage</color>", amt);*/
         take_hit(DAMAGE_NOESCAPE, amt, "poison", -1);
         set_poisoned(p_ptr->poisoned - amt, TRUE);
     }

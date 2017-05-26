@@ -1160,6 +1160,7 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
                 if (effect->effect == RBE_DR_MANA) continue;
                 if (effect->effect == RBE_STUN) continue;
                 if (effect->effect == RBE_CUT) continue;
+                /* XXX Delayed damage: if (effect->effect == GF_POIS) continue;*/
 
                 effect_dam = _avg_dam_roll(effect->dd, effect->ds);
 

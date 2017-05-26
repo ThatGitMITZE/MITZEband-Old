@@ -1000,23 +1000,27 @@ bool make_attack_normal(int m_idx)
 
                 if (weaponmaster_get_toggle() == TOGGLE_TRADE_BLOWS)
                 {
-                    if (m_ptr->ml && !p_ptr->confused && !p_ptr->stun && !p_ptr->blind && !p_ptr->paralyzed)
-                        do_retaliate = TRUE;
+                    do_retaliate = TRUE;
                 }
                 else if (mystic_get_toggle() == MYSTIC_TOGGLE_RETALIATE && p_ptr->csp >= 7)
                 {
-                    if (m_ptr->ml && !p_ptr->confused && !p_ptr->stun && !p_ptr->blind && !p_ptr->paralyzed)
-                        do_retaliate = TRUE;
+                    do_retaliate = TRUE;
                 }
                 else if (p_ptr->sh_retaliation)
                 {
-                    if (m_ptr->ml && !p_ptr->confused && !p_ptr->stun && !p_ptr->blind && !p_ptr->paralyzed && !mon_save_p(m_ptr->r_idx, A_DEX))
-                    {
+                    if (p_ptr->prace == RACE_MON_SWORD) /* death scythe */
+                        do_retaliate = one_in_(3);
+                    else if (p_ptr->monk_lvl) /* monk */
+                        do_retaliate = !mon_save_p(m_ptr->r_idx, A_DEX);
+                    else /* cloak of retaliation or staffmaster */
                         do_retaliate = TRUE;
-                        if (p_ptr->prace == RACE_MON_SWORD && !one_in_(3))
-                            do_retaliate = FALSE;
-                    }
                 }
+                if (!m_ptr->ml || p_ptr->confused || p_ptr->blind || p_ptr->paralyzed)
+                    do_retaliate = FALSE;
+
+                /* light stunning is now *very* common */
+                if (p_ptr->stun && randint0(35) < p_ptr->stun)
+                    do_retaliate = FALSE;
 
                 if ( do_retaliate
                   && alive

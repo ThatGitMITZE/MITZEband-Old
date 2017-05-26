@@ -1858,6 +1858,11 @@ int gf_damage_p(int who, int type, int dam, int flags)
         else if (fuzzy) msg_print("You are hit by poison!");
         if (CHECK_MULTISHADOW()) break;
         dam = res_calc_dam(RES_POIS, dam);
+        /* Moving damage from immediate to delayed can't simply leave the
+         * value unchanged, else this is a monster nerf! We can scale everything
+         * in r_info and BR_POIS, but that is tedious and I'm unsure what a good
+         * scale factor is without some playtesting. cf GF_NUKE below. */
+        dam *= 2;
         set_poisoned(p_ptr->poisoned + dam, FALSE);
         if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
             do_dec_stat(A_CON);
@@ -1868,6 +1873,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         else if (fuzzy) msg_print("You are hit by radiation!");
         if (CHECK_MULTISHADOW()) break;
         dam = res_calc_dam(RES_POIS, dam);
+        dam *= 2;
         set_poisoned(p_ptr->poisoned + dam, FALSE);
         if (!res_save_default(RES_POIS))
         {
