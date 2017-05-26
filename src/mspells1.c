@@ -1405,7 +1405,6 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     char            tmp[MAX_NLEN];
     char            m_name[MAX_NLEN];
     char            m_poss[80];
-    bool            no_innate = FALSE;
     bool            do_spell = DO_SPELL_NONE;
     int             dam = 0;
     u32b mode = 0L;
@@ -1455,16 +1454,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     if (!is_aware(m_ptr)) return FALSE;
 
 
-    /* Sometimes forbid innate attacks (breaths)
-     * XXX This is really counter-intuitive for some monsters.
-     * For example, an orc that RF4_SHOOTs 1 in 15 actually only
-     * does so 0.72% of the time (expected 6%). Turning 1_IN_15
-     * into 1_IN_138.889 is rather weird ... Somebody tell me
-     * why we need this! */
-    if (randint0(100) >= (r_ptr->freq_spell * 2)) no_innate = TRUE;
-
     /* XXX XXX XXX Handle "track_target" option (?) */
-
 
     /* Extract the racial spell flags */
     f4 = r_ptr->flags4;
@@ -1651,14 +1641,6 @@ bool make_attack_spell(int m_idx, bool ticked_off)
 
     /* Extract the monster level */
     rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-
-    /* Forbid innate attacks sometimes */
-    if (no_innate)
-    {
-        f4 &= ~(RF4_NOMAGIC_MASK);
-        f5 &= ~(RF5_NOMAGIC_MASK);
-        f6 &= ~(RF6_NOMAGIC_MASK);
-    }
 
     if (f6 & RF6_DARKNESS)
     {
