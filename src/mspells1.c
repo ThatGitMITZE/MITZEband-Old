@@ -1987,56 +1987,8 @@ bool make_attack_spell(int m_idx, bool ticked_off)
         {
             if (blind) msg_format("%^s mumbles powerfully.", m_name);
             else msg_format("%^s invokes polymorph other.", m_name);
-            if (prace_is_(RACE_ANDROID) || p_ptr->pclass == CLASS_MONSTER || p_ptr->prace == RACE_DOPPELGANGER)
-                msg_print("You are unaffected!");
-            else if (mut_present(MUT_DRACONIAN_METAMORPHOSIS))
-                msg_print("You are unaffected!");
-            else if (randint1(100) <= duelist_skill_sav(m_idx) - r_ptr->level/2)
-                msg_print("You resist the effects!");
-            else if (check_foresight())
-            {
-            }
-            else
-            {
-                int which;
-                /* TODO: MIMIC_GIANT_TOAD ... */
-                switch(randint1(5))
-                {
-                case 1:
-                    if (p_ptr->prace != RACE_SNOTLING)
-                    {
-                        which = RACE_SNOTLING;
-                        break;
-                    }
-                case 2:
-                    if (p_ptr->prace != RACE_YEEK)
-                    {
-                        which = RACE_YEEK;
-                        break;
-                    }
-                case 3:
-                    which = MIMIC_SMALL_KOBOLD;
-                    break;
-                case 4:
-                    which = MIMIC_MANGY_LEPER;
-                    break;
-                default:
-                    for (;;)
-                    {
-                        which = randint0(MAX_RACES);
-                        if ( which != RACE_HUMAN
-                          && which != RACE_DEMIGOD
-                          && which != RACE_DRACONIAN
-                          && which != RACE_ANDROID
-                          && p_ptr->prace != which
-                          && !(get_race_aux(which, 0)->flags & RACE_IS_MONSTER) )
-                        {
-                            break;
-                        }
-                    }
-                }
-                set_mimic(50 + randint1(50), which, FALSE);
-            }
+            if (!check_foresight())
+                gf_damage_p(m_idx, GF_OLD_POLY, 0, GF_DAMAGE_SPELL);
             break;
         }
         /* RF4_BR_STORM */

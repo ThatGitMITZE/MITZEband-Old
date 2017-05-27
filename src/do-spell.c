@@ -2969,17 +2969,19 @@ static cptr do_chaos_spell(int spell, int mode)
         if (name) return "Sonic Boom";
         if (desc) return "Generates a ball of sound centered on you.";
 
-        {
-            int dam = spell_power(60 + plev*3/2 + p_ptr->to_d_spell*2);
+        {   /* Note: Damage is high relative to say fireball, but this is
+               an adjacent spell while fireball is a distance spell. So it should
+               do something like 33% *more* damage than a fireball. However, stunning
+               is a bonus to be reckoned with ... (Design: Ranged = 75% Melee) */
+            int dam = spell_power(50 + plev + p_ptr->to_d_spell);
             int rad = spell_power(plev / 10 + 2);
 
-            if (info) return info_damage(0, 0, dam/2);
+            if (info) return info_damage(0, 0, dam);
 
             if (cast)
             {
                 msg_print("BOOM! Shake the room!");
-
-                project(0, rad, py, px, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(0, rad, py, px, dam*2, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
             }
         }
         break;

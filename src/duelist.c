@@ -51,6 +51,7 @@ int duelist_skill_sav(int m_idx)
 {
     int result = p_ptr->skills.sav;
     if ( p_ptr->pclass == CLASS_DUELIST
+      && m_idx > 0
       && p_ptr->duelist_target_idx == m_idx )
     {
         result = result + 15 + p_ptr->lev;

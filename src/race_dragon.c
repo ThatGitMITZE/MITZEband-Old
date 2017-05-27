@@ -66,35 +66,36 @@ cptr gf_name(int which)
 {
     switch (which)
     {
-    case GF_FIRE: return "fire";
-    case GF_ACID: return "acid";
-    case GF_COLD: return "cold";
-    case GF_ELEC: return "lightning";
-    case GF_POIS: return "poison";
-    case GF_LITE: return "light";
-    case GF_DARK: return "dark";
-    case GF_CONFUSION: return "confusion";
-    case GF_NETHER: return "nether";
-    case GF_NEXUS: return "nexus";
-    case GF_SOUND: return "sound";
-    case GF_SHARDS: return "shards";
-    case GF_CHAOS: return "chaos";
-    case GF_DISENCHANT: return "disenchantment";
-    case GF_TIME: return "time";
-    case GF_MANA: return "mana";
-    case GF_GRAVITY: return "gravity";
-    case GF_INERT: return "inerta";
-    case GF_PLASMA: return "plasma";
-    case GF_FORCE: return "force";
-    case GF_NUKE: return "nuke";
-    case GF_DISINTEGRATE: return "disintegration";
-    case GF_STORM: return "storm";
-    case GF_HOLY_FIRE: return "holy fire";
-    case GF_ELDRITCH_HOWL: return "fear";
-    case GF_ANIM_DEAD: return "reanimation";
-    case GF_OLD_DRAIN: return "vampirism";
-    case GF_HELL_FIRE: return "hell fire";
-    case GF_GENOCIDE: return "death";
+    case GF_FIRE: return "<color:r>Fire</color>";
+    case GF_ACID: return "<color:g>Acid</color>";
+    case GF_COLD: return "<color:W>Cold</color>";
+    case GF_ELEC: return "<color:b>Lightning</color>";
+    case GF_POIS: return "<color:G>Poison</color>";
+    case GF_LITE: return "<color:y>Light</color>";
+    case GF_DARK: return "<color:D>Dark</color>";
+    case GF_CONFUSION: return "<color:U>Confusion</color>";
+    case GF_NETHER: return "<color:D>Nether</color>";
+    case GF_NEXUS: return "<color:v>Nexus</color>";
+    case GF_SOUND: return "<color:o>Sound</color>";
+    case GF_SHARDS: return "<color:U>Shards</color>";
+    case GF_CHAOS: return "<color:v>Chaos</color>";
+    case GF_DISENCHANT: return "<color:v>Disenchantment</color>";
+    case GF_TIME: return "<color:B>Time</color>";
+    case GF_MANA: return "<color:B>Mana</color>";
+    case GF_GRAVITY: return "<color:U>Gravity</color>";
+    case GF_INERT: return "<color:U>Inerta</color>";
+    case GF_PLASMA: return "<color:r>Plasma</color>";
+    case GF_FORCE: return "<color:B>Force</color>";
+    case GF_NUKE: return "<color:G>Nuke</color>";
+    case GF_DISINTEGRATE: return "<color:D>Disintegration</color>";
+    case GF_STORM: return "<color:b>Storm</color>";
+    case GF_HOLY_FIRE: return "<color:r>Holy Fire</color>";
+    case GF_ELDRITCH_HOWL: return "<color:R>Fear</color>";
+    case GF_ANIM_DEAD: return "<color:D>Reanimation</color>";
+    case GF_OLD_DRAIN: return "<color:D>Vampirism</color>";
+    case GF_HELL_FIRE: return "<color:r>Hell Fire</color>";
+    case GF_GENOCIDE: return "<color:D>Death</color>";
+    case GF_OLD_POLY: return "<color:v>Change</color>";
     }
     return "something";
 }
@@ -121,7 +122,7 @@ static void _effect_menu_fn(int cmd, int which, vptr cookie, variant *res)
     switch (cmd)
     {
     case MENU_TEXT:
-        var_set_string(res, format("%^s", gf_name(idx)));
+        var_set_string(res, format("%s", gf_name(idx)));
         break;
     }
 }

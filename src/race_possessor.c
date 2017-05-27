@@ -751,7 +751,7 @@ static void _breathe_spell(int what, int cmd, variant *res)
     switch (cmd)
     {
     case SPELL_NAME:
-        var_set_string(res, format("Breathe %^s", gf_name(what)));
+        var_set_string(res, format("Breathe %s", gf_name(what)));
         break;
     case SPELL_DESC:
         var_set_string(res, format("Breathes %s at your opponent.", gf_name(what)));

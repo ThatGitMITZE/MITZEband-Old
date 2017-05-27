@@ -89,6 +89,7 @@ static int _get_gf_type(cptr which)
         {"STUN", GF_STUN},
         {"NETHER", GF_NETHER},
         {"DAM", GF_MISSILE}, /* Like HURT but with no AC damage reduction */
+        {"POLYMORPH", GF_OLD_POLY},
         {0}};
     int i;
     for (i = 0;; i++)
