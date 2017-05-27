@@ -1436,7 +1436,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
     info->nasty1 += info->auras * info->hits / 100;
     if (info->retaliation)
     {
-        int chance = r->level * 100 / 120;
+        int chance = r->level * 100 / 150;
         int returns = info->hits * chance / 100;
         if (returns > blows * 100) returns = blows * 100;
         info->nasty1 += info->retaliation * returns/100;
