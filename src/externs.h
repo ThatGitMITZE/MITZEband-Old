@@ -1540,7 +1540,6 @@ extern void battle_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
 extern bool tele_town(void);
-extern int hit_chance(int hand, int to_h, int ac);
 
 /* combat.c */
 extern int bow_energy(int sval);
@@ -1554,6 +1553,8 @@ extern void display_shooter_info(doc_ptr doc);
 extern void init_blows_calc(object_type *o_ptr, weapon_info_t *info_ptr);
 extern int calculate_base_blows(int hand, int str_idx, int dex_idx);
 extern int throw_hit_chance(int to_h, int ac, int range);
+extern int hit_chance(int hand, int to_h, int ac);
+extern int hit_chance_innate(int to_h, int ac);
 
 /* util.c */
 extern errr path_parse(char *buf, int max, cptr file);

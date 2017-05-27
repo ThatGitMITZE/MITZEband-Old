@@ -1074,6 +1074,8 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 250));
     if (r->flags4 & RF4_BR_DISI)
         _add_spell_dam(info, RES_INVALID, _max_breath(hp, 6, 150));
+    if (r->flags4 & RF4_BR_TIME) /* XXX RES_TIME, but its so rare and there's no report column */
+        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 150));
 
     if (r->flags5 & RF5_MIND_BLAST)
         _add_spell_dam(info, RES_INVALID, _avg_dam_roll(7, 7));
@@ -1182,10 +1184,111 @@ typedef struct {
     _spell_dam_info_ptr spells;
     _melee_dam_t melee1;
     _melee_dam_t melee2;
+    int          hits;
     int          auras;
+    int          retaliation;
     int          nasty1;
     int          nasty2;
 } _mon_dam_info_t, *_mon_dam_info_ptr;
+
+static int _gf_resist(int which, int dam)
+{
+    switch (which)
+    {
+    case GF_ACID:
+        dam -= dam * res_pct_known(RES_ACID) / 100;
+        break;
+    case GF_ELEC:
+        dam -= dam * res_pct_known(RES_ELEC) / 100;
+        break;
+    case GF_FIRE:
+        dam -= dam * res_pct_known(RES_FIRE) / 100;
+        break;
+    case GF_COLD: case GF_ICE:
+        dam -= dam * res_pct_known(RES_COLD) / 100;
+        break;
+    case GF_POIS:
+    case GF_NUKE:
+        dam -= dam * res_pct_known(RES_POIS) / 100;
+        break;
+    case GF_LITE:
+        dam -= dam * res_pct_known(RES_LITE) / 100;
+        break;
+    case GF_DARK:
+        dam -= dam * res_pct_known(RES_DARK) / 100;
+        break;
+    case GF_NETHER:
+        dam -= dam * res_pct_known(RES_NETHER) / 100;
+        break;
+    case GF_NEXUS:
+        dam -= dam * res_pct_known(RES_NEXUS) / 100;
+        break;
+    case GF_CONFUSION:
+        dam -= dam * res_pct_known(RES_CONF) / 100;
+        break;
+    case GF_SHARDS:
+        dam -= dam * res_pct_known(RES_SHARDS) / 100;
+        break;
+    case GF_SOUND:
+        dam -= dam * res_pct_known(RES_SOUND) / 100;
+        break;
+    case GF_CHAOS:
+        dam -= dam * res_pct_known(RES_CHAOS) / 100;
+        break;
+    case GF_DISENCHANT:
+        dam -= dam * res_pct_known(RES_DISEN) / 100;
+        break;
+    case GF_TIME:
+        dam -= dam * res_pct_known(RES_TIME) / 100;
+        break;
+    case GF_HOLY_FIRE:
+        if (p_ptr->align > 10)
+            dam /= 2;
+        else if (p_ptr->align < -10)
+            dam *= 2;
+        break;
+    case GF_HELL_FIRE:
+        if (p_ptr->align > 10)
+            dam *= 2;
+        break;
+    }
+    return dam;
+}
+
+static int _calc_py_hits(mon_race_ptr r) /* scaled by 100 */
+{
+    int i;
+    int hits = 0;
+    if (p_ptr->prace == RACE_MON_RING) return 0;
+    for (i = 0; i < MAX_HANDS; i++)
+    {
+        if (p_ptr->weapon_info[i].wield_how == WIELD_NONE) continue;
+        if (p_ptr->weapon_info[i].bare_hands)
+        {
+            int blows = NUM_BLOWS(i);
+            int chance = hit_chance(0, 0, r->ac);
+            hits += blows * chance / 100;
+        }
+        else
+        {
+            int blows = NUM_BLOWS(i);
+            obj_ptr obj = equip_obj(p_ptr->weapon_info[i].slot);
+            int chance = hit_chance(i, obj->to_h, r->ac);
+            hits += blows * chance / 100;
+        }
+    }
+    for (i = 0; i < p_ptr->innate_attack_ct; i++)
+    {
+        innate_attack_ptr a = &p_ptr->innate_attacks[i];
+        int to_h = p_ptr->to_h_m + a->to_h;
+        int chance = hit_chance_innate(to_h, r->ac);
+        int blows = a->blows;
+        if (i == 0)
+            blows += p_ptr->innate_attack_info.xtra_blow;
+        hits += blows * chance / 100;
+    }
+    return hits;
+}
 
 static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
 {
@@ -1222,32 +1325,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
             /* XXX Delayed damage: if (effect->effect == GF_POIS) continue;*/
 
             effect_dam = _avg_dam_roll(effect->dd, effect->ds);
-
-            /* reduce for resistances */
-            switch (effect->effect)
-            {
-            case GF_ACID:
-                effect_dam -= effect_dam * res_pct_known(RES_ACID) / 100;
-                break;
-            case GF_ELEC:
-                effect_dam -= effect_dam * res_pct_known(RES_ELEC) / 100;
-                break;
-            case GF_FIRE:
-                effect_dam -= effect_dam * res_pct_known(RES_FIRE) / 100;
-                break;
-            case GF_COLD: case GF_ICE:
-                effect_dam -= effect_dam * res_pct_known(RES_COLD) / 100;
-                break;
-            case GF_POIS:
-                effect_dam -= effect_dam * res_pct_known(RES_POIS) / 100;
-                break;
-            case GF_DISENCHANT:
-                effect_dam -= effect_dam * res_pct_known(RES_DISEN) / 100;
-                break;
-            case GF_TIME:
-                effect_dam -= effect_dam * res_pct_known(RES_TIME) / 100;
-                break;
-            }
+            effect_dam = _gf_resist(effect->effect, effect_dam);
             if (effect->pct)
                 effect_dam = effect_dam * effect->pct / 100;
 
@@ -1289,7 +1367,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         int ds = 1 + r->level/17;
         int base_dam = _avg_dam_roll(dd, ds);
         if ((r->flags2 & RF2_AURA_REVENGE) && blows > 0)
-            info->auras += info->melee2.effective/blows;
+            info->retaliation += info->melee2.effective/blows;
         if (r->flags2 & RF2_AURA_FIRE)
         {
             int pct = res_pct_known(RES_FIRE);
@@ -1314,9 +1392,9 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
             int dam;
             if (!aura->effect) continue;
             dam = _avg_dam_roll(aura->dd, aura->ds);
+            dam = _gf_resist(aura->effect, dam);
             if (aura->pct)
                 dam = dam * aura->pct / 100;
-            /* XXX resistance? need a map from GF_* -> RES_*. */
             info->auras += dam;
         }
     }
@@ -1334,6 +1412,11 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         info->nasty1 = info->nasty1 * mf / pf;
         info->nasty2 = info->nasty2 * mf / pf;
     }
+
+    info->hits = _calc_py_hits(r);
+    info->nasty1 += info->auras * info->hits / 100;
+    if (info->retaliation)
+       info->nasty1 += info->retaliation * MIN(blows*100, info->hits)/100;
     return info;
 }
 static void _mon_dam_info_free(_mon_dam_info_ptr info)
@@ -1352,6 +1435,12 @@ static int _cmp_info2(_mon_dam_info_ptr left, _mon_dam_info_ptr right)
 {
     if (left->nasty1 < right->nasty1) return 1;
     if (left->nasty1 > right->nasty1) return -1;
+    return 0;
+}
+static int _cmp_info3(_mon_dam_info_ptr left, _mon_dam_info_ptr right)
+{
+    if (left->nasty2 < right->nasty2) return 1;
+    if (left->nasty2 > right->nasty2) return -1;
     return 0;
 }
 
@@ -1392,13 +1481,14 @@ static void _spoil_mon_melee_dam_aux_aux(doc_ptr doc, vec_ptr v)
         }
         _display_melee_dam(doc, info->melee1.reduced, info->melee2.reduced);
         _display_melee_dam(doc, info->melee1.effective, info->melee2.effective);
-        if (info->auras)
-            doc_printf(doc, " %5d", info->auras);
+        if (info->auras + info->retaliation)
+            doc_printf(doc, " %5d", info->auras + info->retaliation);
         else
             doc_insert(doc, "      ");
 
         _display_dam(doc, info->nasty1);
         _display_dam(doc, info->nasty2);
+        doc_printf(doc, " %d", info->hits);
         doc_newline(doc);
     }
 }
@@ -1413,19 +1503,29 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
         mon_race_ptr r = vec_get(v, i);
         vec_add(v2, _mon_dam_info_alloc(r));
     }
+
     vec_sort(v2, (vec_cmp_f)_cmp_info1);
     doc_insert(doc, "<topic:ByLevel><style:heading>Monster Damage by Level</style>\n");
     _spoil_mon_melee_dam_aux_aux(doc, v2);
+
     vec_sort(v2, (vec_cmp_f)_cmp_info2);
-    doc_insert(doc, "\n<topic:ByNastiness><style:heading>Monster Damage by Nastiness</style>\n");
+    doc_insert(doc, "\n<topic:ByNasty1><style:heading>Monster Damage by Melee Nastiness</style>\n");
     _spoil_mon_melee_dam_aux_aux(doc, v2);
+
+    vec_sort(v2, (vec_cmp_f)_cmp_info3);
+    doc_insert(doc, "\n<topic:ByNasty2><style:heading>Monster Damage by Distance Nastiness</style>\n");
+    _spoil_mon_melee_dam_aux_aux(doc, v2);
+
     vec_free(v2);
 }
 
 static bool _mon_dam_p(mon_race_ptr r)
 {
-    return TRUE;
+    if (r->id == MON_HAGURE2) return FALSE;
+    if (r->level < 50) return FALSE;
+
     return !(r->flags9 & RF9_DEPRECATED);
+    return TRUE;
     return r->d_char == 'C';
     return BOOL(r->flags2 & RF2_CAMELOT);
 }
