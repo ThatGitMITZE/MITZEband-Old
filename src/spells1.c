@@ -2568,7 +2568,6 @@ static int _stun_amount(int dam)
             { \
                 note = " is immune."; \
                 dam = 0; \
-                skipped = TRUE; \
                 mon_lore_r(m_ptr, RFR_RES_ALL); \
                 break; \
             }
@@ -3252,7 +3251,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
             do_time = (dam + 1) / 2;
         }
         break;
-        case GF_STORM: /* TODO */
+    case GF_STORM: /* TODO */
     case GF_GRAVITY: {
         bool resist_tele = FALSE;
 

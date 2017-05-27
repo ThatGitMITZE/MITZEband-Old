@@ -974,6 +974,25 @@ static void _add_spell_dam(_spell_dam_info_ptr info, int which, int amt)
     info->count++;
 }
 
+static void _add_bolt_dam(_spell_dam_info_ptr info, int which, int amt)
+{
+    if (p_ptr->reflect)
+        _add_spell_dam(info, which, amt/7);
+    else
+        _add_spell_dam(info, which, amt);
+}
+
+static void _add_curse_dam(_spell_dam_info_ptr info, mon_race_ptr mon, int amt)
+{
+    int roll = 100 + mon->level/2;
+    int sav = p_ptr->skills.sav;
+    int success = sav * 100 / roll;
+    int fail = 100 - success;
+    int dam = amt * fail / 100;
+    if (mon->id == MON_KENSHIROU) dam = amt; /* his curses never fail */
+    _add_spell_dam(info, RES_INVALID, dam);
+}
+
 static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
 {
     _spell_dam_info_ptr info = _spell_dam_info_alloc();
@@ -1039,17 +1058,17 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         _add_spell_dam(info, RES_NETHER, _avg_dam_roll(10, 10) + 50 + r->level*power_mult);
 
     if (r->flags5 & RF5_BO_ACID)
-        _add_spell_dam(info, RES_ACID, _avg_dam(7, 8, r->level/3, power_mult));
+        _add_bolt_dam(info, RES_ACID, _avg_dam(7, 8, r->level/3, power_mult));
     if (r->flags5 & RF5_BO_ELEC)
-        _add_spell_dam(info, RES_ELEC, _avg_dam(4, 8, r->level/3, power_mult));
+        _add_bolt_dam(info, RES_ELEC, _avg_dam(4, 8, r->level/3, power_mult));
     if (r->flags5 & RF5_BO_FIRE)
-        _add_spell_dam(info, RES_FIRE, _avg_dam(9, 8, r->level/3, power_mult));
+        _add_bolt_dam(info, RES_FIRE, _avg_dam(9, 8, r->level/3, power_mult));
     if (r->flags5 & RF5_BO_COLD)
-        _add_spell_dam(info, RES_COLD, _avg_dam(6, 8, r->level/3, power_mult));
+        _add_bolt_dam(info, RES_COLD, _avg_dam(6, 8, r->level/3, power_mult));
     if (r->flags5 & RF5_BO_ICEE)
-        _add_spell_dam(info, RES_COLD, _avg_dam_roll(6, 6) + r->level * 3 / power_div);
+        _add_bolt_dam(info, RES_COLD, _avg_dam_roll(6, 6) + r->level * 3 / power_div);
     if (r->flags5 & RF5_BO_NETH)
-        _add_spell_dam(info, RES_NETHER, 30 + _avg_dam_roll(5, 5) + r->level * 4 / power_div);
+        _add_bolt_dam(info, RES_NETHER, 30 + _avg_dam_roll(5, 5) + r->level * 4 / power_div);
 
     if (r->flags5 & RF5_BA_DARK)
         _add_spell_dam(info, RES_DARK, _avg_dam_roll(10, 10) + r->level*4 + 50);
@@ -1078,32 +1097,32 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 150));
 
     if (r->flags5 & RF5_MIND_BLAST)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(7, 7));
+        _add_curse_dam(info, r, _avg_dam_roll(7, 7));
     if (r->flags5 & RF5_BRAIN_SMASH)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(12, 12));
+        _add_curse_dam(info, r, _avg_dam_roll(12, 12));
     if (r->flags5 & RF5_CAUSE_1)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(3, 8));
+        _add_curse_dam(info, r, _avg_dam_roll(3, 8));
     if (r->flags5 & RF5_CAUSE_2)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(8, 8));
+        _add_curse_dam(info, r, _avg_dam_roll(8, 8));
     if (r->flags5 & RF5_CAUSE_3)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(10, 15));
+        _add_curse_dam(info, r, _avg_dam_roll(10, 15));
     if (r->flags5 & RF5_CAUSE_4)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(15, 15));
+        _add_curse_dam(info, r, _avg_dam_roll(15, 15));
     if (r->flags5 & RF5_MISSILE)
         _add_spell_dam(info, RES_INVALID, _avg_dam_roll(2, 6) + r->level/3);
 
     if (r->flags5 & RF5_BA_WATE)
         _add_spell_dam(info, RES_INVALID, _avg_dam_roll(1, r->level*power_mult2) +  50);
     if (r->flags5 & RF5_BO_WATE)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(10, 10) + r->level * 3 / power_div);
+        _add_bolt_dam(info, RES_INVALID, _avg_dam_roll(10, 10) + r->level * 3 / power_div);
     if (r->flags5 & RF5_BO_PLAS)
-        _add_spell_dam(info, RES_INVALID, 10 + _avg_dam_roll(8, 7) + r->level * 3 / power_div);
+        _add_bolt_dam(info, RES_INVALID, 10 + _avg_dam_roll(8, 7) + r->level * 3 / power_div);
     if (r->flags5 & RF5_BO_MANA)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(1, 7*r->level/2) + 50);
+        _add_bolt_dam(info, RES_INVALID, _avg_dam_roll(1, 7*r->level/2) + 50);
     if (r->flags5 & RF5_BA_MANA)
         _add_spell_dam(info, RES_INVALID, _avg_dam_roll(10, 10) + r->level*4 + 50);
     if (r->flags6 & RF6_HAND_DOOM)
-        _add_spell_dam(info, RES_INVALID, p_ptr->chp / 2); 
+        _add_curse_dam(info, r, p_ptr->chp/2);
     if (r->flags6 & RF6_PSY_SPEAR)
     {
         _add_spell_dam(info, RES_INVALID, powerful ?  (_avg_dam_roll(1, 2*r->level) + 150)
@@ -1367,7 +1386,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         int ds = 1 + r->level/17;
         int base_dam = _avg_dam_roll(dd, ds);
         if ((r->flags2 & RF2_AURA_REVENGE) && blows > 0)
-            info->retaliation += info->melee2.effective/blows;
+            info->retaliation += info->melee2.effective;
         if (r->flags2 & RF2_AURA_FIRE)
         {
             int pct = res_pct_known(RES_FIRE);
@@ -1416,7 +1435,12 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
     info->hits = _calc_py_hits(r);
     info->nasty1 += info->auras * info->hits / 100;
     if (info->retaliation)
-       info->nasty1 += info->retaliation * MIN(blows*100, info->hits)/100;
+    {
+        int chance = r->level * 100 / 120;
+        int returns = info->hits * chance / 100;
+        if (returns > blows * 100) returns = blows * 100;
+        info->nasty1 += info->retaliation * returns/100;
+    }
     return info;
 }
 static void _mon_dam_info_free(_mon_dam_info_ptr info)
@@ -1521,8 +1545,14 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
 
 static bool _mon_dam_p(mon_race_ptr r)
 {
+    int min = 0, max = 200;
+    if (dun_level)
+    {
+        min = dun_level - 20;
+        max = dun_level + 20;
+    }
     if (r->id == MON_HAGURE2) return FALSE;
-    if (r->level < 50) return FALSE;
+    if (r->level < min || r->level > max) return FALSE;
 
     return !(r->flags9 & RF9_DEPRECATED);
     return TRUE;
