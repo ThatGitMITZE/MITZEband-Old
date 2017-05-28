@@ -393,12 +393,14 @@ typedef struct {
     s16b effect; /* either RBE_* or GF_* */
     byte dd;
     byte ds;
-    byte pct; /* 0 => 100% (as does 100) */
+    byte pct;    /* 0 => 100% (as does 100) */
+    s16b lore;   /* monster lore: number of times this effect experienced */
 } mon_effect_t, *mon_effect_ptr;
 
 typedef struct {
     byte method;
     byte power;
+    s16b lore;   /* monster lore: number of times this blow seen (hit or miss) */
     mon_effect_t effects[MAX_MON_BLOW_EFFECTS];
 } mon_blow_t, *mon_blow_ptr;
 

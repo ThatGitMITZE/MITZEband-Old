@@ -126,27 +126,43 @@ void mon_lore_r(monster_type *m_ptr, u32b mask)
         mon_lore_aux_r(&r_info[m_ptr->r_idx], mask);
 }
 
-void mon_lore_blows(monster_type *m_ptr, int which, int options)
+void mon_lore_blow(monster_type *m_ptr, mon_blow_ptr blow, int options)
 {
     if (is_original_ap_and_seen(m_ptr))
-        mon_lore_aux_blows(&r_info[m_ptr->r_idx], which, options);
+        mon_lore_aux_blow(&r_info[m_ptr->r_idx], blow, options);
 }
 
-void mon_lore_aux_blows(monster_race *r_ptr, int which, int options)
+void mon_lore_aux_blow(monster_race *r_ptr, mon_blow_ptr blow, int options)
 {
     if (!(options & MON_BLOW_SILLY))
     {
         if ( (options & MON_BLOW_OBVIOUS)
           || (options & MON_BLOW_DAMAGE)
-          || r_ptr->r_blows[which] > 10 )
+          || blow->lore > 10 )
         {
-            if (r_ptr->r_blows[which] < MAX_UCHAR)
+            if (blow->lore < MAX_SHORT)
             {
-                r_ptr->r_blows[which]++;
+                blow->lore++;
                 if (r_ptr->id == p_ptr->monster_race_idx)
                     p_ptr->window |= PW_MONSTER;
             }
         }
+    }
+}
+
+void mon_lore_effect(monster_type *m_ptr, mon_effect_ptr effect)
+{
+    if (is_original_ap_and_seen(m_ptr))
+        mon_lore_aux_effect(&r_info[m_ptr->r_idx], effect);
+}
+
+void mon_lore_aux_effect(monster_race *r_ptr, mon_effect_ptr effect)
+{
+    if (effect->lore < MAX_SHORT)
+    {
+        effect->lore++;
+        if (r_ptr->id == p_ptr->monster_race_idx)
+            p_ptr->window |= PW_MONSTER;
     }
 }
 

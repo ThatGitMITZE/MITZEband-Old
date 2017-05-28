@@ -1062,8 +1062,10 @@ extern void mon_lore_aux_spell(monster_race *r_ptr);
 #define MON_BLOW_SILLY   0x01
 #define MON_BLOW_OBVIOUS 0x02
 #define MON_BLOW_DAMAGE  0x04
-extern void mon_lore_blows(monster_type *m_ptr, int which, int options);
-extern void mon_lore_aux_blows(monster_race *r_ptr, int which, int options);
+extern void mon_lore_blow(monster_type *m_ptr, mon_blow_ptr blow, int options);
+extern void mon_lore_aux_blow(monster_race *r_ptr, mon_blow_ptr blow, int options);
+extern void mon_lore_effect(monster_type *m_ptr, mon_effect_ptr effect);
+extern void mon_lore_aux_effect(monster_race *r_ptr, mon_effect_ptr effect);
 
 extern monster_hook_type get_wilderness_monster_hook(int x, int y);
 extern monster_hook_type get_monster_hook(void);

@@ -194,13 +194,10 @@ bool make_attack_normal(int m_idx)
     ht_cnt = 0;
     for (ap_cnt = 0; ap_cnt < MAX_MON_BLOWS; ap_cnt++)
     {
-        bool obvious = FALSE;
-
-        int method;
-        int power = 0;
-        int blow_dam = 0; /* total physical damage for this blow */
-
-        cptr act = NULL;
+        bool         obvious = FALSE;
+        mon_blow_ptr blow = &r_ptr->blows[ap_cnt];
+        int          blow_dam = 0; /* total physical damage for this blow */
+        cptr         act = NULL;
 
         /* Revenge aura only gives a single retaliatory attempt per player strike
            We'll cycle thru monster attacks on each revenge strike, and the revenge
@@ -216,17 +213,13 @@ bool make_attack_normal(int m_idx)
             if (ap_cnt >= MAX_MON_BLOWS) return FALSE;
         }
 
-        /* Extract the attack infomation */
-        method = r_ptr->blows[ap_cnt].method;
-        power = r_ptr->blows[ap_cnt].power;
-
         if (!m_ptr->r_idx) break;
 
         /* Call off the attacks on the Duelist's Nemesis power */
         if (nemesis_hack) break;
 
         /* Hack -- no more attacks */
-        if (!method) break;
+        if (!blow->method) break;
 
         /* Stop if player is dead or gone (e.g. SHATTER knocks player back) */
         if (!p_ptr->playing || p_ptr->is_dead) break;
@@ -235,7 +228,7 @@ bool make_attack_normal(int m_idx)
         /* Handle "leaving" */
         if (p_ptr->leaving) break;
 
-        if (method == RBM_SHOOT)
+        if (blow->method == RBM_SHOOT)
         {
             if (retaliation_hack) break;
             continue;
@@ -252,8 +245,8 @@ bool make_attack_normal(int m_idx)
         ac = p_ptr->ac + p_ptr->to_a;
 
         /* Monster hits player */
-        if ( !r_ptr->blows[ap_cnt].effects[0].effect  /* XXX B:BEG or B:INSULT */
-          || check_hit(power, rlev, stun, m_idx))
+        if ( !blow->effects[0].effect  /* XXX B:BEG or B:INSULT */
+          || check_hit(blow->power, rlev, stun, m_idx))
         {
             /* Always disturbing */
             disturb(1, 0);
@@ -272,7 +265,7 @@ bool make_attack_normal(int m_idx)
             ht_cnt++;
 
             /* Describe the attack method */
-            switch (method)
+            switch (blow->method)
             {
             case RBM_HIT:
                 act = "hits";
@@ -406,16 +399,16 @@ bool make_attack_normal(int m_idx)
 
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
-                mon_effect_t e = r_ptr->blows[ap_cnt].effects[j];
-                int          effect_dam;
+                mon_effect_ptr effect = &blow->effects[j];
+                int            effect_dam;
 
-                if (!e.effect) break;
+                if (!effect->effect) break;
                 if (!p_ptr->playing || p_ptr->is_dead) break;
                 if (nemesis_hack) break;
                 if (p_ptr->leaving) break;
-                if (e.pct && randint1(100) > e.pct) continue;
+                if (effect->pct && randint1(100) > effect->pct) continue;
 
-                effect_dam = damroll(e.dd, e.ds);
+                effect_dam = damroll(effect->dd, effect->ds);
                 if (stun)
                     effect_dam -= effect_dam*MIN(100, stun) / 150;
 
@@ -428,7 +421,7 @@ bool make_attack_normal(int m_idx)
                 if (explode) /* XXX Explosion already causes the effect ... but then why process at all? */
                     effect_dam = 0;
 
-                switch (e.effect)
+                switch (effect->effect)
                 {
                 case RBE_SUPERHURT: /* XXX Replace with multiple HURT effects ... */
                     if ((randint1(rlev*2+300) > ac+200 || one_in_(13)) && !CHECK_MULTISHADOW())
@@ -978,9 +971,10 @@ bool make_attack_normal(int m_idx)
                     if (!explode)
                     {
                         effect_dam = reduce_melee_dam_p(effect_dam);
-                        gf_damage_p(m_idx, e.effect, effect_dam, GF_DAMAGE_ATTACK);
+                        gf_damage_p(m_idx, effect->effect, effect_dam, GF_DAMAGE_ATTACK);
                     }
                 } /* switch (effect) */
+                mon_lore_effect(m_ptr, effect);
             } /* for each effect */
             total_dam += blow_dam;
             if (explode)
@@ -1339,7 +1333,7 @@ bool make_attack_normal(int m_idx)
         else
         {
             /* Analyze failed attacks */
-            switch (method)
+            switch (blow->method)
             {
             case RBM_HIT:
             case RBM_TOUCH:
@@ -1394,7 +1388,7 @@ bool make_attack_normal(int m_idx)
             if (do_silly_attack) options |= MON_BLOW_SILLY;
             if (obvious) options |= MON_BLOW_OBVIOUS;
             if (blow_dam) options |= MON_BLOW_DAMAGE;
-            mon_lore_blows(m_ptr, ap_cnt, options);
+            mon_lore_blow(m_ptr, blow, options);
         }
 
         if (p_ptr->riding && blow_dam)

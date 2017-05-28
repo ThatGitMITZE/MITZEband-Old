@@ -1543,6 +1543,30 @@ static void _spoil_mon_melee_dam_aux(doc_ptr doc, vec_ptr v)
     vec_free(v2);
 }
 
+typedef bool (_blow_p)(mon_blow_ptr blow);
+static bool _martial_arts(mon_blow_ptr blow)
+{
+    return blow->method == RBM_KICK || blow->method == RBM_PUNCH;
+}
+
+static bool _has_blow(mon_race_ptr r, _blow_p p)
+{
+    int i;
+    for (i = 0; i < MAX_MON_BLOWS; i++)
+    {
+        mon_blow_ptr blow = &r->blows[i];
+        if (!blow->method) continue;
+        if (p(blow)) return TRUE;
+    }
+    return FALSE;
+}
+
+static bool _is_monk(mon_race_ptr r)
+{
+    if (r->d_char != 'p') return FALSE;
+    return _has_blow(r, _martial_arts);
+}
+
 static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
@@ -1556,6 +1580,7 @@ static bool _mon_dam_p(mon_race_ptr r)
 
     return !(r->flags9 & RF9_DEPRECATED);
     return TRUE;
+    return _is_monk(r);
     return r->d_char == 'C';
     return BOOL(r->flags2 & RF2_CAMELOT);
 }

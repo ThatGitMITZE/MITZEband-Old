@@ -792,9 +792,10 @@ static int _ct_known_attacks(monster_race *r_ptr)
     int i;
     for (i = 0; i < MAX_MON_BLOWS; i++)
     {
-        if (!r_ptr->blows[i].method) continue;
-        if (r_ptr->blows[i].method == RBM_SHOOT) continue;
-        if (r_ptr->r_blows[i] || _easy_lore(r_ptr)) ct++;
+        mon_blow_ptr blow = &r_ptr->blows[i];
+        if (!blow->method) continue;
+        if (blow->method == RBM_SHOOT) continue;
+        if (blow->lore || _easy_lore(r_ptr)) ct++;
     }
     return ct;
 }
@@ -814,7 +815,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
 
             if (!blow->method) continue;
             if (blow->method == RBM_SHOOT) continue;
-            if (!_easy_lore(r_ptr) && !r_ptr->r_blows[i]) continue;
+            if (!_easy_lore(r_ptr) && !blow->lore) continue;
 
             v = vec_alloc((vec_free_f)string_free);
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
@@ -822,6 +823,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
                 mon_effect_ptr effect = &blow->effects[j];
                 if (!effect->effect) continue;
                 if (effect->effect == RBE_HURT) continue;
+                if (!_easy_lore(r_ptr) && !effect->lore) continue;
                 vec_add(v, string_copy_s(_effect_desc(effect->effect)));
             }
             doc_printf(doc, "          %-7.7s",  _method_desc(blow->method));

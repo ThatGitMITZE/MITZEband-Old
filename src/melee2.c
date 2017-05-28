@@ -1575,8 +1575,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
     /* Scan through all four blows */
     for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
     {
-        bool obvious = FALSE;
-
         int method;
         int power = 0;
         int damage = 0;
@@ -1735,9 +1733,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     msg_format("%^s %s%s", m_name, act, retaliation_hack ? ".<color:g>)</color>" : ".");
 
             }
-
-            /* Hack -- assume all attacks are obvious */
-            obvious = TRUE;
 
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
@@ -1998,13 +1993,9 @@ bool mon_attack_mon(int m_idx, int t_idx)
             }
         }
 
-        {
-            int options = 0;
-            if (do_silly_attack) options |= MON_BLOW_SILLY;
-            if (obvious) options |= MON_BLOW_OBVIOUS;
-            if (damage) options |= MON_BLOW_DAMAGE;
-            mon_lore_blows(m_ptr, ap_cnt, options);
-        }
+        /* XXX Lore? I'd rather the player only lore attacks they actually experience.
+         * For one thing, the effects are different when it is monster vs monster. For 
+         * another, they are probably a bit distracted! */
 
         if (retaliation_hack)
             break;

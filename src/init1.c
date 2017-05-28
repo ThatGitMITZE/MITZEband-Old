@@ -90,6 +90,7 @@ static int _get_gf_type(cptr which)
         {"NETHER", GF_NETHER},
         {"DAM", GF_MISSILE}, /* Like HURT but with no AC damage reduction */
         {"POLYMORPH", GF_OLD_POLY},
+        {"UN_BONUS", GF_DISENCHANT},
         {0}};
     int i;
     for (i = 0;; i++)
@@ -149,6 +150,7 @@ static int _get_r_blow_effect(cptr which)
     struct { cptr name; int id; } _table[] = {
         {"HURT", RBE_HURT},
         {"DRAIN_CHARGES", RBE_DRAIN_CHARGES},
+        {"UN_POWER", RBE_DRAIN_CHARGES},
         {"EAT_GOLD", RBE_EAT_GOLD},
         {"EAT_ITEM", RBE_EAT_ITEM},
         {"EAT_FOOD", RBE_EAT_FOOD},
