@@ -311,6 +311,7 @@ static void compact_monsters_aux(int i1, int i2)
 
     /* Old monster */
     m_ptr = &m_list[i1];
+    m_ptr->id = i2;
 
     /* Location */
     y = m_ptr->fy;
@@ -825,6 +826,7 @@ s16b m_pop(void)
         m_max++;
         m_cnt++;
         WIPE(&m_list[i], monster_type);
+        m_list[i].id = i;
         return (i);
     }
     /* Recycle dead monsters */
@@ -835,6 +837,7 @@ s16b m_pop(void)
         if (m_ptr->r_idx) continue;
         m_cnt++;
         WIPE(m_ptr, monster_type);
+        m_ptr->id = i;
         return (i);
     }
 

@@ -383,7 +383,6 @@ static errr _parse_q_info(char *line, int options)
         int   flag_ct = z_string_split(line + 2, flags, 10, "|");
         int   i;
 
-        trim_tokens(flags, flag_ct);
         for (i = 0; i < flag_ct; i++)
         {
             char* flag = flags[i];

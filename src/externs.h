@@ -989,6 +989,7 @@ extern errr init_v_info(int options);
 extern int parse_lookup_monster(cptr name, int options);
 extern int parse_lookup_artifact(cptr name, int options);
 extern int parse_lookup_dungeon(cptr name, int options);
+extern int parse_summon_type(cptr token);
 extern errr parse_room_line(room_ptr room, char *line, int options);
 extern errr parse_room_grid(char *buf, room_grid_ptr grid, int options);
 
@@ -2143,6 +2144,7 @@ extern void revenge_spell(void);
 extern void revenge_store(int dam);
 extern bool teleport_barrier(int m_idx);
 extern bool magic_barrier(int m_idx);
+extern bool magic_barrier_aux(mon_ptr m_ptr);
 extern bool multiply_barrier(int m_idx);
 
 /* personalities.c */
@@ -2470,6 +2472,7 @@ extern bool     psion_check_foresight(void);
 
 extern bool     psion_disruption(void);
 extern bool     psion_check_disruption(int m_idx);
+extern bool     psion_check_disruption_aux(mon_ptr m_ptr);
 
 extern bool     psion_drain(void);
 extern int      psion_do_drain(int spell_idx, int dam);

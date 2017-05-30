@@ -1304,7 +1304,7 @@ static void _prep_name(char *dest, const char *src)
    specifying room_grid_t
  */
 static const char *_summon_specific_types[] = {
-    "XXX",
+    "MONSTER",
     "ANT",
     "SPIDER",
     "HOUND",
@@ -1389,6 +1389,16 @@ static const char *_summon_specific_types[] = {
     0,
 };
 
+int parse_summon_type(cptr token)
+{
+    int i;
+    for (i = 0;; i++)
+    {
+        if (!_summon_specific_types[i]) return 0;
+        if (strcmp(_summon_specific_types[i], token) == 0) return i;
+    }
+}
+        
 int parse_lookup_monster(cptr name, int options)
 {
     int i;
@@ -1491,7 +1501,6 @@ static errr _parse_room_grid_monster(char **args, int arg_ct, room_grid_ptr grid
         int   flag_ct = z_string_split(args[1], flags, 10, "|");
         int   i;
 
-        trim_tokens(flags, flag_ct);
         for (i = 0; i < flag_ct; i++)
         {
             char* flag = flags[i];
@@ -1695,7 +1704,6 @@ static errr _parse_room_grid_object(char **args, int arg_ct, room_grid_ptr grid,
         int   flag_ct = z_string_split(args[1], flags, 10, "|");
         int   i;
 
-        trim_tokens(flags, flag_ct);
         for (i = 0; i < flag_ct; i++)
         {
             char* flag = flags[i];
@@ -1949,7 +1957,6 @@ static errr _parse_room_grid_feature(char* name, char **args, int arg_ct, room_g
         int   flag_ct = z_string_split(args[0], flags, 10, "|");
         int   i;
 
-        trim_tokens(flags, flag_ct);
         for (i = 0; i < flag_ct; i++)
         {
             char* flag = flags[i];
@@ -2051,7 +2058,6 @@ static errr _parse_room_flags(char* buf, room_ptr room)
     int   flag_ct = z_string_split(buf, flags, 10, "|");
     int   i;
 
-    trim_tokens(flags, flag_ct);
     for (i = 0; i < flag_ct; i++)
     {
         char* flag = flags[i];
@@ -3577,7 +3583,7 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
     return (1);
 }
 
-
+#if 0
 /*
  * Grab one (spell) flag in a monster_race from a textual string
  */
@@ -3599,6 +3605,7 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
     /* Failure */
     return (1);
 }
+#endif
 
 /*
  * b_info for monster body types
@@ -3928,6 +3935,36 @@ static errr parse_mon_auras(char *buf, mon_race_ptr r_ptr)
         }
     }
 
+    return rc;
+}
+static errr parse_mon_spells(char *buf, mon_race_ptr race)
+{
+    errr  rc = 0;
+    char *tokens[10];
+    int   token_ct = z_string_split(buf, tokens, 10, "|");
+    int   i, n;
+
+    assert(race->spells);
+
+    for (i = 0; i < token_ct; i++)
+    {
+        char *token = tokens[i];
+
+        if (!strlen(token)) continue;
+
+        if (1 == sscanf(token, "1_IN_%d", &n))
+            race->spells->freq = 100 / n;
+        else if (1 == sscanf(token, "FREQ_%d", &n))
+            race->spells->freq = n;
+        else if (1 == sscanf(token, "POWER_%d", &n))
+            race->spells->dam_pct = n;
+        else
+        {
+            rc = mon_spells_parse(race->spells, race->level, token);
+            if (rc)
+                return rc;
+        }
+    }
     return rc;
 }
 /*
@@ -4261,40 +4298,9 @@ errr parse_r_info(char *buf, header *head)
     /* Process 'S' for "Spell Flags" (multiple lines) */
     else if (buf[0] == 'S')
     {
-        /* Parse every entry */
-        for (s = buf + 2; *s; )
-        {
-                /* Find the end of this entry */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
-
-                /* Nuke and skip any dividers */
-            if (*t)
-            {
-                *t++ = '\0';
-                while ((*t == ' ') || (*t == '|')) t++;
-            }
-
-                /* XXX XXX XXX Hack -- Read spell frequency */
-            if (1 == sscanf(s, "1_IN_%d", &i))
-            {
-                r_ptr->freq_spell = 100 / i;
-                s = t;
-                continue;
-            }
-
-            if (1 == sscanf(s, "FREQ_%d", &i))
-            {
-                r_ptr->freq_spell = i;
-                s = t;
-                continue;
-            }
-
-                /* Parse this entry */
-            if (0 != grab_one_spell_flag(r_ptr, s)) return (5);
-
-                /* Start the next entry */
-            s = t;
-        }
+        if (!r_ptr->spells)
+            r_ptr->spells = mon_spells_alloc();
+        return parse_mon_spells(buf + 2, r_ptr);
     }
     /* O:DROP_WARRIOR */
     else if (buf[0] == 'O')

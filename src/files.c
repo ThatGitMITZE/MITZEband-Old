@@ -228,6 +228,7 @@ int z_string_split(char *buf, char **tokens, int max, cptr delim)
     }
 
     tokens[i++] = s;
+    trim_tokens(tokens, i);
     return i;
 }
 
@@ -293,8 +294,6 @@ int parse_args(char *buf, char **name, char **args, int max)
 
     *t++ = '\0';
     ct = z_string_split(s, args, max, ",");
-
-    trim_tokens(args, ct);
     return ct;
 }
 

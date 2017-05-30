@@ -2519,7 +2519,6 @@ static void process_monster(int m_idx)
         int freq = r_ptr->freq_spell;
         int freq_n = 100 / r_ptr->freq_spell; /* recover S:1_IN_X field */
         pack_info_t *pack_ptr = pack_info_ptr(m_idx);
-        bool ticked_off = m_ptr->anger ? TRUE : FALSE;  /* XXX Pass anger to spell selector ... */
         bool blocked_magic = FALSE;
 
         if (is_glyph_grid(&cave[py][px]))
@@ -2611,7 +2610,7 @@ static void process_monster(int m_idx)
             {
                 /* Attempt to cast a spell */
                 /* Being Ticked Off will affect spell selection */
-                if (aware && make_attack_spell(m_idx, ticked_off))
+                if (aware && mon_spell_cast(m_ptr, NULL))
                 {
                     m_ptr->anger = 0;
                     return;
@@ -2620,14 +2619,17 @@ static void process_monster(int m_idx)
                  * Attempt to cast a spell at an enemy other than the player
                  * (may slow the game a smidgeon, but I haven't noticed.)
                  */
-                if (mon_spell_mon(m_idx, 0)) return;
+                if (mon_spell_cast_mon(m_ptr, NULL))
+                    return;
             }
             else
             {
                 /* Attempt to do counter attack at first */
-                if (mon_spell_mon(m_idx, 0)) return;
+                if (mon_spell_cast_mon(m_ptr, NULL))
+                    return;
 
-                if (aware && make_attack_spell(m_idx, FALSE)) return;
+                if (aware && mon_spell_cast(m_ptr, NULL))
+                    return;
             }
         }
     }
@@ -3487,7 +3489,7 @@ static void process_monster(int m_idx)
         /* Try to cast spell again */
         if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
         {
-            if (make_attack_spell(m_idx, FALSE)) return;
+            if (mon_spell_cast(m_ptr, NULL)) return;
         }
     }
 

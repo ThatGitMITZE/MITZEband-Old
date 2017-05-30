@@ -936,6 +936,7 @@ static vec_ptr _get_classes_aux(int ids[])
     {
         int id = ids[i];
         if (id == -1) break;
+        if (id == CLASS_BLUE_MAGE) continue; /* broken ... but needs rewrite anyway */
         if (!_is_valid_race_class(p_ptr->prace, id)) continue;
         vec_add(v, get_class_aux(id, 0));
     }

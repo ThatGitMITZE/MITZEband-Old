@@ -1440,7 +1440,7 @@ bool make_attack_spell(int m_idx, bool ticked_off)
     bool can_use_lite_area = FALSE;
 
     bool can_remember;
-
+return FALSE;
     /* Cannot cast spells when confused */
     if (MON_CONFUSED(m_ptr))
     {

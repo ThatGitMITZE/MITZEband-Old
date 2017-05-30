@@ -13,6 +13,7 @@ enum
 #define DIR_RANDOM  10
 
 typedef struct monster_type mon_t, *mon_ptr;
+typedef struct monster_race mon_race_t, *mon_race_ptr;
 typedef struct py_throw_s py_throw_t, *py_throw_ptr;
 
 struct py_throw_s

@@ -2439,7 +2439,8 @@ enum {
  * Exact numeric values are saved in v_info.raw so don't change/remove/reorder.
  */
 enum summon_specific_e {
-    SUMMON_ANT = 1,
+    SUMMON_MONSTER = 0,
+    SUMMON_ANT,
     SUMMON_SPIDER,
     SUMMON_HOUND,
     SUMMON_HYDRA,

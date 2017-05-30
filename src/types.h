@@ -462,7 +462,7 @@ struct monster_body_s
 typedef struct monster_body_s monster_body_t;
 
 
-typedef struct monster_race monster_race, *mon_race_ptr;
+typedef struct monster_race monster_race;
 
 #define MON_AC(r_ptr, m_ptr) MAX((r_ptr)->ac + (m_ptr)->ac_adj, 0)
 #define MON_MELEE_LVL(r_ptr, m_ptr) MAX(((r_ptr)->melee_level ? (r_ptr)->melee_level : (r_ptr)->level) + (m_ptr)->melee_adj, 1)
@@ -486,6 +486,7 @@ struct monster_race
     byte freq_spell;          /* Spell frequency */
     byte drop_theme;
 
+    mon_spells_ptr spells;
     u32b flags1;              /* Flags 1 (general) */
     u32b flags2;              /* Flags 2 (abilities) */
     u32b flags3;              /* Flags 3 (race/resist) */
@@ -657,6 +658,7 @@ typedef struct monster_type monster_type;
 
 struct monster_type
 {
+    int  id;
     s16b r_idx;        /* Monster race index */
     s16b ap_r_idx;        /* Monster race appearance index */
     byte sub_align;        /* Sub-alignment for a neutral monster */

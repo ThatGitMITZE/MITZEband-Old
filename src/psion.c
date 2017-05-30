@@ -167,9 +167,13 @@ bool psion_disruption(void)
 
 bool psion_check_disruption(int m_idx)
 {
+    monster_type *m_ptr = &m_list[m_idx];
+    return psion_check_disruption_aux(m_ptr);
+}
+bool psion_check_disruption_aux(mon_ptr m_ptr)
+{
     if (psion_disruption())
     {
-        monster_type *m_ptr = &m_list[m_idx];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         int           pl = p_ptr->lev + 8*p_ptr->magic_num2[_DISRUPTION];
 

@@ -1433,7 +1433,7 @@ static void _possessor_stats_table(FILE* fp)
 
         /*XXX if (r_ptr->flags9 & RF9_DROP_CORPSE)*/
         {
-            int ac = 0, dam = 0, attacks = 0, j;
+            int ac = 0, dam = 0, attacks = 0/*, j*/;
 
             if (r_ptr->flags9 & RF9_POS_GAIN_AC)
                 ac = r_ptr->ac;
