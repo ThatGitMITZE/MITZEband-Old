@@ -1684,6 +1684,18 @@ void do_cmd_debug(void)
         teleport_player(10, 0L);
         break;
 
+    /* Wizard Probe */
+    case 'P':
+        if (target_who > 0)
+        {
+            mon_ptr mon = &m_list[target_who];
+            doc_ptr doc = doc_alloc(80);
+            mon_spell_wizard(mon, NULL, doc);
+            doc_display(doc, "Spells", 0);
+            doc_free(doc);
+            do_cmd_redraw();
+        }
+        break;
     case 'q':
     {
         quests_wizard();
@@ -1693,6 +1705,12 @@ void do_cmd_debug(void)
     case 's':
         if (command_arg <= 0) command_arg = 1;
         do_cmd_wiz_summon(command_arg);
+        break;
+
+    case 'S':
+#ifdef ALLOW_SPOILERS
+        generate_spoilers();
+#endif
         break;
 
     /* Teleport */
@@ -1757,12 +1775,6 @@ void do_cmd_debug(void)
     /* Zap Monsters (Omnicide) */
     case 'Z':
         do_cmd_wiz_zap_all();
-        break;
-
-    case 'S':
-#ifdef ALLOW_SPOILERS
-        generate_spoilers();
-#endif
         break;
 
     case '-':

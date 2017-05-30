@@ -44,9 +44,9 @@ enum {
     MSP_DICE,     /* for damage or duration of timed effects */
     MSP_HP_PCT,   /* percentage of chp for damage up to a max */
 };
-typedef struct {  /* XdY+Z */
-    byte dd;
-    byte ds;
+typedef struct {  /* XdY+Z ... Note: Mana Bolt needs a very high ds */
+    s16b dd;
+    s16b ds;     
     s16b base;
 } dice_t;
 typedef struct {  /* MIN(m->chp*pct/100, max) */
@@ -65,7 +65,6 @@ extern mon_spell_parm_t mon_spell_parm_dice(int dd, int ds, int base);
 extern mon_spell_parm_t mon_spell_parm_hp_pct(int pct, int max);
 extern mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev);
 extern errr             mon_spell_parm_parse(mon_spell_parm_ptr parm, char *token);
-extern void             mon_spell_parm_print(mon_spell_parm_ptr parm, string_ptr s);
 
 /* Casting information for a spell (idea from Vanilla) */
 typedef struct {
@@ -89,6 +88,7 @@ typedef struct {
 
 extern errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token);
 extern void mon_spell_print(mon_spell_ptr spell, string_ptr s);
+extern void mon_spell_doc(mon_spell_ptr spell, doc_ptr doc);
 
 /* A collection of related spells, grouped together for tactical purposes.
  * Each tactical group has a dynamic probability depending on the current
@@ -103,10 +103,8 @@ typedef struct {
 
 extern mon_spell_group_ptr mon_spell_group_alloc(void);
 extern void mon_spell_group_free(mon_spell_group_ptr group);
-extern void mon_spell_group_prep(mon_spell_group_ptr group);
 extern void mon_spell_group_add(mon_spell_group_ptr group, mon_spell_ptr spell);
 extern mon_spell_ptr mon_spell_group_find(mon_spell_group_ptr group, mon_spell_id_t id);
-extern mon_spell_ptr mon_spell_group_random(mon_spell_group_ptr group);
 
 typedef struct {
     byte freq;
@@ -120,6 +118,7 @@ extern void           mon_spells_free(mon_spells_ptr spells);
 extern void           mon_spells_add(mon_spells_ptr spells, mon_spell_ptr spell);
 extern errr           mon_spells_parse(mon_spells_ptr spells, int rlev, char *token);
 extern vec_ptr        mon_spells_all(mon_spells_ptr spells);
+extern mon_spell_ptr  mon_spells_find(mon_spells_ptr spells, mon_spell_id_t id);
 extern mon_spell_ptr  mon_spells_random(mon_spells_ptr spells); /* stupid monsters */
 
 /* Finally, it is time to cast a spell!
@@ -132,7 +131,8 @@ typedef struct {
     char          name[MAX_NLEN];
     mon_race_ptr  race;
     mon_spell_ptr spell;
-    point_t       target;
+    point_t       src;
+    point_t       dest;
 } mon_spell_cast_t, *mon_spell_cast_ptr;
 
 /* Allow clients to plug in a smarter/alternative AI */
@@ -140,6 +140,7 @@ typedef bool (*mon_spell_ai)(mon_spell_cast_ptr cast);
 
 extern bool           mon_spell_cast(mon_ptr mon, mon_spell_ai ai);
 extern bool           mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai);
+extern void           mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc);
 extern mon_spell_ptr  mon_spell_find(mon_race_ptr race, mon_spell_id_t id);
 
 /* Some classes need to know what spell is being cast, and who is doing it: */

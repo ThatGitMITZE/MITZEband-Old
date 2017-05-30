@@ -44,8 +44,7 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
     char buf[128];
     int  which;
 
-    WIPE(m_ptr, monster_type);
-
+    assert(m_ptr->id);
     m_ptr->r_idx = savefile_read_s16b(file);
     m_ptr->ap_r_idx = m_ptr->r_idx;
     m_ptr->fy = savefile_read_byte(file);

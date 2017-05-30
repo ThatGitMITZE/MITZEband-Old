@@ -2409,7 +2409,7 @@ static void process_monster(int m_idx)
         {
             if (!p_ptr->inside_arena && !p_ptr->inside_battle)
             {
-                if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
+                if (r_ptr->spells && (randint1(100) <= r_ptr->spells->freq))
                 {
                     int  k, count = 0;
                     int  rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -2514,19 +2514,15 @@ static void process_monster(int m_idx)
     } */
 
     /* Try to cast spell occasionally */
-    if (r_ptr->freq_spell)
+    if (r_ptr->spells)
     {
-        int freq = r_ptr->freq_spell;
-        int freq_n = 100 / r_ptr->freq_spell; /* recover S:1_IN_X field */
+        int freq = r_ptr->spells->freq;
         pack_info_t *pack_ptr = pack_info_ptr(m_idx);
         bool blocked_magic = FALSE;
 
         if (is_glyph_grid(&cave[py][px]))
         {
-            freq_n -= 2;
-            if (freq_n < 2)
-                freq_n = 2;
-            freq = MAX(freq + 5 + r_ptr->level/10, 100 / freq_n);
+            freq = MAX(30, freq + 10);
         }
         else if (pack_ptr)
         {
@@ -2534,25 +2530,15 @@ static void process_monster(int m_idx)
             {
             case AI_SHOOT:
             case AI_MAINTAIN_DISTANCE:
-                freq_n -= 2;
-                if (freq_n < 2)
-                    freq_n = 2;
-                freq = MAX(freq + 15, 100 / freq_n);
+                freq = MAX(30, freq + 15);
                 break;
             case AI_LURE:
             case AI_FEAR:
             case AI_GUARD_POS:
-                freq_n -= 1;
-                if (freq_n < 2)
-                    freq_n = 2;
-                freq = MAX(freq + 10, 100 / freq_n);
+                freq = MAX(30, freq + 10);
                 break;
             }
         }
-
-        /* Cap spell frequency at 75% or twice the natural frequency */
-        freq = MIN(freq, MAX(75, r_ptr->freq_spell));
-        freq = MIN(freq, 2*r_ptr->freq_spell);
 
         /* But angry monsters will eventually spell if they get too pissed off */
         freq += m_ptr->anger;
@@ -2565,7 +2551,7 @@ static void process_monster(int m_idx)
 
             /* Monsters that spell 1 in 1 get a save on each action. Make the
                save and the spell is broken. Fail, and a turn is lost. */
-            if (r_ptr->freq_spell == 100)
+            if (r_ptr->spells->freq == 100)
             {
                 if (!mon_save_p(m_ptr->r_idx, A_STR))
                 {
@@ -2588,7 +2574,7 @@ static void process_monster(int m_idx)
             }
         }
 
-        if (!blocked_magic && r_ptr->freq_spell && randint1(100) <= freq)
+        if (!blocked_magic && randint1(100) <= freq)
         {
             bool counterattack = FALSE;
 
@@ -3487,7 +3473,7 @@ static void process_monster(int m_idx)
     if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
     {
         /* Try to cast spell again */
-        if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
+        if (r_ptr->spells && randint1(100) <= r_ptr->spells->freq)
         {
             if (mon_spell_cast(m_ptr, NULL)) return;
         }

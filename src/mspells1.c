@@ -842,13 +842,13 @@ static bool spell_anti_magic(byte spell)
     return (FALSE);
 }
 
-static bool anti_magic_check(void)
+int anti_magic_check(void)
 {
     if (p_ptr->anti_magic)
-        return FALSE;
+        return 0;
 
     if (p_ptr->tim_no_spells)
-        return FALSE;
+        return 0;
 
     switch (p_ptr->pclass)
     {
@@ -857,13 +857,13 @@ static bool anti_magic_check(void)
     case CLASS_WEAPONSMITH:
     case CLASS_ARCHER:
     case CLASS_CAVALRY:
-        return FALSE;
+        return 0;
 
     case CLASS_TOURIST:
-        return one_in_(20);
+        return 10;
 
     case CLASS_DUELIST:
-        return one_in_(10);
+        return 10;
 
     case CLASS_ROGUE:
     case CLASS_SCOUT:
@@ -876,22 +876,55 @@ static bool anti_magic_check(void)
     case CLASS_BEASTMASTER:
     case CLASS_BLOOD_KNIGHT:
     case CLASS_MAULER:
-        return one_in_(5);
+        return 20;
 
     case CLASS_MINDCRAFTER:
     case CLASS_IMITATOR:
     case CLASS_FORCETRAINER:
     case CLASS_PSION:
-        return one_in_(3);
+        return 30;
 
     case CLASS_MAGIC_EATER:
     case CLASS_RED_MAGE:
     case CLASS_DEVICEMASTER:
-        return one_in_(2);
+        return 50;
+    case CLASS_MONSTER:
+        switch (p_ptr->prace)
+        {
+        case RACE_MON_LICH:
+        case RACE_MON_BEHOLDER:
+        case RACE_MON_QUYLTHULG:
+        case RACE_MON_RING:
+            return 100;
+
+        case RACE_MON_POSSESSOR:
+        case RACE_MON_MIMIC:
+            return 10; /* XXX Depends on current_r_idx */
+
+        case RACE_MON_DRAGON:
+        case RACE_MON_ANGEL:
+        case RACE_MON_DEMON:
+        case RACE_MON_LEPRECHAUN:
+        case RACE_MON_VAMPIRE:
+            return 50;
+
+        case RACE_MON_JELLY:
+        case RACE_MON_SPIDER:
+        case RACE_MON_XORN:
+        case RACE_MON_HOUND:
+        case RACE_MON_GIANT:
+        case RACE_MON_HYDRA:
+        case RACE_MON_TROLL:
+        case RACE_MON_ELEMENTAL:
+        case RACE_MON_SWORD:
+        case RACE_MON_GOLEM:
+        case RACE_MON_CENTIPEDE:
+        case RACE_MON_VORTEX:
+            return 0;
+        }
     }
 
-    /* Everybody else always gets it! */
-    return TRUE;
+    return 10;
 }
 
 /*
