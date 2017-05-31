@@ -2476,7 +2476,7 @@ extern bool     psion_check_disruption(int m_idx);
 extern bool     psion_check_disruption_aux(mon_ptr m_ptr);
 
 extern bool     psion_drain(void);
-extern int      psion_do_drain(int spell_idx, int dam);
+extern int      psion_do_drain(int dam);
 
 
 extern void     rage_mage_browse_spell(void);

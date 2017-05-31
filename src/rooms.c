@@ -1814,7 +1814,7 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
         place_monster_aux(0, p.y, p.x, grid->monster, mode | PM_NO_KAGE);
         if (grid->flags & ROOM_GRID_MON_CLONED)
         {
-            m_list[hack_m_idx_ii].smart |= SM_CLONED;
+            m_list[hack_m_idx_ii].smart |= (1U << SM_CLONED);
 
             /* Make alive again for real unique monster */
             r_info[grid->monster].cur_num = old_cur_num;

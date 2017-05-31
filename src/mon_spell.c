@@ -1458,6 +1458,7 @@ static bool _curse_save(void)
     int odds = _curse_save_odds();
     return randint0(100) < odds;
 }
+static bool _projectable(point_t src, point_t dest);
 static void _annoy(void)
 {
     _custom_msg(_current.spell);
@@ -1528,6 +1529,25 @@ static void _annoy(void)
         else
             set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         break;
+    case ANNOY_TELE_TO:
+        /* Only powerful monsters can choose this spell when the player is not in
+           los. In this case, it is nasty enough to warrant a saving throw. */
+        if (!_projectable(_current.src, _current.dest) && _curse_save())
+            msg_print("You resist the effects!");
+        else if (res_save_default(RES_TELEPORT))
+            msg_print("You resist the effects!");
+        else
+            teleport_player_to(_current.src.y, _current.src.x, TELEPORT_PASSIVE);
+        break;
+    case ANNOY_TRAPS:
+        trap_creation(_current.dest.y, _current.dest.x);
+        break;
+    case ANNOY_WORLD: {
+        int who = 0;
+        if (_current.mon->id == MON_DIO) who = 1; /* XXX Seriously?! */
+        else if (_current.mon->id == MON_WONG) who = 3;
+        process_the_world(randint1(2)+2, who, TRUE);
+        break; }
     }
     /* XXX this sort of stuff needs to be a class hook ... */
     if (p_ptr->tim_spell_reaction && !p_ptr->fast)
@@ -1630,10 +1650,14 @@ static void _escape(void)
             msg_print("You resist the effects!");
         else
             teleport_player_away(_current.mon->id, 100);
+        update_smart_learn(_current.mon->id, RES_TELEPORT);
         break;
     case ESCAPE_TELE_LEVEL:
         if (res_save_default(RES_NEXUS) || _curse_save())
+        {
             msg_print("You resist the effects!");
+            update_smart_learn(_current.mon->id, RES_NEXUS);
+        }
         else
             teleport_level(0);
         break;
@@ -1692,6 +1716,10 @@ static void _summon(void)
         );
     }
 }
+static void _weird(void)
+{
+}
+
 static void _spell_cast_aux(void)
 {
     disturb(1, 0);
@@ -1712,6 +1740,7 @@ static void _spell_cast_aux(void)
     case MST_ESCAPE:  _escape();  break;
     case MST_HEAL:    _heal();    break;
     case MST_SUMMON:  _summon();  break;
+    case MST_WEIRD:   _weird();   break;
     }
 }
 
@@ -1858,12 +1887,69 @@ static mon_spell_ptr _find_spell(mon_spells_ptr spells, _spell_p p)
     return NULL;
 }
 
+static bool _have_smart_flag(u32b flags, int which)
+{
+    return BOOL(flags & (1U << which));
+}
+
+static void _smart_remove_aux(mon_spell_group_ptr group, u32b flags)
+{
+    int i;
+    if (!group) return;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        _gf_info_ptr  gf = _gf_lookup(spell->id.effect);
+        assert(gf);
+        if (gf->resist != RES_INVALID && _have_smart_flag(flags, gf->resist))
+        {
+            int pct = res_pct(gf->resist);
+            int tweak = 100 - pct;
+            spell->prob = MIN(200, spell->prob*tweak/100);
+        }
+    }
+}
+
+static void _remove_spell(mon_spells_ptr spells, mon_spell_id_t id)
+{
+    mon_spell_ptr spell = mon_spells_find(spells, id);
+    if (spell)
+        spell->prob = 0;
+}
+
+static void _smart_remove(mon_spell_cast_ptr cast)
+{
+    mon_spells_ptr spells = cast->race->spells;
+    u32b           flags = cast->mon->smart;
+
+    if (smart_cheat) flags = 0xFFFFFFFF;
+    _smart_remove_aux(spells->groups[MST_BREATHE], flags);
+    _smart_remove_aux(spells->groups[MST_BALL], flags);
+    if (_have_smart_flag(flags, SM_REFLETION) && p_ptr->reflect)
+        _remove_group(spells->groups[MST_BOLT], NULL);
+    else
+        _smart_remove_aux(spells->groups[MST_BOLT], flags);
+    _smart_remove_aux(spells->groups[MST_BEAM], flags);
+
+    if (_have_smart_flag(flags, SM_FREE_ACTION) && p_ptr->free_act)
+    {
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_PARALYZE));
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_SLOW));
+    }
+    if (_have_smart_flag(flags, SM_DRAIN_MANA) && !p_ptr->csp)
+        _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
+}
+
 static void _remove_bad_spells(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
     bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
+
+    /* Apply monster knowledge of player's strengths and weaknesses */
+    if (!stupid && (smart_cheat || smart_learn))
+        _smart_remove(cast);
 
     /* Require a projectable player for projection spells. Even stupid
      * monsters are dumb enough to bounce spells off walls! Non-stupid
@@ -1914,34 +2000,48 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 
     /* When wounded, skew the spell probabilities away from offense
      * and trickery to summoning, healing and escape tactics. Make
-     * this transition gradual. */
-    if (smart)
+     * this transition gradual but allow smart monsters to panic near
+     * death. */
+    if ( spells->groups[MST_HEAL]
+      || spells->groups[MST_ESCAPE]
+      || spells->groups[MST_SUMMON] )
     {
         int pct_healthy = cast->mon->hp * 100 / cast->mon->maxhp;
         int pct_wounded = 100 - pct_healthy;
-
-        if (pct_wounded > 20 && randint0(150) < pct_wounded)
+        if (pct_wounded > 20)
         {
-            _adjust_group(spells->groups[MST_BREATHE], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_BALL], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_BOLT], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_BEAM], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_CURSE], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_BIFF], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_ANNOY], NULL, pct_healthy);
-            _adjust_group(spells->groups[MST_WEIRD], NULL, pct_healthy);
+            int offence = pct_healthy;
+            int panic = 5 * pct_wounded;
+            if (smart && pct_wounded > 90 && one_in_(2))
+            {
+                offence = 0;
+                panic *= 3;
+                _adjust_group(spells->groups[MST_SUMMON], NULL, 5*pct_wounded);
+            }
+            _adjust_group(spells->groups[MST_BREATHE], NULL, offence);
+            _adjust_group(spells->groups[MST_BALL], NULL, offence);
+            _adjust_group(spells->groups[MST_BOLT], NULL, offence);
+            _adjust_group(spells->groups[MST_BEAM], NULL, offence);
+            _adjust_group(spells->groups[MST_CURSE], NULL, offence);
+            _adjust_group(spells->groups[MST_BIFF], NULL, offence);
+            _adjust_group(spells->groups[MST_ANNOY], NULL, offence);
+            _adjust_group(spells->groups[MST_WEIRD], NULL, offence);
 
-            _adjust_group(spells->groups[MST_SUMMON], NULL, 5*pct_wounded);
-            _adjust_group(spells->groups[MST_HEAL], NULL, 10*pct_wounded);
-            _adjust_group(spells->groups[MST_ESCAPE], NULL, 8*pct_wounded);
+            _adjust_group(spells->groups[MST_HEAL], NULL, panic);
+            _adjust_group(spells->groups[MST_ESCAPE], NULL, panic);
         }
-        else if (pct_wounded < 20)
+        else /*if (pct_wounded <= 20)*/
+        {
             _remove_group(spells->groups[MST_HEAL], NULL);
+            _remove_group(spells->groups[MST_ESCAPE], NULL);
+        }
+    }
 
+    if (smart)
+    {
         spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
         if (spell && TELE_LEVEL_IS_INEFF(0))
             spell->prob = 0;
-
         spell = mon_spells_find(spells, _id(MST_BIFF, BIFF_DISPEL_MAGIC));
         if (spell)
             spell->prob = dispel_check(cast->mon->id) ? 50 : 0;
@@ -1949,14 +2049,20 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         if (spell)
             spell->prob = anti_magic_check();
     }
-    else if (cast->mon->hp == cast->mon->maxhp)
-        _remove_group(spells->groups[MST_HEAL], NULL);
+    spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_TO));
+    if (spell)
+    {
+        if (_distance(cast->src, cast->dest) < 2)
+            spell->prob = 0;
+        else
+            spell->prob += cast->mon->anger;
+    }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_WORLD));
     if (spell && world_monster) /* prohibit if already cast */
         spell->prob = 0;
 
-    /* Blink away if too close and good offense available (was 75%) */
+    /* Blink away if too close and good offense available */
     spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_BLINK));
     if (spell && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
         spell->prob = 100;

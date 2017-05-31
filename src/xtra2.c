@@ -625,7 +625,7 @@ static bool _mon_is_wanted(int m_idx)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED))
+    if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & (1U << SM_CLONED)))
     {
         int i;
         for (i = 0; i < MAX_KUBI; i++)
@@ -792,7 +792,7 @@ void monster_death(int m_idx, bool drop_item)
 
     u32b mo_mode = 0L;
 
-    bool cloned = (m_ptr->smart & SM_CLONED) ? TRUE : FALSE;
+    bool cloned = (m_ptr->smart & (1U << SM_CLONED)) ? TRUE : FALSE;
     bool do_vampire_servant = FALSE;
     char m_name[MAX_NLEN];
     int corpse_chance = 3;
@@ -2353,7 +2353,7 @@ void mon_check_kill_unique(int m_idx)
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!(m_ptr->smart & SM_CLONED))
+    if (!(m_ptr->smart & (1U << SM_CLONED)))
     {
         /* When the player kills a Unique, it stays dead */
         if (r_ptr->flags1 & RF1_UNIQUE)
@@ -2538,7 +2538,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
             if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
         }
 
-        if (!(m_ptr->smart & SM_CLONED))
+        if (!(m_ptr->smart & (1U << SM_CLONED)))
         {
             /* When the player kills a Unique, it stays dead */
             if (r_ptr->flags1 & RF1_UNIQUE)
@@ -3758,7 +3758,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
                 strcat(out_val, "(Pet) ");
             else if (is_friendly(m_ptr))
                 strcat(out_val, "(Friendly) ");
-            else if (m_ptr->smart & SM_CLONED)
+            else if (m_ptr->smart & (1U << SM_CLONED))
                 strcat(out_val, "(Clone) ");
             if (display_distance)
                 sprintf(out_val + strlen(out_val), "(Rng %d) ", m_ptr->cdis);

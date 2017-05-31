@@ -28,15 +28,15 @@ int project_length = 0;
  */
 bool allow_ticked_off(monster_race *r_ptr)
 {
-    if (r_ptr->flags4 & RF4_ATTACK_MASK)
+    if (!r_ptr->spells) return FALSE;
+    if ( r_ptr->spells->groups[MST_BREATHE]
+      || r_ptr->spells->groups[MST_BALL]
+      || r_ptr->spells->groups[MST_BOLT]
+      || r_ptr->spells->groups[MST_BEAM]
+      || r_ptr->spells->groups[MST_SUMMON] )
+    {
         return TRUE;
-
-    if (r_ptr->flags5 & RF5_WORTHY_ATTACK_MASK)
-        return TRUE;
-
-    if (r_ptr->flags6 & (RF6_ATTACK_MASK | RF6_WORTHY_SUMMON_MASK))
-        return TRUE;
-
+    }
     return FALSE;
 }
 
@@ -1833,25 +1833,25 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (touch) msg_print("You are <color:G>dissolved</color>!");
         else if (fuzzy) msg_print("You are hit by acid!");
         result = acid_dam(dam, m_name, _mon_spell_hack);
-        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_ACID);
+        update_smart_learn(who, RES_ACID);
         break;
     case GF_FIRE:
         if (touch) msg_print("You are <color:r>burned</color>!");
         else if (fuzzy) msg_print("You are hit by fire!");
         result = fire_dam(dam, m_name, _mon_spell_hack);
-        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_FIRE);
+        update_smart_learn(who, RES_FIRE);
         break;
     case GF_COLD:
         if (touch) msg_print("You are <color:W>frozen</color>!");
         else if (fuzzy) msg_print("You are hit by cold!");
         result = cold_dam(dam, m_name, _mon_spell_hack);
-        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_COLD);
+        update_smart_learn(who, RES_COLD);
         break;
     case GF_ELEC:
         if (touch) msg_print("You are <color:b>shocked</color>!");
         else if (fuzzy) msg_print("You are hit by lightning!");
         result = elec_dam(dam, m_name, _mon_spell_hack);
-        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_ELEC);
+        update_smart_learn(who, RES_ELEC);
         break;
     case GF_POIS:
         if (touch) msg_print("You are <color:G>poisoned</color>!");
@@ -1866,7 +1866,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         set_poisoned(p_ptr->poisoned + dam, FALSE);
         if (!res_save_default(RES_POIS) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
             do_dec_stat(A_CON);
-        if (flags & GF_DAMAGE_ATTACK) update_smart_learn(who, DRS_POIS);
+        update_smart_learn(who, RES_POIS);
         break;
     case GF_NUKE:
         if (touch) msg_print("You are <color:G>irradiated</color>!");
@@ -1887,6 +1887,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             }
             if (!touch) inven_damage(set_acid_destroy, 2, RES_POIS);
         }
+        update_smart_learn(who, RES_POIS);
         break;
     case GF_MISSILE:
     case GF_BLOOD:  /* Monsters can't do this ... */
@@ -1937,6 +1938,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (!res_save_default(RES_NETHER) && !CHECK_MULTISHADOW())
             drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_NETHER);
         break;
     case GF_WATER:
     case GF_WATER2:
@@ -1983,6 +1985,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             }
         }
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_CHAOS);
         break;
     case GF_ROCK:
         if (fuzzy) msg_print("You are hit by something solid!");
@@ -2011,6 +2014,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             (void)set_cut(p_ptr->cut + dam, FALSE);
         if (!touch) inven_damage(set_cold_destroy, 2, RES_SHARDS);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_SHARDS);
         break;
     case GF_SOUND:
         if (!touch && fuzzy) msg_print("You are hit by a loud noise!");
@@ -2023,6 +2027,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         if (!touch) inven_damage(set_cold_destroy, 2, RES_SOUND);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_SOUND);
         break;
     case GF_CONFUSION:
         if (!touch && fuzzy) msg_print("You are hit by something puzzling!");
@@ -2031,6 +2036,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
             (void)set_confused(p_ptr->confused + randint1(20) + 10, FALSE);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_CONF);
         break;
     case GF_DISENCHANT:
         if (touch) msg_print("You are <color:v>disenchanted</color>!");
@@ -2044,6 +2050,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         else if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())
             apply_disenchant(0);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_DISEN);
         break;
     case GF_NEXUS:
         if (touch) msg_print("You are <color:v>scrambled</color>!");
@@ -2052,6 +2059,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (!res_save_default(RES_NEXUS) && !CHECK_MULTISHADOW())
             apply_nexus(m_ptr);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_NEXUS);
         break;
     case GF_FORCE:
         if (fuzzy) msg_print("You are hit by kinetic force!");
@@ -2068,6 +2076,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             (void)set_cut(p_ptr->cut + (dam / 2), FALSE);
         inven_damage(set_cold_destroy, 3, RES_SHARDS);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_SHARDS);
         break;
     case GF_INERT:
         if (!touch && fuzzy) msg_print("You are hit by something slow!");
@@ -2097,6 +2106,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
             p_ptr->redraw |= (PR_STATUS);
         }
+        update_smart_learn(who, RES_LITE);
         break;
     case GF_DARK:
         if (touch) msg_print("You are <color:D>benighted</color>!");
@@ -2107,6 +2117,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         if (prace_is_(RACE_MON_VAMPIRE))
             vampire_take_dark_damage(dam);
+        update_smart_learn(who, RES_DARK);
         break;
     case GF_ELDRITCH:
         if (touch && m_ptr)
@@ -2168,6 +2179,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         dam = res_calc_dam(RES_TIME, dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        update_smart_learn(who, RES_TIME);
         break;
     case GF_STORM:
         msg_print("You are hit by gale force winds!");
@@ -2274,6 +2286,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
                 set_stun(p_ptr->stun + (touch ? randint1(7) : randint1(15)), FALSE);
             inven_damage(set_cold_destroy, 3, RES_COLD);
         }
+        update_smart_learn(who, RES_COLD);
         break;
     case GF_DEATH_RAY:
         if (fuzzy) msg_print("You are hit by something extremely cold!");
@@ -2322,6 +2335,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
                     msg_format("%^s appears healthier.", m_name);
             }
         }
+        update_smart_learn(who, SM_DRAIN_MANA);
         break;
     case GF_MIND_BLAST:
         if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
@@ -4670,7 +4684,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         {
             if ( (r_ptr->flags1 & RF1_UNIQUE)
               || (r_ptr->flagsr & RFR_RES_ALL) 
-              || (m_ptr->smart & SM_GUARDIAN) )
+              || (m_ptr->smart & (1U << SM_GUARDIAN)) )
             {
                 mon_lore_r(m_ptr, RFR_RES_TELE);
                 note = " is unaffected!";
@@ -4683,7 +4697,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 resists_tele = TRUE;
             }
         }
-        else if (m_ptr->smart & SM_GUARDIAN)
+        else if (m_ptr->smart & (1U << SM_GUARDIAN))
         {
             note = " is unaffected!";
             resists_tele = TRUE;
@@ -5569,7 +5583,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
 
         /* Handle "teleport" ... double check the Guardian. It should be
          * handled above for nicer messaging, but I didn't get all the cases. */
-        if (do_dist && !(m_ptr->smart & SM_GUARDIAN))
+        if (do_dist && !(m_ptr->smart & (1U << SM_GUARDIAN)))
         {
             /* Obvious */
             if (seen) obvious = TRUE;
@@ -6211,7 +6225,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     }
 
     if (psion_drain())
-        dam = psion_do_drain(hack_m_spell, dam);
+        dam = psion_do_drain(dam);
 
     _mon_spell_hack = monspell;
     get_damage = gf_damage_p(who, typ, dam, GF_DAMAGE_SPELL);

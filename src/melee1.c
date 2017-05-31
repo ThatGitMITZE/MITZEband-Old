@@ -731,7 +731,7 @@ bool make_attack_normal(int m_idx)
                         if (set_blind(p_ptr->blind + 10 + randint1(rlev), FALSE))
                             obvious = TRUE;
                     }
-                    update_smart_learn(m_idx, DRS_BLIND);
+                    update_smart_learn(m_idx, RES_BLIND);
                     break;
 
                 case RBE_CONFUSE: /* XXX Consider changing titans: B:HIT:HURT(XdY):CONFUSE(XdY) */
@@ -744,7 +744,7 @@ bool make_attack_normal(int m_idx)
                         if (set_confused(p_ptr->confused + 3 + randint1(rlev), FALSE))
                             obvious = TRUE;
                     }
-                    update_smart_learn(m_idx, DRS_CONF);
+                    update_smart_learn(m_idx, RES_CONF);
                     break;
 
                 case RBE_TERRIFY:
@@ -757,7 +757,7 @@ bool make_attack_normal(int m_idx)
                         fear_terrify_p(m_ptr);
                         obvious = TRUE;
                     }
-                    update_smart_learn(m_idx, DRS_FEAR);
+                    update_smart_learn(m_idx, RES_FEAR);
                     break;
 
                 case RBE_PARALYZE: /* XXX Replace with B:GAZE:HURT(XdY):PARALYZE:CONFUSE:STUN(20) */
@@ -781,7 +781,7 @@ bool make_attack_normal(int m_idx)
                         if (set_paralyzed(randint1(3), FALSE))
                             obvious = TRUE;
                     }
-                    update_smart_learn(m_idx, DRS_FREE);
+                    update_smart_learn(m_idx, SM_FREE_ACTION);
                     break;
 
                 case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
@@ -958,7 +958,7 @@ bool make_attack_normal(int m_idx)
                     {
                         sp_player(-effect_dam);
                     }
-                    update_smart_learn(m_idx, DRS_MANA);
+                    update_smart_learn(m_idx, SM_DRAIN_MANA);
                     break;
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);

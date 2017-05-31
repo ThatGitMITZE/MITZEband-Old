@@ -568,7 +568,7 @@ monster_hook_type get_monster_hook2(int y, int x)
 
 void set_friendly(monster_type *m_ptr)
 {
-    m_ptr->smart |= SM_FRIENDLY;
+    m_ptr->smart |= (1U << SM_FRIENDLY);
 }
 
 void set_pet(monster_type *m_ptr)
@@ -577,7 +577,7 @@ void set_pet(monster_type *m_ptr)
 
     quests_on_kill_mon(m_ptr);
 
-    m_ptr->smart |= SM_PET;
+    m_ptr->smart |= (1U << SM_PET);
     if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 }
@@ -591,8 +591,8 @@ void set_hostile(monster_type *m_ptr)
 
     if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, FALSE);
 
-    m_ptr->smart &= ~SM_PET;
-    m_ptr->smart &= ~SM_FRIENDLY;
+    m_ptr->smart &= ~(1U << SM_PET);
+    m_ptr->smart &= ~(1U << SM_FRIENDLY);
 }
 
 

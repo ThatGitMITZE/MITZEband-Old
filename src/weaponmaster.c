@@ -63,8 +63,8 @@ static int _get_nearest_target_los(void)
         m_ptr = &m_list[i];
         if (!m_ptr->r_idx
         ) continue;
-        if (m_ptr->smart & SM_FRIENDLY) continue;
-        if (m_ptr->smart & SM_PET) continue;
+        if (m_ptr->smart & (1U << SM_FRIENDLY)) continue;
+        if (m_ptr->smart & (1U << SM_PET)) continue;
         if (m_ptr->cdis > rng) continue;
         if (!m_ptr->ml) continue;
         if (!los(py, px, m_ptr->fy, m_ptr->fx)) continue;
@@ -94,8 +94,8 @@ static int _get_greater_many_shot_targets(int *targets, int max)
     {
         m_ptr = &m_list[i];
         if (!m_ptr->r_idx) continue;
-        if (m_ptr->smart & SM_FRIENDLY) continue;
-        if (m_ptr->smart & SM_PET) continue;
+        if (m_ptr->smart & (1U << SM_FRIENDLY)) continue;
+        if (m_ptr->smart & (1U << SM_PET)) continue;
         if (m_ptr->cdis > rng) continue;
         if (!m_ptr->ml) continue;
         if (!los(py, px, m_ptr->fy, m_ptr->fx)) continue;
@@ -125,8 +125,8 @@ static int _get_many_shot_targets(int *targets, int max)
     {
         m_ptr = &m_list[i];
         if (!m_ptr->r_idx) continue;
-        if (m_ptr->smart & SM_FRIENDLY) continue;
-        if (m_ptr->smart & SM_PET) continue;
+        if (m_ptr->smart & (1U << SM_FRIENDLY)) continue;
+        if (m_ptr->smart & (1U << SM_PET)) continue;
         if (m_ptr->cdis > rng) continue;
         if (!m_ptr->ml) continue;
         if (!los(py, px, m_ptr->fy, m_ptr->fx)) continue;

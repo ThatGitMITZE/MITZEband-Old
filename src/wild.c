@@ -1007,7 +1007,7 @@ static void _generate_entrance(int x, int y, int dx, int dy)
                     pack_info_t  *pack_ptr = &pack_info_list[pack_idx];
 
                     m_ptr->pack_idx = pack_idx;
-                    m_ptr->smart |= SM_GUARDIAN;
+                    m_ptr->smart |= (1U << SM_GUARDIAN);
 
                     pack_ptr->count++;
                     pack_ptr->ai = AI_GUARD_POS;

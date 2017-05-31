@@ -2192,43 +2192,6 @@ enum {
 
 
 /*
- * Some bit-flags for the "smart" field
- */
-#define SM_RES_ACID             0x00000001
-#define SM_RES_ELEC             0x00000002
-#define SM_RES_FIRE             0x00000004
-#define SM_RES_COLD             0x00000008
-#define SM_RES_POIS             0x00000010
-#define SM_RES_NETH             0x00000020
-#define SM_RES_LITE             0x00000040
-#define SM_RES_DARK             0x00000080
-#define SM_RES_FEAR             0x00000100
-#define SM_RES_CONF             0x00000200
-#define SM_RES_CHAOS            0x00000400
-#define SM_RES_DISEN            0x00000800
-#define SM_RES_BLIND            0x00001000
-#define SM_RES_NEXUS            0x00002000
-#define SM_RES_SOUND            0x00004000
-#define SM_RES_SHARD            0x00008000
-#define SM_OPP_ACID             0x00010000
-#define SM_OPP_ELEC             0x00020000
-#define SM_OPP_FIRE             0x00040000
-#define SM_OPP_COLD             0x00080000
-#define SM_OPP_POIS             0x00100000
-#define SM_GUARDIAN             0x00200000
-#define SM_CLONED               0x00400000
-#define SM_PET                  0x00800000
-#define SM_IMM_ACID             0x01000000
-#define SM_IMM_ELEC             0x02000000
-#define SM_IMM_FIRE             0x04000000
-#define SM_IMM_COLD             0x08000000
-#define SM_FRIENDLY             0x10000000
-#define SM_IMM_REFLECT          0x20000000
-#define SM_IMM_FREE             0x40000000
-#define SM_IMM_MANA             0x80000000
-
-
-/*
  * Bit flags for the "get_item" function
  */
 #define USE_EQUIP               0x001   /* Allow equip items */
@@ -2659,31 +2622,6 @@ enum summon_specific_e {
 #define GF_CONTROL_PACT_MONSTER  146
 
 #define MAX_GF                147
-
-/*
- * Some things which induce learning
- */
-#define DRS_ACID         1
-#define DRS_ELEC         2
-#define DRS_FIRE         3
-#define DRS_COLD         4
-#define DRS_POIS         5
-#define DRS_NETH         6
-#define DRS_LITE         7
-#define DRS_DARK         8
-#define DRS_FEAR         9
-#define DRS_CONF        10
-#define DRS_CHAOS       11
-#define DRS_DISEN       12
-#define DRS_BLIND       13
-#define DRS_NEXUS       14
-#define DRS_SOUND       15
-#define DRS_SHARD       16
-#define DRS_FREE        30
-#define DRS_MANA        31
-#define DRS_REFLECT     32
-
-
 
 #define DAMAGE_FORCE    1
 #define DAMAGE_GENO     2
@@ -3805,13 +3743,13 @@ enum r_drop_e
 
 
 #define is_friendly(A) \
-     (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
+     (bool)(((A)->smart & (1U << SM_FRIENDLY)) ? TRUE : FALSE)
 
 #define is_friendly_idx(IDX) \
      (bool)((IDX) > 0 && is_friendly(&m_list[(IDX)]))
 
 #define is_pet(A) \
-     (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
+     (bool)(((A)->smart & (1U << SM_PET)) ? TRUE : FALSE)
 
 #define is_aware(A) \
      (bool)(((A)->mflag2 & MFLAG2_AWARE) ? TRUE : FALSE)

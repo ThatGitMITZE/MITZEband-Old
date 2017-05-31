@@ -770,7 +770,7 @@ void pack_on_slay_monster(int m_idx)
         pack_info_t *pack_ptr = &pack_info_list[m_ptr->pack_idx];
         pack_ptr->count--;
 
-        if (m_ptr->smart & SM_GUARDIAN)
+        if (m_ptr->smart & (1U << SM_GUARDIAN))
             dungeon_flags[pack_ptr->guard_idx] |= DUNGEON_NO_GUARDIAN;
 
         if (pack_ptr->count <= 0)
@@ -3388,7 +3388,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
     }
 
     if (cloned)
-        m_ptr->smart |= SM_CLONED;
+        m_ptr->smart |= (1U << SM_CLONED);
 
     /* Place the monster at the location */
     m_ptr->fy = y;
@@ -4535,9 +4535,9 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
         return FALSE;
 
     /* Hack -- Transfer "clone" flag */
-    if (clone || (m_ptr->smart & SM_CLONED))
+    if (clone || (m_ptr->smart & (1U << SM_CLONED)))
     {
-        m_list[hack_m_idx_ii].smart |= SM_CLONED;
+        m_list[hack_m_idx_ii].smart |= (1U << SM_CLONED);
         m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
     }
 
@@ -4923,13 +4923,16 @@ void message_pain(int m_idx, int dam)
  */
 void update_smart_learn(int m_idx, int what)
 {
-    monster_type *m_ptr = &m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    int pct;
+    monster_type *m_ptr;
+    monster_race *r_ptr;
 
+    if (m_idx <= 0) return; /* paranoia */
 
     /* Not allowed to learn */
     if (!smart_learn) return;
+
+    m_ptr = &m_list[m_idx];
+    r_ptr = &r_info[m_ptr->r_idx];
 
     /* Too stupid to learn anything */
     if (r_ptr->flags2 & (RF2_STUPID)) return;
@@ -4937,103 +4940,9 @@ void update_smart_learn(int m_idx, int what)
     /* Not intelligent, only learn sometimes */
     if (!(r_ptr->flags2 & (RF2_SMART)) && (randint0(100) < 50)) return;
 
-
-    /* XXX XXX XXX */
-
     /* Analyze the knowledge */
-    switch (what)
-    {
-    case DRS_ACID:
-        pct = res_pct(RES_ACID);
-        if (pct >= 50) m_ptr->smart |= (SM_RES_ACID);
-        if (pct >= 65) m_ptr->smart |= (SM_OPP_ACID);
-        if (pct >= 100) m_ptr->smart |= (SM_IMM_ACID);
-        break;
-
-    case DRS_ELEC:
-        pct = res_pct(RES_ELEC);
-        if (pct >= 50) m_ptr->smart |= (SM_RES_ELEC);
-        if (pct >= 65) m_ptr->smart |= (SM_OPP_ELEC);
-        if (pct >= 100) m_ptr->smart |= (SM_IMM_ELEC);
-        break;
-
-    case DRS_FIRE:
-        pct = res_pct(RES_FIRE);
-        if (pct >= 50) m_ptr->smart |= (SM_RES_FIRE);
-        if (pct >= 65) m_ptr->smart |= (SM_OPP_FIRE);
-        if (pct >= 100) m_ptr->smart |= (SM_IMM_FIRE);
-        break;
-
-    case DRS_COLD:
-        pct = res_pct(RES_COLD);
-        if (pct >= 50) m_ptr->smart |= (SM_RES_COLD);
-        if (pct >= 65) m_ptr->smart |= (SM_OPP_COLD);
-        if (pct >= 100) m_ptr->smart |= (SM_IMM_COLD);
-        break;
-
-    case DRS_POIS:
-        pct = res_pct(RES_POIS);
-        if (pct >= 50) m_ptr->smart |= (SM_RES_POIS);
-        if (pct >= 65) m_ptr->smart |= (SM_OPP_POIS);
-        break;
-
-
-    case DRS_NETH:
-        if (res_pct(RES_NETHER) >= 50) m_ptr->smart |= (SM_RES_NETH);
-        break;
-
-    case DRS_LITE:
-        if (res_pct(RES_LITE) >= 50) m_ptr->smart |= (SM_RES_LITE);
-        break;
-
-    case DRS_DARK:
-        if (res_pct(RES_DARK) >= 50) m_ptr->smart |= (SM_RES_DARK);
-        break;
-
-    case DRS_FEAR:
-        if (res_pct(RES_FEAR) >= 50) m_ptr->smart |= (SM_RES_FEAR);
-        break;
-
-    case DRS_CONF:
-        if (res_pct(RES_CONF) >= 50) m_ptr->smart |= (SM_RES_CONF);
-        break;
-
-    case DRS_CHAOS:
-        if (res_pct(RES_CHAOS) >= 50) m_ptr->smart |= (SM_RES_CHAOS);
-        break;
-
-    case DRS_DISEN:
-        if (res_pct(RES_DISEN) >= 50) m_ptr->smart |= (SM_RES_DISEN);
-        break;
-
-    case DRS_BLIND:
-        if (res_pct(RES_BLIND) >= 50) m_ptr->smart |= (SM_RES_BLIND);
-        break;
-
-    case DRS_NEXUS:
-        if (res_pct(RES_NEXUS) >= 50) m_ptr->smart |= (SM_RES_NEXUS);
-        break;
-
-    case DRS_SOUND:
-        if (res_pct(RES_SOUND) >= 50) m_ptr->smart |= (SM_RES_SOUND);
-        break;
-
-    case DRS_SHARD:
-        if (res_pct(RES_SHARDS) >= 50) m_ptr->smart |= (SM_RES_SHARD);
-        break;
-
-    case DRS_FREE:
-        if (p_ptr->free_act) m_ptr->smart |= (SM_IMM_FREE);
-        break;
-
-    case DRS_MANA:
-        if (!p_ptr->msp) m_ptr->smart |= (SM_IMM_MANA);
-        break;
-
-    case DRS_REFLECT:
-        if (p_ptr->reflect) m_ptr-> smart |= (SM_IMM_REFLECT);
-        break;
-    }
+    assert(0 <= what && what < 32);
+    m_ptr->smart |= (1U << what);
 }
 
 

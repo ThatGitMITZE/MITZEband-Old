@@ -190,17 +190,20 @@ bool psion_drain(void)
     return FALSE;
 }
 
-int psion_do_drain(int spell_idx, int dam)
+int psion_do_drain(int dam)
 {
-    int result = dam;
-    if (psion_drain() && !spell_is_innate(spell_idx))
-    {
-        int drain = dam * 5 * p_ptr->magic_num2[_DRAIN] / 100;
-        result -= drain;
-        sp_player(MAX(drain, 3 * p_ptr->magic_num2[_DRAIN]));
-        if (disturb_minor)
-            msg_print("You draw power from the magics around you!");
-    }
+    int result = dam, drain;
+    mon_spell_ptr spell = mon_spell_current();
+
+    if (!psion_drain()) return result;
+    if (!spell) return result;
+    if (spell->flags & MSF_INNATE) return result;
+
+    drain = dam * 5 * p_ptr->magic_num2[_DRAIN] / 100;
+    result -= drain;
+    sp_player(MAX(drain, 3 * p_ptr->magic_num2[_DRAIN]));
+    if (disturb_minor)
+        msg_print("You draw power from the magics around you!");
     return result;
 }
 
