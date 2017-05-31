@@ -2484,6 +2484,7 @@ enum summon_specific_e {
     SUMMON_ARCHER,
     SUMMON_MONK,
     SUMMON_MAGE,
+    SUMMON_SPECIAL, /* mon->id specific code */
 };
 
 /*

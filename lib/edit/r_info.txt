@@ -12419,7 +12419,7 @@ F:COLD_BLOOD | RES_TELE
 F:DROP_SKELETON | DROP_CORPSE | POS_SEE_INVIS | POS_DETECT_MONSTERS | POS_MAPPING
 P:Copy:Dark-Elf:Rogue
 S:1_IN_3 |
-S:CAUSE_4 | PARALYZE | DRAIN_MANA | SCARE | BLIND | SPECIAL
+S:CAUSE_4 | PARALYZE | DRAIN_MANA | SCARE | BLIND | S_SPECIAL
 S:BA_NETHER | AMNESIA | TRAPS | BRAIN_SMASH | TELE_OTHER
 D:Why would anybody want to kill Santa Claus? To get all the presents,
 D:of course!
@@ -18180,7 +18180,7 @@ F:RES_TELE | RAND_50 | ESCORT | RES_FIRE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | UNIQUE |
 F:OPEN_DOOR | EVIL | BASH_DOOR | SMART
 S:1_IN_3
-S:BA_FIRE | HASTE | SPECIAL
+S:BA_FIRE | HASTE | S_SPECIAL
 P:Copy:Human:Beastmaster
 P:Speed:+10
 
@@ -19613,7 +19613,7 @@ P:Copy:Half-Titan:Warrior-Mage
 P:Stats:2:2:2:2:2:2
 P:Life:110
 S:1_IN_3 |
-S:BR_ELEC | BR_DISENCHANT | HASTE | TELE_TO | S_KIN | SPECIAL
+S:BR_ELEC | BR_DISENCHANT | HASTE | TELE_TO | S_KIN | S_SPECIAL
 S:PSY_SPEAR | DISPEL_MAGIC | ANTI_MAGIC | TELE_SELF | ROCKET | BR_CHAOS
 D:Zeus, King of the gods and ruler of Mount Olympus, god of the Sky
 D:and Thunder, and nominal husband of Hera. He commands the
@@ -19639,7 +19639,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:1:1:2
 P:Life:105
 S:1_IN_3 |
-S:BA_WATER | SPECIAL | BR_DISINTEGRATE
+S:BA_WATER | S_SPECIAL | BR_DISINTEGRATE
 D:Poseidon, Brother of Zeus, Lord of the Seas and Storm. Entire
 D:cities have been buried by his wrath, and seamen always utter
 D:a prayer to him for safe passage. He lost the patronage of
@@ -19667,7 +19667,7 @@ P:Stats:2:0:0:0:3:2
 P:Life:110
 S:1_IN_3 |
 S:BR_DARK | BR_NETHER | BA_NETHER |
-S:HAND_DOOM | SPECIAL | BR_DISINTEGRATE
+S:HAND_DOOM | S_SPECIAL | BR_DISINTEGRATE
 D:Hades, Ruler of the Underworld, as demarked by the River Styx. He
 D:rarely lets those who have seen his realm leave it. He is ever
 D:protective of his time with Persephone, daughter of Demeter.
@@ -19692,7 +19692,7 @@ F:NO_CONF | NO_SLEEP | AURA_FEAR
 P:Copy:Half-Titan:Priest
 P:Stats:0:0:3:0:0:3
 S:1_IN_2 |
-S:SPECIAL | PSY_SPEAR | HASTE | HEAL | INVULN
+S:S_SPECIAL | PSY_SPEAR | HASTE | HEAL | INVULN
 S:BA_MANA | TELE_TO | TELE_OTHER
 D:Athena is the great goddess of wisdom and the protector of
 D:Athens. She was born of Zeus and the Titan Metis, and her
@@ -19718,7 +19718,7 @@ F:POS_GAIN_AC
 P:Copy:Half-Titan:Mauler
 P:Stats:1:0:3:1:0:0
 S:1_IN_5 |
-S:TELE_TO | SPECIAL
+S:TELE_TO | S_SPECIAL
 O:DROP_WARRIOR
 D:Ares is the bold son of Zeus and Hera, whose very name is
 D:feared and respected by warriors and citizens alike. His
@@ -19747,7 +19747,7 @@ P:Skills:0:0:0:7:0:0:0:0
 S:1_IN_3 |
 S:HASTE | SLOW | DISPEL_MAGIC | BR_TIME | BR_NEXUS | TELE_SELF
 S:TELE_TO | TELE_OTHER | PSY_SPEAR | S_KIN | HEAL
-S:ANTI_MAGIC | S_KIN | BA_DARK | SPECIAL
+S:ANTI_MAGIC | S_KIN | BA_DARK | S_SPECIAL
 D:Hermes, the Messenger, is the extremely cunning diplomat used
 D:by the Olympians to negotiate truces. With his Winged Sandals
 D:and his powerful magic, there is no place barred from him, and
@@ -19774,7 +19774,7 @@ F:NO_CONF | NO_SLEEP | AURA_FEAR
 P:Copy:Half-Titan:Priest
 P:Stats:0:0:3:0:0:3
 S:1_IN_3 |
-S:BA_LITE | BLINK | BR_LITE | SPECIAL
+S:BA_LITE | BLINK | BR_LITE | S_SPECIAL
 
 N:1103:Artemis, the Moon Goddess
 G:P:s
@@ -19791,8 +19791,8 @@ F:RES_LITE | RES_SOUN | RES_DISE
 F:NO_CONF | NO_SLEEP | AURA_FEAR
 P:Copy:Half-Titan:Ranger
 P:Stats:0:0:2:0:0:0
-S:1_IN_2
-S:BLINK | SHOOT(12d12) | HEAL | SPECIAL
+S:1_IN_3
+S:BLINK | SHOOT(12d12) | HEAL | S_SPECIAL
 
 N:1104:Hephaestus, the Smith God
 G:P:B
@@ -19812,7 +19812,7 @@ F:POS_GAIN_AC
 P:Copy:Half-Titan:Mauler
 P:Stats:3:0:0:0:0:0
 S:1_IN_5 |
-S:ROCKET | HEAL | TELE_SELF | TELE_TO | SPECIAL
+S:ROCKET | HEAL | TELE_SELF | TELE_TO | S_SPECIAL
 
 N:1105:Hera, Queen of the Gods
 G:P:g
@@ -19833,7 +19833,7 @@ F:NO_CONF | NO_SLEEP | CAN_SWIM | AURA_FEAR
 P:Copy:Half-Titan:Priest
 P:Stats:0:0:4:0:0:4
 S:1_IN_2 |
-S:BA_MANA | BO_MANA | BA_LITE | HASTE | TELE_TO | SPECIAL |
+S:BA_MANA | BO_MANA | BA_LITE | HASTE | TELE_TO | S_SPECIAL |
 S:PSY_SPEAR | DISPEL_MAGIC | ANTI_MAGIC | TELE_SELF | BLINK
 
 N:1106:Demeter, the Goddess of Nature
@@ -19855,7 +19855,7 @@ F:NO_CONF | NO_SLEEP | AURA_FEAR
 P:Copy:Half-Titan:Beastmaster
 P:Stats:0:0:0:0:0:3
 S:1_IN_3 |
-S:HEAL | TELE_SELF | BLINK | SPECIAL
+S:HEAL | TELE_SELF | BLINK | S_SPECIAL
 
 N:1107:Aphrodite, the Goddess of Love
 G:P:u

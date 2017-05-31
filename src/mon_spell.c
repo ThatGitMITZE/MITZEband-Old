@@ -1369,6 +1369,8 @@ static void _ball(void)
 }
 static void _bolt(void)
 {
+    int ct = 1, i;
+    int flags = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE;
     assert(_current.spell->parm.tag == MSP_DICE);
 
     if (!_custom_msg(_current.spell))
@@ -1384,16 +1386,24 @@ static void _bolt(void)
         }
     }
 
-    project(
-        _current.mon->id,
-        0,
-        _current.dest.y,
-        _current.dest.x,
-        _scale(_roll(_current.spell->parm.v.dice)),
-        _current.spell->id.effect,
-        PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE,
-        -1
-    );
+    if (_current.race->id == MON_ARTEMIS && _spell_is_(_current.spell, MST_BOLT, GF_ARROW))
+    {
+        ct = 4;
+        flags &= ~PROJECT_REFLECTABLE;
+    }
+    for (i = 0; i < ct; i++)
+    {
+        project(
+            _current.mon->id,
+            0,
+            _current.dest.y,
+            _current.dest.x,
+            _scale(_roll(_current.spell->parm.v.dice)),
+            _current.spell->id.effect,
+            flags,
+            -1
+        );
+    }
 }
 static void _beam(void)
 {
@@ -1697,24 +1707,154 @@ static void _heal(void)
     amt = _roll(_current.spell->parm.v.dice);
     hp_mon(_current.mon, amt);
 }
+static void _summon_r_idx(int r_idx)
+{
+    summon_named_creature(
+        _current.mon->id,
+        _current.dest.y,
+        _current.dest.x,
+        r_idx,
+        PM_ALLOW_GROUP | PM_ALLOW_UNIQUE
+    );
+}
+static void _summon_type(int type)
+{
+    summon_specific(
+        _current.mon->id,
+        _current.dest.y,
+        _current.dest.x,
+        _current.race->level,
+        type,
+        PM_ALLOW_GROUP | PM_ALLOW_UNIQUE
+    );
+}
+/* XXX Vanilla has a 'friends' concept ... perhaps we could do likewise? */
+static void _summon_special(void)
+{
+    int num = randint1(4);
+    int r_idx = 0, r_idx2 = 0, i;
+    switch (_current.race->id)
+    {
+    case MON_SANTACLAUS:
+        msg_format("%s says 'Now Dasher! Now Dancer! Now, Prancer and Vixen! On, Comet! On, Cupid! On, Donner and Blitzen!'", _current.name);
+        r_idx = MON_REINDEER;
+        break;
+     case MON_ZEUS:
+        msg_format("%s summons Shamblers!", _current.name);
+        r_idx = MON_SHAMBLER;
+        break;
+    case MON_POSEIDON:
+        fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
+        msg_format("%s summons Greater Kraken!", _current.name);
+        r_idx = MON_GREATER_KRAKEN;
+        break;
+    case MON_HADES:
+        num = randint1(2);
+        fire_ball_hide(GF_LAVA_FLOW, 0, 3, 8);
+        msg_format("%s summons Death!", _current.name);
+        r_idx = MON_GREATER_BALROG;
+        r_idx2 = MON_ARCHLICH;
+        break;
+    case MON_ATHENA:
+        msg_format("%s summons friends!", _current.name);
+        if (one_in_(3) && r_info[MON_ZEUS].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_ZEUS;
+        }
+        else
+        {
+            num = randint1(2);
+            r_idx = MON_ULT_MAGUS;
+        }
+        break;
+    case MON_ARES:
+        num = 1;
+        msg_format("%s yells 'Mommy! Daddy! Help!!'", _current.name);
+        r_idx = MON_ZEUS;
+        r_idx2 = MON_HERA;
+        break;
+    case MON_APOLLO:
+        msg_format("%s summons help!", _current.name);
+        if (one_in_(3) && r_info[MON_ARTEMIS].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_ARTEMIS;
+        }
+        else
+            r_idx = MON_FENGHUANG;
+        break;
+    case MON_ARTEMIS:
+        num = 1;
+        msg_format("%s summons help!", _current.name);
+        r_idx = MON_APOLLO;
+        break;
+    case MON_HEPHAESTUS:
+        msg_format("%s summons friends!", _current.name);
+        if (one_in_(3) && r_info[MON_ZEUS].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_ZEUS;
+        }
+        else if (one_in_(3) && r_info[MON_HERA].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_HERA;
+        }
+        else
+            r_idx = MON_SPELLWARP_AUTOMATON;
+        break;
+    case MON_HERMES:
+        num = randint1(16); /* XXX Why so high, RF1_FRIENDS? */
+        msg_format("%s summons friends!", _current.name);
+        r_idx = MON_MAGIC_MUSHROOM;
+        break;
+    case MON_HERA:
+        msg_format("%s summons aid!'", _current.name);
+        if (one_in_(3) && r_info[MON_ARES].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_ARES;
+        }
+        else if (one_in_(3) && r_info[MON_HEPHAESTUS].max_num == 1)
+        {
+            num = 1;
+            r_idx = MON_HEPHAESTUS;
+        }
+        else
+            r_idx = MON_DEATH_BEAST;
+        break;
+    case MON_DEMETER:
+        msg_format("%s summons ents!", _current.name);
+        r_idx = MON_ENT;
+        break;
+    case MON_ROLENTO:
+        if (p_ptr->blind) msg_format("%s spreads something.", _current.name);
+        else msg_format("%s throws some hand grenades.", _current.name);
+        num = 1 + randint1(3);
+        r_idx = MON_SHURYUUDAN;
+        break;
+    }
+    for (i = 0; i < num; i++)
+    {
+        if (r_idx) _summon_r_idx(r_idx);
+        if (r_idx2) _summon_r_idx(r_idx2);
+    }
+}
 static void _summon(void)
 {
     int ct, i;
+    if (_current.spell->id.effect == SUMMON_SPECIAL)
+    {
+        _summon_special();
+        return;
+    }
     if (!_custom_msg(_current.spell))
         msg_format("%s summons help.", _current.name);
     assert(_current.spell->parm.tag == MSP_DICE);
     ct = _roll(_current.spell->parm.v.dice);
     for (i = 0; i < ct; i++)
-    {
-        summon_specific(
-            _current.mon->id,
-            _current.dest.y,
-            _current.dest.x,
-            _current.race->level,
-            0,
-            PM_ALLOW_GROUP | PM_ALLOW_UNIQUE
-        );
-    }
+        _summon_type(_current.spell->id.effect);
 }
 static void _weird(void)
 {
@@ -1900,7 +2040,7 @@ static void _smart_remove_aux(mon_spell_group_ptr group, u32b flags)
     {
         mon_spell_ptr spell = &group->spells[i];
         _gf_info_ptr  gf = _gf_lookup(spell->id.effect);
-        assert(gf);
+        if (!gf) continue; /* GF_ARROW? */
         if (gf->resist != RES_INVALID && _have_smart_flag(flags, gf->resist))
         {
             int pct = res_pct(gf->resist);
@@ -1940,10 +2080,20 @@ static void _smart_remove(mon_spell_cast_ptr cast)
         _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
 }
 
+static bool _clean_shot(point_t src, point_t dest)
+{
+    return clean_shot(src.y, src.x, dest.y, dest.x, FALSE);
+}
+static bool _summon_possible(point_t where)
+{
+    return summon_possible(where.y, where.x);
+}
+
 static void _remove_bad_spells(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
     bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
+    bool           splash = FALSE;
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
 
@@ -1957,10 +2107,10 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
      * odds. */
     if (!_projectable(cast->src, cast->dest))
     {
-        point_t splash = {0};
+        point_t new_dest = {0};
         
         if (!stupid)
-            splash = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
+            new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
 
         _remove_group(spells->groups[MST_ANNOY], NULL);
         _remove_group(spells->groups[MST_BOLT], NULL);
@@ -1968,9 +2118,10 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _remove_group(spells->groups[MST_BIFF], NULL);
         _remove_group(spells->groups[MST_CURSE], NULL);
 
-        if (splash.x || splash.y) /* XXX assume (0,0) out of bounds */
+        if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
         {
-            cast->dest = splash;
+            cast->dest = new_dest;
+            splash = TRUE;
             _adjust_group(spells->groups[MST_BREATHE], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
@@ -1991,6 +2142,10 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             }
         }
     }
+    if (p_ptr->inside_arena || p_ptr->inside_battle)
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    /* Stupid monsters are done! */
     if (stupid)
         return;
 
@@ -2076,10 +2231,21 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && cast->mon->mtimed[MTIMED_FAST])
         spell->prob = 0;
 
-    /* XXX Raise Dead */
+    if (!p_ptr->csp) /* XXX Historical: Bypass SM_DRAIN_MANA? */
+        _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
+
+    /* require a direct shot to player for bolts */
+    if (!splash && spells->groups[MST_BOLT] && !_clean_shot(cast->src, cast->dest))
+        _remove_group(spells->groups[MST_BOLT], NULL);
+
+    if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_ANIMATE_DEAD));
+    if (spell && !raise_possible(cast->mon))
+        spell->prob = 0;
+
     /* XXX Invulnerable => Psychospear */
-    /* XXX Smart monsters know about player resistance levels. Adjust
-     * spell probabilities based upon this knowledge */
 }
 
 static mon_spell_ptr _choose_spell(mon_spells_ptr spells)
