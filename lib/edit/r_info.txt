@@ -5933,7 +5933,7 @@ F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO |
 F:ANIMAL | GOOD | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 S:1_IN_2
-S:SPECIAL | S_KIN
+S:SPECIAL | S_EAGLE
 P:Copy:Dunadan:Mystic
 P:Life:80
 P:Body:Giant Bird
@@ -6363,7 +6363,7 @@ F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO |
 F:ANIMAL | GOOD | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 S:1_IN_2
-S:SPECIAL | S_KIN
+S:SPECIAL | S_EAGLE
 P:Copy:Dunadan:Mystic
 P:Body:Giant Bird
 D:An agent of supernatural beings, this creature looks like a
@@ -7366,7 +7366,7 @@ F:WILD_ONLY | WILD_MOUNTAIN | WILD_VOLCANO |
 F:ANIMAL | GOOD | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 S:1_IN_2
-S:SPECIAL | S_KIN
+S:SPECIAL | S_EAGLE
 P:Copy:Dunadan:Mystic
 P:Life:80
 P:Body:Giant Bird
@@ -13703,7 +13703,7 @@ P:Copy:Half-Titan:Chaos-Warrior
 S:FREQ_30
 S:BR_NEXUS | BR_CHAOS | PARALYZE | SLOW | BR_INERTIA | BA_NUKE |
 S:MIND_BLAST | BRAIN_SMASH | CONFUSE | BLIND | TELE_TO | HEAL |
-S:TELE_OTHER | TELE_LEVEL | TELE_SELF | S_KIN | DRAIN_MANA
+S:TELE_OTHER | TELE_LEVEL | TELE_SELF | S_NIGHTMARE | DRAIN_MANA
 D:"Young with the youth that is outside time, and with a beauteous
 D:bearded face, curved, smiling lips, Olympian brow; and dense locks
 D:waving and poppy-crowned."
@@ -19035,8 +19035,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
 F:DROP_CORPSE
 P:Copy:Human:Tourist
 P:Speed:+10
-S:1_IN_6
-S:S_KIN
+S:1_IN_6 | S_LOUSE
 D:This huge louse is the ruin of the sad man
 D:who had become a louse just because he loves louses.
 
@@ -19578,7 +19577,7 @@ F:DROP_CORPSE | CAN_FLY | WEIRD_MIND |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT |
 P:Copy:Imp:Rogue
 S:1_IN_3
-S:S_KIN | POLYMORPH
+S:S_SOFTWARE_BUG | POLYMORPH
 D:A frazzled stumbling pathetic shadow of a man. He
 D:seems steeped in confusion while mumbling something
 D:about memory corruption in cmd2.c.
@@ -19613,7 +19612,7 @@ P:Copy:Half-Titan:Warrior-Mage
 P:Stats:2:2:2:2:2:2
 P:Life:110
 S:1_IN_3 |
-S:BR_ELEC | BR_DISENCHANT | HASTE | TELE_TO | S_KIN | S_SPECIAL
+S:BR_ELEC | BR_DISENCHANT | HASTE | TELE_TO | S_OLYMPIAN | S_SPECIAL
 S:PSY_SPEAR | DISPEL_MAGIC | ANTI_MAGIC | TELE_SELF | ROCKET | BR_CHAOS
 D:Zeus, King of the gods and ruler of Mount Olympus, god of the Sky
 D:and Thunder, and nominal husband of Hera. He commands the
@@ -19746,8 +19745,8 @@ P:Stats:0:0:0:7:0:0
 P:Skills:0:0:0:7:0:0:0:0
 S:1_IN_3 |
 S:HASTE | SLOW | DISPEL_MAGIC | BR_TIME | BR_NEXUS | TELE_SELF
-S:TELE_TO | TELE_OTHER | PSY_SPEAR | S_KIN | HEAL
-S:ANTI_MAGIC | S_KIN | BA_DARK | S_SPECIAL
+S:TELE_TO | TELE_OTHER | PSY_SPEAR | S_OLYMPIAN | HEAL
+S:ANTI_MAGIC | BA_DARK | S_SPECIAL
 D:Hermes, the Messenger, is the extremely cunning diplomat used
 D:by the Olympians to negotiate truces. With his Winged Sandals
 D:and his powerful magic, there is no place barred from him, and
@@ -19876,7 +19875,7 @@ F:NO_CONF | NO_SLEEP | POWERFUL | AURA_FEAR
 P:Copy:Half-Titan:Beastmaster
 P:Stats:0:0:0:0:0:7
 S:1_IN_3 |
-S:HEAL | BLINK | S_UNIQUE | S_KIN | TELE_SELF
+S:HEAL | BLINK | S_UNIQUE | S_OLYMPIAN | TELE_SELF
 
 N:1108:Orc digger
 G:o:s
@@ -19944,7 +19943,7 @@ F:RES_FIRE | RES_COLD | RES_ACID | RES_POIS | RES_ELEC |
 F:NO_CONF | NO_SLEEP | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_4 |
 S:SHOOT(4d8) | TELE_SELF | HEAL | BO_FIRE | BA_ACID |
-S:SHRIEK | HASTE | TELE_TO | S_KIN
+S:SHRIEK | HASTE | TELE_TO | S_CAMELOT(1d2)
 D:Arthur Pendragon, who wields the Sword in the Stone and
 D:rules the Knights of Camelot. He charges at you with
 D:righteous vengeance for upsetting his realm.
@@ -19964,7 +19963,7 @@ F:GOOD | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_COLD | RES_ACID | RES_ELEC |
 F:NO_FEAR | NO_SLEEP | NO_CONF | AURA_REVENGE | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_6 |
-S:TELE_TO | HEAL | S_KIN
+S:TELE_TO | HEAL | S_CAMELOT(1d2)
 D:The strongest of the Knights, Lancelot is also the most handsome,
 D:and leaves a trail of broken hearts in his wake. Fated never
 D:to be with his true love Guinevere, Lancelot nevertheless protects
@@ -19984,7 +19983,7 @@ F:GOOD | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_POIS | RES_ACID | RES_COLD |
 F:NO_SLEEP | NO_CONF | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_3 |
-S:SHOOT(14d6) | BO_MANA | BLINK | TELE_SELF | S_KIN | HEAL
+S:SHOOT(14d6) | BO_MANA | BLINK | TELE_SELF | S_CAMELOT(1d2) | HEAL
 D:The second strongest of the Round Table, Gawain is usually
 D:the voice of reason.
 P:Copy:Demigod:Paladin
@@ -20004,7 +20003,7 @@ F:GOOD | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_ELEC | RES_COLD | RES_POIS | RES_ACID |
 F:NO_SLEEP | NO_CONF | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_5 |
-S:SHOOT(6d8) | TELE_TO | TELE_SELF | S_KIN | HEAL
+S:SHOOT(6d8) | TELE_TO | TELE_SELF | S_CAMELOT(1d2) | HEAL
 D:Sir Galahad the Pure takes after his father Lancelot in his
 D:combat abilities and after his mother Elaine in his calm. He
 D:is the one who finally completed the Quest for the Holy Grail.
@@ -20025,7 +20024,7 @@ F:GOOD | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_ELEC | RES_COLD |
 F:NO_SLEEP | NO_CONF | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_5 |
-S:SHOOT(6d8) | BO_ELEC | HASTE | TELE_TO | TELE_SELF | S_KIN | HEAL
+S:SHOOT(6d8) | BO_ELEC | HASTE | TELE_TO | TELE_SELF | S_CAMELOT(1d2) | HEAL
 D:The protege of Lancelot and the younger brother of Gawain,
 D:Gareth served as a Nexus of the Round Table, and after his
 D:death, Camelot itself soon dissolved.
@@ -20046,7 +20045,7 @@ F:EVIL | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE |
 F:NO_SLEEP | NO_CONF | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_6 |
-S:BO_FIRE | BLINK | TELE_SELF | S_KIN
+S:BO_FIRE | BLINK | TELE_SELF | S_CAMELOT(1d2)
 D:The weakest and most petty of the knights, Kay is often bullying
 D:squires and pages, forcing them to do demeaning tasks. Several
 D:of the Knights in their youths suffered Kay.
@@ -20066,7 +20065,7 @@ F:GOOD | HUMAN | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_ACID |
 F:NO_SLEEP | NO_CONF | CAMELOT | NO_QUEST | KNIGHT | HAS_LITE_1
 S:1_IN_6 |
-S:SHOOT(6d8) | BO_FIRE | TELE_TO | BLINK | TELE_SELF | S_KIN | HEAL
+S:SHOOT(6d8) | BO_FIRE | TELE_TO | BLINK | TELE_SELF | S_KNIGHT | HEAL
 D:A Knight of the Round Table of King Arthur's Court.
 P:Copy:Demigod:Paladin
 
@@ -20144,7 +20143,7 @@ F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:DROP_SKELETON | DROP_CORPSE | HUMAN |
 F:SMART | OPEN_DOOR | TAKE_ITEM | BASH_DOOR |
 F:NO_FEAR | AURA_FEAR | POWERFUL
-S:FREQ_30 | SCARE | S_KIN | TELE_TO
+S:FREQ_30 | SCARE | S_NIGHTMARE | TELE_TO
 D:A human, covered in bone armor and decorated with the
 D:shriveled, preserved eyeballs of foes defeated. The
 D:sight of him strikes terror into your soul.

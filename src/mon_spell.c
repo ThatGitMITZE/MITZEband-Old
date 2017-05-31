@@ -1853,6 +1853,8 @@ static void _summon(void)
         msg_format("%s summons help.", _current.name);
     assert(_current.spell->parm.tag == MSP_DICE);
     ct = _roll(_current.spell->parm.v.dice);
+    if (_current.spell->id.effect == SUMMON_KIN)
+        summon_kin_type = _current.race->d_char;
     for (i = 0; i < ct; i++)
         _summon_type(_current.spell->id.effect);
 }
