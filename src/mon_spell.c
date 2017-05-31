@@ -2109,6 +2109,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
     bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
     bool           splash = FALSE;
+    bool           direct = TRUE;
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
 
@@ -2124,6 +2125,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     {
         point_t new_dest = {0};
         
+        direct = FALSE;
         if (!stupid)
             new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
 
@@ -2187,7 +2189,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         int pct_wounded = 100 - pct_healthy;
         if (pct_wounded > 20)
         {
-            int offence = pct_healthy;
+            int offence = 100 - pct_wounded/2;
             int panic = 5 * pct_wounded;
             if (smart && pct_wounded > 90 && one_in_(2))
             {
@@ -2214,7 +2216,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         }
     }
 
-    if (smart)
+    if (smart && direct)
     {
         spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
         if (spell && TELE_LEVEL_IS_INEFF(0))
@@ -2233,6 +2235,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             spell->prob = 0;
         else
             spell->prob += cast->mon->anger;
+        /* XXX if (!direct && powerful_monster && some_odds) ... */
     }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_WORLD));
@@ -2241,7 +2244,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 
     /* Blink away if too close and good offense available */
     spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_BLINK));
-    if (spell && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+    if (spell && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
         spell->prob = 100;
 
     /* Useless buffs? */
@@ -2267,7 +2270,17 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && !raise_possible(cast->mon))
         spell->prob = 0;
 
-    /* XXX Invulnerable => Psychospear */
+    if (p_ptr->invuln && direct)
+    {
+        _remove_group(spells->groups[MST_BREATHE], NULL);
+        _remove_group(spells->groups[MST_BALL], NULL);
+        _remove_group(spells->groups[MST_BOLT], NULL);
+        _remove_group(spells->groups[MST_BEAM], NULL);
+        _remove_group(spells->groups[MST_CURSE], NULL);
+        spell = mon_spells_find(spells, _id(MST_BEAM, GF_PSY_SPEAR));
+        if (spell)
+            spell->prob = 30;
+    }
 }
 
 static mon_spell_ptr _choose_spell(mon_spells_ptr spells)
