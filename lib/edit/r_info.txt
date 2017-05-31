@@ -14529,7 +14529,7 @@ P:Copy:Human:Sorcerer
 P:Stats:0:0:0:0:0:20
 P:Body:Quylthulg
 S:1_IN_1 |
-S:S_MONSTER(1d1) | S_MONSTER | S_UNDEAD | S_DEMON | S_DRAGON | S_ANGEL |
+S:S_MONSTER(1d1) | S_MONSTER | S_UNDEAD | S_HI_DEMON | S_DRAGON | S_ANGEL |
 S:S_HYDRA | S_SPIDER | S_ANT | S_HOUND | S_UNIQUE | S_AMBERITE |
 S:S_HI_UNDEAD | S_HI_DRAGON | S_KIN
 D:This disgusting creature squeals and snorts as it writhes on the floor.
@@ -14639,7 +14639,7 @@ P:Body:Cyaegha
 S:FREQ_30 |
 S:TELE_OTHER | BLIND | PARALYZE | SCARE | BRAIN_SMASH |
 S:BR_DARK | BA_DARK | BR_NETHER | HAND_DOOM | AMNESIA |
-S:S_HI_UNDEAD | S_DEMON | S_MONSTER | S_HYDRA
+S:S_HI_UNDEAD | S_HI_DEMON | S_MONSTER | S_HYDRA
 D:"...it was a gigantic eye staring down at them. Around the eye,
 D:the sky split; deep clefts opened through which the darkness
 D:began to ooze, a darkness blacker than the night, which crawled
@@ -14689,7 +14689,7 @@ F:POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Speed:+15
 S:1_IN_3 |
-S:BO_MANA | SCARE | BR_COLD | S_DEMON | BO_ELEC | BA_ELEC | PSY_SPEAR |
+S:BO_MANA | SCARE | BR_COLD | S_HI_DEMON | BO_ELEC | BA_ELEC | PSY_SPEAR |
 S:MIND_BLAST | CAUSE_4 | BA_CHAOS | BA_WATER | S_HI_UNDEAD | S_KIN
 D:The Wendigo, moving so fast that you can see little except two
 D:glowing eyes burning with hatred. "The stars had been blotted out...
@@ -14762,7 +14762,7 @@ P:Copy:Balrog:Chaos-Warrior
 P:Speed:+15
 S:1_IN_3 |
 S:TELE_TO | SCARE | PARALYZE | BRAIN_SMASH |
-S:S_DEMON | S_HI_UNDEAD | S_UNDEAD |
+S:S_HI_DEMON | S_HI_UNDEAD | S_UNDEAD |
 S:BR_FIRE | BR_NETHER | S_CYBER | HAND_DOOM | ANIM_DEAD
 D:A duke of hell, in the flesh.
 
@@ -14805,7 +14805,7 @@ F:POS_GAIN_AC
 P:Copy:Half-Giant:Mauler
 P:Body:Demonic Horror
 S:1_IN_6 |
-S:S_MONSTER | S_DEMON | S_HI_DRAGON | S_HI_UNDEAD | HEAL |
+S:S_MONSTER | S_HI_DEMON | S_HI_DRAGON | S_HI_UNDEAD | HEAL |
 S:TELE_OTHER | TELE_SELF | CAUSE_4 | BRAIN_SMASH | DRAIN_MANA
 S:BR_NUKE | BR_POIS | BR_CHAOS | BR_NEXUS | ANIM_DEAD
 D:"...in the pool [there was] a grayish, horrid mass that nearly choked
@@ -14855,7 +14855,7 @@ F:DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Titan:Rogue
 S:1_IN_3 |
 S:SHRIEK | HASTE | HEAL | DRAIN_MANA | TELE_SELF | TELE_TO | TELE_OTHER |
-S:TELE_LEVEL | AMNESIA | S_CYBER | S_DEMON | HAND_DOOM | S_HI_UNDEAD |
+S:TELE_LEVEL | AMNESIA | S_CYBER | S_HI_DEMON | HAND_DOOM | S_HI_UNDEAD |
 S:S_UNIQUE | S_HI_DRAGON | BA_DARK | BA_MANA | S_AMBERITE | ANIM_DEAD
 S:INVULN | DISPEL_MAGIC | ANTI_MAGIC | PSY_SPEAR
 D:Loki, the god of mischief, is a nasty person. He will use every
@@ -14879,7 +14879,7 @@ F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Chaos-Warrior
 P:Body:Cthulhu
 S:1_IN_3
-S:SCARE | CONFUSE | S_DEMON | S_UNDEAD | DRAIN_MANA | BR_ACID |
+S:SCARE | CONFUSE | S_HI_DEMON | S_UNDEAD | DRAIN_MANA | BR_ACID |
 S:BR_FIRE | TELE_SELF | S_MONSTER | BRAIN_SMASH | BR_NETHER |
 S:HEAL | MIND_BLAST | BA_NUKE | ANIM_DEAD
 D:The last remnants of sanity threaten to leave your brain as you
@@ -14906,7 +14906,7 @@ F:POS_SUST_STR
 P:Copy:Half-Titan:Mauler
 S:1_IN_5 |
 S:BR_FIRE | BR_PLASMA | BLIND | TELE_TO | S_KIN | S_HI_UNDEAD |
-S:HAND_DOOM | TELE_OTHER | S_CYBER | S_DEMON | THROW
+S:HAND_DOOM | TELE_OTHER | S_CYBER | S_HI_DEMON | THROW
 D:Surtur is also one of the most ancient of all creatures. He is a demonic
 D:giant of fire, who is destined to set the nine worlds afire with his
 D:accursed sword of doom on the day of Ragnarok.
@@ -14953,7 +14953,7 @@ P:Copy:Balrog:Mauler
 S:1_IN_4 |
 S:BLIND | CONFUSE | SCARE |
 S:BR_FIRE |
-S:S_DEMON | S_HI_UNDEAD
+S:S_HI_DEMON | S_HI_UNDEAD
 D:A massive form cloaked in flame. Lungorthin stares balefully at you with
 D:eyes that smoulder red. The dungeon floor where he stands is scorched by
 D:the heat of his body.
@@ -15000,7 +15000,7 @@ P:Body:Cyaegha
 S:1_IN_2 |
 S:AMNESIA | HEAL | HAND_DOOM | BA_MANA | TELE_SELF | TELE_OTHER |
 S:TELE_LEVEL | CONFUSE | BLIND | BRAIN_SMASH | DRAIN_MANA |
-S:S_MONSTER | S_KIN | S_CYBER | S_HOUND | S_HYDRA | S_DEMON |
+S:S_MONSTER | S_KIN | S_CYBER | S_HOUND | S_HYDRA | S_HI_DEMON |
 S:S_UNIQUE | S_HI_UNDEAD | S_HI_DRAGON | ANIM_DEAD | DISPEL_MAGIC | ANTI_MAGIC | PSY_SPEAR
 D:Shuma-Gorath is one of the immortal lords of chaos. The true form of
 D:this blasphemous horror is a huge, all-seeing eye surrounded by tentacles.
@@ -15065,7 +15065,7 @@ P:Stats:0:5:0:0:0:0
 S:1_IN_3 |
 S:TELE_SELF | BLIND | SCARE | CAUSE_4 | BRAIN_SMASH | POLYMORPH
 S:BA_MANA | BO_MANA | BA_FIRE | DISPEL_MAGIC | ANTI_MAGIC | PSY_SPEAR |
-S:S_MONSTER | S_DEMON | S_HI_UNDEAD | HAND_DOOM | ANIM_DEAD
+S:S_MONSTER | S_HI_DEMON | S_HI_UNDEAD | HAND_DOOM | ANIM_DEAD
 O:DROP_MAGE
 D:A stench of corruption and decay surrounds this sorcerer, who has clearly
 D:risen from the grave to continue his foul plots and schemes.
@@ -15084,7 +15084,7 @@ F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | NONLIVING | CAN_FLY | POWERFUL |
 F:EVIL | RES_ACID | RES_COLD | RES_ELEC | RES_POIS | RES_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:BO_MANA | BRAIN_SMASH | BA_MANA | S_MONSTER | S_CYBER | DISPEL_MAGIC | ANTI_MAGIC | BA_LITE |
-S:BA_CHAOS | S_DEMON | S_HI_UNDEAD | S_HOUND | BR_MANA | BR_DISINTEGRATE | PSY_SPEAR
+S:BA_CHAOS | S_HI_DEMON | S_HI_UNDEAD | S_HOUND | BR_MANA | BR_DISINTEGRATE | PSY_SPEAR
 F:POS_GAIN_AC | POS_SEE_INVIS | POS_HOLD_LIFE | POS_SUST_STR | POS_SUST_CON
 P:Copy:Barbarian:Mauler
 P:Body:Jelly7
@@ -15167,7 +15167,7 @@ P:Body:Demonic Horror
 S:1_IN_3 |
 S:BO_MANA | BRAIN_SMASH | BA_DARK | S_MONSTER |
 S:CAUSE_4 | HEAL | BR_CHAOS | BR_CONFUSION | BR_POIS | BR_NUKE |
-S:BA_CHAOS | S_DEMON | S_HI_UNDEAD | S_UNIQUE | ANIM_DEAD
+S:BA_CHAOS | S_HI_DEMON | S_HI_UNDEAD | S_UNIQUE | ANIM_DEAD
 D:This horrendous outer god looks like a writhing cloudy mass filled
 D:with mouths and tentacles.
 
@@ -15242,7 +15242,7 @@ S:1_IN_3 |
 S:TELE_OTHER | TELE_TO | TELE_LEVEL | TELE_SELF | BR_NEXUS | BA_CHAOS |
 S:BA_MANA | BA_FIRE | S_MONSTER | BRAIN_SMASH | MIND_BLAST |
 S:CAUSE_4 | HASTE | S_HI_UNDEAD | S_HI_DRAGON | ANIM_DEAD | PSY_SPEAR |
-S:S_ANGEL | S_DEMON | HEAL | S_SPIDER | S_HOUND | S_CYBER | HAND_DOOM
+S:S_ANGEL | S_HI_DEMON | HEAL | S_SPIDER | S_HOUND | S_CYBER | HAND_DOOM
 D:Nyarlathothep is the messenger, the heart and the soul of the outer gods.
 D:He is a shapechanger capable of assuming thousands of nightmarish forms.
 D:One of them looks like this: "A tall, slim figure with the young face of
@@ -15271,7 +15271,7 @@ F:POS_GAIN_AC | POS_HOLD_LIFE
 P:Copy:Zombie:Rage-Mage
 P:Body:Demonic Horror
 S:1_IN_5 |
-S:S_DEMON | BR_CHAOS | BR_DISENCHANT | BR_MANA | BA_WATER | BR_DISINTEGRATE
+S:S_HI_DEMON | BR_CHAOS | BR_DISENCHANT | BR_MANA | BA_WATER | BR_DISINTEGRATE
 D:"That last amorphous blight of nethermost confusion which
 D:blasphemes and bubbles at the centre of all infinity --
 D:the boundless daemon sultan Azathoth, whose name no lips
@@ -15365,7 +15365,7 @@ F:IM_FIRE | RES_ELEC | NO_CONF | NO_SLEEP
 F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Mauler
 S:FREQ_30 | BR_HELL_FIRE | BR_FIRE | BR_NETHER | BA_NETHER
-S:S_KIN | S_DEMON | S_HI_UNDEAD | S_CYBER
+S:S_KIN | S_HI_DEMON | S_HI_UNDEAD | S_CYBER
 D:Gothmog is the Chief Balrog in Morgoth's personal guard. He is renowned
 D:for slaying Ecthelion the Warder of the Gates and he has never been
 D:defeated in combat. With his whip of flame and awesome fiery breath he
@@ -15392,7 +15392,7 @@ S:FREQ_30
 S:TELE_SELF | SCARE | BLIND | MIND_BLAST | BRAIN_SMASH | DRAIN_MANA |
 S:BR_POIS | BR_ACID | BR_FIRE | CONFUSE | DARKNESS | AMNESIA | S_HI_UNDEAD |
 S:BR_NUKE | BR_NETHER | BR_CHAOS | BR_DISENCHANT | BR_DARK | BR_PLASMA | BR_CONFUSION
-S:BR_NEXUS | S_DEMON | S_CYBER | S_KIN | BR_DISINTEGRATE | HAND_DOOM
+S:BR_NEXUS | S_HI_DEMON | S_CYBER | S_KIN | BR_DISINTEGRATE | HAND_DOOM
 S:ANIM_DEAD
 D:This creature is death incarnate. "A monster of vaguely anthropoid
 D:outline, but with an octopus-like head whose face was a mass of
@@ -15426,7 +15426,7 @@ S:TELE_SELF | TELE_LEVEL | BLIND | CONFUSE | SCARE | CAUSE_4 |
 S:BRAIN_SMASH | AMNESIA |
 S:BO_ICE | BO_MANA | BO_PLASMA |
 S:BA_MANA | BA_FIRE | BA_WATER | BA_NETHER | BA_DARK |
-S:S_MONSTER | S_DEMON | S_HI_UNDEAD | S_HI_DRAGON |
+S:S_MONSTER | S_HI_DEMON | S_HI_UNDEAD | S_HI_DRAGON |
 S:HAND_DOOM | ANIM_DEAD | DISPEL_MAGIC | ANTI_MAGIC | PSY_SPEAR
 D:Mighty in spells and enchantments,
 D:he created the One Ring. His eyes glow with power and his gaze seeks to
@@ -15484,7 +15484,7 @@ F:SMART | OPEN_DOOR | BASH_DOOR | MOVE_BODY | REGENERATE |
 F:EVIL | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | RES_CHAO | POWERFUL |
 F:NO_CONF | NO_SLEEP
 S:FREQ_40 |
-S:TELE_SELF | SCARE | BLIND | S_DEMON | S_MONSTER |
+S:TELE_SELF | SCARE | BLIND | S_HI_DEMON | S_MONSTER |
 S:TELE_TO | CONFUSE | BO_MANA | BA_FIRE | BRAIN_SMASH | BA_NETHER |
 S:BO_ICE | CAUSE_4 | BA_WATER | BO_PLASMA | TELE_LEVEL | TELE_OTHER |
 S:AMNESIA | DARKNESS | BA_MANA | S_HI_DRAGON | S_HI_UNDEAD | BA_CHAOS
@@ -15615,7 +15615,7 @@ F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
 F:RES_TELE | NO_FEAR | NO_CONF | NO_STUN | NO_SLEEP |
 S:1_IN_2 |
 S:BR_NETHER | BR_TIME | BA_MANA | BO_MANA | HAND_DOOM | HEAL |
-S:S_DEMON | S_HI_UNDEAD | S_HI_DRAGON | DISPEL_MAGIC | ANTI_MAGIC
+S:S_HI_DEMON | S_HI_UNDEAD | S_HI_DRAGON | DISPEL_MAGIC | ANTI_MAGIC
 D:It is a ring of immense power. You can hardly believe you've
 D:finally found the One Ring!
 
@@ -16589,7 +16589,7 @@ F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Chaos-Warrior
 P:Body:Demogorgon
 S:FREQ_25 | BA_DARK | BO_NETHER | BR_NETHER | BR_DARK | BR_NUKE | BR_POIS | HAND_DOOM |
-S:BLIND | CONFUSE | SCARE | S_DEMON | S_KIN | DISPEL_MAGIC | ANTI_MAGIC
+S:BLIND | CONFUSE | SCARE | S_HI_DEMON | S_KIN | DISPEL_MAGIC | ANTI_MAGIC
 
 #XXX was EXPLODE:LOSE_ALL
 N:921:Internet Exploder
@@ -20185,7 +20185,7 @@ F:ANIMAL | EVIL | STUPID |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_2 |
 S:BLINK | TELE_SELF |
-S:S_DEMON
+S:S_HI_DEMON
 F:POS_SEE_INVIS | POS_TELEPATHY
 P:Copy:Human:Sorcerer
 P:Stats:0:0:0:0:0:10
@@ -20661,7 +20661,7 @@ F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | CAN_FLY |
 F:EVIL | DEMON | RES_FIRE | RES_POIS | NO_CONF | NO_SLEEP |
 P:Copy:Balrog:Mauler
 S:1_IN_5 |
-S:S_DEMON | S_HI_DRAGON | BR_FIRE | BR_POIS | BR_CHAOS | BA_CHAOS |
+S:S_HI_DEMON | S_HI_DRAGON | BR_FIRE | BR_POIS | BR_CHAOS | BA_CHAOS |
 S:SCARE | BA_FIRE | CAUSE_4 | S_KIN |
 D:Appearing as a giant, clawed and winged humanoid with a scaly red body
 D:and massive fangs dripping a foul green liquid, the Pit Fiend is a
@@ -20707,7 +20707,7 @@ P:Life:110
 P:Body:Giant Bird
 S:1_IN_3 |
 S:BR_DARK | BR_NETHER | SCARE | BO_NETHER | BA_DARK |
-S:S_HI_UNDEAD | S_UNDEAD | S_DEMON | ANIM_DEAD |
+S:S_HI_UNDEAD | S_UNDEAD | S_HI_DEMON | ANIM_DEAD |
 D:Nebiros, the General of Hell keeps watch over all demons. One of the
 D:greatest necromancers in Hell, he appears in the form of a raven.
 
@@ -21039,7 +21039,7 @@ F:EVIL | DEMON | HURT_LITE | RES_DARK |
 F:RES_COLD | RES_ELEC | RES_ACID | RES_POIS | NO_CONF | NO_SLEEP
 F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Mauler
-S:FREQ_20 | BR_DARK | BR_CONFUSION | BR_INERTIA | S_DEMON |
+S:FREQ_20 | BR_DARK | BR_CONFUSION | BR_INERTIA | S_HI_DEMON |
 D:The prince of evil.
 
 N:1195:Lucifer, the Fallen
@@ -21149,7 +21149,7 @@ S:1_IN_2 |
 S:TELE_TO | TELE_SELF | BR_GRAVITY |
 S:BA_CHAOS | BA_FIRE | BA_DARK | BA_NETHER | BA_ACID | BA_COLD | BRAIN_SMASH |
 S:CAUSE_4 | PSY_SPEAR | BO_MANA | HEAL | HASTE | MIND_BLAST | BA_LITE | BA_ELEC |
-S:S_DEMON | S_CYBER | S_HI_UNDEAD | S_HI_DRAGON | S_MONSTER | S_UNIQUE |
+S:S_HI_DEMON | S_CYBER | S_HI_UNDEAD | S_HI_DRAGON | S_MONSTER | S_UNIQUE |
 S:S_ANGEL | S_HOUND |
 
 # some steam stuff

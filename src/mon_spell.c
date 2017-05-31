@@ -1858,8 +1858,8 @@ static void _summon(void)
 }
 static void _weird(void)
 {
-}
-
+    /* Banor=Rupart, Ohmu, Birds */
+} 
 static void _spell_cast_aux(void)
 {
     disturb(1, 0);
@@ -1882,6 +1882,9 @@ static void _spell_cast_aux(void)
     case MST_SUMMON:  _summon();  break;
     case MST_WEIRD:   _weird();   break;
     }
+
+    if (is_original_ap_and_seen(_current.mon))
+        _current.spell->lore = MIN(MAX_SHORT, _current.spell->lore + 1);
 }
 
 /*************************************************************************
