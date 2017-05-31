@@ -658,7 +658,6 @@ typedef struct monster_type monster_type;
 enum {
     SM_REFLETION = RES_MAX,
     SM_FREE_ACTION,
-    SM_DRAIN_MANA,
     SM_GUARDIAN,
     SM_CLONED,
     SM_PET,

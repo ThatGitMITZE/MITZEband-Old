@@ -958,7 +958,6 @@ bool make_attack_normal(int m_idx)
                     {
                         sp_player(-effect_dam);
                     }
-                    update_smart_learn(m_idx, SM_DRAIN_MANA);
                     break;
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);

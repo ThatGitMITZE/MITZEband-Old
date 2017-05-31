@@ -2335,7 +2335,6 @@ int gf_damage_p(int who, int type, int dam, int flags)
                     msg_format("%^s appears healthier.", m_name);
             }
         }
-        update_smart_learn(who, SM_DRAIN_MANA);
         break;
     case GF_MIND_BLAST:
         if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())

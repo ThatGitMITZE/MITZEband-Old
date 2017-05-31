@@ -567,12 +567,6 @@ static mon_spell_parm_t _breathe_parm(int which)
 static mon_spell_parm_t _ball_parm(int which, int rlev)
 {
     mon_spell_parm_t parm = {0};
-    if (which == GF_ROCKET)
-    {
-        parm.tag = MSP_HP_PCT;
-        parm.v.hp_pct = _hp_pct(18, 600);
-        return parm;
-    }
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -619,6 +613,9 @@ static mon_spell_parm_t _ball_parm(int which, int rlev)
         break;
     case GF_ROCK:
         parm.v.dice = _dice(0, 0, 3*rlev);
+        break;
+    case GF_ROCKET:
+        parm.v.dice = _dice(0, 0, 6*rlev);
         break;
     default:
         assert(FALSE);
@@ -1055,18 +1052,14 @@ vec_ptr mon_spells_all(mon_spells_ptr spells)
 
 mon_spell_ptr mon_spells_find(mon_spells_ptr spells, mon_spell_id_t id)
 {
-    int i, j;
-    for (i = 0; i < MST_COUNT; i++)
+    int i;
+    mon_spell_group_ptr group = spells->groups[id.type];
+    if (!group) return NULL;
+    for (i = 0; i < group->count; i++)
     {
-        mon_spell_group_ptr group = spells->groups[i];
-        if (!group) continue;
-        for (j = 0; j < group->count; j++)
-        {
-            mon_spell_ptr spell = &group->spells[j];
-            if (spell->id.type != id.type) continue;
-            if (spell->id.effect != id.effect) continue;
-            return spell;
-        }
+        mon_spell_ptr spell = &group->spells[i];
+        if (spell->id.effect != id.effect) continue;
+        return spell;
     }
     return NULL;
 }
@@ -1325,30 +1318,21 @@ static void _ball(void)
         }
     }
 
-    if (_current.spell->id.effect == GF_ROCKET) /* odd ball */
+    assert(_current.spell->parm.tag == MSP_DICE);
+    dam = _scale(_roll(dice));
+    if (!(_current.spell->flags & MSF_BALL0))
     {
-        int pct = _current.spell->parm.v.hp_pct.pct;
-        int max = _current.spell->parm.v.hp_pct.max;
-        assert(_current.spell->parm.tag == MSP_HP_PCT);
-        flags |= PROJECT_STOP;
-        rad = 2;
-        dam = _current.mon->hp * pct / 100;
-        if (dam > max) dam = max;
+        /* XXX This was previously set on a spell by spell basis ... */
+        if (dam > 300) rad = 4;
+        else if (dam > 150) rad = 3;
+        else rad = 2;
     }
-    else
-    {
-        assert(_current.spell->parm.tag == MSP_DICE);
-        dam = _scale(_roll(dice));
-        if (!(_current.spell->flags & MSF_BALL0))
-        {
-            /* XXX This was previously set on a spell by spell basis ... */
-            if (dam > 300) rad = 4;
-            else if (dam > 150) rad = 3;
-            else rad = 2;
-        }
-    }
+
     switch (_current.spell->id.effect)
     {
+    case GF_ROCKET:
+        flags |= PROJECT_STOP;
+        break;
     case GF_DRAIN_MANA:
     case GF_MIND_BLAST:
     case GF_BRAIN_SMASH:
@@ -2081,8 +2065,6 @@ static void _smart_remove(mon_spell_cast_ptr cast)
         _remove_spell(spells, _id(MST_ANNOY, ANNOY_PARALYZE));
         _remove_spell(spells, _id(MST_ANNOY, ANNOY_SLOW));
     }
-    if (_have_smart_flag(flags, SM_DRAIN_MANA) && !p_ptr->csp)
-        _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
     if (_have_smart_flag(flags, RES_NEXUS))
     {
         int pct = res_pct(RES_NEXUS);
@@ -2118,7 +2100,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _smart_remove(cast);
 
     /* Require a projectable player for projection spells. Even stupid
-     * monsters are dumb enough to bounce spells off walls! Non-stupid
+     * monsters aren't dumb enough to bounce spells off walls! Non-stupid
      * monsters will splash the player if possible, though with reduced
      * odds. */
     if (!_projectable(cast->src, cast->dest))
@@ -2136,6 +2118,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _remove_group(spells->groups[MST_BUFF], NULL);
         _remove_group(spells->groups[MST_CURSE], NULL);
         _remove_group(spells->groups[MST_WEIRD], NULL);
+        _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
 
         if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
         {
@@ -2233,9 +2216,8 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     {
         if (_distance(cast->src, cast->dest) < 2)
             spell->prob = 0;
-        else
+        else /* XXX this allows any angry monster to TELE_TO out of LoS! Too much? */
             spell->prob += cast->mon->anger;
-        /* XXX if (!direct && powerful_monster && some_odds) ... */
     }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_WORLD));
@@ -2245,7 +2227,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     /* Blink away if too close and good offense available */
     spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_BLINK));
     if (spell && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
-        spell->prob = 100;
+        spell->prob = 50;
 
     /* Useless buffs? */
     spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_INVULN));
@@ -2256,12 +2238,15 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && cast->mon->mtimed[MTIMED_FAST])
         spell->prob = 0;
 
-    if (!p_ptr->csp) /* XXX Historical: Bypass SM_DRAIN_MANA? */
+    if (!p_ptr->csp)
         _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
 
     /* require a direct shot to player for bolts */
-    if (!splash && spells->groups[MST_BOLT] && !_clean_shot(cast->src, cast->dest))
+    if (!splash && !_clean_shot(cast->src, cast->dest))
+    {
         _remove_group(spells->groups[MST_BOLT], NULL);
+        _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
+    }
 
     if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
         _remove_group(spells->groups[MST_SUMMON], NULL);

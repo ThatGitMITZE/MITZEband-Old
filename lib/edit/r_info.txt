@@ -14386,7 +14386,7 @@ F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | RES_TELE |
 F:RES_POIS | RES_FIRE | FORCE_SLEEP | FORCE_MAXHP | NONLIVING
 F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Mauler
-S:FREQ_15 | ROCKET
+S:FREQ_15 | ROCKET(600)
 D:Reverbrant metal steps announce the arrival of this huge creature,
 D:half demon half machine. It has an unsurpassable firepower.
 
@@ -15041,7 +15041,7 @@ F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | RES_TELE | DROP_GREAT | UNIQUE |
 F:RES_POIS | RES_FIRE | FORCE_SLEEP | FORCE_MAXHP | NONLIVING
 F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Balrog:Mauler
-S:FREQ_20 | ROCKET | S_CYBER
+S:FREQ_20 | ROCKET(600) | S_CYBER
 D:The mightiest of Cyberdemons, their lord and ruler.
 
 N:844:Kaschei the Immortal
@@ -15566,7 +15566,7 @@ P:Life:125
 P:Body:Jormungand
 S:FREQ_35 |
 S:BR_CHAOS | BR_NETHER | BR_MANA | BR_NUKE | BR_DISINTEGRATE
-S:BA_CHAOS | ROCKET | HAND_DOOM
+S:BA_CHAOS | ROCKET(600) | HAND_DOOM
 S:TELE_TO | DISPEL_MAGIC | ANTI_MAGIC
 S:S_MONSTER | S_CYBER | S_KIN | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
 D:The Big Boss himself. Before the universe the Serpent was. The Unicorn
@@ -15792,7 +15792,7 @@ F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
 F:RES_TELE | NO_CONF | NO_SLEEP |
 F:DROP_CORPSE | POS_GAIN_AC
 S:1_IN_2 |
-S:ROCKET | HEAL | BLINK | INVULN
+S:ROCKET(300) | HEAL | BLINK | INVULN
 P:Copy:Human:Beastmaster
 P:Speed:+15
 D:His favorite food is roasting rice noodle.
@@ -15996,7 +15996,7 @@ P:Copy:Half-Giant:Mauler
 P:Life:125
 P:Body:Jormungand
 S:FREQ_35 |
-S:S_MONSTER | BR_CHAOS | BA_CHAOS | ROCKET | S_CYBER | S_KIN |
+S:S_MONSTER | BR_CHAOS | BA_CHAOS | ROCKET(600) | S_CYBER | S_KIN |
 S:BR_NETHER | BR_MANA | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
 S:BR_NUKE | BR_DISINTEGRATE | HAND_DOOM | DISPEL_MAGIC | ANTI_MAGIC
 
@@ -16091,7 +16091,7 @@ W:70:6:999:2000:0:0
 B:EXPLODE:DAM(15d5)
 F:CHAR_CLEAR | ATTR_CLEAR
 F:NEVER_MOVE | RES_POIS | NONLIVING | RES_ACID | RES_CHAO | STUPID | FORCE_MAXHP
-S:FREQ_20 | ROCKET | SHOOT(15d10) | BLINK | BR_POIS | BR_CHAOS | BR_NEXUS
+S:FREQ_20 | ROCKET(200) | SHOOT(15d10) | BLINK | BR_POIS | BR_CHAOS | BR_NEXUS
 D:It was left here to be used against intruders.
 
 N:890:Great Venom Wyrm
@@ -16209,7 +16209,7 @@ B:HIT:HURT:2d4
 F:MALE | FORCE_SLEEP | FORCE_MAXHP | DROP_1D2 | SMART
 F:DROP_CORPSE | DROP_SKELETON | CAN_SWIM
 P:Copy:Hobbit:Blood-Knight
-S:FREQ_10 | ROCKET
+S:FREQ_10 | ROCKET(150)
 D:You watch in horror as he aims his massive weapon at you.
 
 N:897:Shard vortex
@@ -16734,7 +16734,7 @@ F:WILD_OCEAN | WILD_WASTE | WILD_WOOD | WILD_VOLCANO | WILD_MOUNTAIN |
 F:WILD_GRASS | WILD_ALL | SELF_LITE_1 | SELF_LITE_2 |
 F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC | POS_SEE_INVIS
 S:1_IN_3 |
-S:SHRIEK | DISPEL_MAGIC | ANTI_MAGIC | ROCKET | SHOOT(1d200) | BR_ACID |
+S:SHRIEK | DISPEL_MAGIC | ANTI_MAGIC | ROCKET(600) | SHOOT(1d200) | BR_ACID |
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_POIS | BR_NETHER | BR_LITE | BR_DARK | BR_CONFUSION |
 S:BR_SOUND | BR_CHAOS | BR_DISENCHANT | BR_NEXUS | BR_TIME | BR_INERTIA | BR_GRAVITY | BR_SHARDS |
 S:BR_PLASMA | BR_FORCE | BR_MANA | BA_NUKE | BR_NUKE | BA_CHAOS | BR_DISINTEGRATE | BA_ACID |
@@ -19613,7 +19613,7 @@ P:Stats:2:2:2:2:2:2
 P:Life:110
 S:1_IN_3 |
 S:BR_ELEC | BR_DISENCHANT | HASTE | TELE_TO | S_OLYMPIAN | S_SPECIAL
-S:PSY_SPEAR | DISPEL_MAGIC | ANTI_MAGIC | TELE_SELF | ROCKET | BR_CHAOS
+S:PSY_SPEAR | DISPEL_MAGIC | ANTI_MAGIC | TELE_SELF | ROCKET(550) | BR_CHAOS
 D:Zeus, King of the gods and ruler of Mount Olympus, god of the Sky
 D:and Thunder, and nominal husband of Hera. He commands the
 D:Olympians, and his wrath is fearsome. Flee his presence! Unless
@@ -19811,7 +19811,7 @@ F:POS_GAIN_AC
 P:Copy:Half-Titan:Mauler
 P:Stats:3:0:0:0:0:0
 S:1_IN_5 |
-S:ROCKET | HEAL | TELE_SELF | TELE_TO | S_SPECIAL
+S:ROCKET(500) | HEAL | TELE_SELF | TELE_TO | S_SPECIAL
 
 N:1105:Hera, Queen of the Gods
 G:P:g
@@ -20957,7 +20957,7 @@ F:DROP_CORPSE |
 P:Copy:High-Elf:High-Mage
 P:Body:Cyaegha
 S:1_IN_1 |
-S:ROCKET
+S:ROCKET(400)
 D:This golem beholder is a perfect sentry and won't let anything come close.
 D:White mouldy flesh covered by metal plating holds a black lidless eye,
 D:slowly turning around and around forever.
