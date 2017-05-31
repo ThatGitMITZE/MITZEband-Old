@@ -347,7 +347,7 @@ enum {
 static _parse_t _heal_tbl[] = {
     { "HEAL", { MST_HEAL, HEAL_SELF },
         { "Heal Self", TERM_WHITE,
-          "%s concentrates on .", /* XXX */
+          "%s concentrates on its wounds.", /* XXX */
           "%s mumbles." }},
     {0}
 };
@@ -2083,6 +2083,16 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     }
     if (_have_smart_flag(flags, SM_DRAIN_MANA) && !p_ptr->csp)
         _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
+    if (_have_smart_flag(flags, RES_NEXUS))
+    {
+        int pct = res_pct(RES_NEXUS);
+        mon_spell_ptr spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
+        if (spell && pct)
+        {
+           int tweak = pct > 30 ? 0 : 50;
+           spell->prob = spell->prob * tweak / 100;
+        }
+    }
 }
 
 static bool _clean_shot(point_t src, point_t dest)
@@ -2121,7 +2131,9 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_group(spells->groups[MST_BEAM], NULL);
         _remove_group(spells->groups[MST_BIFF], NULL);
+        _remove_group(spells->groups[MST_BUFF], NULL);
         _remove_group(spells->groups[MST_CURSE], NULL);
+        _remove_group(spells->groups[MST_WEIRD], NULL);
 
         if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
         {
@@ -2131,12 +2143,17 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             _adjust_group(spells->groups[MST_BALL], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
             _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
+            /* Heal and Self Telportation OK */
+            _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
+            _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
         }
         else
         {
             _remove_group(spells->groups[MST_BREATHE], NULL);
             _remove_group(spells->groups[MST_BALL], NULL);
             _remove_group(spells->groups[MST_SUMMON], NULL);
+            _remove_group(spells->groups[MST_HEAL], NULL);
+            _remove_group(spells->groups[MST_ESCAPE], NULL);
             spell = mon_spells_find(spells, _id(MST_BREATHE, GF_DISINTEGRATE));
             if ( spell
               && cast->mon->cdis < MAX_RANGE / 2
