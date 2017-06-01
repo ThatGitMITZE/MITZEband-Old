@@ -7656,7 +7656,7 @@ F:EVIL | NO_CONF | NO_SLEEP
 P:Copy:Hobbit:Ninja
 P:Life:90
 P:Speed:+10
-S:FREQ_30 | SHOOT(20d1)
+S:FREQ_30 | SHOOT(20d1) | JMP_CONFUSION | JMP_FIRE | JMP_POIS
 O:DROP_NINJA
 D:A humanoid clothed in black who moves with blinding speed.
 
@@ -16782,7 +16782,7 @@ F:GOOD | EVIL | REFLECTING | SMART | REGENERATE | OPEN_DOOR | CAN_SPEAK |
 F:RES_COLD | RES_FIRE | RES_ELEC | RES_ACID | RES_POIS | NO_CONF |
 F:NO_SLEEP | RES_TELE | RES_NETH | RES_NEXU | RES_TIME | POWERFUL |
 S:FREQ_40 |
-S:TELE_SELF | BLINK | HEAL | HASTE |
+S:TELE_SELF | BLINK | BLINK_OTHER | HEAL | HASTE |
 S:BO_MANA | BRAIN_SMASH | PSY_SPEAR | BA_CHAOS | S_SPECIAL
 P:Copy:Demigod:Monk
 
@@ -18391,9 +18391,9 @@ F:DROP_SKELETON | DROP_CORPSE |
 F:POS_DETECT_MONSTERS | POS_MAPPING | POS_IDENTIFY | POS_TELEPATHY
 P:Copy:Demigod:Mage
 S:1_IN_2 |
-S:BLINK | TELE_TO | BLIND | CONFUSE | CAUSE_3 | CAUSE_4 | TRAPS |
+S:BLINK | BLINK_OTHER | TELE_TO | BLIND | CONFUSE | CAUSE_3 | CAUSE_4 | TRAPS |
 S:BO_ACID | BA_FIRE | BA_COLD | BA_POIS | BO_WATER | BO_MANA | BA_WATER
-S:S_MONSTER(1d1) | S_UNDEAD | S_DRAGON | S_HI_DRAGON | S_HI_UNDEAD
+S:S_MONSTER | S_UNDEAD | S_DRAGON | S_HI_DRAGON | S_HI_UNDEAD
 O:DROP_MAGE
 D:A human figure in robes, he moves with magically improved speed, and his
 D:hands are a blur with spell casting. You stagger at the mighty sound of his
@@ -19396,7 +19396,7 @@ F:AURA_FEAR | NO_FEAR
 F:DROP_CORPSE | POS_DETECT_MONSTERS | POS_TELEPATHY
 P:Copy:Mindflayer:Mage
 S:1_IN_1 |
-S:BLINK | TELE_SELF | HEAL | TELE_OTHER |
+S:BLINK | BLINK_OTHER | TELE_SELF | HEAL | TELE_OTHER |
 S:BA_MANA | BR_DISINTEGRATE | DISPEL_MAGIC | ANTI_MAGIC
 S:BA_NETHER | BO_MANA | BA_CHAOS
 O:DROP_MAGE
@@ -20182,7 +20182,7 @@ F:INVISIBLE | EMPTY_MIND |
 F:ANIMAL | EVIL | STUPID |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_2 |
-S:BLINK | TELE_SELF |
+S:BLINK | BLINK_OTHER | TELE_SELF |
 S:S_HI_DEMON
 F:POS_SEE_INVIS | POS_TELEPATHY
 P:Copy:Human:Sorcerer
@@ -21149,179 +21149,6 @@ S:BA_CHAOS | BA_FIRE | BA_DARK | BA_NETHER | BA_ACID | BA_COLD | BRAIN_SMASH |
 S:CAUSE_4 | PSY_SPEAR | BO_MANA | HEAL | HASTE | MIND_BLAST | BA_LITE | BA_ELEC |
 S:S_HI_DEMON | S_CYBER | S_HI_UNDEAD | S_HI_DRAGON | S_MONSTER | S_UNIQUE |
 S:S_ANGEL | S_HOUND |
-
-# some steam stuff
-N:1201:Countess Bathory
-G:V:w
-I:130:50d100:20:100:10:170
-W:58:4:999:30000:0:0
-B:BITE:EXP_VAMP:14d8
-B:BITE:EXP_VAMP:14d8
-B:BITE:EXP_VAMP:10d8
-B:BITE:EXP_VAMP:10d8
-F:DEPRECATED
-F:UNIQUE | FEMALE | AURA_FEAR |
-F:FORCE_SLEEP | FORCE_MAXHP | SMART | CAN_SPEAK |
-F:ONLY_ITEM | DROP_1D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD |
-F:OPEN_DOOR | BASH_DOOR | REGENERATE | UNDEAD | COLD_BLOOD |
-F:EVIL | HURT_LITE | NO_CONF | NO_SLEEP | ESCORT | RES_TELE |
-F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_DETECT_MONSTERS | POS_MAPPING | POS_IDENTIFY
-F:DROP_CORPSE |
-P:Copy:Vampire:Rogue
-P:Body:Vampire
-S:1_IN_3 |
-S:HEAL | HASTE |
-D:The Countess Elizabeth Bathory stands before you, a strikingly
-D:beautiful young woman with an aura of tremendous power. You
-D:immediately notice the blood dripping from her face and covering
-D:most of her body, and her eyes glint with an inhuman
-D:bloodlust as she launches herself towards you, fangs bared and
-D:razor-sharp nails glinting as they rake through the air intent on
-D:drawing your blood that she may bathe in it.
-
-N:1202:Steam-Powered Mechanical Dragon
-G:g:D
-I:125:84d100:80:120:100:500
-W:69:7:999:24000:0:0
-B:CLAW:HURT:10d10
-B:CLAW:HURT:10d10
-B:BITE:FIRE:13d13
-B:BITE:HURT:2d2
-F:DEPRECATED
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | KILL_WALL |
-F:EMPTY_MIND | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:DRAGON | RES_FIRE | RES_COLD | RES_ELEC | RES_COLD | IM_POIS | CAN_SWIM |
-F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | RIDING |
-F:RES_LITE | RES_DARK | RES_NEXU | RES_NETH | RES_SHAR | RES_SOUN | RES_CHAO |
-F:RES_DISE | RES_ACID |
-F:DROP_3D2 | DROP_4D2 | DROP_2D2 | DROP_1D2 | DROP_GOOD |
-F:POS_GAIN_AC | POS_HOLD_LIFE
-F:DROP_CORPSE |
-P:Copy:Golem:Mauler
-P:Body:Dragon
-S:1_IN_6 |
-S:BR_FIRE | BA_WATER
-D:Before you stands a huge automated guardian of the depths made
-D:to look like a dragon. It idly bites a large chunk of the wall, the better
-D:to power its hellish furnace; you can feel the heat from here. You consider
-D:your options...
-
-N:1203:The Grand Inquisitor
-G:p:r
-I:120:25d100:15:80:25:170
-W:50:3:999:17000:0:0
-B:SLASH:FIRE:2d40
-B:SLASH:FIRE:2d40
-B:GAZE:PARALYZE:15d5
-B:GAZE:CONFUSE:20d5
-F:DEPRECATED
-F:UNIQUE | MALE | CAN_SPEAK | DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP |
-F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT | HUMAN | SMART |
-F:RES_ACID | RES_COLD | RES_POIS | RES_FIRE | RES_ELEC | NO_CONF |
-F:NO_SLEEP | ESCORT | ESCORTS | NO_FEAR | OPEN_DOOR | BASH_DOOR |
-S:1_IN_2 |
-S:BA_FIRE | BO_FIRE | HEAL | HASTE | SLOW | TELE_SELF | BLINK
-S:S_KIN | S_MONSTER | BLIND | SCARE |
-P:Copy:Dunadan:Warrior
-D:"... and at that moment the cardinal himself, the Grand Inquisitor,
-D:passes by the cathedral. He is an old man, almost ninety, tall and
-D:erect, with a withered face and sunken eyes, in which there is
-D:still a gleam of light. He is not dressed in his gorgeous cardinal's
-D:robes, as he was the day before, when he was burning the enemies
-D:of the Roman Church -- at this moment he is wearing his coarse, old,
-D:monk's cassock."
-
-N:1204:Jack the Ripper
-G:p:D
-I:150:80d100:100:120:4:150
-W:90:2:999:50000:0:0
-B:HIT:SUPERHURT:15d10
-B:HIT:TERRIFY:15d10
-B:HIT:LOSE_ALL:15d10
-B:HIT:LOSE_ALL:15d10
-F:DEPRECATED
-F:MALE | FORCE_MAXHP | CAN_SPEAK |
-F:REGENERATE | NO_CONF | NO_SLEEP |
-F:HUMAN | EVIL |
-F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT | UNIQUE |
-F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | SMART | POWERFUL |
-F:DROP_SKELETON | DROP_CORPSE | POS_TELEPATHY
-S:1_IN_6
-S:HASTE | HEAL | BLINK | TELE_SELF | TELE_TO | DARKNESS | TRAPS
-D:Pure evil needs no introduction.
-P:Copy:High-Elf:Rogue
-P:Skills:0:0:0:7:0:0:0:0
-P:Life:90
-P:Speed:+15
-
-N:1205:The Babbage Analytical Engine
-G:g:B
-I:125:100d100:2:130:30:500
-W:96:6:999:60000:0:0
-F:DEPRECATED
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | POWERFUL |
-F:EMPTY_MIND | COLD_BLOOD | NEVER_BLOW | NEVER_MOVE | NONLIVING
-F:RES_FIRE | RES_COLD | RES_ELEC | RES_COLD | RES_ACID | IM_POIS |
-F:NO_CONF | NO_SLEEP | NO_FEAR | UNIQUE | NO_STUN |
-F:DROP_4D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT |
-F:POS_GAIN_AC | POS_HOLD_LIFE
-P:Copy:Golem:Mage
-S:1_IN_1
-S:SHRIEK | S_KIN | BR_ELEC | BR_FIRE
-D:Charles Babbage must have gone on to create this heinous monster after
-D:the creation of his useful difference engine. This must be the source of
-D:all the automata that you have been destroying. You are sure that if
-D:you destroy this monstrosity that it will end the terrible mechanical scourge.
-D:That is much easier said than done, however, as you see a
-D:steady stream of automata appearing
-D:and moving towards you in an attempt to protect their master.
-
-# originally had S:SHOTGUN, could just do special messages?
-N:1206:The Marquis de la Tour
-G:p:r
-I:130:155d10:20:50:20:170
-W:40:4:999:17000:0:0
-B:HIT:HURT:6d15
-F:DEPRECATED
-F:UNIQUE | MALE | CAN_SPEAK | DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP |
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | NO_CONF |
-F:NO_SLEEP | NO_FEAR | OPEN_DOOR | BASH_DOOR |
-S:1_IN_2 |
-S:SHOOT(6d15) | HEAL | BLINK | TELE_SELF
-D:Seemingly out of nowhere, a gentleman steps towards you.
-D:He is wearing a fine suit covered by a dark cloak. He
-D:tips his top hat towards you. "Good evening", he says
-D:with a smile. Suddenly he pulls a shotgun from under
-D:his cloak and points it towards you. His form seems
-D:to blur for a second and then resolidifies in the form
-D:of a humanoid tiger: a Rakshasa! "A good evening
-D:indeed," he growls, "A pity you will not live to enjoy it!".
-
-N:1207:The Etheric Dimensional Phase Automaton
-G:g:b
-I:150:255d20:100:255:0:50
-W:96:6:999:55000:0:0
-B:HIT:HURT:20d10
-B:HIT:HURT:20d10
-B:HIT:HURT:20d10
-F:DEPRECATED
-F:FORCE_SLEEP | FORCE_MAXHP | NO_STUN |
-F:EMPTY_MIND | COLD_BLOOD | NO_CONF | NO_SLEEP | NO_FEAR | UNIQUE | NONLIVING |
-F:RES_FIRE | RES_COLD | RES_ELEC | RES_COLD | RES_ACID | IM_POIS |
-F:DROP_90 | DROP_2D2 | DROP_GOOD | DROP_GREAT | RES_TIME | INVISIBLE |
-F:POS_GAIN_AC | POS_HOLD_LIFE | OPEN_DOOR | BASH_DOOR |
-P:Copy:Golem:Mage
-S:1_IN_2
-S:BR_ELEC | BR_GRAVITY | BR_TIME | BO_MANA | BA_DARK |
-S:TELE_SELF | TELE_TO | BLINK |
-D:There was once a universe where a brilliant scientist lived. Greater
-D:than any man of science had ever been, his inventions were countless
-D:and grander than any race's inventions had a right to be. However, hubris
-D:is not just a human concept. One day, believing himself to
-D:be infallible, he invented the Etheric Dimensional Phase Automaton.
-D:It promptly killed him and began exterminating life anywhere it could
-D:find it; since it can travel to any place and to any time, that
-D:is quite a bit of life indeed.
 
 # new
 N:1208:Anubis, Keeper of the Balance

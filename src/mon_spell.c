@@ -627,7 +627,7 @@ static mon_spell_parm_t _ball_parm(int which, int rlev)
         parm.v.dice = _dice(0, 0, 6*rlev);
         break;
     default:
-        assert(FALSE);
+        parm.v.dice = _dice(5, 5, rlev);
     }
     return parm;
 }
@@ -748,6 +748,15 @@ static mon_spell_parm_t _summon_parm(int which)
     return parm;
 }
 
+static mon_spell_parm_t _tactic_parm(int which, int rlev)
+{
+    mon_spell_parm_t parm = {0};
+    if (which >= TACTIC_BLINK) return parm;
+    parm.tag = MSP_DICE;
+    parm.v.dice = _dice(0, 0, rlev);
+    return parm;
+}
+
 mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev)
 {
     mon_spell_parm_t empty = {0};
@@ -768,6 +777,8 @@ mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev)
         return _heal_parm(id.effect, rlev);
     case MST_SUMMON:
         return _summon_parm(id.effect);
+    case MST_TACTIC:
+        return _tactic_parm(id.effect, rlev);
     }
 
     return empty;
@@ -872,22 +883,35 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
     }
     else
     {
-        _gf_info_ptr  gf;
+        _gf_info_ptr gf;
+        cptr         suffix;
         if (prefix(name, "BR_"))
         {
             spell->id.type = MST_BREATHE;
             spell->flags |= MSF_INNATE;
+            suffix = name + 3;
         }
         else if (prefix(name, "BA_"))
+        {
             spell->id.type = MST_BALL;
+            suffix = name + 3;
+        }
         else if (prefix(name, "BO_"))
+        {
             spell->id.type = MST_BOLT;
+            suffix = name + 3;
+        }
+        else if (prefix(name, "JMP_"))
+        {
+            spell->id.type = MST_TACTIC;
+            suffix = name + 4;
+        }
         else
         {
             msg_format("Error: Unkown spell %s.", name);
             return PARSE_ERROR_GENERIC;
         }
-        gf = _gf_parse_name(name + 3);
+        gf = _gf_parse_name(suffix);
         if (!gf)
         {
             msg_format("Error: Unkown type %s.", name + 3);
@@ -930,6 +954,17 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
         }
         else
             string_printf(s, "Breathe %d", spell->id.effect);
+    }
+    else if (spell->id.type == MST_TACTIC) /* XXX BLINK and BLINK_OTHER have spell->display set */
+    {
+        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        if (gf)
+        {
+            string_printf(s, "<color:%c>%s Jump</color>",
+                attr_to_attr_char(gf->color), gf->name);
+        }
+        else
+            string_printf(s, "%d Jump", spell->id.effect);
     }
     else
     {
@@ -1702,6 +1737,15 @@ static void _tactic(void)
             teleport_player_away(_current.mon->id, 10);
         update_smart_learn(_current.mon->id, RES_TELEPORT);
         break;
+    default: /* JMP_<type> */
+        assert(_current.spell->parm.tag == MSP_DICE);
+        project( _current.mon->id, 5, _current.src.y, _current.src.x,
+            _scale(_roll(_current.spell->parm.v.dice)),
+            _current.spell->id.effect,
+            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER, -1);
+        teleport_away(_current.mon->id, 10, 0); 
+        p_ptr->update |= PU_MONSTERS;
+        break;
     }
 }
 
@@ -2016,6 +2060,12 @@ static bool _blink_check_p(mon_spell_ptr spell)
     }
     return _spell_is_(spell, MST_ANNOY, ANNOY_TRAPS);
 }
+static bool _jump_p(mon_spell_ptr spell)
+{
+    if (spell->id.type != MST_TACTIC) return FALSE;
+    if (spell->id.effect >= TACTIC_BLINK) return FALSE;
+    return TRUE;
+}
 
 static point_t _choose_splash_point(point_t src, point_t dest, _path_p filter)
 {
@@ -2297,6 +2347,9 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
     if (spells->groups[MST_TACTIC] && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
         _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
+
+    if (_distance(cast->src, cast->dest) > 5)
+        _remove_group(spells->groups[MST_TACTIC], _jump_p);
 
     /* Useless buffs? */
     spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_INVULN));
