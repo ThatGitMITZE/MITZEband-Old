@@ -79,6 +79,7 @@ static _gf_info_t _gf_tbl[] = {
     { "HELL_FIRE", GF_HELL_FIRE, "Hell Fire", TERM_L_DARK, RES_INVALID },
     { "ICE", GF_ICE, "Ice", TERM_L_WHITE, RES_COLD },
     { "WATER", GF_WATER, "Water", TERM_L_BLUE, RES_INVALID },
+    { "ROCKET", GF_ROCKET, "Rocket", TERM_RED, RES_SHARDS },
     {0}
 };
 
@@ -134,50 +135,50 @@ enum {
 static _parse_t _annoy_tbl[] = {
     { "AMNESIA", { MST_ANNOY, ANNOY_AMNESIA },
         { "Amnesia", TERM_L_BLUE,
-          "%s tries to blank your mind.",
-          "%s tries to blank your mind."}},
+          "$SRC tries to blank your mind.",
+          "$SRC tries to blank your mind."}, MSF_TARGET},
     { "ANIM_DEAD", { MST_ANNOY, ANNOY_ANIMATE_DEAD },
         { "Animate Dead", TERM_L_DARK,
-          "%s casts a spell to revive the dead.",
-          "%s mumbles."}},
+          "$SRC casts a spell to revive the dead.",
+          "$SRC mumbles."}},
     { "BLIND", { MST_ANNOY, ANNOY_BLIND },
         { "Blind", TERM_WHITE,
-          "%s casts a spell, burning your eyes!",
-          "%s mumbles."}},
+          "$SRC casts a spell, burning your eyes!",
+          "$SRC mumbles."}, MSF_TARGET},
     { "CONFUSE", { MST_ANNOY, ANNOY_CONFUSE },
         { "Confuse", TERM_L_UMBER,
-          "%s creates a mesmerizing illusion.",
-          "%s mumbles, and you hear puzzling noises."}},
+          "$SRC creates a mesmerizing illusion.",
+          "$SRC mumbles, and you hear puzzling noises."}, MSF_TARGET},
     { "DARKNESS", { MST_ANNOY, ANNOY_DARKNESS },
         { "Create Darkness", TERM_L_DARK }},
     { "PARALYZE", { MST_ANNOY, ANNOY_PARALYZE },
         { "Paralyze", TERM_RED,
-          "%s stares deep into your eyes!",
-          "%s mumbles."}},
+          "$SRC stares deep into your eyes!",
+          "$SRC mumbles."}, MSF_TARGET},
     { "SCARE", { MST_ANNOY, ANNOY_SCARE },
         { "Terrify", TERM_RED,
-          "%s casts a fearful illusion.",
-          "%s mumbles, and you hear scary noises."}},
+          "$SRC casts a fearful illusion.",
+          "$SRC mumbles, and you hear scary noises."}, MSF_TARGET},
     { "SLOW", { MST_ANNOY, ANNOY_SLOW },
         { "Slow", TERM_L_UMBER,
-          "%s drains power from your muscles!",
-          "%s drains power from your muscles!"}},
+          "$SRC drains power from your muscles!",
+          "$SRC drains power from your muscles!"}, MSF_TARGET},
     { "SHRIEK", { MST_ANNOY, ANNOY_SHRIEK },
         { "Shriek", TERM_L_BLUE,
-          "%s makes a high pitched shriek.",
-          "%s makes a high pitched shriek." }, MSF_INNATE },
+          "$SRC makes a high pitched shriek.",
+          "$SRC makes a high pitched shriek." }, MSF_INNATE },
     { "TELE_LEVEL", { MST_ANNOY, ANNOY_TELE_LEVEL },
         { "Teleport Level", TERM_WHITE,
-          "%s gestures at your feet.",
-          "%s mumbles strangely."}},
+          "$SRC gestures at your feet.",
+          "$SRC mumbles strangely."}, MSF_TARGET},
     { "TELE_TO", { MST_ANNOY, ANNOY_TELE_TO },
         { "Teleport To", TERM_WHITE,
-          "%s commands you to return.",
-          "%s mumbles." }},
+          "$SRC commands you to return.",
+          "$SRC mumbles." }, MSF_TARGET},
     { "TRAPS", { MST_ANNOY, ANNOY_TRAPS },
         { "Create Traps", TERM_WHITE,
-          "%s casts a spell and cackles evilly.",
-          "%s mumbles gleefully." }},
+          "$SRC casts a spell and cackles evilly.",
+          "$SRC mumbles gleefully." }, MSF_TARGET},
     { "WORLD", { MST_ANNOY, ANNOY_WORLD },
         { "Stop Time", TERM_L_BLUE}},
     {0}
@@ -192,16 +193,16 @@ enum {
 static _parse_t _biff_tbl[] = {
     { "ANTI_MAGIC", { MST_BIFF, BIFF_ANTI_MAGIC },
         { "Anti-Magic", TERM_L_BLUE,
-          "%s invokes anti-magic.",
-          "%s mumbles powefully." }},
+          "$SRC invokes anti-magic.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     { "DISPEL_MAGIC", { MST_BIFF, BIFF_DISPEL_MAGIC },
         { "Dispel Magic", TERM_L_BLUE,
-          "%s invokes dispel magic.",
-          "%s mumbles powefully." }},
+          "$SRC invokes dispel magic.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     { "POLYMORPH", { MST_BIFF, BIFF_POLYMORPH },
         { "Polymorph Other", TERM_RED,
-          "%s invokes polymorph other.",
-          "%s mumbles powefully." }},
+          "$SRC invokes polymorph other.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     {0}
 };
 
@@ -213,12 +214,12 @@ enum {
 static _parse_t _buff_tbl[] = {
     { "HASTE", { MST_BUFF, BUFF_HASTE },
         { "Haste Self", TERM_WHITE,
-          "%s concentrates on its body.", /* XXX */
-          "%s mumbles." }},
+          "$SRC concentrates on $SRC_POS body.",
+          "$SRC mumbles." }},
     { "INVULN", { MST_BUFF, BUFF_INVULN },
         { "Invulnerability", TERM_WHITE,
-          "%s casts a Globe of Invulnerability",
-          "%s mumbles powerfully." }},
+          "$SRC casts a Globe of Invulnerability.",
+          "$SRC mumbles powerfully." }},
     {0}
 };
 
@@ -226,51 +227,51 @@ static _parse_t _buff_tbl[] = {
 static _parse_t _ball_tbl[] = {
     { "BA_CHAOS", { MST_BALL, GF_CHAOS },
         { "Invoke Logrus", TERM_VIOLET,
-          "%s invokes a raw logrus.",
-          "%s mumbles frighteningly." }},
+          "$SRC invokes a raw logrus.",
+          "$SRC mumbles frighteningly." }, MSF_TARGET},
     { "BA_DARK", { MST_BALL, GF_DARK },
         { "Darkness Storm", TERM_L_DARK,
-          "%s invokes a darkness storm.",
-          "%s mumbles powerfully." }},
+          "$SRC invokes a darkness storm.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     { "BA_LITE", { MST_BALL, GF_LITE },
         { "Starburst", TERM_YELLOW,
-          "%s invokes a starburst.",
-          "%s mumbles powerfully." }},
+          "$SRC invokes a starburst.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     { "BA_MANA", { MST_BALL, GF_MANA },
         { "Mana Storm", TERM_L_BLUE,
-          "%s invokes a mana storm.",
-          "%s mumbles powerfully." }},
+          "$SRC invokes a mana storm.",
+          "$SRC mumbles powerfully." }, MSF_TARGET},
     { "BA_NUKE", { MST_BALL, GF_NUKE },
         { "Radiation Ball", TERM_L_GREEN,
-          "%s casts a ball of radiation.",
-          "%s mumbles." }},
+          "$SRC casts a ball of radiation.",
+          "$SRC mumbles." }, MSF_TARGET},
     { "BA_POIS", { MST_BALL, GF_POIS },
         { "Stinking Cloud", TERM_L_GREEN,
-          "%s casts a stinking cloud.",
-          "%s mumbles." }},
+          "$SRC casts a stinking cloud.",
+          "$SRC mumbles." }, MSF_TARGET},
     { "BA_WATER", { MST_BALL, GF_WATER },
         { "Whirlpool", TERM_L_BLUE,
-          "%s gestures fluidly.",
-          "%s mumbles.",
-          "You are engulfed in a whirlpool."}},
+          "$SRC gestures fluidly.",
+          "$SRC mumbles.",
+          "You are engulfed in a whirlpool."}, MSF_TARGET},
     { "BRAIN_SMASH", { MST_BALL, GF_BRAIN_SMASH },
         { "Brain Smash", TERM_L_BLUE,
-          "%s gazes deep into your eyes.",
-          "You feel something focusing on your mind."}, MSF_BALL0 },
+          "$SRC gazes deep into your eyes.",
+          "You feel something focusing on your mind."}, MSF_BALL0 | MSF_TARGET },
     { "DRAIN_MANA", { MST_BALL, GF_DRAIN_MANA },
-        { "Drain Mana", TERM_L_BLUE}, MSF_BALL0 },
+        { "Drain Mana", TERM_L_BLUE}, MSF_BALL0 | MSF_TARGET },
     { "MIND_BLAST", { MST_BALL, GF_MIND_BLAST },
         { "Mind Blast", TERM_L_BLUE,
-          "%s gazes deep into your eyes.",
-          "You feel something focusing on your mind."}, MSF_BALL0 },
+          "$SRC gazes deep into your eyes.",
+          "You feel something focusing on your mind."}, MSF_BALL0 | MSF_TARGET},
     { "ROCKET", { MST_BALL, GF_ROCKET },
         { "Rocket", TERM_L_UMBER,
-          "%s fires a rocket.",
-          "%s shoots something." }, MSF_INNATE },
+          "$SRC fires a rocket.",
+          "$SRC shoots something." }, MSF_INNATE | MSF_TARGET },
     { "THROW", { MST_BALL, GF_ROCK }, /* non-reflectable! */
         { "Throw Boulder", TERM_L_UMBER,
-          "%s throws a large rock.",
-          "%s shouts, 'Haaa!!'." }, MSF_INNATE | MSF_BALL0 },
+          "$SRC throws a large rock.",
+          "$SRC shouts, 'Haaa!!'." }, MSF_INNATE | MSF_BALL0 | MSF_TARGET},
     {0}
 };
 
@@ -278,15 +279,15 @@ static _parse_t _ball_tbl[] = {
 static _parse_t _bolt_tbl[] = {
     { "GAZE", { MST_BOLT, GF_ATTACK },
         { "Gaze", TERM_RED,
-          "%s gazes at you."}},
+          "$SRC gazes at you."}, MSF_TARGET},
     { "MISSILE", { MST_BOLT, GF_MISSILE },
         { "Magic Missile", TERM_WHITE,
-          "%s casts a magic missile.",
-          "%s mumbles."}},
+          "$SRC casts a magic missile.",
+          "$SRC mumbles."}, MSF_TARGET},
     { "SHOOT", { MST_BOLT, GF_ARROW },
         { "Shoot", TERM_L_UMBER,
-          "%s fires an arrow.",
-          "%s makes a strange noise." }, MSF_INNATE },
+          "$SRC fires an arrow.",
+          "$SRC makes a strange noise." }, MSF_INNATE | MSF_TARGET },
     {0}
 };
 
@@ -294,8 +295,8 @@ static _parse_t _bolt_tbl[] = {
 static _parse_t _beam_tbl[] = {
     { "PSY_SPEAR", { MST_BEAM, GF_PSY_SPEAR },
         { "Psycho-Spear", TERM_L_BLUE,
-          "%s throws a Psycho-Spear.",
-          "%s mumbles."}},
+          "$SRC throws a Psycho-Spear.",
+          "$SRC mumbles."}, MSF_TARGET },
     {0}
 };
 
@@ -303,24 +304,24 @@ static _parse_t _beam_tbl[] = {
 static _parse_t _curse_tbl[] = {
     { "CAUSE_1", { MST_CURSE, GF_CAUSE_1 },
         { "Cause Light Wounds", TERM_RED,
-          "%s points at you and curses.",
-          "%s curses."}},
+          "$SRC points at you and curses.",
+          "$SRC curses."}, MSF_TARGET },
     { "CAUSE_2", { MST_CURSE, GF_CAUSE_2 },
         { "Cause Serious Wounds", TERM_RED,
-          "%s points at you and curses horribly.",
-          "%s curses horribly."}},
+          "$SRC points at you and curses horribly.",
+          "$SRC curses horribly."}, MSF_TARGET },
     { "CAUSE_3", { MST_CURSE, GF_CAUSE_3 },
         { "Cause Critical Wounds", TERM_RED,
-          "%s points at you, incanting terribly!"
-          "%s incants terribly."}},
+          "$SRC points at you, incanting terribly!"
+          "$SRC incants terribly."}, MSF_TARGET },
     { "CAUSE_4", { MST_CURSE, GF_CAUSE_4 },
         { "Cause Mortal Wounds", TERM_RED,
-          "%s points at you, screaming the word DIE!",
-          "%s screams the word DIE!"}},
+          "$SRC points at you, screaming the word DIE!",
+          "$SRC screams the word DIE!"}, MSF_TARGET },
     { "HAND_DOOM", { MST_CURSE, GF_HAND_DOOM },
         { "Hand of Doom", TERM_RED,
-          "%s invokes the Hand of Doom!",
-          "%s invokes the Hand of Doom!"}},
+          "$SRC invokes the Hand of Doom!",
+          "$SRC invokes the Hand of Doom!"}, MSF_TARGET },
     {0}
 };
 
@@ -331,7 +332,7 @@ enum {
 };
 static _parse_t _escape_tbl[] = {
     { "TELE_OTHER", { MST_ESCAPE, ESCAPE_TELE_OTHER },
-        { "Teleport Away", TERM_WHITE }},
+        { "Teleport Away", TERM_WHITE }, MSF_TARGET },
     { "TELE_SELF", { MST_ESCAPE, ESCAPE_TELE_SELF },
         { "Teleport", TERM_WHITE }},
     {0}
@@ -344,7 +345,7 @@ static _parse_t _tactic_tbl[] = {
     { "BLINK", { MST_TACTIC, TACTIC_BLINK },
         { "Blink", TERM_WHITE }},
     { "BLINK_OTHER", { MST_TACTIC, TACTIC_BLINK_OTHER },
-        { "Blink Away", TERM_WHITE }},
+        { "Blink Away", TERM_WHITE }, MSF_TARGET },
     {0}
 };
 
@@ -355,8 +356,8 @@ enum {
 static _parse_t _heal_tbl[] = {
     { "HEAL", { MST_HEAL, HEAL_SELF },
         { "Heal Self", TERM_WHITE,
-          "%s concentrates on its wounds.", /* XXX */
-          "%s mumbles." }},
+          "$SRC concentrates on $SRC_POS wounds.",
+          "$SRC mumbles." }},
     {0}
 };
 
@@ -888,17 +889,19 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
         if (prefix(name, "BR_"))
         {
             spell->id.type = MST_BREATHE;
-            spell->flags |= MSF_INNATE;
+            spell->flags |= MSF_INNATE | MSF_TARGET;
             suffix = name + 3;
         }
         else if (prefix(name, "BA_"))
         {
             spell->id.type = MST_BALL;
+            spell->flags |= MSF_TARGET;
             suffix = name + 3;
         }
         else if (prefix(name, "BO_"))
         {
             spell->id.type = MST_BOLT;
+            spell->flags |= MSF_TARGET;
             suffix = name + 3;
         }
         else if (prefix(name, "JMP_"))
@@ -1154,26 +1157,43 @@ mon_ptr mon_current(void)
 
 static void _spell_cast_aux(void);
 static bool _default_ai(mon_spell_cast_ptr cast);
+static bool _default_ai_mon(mon_spell_cast_ptr cast);
 
-static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
+static void _mon_desc(mon_ptr mon, char *buf)
 {
     char tmp[MAX_NLEN];
-
+    monster_desc(tmp, mon, 0);
+    tmp[0] = toupper(tmp[0]);
+    sprintf(buf, "<color:g>%s</color>", tmp);
+}
+static mon_race_ptr _race(mon_ptr mon)
+{
+    if (!mon) return NULL;
+    return &r_info[mon->ap_r_idx];
+}
+static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
+{
     cast->mon = mon;
-    cast->race = &r_info[mon->ap_r_idx];
+    cast->race = _race(mon);
     cast->spell = NULL;
     cast->src = point(mon->fx, mon->fy);
     cast->dest = point(px, py);
-
-    monster_desc(tmp, mon, 0);
-    tmp[0] = toupper(tmp[0]);
-    sprintf(cast->name, "<color:g>%s</color>", tmp);
+    _mon_desc(mon, cast->name); 
+    cast->flags = MSC_SRC_MONSTER | MSC_DEST_PLAYER;
 }
 
-bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
+static void _spell_cast_init_mon(mon_spell_cast_ptr cast, mon_ptr mon)
 {
-    mon_spell_cast_t cast = {0};
+    cast->mon = mon;
+    cast->race = _race(mon);
+    cast->spell = NULL;
+    cast->src = point(mon->fx, mon->fy);
+    _mon_desc(mon, cast->name); 
+    cast->flags = MSC_SRC_MONSTER | MSC_DEST_MONSTER;
+}
 
+static bool _can_cast(mon_ptr mon)
+{
     if (MON_CONFUSED(mon))
     {
         reset_target(mon);
@@ -1184,6 +1204,15 @@ bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
     if (!is_aware(mon)) return FALSE;
     if (!p_ptr->playing || p_ptr->is_dead) return FALSE;
     if (p_ptr->leaving) return FALSE;
+
+    return TRUE;
+}
+
+bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
+{
+    mon_spell_cast_t cast = {0};
+
+    if (!_can_cast(mon)) return FALSE;
     if (mon->cdis > MAX_RANGE && !mon->target_y) return FALSE;
 
     if (!ai) ai = _default_ai;
@@ -1201,7 +1230,20 @@ bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
 
 bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
 {
-    /* XXX */
+    mon_spell_cast_t cast = {0};
+
+    if (!_can_cast(mon)) return FALSE;
+
+    if (!ai) ai = _default_ai_mon;
+
+    _spell_cast_init_mon(&cast, mon);
+    if (ai(&cast))
+    {
+        _current = cast;
+        _spell_cast_aux();
+        memset(&_current, 0, sizeof(mon_spell_cast_t));
+        return TRUE;
+    }
     return FALSE;
 }
 
@@ -1247,62 +1289,6 @@ static bool _spell_blocked(void)
     return FALSE;
 }
 
-/* Some monsters override the default message with something cutesy */
-typedef struct {
-    int race_id;
-    mon_spell_id_t spell_id;
-    cptr msg;
-    bool allow_blind;
-} _custom_msg_t, *_custom_msg_ptr;
-static _custom_msg_t _mon_msg_tbl[] = {
-    { MON_NINJA, {MST_BOLT, GF_ARROW}, "%s throws a syuriken." },
-    { MON_JAIAN, {MST_BREATHE, GF_SOUND}, "'Booooeeeeee'", TRUE },
-    { MON_BOTEI, {MST_BREATHE, GF_SHARDS}, "'Botei-Build cutter!!!'", TRUE },
-    { MON_ROLENTO, {MST_BALL, GF_FIRE}, "%^s throws a hand grenade." },
-    {0}
-};
-
-static bool _mon_custom_msg(mon_spell_ptr spell)
-{
-    int i;
-    for (i = 0;; i++)
-    {
-        _custom_msg_ptr msg = &_mon_msg_tbl[i];
-        if (!msg->race_id) return FALSE;
-        if (msg->race_id != _current.race->id) continue;
-        if (msg->spell_id.type != spell->id.type) continue;
-        if (msg->spell_id.effect != spell->id.effect) continue;
-        if (p_ptr->blind && !msg->allow_blind) return FALSE;
-        msg_format(msg->msg, _current.name);
-        return TRUE;
-    }
-}
-
-/* Some spells override the default message with something more flavorful:
- * 'Mana Storm' rather than 'ball of mana' or 'Invoke Logrus' rather than
- * 'ball of chaos' (cf _parse_tbl) */
-static bool _custom_msg(mon_spell_ptr spell)
-{
-    if (_mon_custom_msg(spell)) return TRUE;
-    if (!spell->display) return FALSE;
-    /* Note: Null messages in _parse_tbl give a mechanism to suppress
-     * the default messaging. For example, DRAIN_MANA has historically
-     * been quiet, relying on gf_damage_p for any messages. */
-    if (p_ptr->blind)
-    {
-        if (spell->display->blind_msg)
-            msg_format(spell->display->blind_msg, _current.name);
-    }
-    else
-    {
-        if (spell->display->cast_msg)
-            msg_format(spell->display->cast_msg, _current.name);
-    }
-    if (spell->display->xtra_msg)
-        msg_print(spell->display->xtra_msg);
-    return TRUE;
-}
-
 static void _breathe(void)
 {
     int dam;
@@ -1310,19 +1296,6 @@ static void _breathe(void)
     int max = _current.spell->parm.v.hp_pct.max;
 
     assert(_current.spell->parm.tag == MSP_HP_PCT);
-
-    if (!_custom_msg(_current.spell))
-    {
-        if (p_ptr->blind)
-            msg_format("%s roars!", _current.name);
-        else
-        {
-            _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
-            char         color = attr_to_attr_char(gf->color);
-            msg_format("%s breathes <color:%c>%s</color>.",
-                _current.name, color, gf->name);
-        }
-    }
 
     dam = _current.mon->hp * pct / 100;
     if (dam > max) dam = max;
@@ -1359,31 +1332,12 @@ static int _avg_roll(dice_t dice)
         roll += dice.dd * (dice.ds + 1)/2;
     return roll;
 }
-static cptr _a_an(cptr noun)
-{
-    if (strchr("aeiou", noun[0])) return "an";
-    return "a";
-}
 static void _ball(void)
 {
     int    dam;
     dice_t dice = _current.spell->parm.v.dice;
     int    rad = 0;
     int    flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
-
-
-    if (!_custom_msg(_current.spell))
-    {
-        if (p_ptr->blind)
-            msg_format("%s mumbles.", _current.name);
-        else
-        {
-            _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
-            char         color = attr_to_attr_char(gf->color);
-            msg_format("%s casts %s <color:%c>%s Ball</color>.",
-                _current.name, _a_an(gf->name), color, gf->name);
-        }
-    }
 
     assert(_current.spell->parm.tag == MSP_DICE);
     dam = _scale(_roll(dice));
@@ -1423,20 +1377,6 @@ static void _bolt(void)
     int ct = 1, i;
     int flags = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE;
     assert(_current.spell->parm.tag == MSP_DICE);
-
-    if (!_custom_msg(_current.spell))
-    {
-        if (p_ptr->blind)
-            msg_format("%s mumbles.", _current.name);
-        else
-        {
-            _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
-            char         color = attr_to_attr_char(gf->color);
-            msg_format("%s casts %s <color:%c>%s Bolt</color>.",
-                _current.name, _a_an(gf->name), color, gf->name);
-        }
-    }
-
     if (_current.race->id == MON_ARTEMIS && _spell_is_(_current.spell, MST_BOLT, GF_ARROW))
     {
         ct = 4;
@@ -1459,20 +1399,6 @@ static void _bolt(void)
 static void _beam(void)
 {
     assert(_current.spell->parm.tag == MSP_DICE);
-
-    if (!_custom_msg(_current.spell))
-    {
-        if (p_ptr->blind)
-            msg_format("%s mumbles.", _current.name);
-        else
-        {
-            _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
-            char         color = attr_to_attr_char(gf->color);
-            msg_format("%s casts %s <color:%c>%s Beam</color>.",
-                _current.name, _a_an(gf->name), color, gf->name);
-        }
-    }
-
     project(
         _current.mon->id,
         0,
@@ -1487,14 +1413,12 @@ static void _beam(void)
 static void _curse(void)
 {
     int dam;
-
     assert(_current.spell->parm.tag == MSP_DICE);
     dam = _roll(_current.spell->parm.v.dice);
     if (_current.spell->id.effect == GF_HAND_DOOM)
         dam = dam * p_ptr->chp / 100;
     else
         dam = _scale(dam);
-    _custom_msg(_current.spell);
     project(
         _current.mon->id,
         0,
@@ -1522,7 +1446,6 @@ static bool _curse_save(void)
 static bool _projectable(point_t src, point_t dest);
 static void _annoy(void)
 {
-    _custom_msg(_current.spell);
     switch (_current.spell->id.effect)
     {
     case ANNOY_AMNESIA:
@@ -1625,7 +1548,6 @@ static void _annoy(void)
 }
 static void _biff(void)
 {
-    _custom_msg(_current.spell);
     if (check_foresight()) return;
     switch (_current.spell->id.effect)
     {
@@ -1658,7 +1580,6 @@ static void _biff(void)
 }
 static void _buff(void)
 {
-    _custom_msg(_current.spell);
     switch (_current.spell->id.effect)
     {
     case BUFF_HASTE:
@@ -1673,7 +1594,6 @@ static void _buff(void)
 }
 static void _escape(void)
 {
-    _custom_msg(_current.spell);
     switch (_current.spell->id.effect)
     {
     case ESCAPE_TELE_SELF:
@@ -1715,7 +1635,6 @@ static void _escape(void)
 }
 static void _tactic(void)
 {
-    _custom_msg(_current.spell);
     switch (_current.spell->id.effect)
     {
     case TACTIC_BLINK:
@@ -1740,7 +1659,7 @@ static void _tactic(void)
     default: /* JMP_<type> */
         assert(_current.spell->parm.tag == MSP_DICE);
         project( _current.mon->id, 5, _current.src.y, _current.src.x,
-            _scale(_roll(_current.spell->parm.v.dice)),
+            _roll(_current.spell->parm.v.dice) * 2,
             _current.spell->id.effect,
             PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER, -1);
         teleport_away(_current.mon->id, 10, 0); 
@@ -1771,13 +1690,12 @@ static void hp_mon(mon_ptr mon, int amt) /* this should be public */
     if (MON_MONFEAR(mon))
     {
         set_monster_monfear(mon->id, 0);
-        msg_format("%^s recovers its courage.", _current.name); /* XXX */
+        msg_format("%s recovers its courage.", _current.name); /* XXX */
     }
 }
 static void _heal(void)
 {
     int amt;
-    _custom_msg(_current.spell);
     assert(_current.spell->parm.tag == MSP_DICE);
     amt = _roll(_current.spell->parm.v.dice);
     hp_mon(_current.mon, amt);
@@ -1938,17 +1856,6 @@ static void _summon(void)
         _summon_special();
         return;
     }
-    if (!_custom_msg(_current.spell))
-    {
-        parse_tbl_ptr p = summon_type_lookup(_current.spell->id.effect);
-        if (!p)
-            msg_format("%s summons help.", _current.name);
-        else
-        {
-            msg_format("%s summons <color:%c>%s</color>.",
-                _current.name, attr_to_attr_char(p->color), p->name);
-        }
-    }
     assert(_current.spell->parm.tag == MSP_DICE);
     ct = _roll(_current.spell->parm.v.dice);
     if (_current.spell->id.effect == SUMMON_KIN)
@@ -1960,12 +1867,14 @@ static void _weird(void)
 {
     /* Banor=Rupart, Ohmu, Birds */
 } 
+static void _spell_msg(void);
 static void _spell_cast_aux(void)
 {
     disturb(1, 0);
     reset_target(_current.mon);
     if (_spell_fail() || _spell_blocked())
         return;
+    _spell_msg();
 
     switch (_current.spell->id.type)
     {
@@ -1986,6 +1895,296 @@ static void _spell_cast_aux(void)
 
     if (is_original_ap_and_seen(_current.mon))
         _current.spell->lore = MIN(MAX_SHORT, _current.spell->lore + 1);
+}
+
+/*************************************************************************
+ * Message
+ ************************************************************************/
+static char _msg[255];
+static cptr _a_an(cptr noun)
+{
+    if (strchr("aeiou", noun[0])) return "an";
+    return "a";
+}
+static cptr _possessive(mon_race_ptr race)
+{
+    if (!race) return "its";
+    if (race->flags1 & RF1_MALE) return "his";
+    if (race->flags1 & RF1_FEMALE) return "her";
+    return "its";
+}
+/* Some monsters override the default message with something cutesy */
+typedef struct {
+    int race_id;
+    mon_spell_id_t spell_id;
+    cptr cast_msg;
+    cptr blind_msg;
+    cptr cast_mon_msg;
+    cptr cast_plr_msg;
+} _custom_msg_t, *_custom_msg_ptr;
+static _custom_msg_t _mon_msg_tbl[] = {
+    { MON_NINJA, {MST_BOLT, GF_ARROW},
+        "$SRC throws a syuriken.",
+        "",
+        "$SRC throws a syuriken at $DEST.",
+        "You throw a syuriken." },
+    { MON_JAIAN, {MST_BREATHE, GF_SOUND},
+        "'Booooeeeeee'",
+        "'Booooeeeeee'",
+        "'Booooeeeeee'",
+        "'Booooeeeeee'" },
+    { MON_BOTEI, {MST_BREATHE, GF_SHARDS},
+        "'Botei-Build cutter!!!'",
+        "'Botei-Build cutter!!!'",
+        "'Botei-Build cutter!!!'",
+        "'Botei-Build cutter!!!'" } ,
+    { MON_ROLENTO, {MST_BALL, GF_FIRE},
+        "$SRC throws a hand grenade.", 
+        "$SRC throws a hand grenade.", 
+        "$SRC throws a hand grenade.", 
+        "$SRC throws a hand grenade at $DEST." }, 
+    {0}
+};
+static cptr _custom_msg(void)
+{
+    int i;
+    for (i = 0;; i++)
+    {
+        _custom_msg_ptr msg = &_mon_msg_tbl[i];
+        if (!msg->race_id) return NULL;
+        if (msg->race_id != _current.race->id) continue;
+        if (msg->spell_id.type != _current.spell->id.type) continue;
+        if (msg->spell_id.effect != _current.spell->id.effect) continue;
+        if (_current.flags & MSC_SRC_PLAYER)
+            return msg->cast_plr_msg;
+        else if (_current.flags & MSC_DEST_PLAYER)
+        {
+            if (p_ptr->blind) return msg->blind_msg;
+            return msg->cast_msg;
+        }
+        else if (_current.flags & MSC_DEST_MONSTER)
+        {
+            if (_current.spell->display && !(_current.flags & MSC_UNVIEW))
+                return msg->cast_mon_msg;
+        }
+    }
+}
+static cptr _display_msg(void)
+{
+    if (!_current.spell->display) return NULL;
+    else if (_current.flags & MSC_SRC_PLAYER)
+        return _current.spell->display->cast_plr_msg;
+    else if (_current.flags & MSC_DEST_PLAYER)
+    {
+        if (p_ptr->blind) return _current.spell->display->blind_msg;
+        return _current.spell->display->cast_msg;
+    }
+    else if (_current.flags & MSC_DEST_MONSTER)
+    {
+        if (_current.spell->display && !(_current.flags & MSC_UNVIEW))
+            return _current.spell->display->cast_mon_msg;
+    }
+    return NULL;
+}
+static cptr _breathe_msg(void)
+{
+    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    assert(gf);
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        sprintf(_msg, "You breathe <color:%c>%s</color>.",
+            attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_PLAYER)
+    {
+        if (p_ptr->blind) return "$SRC roars.";
+        sprintf(_msg, "$SRC breathes <color:%c>%s</color>.",
+            attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_MONSTER)
+    {
+        if (!(_current.flags & MSC_UNVIEW))
+        {
+            sprintf(_msg, "$SRC breathes <color:%c>%s</color> at $DEST.",
+                attr_to_attr_char(gf->color), gf->name);
+            return _msg;
+        }
+    }
+    return NULL;
+}
+static cptr _ball_msg(void)
+{
+    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    assert(gf);
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        sprintf(_msg, "You cast %s <color:%c>%s Ball</color>.",
+            _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_PLAYER)
+    {
+        if (p_ptr->blind) return "$SRC mumbles.";
+        sprintf(_msg, "$SRC casts %s <color:%c>%s Ball</color>.",
+            _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_MONSTER)
+    {
+        if (!(_current.flags & MSC_UNVIEW))
+        {
+            sprintf(_msg, "$SRC casts %s <color:%c>%s Ball</color> at $DEST.",
+                _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+            return _msg;
+        }
+    }
+    return NULL;
+}
+static cptr _bolt_msg(void)
+{
+    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    assert(gf);
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        sprintf(_msg, "You cast %s <color:%c>%s Bolt</color>.",
+            _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_PLAYER)
+    {
+        if (p_ptr->blind) return "$SRC mumbles.";
+        sprintf(_msg, "$SRC casts %s <color:%c>%s Bolt</color>.",
+            _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_MONSTER)
+    {
+        if (!(_current.flags & MSC_UNVIEW))
+        {
+            sprintf(_msg, "$SRC casts %s <color:%c>%s Bolt</color> at $DEST.",
+                _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
+            return _msg;
+        }
+    }
+    return NULL;
+}
+static cptr _summon_msg(void)
+{
+    parse_tbl_ptr p = summon_type_lookup(_current.spell->id.effect);
+    assert(p);
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        sprintf(_msg, "You summon <color:%c>%s</color>.",
+            attr_to_attr_char(p->color), p->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_PLAYER)
+    {
+        if (p_ptr->blind) return "$SRC mumbles.";
+        sprintf(_msg, "$SRC summons <color:%c>%s</color>.",
+            attr_to_attr_char(p->color), p->name);
+        return _msg;
+    }
+    else if (_current.flags & MSC_DEST_MONSTER)
+    {
+        if (!(_current.flags & MSC_UNVIEW))
+        {
+            sprintf(_msg, "$SRC summons <color:%c>%s</color>.",
+                attr_to_attr_char(p->color), p->name);
+            return _msg;
+        }
+    }
+    return NULL;
+}
+static cptr _get_msg(void)
+{
+    cptr msg = _custom_msg();
+    if (!msg) msg = _display_msg();
+    if (!msg)
+    {
+        switch (_current.spell->id.type)
+        {
+        case MST_BREATHE:
+            msg = _breathe_msg();
+            break;
+        case MST_BALL:
+            msg = _ball_msg();
+            break;
+        case MST_BOLT:
+            msg = _bolt_msg();
+            break;
+        case MST_SUMMON:
+            msg = _summon_msg();
+            break;
+        }
+    }
+    return msg;
+}
+static cptr _msg_var(cptr var)
+{
+    if (strcmp(var, "SRC") == 0)
+        return _current.name;
+    if (strcmp(var, "SRC_POS") == 0)
+    {
+        if (_current.flags & MSC_SRC_PLAYER)
+            return "your";
+        return _possessive(_current.race);
+    }
+    if (strcmp(var, "DEST") == 0)
+        return _current.name2;
+    if (strcmp(var, "DEST_POS") == 0)
+    {
+        if (_current.flags & MSC_DEST_PLAYER)
+            return "your";
+        return _possessive(_race(_current.mon2));
+    }
+    
+    /*return format("<color:v>%s</color>", var);*/
+    return "<color:v>?</color>";
+}
+static bool _is_ident_char(char c)
+{
+    if (c == '_') return TRUE;
+    return BOOL(isupper(c));
+}
+static void _spell_msg(void)
+{
+    char  out[255], token[50];
+    cptr  pos;
+    char *dest;
+    cptr  msg = _get_msg();
+    if (!msg) return;
+    if (!strlen(msg)) return;
+    pos = msg;
+    dest = out;
+    for (;;)
+    {
+        char c = *pos;
+        if (!c) break;
+        if (c == '$')
+        {
+            cptr seek = ++pos;
+            cptr replace;
+            while (_is_ident_char(*seek))
+                seek++;
+            strncpy(token, pos, seek - pos);
+            token[seek - pos] = '\0';
+            replace = _msg_var(token);
+            if (replace)
+            {
+                strcpy(dest, replace); 
+                dest += strlen(replace);
+            }
+            pos = seek;
+        }
+        else
+            *dest++ = *pos++;
+    }
+    *dest++ = '\0';
+    if (!strlen(msg)) return;
+    msg_print(out);
 }
 
 /*************************************************************************
@@ -2207,6 +2406,49 @@ static bool _summon_possible(point_t where)
     return summon_possible(where.y, where.x);
 }
 
+/* When wounded, skew the spell probabilities away from offense
+ * and trickery to summoning, healing and escape tactics. Make
+ * this transition gradual but allow smart monsters to panic near
+ * death. */
+static void _ai_wounded(mon_spell_cast_ptr cast)
+{
+    bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
+    mon_spells_ptr spells = cast->race->spells;
+    if ( spells->groups[MST_HEAL]
+      || spells->groups[MST_ESCAPE]
+      || spells->groups[MST_SUMMON] )
+    {
+        int pct_healthy = cast->mon->hp * 100 / cast->mon->maxhp;
+        int pct_wounded = 100 - pct_healthy;
+        if (pct_wounded > 20)
+        {
+            int buff = pct_wounded * pct_wounded * pct_wounded / 500;
+            int biff = pct_wounded / 2;
+            if (smart && pct_wounded > 90 && one_in_(2))
+            {
+                biff = 100;
+                _adjust_group(spells->groups[MST_SUMMON], NULL, 100 + buff/3);
+            }
+            _adjust_group(spells->groups[MST_BREATHE], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BALL], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BOLT], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BEAM], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_CURSE], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BIFF], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_ANNOY], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_WEIRD], NULL, 100 - biff);
+
+            _adjust_group(spells->groups[MST_HEAL], NULL, 100 + buff);
+            _adjust_group(spells->groups[MST_ESCAPE], NULL, 100 + buff);
+        }
+        else /*if (pct_wounded <= 20)*/
+        {
+            _remove_group(spells->groups[MST_HEAL], NULL);
+            _remove_group(spells->groups[MST_ESCAPE], NULL);
+        }
+    }
+}
+
 static void _remove_bad_spells(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
@@ -2281,43 +2523,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
         _remove_spells(spells, _not_innate_p);
 
-    /* When wounded, skew the spell probabilities away from offense
-     * and trickery to summoning, healing and escape tactics. Make
-     * this transition gradual but allow smart monsters to panic near
-     * death. */
-    if ( spells->groups[MST_HEAL]
-      || spells->groups[MST_ESCAPE]
-      || spells->groups[MST_SUMMON] )
-    {
-        int pct_healthy = cast->mon->hp * 100 / cast->mon->maxhp;
-        int pct_wounded = 100 - pct_healthy;
-        if (pct_wounded > 20)
-        {
-            int buff = pct_wounded * pct_wounded * pct_wounded / 500;
-            int biff = pct_wounded / 2;
-            if (smart && pct_wounded > 90 && one_in_(2))
-            {
-                biff = 100;
-                _adjust_group(spells->groups[MST_SUMMON], NULL, 100 + buff/3);
-            }
-            _adjust_group(spells->groups[MST_BREATHE], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_BALL], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_BOLT], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_BEAM], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_CURSE], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_BIFF], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_ANNOY], NULL, 100 - biff);
-            _adjust_group(spells->groups[MST_WEIRD], NULL, 100 - biff);
-
-            _adjust_group(spells->groups[MST_HEAL], NULL, 100 + buff);
-            _adjust_group(spells->groups[MST_ESCAPE], NULL, 100 + buff);
-        }
-        else /*if (pct_wounded <= 20)*/
-        {
-            _remove_group(spells->groups[MST_HEAL], NULL);
-            _remove_group(spells->groups[MST_ESCAPE], NULL);
-        }
-    }
+    _ai_wounded(cast);
 
     if (smart && direct)
     {
@@ -2427,6 +2633,89 @@ static bool _default_ai(mon_spell_cast_ptr cast)
     cast->spell = _choose_spell(cast->race->spells);
     return cast->spell != NULL;
 }
+
+/*************************************************************************
+ * AI Mon
+ ************************************************************************/
+static bool _choose_target(mon_spell_cast_ptr cast)
+{
+    /* XXX */
+    return FALSE;
+}
+
+static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
+{
+    mon_spells_ptr spells = cast->race->spells;
+    mon_spell_ptr  spell;
+
+    /* _choose_target only selects projectable foes for now */
+    assert(_projectable(cast->src, cast->dest));
+
+    /* not implemented ... yet */
+    _remove_group(spells->groups[MST_ANNOY], NULL);
+    _remove_group(spells->groups[MST_BIFF], NULL);
+    _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
+
+    if (p_ptr->inside_arena || p_ptr->inside_battle)
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    /* Stupid monsters are done! */
+    if (cast->race->flags2 & RF2_STUPID)
+        return;
+
+    /* Anti-magic caves? Don't bother casting spells with 100% fail rates */
+    if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+        _remove_spells(spells, _not_innate_p);
+
+    _ai_wounded(cast);
+
+    /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
+    if (spells->groups[MST_TACTIC] && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+        _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
+
+    if (_distance(cast->src, cast->dest) > 5)
+        _remove_group(spells->groups[MST_TACTIC], _jump_p);
+
+    /* Useless buffs? */
+    spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_INVULN));
+    if (spell && cast->mon->mtimed[MTIMED_INVULNER])
+        spell->prob = 0;
+
+    spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_HASTE));
+    if (spell && cast->mon->mtimed[MTIMED_FAST])
+        spell->prob = 0;
+
+    /* require a direct shot for bolts */
+    if (!_clean_shot(cast->src, cast->dest))
+    {
+        _remove_group(spells->groups[MST_BOLT], NULL);
+        _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
+    }
+
+    if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    /* Hack: No monster summoning unless the player is nearby.
+     * XXX: Or any player pets ... */
+    if (!_projectable(cast->src, point(px, py)))
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_ANIMATE_DEAD));
+    if (spell && !raise_possible(cast->mon))
+        spell->prob = 0;
+
+    /* XXX Pets need to avoid harming the player!!! */
+}
+static bool _default_ai_mon(mon_spell_cast_ptr cast)
+{
+    if (!cast->race->spells) return FALSE;
+    if (!_choose_target(cast)) return FALSE;
+    _init_spells(cast->race->spells);
+    _remove_bad_spells_mon(cast);
+    cast->spell = _choose_spell(cast->race->spells);
+    return cast->spell != NULL;
+}
+
 
 /*************************************************************************
  * Wizard Probe
