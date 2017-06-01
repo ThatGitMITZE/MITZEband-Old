@@ -1303,103 +1303,125 @@ static void _prep_name(char *dest, const char *src)
    These are legal monster types for the MON() directive when
    specifying room_grid_t
  */
-static const char *_summon_specific_types[] = {
-    "MONSTER",
-    "ANT",
-    "SPIDER",
-    "HOUND",
-    "HYDRA",
-    "ANGEL",
-    "DEMON",
-    "UNDEAD",
-    "DRAGON",
-    "HI_UNDEAD",
-    "HI_DRAGON",
-    "HI_DEMON",
-    "AMBERITE",
-    "UNIQUE",
-    "BIZARRE1",
-    "BIZARRE2",
-    "BIZARRE3",
-    "BIZARRE4",
-    "BIZARRE5",
-    "BIZARRE6",
-    "CYBER",
-    "KIN",
-    "DAWN",
-    "ANIMAL",
-    "ANIMAL_RANGER",
-    "PHANTOM",
-    "BLUE_HORROR",
-    "LIVING",
-    "HI_DRAGON_LIVING",
-    "GOLEM",
-    "ELEMENTAL",
-    "VORTEX",
-    "HYBRID",
-    "BIRD",
-    "KAMIKAZE",
-    "KAMIKAZE_LIVING",
-    "MANES",
-    "LOUSE",
-    "GUARDIAN",
-    "KNIGHT",
-    "EAGLE",
-    "PIRANHA",
-    "ARMAGE_GOOD",
-    "ARMAGE_EVIL",
-    "SOFTWARE_BUG",
-    "OLYMPIAN",
-    "RAT",
-    "BAT",
-    "WOLF",
-    "DREAD",
-    "ZOMBIE",
-    "SKELETON",
-    "GHOST",
-    "VAMPIRE",
-    "WIGHT",
-    "LICH",
-    "KRAKEN",
-    "THIEF",
-    "ENT",
-    "CAMELOT",
-    "NIGHTMARE",
-    "YEEK",
-    "ORC",
-    "DARK_ELF",
-    "GIANT",
-    "UNDEAD_SUMMONER",
-    "MATURE_DRAGON",
-    "DRAGON_SUMMONER",
-    "CLUBBER_DEMON",
-    "BALROG",
-    "DEMON_SUMMONER",
-    "ULTIMATE",
-    "HUMAN",
-    "HORSE",
-    "MAGICAL",
-    "TROLL",
-    "CHAPEL_GOOD",
-    "CHAPEL_EVIL",
-    "RING_BEARER",
-    "ARCHER",
-    "MONK",
-    "MAGE",
-    "SPECIAL",
-    0,
+static parse_tbl_t _summon_type_tbl[] = {
+    { SUMMON_MONSTER, "Monsters", TERM_WHITE, "", "MONSTER" },
+    { SUMMON_ANT, "Ants", TERM_WHITE, "", "ANT" },
+    { SUMMON_SPIDER, "Spiders", TERM_WHITE, "", "SPIDER" },
+    { SUMMON_HOUND, "Hounds", TERM_WHITE, "", "HOUND" },
+    { SUMMON_HYDRA, "Hydras", TERM_WHITE, "", "HYDRA" },
+    { SUMMON_ANGEL, "Angels", TERM_WHITE, "", "ANGEL" },
+    { SUMMON_DEMON, "Demons", TERM_WHITE, "", "DEMON" },
+    { SUMMON_UNDEAD, "Undead", TERM_WHITE, "", "UNDEAD" },
+    { SUMMON_DRAGON, "Dragons", TERM_WHITE, "", "DRAGON" },
+    { SUMMON_HI_UNDEAD, "Mighty Undead", TERM_L_DARK, "", "HI_UNDEAD" },
+    { SUMMON_HI_DRAGON, "Ancient Dragons", TERM_RED, "", "HI_DRAGON" },
+    { SUMMON_HI_DEMON, "Foul Demons", TERM_RED, "", "HI_DEMON" },
+    { SUMMON_AMBERITE, "Amberites", TERM_WHITE, "", "AMBERITE" },
+    { SUMMON_UNIQUE, "Uniques", TERM_VIOLET, "", "UNIQUE" },
+    { SUMMON_BIZARRE1, "Mold", TERM_WHITE, "", "BIZARRE1" },
+    { SUMMON_BIZARRE2, "Bats", TERM_WHITE, "", "BIZARRE2" },
+    { SUMMON_BIZARRE3, "Quylthulgs", TERM_WHITE, "", "BIZARRE3" },
+    { SUMMON_BIZARRE4, "Vortices", TERM_WHITE, "", "BIZARRE4" },
+    { SUMMON_BIZARRE5, "Creeping Coins", TERM_WHITE, "", "BIZARRE5" },
+    { SUMMON_BIZARRE6, "Mimics", TERM_WHITE, "", "BIZARRE6" },
+    { SUMMON_CYBER, "Cyberdemons", TERM_WHITE, "", "CYBER" },
+    { SUMMON_KIN, "Kin", TERM_WHITE, "", "KIN" },
+    { SUMMON_DAWN, "Warriors of the Dawn", TERM_WHITE, "", "DAWN" },
+    { SUMMON_ANIMAL, "Animals", TERM_WHITE, "", "ANIMAL" },
+    { SUMMON_ANIMAL_RANGER, "Animals", TERM_WHITE, "", "ANIMAL_RANGER" },
+    { SUMMON_PHANTOM, "Phantom Beasts", TERM_WHITE, "", "PHANTOM" },
+    { SUMMON_BLUE_HORROR, "Blue Horros", TERM_WHITE, "", "BLUE_HORROR" },
+    { SUMMON_LIVING, "Life", TERM_WHITE, "", "LIVING" },
+    { SUMMON_HI_DRAGON_LIVING, "Dragons", TERM_WHITE, "", "HI_DRAGON_LIVING" },
+    { SUMMON_GOLEM, "Golems", TERM_WHITE, "", "GOLEM" },
+    { SUMMON_ELEMENTAL, "Elementals", TERM_WHITE, "", "ELEMENTAL" },
+    { SUMMON_VORTEX, "Vortices", TERM_WHITE, "", "VORTEX" },
+    { SUMMON_HYBRID, "Abominations", TERM_WHITE, "", "HYBRID" },
+    { SUMMON_BIRD, "Birds", TERM_WHITE, "", "BIRD" },
+    { SUMMON_KAMIKAZE, "Fanatics", TERM_WHITE, "", "KAMIKAZE" },
+    { SUMMON_KAMIKAZE_LIVING, "Fanatics", TERM_WHITE, "", "KAMIKAZE_LIVING" },
+    { SUMMON_MANES, "Manes", TERM_WHITE, "", "MANES" },
+    { SUMMON_LOUSE, "Lice", TERM_WHITE, "", "LOUSE" },
+    { SUMMON_GUARDIAN, "Dungeon Guardians", TERM_VIOLET, "", "GUARDIAN" },
+    { SUMMON_KNIGHT, "Knights", TERM_WHITE, "", "KNIGHT" },
+    { SUMMON_EAGLE, "Eagles", TERM_WHITE, "", "EAGLE" },
+    { SUMMON_PIRANHA, "Piranhas", TERM_WHITE, "", "PIRANHA" },
+    { SUMMON_ARMAGE_GOOD, "Holy Monsters", TERM_WHITE, "", "ARMAGE_GOOD" },
+    { SUMMON_ARMAGE_EVIL, "Foul Monsters", TERM_WHITE, "", "ARMAGE_EVIL" },
+    { SUMMON_SOFTWARE_BUG, "Software Bugs", TERM_WHITE, "", "SOFTWARE_BUG" },
+    { SUMMON_OLYMPIAN, "Olympians", TERM_WHITE, "", "OLYMPIAN" },
+    { SUMMON_RAT, "Rats", TERM_WHITE, "", "RAT" },
+    { SUMMON_BAT, "Bats", TERM_WHITE, "", "BAT" },
+    { SUMMON_WOLF, "Wolves", TERM_WHITE, "", "WOLF" },
+    { SUMMON_DREAD, "Dread", TERM_WHITE, "", "DREAD" },
+    { SUMMON_ZOMBIE, "Zombies", TERM_WHITE, "", "ZOMBIE" },
+    { SUMMON_SKELETON, "Skeletons", TERM_WHITE, "", "SKELETON" },
+    { SUMMON_GHOST, "Ghosts", TERM_WHITE, "", "GHOST" },
+    { SUMMON_VAMPIRE, "Vampires", TERM_WHITE, "", "VAMPIRE" },
+    { SUMMON_WIGHT, "Wights", TERM_WHITE, "", "WIGHT" },
+    { SUMMON_LICH, "Liches", TERM_WHITE, "", "LICH" },
+    { SUMMON_KRAKEN, "Kraken", TERM_WHITE, "", "KRAKEN" },
+    { SUMMON_THIEF, "Thieves", TERM_WHITE, "", "THIEF" },
+    { SUMMON_ENT, "Ents", TERM_WHITE, "", "ENT" },
+    { SUMMON_CAMELOT, "Camelot Knights", TERM_WHITE, "", "CAMELOT" },
+    { SUMMON_NIGHTMARE, "Nightmares", TERM_WHITE, "", "NIGHTMARE" },
+    { SUMMON_YEEK, "Yeeks", TERM_WHITE, "", "YEEK" },
+    { SUMMON_ORC, "Orcs", TERM_WHITE, "", "ORC" },
+    { SUMMON_DARK_ELF, "Dark Elves", TERM_WHITE, "", "DARK_ELF" },
+    { SUMMON_GIANT, "Giants", TERM_WHITE, "", "GIANT" },
+    { SUMMON_UNDEAD_SUMMONER, "Undead Summoners", TERM_WHITE, "", "UNDEAD_SUMMONER" },
+    { SUMMON_MATURE_DRAGON, "Mature Dragons", TERM_WHITE, "", "MATURE_DRAGON" },
+    { SUMMON_DRAGON_SUMMONER, "Dragon Summoners", TERM_WHITE, "", "DRAGON_SUMMONER" },
+    { SUMMON_CLUBBER_DEMON, "Clubber Demons", TERM_WHITE, "", "CLUBBER_DEMON" },
+    { SUMMON_BALROG, "Balrogs", TERM_WHITE, "", "BALROG" },
+    { SUMMON_DEMON_SUMMONER, "Demon Summoners", TERM_WHITE, "", "DEMON_SUMMONER" },
+    { SUMMON_ULTIMATE, "Ultimate", TERM_WHITE, "", "ULTIMATE" },
+    { SUMMON_HUMAN, "Human", TERM_WHITE, "", "HUMAN" },
+    { SUMMON_HORSE, "Horsies", TERM_WHITE, "", "HORSE" },
+    { SUMMON_MAGICAL, "Magical Monsters", TERM_WHITE, "", "MAGICAL" },
+    { SUMMON_TROLL, "Trolls", TERM_WHITE, "", "TROLL" },
+    { SUMMON_CHAPEL_GOOD, "Good Monsters", TERM_WHITE, "", "CHAPEL_GOOD" },
+    { SUMMON_CHAPEL_EVIL, "Evil Monsters", TERM_WHITE, "", "CHAPEL_EVIL" },
+    { SUMMON_RING_BEARER, "Ring Bearers", TERM_WHITE, "", "RING_BEARER" },
+    { SUMMON_ARCHER, "Archers", TERM_WHITE, "", "ARCHER" },
+    { SUMMON_MONK, "Monks", TERM_WHITE, "", "MONK" },
+    { SUMMON_MAGE, "Mages", TERM_WHITE, "", "MAGE" },
+    { SUMMON_SPECIAL, "Special", TERM_WHITE, "", "SPECIAL" },
+    { 0 }
 };
 
-int parse_summon_type(cptr token)
+parse_tbl_ptr parse_tbl_parse(parse_tbl_ptr tbl, cptr token)
 {
     int i;
     for (i = 0;; i++)
     {
-        if (!_summon_specific_types[i]) return 0;
-        if (strcmp(_summon_specific_types[i], token) == 0) return i;
+        parse_tbl_ptr p = &tbl[i];
+        if (!p->name) return NULL;
+        if (strcmp(p->parse, token) == 0) return p;
     }
 }
+
+parse_tbl_ptr parse_tbl_lookup(parse_tbl_ptr tbl, int id)
+{
+    int i;
+    for (i = 0;; i++)
+    {
+        parse_tbl_ptr p = &tbl[i];
+        if (!p->name) return NULL;
+        if (p->id == id) return p;
+    }
+}
+
+parse_tbl_ptr summon_type_parse(cptr token)
+{
+    return parse_tbl_parse(_summon_type_tbl, token);
+}
         
+parse_tbl_ptr summon_type_lookup(int id)
+{
+    return parse_tbl_lookup(_summon_type_tbl, id);
+}
+
 int parse_lookup_monster(cptr name, int options)
 {
     int i;
@@ -1473,24 +1495,19 @@ static errr _parse_room_grid_monster(char **args, int arg_ct, room_grid_ptr grid
     }
     else
     {
-        int i;
-        for (i = 0; ; i++)
+        parse_tbl_ptr p = summon_type_parse(args[0]);
+        if (p)
         {
-            if (!_summon_specific_types[i])
+            grid->flags |= ROOM_GRID_MON_TYPE;
+            grid->monster = p->id;
+        }
+        else
+        {
+            grid->monster = parse_lookup_monster(args[0], options);
+            if (!grid->monster)
             {
-                grid->monster = parse_lookup_monster(args[0], options);
-                if (!grid->monster)
-                {
-                    msg_format("Error: Invalid monster specifier %s.", args[0]);
-                    return PARSE_ERROR_GENERIC;
-                }
-                break;
-            }
-            if (streq(args[0], _summon_specific_types[i]))
-            {
-                grid->flags |= ROOM_GRID_MON_TYPE;
-                grid->monster = i;
-                break;
+                msg_format("Error: Invalid monster specifier %s.", args[0]);
+                return PARSE_ERROR_GENERIC;
             }
         }
     }

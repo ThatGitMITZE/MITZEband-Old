@@ -992,6 +992,10 @@ extern int parse_lookup_dungeon(cptr name, int options);
 extern int parse_summon_type(cptr token);
 extern errr parse_room_line(room_ptr room, char *line, int options);
 extern errr parse_room_grid(char *buf, room_grid_ptr grid, int options);
+extern parse_tbl_ptr parse_tbl_parse(parse_tbl_ptr tbl, cptr token);
+extern parse_tbl_ptr parse_tbl_lookup(parse_tbl_ptr tbl, int id);
+extern parse_tbl_ptr summon_type_parse(cptr token);
+extern parse_tbl_ptr summon_type_lookup(int id);
 
 /* init2.c */
 extern void init_file_paths(const char *configpath, const char *libpath, const char *datapath);

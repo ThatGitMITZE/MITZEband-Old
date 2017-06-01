@@ -228,12 +228,6 @@ bool make_attack_normal(int m_idx)
         /* Handle "leaving" */
         if (p_ptr->leaving) break;
 
-        if (blow->method == RBM_SHOOT)
-        {
-            if (retaliation_hack) break;
-            continue;
-        }
-
         if (retaliation_hack)
         {
             if (m_ptr->ml)

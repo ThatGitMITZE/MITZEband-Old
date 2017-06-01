@@ -2399,7 +2399,6 @@ enum {
 /*
  * Legal restrictions for "summon_specific()"
  * Note: _summon_specific_types in init1.c relies on the exact order below for parsing.
- * Exact numeric values are saved in v_info.raw so don't change/remove/reorder.
  */
 enum summon_specific_e {
     SUMMON_MONSTER = 0,
@@ -3110,7 +3109,6 @@ enum obj_flags_e {
 #define RBM_INSULT      22
 #define RBM_MOAN        23
 #define RBM_SHOW        24
-#define RBM_SHOOT       25
 
 
 /*

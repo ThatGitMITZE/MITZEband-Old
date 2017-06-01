@@ -1443,7 +1443,6 @@ static void _possessor_stats_table(FILE* fp)
             {
                 if (!r_ptr->blow[j].effect) continue;
                 if (r_ptr->blow[j].method == RBM_EXPLODE) continue;
-                if (r_ptr->blow[j].method == RBM_SHOOT) continue;
 
                 dam += r_ptr->blow[j].d_dice * (r_ptr->blow[j].d_side + 1) / 2;
                 attacks++;

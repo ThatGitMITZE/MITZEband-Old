@@ -2045,7 +2045,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 
     /* Hack -- Skip Unique Monsters or Quest Monsters */
     if (r_ptr->flags1 & RF1_UNIQUE) resist = TRUE;
-    if (m_ptr->mflag2 & MFLAG2_QUESTOR) resist = TRUE;
+    else if (m_ptr->mflag2 & MFLAG2_QUESTOR) resist = TRUE;
 
     else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 

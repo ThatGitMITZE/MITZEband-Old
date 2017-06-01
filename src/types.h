@@ -1808,6 +1808,14 @@ typedef struct {
     int mode;
 } travel_type;
 
+typedef struct {
+    int  id;
+    cptr name;
+    byte color;
+    cptr desc;
+    cptr parse;
+} parse_tbl_t, *parse_tbl_ptr;
+
 /*
  * A new spell system, and some half baked ideas for refactoring
  * Below here, is under construction, to be cleaned up later!

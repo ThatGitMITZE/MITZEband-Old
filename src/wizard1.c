@@ -1329,7 +1329,6 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         if (r->freq_spell == 100) break;
         if (!blow->method) continue;
         if (blow->method == RBM_EXPLODE) continue;
-        if (blow->method == RBM_SHOOT) continue;
 
         for (k = 0; k < MAX_MON_BLOW_EFFECTS; k++)
         {

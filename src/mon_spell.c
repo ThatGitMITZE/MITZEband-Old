@@ -126,6 +126,7 @@ enum {
     ANNOY_SCARE,
     ANNOY_SHRIEK,
     ANNOY_SLOW,
+    ANNOY_TELE_LEVEL,
     ANNOY_TELE_TO,
     ANNOY_TRAPS,
     ANNOY_WORLD,
@@ -165,6 +166,10 @@ static _parse_t _annoy_tbl[] = {
         { "Shriek", TERM_L_BLUE,
           "%s makes a high pitched shriek.",
           "%s makes a high pitched shriek." }, MSF_INNATE },
+    { "TELE_LEVEL", { MST_ANNOY, ANNOY_TELE_LEVEL },
+        { "Teleport Level", TERM_WHITE,
+          "%s gestures at your feet.",
+          "%s mumbles strangely."}},
     { "TELE_TO", { MST_ANNOY, ANNOY_TELE_TO },
         { "Teleport To", TERM_WHITE,
           "%s commands you to return.",
@@ -321,22 +326,25 @@ static _parse_t _curse_tbl[] = {
 
 /* MST_ESCAPE */
 enum {
-    ESCAPE_BLINK,
-    ESCAPE_TELE_LEVEL,
     ESCAPE_TELE_SELF,
     ESCAPE_TELE_OTHER,
 };
 static _parse_t _escape_tbl[] = {
-    { "BLINK", { MST_ESCAPE, ESCAPE_BLINK },
-        { "Blink Self", TERM_WHITE }},
-    { "TELE_LEVEL", { MST_ESCAPE, ESCAPE_TELE_LEVEL },
-        { "Teleport Level", TERM_WHITE,
-          "%s gestures at your feet.",
-          "%s mumbles strangely."}},
     { "TELE_OTHER", { MST_ESCAPE, ESCAPE_TELE_OTHER },
         { "Teleport Away", TERM_WHITE }},
     { "TELE_SELF", { MST_ESCAPE, ESCAPE_TELE_SELF },
         { "Teleport", TERM_WHITE }},
+    {0}
+};
+enum {
+    TACTIC_BLINK = 1000,
+    TACTIC_BLINK_OTHER,
+};
+static _parse_t _tactic_tbl[] = {
+    { "BLINK", { MST_TACTIC, TACTIC_BLINK },
+        { "Blink", TERM_WHITE }},
+    { "BLINK_OTHER", { MST_TACTIC, TACTIC_BLINK_OTHER },
+        { "Blink Away", TERM_WHITE }},
     {0}
 };
 
@@ -377,7 +385,7 @@ static _parse_ptr _spell_parse_name(cptr token)
 {
     _parse_ptr tbls[] = {_annoy_tbl, _ball_tbl, _beam_tbl, _biff_tbl,
                          _bolt_tbl, _buff_tbl, _curse_tbl, _escape_tbl,
-                         _heal_tbl, _weird_tbl, NULL};
+                         _heal_tbl, _tactic_tbl, _weird_tbl, NULL};
     int i;
     for (i = 0;; i++)
     {
@@ -425,6 +433,7 @@ static _mst_info_t _mst_tbl[] = {
     { MST_ANNOY, "Annoy", TERM_ORANGE, 5 },
     { MST_SUMMON, "Summon", TERM_ORANGE, 8 },
     { MST_HEAL, "Heal", TERM_L_BLUE, 10 },
+    { MST_TACTIC, "Tactic", TERM_L_BLUE, 10 },
     { MST_WEIRD, "Weird", TERM_L_UMBER, 10 },
     { 0 }
 };
@@ -852,14 +861,14 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
     }
     else if (prefix(name, "S_"))
     {
-        int id = parse_summon_type(name + 2);
-        if (!id && strcmp(name + 2, "MONSTER") != 0)
+        parse_tbl_ptr p = summon_type_parse(name + 2);
+        if (!p)
         {
             msg_format("Error: Unknown summon type %s.", name + 2);
             return PARSE_ERROR_GENERIC;
         }
         spell->id.type = MST_SUMMON;
-        spell->id.effect = id;
+        spell->id.effect = p->id;
     }
     else
     {
@@ -905,18 +914,35 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
     }
     else if (spell->id.type == MST_SUMMON)
     {
-        string_printf(s, "%d", spell->id.effect);
+        parse_tbl_ptr p = summon_type_lookup(spell->id.effect);
+        if (!p)
+            string_printf(s, "Summon %d", spell->id.effect);
+        else
+            string_printf(s, "<color:%c>Summon %s</color>", attr_to_attr_char(p->color), p->name);
     }
-    else
+    else if (spell->id.type == MST_BREATHE)
     {
         _gf_info_ptr gf = _gf_lookup(spell->id.effect);
         if (gf)
         {
-            string_printf(s, "<color:%c>%s</color>",
+            string_printf(s, "<color:%c>Breathe %s</color>",
                 attr_to_attr_char(gf->color), gf->name);
         }
         else
-            string_printf(s, "%d", spell->id.effect);
+            string_printf(s, "Breathe %d", spell->id.effect);
+    }
+    else
+    {
+        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        _mst_info_ptr mst = _mst_lookup(spell->id.type);
+        assert(mst);
+        if (gf)
+        {
+            string_printf(s, "<color:%c>%s %s</color>",
+                attr_to_attr_char(gf->color), gf->name, mst->name);
+        }
+        else
+            string_printf(s, "%s %d", mst->name, spell->id.effect);
     }
 }
 
@@ -1291,7 +1317,13 @@ static int _scale(int amt)
         amt = amt * _current.race->spells->dam_pct / 100;
     return amt;
 }
-
+static int _avg_roll(dice_t dice)
+{
+    int roll = dice.base;
+    if (dice.dd && dice.ds)
+        roll += dice.dd * (dice.ds + 1)/2;
+    return roll;
+}
 static cptr _a_an(cptr noun)
 {
     if (strchr("aeiou", noun[0])) return "an";
@@ -1523,6 +1555,15 @@ static void _annoy(void)
         else
             set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         break;
+    case ANNOY_TELE_LEVEL:
+        if (res_save_default(RES_NEXUS) || _curse_save())
+        {
+            msg_print("You resist the effects!");
+            update_smart_learn(_current.mon->id, RES_NEXUS);
+        }
+        else
+            teleport_level(0);
+        break;
     case ANNOY_TELE_TO:
         /* Only powerful monsters can choose this spell when the player is not in
            los. In this case, it is nasty enough to warrant a saving throw. */
@@ -1600,17 +1641,6 @@ static void _escape(void)
     _custom_msg(_current.spell);
     switch (_current.spell->id.effect)
     {
-    case ESCAPE_BLINK:
-        if (teleport_barrier(_current.mon->id))
-            msg_format("Magic barrier obstructs teleporting of %s.", _current.name);
-        else
-        {
-            if (!p_ptr->blind && _current.mon->ml)
-                msg_format("%s blinks away.", _current.name);
-            teleport_away(_current.mon->id, 10, 0);
-            p_ptr->update |= PU_MONSTERS;
-        }
-        break;
     case ESCAPE_TELE_SELF:
         if (teleport_barrier(_current.mon->id))
             msg_format("Magic barrier obstructs teleporting of %s.", _current.name);
@@ -1646,14 +1676,31 @@ static void _escape(void)
             teleport_player_away(_current.mon->id, 100);
         update_smart_learn(_current.mon->id, RES_TELEPORT);
         break;
-    case ESCAPE_TELE_LEVEL:
-        if (res_save_default(RES_NEXUS) || _curse_save())
-        {
-            msg_print("You resist the effects!");
-            update_smart_learn(_current.mon->id, RES_NEXUS);
-        }
+    }
+}
+static void _tactic(void)
+{
+    _custom_msg(_current.spell);
+    switch (_current.spell->id.effect)
+    {
+    case TACTIC_BLINK:
+        if (teleport_barrier(_current.mon->id))
+            msg_format("Magic barrier obstructs teleporting of %s.", _current.name);
         else
-            teleport_level(0);
+        {
+            if (!p_ptr->blind && _current.mon->ml)
+                msg_format("%s blinks away.", _current.name);
+            teleport_away(_current.mon->id, 10, 0);
+            p_ptr->update |= PU_MONSTERS;
+        }
+        break;
+    case TACTIC_BLINK_OTHER:
+        msg_format("%s blinks you away.", _current.name);
+        if (res_save_default(RES_TELEPORT))
+            msg_print("You resist the effects!");
+        else
+            teleport_player_away(_current.mon->id, 10);
+        update_smart_learn(_current.mon->id, RES_TELEPORT);
         break;
     }
 }
@@ -1818,6 +1865,20 @@ static void _summon_special(void)
         num = 1 + randint1(3);
         r_idx = MON_SHURYUUDAN;
         break;
+    case MON_BULLGATES:
+        msg_format("%s summons his minions.", _current.name);
+        r_idx = MON_IE;
+        break;
+    case MON_CALDARM:
+        num = randint1(3);
+        msg_format("%s summons his minions.", _current.name);
+        r_idx = MON_LOCKE_CLONE;
+        break;
+    case MON_TALOS:
+        num = randint1(3);
+        msg_format("%s summons his minions.", _current.name);
+        r_idx = MON_SPELLWARP_AUTOMATON;
+        break;
     }
     for (i = 0; i < num; i++)
     {
@@ -1834,7 +1895,16 @@ static void _summon(void)
         return;
     }
     if (!_custom_msg(_current.spell))
-        msg_format("%s summons help.", _current.name);
+    {
+        parse_tbl_ptr p = summon_type_lookup(_current.spell->id.effect);
+        if (!p)
+            msg_format("%s summons help.", _current.name);
+        else
+        {
+            msg_format("%s summons <color:%c>%s</color>.",
+                _current.name, attr_to_attr_char(p->color), p->name);
+        }
+    }
     assert(_current.spell->parm.tag == MSP_DICE);
     ct = _roll(_current.spell->parm.v.dice);
     if (_current.spell->id.effect == SUMMON_KIN)
@@ -1866,6 +1936,7 @@ static void _spell_cast_aux(void)
     case MST_ESCAPE:  _escape();  break;
     case MST_HEAL:    _heal();    break;
     case MST_SUMMON:  _summon();  break;
+    case MST_TACTIC:  _tactic();  break;
     case MST_WEIRD:   _weird();   break;
     }
 
@@ -2068,7 +2139,7 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     if (_have_smart_flag(flags, RES_NEXUS))
     {
         int pct = res_pct(RES_NEXUS);
-        mon_spell_ptr spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
+        mon_spell_ptr spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
         if (spell && pct)
         {
            int tweak = pct > 30 ? 0 : 50;
@@ -2129,7 +2200,6 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
             _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
             /* Heal and Self Telportation OK */
-            _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
             _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
         }
         else
@@ -2139,6 +2209,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             _remove_group(spells->groups[MST_SUMMON], NULL);
             _remove_group(spells->groups[MST_HEAL], NULL);
             _remove_group(spells->groups[MST_ESCAPE], NULL);
+            _remove_group(spells->groups[MST_TACTIC], NULL);
             spell = mon_spells_find(spells, _id(MST_BREATHE, GF_DISINTEGRATE));
             if ( spell
               && cast->mon->cdis < MAX_RANGE / 2
@@ -2172,25 +2243,24 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         int pct_wounded = 100 - pct_healthy;
         if (pct_wounded > 20)
         {
-            int offence = 100 - pct_wounded/2;
-            int panic = 5 * pct_wounded;
+            int buff = pct_wounded * pct_wounded * pct_wounded / 500;
+            int biff = pct_wounded / 2;
             if (smart && pct_wounded > 90 && one_in_(2))
             {
-                offence = 0;
-                panic *= 3;
-                _adjust_group(spells->groups[MST_SUMMON], NULL, 5*pct_wounded);
+                biff = 100;
+                _adjust_group(spells->groups[MST_SUMMON], NULL, 100 + buff/3);
             }
-            _adjust_group(spells->groups[MST_BREATHE], NULL, offence);
-            _adjust_group(spells->groups[MST_BALL], NULL, offence);
-            _adjust_group(spells->groups[MST_BOLT], NULL, offence);
-            _adjust_group(spells->groups[MST_BEAM], NULL, offence);
-            _adjust_group(spells->groups[MST_CURSE], NULL, offence);
-            _adjust_group(spells->groups[MST_BIFF], NULL, offence);
-            _adjust_group(spells->groups[MST_ANNOY], NULL, offence);
-            _adjust_group(spells->groups[MST_WEIRD], NULL, offence);
+            _adjust_group(spells->groups[MST_BREATHE], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BALL], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BOLT], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BEAM], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_CURSE], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BIFF], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_ANNOY], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_WEIRD], NULL, 100 - biff);
 
-            _adjust_group(spells->groups[MST_HEAL], NULL, panic);
-            _adjust_group(spells->groups[MST_ESCAPE], NULL, panic);
+            _adjust_group(spells->groups[MST_HEAL], NULL, 100 + buff);
+            _adjust_group(spells->groups[MST_ESCAPE], NULL, 100 + buff);
         }
         else /*if (pct_wounded <= 20)*/
         {
@@ -2201,7 +2271,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 
     if (smart && direct)
     {
-        spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_TELE_LEVEL));
+        spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
         if (spell && TELE_LEVEL_IS_INEFF(0))
             spell->prob = 0;
         spell = mon_spells_find(spells, _id(MST_BIFF, BIFF_DISPEL_MAGIC));
@@ -2224,10 +2294,9 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && world_monster) /* prohibit if already cast */
         spell->prob = 0;
 
-    /* Blink away if too close and good offense available */
-    spell = mon_spells_find(spells, _id(MST_ESCAPE, ESCAPE_BLINK));
-    if (spell && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
-        spell->prob = 50;
+    /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
+    if (spells->groups[MST_TACTIC] && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+        _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
 
     /* Useless buffs? */
     spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_INVULN));
@@ -2306,10 +2375,70 @@ static bool _default_ai(mon_spell_cast_ptr cast)
     return cast->spell != NULL;
 }
 
+/*************************************************************************
+ * Wizard Probe
+ ************************************************************************/
+static bool _is_attack_spell(mon_spell_ptr spell)
+{
+    switch (spell->id.type)
+    {
+    case MST_BREATHE: case MST_BALL: case MST_BOLT: case MST_BEAM: case MST_CURSE:
+        return TRUE;
+    }
+    return FALSE;
+}
+static bool _is_gf_spell(mon_spell_ptr spell)
+{
+    switch (spell->id.type)
+    {
+    case MST_BREATHE: case MST_BALL: case MST_BOLT: case MST_BEAM:
+        return TRUE;
+    }
+    return FALSE;
+}
+static int _spell_res(mon_spell_ptr spell)
+{
+    int res = 0;
+    if (_is_gf_spell(spell))
+    {
+        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        if (gf && gf->resist != RES_INVALID)
+            res = res_pct(gf->resist);
+    }
+    return res;
+}
+
+int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
+{
+    if (!_is_attack_spell(spell)) return 0;
+    if (spell->parm.tag == MSP_DICE)
+    {
+        dice_t dice = spell->parm.v.dice;
+        int dam = _avg_roll(dice);
+        int scale = r_info[mon->ap_r_idx].spells->dam_pct;
+        int res = _spell_res(spell);
+        if (scale)
+            dam = dam * scale / 100;
+        if (res)
+            dam -= dam * res / 100;
+        return dam;
+    }
+    if (spell->parm.tag == MSP_HP_PCT)
+    {
+        hp_pct_t hp = spell->parm.v.hp_pct;
+        int dam = mon->hp * hp.pct / 100;
+        int res = _spell_res(spell);
+        if (dam > hp.max) dam = hp.max;
+        if (res) dam -= dam * res / 100;
+        return dam;
+    }
+    return 0;
+}
+
 void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
 {
     mon_spell_cast_t cast = {0};
-    int              i, j, total = 0;
+    int              i, j, total = 0, total_dam = 0;
     _spell_cast_init(&cast, mon);
     if (!ai) ai = _default_ai;
     if (!cast.race->spells) return;
@@ -2340,12 +2469,13 @@ void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
         for (j = 0; j < group->count; j++)
         {
             mon_spell_ptr spell = &group->spells[j];
+            int           dam = _avg_spell_dam(mon, spell);
             doc_printf(doc, "<tab:20>%2d.%d%% ", spell->prob * 100 / total, (spell->prob * 1000 / total) % 10);
             mon_spell_doc(spell, doc);
             if (spell->parm.tag == MSP_DICE)
             {
                 dice_t dice = spell->parm.v.dice;
-                doc_insert(doc, "<tab:40>");
+                doc_insert(doc, "<tab:50>");
                 if (dice.dd)
                     doc_printf(doc, "%dd%d", dice.dd, dice.ds);
                 if (dice.base)
@@ -2359,9 +2489,17 @@ void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
                 hp_pct_t hp = spell->parm.v.hp_pct;
                 int      dam = mon->hp * hp.pct / 100;
                 if (dam > hp.max) dam = hp.max;
-                doc_printf(doc, "<tab:40>%d", dam);
+                doc_printf(doc, "<tab:50>%d", dam);
+            }
+            if (dam)
+            {
+                total_dam += spell->prob * dam;
+                doc_printf(doc, "<tab:65>%d", dam);
             }
             doc_newline(doc);
         }
     }
+    doc_printf(doc, "<tab:65><color:r>%d</color>", total_dam / total);
+    doc_newline(doc);
 }
+

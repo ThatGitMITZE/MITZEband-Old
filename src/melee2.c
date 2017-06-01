@@ -1599,12 +1599,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
         /* Hack -- no more attacks */
         if (!method) break;
 
-        if (method == RBM_SHOOT)
-        {
-            if (retaliation_hack) break;
-            continue;
-        }
-
         if (retaliation_hack && see_either)
         {
             cmsg_format(TERM_GREEN, "(<color:o>%^s</color> retaliates:", m_name);

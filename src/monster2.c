@@ -1060,7 +1060,7 @@ bool mon_is_type(int r_idx, int type)
         if (r_ptr->d_char == 'g') return TRUE;
         break;
     case SUMMON_CYBER:
-        if (r_ptr->d_char == 'U' && (r_ptr->flags4 & RF4_ROCKET)) return TRUE;
+        if (r_idx == MON_CYBER) return TRUE;
         break;
     case SUMMON_KIN:
         if (r_ptr->d_char == summon_kin_type && r_idx != MON_HAGURE) return TRUE;
@@ -1109,11 +1109,11 @@ bool mon_is_type(int r_idx, int type)
         if (r_ptr->d_char == 'B') return TRUE;
         break;
     case SUMMON_ARCHER:
-        if (r_ptr->d_char == 'p')
+        if ( r_ptr->d_char == 'p'
+          && r_ptr->spells
+          && mon_spells_find(r_ptr->spells, mon_spell_id(MST_BOLT, GF_ARROW)) )
         {
-            int i;
-            for (i = 0; i < MAX_MON_BLOWS; i++)
-                if (r_ptr->blows[i].method == RBM_SHOOT) return TRUE;
+            return TRUE;
         }
         break;
     case SUMMON_KAMIKAZE:

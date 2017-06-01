@@ -794,7 +794,6 @@ static int _ct_known_attacks(monster_race *r_ptr)
     {
         mon_blow_ptr blow = &r_ptr->blows[i];
         if (!blow->method) continue;
-        if (blow->method == RBM_SHOOT) continue;
         if (blow->lore || _easy_lore(r_ptr)) ct++;
     }
     return ct;
@@ -814,7 +813,6 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
             vec_ptr      v;
 
             if (!blow->method) continue;
-            if (blow->method == RBM_SHOOT) continue;
             if (!_easy_lore(r_ptr) && !blow->lore) continue;
 
             v = vec_alloc((vec_free_f)string_free);

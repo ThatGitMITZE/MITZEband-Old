@@ -155,6 +155,7 @@ void shoot_arrow_spell(int cmd, variant *res)
         }
         else if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
         {
+            /* XXX Remove this spell for Possessors.
             monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
             int i;
             for (i = 0; i < 4; i++)
@@ -165,6 +166,7 @@ void shoot_arrow_spell(int cmd, variant *res)
                     return;
                 }
             }
+            */
         }
         else
             var_set_string(res, info_damage(0, 0, 1));
@@ -189,16 +191,7 @@ void shoot_arrow_spell(int cmd, variant *res)
         }
         else if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
         {
-            monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
-            int i;
-            for (i = 0; i < 4; i++)
-            {
-                if (r_ptr->blows[i].method == RBM_SHOOT)
-                {
-                    dam = damroll(r_ptr->blows[i].effects[0].dd, r_ptr->blows[i].effects[0].ds);
-                    break;
-                }
-            }
+            /* XXX Remove me! */
         }
 
         fire_bolt(GF_ARROW, dir, spell_power(dam));

@@ -21,6 +21,7 @@ enum {
     MST_ANNOY,
     MST_SUMMON,
     MST_HEAL,
+    MST_TACTIC,
     MST_WEIRD,
     MST_COUNT
 };

@@ -259,9 +259,6 @@ static bool _blow_is_masked(mon_blow_ptr blow)
     {
     case 0:
     /*case RBM_EXPLODE:*/
-    case RBM_SHOOT:
-        return TRUE;
-
     case RBM_GAZE:
         if (p_ptr->blind)
             return TRUE;
