@@ -74,7 +74,6 @@ typedef struct {
     byte color;
     cptr cast_msg;
     cptr blind_msg;
-    cptr xtra_msg;
     cptr cast_mon_msg;
     cptr cast_plr_msg;
 } mon_spell_display_t, *mon_spell_display_ptr;

@@ -215,11 +215,15 @@ static _parse_t _buff_tbl[] = {
     { "HASTE", { MST_BUFF, BUFF_HASTE },
         { "Haste Self", TERM_WHITE,
           "$SRC concentrates on $SRC_POS body.",
-          "$SRC mumbles." }},
+          "$SRC mumbles.",
+          "$SRC concentrates on $SRC_POS body.",
+          "You concentrate on your body." }},
     { "INVULN", { MST_BUFF, BUFF_INVULN },
         { "Invulnerability", TERM_WHITE,
           "$SRC casts a Globe of Invulnerability.",
-          "$SRC mumbles powerfully." }},
+          "$SRC mumbles powerfully.",
+          "$SRC casts a Globe of Invulnerability.",
+          "You cast a Globe of Invulnerability." }},
     {0}
 };
 
@@ -228,50 +232,71 @@ static _parse_t _ball_tbl[] = {
     { "BA_CHAOS", { MST_BALL, GF_CHAOS },
         { "Invoke Logrus", TERM_VIOLET,
           "$SRC invokes a raw logrus.",
-          "$SRC mumbles frighteningly." }, MSF_TARGET},
+          "$SRC mumbles frighteningly.",
+          "$SRC invokes a raw logrus at $DEST.",
+          "You invoke a raw logrus." }, MSF_TARGET},
     { "BA_DARK", { MST_BALL, GF_DARK },
         { "Darkness Storm", TERM_L_DARK,
           "$SRC invokes a darkness storm.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$SRC mumbles powerfully.",
+          "$SRC invokes a darkness storm at $DEST.",
+          "You invoke a darkness storm." }, MSF_TARGET},
     { "BA_LITE", { MST_BALL, GF_LITE },
         { "Starburst", TERM_YELLOW,
           "$SRC invokes a starburst.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$SRC mumbles powerfully.",
+          "$SRC invokes a starburst at $DEST.",
+          "You invoke a starburst." }, MSF_TARGET},
     { "BA_MANA", { MST_BALL, GF_MANA },
         { "Mana Storm", TERM_L_BLUE,
           "$SRC invokes a mana storm.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$SRC mumbles powerfully.",
+          "$SRC invokes a mana storm at $DEST.",
+          "You invoke a mana storm." }, MSF_TARGET},
     { "BA_NUKE", { MST_BALL, GF_NUKE },
         { "Radiation Ball", TERM_L_GREEN,
           "$SRC casts a ball of radiation.",
-          "$SRC mumbles." }, MSF_TARGET},
+          "$SRC mumbles.",
+          "$SRC casts a ball of radiation at $DEST.",
+          "You cast a ball of radiation." }, MSF_TARGET},
     { "BA_POIS", { MST_BALL, GF_POIS },
         { "Stinking Cloud", TERM_L_GREEN,
           "$SRC casts a stinking cloud.",
-          "$SRC mumbles." }, MSF_TARGET},
+          "$SRC mumbles.",
+          "$SRC casts a stinking cloud at $DEST.",
+          "You cast a stinking cloud." }, MSF_TARGET},
     { "BA_WATER", { MST_BALL, GF_WATER },
         { "Whirlpool", TERM_L_BLUE,
-          "$SRC gestures fluidly.",
-          "$SRC mumbles.",
-          "You are engulfed in a whirlpool."}, MSF_TARGET},
+          "$SRC gestures fluidly. You are engulfed in a whirlpool.",
+          "$SRC mumbles. You are engulfed in a whirlpool.",
+          "$SRC gestures fluidly. $DEST is engulfed in a whirlpool.",
+          "You gesture fluidly." }, MSF_TARGET},
     { "BRAIN_SMASH", { MST_BALL, GF_BRAIN_SMASH },
         { "Brain Smash", TERM_L_BLUE,
           "$SRC gazes deep into your eyes.",
-          "You feel something focusing on your mind."}, MSF_BALL0 | MSF_TARGET },
+          "You feel something focusing on your mind.", 
+          "$SRC gazes deep into the eyes of $DEST.",
+          "You gaze deeply." }, MSF_BALL0 | MSF_TARGET },
     { "DRAIN_MANA", { MST_BALL, GF_DRAIN_MANA },
         { "Drain Mana", TERM_L_BLUE}, MSF_BALL0 | MSF_TARGET },
     { "MIND_BLAST", { MST_BALL, GF_MIND_BLAST },
         { "Mind Blast", TERM_L_BLUE,
           "$SRC gazes deep into your eyes.",
-          "You feel something focusing on your mind."}, MSF_BALL0 | MSF_TARGET},
+          "You feel something focusing on your mind.", 
+          "$SRC gazes deep into the eyes of $DEST.",
+          "You gaze deeply." }, MSF_BALL0 | MSF_TARGET},
     { "ROCKET", { MST_BALL, GF_ROCKET },
         { "Rocket", TERM_L_UMBER,
           "$SRC fires a rocket.",
-          "$SRC shoots something." }, MSF_INNATE | MSF_TARGET },
+          "$SRC shoots something.",
+          "$SRC fires a rocket at $DEST.",
+          "You fire a rocket." }, MSF_INNATE | MSF_TARGET },
     { "THROW", { MST_BALL, GF_ROCK }, /* non-reflectable! */
         { "Throw Boulder", TERM_L_UMBER,
           "$SRC throws a large rock.",
-          "$SRC shouts, 'Haaa!!'." }, MSF_INNATE | MSF_BALL0 | MSF_TARGET},
+          "$SRC shouts, 'Haaa!!'.",
+          "$SRC throws a large rock at $DEST.", 
+          "You throw a large rock." }, MSF_INNATE | MSF_BALL0 | MSF_TARGET},
     {0}
 };
 
@@ -279,15 +304,22 @@ static _parse_t _ball_tbl[] = {
 static _parse_t _bolt_tbl[] = {
     { "GAZE", { MST_BOLT, GF_ATTACK },
         { "Gaze", TERM_RED,
-          "$SRC gazes at you."}, MSF_TARGET},
+          "$SRC gazes at you.",
+          "",
+          "$SRC gazes at $DEST.",
+          ""}, MSF_TARGET},
     { "MISSILE", { MST_BOLT, GF_MISSILE },
         { "Magic Missile", TERM_WHITE,
           "$SRC casts a magic missile.",
-          "$SRC mumbles."}, MSF_TARGET},
+          "$SRC mumbles.",
+          "$SRC casts a magic missile at $DEST.",
+          "You cast a magic missile." }, MSF_TARGET},
     { "SHOOT", { MST_BOLT, GF_ARROW },
         { "Shoot", TERM_L_UMBER,
           "$SRC fires an arrow.",
-          "$SRC makes a strange noise." }, MSF_INNATE | MSF_TARGET },
+          "$SRC makes a strange noise.",
+          "$SRC fires an arrow at $DEST.",
+          "You fire an arrow." }, MSF_INNATE | MSF_TARGET },
     {0}
 };
 
@@ -296,7 +328,9 @@ static _parse_t _beam_tbl[] = {
     { "PSY_SPEAR", { MST_BEAM, GF_PSY_SPEAR },
         { "Psycho-Spear", TERM_L_BLUE,
           "$SRC throws a Psycho-Spear.",
-          "$SRC mumbles."}, MSF_TARGET },
+          "$SRC mumbles.", 
+          "$SRC throws a Psycho-Spear at $DEST.",
+          "You throw a Psycho-Spear." }, MSF_TARGET },
     {0}
 };
 
@@ -305,23 +339,33 @@ static _parse_t _curse_tbl[] = {
     { "CAUSE_1", { MST_CURSE, GF_CAUSE_1 },
         { "Cause Light Wounds", TERM_RED,
           "$SRC points at you and curses.",
-          "$SRC curses."}, MSF_TARGET },
+          "$SRC curses.",
+          "$SRC points at $DEST and curses.",
+          "You curse."}, MSF_TARGET },
     { "CAUSE_2", { MST_CURSE, GF_CAUSE_2 },
         { "Cause Serious Wounds", TERM_RED,
           "$SRC points at you and curses horribly.",
-          "$SRC curses horribly."}, MSF_TARGET },
+          "$SRC curses horribly.",
+          "$SRC points at $DEST and curses horribly.",
+          "You curse horribly." }, MSF_TARGET },
     { "CAUSE_3", { MST_CURSE, GF_CAUSE_3 },
         { "Cause Critical Wounds", TERM_RED,
-          "$SRC points at you, incanting terribly!"
-          "$SRC incants terribly."}, MSF_TARGET },
+          "$SRC points at you, incanting terribly!",
+          "$SRC incants terribly.",
+          "$SRC points at $DEST, incanting terribly!",
+          "You incant terribly." }, MSF_TARGET },
     { "CAUSE_4", { MST_CURSE, GF_CAUSE_4 },
         { "Cause Mortal Wounds", TERM_RED,
           "$SRC points at you, screaming the word DIE!",
-          "$SRC screams the word DIE!"}, MSF_TARGET },
+          "$SRC screams the word DIE!", 
+          "$SRC points at $DEST, screaming the word DIE!",
+          "You scream the word DIE!" }, MSF_TARGET },
     { "HAND_DOOM", { MST_CURSE, GF_HAND_DOOM },
         { "Hand of Doom", TERM_RED,
           "$SRC invokes the Hand of Doom!",
-          "$SRC invokes the Hand of Doom!"}, MSF_TARGET },
+          "$SRC invokes the Hand of Doom!",
+          "$SRC invokes the Hand of Doom at $DEST.",
+          "You invoke the Hand of Doom!" }, MSF_TARGET },
     {0}
 };
 
@@ -357,7 +401,9 @@ static _parse_t _heal_tbl[] = {
     { "HEAL", { MST_HEAL, HEAL_SELF },
         { "Heal Self", TERM_WHITE,
           "$SRC concentrates on $SRC_POS wounds.",
-          "$SRC mumbles." }},
+          "$SRC mumbles.",
+          "$SRC concentrates on $SRC_POS wounds.",
+          "$SRC concentrates on $SRC_POS wounds." }},
     {0}
 };
 
@@ -1159,12 +1205,12 @@ static void _spell_cast_aux(void);
 static bool _default_ai(mon_spell_cast_ptr cast);
 static bool _default_ai_mon(mon_spell_cast_ptr cast);
 
-static void _mon_desc(mon_ptr mon, char *buf)
+static void _mon_desc(mon_ptr mon, char *buf, char color)
 {
     char tmp[MAX_NLEN];
     monster_desc(tmp, mon, 0);
     tmp[0] = toupper(tmp[0]);
-    sprintf(buf, "<color:g>%s</color>", tmp);
+    sprintf(buf, "<color:%c>%s</color>", color, tmp);
 }
 static mon_race_ptr _race(mon_ptr mon)
 {
@@ -1178,7 +1224,7 @@ static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
     cast->spell = NULL;
     cast->src = point(mon->fx, mon->fy);
     cast->dest = point(px, py);
-    _mon_desc(mon, cast->name); 
+    _mon_desc(mon, cast->name, 'G'); 
     cast->flags = MSC_SRC_MONSTER | MSC_DEST_PLAYER;
 }
 
@@ -1188,7 +1234,7 @@ static void _spell_cast_init_mon(mon_spell_cast_ptr cast, mon_ptr mon)
     cast->race = _race(mon);
     cast->spell = NULL;
     cast->src = point(mon->fx, mon->fy);
-    _mon_desc(mon, cast->name); 
+    _mon_desc(mon, cast->name, 'G'); 
     cast->flags = MSC_SRC_MONSTER | MSC_DEST_MONSTER;
 }
 
@@ -1240,6 +1286,8 @@ bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
     if (ai(&cast))
     {
         _current = cast;
+        if (_current.flags & MSC_UNVIEW)
+            mon_fight = TRUE;
         _spell_cast_aux();
         memset(&_current, 0, sizeof(mon_spell_cast_t));
         return TRUE;
@@ -1676,21 +1724,22 @@ static void hp_mon(mon_ptr mon, int amt) /* this should be public */
         mon->hp = mon->maxhp;
         if (!p_ptr->blind && mon->ml)
             msg_format("%s looks completely healed!", _current.name); /* XXX */
-        else
-            msg_format("%s looks sounds healed!", _current.name); /* XXX */
+        else if (!(_current.flags & MSC_UNVIEW))
+            msg_format("%s sounds healed!", _current.name); /* XXX */
     }
     else
     {
         if (!p_ptr->blind && mon->ml)
             msg_format("%s looks healther.", _current.name); /* XXX */
-        else
+        else if (!(_current.flags & MSC_UNVIEW))
             msg_format("%s looks sounds healthier.", _current.name); /* XXX */
     }
     check_mon_health_redraw(mon->id);
     if (MON_MONFEAR(mon))
     {
         set_monster_monfear(mon->id, 0);
-        msg_format("%s recovers its courage.", _current.name); /* XXX */
+        if (!p_ptr->blind && mon->ml)
+            msg_format("%s recovers its courage.", _current.name); /* XXX */
     }
 }
 static void _heal(void)
@@ -1941,8 +1990,8 @@ static _custom_msg_t _mon_msg_tbl[] = {
     { MON_ROLENTO, {MST_BALL, GF_FIRE},
         "$SRC throws a hand grenade.", 
         "$SRC throws a hand grenade.", 
-        "$SRC throws a hand grenade.", 
-        "$SRC throws a hand grenade at $DEST." }, 
+        "$SRC throws a hand grenade at $DEST.",
+        "You throw a hand grenade." },
     {0}
 };
 static cptr _custom_msg(void)
@@ -1964,7 +2013,9 @@ static cptr _custom_msg(void)
         }
         else if (_current.flags & MSC_DEST_MONSTER)
         {
-            if (_current.spell->display && !(_current.flags & MSC_UNVIEW))
+            if (_current.flags & MSC_UNVIEW)
+                return "";
+            else
                 return msg->cast_mon_msg;
         }
     }
@@ -1981,10 +2032,12 @@ static cptr _display_msg(void)
     }
     else if (_current.flags & MSC_DEST_MONSTER)
     {
-        if (_current.spell->display && !(_current.flags & MSC_UNVIEW))
+        if (_current.flags & MSC_UNVIEW)
+            return "";
+        else
             return _current.spell->display->cast_mon_msg;
     }
-    return NULL;
+    return "";
 }
 static cptr _breathe_msg(void)
 {
@@ -2017,6 +2070,11 @@ static cptr _breathe_msg(void)
 static cptr _ball_msg(void)
 {
     _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    if (!gf)
+    {
+        msg_format("Unkown Ball %d", _current.spell->id.effect);
+        return NULL;
+    }
     assert(gf);
     if (_current.flags & MSC_SRC_PLAYER)
     {
@@ -2183,7 +2241,7 @@ static void _spell_msg(void)
             *dest++ = *pos++;
     }
     *dest++ = '\0';
-    if (!strlen(msg)) return;
+    if (!strlen(out)) return;
     msg_print(out);
 }
 
@@ -2637,9 +2695,61 @@ static bool _default_ai(mon_spell_cast_ptr cast)
 /*************************************************************************
  * AI Mon
  ************************************************************************/
+static vec_ptr _enemies(mon_ptr mon)
+{
+    int i;
+    vec_ptr v = vec_alloc(NULL);
+    for (i = 1; i < m_max; i++)
+    {
+        mon_ptr tgt = &m_list[i];
+        if (tgt->id == mon->id) continue;
+        if (!tgt->r_idx) continue;
+        if (!are_enemies(mon, tgt)) continue;
+        if (!_projectable(point(mon->fx, mon->fy), point(tgt->fx, tgt->fy))) continue;
+        vec_add(v, tgt);
+    }
+    return v;
+}
 static bool _choose_target(mon_spell_cast_ptr cast)
 {
-    /* XXX */
+    mon_ptr mon2 = NULL;
+    if (pet_t_m_idx && is_pet(cast->mon))
+    {
+        mon2 = &m_list[pet_t_m_idx];
+        if (mon2->id == cast->mon->id || !_projectable(cast->src, point(mon2->fx, mon2->fy)))
+            mon2 = NULL;
+    }
+    if (!mon2 && cast->mon->target_y)
+    {
+        int t_idx = cave[cast->mon->target_y][cast->mon->target_x].m_idx;
+
+        if (t_idx)
+        {
+            mon2 = &m_list[t_idx];
+            if ( mon2->id == cast->mon->id
+              || !are_enemies(cast->mon, mon2)
+              || !_projectable(cast->src, point(mon2->fx, mon2->fy)) )
+            {
+                mon2 = NULL;
+            }
+        }
+    }
+    if (!mon2)
+    {
+        vec_ptr v = _enemies(cast->mon);
+        if (vec_length(v))
+            mon2 = vec_get(v, randint0(vec_length(v)));
+        vec_free(v);
+    }
+    if (mon2)
+    {
+        cast->mon2 = mon2;
+        _mon_desc(mon2, cast->name2, 'o');
+        cast->dest = point(mon2->fx, mon2->fy);
+        if (!cast->mon->ml && !cast->mon2->ml)
+            cast->flags |= MSC_UNVIEW;
+        return TRUE;
+    }
     return FALSE;
 }
 
