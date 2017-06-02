@@ -135,50 +135,50 @@ enum {
 static _parse_t _annoy_tbl[] = {
     { "AMNESIA", { MST_ANNOY, ANNOY_AMNESIA },
         { "Amnesia", TERM_L_BLUE,
-          "$SRC tries to blank your mind.",
-          "$SRC tries to blank your mind."}, MSF_TARGET},
+          "$CASTER tries to blank your mind.",
+          "$CASTER tries to blank your mind."}, MSF_TARGET},
     { "ANIM_DEAD", { MST_ANNOY, ANNOY_ANIMATE_DEAD },
         { "Animate Dead", TERM_L_DARK,
-          "$SRC casts a spell to revive the dead.",
-          "$SRC mumbles."}},
+          "$CASTER casts a spell to revive the dead.",
+          "$CASTER mumbles."}},
     { "BLIND", { MST_ANNOY, ANNOY_BLIND },
         { "Blind", TERM_WHITE,
-          "$SRC casts a spell, burning your eyes!",
-          "$SRC mumbles."}, MSF_TARGET},
+          "$CASTER casts a spell, burning your eyes!",
+          "$CASTER mumbles."}, MSF_TARGET},
     { "CONFUSE", { MST_ANNOY, ANNOY_CONFUSE },
         { "Confuse", TERM_L_UMBER,
-          "$SRC creates a mesmerizing illusion.",
-          "$SRC mumbles, and you hear puzzling noises."}, MSF_TARGET},
+          "$CASTER creates a mesmerizing illusion.",
+          "$CASTER mumbles, and you hear puzzling noises."}, MSF_TARGET},
     { "DARKNESS", { MST_ANNOY, ANNOY_DARKNESS },
         { "Create Darkness", TERM_L_DARK }},
     { "PARALYZE", { MST_ANNOY, ANNOY_PARALYZE },
         { "Paralyze", TERM_RED,
-          "$SRC stares deep into your eyes!",
-          "$SRC mumbles."}, MSF_TARGET},
+          "$CASTER stares deep into your eyes!",
+          "$CASTER mumbles."}, MSF_TARGET},
     { "SCARE", { MST_ANNOY, ANNOY_SCARE },
         { "Terrify", TERM_RED,
-          "$SRC casts a fearful illusion.",
-          "$SRC mumbles, and you hear scary noises."}, MSF_TARGET},
+          "$CASTER casts a fearful illusion.",
+          "$CASTER mumbles, and you hear scary noises."}, MSF_TARGET},
     { "SLOW", { MST_ANNOY, ANNOY_SLOW },
         { "Slow", TERM_L_UMBER,
-          "$SRC drains power from your muscles!",
-          "$SRC drains power from your muscles!"}, MSF_TARGET},
+          "$CASTER drains power from your muscles!",
+          "$CASTER drains power from your muscles!"}, MSF_TARGET},
     { "SHRIEK", { MST_ANNOY, ANNOY_SHRIEK },
         { "Shriek", TERM_L_BLUE,
-          "$SRC makes a high pitched shriek.",
-          "$SRC makes a high pitched shriek." }, MSF_INNATE },
+          "$CASTER makes a high pitched shriek.",
+          "$CASTER makes a high pitched shriek." }, MSF_INNATE },
     { "TELE_LEVEL", { MST_ANNOY, ANNOY_TELE_LEVEL },
         { "Teleport Level", TERM_WHITE,
-          "$SRC gestures at your feet.",
-          "$SRC mumbles strangely."}, MSF_TARGET},
+          "$CASTER gestures at your feet.",
+          "$CASTER mumbles strangely."}, MSF_TARGET},
     { "TELE_TO", { MST_ANNOY, ANNOY_TELE_TO },
         { "Teleport To", TERM_WHITE,
-          "$SRC commands you to return.",
-          "$SRC mumbles." }, MSF_TARGET},
+          "$CASTER commands you to return.",
+          "$CASTER mumbles." }, MSF_TARGET},
     { "TRAPS", { MST_ANNOY, ANNOY_TRAPS },
         { "Create Traps", TERM_WHITE,
-          "$SRC casts a spell and cackles evilly.",
-          "$SRC mumbles gleefully." }, MSF_TARGET},
+          "$CASTER casts a spell and cackles evilly.",
+          "$CASTER mumbles gleefully." }, MSF_TARGET},
     { "WORLD", { MST_ANNOY, ANNOY_WORLD },
         { "Stop Time", TERM_L_BLUE}},
     {0}
@@ -193,16 +193,22 @@ enum {
 static _parse_t _biff_tbl[] = {
     { "ANTI_MAGIC", { MST_BIFF, BIFF_ANTI_MAGIC },
         { "Anti-Magic", TERM_L_BLUE,
-          "$SRC invokes anti-magic.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$CASTER invokes <color:B>Anti-Magic</color>.",
+          "$CASTER mumbles powerfully.",
+          ""
+          "You invoke <color:B>Anti-Magic</color>." }, MSF_TARGET},
     { "DISPEL_MAGIC", { MST_BIFF, BIFF_DISPEL_MAGIC },
         { "Dispel Magic", TERM_L_BLUE,
-          "$SRC invokes dispel magic.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$CASTER invokes <color:B>Dispel Magic</color>.",
+          "$CASTER mumbles powerfully.",
+          "",
+          "You invoke <color:B>Dispel Magic</color>." }, MSF_TARGET},
     { "POLYMORPH", { MST_BIFF, BIFF_POLYMORPH },
         { "Polymorph Other", TERM_RED,
-          "$SRC invokes polymorph other.",
-          "$SRC mumbles powerfully." }, MSF_TARGET},
+          "$CASTER invokes <color:r>Polymorph Other</color>.",
+          "$CASTER mumbles powerfully.",
+          "",
+          "You invoke <color:r>Polymorph Other<color>." }, MSF_TARGET},
     {0}
 };
 
@@ -214,16 +220,16 @@ enum {
 static _parse_t _buff_tbl[] = {
     { "HASTE", { MST_BUFF, BUFF_HASTE },
         { "Haste Self", TERM_WHITE,
-          "$SRC concentrates on $SRC_POS body.",
-          "$SRC mumbles.",
-          "$SRC concentrates on $SRC_POS body.",
+          "$CASTER concentrates on $CASTER_POS body.",
+          "$CASTER mumbles.",
+          "$CASTER concentrates on $CASTER_POS body.",
           "You concentrate on your body." }},
     { "INVULN", { MST_BUFF, BUFF_INVULN },
-        { "Invulnerability", TERM_WHITE,
-          "$SRC casts a Globe of Invulnerability.",
-          "$SRC mumbles powerfully.",
-          "$SRC casts a Globe of Invulnerability.",
-          "You cast a Globe of Invulnerability." }},
+        { "Invulnerability", TERM_YELLOW,
+          "$CASTER casts a <color:y>Globe of Invulnerability</color>.",
+          "$CASTER mumbles powerfully.",
+          "$CASTER casts a <color:y>Globe of Invulnerability</color>.",
+          "You cast a <color:y>Globe of Invulnerability</color>." }},
     {0}
 };
 
@@ -231,77 +237,77 @@ static _parse_t _buff_tbl[] = {
 static _parse_t _ball_tbl[] = {
     { "BA_CHAOS", { MST_BALL, GF_CHAOS },
         { "Invoke Logrus", TERM_VIOLET,
-          "$SRC invokes a raw logrus.",
-          "$SRC mumbles frighteningly.",
-          "$SRC invokes a raw logrus at $DEST.",
-          "You invoke a raw logrus." }, MSF_TARGET},
+          "$CASTER invokes a <color:v>Raw Logrus</color>.",
+          "$CASTER mumbles frighteningly.",
+          "$CASTER invokes a <color:v>Raw Logrus</color> at $TARGET.",
+          "You invoke a <color:v>Raw Logrus</color>." }, MSF_TARGET},
     { "BA_DARK", { MST_BALL, GF_DARK },
         { "Darkness Storm", TERM_L_DARK,
-          "$SRC invokes a darkness storm.",
-          "$SRC mumbles powerfully.",
-          "$SRC invokes a darkness storm at $DEST.",
-          "You invoke a darkness storm." }, MSF_TARGET},
+          "$CASTER invokes a <color:D>Darkness Storm</color>.",
+          "$CASTER mumbles powerfully.",
+          "$CASTER invokes a <color:D>Darkness Storm</color> at $TARGET.",
+          "You invoke a <color:D>Darkness Storm</color>." }, MSF_TARGET},
     { "BA_LITE", { MST_BALL, GF_LITE },
         { "Starburst", TERM_YELLOW,
-          "$SRC invokes a starburst.",
-          "$SRC mumbles powerfully.",
-          "$SRC invokes a starburst at $DEST.",
-          "You invoke a starburst." }, MSF_TARGET},
+          "$CASTER invokes a <color:y>Starburst</color>.",
+          "$CASTER mumbles powerfully.",
+          "$CASTER invokes a <color:y>Starburst</color> at $TARGET.",
+          "You invoke a <color:y>Starburst</color>." }, MSF_TARGET},
     { "BA_MANA", { MST_BALL, GF_MANA },
         { "Mana Storm", TERM_L_BLUE,
-          "$SRC invokes a mana storm.",
-          "$SRC mumbles powerfully.",
-          "$SRC invokes a mana storm at $DEST.",
-          "You invoke a mana storm." }, MSF_TARGET},
+          "$CASTER invokes a <color:B>Mana Storm</color>.",
+          "$CASTER mumbles powerfully.",
+          "$CASTER invokes a <color:B>Mana Storm</color> at $TARGET.",
+          "You invoke a <color:B>Mana Storm</color>." }, MSF_TARGET},
     { "BA_NUKE", { MST_BALL, GF_NUKE },
         { "Radiation Ball", TERM_L_GREEN,
-          "$SRC casts a ball of radiation.",
-          "$SRC mumbles.",
-          "$SRC casts a ball of radiation at $DEST.",
-          "You cast a ball of radiation." }, MSF_TARGET},
+          "$CASTER casts a <color:G>Ball of Radiation</color>.",
+          "$CASTER mumbles.",
+          "$CASTER casts a <color:G>Ball of Radiation</color> at $TARGET.",
+          "You cast a <color:G>Ball of Radiation</color>." }, MSF_TARGET},
     { "BA_POIS", { MST_BALL, GF_POIS },
         { "Stinking Cloud", TERM_L_GREEN,
-          "$SRC casts a stinking cloud.",
-          "$SRC mumbles.",
-          "$SRC casts a stinking cloud at $DEST.",
-          "You cast a stinking cloud." }, MSF_TARGET},
+          "$CASTER casts a <color:G>Stinking Cloud</color>.",
+          "$CASTER mumbles.",
+          "$CASTER casts a <color:G>Stinking Cloud</color> at $TARGET.",
+          "You cast a <color:G>Stinking Cloud</color>." }, MSF_TARGET},
     { "BA_WATER", { MST_BALL, GF_WATER },
         { "Whirlpool", TERM_L_BLUE,
-          "$SRC gestures fluidly. You are engulfed in a whirlpool.",
-          "$SRC mumbles. You are engulfed in a whirlpool.",
-          "$SRC gestures fluidly. $DEST is engulfed in a whirlpool.",
+          "$CASTER gestures fluidly. You are engulfed in a <color:B>Whirlpool</color>.",
+          "$CASTER mumbles. You are engulfed in a <color:B>Whirlpool</color>.",
+          "$CASTER gestures fluidly. $TARGET is engulfed in a <color:B>Whirlpool</color>.",
           "You gesture fluidly." }, MSF_TARGET},
     { "BRAIN_SMASH", { MST_BALL, GF_BRAIN_SMASH },
         { "Brain Smash", TERM_L_BLUE,
-          "$SRC gazes deep into your eyes.",
+          "$CASTER gazes deep into your eyes.",
           "You feel something focusing on your mind.", 
-          "$SRC gazes deep into the eyes of $DEST.",
+          "$CASTER gazes deep into the eyes of $TARGET.",
           "You gaze deeply." }, MSF_BALL0 | MSF_TARGET },
     { "DRAIN_MANA", { MST_BALL, GF_DRAIN_MANA },
         { "Drain Mana", TERM_L_BLUE}, MSF_BALL0 | MSF_TARGET },
     { "MIND_BLAST", { MST_BALL, GF_MIND_BLAST },
         { "Mind Blast", TERM_L_BLUE,
-          "$SRC gazes deep into your eyes.",
+          "$CASTER gazes deep into your eyes.",
           "You feel something focusing on your mind.", 
-          "$SRC gazes deep into the eyes of $DEST.",
+          "$CASTER gazes deep into the eyes of $TARGET.",
           "You gaze deeply." }, MSF_BALL0 | MSF_TARGET},
     { "PULVERISE", { MST_BALL, GF_TELEKINESIS },
         { "Pulverise", TERM_L_BLUE,
-          "$SRC pulverises you.",
-          "Something pulverises you.",
-          "$SRC pulverises $DEST.",
+          "$CASTER <color:B>pulverises</color> you.",
+          "Something <color:B>pulverises</color> you.",
+          "$CASTER <color:B>pulverises</color> $TARGET.",
           "" }, MSF_TARGET},
     { "ROCKET", { MST_BALL, GF_ROCKET },
         { "Rocket", TERM_L_UMBER,
-          "$SRC fires a rocket.",
-          "$SRC shoots something.",
-          "$SRC fires a rocket at $DEST.",
-          "You fire a rocket." }, MSF_INNATE | MSF_TARGET },
+          "$CASTER fires a <color:U>Rocket</color>.",
+          "$CASTER shoots something.",
+          "$CASTER fires a <color:U>Rocket</color> at $TARGET.",
+          "You fire a <color:U>Rocket</color>." }, MSF_INNATE | MSF_TARGET },
     { "THROW", { MST_BALL, GF_ROCK }, /* non-reflectable! */
         { "Throw Boulder", TERM_L_UMBER,
-          "$SRC throws a large rock.",
-          "$SRC shouts, 'Haaa!!'.",
-          "$SRC throws a large rock at $DEST.", 
+          "$CASTER throws a large rock.",
+          "$CASTER shouts, 'Haaa!!'.",
+          "$CASTER throws a large rock at $TARGET.", 
           "You throw a large rock." }, MSF_INNATE | MSF_BALL0 | MSF_TARGET},
     {0}
 };
@@ -310,21 +316,21 @@ static _parse_t _ball_tbl[] = {
 static _parse_t _bolt_tbl[] = {
     { "GAZE", { MST_BOLT, GF_ATTACK },
         { "Gaze", TERM_RED,
-          "$SRC gazes at you.",
+          "$CASTER gazes at you.",
           "",
-          "$SRC gazes at $DEST.",
+          "$CASTER gazes at $TARGET.",
           ""}, MSF_TARGET},
     { "MISSILE", { MST_BOLT, GF_MISSILE },
         { "Magic Missile", TERM_WHITE,
-          "$SRC casts a magic missile.",
-          "$SRC mumbles.",
-          "$SRC casts a magic missile at $DEST.",
-          "You cast a magic missile." }, MSF_TARGET},
+          "$CASTER casts a Magic Missile.",
+          "$CASTER mumbles.",
+          "$CASTER casts a Magic Missile at $TARGET.",
+          "You cast a Magic Missile." }, MSF_TARGET},
     { "SHOOT", { MST_BOLT, GF_ARROW },
         { "Shoot", TERM_L_UMBER,
-          "$SRC fires an arrow.",
-          "$SRC makes a strange noise.",
-          "$SRC fires an arrow at $DEST.",
+          "$CASTER fires an arrow.",
+          "$CASTER makes a strange noise.",
+          "$CASTER fires an arrow at $TARGET.",
           "You fire an arrow." }, MSF_INNATE | MSF_TARGET },
     {0}
 };
@@ -333,21 +339,21 @@ static _parse_t _bolt_tbl[] = {
 static _parse_t _beam_tbl[] = {
     { "PSY_SPEAR", { MST_BEAM, GF_PSY_SPEAR },
         { "Psycho-Spear", TERM_L_BLUE,
-          "$SRC throws a Psycho-Spear.",
-          "$SRC mumbles.", 
-          "$SRC throws a Psycho-Spear at $DEST.",
-          "You throw a Psycho-Spear." }, MSF_TARGET },
+          "$CASTER throws a <color:B>Psycho-Spear</color>.",
+          "$CASTER mumbles.", 
+          "$CASTER throws a <color:B>Psycho-Spear</color> at $TARGET.",
+          "You throw a <color:B>Psycho-Spear</color>." }, MSF_TARGET },
     { "HELL_LANCE", { MST_BEAM, GF_HELL_FIRE },
         { "Hell Lance", TERM_RED,
-          "$SRC throws a <color:r>Hell Lance</color>.",
-          "$SRC mumbles.",
-          "$SRC throws a <color:r>Hell Lance</color> at $DEST.",
+          "$CASTER throws a <color:r>Hell Lance</color>.",
+          "$CASTER mumbles.",
+          "$CASTER throws a <color:r>Hell Lance</color> at $TARGET.",
           "You throw a <color:r>Hell Lance</color>." }, MSF_TARGET},
     { "HOLY_LANCE", { MST_BEAM, GF_HOLY_FIRE },
         { "Holy Lance", TERM_YELLOW,
-          "$SRC throws a <color:y>Holy Lance</color>.",
-          "$SRC mumbles.",
-          "$SRC throws a <color:y>Holy Lance</color> at $DEST.",
+          "$CASTER throws a <color:y>Holy Lance</color>.",
+          "$CASTER mumbles.",
+          "$CASTER throws a <color:y>Holy Lance</color> at $TARGET.",
           "You throw a <color:y>Holy Lance</color>." }, MSF_TARGET},
     {0}
 };
@@ -356,34 +362,34 @@ static _parse_t _beam_tbl[] = {
 static _parse_t _curse_tbl[] = {
     { "CAUSE_1", { MST_CURSE, GF_CAUSE_1 },
         { "Cause Light Wounds", TERM_RED,
-          "$SRC points at you and curses.",
-          "$SRC curses.",
-          "$SRC points at $DEST and curses.",
+          "$CASTER points at you and curses.",
+          "$CASTER curses.",
+          "$CASTER points at $TARGET and curses.",
           "You curse."}, MSF_TARGET },
     { "CAUSE_2", { MST_CURSE, GF_CAUSE_2 },
         { "Cause Serious Wounds", TERM_RED,
-          "$SRC points at you and curses horribly.",
-          "$SRC curses horribly.",
-          "$SRC points at $DEST and curses horribly.",
+          "$CASTER points at you and curses horribly.",
+          "$CASTER curses horribly.",
+          "$CASTER points at $TARGET and curses horribly.",
           "You curse horribly." }, MSF_TARGET },
     { "CAUSE_3", { MST_CURSE, GF_CAUSE_3 },
         { "Cause Critical Wounds", TERM_RED,
-          "$SRC points at you, incanting terribly!",
-          "$SRC incants terribly.",
-          "$SRC points at $DEST, incanting terribly!",
+          "$CASTER points at you, incanting terribly!",
+          "$CASTER incants terribly.",
+          "$CASTER points at $TARGET, incanting terribly!",
           "You incant terribly." }, MSF_TARGET },
     { "CAUSE_4", { MST_CURSE, GF_CAUSE_4 },
         { "Cause Mortal Wounds", TERM_RED,
-          "$SRC points at you, screaming the word DIE!",
-          "$SRC screams the word DIE!", 
-          "$SRC points at $DEST, screaming the word DIE!",
+          "$CASTER points at you, screaming the word DIE!",
+          "$CASTER screams the word DIE!", 
+          "$CASTER points at $TARGET, screaming the word DIE!",
           "You scream the word DIE!" }, MSF_TARGET },
     { "HAND_DOOM", { MST_CURSE, GF_HAND_DOOM },
         { "Hand of Doom", TERM_RED,
-          "$SRC invokes the Hand of Doom!",
-          "$SRC invokes the Hand of Doom!",
-          "$SRC invokes the Hand of Doom at $DEST.",
-          "You invoke the Hand of Doom!" }, MSF_TARGET },
+          "$CASTER invokes the <color:r>Hand of Doom</color>!",
+          "$CASTER invokes the <color:r>Hand of Doom</color>!",
+          "$CASTER invokes the <color:r>Hand of Doom</color> at $TARGET.",
+          "You invoke the <color:r>Hand of Doom</color>!" }, MSF_TARGET },
     {0}
 };
 
@@ -418,10 +424,10 @@ enum {
 static _parse_t _heal_tbl[] = {
     { "HEAL", { MST_HEAL, HEAL_SELF },
         { "Heal Self", TERM_WHITE,
-          "$SRC concentrates on $SRC_POS wounds.",
-          "$SRC mumbles.",
-          "$SRC concentrates on $SRC_POS wounds.",
-          "$SRC concentrates on $SRC_POS wounds." }},
+          "$CASTER concentrates on $CASTER_POS wounds.",
+          "$CASTER mumbles.",
+          "$CASTER concentrates on $CASTER_POS wounds.",
+          "$CASTER concentrates on $CASTER_POS wounds." }},
     {0}
 };
 
@@ -1970,7 +1976,6 @@ static void _weird_bird(void)
         teleport_away(_current.mon->id, 10, TELEPORT_NONMAGICAL);
         p_ptr->update |= (PU_MONSTERS);
     }
-    /* XXX Shouldn't this require adjacency? */
     else
     {
         int dam = 0;
@@ -2134,9 +2139,9 @@ typedef struct {
 } _custom_msg_t, *_custom_msg_ptr;
 static _custom_msg_t _mon_msg_tbl[] = {
     { MON_NINJA, {MST_BOLT, GF_ARROW},
-        "$SRC throws a syuriken.",
+        "$CASTER throws a syuriken.",
         "",
-        "$SRC throws a syuriken at $DEST.",
+        "$CASTER throws a syuriken at $TARGET.",
         "You throw a syuriken." },
     { MON_JAIAN, {MST_BREATHE, GF_SOUND},
         "'Booooeeeeee'",
@@ -2149,9 +2154,9 @@ static _custom_msg_t _mon_msg_tbl[] = {
         "'Botei-Build cutter!!!'",
         "'Botei-Build cutter!!!'" } ,
     { MON_ROLENTO, {MST_BALL, GF_FIRE},
-        "$SRC throws a hand grenade.", 
-        "$SRC throws a hand grenade.", 
-        "$SRC throws a hand grenade at $DEST.",
+        "$CASTER throws a hand grenade.", 
+        "$CASTER throws a hand grenade.", 
+        "$CASTER throws a hand grenade at $TARGET.",
         "You throw a hand grenade." },
     {0}
 };
@@ -2212,8 +2217,8 @@ static cptr _breathe_msg(void)
     }
     else if (_current.flags & MSC_DEST_PLAYER)
     {
-        if (p_ptr->blind) return "$SRC roars.";
-        sprintf(_msg, "$SRC breathes <color:%c>%s</color>.",
+        if (p_ptr->blind) return "$CASTER roars.";
+        sprintf(_msg, "$CASTER breathes <color:%c>%s</color>.",
             attr_to_attr_char(gf->color), gf->name);
         return _msg;
     }
@@ -2221,7 +2226,7 @@ static cptr _breathe_msg(void)
     {
         if (!(_current.flags & MSC_UNVIEW))
         {
-            sprintf(_msg, "$SRC breathes <color:%c>%s</color> at $DEST.",
+            sprintf(_msg, "$CASTER breathes <color:%c>%s</color> at $TARGET.",
                 attr_to_attr_char(gf->color), gf->name);
             return _msg;
         }
@@ -2245,8 +2250,8 @@ static cptr _ball_msg(void)
     }
     else if (_current.flags & MSC_DEST_PLAYER)
     {
-        if (p_ptr->blind) return "$SRC mumbles.";
-        sprintf(_msg, "$SRC casts %s <color:%c>%s Ball</color>.",
+        if (p_ptr->blind) return "$CASTER mumbles.";
+        sprintf(_msg, "$CASTER casts %s <color:%c>%s Ball</color>.",
             _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
         return _msg;
     }
@@ -2254,7 +2259,7 @@ static cptr _ball_msg(void)
     {
         if (!(_current.flags & MSC_UNVIEW))
         {
-            sprintf(_msg, "$SRC casts %s <color:%c>%s Ball</color> at $DEST.",
+            sprintf(_msg, "$CASTER casts %s <color:%c>%s Ball</color> at $TARGET.",
                 _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
             return _msg;
         }
@@ -2273,8 +2278,8 @@ static cptr _bolt_msg(void)
     }
     else if (_current.flags & MSC_DEST_PLAYER)
     {
-        if (p_ptr->blind) return "$SRC mumbles.";
-        sprintf(_msg, "$SRC casts %s <color:%c>%s Bolt</color>.",
+        if (p_ptr->blind) return "$CASTER mumbles.";
+        sprintf(_msg, "$CASTER casts %s <color:%c>%s Bolt</color>.",
             _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
         return _msg;
     }
@@ -2282,7 +2287,7 @@ static cptr _bolt_msg(void)
     {
         if (!(_current.flags & MSC_UNVIEW))
         {
-            sprintf(_msg, "$SRC casts %s <color:%c>%s Bolt</color> at $DEST.",
+            sprintf(_msg, "$CASTER casts %s <color:%c>%s Bolt</color> at $TARGET.",
                 _a_an(gf->name), attr_to_attr_char(gf->color), gf->name);
             return _msg;
         }
@@ -2301,8 +2306,8 @@ static cptr _summon_msg(void)
     }
     else if (_current.flags & MSC_DEST_PLAYER)
     {
-        if (p_ptr->blind) return "$SRC mumbles.";
-        sprintf(_msg, "$SRC summons <color:%c>%s</color>.",
+        if (p_ptr->blind) return "$CASTER mumbles.";
+        sprintf(_msg, "$CASTER summons <color:%c>%s</color>.",
             attr_to_attr_char(p->color), p->name);
         return _msg;
     }
@@ -2310,7 +2315,7 @@ static cptr _summon_msg(void)
     {
         if (!(_current.flags & MSC_UNVIEW))
         {
-            sprintf(_msg, "$SRC summons <color:%c>%s</color>.",
+            sprintf(_msg, "$CASTER summons <color:%c>%s</color>.",
                 attr_to_attr_char(p->color), p->name);
             return _msg;
         }
@@ -2343,17 +2348,17 @@ static cptr _get_msg(void)
 }
 static cptr _msg_var(cptr var)
 {
-    if (strcmp(var, "SRC") == 0)
+    if (strcmp(var, "CASTER") == 0)
         return _current.name;
-    if (strcmp(var, "SRC_POS") == 0)
+    if (strcmp(var, "CASTER_POS") == 0)
     {
         if (_current.flags & MSC_SRC_PLAYER)
             return "your";
         return _possessive(_current.race);
     }
-    if (strcmp(var, "DEST") == 0)
+    if (strcmp(var, "TARGET") == 0)
         return _current.name2;
-    if (strcmp(var, "DEST_POS") == 0)
+    if (strcmp(var, "TARGET_POS") == 0)
     {
         if (_current.flags & MSC_DEST_PLAYER)
             return "your";
