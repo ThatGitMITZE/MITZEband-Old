@@ -337,6 +337,18 @@ static _parse_t _beam_tbl[] = {
           "$SRC mumbles.", 
           "$SRC throws a Psycho-Spear at $DEST.",
           "You throw a Psycho-Spear." }, MSF_TARGET },
+    { "HELL_LANCE", { MST_BEAM, GF_HELL_FIRE },
+        { "Hell Lance", TERM_RED,
+          "$SRC throws a <color:r>Hell Lance</color>.",
+          "$SRC mumbles.",
+          "$SRC throws a <color:r>Hell Lance</color> at $DEST.",
+          "You throw a <color:r>Hell Lance</color>." }, MSF_TARGET},
+    { "HOLY_LANCE", { MST_BEAM, GF_HOLY_FIRE },
+        { "Holy Lance", TERM_YELLOW,
+          "$SRC throws a <color:y>Holy Lance</color>.",
+          "$SRC mumbles.",
+          "$SRC throws a <color:y>Holy Lance</color> at $DEST.",
+          "You throw a <color:y>Holy Lance</color>." }, MSF_TARGET},
     {0}
 };
 
@@ -740,6 +752,10 @@ static mon_spell_parm_t _beam_parm(int which, int rlev)
     {
     case GF_PSY_SPEAR:
         parm.v.dice = _dice(1, rlev*3/2, 100);
+        break;
+    case GF_HELL_FIRE:
+    case GF_HOLY_FIRE:
+        parm.v.dice = _dice(0, 0, 2*rlev);
         break;
     default:
         assert(FALSE);

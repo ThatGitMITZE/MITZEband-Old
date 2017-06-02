@@ -1813,6 +1813,21 @@ static bool _plr_save(int m_idx, int boost)
     int odds = _plr_save_odds(m_idx, boost);
     return randint0(100) < odds;
 }
+static int _align_dam_pct(int align)
+{
+    static point_t tbl[6] = { {-150, 200}, {-50, 150}, {-10, 125},
+                              {10, 80}, {50, 66}, {150, 50} };
+
+    return interpolate(align, tbl, 6);
+}
+static int _holy_dam(int dam)
+{
+    return dam * _align_dam_pct(p_ptr->align) / 100;
+}
+static int _hell_dam(int dam)
+{
+    return dam * _align_dam_pct(-p_ptr->align) / 100;
+}
 int gf_damage_p(int who, int type, int dam, int flags)
 {
     int          result = 0;
@@ -1920,17 +1935,13 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_HOLY_FIRE:
         if (touch) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
-        if (p_ptr->align > 10)
-            dam /= 2;
-        else if (p_ptr->align < -10)
-            dam *= 2;
+        dam = _holy_dam(dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_HELL_FIRE:
         if (touch) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
-        if (p_ptr->align > 10)
-            dam *= 2;
+        dam = _hell_dam(dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_ARROW:
