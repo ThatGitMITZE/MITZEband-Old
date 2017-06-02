@@ -1790,6 +1790,29 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
    NEW: gf_damage_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA); <==  4 parameters
  */
 static int _mon_spell_hack; /* Blue-mage: project_p will handle this ... everyone else can ignore */
+static int _rlev(int m_idx)
+{
+    if (m_idx > 0)
+    {
+        mon_ptr mon = &m_list[m_idx];
+        mon_race_ptr race = &r_info[mon->/*ap_*/r_idx]; /* XXX */
+        return race->level;
+    }
+    return 0;
+}
+static int _plr_save_odds(int m_idx, int boost)
+{
+    int rlev = _rlev(m_idx);
+    int roll = 100 + rlev/2 + boost;
+    int sav = duelist_skill_sav(m_idx);
+    int odds = sav * 100 / roll;
+    return odds;
+}
+static bool _plr_save(int m_idx, int boost)
+{
+    int odds = _plr_save_odds(m_idx, boost);
+    return randint0(100) < odds;
+}
 int gf_damage_p(int who, int type, int dam, int flags)
 {
     int          result = 0;
@@ -2127,7 +2150,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         if (touch) set_stun(p_ptr->stun + dam, FALSE);
         break;
     case GF_AMNESIA:
-        if (randint0(100 + r_ptr->level/2) < duelist_skill_sav(who))
+        if (_plr_save(who, 0))
         {
             if (!touch) msg_print("You resist the effects!");
         }
@@ -2337,7 +2360,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_MIND_BLAST:
-        if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/5) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2366,7 +2389,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
         break;
     case GF_BRAIN_SMASH:
-        if ((randint0(100 + rlev / 2) < MAX(5, duelist_skill_sav(who))) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/3) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2400,28 +2423,39 @@ int gf_damage_p(int who, int type, int dam, int flags)
             if (!CHECK_MULTISHADOW())
             {
                 if (!res_save_default(RES_BLIND))
-                    (void)set_blind(p_ptr->blind + 8 + randint0(8), FALSE);
+                    set_blind(p_ptr->blind + 8 + randint0(8), FALSE);
                 if (!res_save_default(RES_CONF))
-                    (void)set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
+                    set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
                 if (!p_ptr->free_act)
-                {
-                    (void)set_paralyzed(randint1(4), FALSE);
-                }
-                else equip_learn_flag(OF_FREE_ACT);
-                (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+                    set_paralyzed(randint1(4), FALSE);
+                else
+                    equip_learn_flag(OF_FREE_ACT);
 
-                while (randint0(100 + rlev / 2) > (MAX(5, duelist_skill_sav(who))))
-                    (void)do_dec_stat(A_INT);
-                while (randint0(100 + rlev / 2) > (MAX(5, duelist_skill_sav(who))))
-                    (void)do_dec_stat(A_WIS);
+                set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+                set_stun(p_ptr->stun + MIN(50, dam/6 + randint1(dam/6)), FALSE);
+
+                while (!_plr_save(who, 0))
+                    do_dec_stat(A_INT);
+                while (!_plr_save(who, 0))
+                    do_dec_stat(A_WIS);
 
                 if (!res_save_default(RES_CHAOS))
-                    (void)set_image(p_ptr->image + randint0(25) + 15, FALSE);
+                    set_image(p_ptr->image + randint0(25) + 15, FALSE);
             }
         }
         break;
+    case GF_TELEKINESIS:
+        if (!CHECK_MULTISHADOW())
+        {
+            if (one_in_(4))
+                teleport_player(5, TELEPORT_PASSIVE);
+            if (!_plr_save(who, dam/5))
+                set_stun(p_ptr->stun + MIN(25, dam/6 + randint1(dam/6)), FALSE);
+        }
+        result = take_hit(DAMAGE_ATTACK, dam, m_name, _mon_spell_hack);
+        break;
     case GF_CAUSE_1:
-        if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/5) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2436,7 +2470,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_CAUSE_2:
-        if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/5) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2451,7 +2485,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_CAUSE_3:
-        if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/5) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2466,7 +2500,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_CAUSE_4:
-        if ((randint0(100 + rlev / 2) < duelist_skill_sav(who)) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, dam/5) && m_ptr->r_idx != MON_KENSHIROU && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2481,7 +2515,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         break;
     case GF_HAND_DOOM:
-        if ((randint0(100 + rlev/2) < duelist_skill_sav(who)) && !CHECK_MULTISHADOW())
+        if (_plr_save(who, 0) && !CHECK_MULTISHADOW())
         {
             if (!touch)
             {
@@ -2511,7 +2545,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             if (flags & GF_DAMAGE_SPELL)
                 msg_print("You are unaffected!");
         }
-        else if (randint1(100) <= duelist_skill_sav(who) - rlev/2)
+        else if (_plr_save(who, 0))
         {
             if (flags & GF_DAMAGE_SPELL)
                 msg_print("You resist the effects!");

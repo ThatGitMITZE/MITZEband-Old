@@ -15524,7 +15524,7 @@ P:Copy:Half-Giant:Mauler
 P:Life:120
 P:Speed:+15
 S:FREQ_30 |
-S:BRAIN_SMASH | DISPEL_MAGIC | ANTI_MAGIC |
+S:BRAIN_SMASH(100) | DISPEL_MAGIC | ANTI_MAGIC |
 S:BA_MANA | BO_MANA | BA_NETHER | ANIM_DEAD
 S:S_MONSTER | S_UNIQUE | S_HI_UNDEAD | S_HI_DRAGON
 D:He is the Master of the Pits of Angband. His figure is like a black
@@ -15566,7 +15566,7 @@ P:Life:125
 P:Body:Jormungand
 S:FREQ_35 |
 S:BR_CHAOS | BR_NETHER | BR_MANA | BR_NUKE | BR_DISINTEGRATE
-S:BA_CHAOS | ROCKET(600) | HAND_DOOM
+S:BA_CHAOS | ROCKET(600) | HAND_DOOM | BRAIN_SMASH(120)
 S:TELE_TO | DISPEL_MAGIC | ANTI_MAGIC
 S:S_MONSTER | S_CYBER | S_GUARDIAN | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
 D:The Big Boss himself. Before the universe the Serpent was. The Unicorn
@@ -18891,7 +18891,7 @@ F:OPEN_DOOR | BASH_DOOR |
 F:EVIL | HAS_LITE_2
 F:DROP_SKELETON | DROP_CORPSE | POS_DETECT_MONSTERS | POS_MAPPING | POS_TELEPATHY
 S:1_IN_4 |
-S:CONFUSE | BLIND | PARALYZE | SLOW | MIND_BLAST | S_MONSTER(1d1) | BLINK
+S:CONFUSE | BLIND | PARALYZE | SLOW | MIND_BLAST | BLINK
 P:Copy:Dunadan:Mindcrafter
 D:A master of the mental arts, able to damage or dominate the
 D:minds of others.
@@ -18908,13 +18908,13 @@ F:SMART | BASH_DOOR | TAKE_ITEM | MOVE_BODY | HUMAN |
 F:EVIL | RES_FIRE | RES_ELEC | RES_POIS |
 F:NO_CONF | NO_SLEEP |
 F:DROP_SKELETON | DROP_CORPSE | POS_DETECT_MONSTERS | POS_MAPPING | POS_TELEPATHY
-S:FREQ_30 |
-S:HEAL | BLIND | PARALYZE | CONFUSE | SCARE | TELE_SELF | BA_COLD | BA_FIRE |
-S:MIND_BLAST | BRAIN_SMASH | S_MONSTER | TELE_OTHER | BLINK | BO_NETHER
+S:FREQ_50 |
+S:HEAL | BLIND | PARALYZE | CONFUSE | SLOW | TELE_SELF
+S:MIND_BLAST | BRAIN_SMASH(60) | PULVERISE | TELE_OTHER | BLINK | BLINK_OTHER
 P:Copy:Dunadan:Mindcrafter
 D:A mindcrafter of the highest order. Powerful and evil, and a dangerous
 D:enemy: a master of mind over matter, of his own mind, and of the minds of
-D:others, who slavishly follow him into battle when he calls them.
+D:others.
 
 N:1057:Ogrillon
 G:O:W

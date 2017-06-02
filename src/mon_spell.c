@@ -285,6 +285,12 @@ static _parse_t _ball_tbl[] = {
           "You feel something focusing on your mind.", 
           "$SRC gazes deep into the eyes of $DEST.",
           "You gaze deeply." }, MSF_BALL0 | MSF_TARGET},
+    { "PULVERISE", { MST_BALL, GF_TELEKINESIS },
+        { "Pulverise", TERM_L_BLUE,
+          "$SRC pulverises you.",
+          "Something pulverises you.",
+          "$SRC pulverises $DEST.",
+          "" }, MSF_TARGET},
     { "ROCKET", { MST_BALL, GF_ROCKET },
         { "Rocket", TERM_L_UMBER,
           "$SRC fires a rocket.",
@@ -666,6 +672,9 @@ static mon_spell_parm_t _ball_parm(int which, int rlev)
         break;
     case GF_BRAIN_SMASH:
         parm.v.dice = _dice(12, 12, 0);
+        break;
+    case GF_TELEKINESIS:
+        parm.v.dice = _dice(8, 8, 0);
         break;
     case GF_ROCK:
         parm.v.dice = _dice(0, 0, 3*rlev);
@@ -1245,8 +1254,8 @@ static bool _can_cast(mon_ptr mon)
         reset_target(mon);
         return FALSE;
     }
-    if (mon->mflag & MFLAG_NICE) return FALSE;
     if (!is_hostile(mon)) return FALSE;
+    if (mon->mflag & MFLAG_NICE) return FALSE;
     if (!is_aware(mon)) return FALSE;
     if (!p_ptr->playing || p_ptr->is_dead) return FALSE;
     if (p_ptr->leaving) return FALSE;
@@ -1278,7 +1287,13 @@ bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
 {
     mon_spell_cast_t cast = {0};
 
-    if (!_can_cast(mon)) return FALSE;
+    /* XXX This causes problems inside_battle:
+     * if (!_can_cast(mon)) return FALSE; */
+    if (MON_CONFUSED(mon))
+    {
+        reset_target(mon);
+        return FALSE;
+    }
 
     if (!ai) ai = _default_ai_mon;
 
@@ -1481,7 +1496,7 @@ static void _curse(void)
 }
 static int _curse_save_odds(void)
 {
-    int roll = 100 + _current.race->level;
+    int roll = 100 + _current.race->level/2;
     int sav = duelist_skill_sav(_current.mon->id);
     int odds = sav * 100 / roll;
     return odds;
@@ -1507,12 +1522,14 @@ static void _annoy(void)
             msg_print("You resist the effects!");
         else
             set_blind(12 + randint0(4), FALSE);
+        update_smart_learn(_current.mon->id, RES_BLIND);
         break;
     case ANNOY_CONFUSE:
         if (res_save_default(RES_CONF) || _curse_save())
             msg_print("You disbelieve the feeble spell.");
         else
             set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
+        update_smart_learn(_current.mon->id, RES_CONF);
         break;
     case ANNOY_DARKNESS:
         if (p_ptr->blind)
@@ -1543,9 +1560,11 @@ static void _annoy(void)
             msg_print("You resist the effects!");
         else
             set_paralyzed(randint1(3), FALSE);
+        update_smart_learn(_current.mon->id, SM_FREE_ACTION);
         break;
     case ANNOY_SCARE:
         fear_scare_p(_current.mon);
+        update_smart_learn(_current.mon->id, RES_FEAR);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_current.mon->id);
@@ -1560,15 +1579,14 @@ static void _annoy(void)
             msg_print("You resist the effects!");
         else
             set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+        update_smart_learn(_current.mon->id, SM_FREE_ACTION);
         break;
     case ANNOY_TELE_LEVEL:
         if (res_save_default(RES_NEXUS) || _curse_save())
-        {
             msg_print("You resist the effects!");
-            update_smart_learn(_current.mon->id, RES_NEXUS);
-        }
         else
             teleport_level(0);
+        update_smart_learn(_current.mon->id, RES_NEXUS);
         break;
     case ANNOY_TELE_TO:
         /* Only powerful monsters can choose this spell when the player is not in
@@ -1579,6 +1597,7 @@ static void _annoy(void)
             msg_print("You resist the effects!");
         else
             teleport_player_to(_current.src.y, _current.src.x, TELEPORT_PASSIVE);
+        update_smart_learn(_current.mon->id, RES_TELEPORT);
         break;
     case ANNOY_TRAPS:
         trap_creation(_current.dest.y, _current.dest.x);
@@ -2399,6 +2418,68 @@ static bool _have_smart_flag(u32b flags, int which)
     return BOOL(flags & (1U << which));
 }
 
+static void _smart_tweak_res_dam(mon_spell_ptr spell, int res, u32b flags)
+{
+    int pct, tweak = 100;
+    if (res == RES_INVALID) return;
+    if (!_have_smart_flag(flags, res)) return;
+    pct = res_pct(res);
+    if (!pct) return;
+    if (pct == 100) tweak = 0;
+    else if (res_is_high(res) && res > 30) tweak = 100 - pct/2;
+    else if (res > 50) tweak = 100 - pct/3;
+    spell->prob = MIN(200, spell->prob*tweak/100);
+}
+static void _smart_tweak_res_sav(mon_spell_ptr spell, int res, u32b flags)
+{
+    int pct, tweak = 100, need;
+    if (res == RES_INVALID) return;
+    if (!_have_smart_flag(flags, res)) return;
+    pct = res_pct(res);
+    if (!pct) return;
+    need = res_is_high(res) ? 33 : 55;
+    if (pct >= need) tweak = 0;
+    else tweak = 100 - pct*80/need;
+    spell->prob = MIN(200, spell->prob*tweak/100);
+}
+static void _smart_remove_annoy(mon_spell_group_ptr group, u32b flags)
+{
+    int i;
+    if (!group) return;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        switch (spell->id.effect)
+        {
+        case ANNOY_BLIND:
+            _smart_tweak_res_sav(spell, RES_BLIND, flags);
+            break;
+        case ANNOY_CONFUSE:
+            _smart_tweak_res_sav(spell, RES_CONF, flags);
+            break;
+        case ANNOY_PARALYZE:
+        case ANNOY_SLOW:
+            if (_have_smart_flag(flags, SM_FREE_ACTION) && p_ptr->free_act)
+                spell->prob = 0;
+            break;
+        case ANNOY_SCARE:
+            if (_have_smart_flag(flags, RES_FEAR))
+            {
+                int ct = p_ptr->resist[RES_FEAR];
+                int i;
+                for (i = 0; i < ct; i++)
+                    spell->prob = spell->prob * 75 / 100;
+            }
+            break;
+        case ANNOY_TELE_TO:
+            _smart_tweak_res_sav(spell, RES_TELEPORT, flags);
+            break;
+        case ANNOY_TELE_LEVEL:
+            _smart_tweak_res_sav(spell, RES_NEXUS, flags);
+            break;
+        }
+    }
+}
 static void _smart_remove_aux(mon_spell_group_ptr group, u32b flags)
 {
     int i;
@@ -2408,12 +2489,7 @@ static void _smart_remove_aux(mon_spell_group_ptr group, u32b flags)
         mon_spell_ptr spell = &group->spells[i];
         _gf_info_ptr  gf = _gf_lookup(spell->id.effect);
         if (!gf) continue; /* GF_ARROW? */
-        if (gf->resist != RES_INVALID && _have_smart_flag(flags, gf->resist))
-        {
-            int pct = res_pct(gf->resist);
-            int tweak = 100 - pct;
-            spell->prob = MIN(200, spell->prob*tweak/100);
-        }
+        _smart_tweak_res_dam(spell, gf->resist, flags);
     }
 }
 
@@ -2437,22 +2513,7 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     else
         _smart_remove_aux(spells->groups[MST_BOLT], flags);
     _smart_remove_aux(spells->groups[MST_BEAM], flags);
-
-    if (_have_smart_flag(flags, SM_FREE_ACTION) && p_ptr->free_act)
-    {
-        _remove_spell(spells, _id(MST_ANNOY, ANNOY_PARALYZE));
-        _remove_spell(spells, _id(MST_ANNOY, ANNOY_SLOW));
-    }
-    if (_have_smart_flag(flags, RES_NEXUS))
-    {
-        int pct = res_pct(RES_NEXUS);
-        mon_spell_ptr spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
-        if (spell && pct)
-        {
-           int tweak = pct > 30 ? 0 : 50;
-           spell->prob = spell->prob * tweak / 100;
-        }
-    }
+    _smart_remove_annoy(spells->groups[MST_ANNOY], flags);
 }
 
 static bool _clean_shot(point_t src, point_t dest)
@@ -2600,7 +2661,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     {
         if (_distance(cast->src, cast->dest) < 2)
             spell->prob = 0;
-        else /* XXX this allows any angry monster to TELE_TO out of LoS! Too much? */
+        else
             spell->prob += cast->mon->anger;
     }
 
@@ -2624,8 +2685,17 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && cast->mon->mtimed[MTIMED_FAST])
         spell->prob = 0;
 
+    /* Uselss annoys? */
     if (!p_ptr->csp)
         _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
+    if (p_ptr->blind)
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_BLIND));
+    if (p_ptr->slow)
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_SLOW));
+    if (p_ptr->paralyzed)
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_PARALYZE));
+    if (p_ptr->confused)
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_CONFUSE));
 
     /* require a direct shot to player for bolts */
     if (!splash && !_clean_shot(cast->src, cast->dest))
@@ -2635,7 +2705,10 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     }
 
     if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
+    {
         _remove_group(spells->groups[MST_SUMMON], NULL);
+        /* XXX Use GF_DISINTEGRATE to open things up */
+    }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_ANIMATE_DEAD));
     if (spell && !raise_possible(cast->mon))
