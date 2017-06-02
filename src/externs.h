@@ -1337,7 +1337,7 @@ extern bool binding_field(int dam);
  * or a monster index (m_idx > 0). Occasionally, it might be a special
  * negative code when using project(), but not for the gf_damage_* routines.
  */
-#define GF_WHO_PLAYER    0
+#define GF_WHO_PLAYER      0  /* same as PROJECT_WHO_PLAYER */
 
 /* We also need information on whether the effect is spell/breath based,
  * or whether it is the result of melee contact. Mostly, this if for message

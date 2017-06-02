@@ -251,9 +251,7 @@ void mon_lore_aux_6(monster_race *r_ptr, u32b mask)
 {
     u32b old = r_ptr->r_flags6;
 
-    if (r_ptr->id != MON_OHMU) /* The one and only example of RF6_* not being a spell ... sigh */
-        mon_lore_aux_spell(r_ptr);
-
+    mon_lore_aux_spell(r_ptr);
     r_ptr->r_flags6 |= (r_ptr->flags6 & mask);
     if (r_ptr->r_flags6 != old && r_ptr->id == p_ptr->monster_race_idx)
         p_ptr->window |= PW_MONSTER;

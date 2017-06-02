@@ -499,7 +499,7 @@ static _mst_info_t _mst_tbl[] = {
     { MST_SUMMON, "Summon", TERM_ORANGE, 8 },
     { MST_HEAL, "Heal", TERM_L_BLUE, 10 },
     { MST_TACTIC, "Tactic", TERM_L_BLUE, 10 },
-    { MST_WEIRD, "Weird", TERM_L_UMBER, 10 },
+    { MST_WEIRD, "Weird", TERM_L_UMBER, 100 },
     { 0 }
 };
 static _mst_info_ptr _mst_lookup(int which)
@@ -1786,8 +1786,13 @@ static void _heal(void)
 }
 static void _summon_r_idx(int r_idx)
 {
+    int who = SUMMON_WHO_NOBODY;
+    if (_current.flags & MSC_SRC_PLAYER)
+        who = SUMMON_WHO_PLAYER;
+    else if (_current.mon)
+        who = _current.mon->id;  /* Banor=Rupart deletes himself when splitting */
     summon_named_creature(
-        _current.mon->id,
+        who,
         _current.dest.y,
         _current.dest.x,
         r_idx,
@@ -1796,8 +1801,13 @@ static void _summon_r_idx(int r_idx)
 }
 static void _summon_type(int type)
 {
+    int who = SUMMON_WHO_NOBODY;
+    if (_current.flags & MSC_SRC_PLAYER)
+        who = SUMMON_WHO_PLAYER;
+    else if (_current.mon)
+        who = _current.mon->id;
     summon_specific(
-        _current.mon->id,
+        who,
         _current.dest.y,
         _current.dest.x,
         _current.race->level,
@@ -1947,9 +1957,126 @@ static void _summon(void)
     for (i = 0; i < ct; i++)
         _summon_type(_current.spell->id.effect);
 }
+static void _weird_bird(void)
+{
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        msg_print("Not implemented yet!");
+        return;
+    }
+    if (one_in_(3) || !(_current.flags & MSC_DIRECT))
+    {
+        msg_format("%s suddenly go out of your sight!", _current.name);
+        teleport_away(_current.mon->id, 10, TELEPORT_NONMAGICAL);
+        p_ptr->update |= (PU_MONSTERS);
+    }
+    /* XXX Shouldn't this require adjacency? */
+    else
+    {
+        int dam = 0;
+        int get_damage = 0;
+
+        msg_format("%s holds you, and drops from the sky.", _current.name);
+        dam = damroll(4, 8);
+        teleport_player_to(_current.src.y, _current.src.x, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+
+        sound(SOUND_FALL);
+
+        if (p_ptr->levitation)
+            msg_print("You float gently down to the ground.");
+        else
+        {
+            msg_print("You crashed into the ground.");
+            dam += damroll(6, 8);
+        }
+
+        /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
+           -- henkma
+         */
+        get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name, -1);
+        if (get_damage > 0)
+            weaponmaster_do_readied_shot(_current.mon);
+
+        if (IS_REVENGE() && get_damage > 0 && !p_ptr->is_dead)
+        {
+            char m_name_self[80];
+
+            monster_desc(m_name_self, _current.mon, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+
+            msg_format("The attack of %s has wounded %s!", _current.name, m_name_self);
+            project(0, 0, _current.src.y, _current.src.x, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL, -1);
+            if (p_ptr->tim_eyeeye)
+                set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+        }
+
+        if (p_ptr->riding)
+        {
+            bool fear;
+            mon_take_hit_mon(p_ptr->riding, dam, &fear,
+                extract_note_dies(real_r_ptr(&m_list[p_ptr->riding])), _current.mon->id);
+        }
+    }
+}
 static void _weird(void)
 {
-    /* Banor=Rupart, Ohmu, Birds */
+    if (_current.race->d_char == 'B')
+    {
+        _weird_bird();
+        return;
+    }
+    switch (_current.race->id)
+    {
+    case MON_BANORLUPART: {
+        int hp = (_current.mon->hp + 1) / 2;
+        int maxhp = _current.mon->maxhp/2;
+
+        if ( p_ptr->inside_arena
+          || p_ptr->inside_battle
+          || !summon_possible(_current.mon->fy, _current.mon->fx)) return;
+
+        delete_monster_idx(_current.mon->id);
+        _current.mon = NULL;
+        summon_named_creature(0, _current.src.y, _current.src.x, MON_BANOR, 0);
+        m_list[hack_m_idx_ii].hp = hp;
+        m_list[hack_m_idx_ii].maxhp = maxhp;
+
+        summon_named_creature(0, _current.src.y, _current.src.x, MON_LUPART, 0);
+        m_list[hack_m_idx_ii].hp = hp;
+        m_list[hack_m_idx_ii].maxhp = maxhp;
+
+        msg_print("Banor=Rupart splits in two!");
+
+        break; }
+
+    case MON_BANOR:
+    case MON_LUPART: {
+        int k, hp = 0, maxhp = 0;
+        point_t where;
+
+        if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) return;
+        for (k = 1; k < m_max; k++)
+        {
+            if (m_list[k].r_idx == MON_BANOR || m_list[k].r_idx == MON_LUPART)
+            {
+                mon_ptr mon = &m_list[k];
+                hp += mon->hp;
+                maxhp += mon->maxhp;
+                if (mon->r_idx != _current.race->id)
+                    where = point(mon->fx, mon->fy);
+                delete_monster_idx(mon->id);
+            }
+        }
+        _current.mon = NULL;
+        _current.dest = where;
+        _summon_r_idx(MON_BANORLUPART);
+        _current.mon = &m_list[hack_m_idx_ii];
+        _current.mon->hp = hp;
+        _current.mon->maxhp = maxhp;
+
+        msg_print("Banor and Rupart combine into one!");
+
+        break; }
+    }
 } 
 static void _spell_msg(void);
 static void _spell_cast_aux(void)
@@ -1959,6 +2086,8 @@ static void _spell_cast_aux(void)
     if (_spell_fail() || _spell_blocked())
         return;
     _spell_msg();
+    if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */
+        _current.spell->lore = MIN(MAX_SHORT, _current.spell->lore + 1);
 
     switch (_current.spell->id.type)
     {
@@ -1976,9 +2105,6 @@ static void _spell_cast_aux(void)
     case MST_TACTIC:  _tactic();  break;
     case MST_WEIRD:   _weird();   break;
     }
-
-    if (is_original_ap_and_seen(_current.mon))
-        _current.spell->lore = MIN(MAX_SHORT, _current.spell->lore + 1);
 }
 
 /*************************************************************************
@@ -2588,8 +2714,6 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
     bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
-    bool           splash = FALSE;
-    bool           direct = TRUE;
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
 
@@ -2601,11 +2725,12 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
      * monsters aren't dumb enough to bounce spells off walls! Non-stupid
      * monsters will splash the player if possible, though with reduced
      * odds. */
-    if (!_projectable(cast->src, cast->dest))
+    if (_projectable(cast->src, cast->dest))
+        cast->flags |= MSC_DIRECT;
+    else
     {
         point_t new_dest = {0};
         
-        direct = FALSE;
         if (!stupid)
             new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
 
@@ -2621,7 +2746,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
         {
             cast->dest = new_dest;
-            splash = TRUE;
+            cast->flags |= MSC_SPLASH;
             _adjust_group(spells->groups[MST_BREATHE], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
@@ -2660,7 +2785,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 
     _ai_wounded(cast);
 
-    if (smart && direct)
+    if (smart && (cast->flags & MSC_DIRECT))
     {
         spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
         if (spell && TELE_LEVEL_IS_INEFF(0))
@@ -2686,7 +2811,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         spell->prob = 0;
 
     /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
-    if (spells->groups[MST_TACTIC] && (direct || splash) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+    if (spells->groups[MST_TACTIC] && (cast->flags & (MSC_DIRECT | MSC_SPLASH)) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
         _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
 
     if (_distance(cast->src, cast->dest) > 5)
@@ -2714,7 +2839,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _remove_spell(spells, _id(MST_ANNOY, ANNOY_CONFUSE));
 
     /* require a direct shot to player for bolts */
-    if (!splash && !_clean_shot(cast->src, cast->dest))
+    if ((cast->flags & MSC_DIRECT) && !_clean_shot(cast->src, cast->dest))
     {
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
@@ -2730,7 +2855,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && !raise_possible(cast->mon))
         spell->prob = 0;
 
-    if (p_ptr->invuln && direct)
+    if (p_ptr->invuln && (cast->flags & MSC_DIRECT))
     {
         _remove_group(spells->groups[MST_BREATHE], NULL);
         _remove_group(spells->groups[MST_BALL], NULL);
@@ -2842,6 +2967,10 @@ static bool _choose_target(mon_spell_cast_ptr cast)
     return FALSE;
 }
 
+static void _remove_bad_spells_pet(mon_spell_cast_ptr cast)
+{
+}
+
 static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
 {
     mon_spells_ptr spells = cast->race->spells;
@@ -2849,6 +2978,7 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
 
     /* _choose_target only selects projectable foes for now */
     assert(_projectable(cast->src, cast->dest));
+    cast->flags |= MSC_DIRECT;
 
     /* not implemented ... yet */
     _remove_group(spells->groups[MST_ANNOY], NULL);
@@ -2857,6 +2987,9 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
 
     if (p_ptr->inside_arena || p_ptr->inside_battle)
         _remove_group(spells->groups[MST_SUMMON], NULL);
+
+    if (is_pet(cast->mon))
+        _remove_bad_spells_pet(cast);
 
     /* Stupid monsters are done! */
     if (cast->race->flags2 & RF2_STUPID)
@@ -2892,7 +3025,11 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
     }
 
     if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
+    {
         _remove_group(spells->groups[MST_SUMMON], NULL);
+        if (cast->race->id == MON_BANORLUPART)
+            _remove_spell(spells, _id(MST_WEIRD, WEIRD_SPECIAL));
+    }
 
     /* Hack: No monster summoning unless the player is nearby.
      * XXX: Or any player pets ... */

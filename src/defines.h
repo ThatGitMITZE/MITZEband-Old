@@ -2151,6 +2151,9 @@ enum {
 #define PROJECT_WHO_UNCTRL_POWER -1
 #define PROJECT_WHO_GLASS_SHARDS -2
 
+#define SUMMON_WHO_PLAYER -1  /* gotta love inconsistency! */
+#define SUMMON_WHO_NOBODY  0
+
 
 /*
  * Bit flags for the "enchant()" function

@@ -2396,29 +2396,20 @@ static void process_monster(int m_idx)
     }
 
 
-    if (r_ptr->flags6 & RF6_SPECIAL)
+    /* Hack -- Ohmu scatters molds! This is no longer a spell ... just do it! */
+    if (m_ptr->r_idx == MON_OHMU)
     {
-        /* Hack -- Ohmu scatters molds! */
-        if (m_ptr->r_idx == MON_OHMU)
+        if (!p_ptr->inside_arena && !p_ptr->inside_battle)
         {
-            if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+            if (one_in_(3))
             {
-                if (r_ptr->spells && (randint1(100) <= r_ptr->spells->freq))
+                int  k;
+                int  flags = PM_ALLOW_GROUP;
+                if (is_pet(m_ptr)) flags |= PM_FORCE_PET;
+                for (k = 0; k < 6; k++)
                 {
-                    int  k, count = 0;
-                    int  rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-                    u32b p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
-
-                    for (k = 0; k < 6; k++)
-                    {
-                        if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_BIZARRE1, (PM_ALLOW_GROUP | p_mode)))
-                        {
-                            if (m_list[hack_m_idx_ii].ml) count++;
-                        }
-                    }
-
-                    if (count)
-                        mon_lore_6(m_ptr, RF6_SPECIAL);
+                    summon_specific(m_idx, m_ptr->fy, m_ptr->fx,
+                        r_ptr->level, SUMMON_BIZARRE1, flags);
                 }
             }
         }
