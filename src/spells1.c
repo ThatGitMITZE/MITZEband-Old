@@ -6103,6 +6103,11 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
  * We return "TRUE" if any "obvious" effects were observed. XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
+static int _reduce_dam(int dam, int distance)
+{          /* OLD: 100, 50, 33, 25, 20, 16, 14, 12 */
+    int pct[8] = { 100, 80, 60, 50, 44, 37, 33, 30 };
+    return (dam + 50) * pct[MIN(7, distance)] / 100;
+}
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {
 
@@ -6219,7 +6224,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     }
 
     /* Reduce damage by distance */
-    dam = (dam + r) / (r + 1);
+    dam = _reduce_dam(dam, r);
 
     /* Yes, it is as ugly as this ... sigh
        These attacks (Breathe * and Throw Boulder) are considered
