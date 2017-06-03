@@ -2746,6 +2746,16 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (_distance(cast->src, cast->dest) > 5)
         _remove_group(spells->groups[MST_TACTIC], _jump_p);
 
+    /* beholders prefer to gaze, but won't do so if adjacent */
+    spell = mon_spells_find(spells, _id(MST_BOLT, GF_ATTACK));
+    if (spell)
+    {
+        if (_distance(cast->src, cast->dest) < 2)
+            spell->prob = 0;
+        else
+            spell->prob *= 7;
+    }
+
     /* Useless buffs? */
     spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_INVULN));
     if (spell && cast->mon->mtimed[MTIMED_INVULNER])

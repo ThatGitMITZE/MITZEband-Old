@@ -151,9 +151,6 @@ static spell_info _beholder_spells[] = {
     {  1,  0,  0, _gaze_spell},
     { 15,  7, 30, _vision_spell},
     { 25,  7, 30, drain_mana_spell},
-    { 25,  4, 30, frost_bolt_spell},
-    { 25,  6, 30, fire_bolt_spell},
-    { 25,  7, 30, acid_bolt_spell},
     { -1, -1, -1, NULL}
 };
 static spell_info _undead_beholder_spells[] = {
@@ -172,9 +169,6 @@ static spell_info _ultimate_beholder_spells[] = {
     {  1,  0,  0, _gaze_spell},
     { 15,  7, 30, _vision_spell},
     { 25,  7, 30, drain_mana_spell},
-    { 25, 10, 30, frost_ball_spell},
-    { 25, 12, 30, fire_ball_spell},
-    { 25, 14, 30, acid_ball_spell},
     { 35, 20, 50, brain_smash_spell},
     { 45, 30, 50, mana_bolt_II_spell},
     { 45, 40, 60, summon_kin_spell},
