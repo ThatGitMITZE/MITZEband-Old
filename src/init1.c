@@ -51,53 +51,9 @@
 /*** Helper arrays for parsing ascii template files ***/
 static int _get_gf_type(cptr which)
 {
-    struct { cptr name; int id; } _table[] = {
-        {"ELEC", GF_ELEC},
-        {"POIS", GF_POIS},
-        {"POISON", GF_POIS},
-        {"ACID", GF_ACID},
-        {"COLD", GF_COLD},
-        {"FIRE", GF_FIRE},
-        {"PLASMA", GF_PLASMA},
-        {"LITE", GF_LITE},
-        {"DARK", GF_DARK},
-        {"SHARDS", GF_SHARDS},
-        {"SOUND", GF_SOUND},
-        {"CONFUSION", GF_CONFUSION},
-        {"FORCE", GF_FORCE},
-        {"INERT", GF_INERT},
-        {"MANA", GF_MANA},
-        {"ICE", GF_ICE},
-        {"CHAOS", GF_CHAOS},
-        {"DISENCHANT", GF_DISENCHANT},
-        {"NEXUS", GF_NEXUS},
-        {"TIME", GF_TIME},
-        {"GRAVITY", GF_GRAVITY},
-        {"NUKE", GF_NUKE},
-        {"HOLY_FIRE", GF_HOLY_FIRE},
-        {"HELL_FIRE", GF_HELL_FIRE},
-        {"DRAIN_MANA", GF_DRAIN_MANA},
-        {"MIND_BLAST", GF_MIND_BLAST},
-        {"BRAIN_SMASH", GF_BRAIN_SMASH},
-        {"CAUSE_1", GF_CAUSE_1},
-        {"CAUSE_2", GF_CAUSE_2},
-        {"CAUSE_3", GF_CAUSE_3},
-        {"CAUSE_4", GF_CAUSE_4},
-        {"HAND_DOOM", GF_HAND_DOOM},
-        {"AMNESIA", GF_AMNESIA},
-        {"ELDRITCH", GF_ELDRITCH},
-        {"STUN", GF_STUN},
-        {"NETHER", GF_NETHER},
-        {"DAM", GF_MISSILE}, /* Like HURT but with no AC damage reduction */
-        {"POLYMORPH", GF_OLD_POLY},
-        {"UN_BONUS", GF_DISENCHANT},
-        {0}};
-    int i;
-    for (i = 0;; i++)
-    {
-        if (!_table[i].name) return 0;
-        if (streq(_table[i].name, which)) return _table[i].id;
-    }
+    gf_info_ptr gf = gf_parse_name(which);
+    if (gf) return gf->id;
+    return 0;
 }
 
 /*

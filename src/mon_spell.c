@@ -35,76 +35,6 @@
  *
  ************************************************************************/
 
-/* GF_* codes ... These need a rewrite. They are not projection types,
- * though projection uses them. They are not damage types, since they
- * may not cause physical damage. They are not element types, though they
- * often are. Probably, they are best considered as effects: on the player,
- * a monster or terrain. They are used by monster spells, player spells,
- * monster melee, player innate melee, traps, terrain effects on the player,
- * monster auras, player auras and probably much more besides. For now,
- * let's just table up what we need for monster spells: */
-typedef struct {
-    cptr token;
-    int  id;
-    cptr name;
-    byte color;
-    int  resist;
-} _gf_info_t, *_gf_info_ptr;
-
-static _gf_info_t _gf_tbl[] = {
-    { "ACID", GF_ACID, "Acid", TERM_GREEN, RES_ACID },
-    { "ELEC", GF_ELEC, "Lightning", TERM_BLUE, RES_ELEC },
-    { "FIRE", GF_FIRE, "Fire", TERM_RED, RES_FIRE },
-    { "COLD", GF_COLD, "Cold", TERM_L_WHITE, RES_COLD },
-    { "POIS", GF_POIS, "Poison", TERM_L_GREEN, RES_POIS },
-    { "LITE", GF_LITE, "Light", TERM_YELLOW, RES_LITE },
-    { "DARK", GF_DARK, "Dark", TERM_L_DARK, RES_DARK },
-    { "CONFUSION", GF_CONFUSION, "Confusion", TERM_L_UMBER, RES_CONF },
-    { "NETHER", GF_NETHER, "Nether", TERM_L_DARK, RES_NETHER },
-    { "NEXUS", GF_NEXUS, "Nexus", TERM_VIOLET, RES_NEXUS },
-    { "SOUND", GF_SOUND, "Sound", TERM_ORANGE, RES_SOUND },
-    { "SHARDS", GF_SHARDS, "Shards", TERM_L_UMBER, RES_SHARDS },
-    { "CHAOS", GF_CHAOS, "Chaos", TERM_VIOLET, RES_CHAOS },
-    { "DISENCHANT", GF_DISENCHANT, "Disenchantment", TERM_VIOLET, RES_DISEN },
-    { "TIME", GF_TIME, "Time", TERM_L_BLUE, RES_TIME },
-    { "MANA", GF_MANA, "Mana", TERM_L_BLUE, RES_INVALID },
-    { "GRAVITY", GF_GRAVITY, "Gravity", TERM_L_UMBER, RES_INVALID },
-    { "INERTIA", GF_INERT, "Inertia", TERM_L_UMBER, RES_INVALID },
-    { "PLASMA", GF_PLASMA, "Plasma", TERM_L_RED, RES_INVALID },
-    { "FORCE", GF_FORCE, "Force", TERM_L_BLUE, RES_INVALID },
-    { "NUKE", GF_NUKE, "Toxic Waste", TERM_L_GREEN, RES_INVALID },
-    { "DISINTEGRATE", GF_DISINTEGRATE, "Disintegration", TERM_L_DARK, RES_INVALID },
-    { "STORM", GF_STORM, "Storm Winds", TERM_BLUE, RES_INVALID },
-    { "HOLY_FIRE", GF_HOLY_FIRE, "Holy Fire", TERM_YELLOW, RES_INVALID },
-    { "HELL_FIRE", GF_HELL_FIRE, "Hell Fire", TERM_L_DARK, RES_INVALID },
-    { "ICE", GF_ICE, "Ice", TERM_L_WHITE, RES_COLD },
-    { "WATER", GF_WATER, "Water", TERM_L_BLUE, RES_INVALID },
-    { "ROCKET", GF_ROCKET, "Rocket", TERM_RED, RES_SHARDS },
-    {0}
-};
-
-static _gf_info_ptr _gf_parse_name(cptr token)
-{
-    int i;
-    for (i = 0; ; i++)
-    {
-        _gf_info_ptr info = &_gf_tbl[i];
-        if (!info->token) return NULL;
-        if (strcmp(info->token, token) == 0) return info;
-    }
-}
-
-static _gf_info_ptr _gf_lookup(int id)
-{
-    int i;
-    for (i = 0; ; i++)
-    {
-        _gf_info_ptr info = &_gf_tbl[i];
-        if (!info->token) return NULL;
-        if (info->id == id) return info;
-    }
-}
-
 /* Spells: We use a series of parse tables to handle overrides, as
  * discussed above. Each MST_* code gets its own table to preserve
  * my sanity. Note: We store spell lore by the numeric code, so
@@ -741,6 +671,7 @@ static mon_spell_parm_t _bolt_parm(int which, int rlev)
         break;
     case GF_MISSILE:
         parm.v.dice = _dice(2, 6, rlev/3);
+    case GF_ATTACK:
     case GF_ARROW:
         /* SHOOT always specifies dice overrides */
         break;
@@ -961,7 +892,7 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
     }
     else
     {
-        _gf_info_ptr gf;
+        gf_info_ptr  gf;
         cptr         suffix;
         if (prefix(name, "BR_"))
         {
@@ -991,7 +922,7 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
             msg_format("Error: Unkown spell %s.", name);
             return PARSE_ERROR_GENERIC;
         }
-        gf = _gf_parse_name(suffix);
+        gf = gf_parse_name(suffix);
         if (!gf)
         {
             msg_format("Error: Unkown type %s.", name + 3);
@@ -1026,7 +957,7 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
     }
     else if (spell->id.type == MST_BREATHE)
     {
-        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        gf_info_ptr gf = gf_lookup(spell->id.effect);
         if (gf)
         {
             string_printf(s, "<color:%c>Breathe %s</color>",
@@ -1037,7 +968,7 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
     }
     else if (spell->id.type == MST_TACTIC) /* XXX BLINK and BLINK_OTHER have spell->display set */
     {
-        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        gf_info_ptr gf = gf_lookup(spell->id.effect);
         if (gf)
         {
             string_printf(s, "<color:%c>%s Jump</color>",
@@ -1048,7 +979,7 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
     }
     else
     {
-        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        gf_info_ptr   gf = gf_lookup(spell->id.effect);
         _mst_info_ptr mst = _mst_lookup(spell->id.type);
         assert(mst);
         if (gf)
@@ -1467,6 +1398,8 @@ static void _bolt(void)
         ct = 4;
         flags &= ~PROJECT_REFLECTABLE;
     }
+    if (_current.spell->id.effect == GF_ATTACK)
+        flags |= PROJECT_HIDE;
     for (i = 0; i < ct; i++)
     {
         project(
@@ -1573,16 +1506,7 @@ static void _annoy(void)
         }
         break;
     case ANNOY_PARALYZE:
-        if (p_ptr->free_act)
-        {
-            msg_print("You are unaffected!");
-            equip_learn_flag(OF_FREE_ACT);
-        }
-        else if (_curse_save())
-            msg_print("You resist the effects!");
-        else
-            set_paralyzed(randint1(3), FALSE);
-        update_smart_learn(_current.mon->id, SM_FREE_ACTION);
+        gf_damage_p(_current.mon->id, GF_PARALYSIS, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SCARE:
         fear_scare_p(_current.mon);
@@ -2207,7 +2131,7 @@ static cptr _display_msg(void)
 }
 static cptr _breathe_msg(void)
 {
-    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    gf_info_ptr gf = gf_lookup(_current.spell->id.effect);
     assert(gf);
     if (_current.flags & MSC_SRC_PLAYER)
     {
@@ -2235,7 +2159,7 @@ static cptr _breathe_msg(void)
 }
 static cptr _ball_msg(void)
 {
-    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    gf_info_ptr gf = gf_lookup(_current.spell->id.effect);
     if (!gf)
     {
         msg_format("Unkown Ball %d", _current.spell->id.effect);
@@ -2268,7 +2192,7 @@ static cptr _ball_msg(void)
 }
 static cptr _bolt_msg(void)
 {
-    _gf_info_ptr gf = _gf_lookup(_current.spell->id.effect);
+    gf_info_ptr gf = gf_lookup(_current.spell->id.effect);
     assert(gf);
     if (_current.flags & MSC_SRC_PLAYER)
     {
@@ -2634,7 +2558,7 @@ static void _smart_remove_aux(mon_spell_group_ptr group, u32b flags)
     for (i = 0; i < group->count; i++)
     {
         mon_spell_ptr spell = &group->spells[i];
-        _gf_info_ptr  gf = _gf_lookup(spell->id.effect);
+        gf_info_ptr   gf = gf_lookup(spell->id.effect);
         if (!gf) continue; /* GF_ARROW? */
         _smart_tweak_res_dam(spell, gf->resist, flags);
     }
@@ -3084,7 +3008,7 @@ static int _spell_res(mon_spell_ptr spell)
     int res = 0;
     if (_is_gf_spell(spell))
     {
-        _gf_info_ptr gf = _gf_lookup(spell->id.effect);
+        gf_info_ptr gf = gf_lookup(spell->id.effect);
         if (gf && gf->resist != RES_INVALID)
             res = res_pct(gf->resist);
     }

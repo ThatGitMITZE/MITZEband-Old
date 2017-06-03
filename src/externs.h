@@ -1327,32 +1327,10 @@ extern bool project(int who, int rad, int y, int x, int dam, int typ, int flg, i
 extern bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see_s_msg);
 extern int project_length;
 extern bool binding_field(int dam);
-
-/* Directly damage the player or a monster with a GF_* attack type, 
- * bypassing the project() code. This is needed for monster melee,
- * monster auras, and player innate attacks where project() is overly
- * complicated and error prone if flg is incorrectly set.
- *
- * We still need a "who" done it parameter. This is either the player (0)
- * or a monster index (m_idx > 0). Occasionally, it might be a special
- * negative code when using project(), but not for the gf_damage_* routines.
- */
-#define GF_WHO_PLAYER      0  /* same as PROJECT_WHO_PLAYER */
-
-/* We also need information on whether the effect is spell/breath based,
- * or whether it is the result of melee contact. Mostly, this if for message
- * purposes, but, occasionally, it has gameplay effects. For example, GF_DISENCHANT
- * will usually dispel_player() on a touch effect (GF_DAMAGE_ATTACK or _AURA)
- * while it always apply_disenchant()s on a breath (GF_DAMAGE_SPELL).
- * The flags param only contains the following GF_DAMAGE_* flags, and never
- * needs any of the PROJECT_* stuff. At the moment, using bits is inappropriate
- * as the options are mutually exclusive, but other options may follow in the future.
- */
-#define GF_DAMAGE_SPELL  0x01 /* Monster spell or breath from a project() */
-#define GF_DAMAGE_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
-#define GF_DAMAGE_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
-extern int gf_damage_p(int who, int type, int dam, int flags);
-extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
+extern s16b monster_target_x;
+extern s16b monster_target_y;
+extern int rakubadam_m;
+extern int rakubadam_p;
 
 /* spells2.c */
 extern void message_pain(int m_idx, int dam);

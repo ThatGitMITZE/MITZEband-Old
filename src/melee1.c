@@ -181,8 +181,8 @@ bool make_attack_normal(int m_idx)
     {
         if (kawarimi(TRUE)) return TRUE;
     }
-
-    if (!retaliation_hack)
+                           /* v---- Assume a beholder GAZE = {MST_BOLT, GF_ATTACK} */
+    if (!retaliation_hack && !mon_spell_current())
         cmsg_format(TERM_GREEN, "%^s attacks you:", m_name);
     monster_desc(m_name, m_ptr, MD_PRON_VISIBLE);
 
@@ -223,7 +223,8 @@ bool make_attack_normal(int m_idx)
 
         /* Stop if player is dead or gone (e.g. SHATTER knocks player back) */
         if (!p_ptr->playing || p_ptr->is_dead) break;
-        if (distance(py, px, m_ptr->fy, m_ptr->fx) > 1) break;
+        if (!mon_spell_current() && distance(py, px, m_ptr->fy, m_ptr->fx) > 1) break;
+        /*   ^--- Assume it is GAZE = {MST_BOLT, GF_ATTACK} from a beholder */
 
         /* Handle "leaving" */
         if (p_ptr->leaving) break;
