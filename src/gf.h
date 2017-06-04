@@ -172,6 +172,11 @@ extern gf_info_ptr gf_lookup(int id);
 extern int gf_damage_p(int who, int type, int dam, int flags);
 extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
 
+/* exposed for the sake of wizard commands: calculate damage based
+ * on the player's alignment */
+extern int gf_holy_dam(int dam);
+extern int gf_hell_dam(int dam);
+
 /* XXX Remove these ... */
 extern int gf_distance_hack;
 extern int mon_spell_hack;

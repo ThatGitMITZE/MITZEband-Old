@@ -123,11 +123,11 @@ static int _align_dam_pct(int align)
 
     return interpolate(align, tbl, 6);
 }
-static int _holy_dam(int dam)
+int gf_holy_dam(int dam)
 {
     return dam * _align_dam_pct(p_ptr->align) / 100;
 }
-static int _hell_dam(int dam)
+int gf_hell_dam(int dam)
 {
     return dam * _align_dam_pct(-p_ptr->align) / 100;
 }
@@ -238,13 +238,13 @@ int gf_damage_p(int who, int type, int dam, int flags)
     case GF_HOLY_FIRE:
         if (touch) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
-        dam = _holy_dam(dam);
+        dam = gf_holy_dam(dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, mon_spell_hack);
         break;
     case GF_HELL_FIRE:
         if (touch) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
-        dam = _hell_dam(dam);
+        dam = gf_hell_dam(dam);
         result = take_hit(DAMAGE_ATTACK, dam, m_name, mon_spell_hack);
         break;
     case GF_ARROW:

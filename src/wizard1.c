@@ -1143,62 +1143,20 @@ static int _gf_resist(int which, int dam)
 {
     switch (which)
     {
-    case GF_ACID:
-        dam -= dam * res_pct_known(RES_ACID) / 100;
-        break;
-    case GF_ELEC:
-        dam -= dam * res_pct_known(RES_ELEC) / 100;
-        break;
-    case GF_FIRE:
-        dam -= dam * res_pct_known(RES_FIRE) / 100;
-        break;
-    case GF_COLD: case GF_ICE:
-        dam -= dam * res_pct_known(RES_COLD) / 100;
-        break;
-    case GF_POIS:
-    case GF_NUKE:
-        dam -= dam * res_pct_known(RES_POIS) / 100;
-        break;
-    case GF_LITE:
-        dam -= dam * res_pct_known(RES_LITE) / 100;
-        break;
-    case GF_DARK:
-        dam -= dam * res_pct_known(RES_DARK) / 100;
-        break;
-    case GF_NETHER:
-        dam -= dam * res_pct_known(RES_NETHER) / 100;
-        break;
-    case GF_NEXUS:
-        dam -= dam * res_pct_known(RES_NEXUS) / 100;
-        break;
-    case GF_CONFUSION:
-        dam -= dam * res_pct_known(RES_CONF) / 100;
-        break;
-    case GF_SHARDS:
-        dam -= dam * res_pct_known(RES_SHARDS) / 100;
-        break;
-    case GF_SOUND:
-        dam -= dam * res_pct_known(RES_SOUND) / 100;
-        break;
-    case GF_CHAOS:
-        dam -= dam * res_pct_known(RES_CHAOS) / 100;
-        break;
-    case GF_DISENCHANT:
-        dam -= dam * res_pct_known(RES_DISEN) / 100;
-        break;
-    case GF_TIME:
-        dam -= dam * res_pct_known(RES_TIME) / 100;
-        break;
     case GF_HOLY_FIRE:
-        if (p_ptr->align > 10)
-            dam /= 2;
-        else if (p_ptr->align < -10)
-            dam *= 2;
+        dam = gf_holy_dam(dam);
         break;
     case GF_HELL_FIRE:
-        if (p_ptr->align > 10)
-            dam *= 2;
+        dam = gf_hell_dam(dam);
         break;
+    default: {
+        gf_info_ptr gf = gf_lookup(which);
+        if (gf && gf->resist != RES_INVALID)
+        {
+            int pct = res_pct_known(gf->resist);
+            dam -= dam * pct / 100;
+        }
+        break; }
     }
     return dam;
 }

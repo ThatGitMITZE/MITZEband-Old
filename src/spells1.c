@@ -1866,7 +1866,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 static int _reduce_dam(int dam, int distance)
 {          /* OLD: 100, 50, 33, 25, 20, 16, 14, 12 */
     int pct[8] = { 100, 80, 60, 50, 44, 37, 33, 30 };
-    return (dam + 50) * pct[MIN(7, distance)] / 100;
+    return (dam * pct[MIN(7, distance)] + 50) / 100;
 }
 static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
 {

@@ -29,7 +29,8 @@ enum {
 /* Monster Spell Flags (MSF_*) */
 #define MSF_INNATE 0x0001
 #define MSF_BALL0  0x0002 /* hack for THROW = {MST_BALL, GF_ROCK} */
-#define MSF_TARGET 0x0004 /* spell requires a target (possessor) */
+#define MSF_BALL4  0x0004 /* hack for Mana Storm, Starburst, et. al. */
+#define MSF_TARGET 0x0008 /* spell requires a target (possessor) */
 
 /* Every spell can be identified by (Type, Effect) pair */
 typedef struct {

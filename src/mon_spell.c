@@ -170,25 +170,25 @@ static _parse_t _ball_tbl[] = {
           "$CASTER invokes a <color:v>Raw Logrus</color>.",
           "$CASTER mumbles frighteningly.",
           "$CASTER invokes a <color:v>Raw Logrus</color> at $TARGET.",
-          "You invoke a <color:v>Raw Logrus</color>." }, MSF_TARGET},
+          "You invoke a <color:v>Raw Logrus</color>." }, MSF_TARGET | MSF_BALL4},
     { "BA_DARK", { MST_BALL, GF_DARK },
         { "Darkness Storm", TERM_L_DARK,
           "$CASTER invokes a <color:D>Darkness Storm</color>.",
           "$CASTER mumbles powerfully.",
           "$CASTER invokes a <color:D>Darkness Storm</color> at $TARGET.",
-          "You invoke a <color:D>Darkness Storm</color>." }, MSF_TARGET},
+          "You invoke a <color:D>Darkness Storm</color>." }, MSF_TARGET | MSF_BALL4},
     { "BA_LITE", { MST_BALL, GF_LITE },
         { "Starburst", TERM_YELLOW,
           "$CASTER invokes a <color:y>Starburst</color>.",
           "$CASTER mumbles powerfully.",
           "$CASTER invokes a <color:y>Starburst</color> at $TARGET.",
-          "You invoke a <color:y>Starburst</color>." }, MSF_TARGET},
+          "You invoke a <color:y>Starburst</color>." }, MSF_TARGET | MSF_BALL4},
     { "MANA_STORM", { MST_BALL, GF_MANA },
         { "Mana Storm", TERM_L_BLUE,
           "$CASTER invokes a <color:B>Mana Storm</color>.",
           "$CASTER mumbles powerfully.",
           "$CASTER invokes a <color:B>Mana Storm</color> at $TARGET.",
-          "You invoke a <color:B>Mana Storm</color>." }, MSF_TARGET},
+          "You invoke a <color:B>Mana Storm</color>." }, MSF_TARGET | MSF_BALL4},
     { "BA_NUKE", { MST_BALL, GF_NUKE },
         { "Radiation Ball", TERM_L_GREEN,
           "$CASTER casts a <color:G>Ball of Radiation</color>.",
@@ -508,7 +508,7 @@ mon_spell_parm_t mon_spell_parm_hp_pct(int pct, int max)
     return parm;
 }
 
-static mon_spell_parm_t _breathe_parm(int which)
+static mon_spell_parm_t _breath_parm(int which)
 {
     mon_spell_parm_t parm = {0};
     parm.tag = MSP_HP_PCT;
@@ -552,7 +552,7 @@ static mon_spell_parm_t _breathe_parm(int which)
     case GF_PLASMA:
     case GF_HELL_FIRE:
     case GF_HOLY_FIRE:
-        parm.v.hp_pct = _hp_pct(17, 200);
+        parm.v.hp_pct = _hp_pct(17, 250);
         break;
     case GF_GRAVITY:
     case GF_FORCE:
@@ -569,7 +569,7 @@ static mon_spell_parm_t _breathe_parm(int which)
         break;
     default:
         /*assert(FALSE);*/
-        msg_format("Unsupported breathe %s (%d)", gf_name(which), which);
+        msg_format("Unsupported breath %s (%d)", gf_name(which), which);
     }
     return parm;
 }
@@ -773,7 +773,7 @@ mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev)
     switch (id.type)
     {
     case MST_BREATH:
-        return _breathe_parm(id.effect);
+        return _breath_parm(id.effect);
     case MST_BALL:
         return _ball_parm(id.effect, rlev);
     case MST_BOLT:
@@ -1364,7 +1364,7 @@ static bool _spell_blocked(void)
     return FALSE;
 }
 
-static void _breathe(void)
+static void _breath(void)
 {
     int dam;
     int pct = _current.spell->parm.v.hp_pct.pct;
@@ -1405,18 +1405,13 @@ static void _ball(void)
 {
     int    dam;
     dice_t dice = _current.spell->parm.v.dice;
-    int    rad = 0;
+    int    rad = 2;
     int    flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
 
     assert(_current.spell->parm.tag == MSP_DICE);
     dam = _roll(dice);
-    if (!(_current.spell->flags & MSF_BALL0))
-    {
-        /* XXX This was previously set on a spell by spell basis ... */
-        if (dam > 300) rad = 4;
-        else if (dam > 150) rad = 3;
-        else rad = 2;
-    }
+    if (_current.spell->flags & MSF_BALL0) rad = 0;
+    else if (_current.spell->flags & MSF_BALL4) rad = 4;
 
     switch (_current.spell->id.effect)
     {
@@ -1500,12 +1495,15 @@ static void _curse(void)
         -1
     );
 }
-static int _curse_save_odds(void)
+static int _curse_save_odds_aux(int rlev, int sav)
 {
-    int roll = 100 + _current.race->level/2;
-    int sav = duelist_skill_sav(_current.mon->id);
+    int roll = 100 + rlev/2;
     int odds = sav * 100 / roll;
     return odds;
+}
+static int _curse_save_odds(void)
+{
+    return _curse_save_odds_aux(_current.race->level, duelist_skill_sav(_current.mon->id));
 }
 static bool _curse_save(void)
 {
@@ -2076,7 +2074,7 @@ static void _spell_cast_aux(void)
     case MST_BEAM:    _beam();    break;
     case MST_BIFF:    _biff();    break;
     case MST_BOLT:    _bolt();    break;
-    case MST_BREATH: _breathe(); break;
+    case MST_BREATH:  _breath(); break;
     case MST_BUFF:    _buff();    break;
     case MST_CURSE:   _curse();   break;
     case MST_ESCAPE:  _escape();  break;
@@ -2180,7 +2178,7 @@ static cptr _display_msg(void)
     }
     return "";
 }
-static cptr _breathe_msg(void)
+static cptr _breath_msg(void)
 {
     gf_info_ptr gf = gf_lookup(_current.spell->id.effect);
     assert(gf);
@@ -2306,7 +2304,7 @@ static cptr _get_msg(void)
         switch (_current.spell->id.type)
         {
         case MST_BREATH:
-            msg = _breathe_msg();
+            msg = _breath_msg();
             break;
         case MST_BALL:
             msg = _ball_msg();
@@ -2420,15 +2418,16 @@ static bool _disintegrable(point_t src, point_t dest)
 {
     return in_disintegration_range(dest.y, dest.x, src.y, src.x);
 }
-#if 0
-static bool _visible(point_t src, point_t dest)
+static bool _los(point_t src, point_t dest)
 {
     return los(src.y, src.x, dest.y, dest.x);
 }
+#if 0
 static bool _visible_splash(point_t src, point_t dest)
 {
     return _los(src, dest)
         && cave_have_flag_bold(dest.y, dest.x, FF_LOS);
+}
 #endif
 static bool _distance(point_t src, point_t dest)
 {
@@ -2956,9 +2955,121 @@ static bool _choose_target(mon_spell_cast_ptr cast)
     }
     return FALSE;
 }
-
+static point_t _project_pt(point_t start, point_t stop, int flags)
+{
+    point_t pt = stop;
+    get_project_point(start.y, start.x, &pt.y, &pt.x, flags);
+    return pt;
+}
+static bool _small_ball_p(mon_spell_ptr spell)
+{
+    if (spell->id.type != MST_BALL) return FALSE;
+    if (spell->flags & MSF_BALL4) return FALSE;
+    return TRUE;
+}
 static void _remove_bad_spells_pet(mon_spell_cast_ptr cast)
 {
+    mon_spells_ptr spells = cast->race->spells;
+    mon_spell_ptr  spell;
+
+    assert(is_pet(cast->mon));
+
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_SHRIEK));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_DARKNESS));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
+
+    if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
+    {
+        _remove_group(spells->groups[MST_TACTIC], NULL);
+        _remove_group(spells->groups[MST_ESCAPE], NULL);
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_TO));
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
+    }
+
+    if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
+    {
+        _remove_group(spells->groups[MST_BREATH], NULL);
+        _remove_group(spells->groups[MST_BALL], NULL);
+        _remove_group(spells->groups[MST_BOLT], NULL);
+        _remove_group(spells->groups[MST_BEAM], NULL);
+        _remove_group(spells->groups[MST_CURSE], NULL);
+    }
+
+    if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL))
+    {
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+    }
+
+    /* Prevent collateral damage XXX PF_BALL_SPELL is a horrible misnomer XXX
+     * All the logic here is from the old mspells2.c code, which we still call
+     * (e.g. breath_direct) */
+    if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (cast->mon->id != p_ptr->riding))
+    {
+        if (spells->groups[MST_BALL])
+        {
+            point_t explode = _project_pt(cast->src, cast->dest, 0);
+            point_t player = point(px, py);
+
+            if (_projectable(player, explode))
+            {
+                if (_distance(player, explode) <= 2)
+                    _remove_group(spells->groups[MST_BALL], _small_ball_p);
+                else
+                    _remove_group(spells->groups[MST_BALL], NULL);
+            }
+            else /* Glass walls and such have LOS but not PROJECT */
+            {
+                spell = mon_spells_find(spells, _id(MST_BALL, GF_LITE));
+                if (spell && _distance(player, explode) <= 4 && _los(player, explode))
+                    spell->prob = 0;
+            }
+        }
+
+        /* rockets project like MST_BOLT spells ... */
+        spell = mon_spells_find(spells, _id(MST_BALL, GF_ROCKET));
+        if (spell)
+        {
+            point_t explode = _project_pt(cast->src, cast->dest, PROJECT_STOP);
+            point_t player = point(px, py);
+            if (_projectable(player, explode) && _distance(player, explode) <= 2)
+                spell->prob = 0;
+        }
+
+        if ( spells->groups[MST_BEAM]
+          && !direct_beam(cast->src.y, cast->src.x, cast->dest.y, cast->dest.x, cast->mon) )
+        {
+            _remove_group(spells->groups[MST_BEAM], NULL);
+        }
+
+        if (spells->groups[MST_BREATH])
+        {
+            int rad = cast->race->level >= 50 ? 3 : 2;
+
+            if (!breath_direct(cast->src.y, cast->src.x, cast->dest.y, cast->dest.x, rad, 0, TRUE))
+                _remove_group(spells->groups[MST_BREATH], NULL);
+            else
+            {
+                spell = mon_spells_find(spells, _id(MST_BREATH, GF_LITE));
+                if (spell && !breath_direct(cast->src.y, cast->src.x, cast->dest.y, cast->dest.x, rad, GF_LITE, TRUE))
+                    spell->prob = 0;
+                spell = mon_spells_find(spells, _id(MST_BREATH, GF_DISINTEGRATE));
+                if (spell && !breath_direct(cast->src.y, cast->src.x, cast->dest.y, cast->dest.x, rad, GF_DISINTEGRATE, TRUE))
+                    spell->prob = 0;
+            }
+        }
+    }
+
+    /* Special moves restriction */
+    spell = mon_spells_find(spells, _id(MST_WEIRD, WEIRD_SPECIAL));
+    if (spell)
+    {
+        if (cast->race->d_char == 'B')
+        {
+            if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
+                spell->prob = 0;
+        }
+        else spell->prob = 0;
+    }
 }
 
 static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
@@ -2970,7 +3081,7 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
     assert(_projectable(cast->src, cast->dest));
     cast->flags |= MSC_DIRECT;
 
-    /* not implemented ... yet */
+    /* XXX not implemented ... yet */
     _remove_group(spells->groups[MST_ANNOY], NULL);
     _remove_group(spells->groups[MST_BIFF], NULL);
     _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
@@ -3029,8 +3140,6 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_ANIMATE_DEAD));
     if (spell && !raise_possible(cast->mon))
         spell->prob = 0;
-
-    /* XXX Pets need to avoid harming the player!!! */
 }
 static bool _default_ai_mon(mon_spell_cast_ptr cast)
 {
@@ -3075,7 +3184,18 @@ static int _spell_res(mon_spell_ptr spell)
     }
     return res;
 }
-
+static int _align_dam(mon_spell_ptr spell, int dam)
+{
+    if (_is_gf_spell(spell))
+    {
+        switch (spell->id.effect)
+        {
+        case GF_HOLY_FIRE: return gf_holy_dam(dam);
+        case GF_HELL_FIRE: return gf_hell_dam(dam);
+        }
+    }
+    return dam;
+}
 static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
 {
     if (!_is_attack_spell(spell)) return 0;
@@ -3084,6 +3204,7 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
         dice_t dice = spell->parm.v.dice;
         int dam = _avg_roll(dice);
         int res = _spell_res(spell);
+        dam = _align_dam(spell, dam);
         if (res)
             dam -= dam * res / 100;
         if (spell->id.type == MST_CURSE && spell->id.effect == GF_HAND_DOOM)
@@ -3096,6 +3217,7 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
         int res = _spell_res(spell);
         if (dam > spell->parm.v.hp_pct.max)
             dam = spell->parm.v.hp_pct.max;
+        dam = _align_dam(spell, dam);
         if (res)
             dam -= dam * res / 100;
         return dam;
@@ -3168,6 +3290,8 @@ void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
             }
             if (dam)
             {
+                if (spell->id.type == MST_CURSE)
+                    dam -= dam * _curse_save_odds_aux(cast.race->level, p_ptr->skills.sav) / 100;
                 total_dam += spell->prob * dam;
                 doc_printf(doc, "<tab:65>%d", dam);
             }
