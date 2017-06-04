@@ -2020,7 +2020,6 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
     int maxf1 = d_info[dungeon_type].obj_good;
     int maxf2 = d_info[dungeon_type].obj_great;
 
-    if (p_ptr->personality == PERS_MUNCHKIN) lev += randint0(p_ptr->lev/2+10);
     if (quickband && !(mode & AM_STOCK_TOWN))
     {
         lev += 10;
@@ -2044,7 +2043,7 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
     f2 = f1 * 2 / 3;
 
     /* Maximal chance of being "great" */
-    if (p_ptr->personality != PERS_MUNCHKIN && f2 > maxf2)
+    if (f2 > maxf2)
         f2 = maxf2;
 
     /* Temp Hack: It's a bit too hard to find good rings early on. Note we hack after

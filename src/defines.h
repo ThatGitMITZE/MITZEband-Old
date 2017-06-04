@@ -16,9 +16,9 @@
 #define VERSION_NAME "PosChengband"
 
 
-#define VER_MAJOR 6
-#define VER_MINOR 1
-#define VER_PATCH 1
+#define VER_MAJOR 7
+#define VER_MINOR 0
+#define VER_PATCH 0
 #define VER_EXTRA 0
 
 #define GAME_MODE_BEGINNER  0
@@ -857,21 +857,21 @@ enum {
 #define DEVICEMASTER_MAX     5
 
 
-#define PERS_ORDINARY      0
-#define PERS_MIGHTY        1
-#define PERS_SHREWD        2
-#define PERS_PIOUS         3
-#define PERS_NIMBLE        4
-#define PERS_FEARLESS      5
-#define PERS_COMBAT        6
-#define PERS_LAZY          7
-#define PERS_SEXY          8
-#define PERS_LUCKY         9
-#define PERS_PATIENT      10
-#define PERS_MUNCHKIN     11
-#define PERS_CRAVEN       12
-#define PERS_HASTY        13
-#define MAX_PERSONALITIES 14
+enum {
+    PERS_ORDINARY = 0,
+    PERS_MIGHTY,
+    PERS_SHREWD,
+    PERS_PIOUS,
+    PERS_NIMBLE,
+    PERS_FEARLESS,
+    PERS_COMBAT,
+    PERS_SEXY,
+    PERS_LUCKY,
+    PERS_PATIENT,
+    PERS_CRAVEN,
+    PERS_HASTY,
+    MAX_PERSONALITIES,
+};
 
 /*
  * Number of feats we change to (Excluding default). Used in f_info.txt.
@@ -1206,7 +1206,6 @@ enum {
 #define ART_HIMRING             127
 #define ART_INCANUS             131
 #define ART_NAMAKE_ARMOR        183
-#define ART_GHB                 192
 #define ART_DASAI               200
 #define ART_KESHO               204
 
@@ -4423,7 +4422,6 @@ extern int PlayerUID;
 #define MON_BEGGAR              12
 #define MON_LEPER               13
 #define MON_BLACK_MARKET        14
-#define MON_GHB                 39
 #define MON_NOV_PRIEST          45
 #define MON_GRIP                53
 #define MON_WOLF                54

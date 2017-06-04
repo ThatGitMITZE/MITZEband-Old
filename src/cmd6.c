@@ -786,12 +786,6 @@ static void do_cmd_read_scroll_aux(obj_ptr o_ptr)
         if (object_is_(o_ptr, TV_SCROLL, SV_SCROLL_IDENTIFY))
             number = device_used_charges;
     }
-    else if (o_ptr->name1 == ART_GHB)
-    {
-        msg_print("I had a very hard time to kill the Greater hell-beast, ");
-        msg_print("but all I got was this lousy t-shirt!");
-        used_up = FALSE;
-    }
     else if (o_ptr->name1 == ART_POWER)
     {
         msg_print("'One Ring to rule them all, ");
@@ -854,7 +848,7 @@ static void do_cmd_read_scroll_aux(obj_ptr o_ptr)
 static bool _can_read(object_type *o_ptr)
 {
     if (!o_ptr) return FALSE;
-    if (o_ptr->tval==TV_SCROLL || o_ptr->tval==TV_PARCHMENT || o_ptr->name1 == ART_GHB || o_ptr->name1 == ART_POWER)
+    if (o_ptr->tval==TV_SCROLL || o_ptr->tval==TV_PARCHMENT || o_ptr->name1 == ART_POWER)
         return TRUE;
     return FALSE;
 }

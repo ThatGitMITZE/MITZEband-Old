@@ -1142,49 +1142,6 @@ void monster_death(int m_idx, bool drop_item)
         }
         break;
 
-    case MON_UNICORN_ORD:
-    case MON_MORGOTH:
-    case MON_ONE_RING:
-        /* Reward for "lazy" player */
-        if (p_ptr->personality == PERS_LAZY)
-        {
-            int a_idx = 0;
-            artifact_type *a_ptr = NULL;
-
-            if (!drop_chosen_item) break;
-
-            do
-            {
-                switch (randint0(3))
-                {
-                case 0:
-                    a_idx = ART_NAMAKE_HAMMER;
-                    break;
-                case 1:
-                    a_idx = ART_NAMAKE_BOW;
-                    break;
-                case 2:
-                    a_idx = ART_NAMAKE_ARMOR;
-                    break;
-                }
-
-                a_ptr = &a_info[a_idx];
-            }
-            while (a_ptr->generated);
-
-            /* Create the artifact */
-            if (create_named_art(a_idx, y, x))
-            {
-                a_ptr->generated = TRUE;
-
-                /* Hack -- Memorize location of artifact in saved floors */
-                if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
-            }
-            else if (!preserve_mode)
-                a_ptr->generated = TRUE;
-        }
-        break;
-
     case MON_SERPENT:
         if (!drop_chosen_item) break;
         if (create_named_art(ART_GROND, y, x))
@@ -1446,11 +1403,6 @@ void monster_death(int m_idx, bool drop_item)
                 a_idx = ART_AMBER;
                 chance = 50;
             }
-            break;
-
-        case MON_GHB:
-            a_idx = ART_GHB;
-            chance = 100;
             break;
 
         case MON_STORMBRINGER:

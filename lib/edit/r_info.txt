@@ -663,23 +663,7 @@ P:Body:Scrawny
 D:A lone insect may be harmless, but there's a whole swarm of
 D:them here!
 
-N:39:Greater Hell-Beast
-G:U:s
-I:115:15d100:10:100:99:666
-W:1:6:999:250:0:0
-B:GAZE:HURT
-B:GAZE:HURT
-B:CRUSH:SUPERHURT
-F:EVIL | RES_ACID | RES_ELEC | RES_FIRE | RES_POIS | RES_COLD | UNIQUE |
-F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
-F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
-F:KILL_WALL | FORCE_MAXHP | CAN_SWIM | DEMON | DEPRECATED
-F:DROP_CORPSE | POS_GAIN_AC
-S:FREQ_10 | TELE_SELF | BLINK | TELE_OTHER
-P:Copy:Snotling:Tourist
-P:Life:150
-P:Body:Greater Hell-Beast
-D:This unholy abomination will crush you. Flee while you can!
+#### GAP
 
 N:40:Shrieker mushroom patch
 G:,:R
@@ -20565,6 +20549,8 @@ D:She is the spirit of the sun that lords Takamagahara that is the country
 D:of heaven. Her brightness lights up the world.
 D:She and her children plot to conquest of countries of the ground.
 
+#### GAP
+
 # Demons from Vanilla
 N:1151:Osyluth
 G:U:W
@@ -20649,6 +20635,8 @@ D:Appearing as a giant, clawed and winged humanoid with a scaly red body
 D:and massive fangs dripping a foul green liquid, the Pit Fiend is a
 D:dreadful enemy from the lowest depths of the hells. They are often the
 D:commanders of vast demon armies.
+
+#### GAP
 
 # Tomenet
 N:1159:Cave Gorm
@@ -20804,6 +20792,8 @@ S:BO_MANA | BO_NETHER | TELE_TO |
 S:HASTE | HEAL | ANTI_MAGIC |
 D:"I win greater honor when the victims are young."
 
+#### GAP
+
 N:1169:Chitauli
 G:R:W
 I:130:107d65:60:120:1:300
@@ -20864,63 +20854,7 @@ D:their balance. Its aura is pure beyond expression, its eyes reflect supreme
 D:laws beyond comprehension, daring to look at it will drive you insane,
 D:let alone fighting it!
 
-N:1172:Michael, the Guardian Overlord
-G:A:U
-I:130:69d199:100:175:255:255
-W:98:3:999:77777:0:0
-B:GAZE:TERRIFY:7d4
-B:HIT:HURT:50d7
-B:HIT:HURT:50d7
-F:FORCE_SLEEP | FORCE_MAXHP | GOOD | SELF_LITE_2 |
-F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT
-F:SMART | KILL_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | RES_LITE | AURA_FEAR
-F:AURA_ELEC | ESCORT | UNIQUE | DEPRECATED | REGENERATE | MALE
-F:NO_CONF | NO_SLEEP | CAN_FLY | KILL_WALL | NO_FEAR | REFLECTING | RES_TELE
-F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC |
-P:Copy:Archon:Paladin
-P:Stats:2:2:5:2:2:5
-P:Speed:+10
-S:1_IN_3 |
-S:TELE_TO | BR_MANA | BR_DISENCHANT | BR_CONFUSION | S_ANGEL | S_MONSTER
-S:BA_LITE | BO_MANA | BO_WATER(10d10+150) | BRAIN_SMASH |
-S:HASTE | HEAL | ANTI_MAGIC | DRAIN_MANA
-D:Through many succeeding cycles of time, as ray after ray provided the pathway
-D:for the descent of new spirits, lord Michael has remained as the guardian
-D:overlord of the angelic host, the elemental kingdom and humanity. He shall
-D:not fold his cosmic wings about him to return home until the final angelic
-D:being is freed, the last man is redeemed and the last elemental returned to
-D:its perfect state.
-
-N:1173:Tik'srvzllat
-G:G:v
-I:142:103d103:60:170:0:120
-W:98:3:999:50000:0:0
-B:GAZE:TIME(7d7)
-B:GAZE:BLIND(7d7)
-B:GAZE:CONFUSE(7d7)
-B:GAZE:TERRIFY(7d7)
-A:MIND_BLAST(3d3, 50%):STUN(1d5, 50%):AMNESIA(3d3, 50%)
-F:UNIQUE | DEPRECATED
-F:FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK | CAN_FLY | HAS_DARK_2 |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT |
-F:INVISIBLE | COLD_BLOOD | PASS_WALL | WEIRD_MIND | ELDRITCH_HORROR |
-F:EVIL | UNDEAD | IM_COLD | RES_NETH | SMART |
-F:IM_POIS | NO_CONF | NO_SLEEP | NO_STUN | RES_DARK | RES_TIME |
-F:AURA_FEAR | NO_FEAR
-F:POS_SEE_INVIS | POS_HOLD_LIFE | POS_DETECT_MONSTERS
-P:Copy:High-Elf:Rogue
-S:FREQ_30 |
-S:S_UNDEAD | S_DEMON | S_DRAGON |
-S:S_UNIQUE | S_AMBERITE |
-S:S_HI_UNDEAD | S_HI_DRAGON | S_KIN |
-S:BR_NEXUS | BR_NETHER | BR_DARK | BR_DISENCHANT
-D:A disembodied and barely sentient mind, Tik'srvzllat floated
-D:through the void for eons before being awakened by sorcery, pulled
-D:into the nether realm, and shaped into the being you see before you.
-D:A flickering purple outline of a sphere, with eerie yellow-purple
-D:mist circling rapidly around it, Tik'srvzllat threatens your sanity
-D:with its appearance alone.
+#### GAP
 
 # v from FA
 N:1192:Wiruin, the Maelstrom
@@ -20984,24 +20918,7 @@ P:Copy:Balrog:Mauler
 S:FREQ_20 | BR_DARK | BR_CONFUSION | BR_INERTIA | S_HI_DEMON |
 D:The prince of evil.
 
-N:1195:Lucifer, the Fallen
-G:A:W
-I:135:157d100:50:250:255:235
-W:97:2:999:65100:0:0
-B:HIT:HURT:15d15
-B:HIT:HURT:15d15
-B:GAZE:LOSE_WIS:5d5
-B:GAZE:LOSE_CHR:5d5
-F:UNIQUE | DEPRECATED | MALE | CAN_SPEAK | CAN_FLY | AURA_REVENGE |
-F:FORCE_SLEEP | FORCE_MAXHP | REGENERATE |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT |
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | SMART |
-F:AURA_COLD | EVIL | RES_TELE |
-F:IM_COLD | RES_POIS | NO_CONF | NO_SLEEP |
-F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC |
-P:Copy:Archon:Paladin
-S:1_IN_4 |
-S:BR_COLD | BR_SHARDS | PSY_SPEAR(1d194+150) | S_ANGEL |
+#### GAP
 
 N:1196:The Lurking Horror
 G:H:D
@@ -21093,6 +21010,8 @@ S:BA_COLD(1d282+20) | BRAIN_SMASH | CAUSE_4 | PSY_SPEAR(1d188+150)
 S:BO_MANA | HEAL | HASTE | MIND_BLAST | BA_LITE | BA_ELEC(1d282+16) |
 S:S_HI_DEMON | S_CYBER | S_HI_UNDEAD | S_HI_DRAGON | S_MONSTER | S_UNIQUE |
 S:S_ANGEL | S_HOUND |
+
+#### GAP
 
 # new
 N:1208:Anubis, Keeper of the Balance

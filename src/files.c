@@ -3026,12 +3026,6 @@ long total_points(void)
             point = point / 5;
     }
 
-    if ((p_ptr->personality == PERS_MUNCHKIN) && point)
-    {
-        point = 1;
-        if (p_ptr->total_winner) point = 2;
-    }
-
     return point;
 }
 

@@ -616,11 +616,6 @@ static void _wield_after(slot_t slot)
     char    o_name[MAX_NLEN];
     obj_ptr obj = inv_obj(_inv, slot);
 
-    if (p_ptr->personality == PERS_MUNCHKIN)
-    {
-        identify_item(obj);
-        autopick_alter_obj(obj, FALSE);
-    }
     obj_learn_equipped(obj);
     stats_on_equip(obj);
     obj->marked |= OM_TOUCHED;
