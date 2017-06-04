@@ -3085,6 +3085,8 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
         int res = _spell_res(spell);
         if (res)
             dam -= dam * res / 100;
+        if (spell->id.type == MST_CURSE && spell->id.effect == GF_HAND_DOOM)
+            dam = p_ptr->chp * dam / 100;
         return dam;
     }
     if (spell->parm.tag == MSP_HP_PCT)

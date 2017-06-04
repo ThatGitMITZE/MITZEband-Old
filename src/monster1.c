@@ -51,9 +51,6 @@ static int _r_level(int r_idx)
     if (r_ptr->flags1 & RF1_UNIQUE)
         ml += ml/5;
 
-    if (r_ptr->flags2 & RF2_POWERFUL)
-        ml += 7;
-
     if (ml < 1)
         ml = 1;
 

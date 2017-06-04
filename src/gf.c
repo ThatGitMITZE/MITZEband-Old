@@ -24,7 +24,7 @@ static gf_info_t _gf_tbl[] = {
     { GF_INERT, "Inertia", TERM_L_UMBER, RES_INVALID, "INERTIA" },
     { GF_PLASMA, "Plasma", TERM_L_RED, RES_INVALID, "PLASMA" },
     { GF_FORCE, "Force", TERM_L_BLUE, RES_INVALID, "FORCE" },
-    { GF_NUKE, "Toxic Waste", TERM_L_GREEN, RES_INVALID, "NUKE" },
+    { GF_NUKE, "Toxic Waste", TERM_L_GREEN, RES_POIS, "NUKE" },
     { GF_DISINTEGRATE, "Disintegration", TERM_L_DARK, RES_INVALID, "DISINTEGRATE" },
     { GF_STORM, "Storm Winds", TERM_BLUE, RES_INVALID, "STORM" },
     { GF_HOLY_FIRE, "Holy Fire", TERM_YELLOW, RES_INVALID, "HOLY_FIRE" },
@@ -2795,7 +2795,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         int pl = dam;
 
         if (r_ptr->flags1 & RF1_UNIQUE) ml += 3;
-        if (r_ptr->flags2 & RF2_POWERFUL) ml += 7;
 
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
@@ -2827,7 +2826,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         int pl = dam;
 
         if (r_ptr->flags1 & RF1_UNIQUE) ml += 3;
-        if (r_ptr->flags2 & RF2_POWERFUL) ml += 7;
 
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
@@ -2860,7 +2858,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         int pl = dam;
 
         if (r_ptr->flags1 & RF1_UNIQUE) ml += 3;
-        if (r_ptr->flags2 & RF2_POWERFUL) ml += 7;
 
         if (seen) obvious = TRUE;
         _BABBLE_HACK()

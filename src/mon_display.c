@@ -415,8 +415,6 @@ static void _display_frequency(monster_race *r_ptr, doc_ptr doc)
 
         if (r_ptr->flags2 & RF2_SMART)
             vec_add(v, string_copy_s("<color:y>Intelligent</color>"));
-        if (r_ptr->flags2 & RF2_POWERFUL)
-            vec_add(v, string_copy_s("<color:v>Powerful</color>"));
         _print_list(v, doc, ',', '\0');
         vec_free(v);
         doc_insert(doc, "</indent>");
@@ -436,7 +434,7 @@ static bool _is_attack_spell(mon_spell_ptr spell)
     }
     return FALSE;
 }
-static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, vec_ptr v, bool short_names)
+static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, vec_ptr v)
 {
     int i;
     if (!group) return;
@@ -446,17 +444,14 @@ static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, 
         if (_easy_lore(r_ptr) || spell->lore)
         {
             string_ptr s = string_alloc();
-            if (short_names)
-                mon_spell_display(spell, s);
-            else
-                mon_spell_print(spell, s);
-            if (easy_lore || spell->lore > 5)
+            mon_spell_display(spell, s);
+            if (easy_lore || spell->lore > 5) /* XXX How many? */
             {
                 if (spell->parm.tag && spell->id.type != MST_SUMMON)
                 {
                     string_append_c(s, ' ');
                     string_append_c(s, '(');
-                    if (spoiler_hack && !_is_attack_spell(spell))
+                    if (spoiler_hack || !_is_attack_spell(spell))
                     {
                         mon_spell_parm_print(&spell->parm, s, r_ptr);
                         if (spell->id.type == MST_CURSE && spell->id.effect == GF_HAND_DOOM)
@@ -481,7 +476,7 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
     _display_frequency(r_ptr, doc);
 
     /* Breaths */
-    _display_spell_group(r_ptr, spells->groups[MST_BREATH], v, TRUE);
+    _display_spell_group(r_ptr, spells->groups[MST_BREATH], v);
     if (vec_length(v))
     {
         doc_insert(doc, "Breathe : <indent><style:indent>");
@@ -492,10 +487,10 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Offense */
     vec_clear(v);
-    _display_spell_group(r_ptr, spells->groups[MST_BALL], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_BOLT], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_BEAM], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_CURSE], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_BALL], v);
+    _display_spell_group(r_ptr, spells->groups[MST_BOLT], v);
+    _display_spell_group(r_ptr, spells->groups[MST_BEAM], v);
+    _display_spell_group(r_ptr, spells->groups[MST_CURSE], v);
     if (vec_length(v))
     {
         doc_insert(doc, "Offense : <indent><style:indent>");
@@ -506,7 +501,7 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Annoy */
     vec_clear(v);
-    _display_spell_group(r_ptr, spells->groups[MST_ANNOY], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_ANNOY], v);
     if (vec_length(v))
     {
         doc_insert(doc, "Annoy   : <indent><style:indent>");
@@ -517,12 +512,12 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Defense */
     vec_clear(v);
-    _display_spell_group(r_ptr, spells->groups[MST_BUFF], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_BIFF], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_HEAL], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_ESCAPE], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_TACTIC], v, FALSE);
-    _display_spell_group(r_ptr, spells->groups[MST_WEIRD], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_BUFF], v);
+    _display_spell_group(r_ptr, spells->groups[MST_BIFF], v);
+    _display_spell_group(r_ptr, spells->groups[MST_HEAL], v);
+    _display_spell_group(r_ptr, spells->groups[MST_ESCAPE], v);
+    _display_spell_group(r_ptr, spells->groups[MST_TACTIC], v);
+    _display_spell_group(r_ptr, spells->groups[MST_WEIRD], v);
     if (vec_length(v))
     {
         doc_insert(doc, "Defense : <indent><style:indent>");
@@ -533,7 +528,7 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Summoning */
     vec_clear(v);
-    _display_spell_group(r_ptr, spells->groups[MST_SUMMON], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_SUMMON], v);
     if (vec_length(v))
     {
         doc_insert(doc, "Summon  : <indent><style:indent>");

@@ -327,7 +327,7 @@ static cptr r_info_flags2[] =
     "REGENERATE",
     "CHAR_MULTI",
     "ATTR_ANY",
-    "POWERFUL",
+    "XXX",
     "ELDRITCH_HORROR",
     "AURA_FIRE",
     "AURA_ELEC",

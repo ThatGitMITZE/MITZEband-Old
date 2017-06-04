@@ -997,7 +997,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
 {
     _spell_dam_info_ptr info = _spell_dam_info_alloc();
     int                 hp = 0;
-    bool                powerful = BOOL(r->flags2 & RF2_POWERFUL);
+    bool                powerful = FALSE;
     int                 power_mult = powerful ? 2 : 1; /* elemental balls and bolts */
     int                 power_mult2 = powerful ? 3 : 2; /* some high level balls */
     int                 power_div = powerful ? 2 : 3; /* cause, you know, diversity is a good thing */

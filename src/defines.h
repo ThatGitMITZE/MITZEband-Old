@@ -3068,7 +3068,7 @@ enum {
 #define RF2_REGENERATE      0x00000200  /* Monster regenerates */
 #define RF2_CHAR_MULTI      0x00000400  /* (Not implemented) */
 #define RF2_ATTR_ANY        0x00000800  /* TY: Attr_any */
-#define RF2_POWERFUL        0x00001000  /* Monster has strong breath */
+#define RF2_XXX             0x00001000
 #define RF2_ELDRITCH_HORROR 0x00002000  /* Sanity-blasting horror    */
 #define RF2_AURA_FIRE       0x00004000  /* Burns in melee */
 #define RF2_AURA_ELEC       0x00008000  /* Shocks in melee */

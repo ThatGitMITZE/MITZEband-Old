@@ -141,9 +141,6 @@ static int _r_level(monster_race *r_ptr)
 {
 int ml = r_ptr->level;
 
-    if (r_ptr->flags2 & RF2_POWERFUL)
-        ml += 7;
-
     if (r_ptr->flags1 & RF1_UNIQUE)
         ml += 3;
 
