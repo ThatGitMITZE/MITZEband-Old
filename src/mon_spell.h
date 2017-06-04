@@ -7,10 +7,10 @@
  * The spell type is used to intelligently choose spells depending on
  * the current situation. For example, wounded monsters will prefer
  * to MST_HEAL or possibly MST_ESCAPE. If the player is not "projectable",
- * then the attack types are excluded, but we might keep MST_BREATHE and
+ * then the attack types are excluded, but we might keep MST_BREATH and
  * MST_BALL around if the player can be "splashed" by the effect. Etc. */
 enum {
-    MST_BREATHE,
+    MST_BREATH,
     MST_BALL,
     MST_BOLT,
     MST_BEAM,
@@ -67,6 +67,7 @@ extern mon_spell_parm_t mon_spell_parm_dice(int dd, int ds, int base);
 extern mon_spell_parm_t mon_spell_parm_hp_pct(int pct, int max);
 extern mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev);
 extern errr             mon_spell_parm_parse(mon_spell_parm_ptr parm, char *token);
+extern void             mon_spell_parm_print(mon_spell_parm_ptr parm, string_ptr s, mon_race_ptr race);
 
 /* Casting information for a spell (idea from Vanilla) */
 typedef struct {
@@ -91,7 +92,9 @@ typedef struct {
 
 extern errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token);
 extern void mon_spell_print(mon_spell_ptr spell, string_ptr s);
+extern void mon_spell_display(mon_spell_ptr spell, string_ptr s); /* helper for mon_display */
 extern void mon_spell_doc(mon_spell_ptr spell, doc_ptr doc);
+extern int  mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race);
 
 /* A collection of related spells, grouped together for tactical purposes.
  * Each tactical group has a dynamic probability depending on the current
@@ -111,7 +114,6 @@ extern mon_spell_ptr mon_spell_group_find(mon_spell_group_ptr group, mon_spell_i
 
 typedef struct {
     byte freq;
-    s16b dam_pct;  /* 0 => 100%. Only works on MSP_DICE effects. Obsoletes RF2_POWERFUL. */
     u32b flags;
     mon_spell_group_ptr groups[MST_COUNT];
 } mon_spells_t, *mon_spells_ptr;

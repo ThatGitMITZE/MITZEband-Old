@@ -8,7 +8,7 @@
  *
  * The parser will first look in various parse tables  for spell names,
  * such as THROW, SHOOT or HASTE. If not present, then the token prefix
- * determines the spell type (such as BR_ for MST_BREATHE) while the
+ * determines the spell type (such as BR_ for MST_BREATH) while the
  * token suffix determines the effect type (currently we use the GF_*
  * system, though this needs some reworking). For example, BA_ACID for
  * an acid ball {MST_BALL, GF_ACID}.
@@ -183,7 +183,7 @@ static _parse_t _ball_tbl[] = {
           "$CASTER mumbles powerfully.",
           "$CASTER invokes a <color:y>Starburst</color> at $TARGET.",
           "You invoke a <color:y>Starburst</color>." }, MSF_TARGET},
-    { "BA_MANA", { MST_BALL, GF_MANA },
+    { "MANA_STORM", { MST_BALL, GF_MANA },
         { "Mana Storm", TERM_L_BLUE,
           "$CASTER invokes a <color:B>Mana Storm</color>.",
           "$CASTER mumbles powerfully.",
@@ -423,7 +423,7 @@ typedef struct {
     int  prob;
 } _mst_info_t, *_mst_info_ptr;
 static _mst_info_t _mst_tbl[] = {
-    { MST_BREATHE, "Breathe", TERM_RED, 15 },
+    { MST_BREATH, "Breathe", TERM_RED, 15 },
     { MST_BALL, "Ball", TERM_RED, 15 },
     { MST_BOLT, "Bolt", TERM_RED, 15 },
     { MST_BEAM, "Beam", TERM_RED, 15 },
@@ -772,7 +772,7 @@ mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev)
 
     switch (id.type)
     {
-    case MST_BREATHE:
+    case MST_BREATH:
         return _breathe_parm(id.effect);
     case MST_BALL:
         return _ball_parm(id.effect, rlev);
@@ -854,6 +854,41 @@ errr mon_spell_parm_parse(mon_spell_parm_ptr parm, char *token)
     return 0;
 }
 
+static int _avg_dam_roll(int dd, int ds) { return dd * (ds + 1) / 2; }
+static int _avg_hp(mon_race_ptr r)
+{
+    if (r->flags1 & RF1_FORCE_MAXHP)
+        return r->hdice * r->hside;
+    return _avg_dam_roll(r->hdice, r->hside);
+}
+void mon_spell_parm_print(mon_spell_parm_ptr parm, string_ptr s, mon_race_ptr race)
+{
+    if (parm->tag == MSP_DICE)
+    {
+        if (parm->v.dice.dd && parm->v.dice.ds)
+        {
+            string_printf(s, "%dd%d", parm->v.dice.dd, parm->v.dice.ds);
+            if (parm->v.dice.base)
+                string_append_c(s, '+');
+        }
+        if (parm->v.dice.base)
+            string_printf(s, "%d", parm->v.dice.base);
+    }
+    else if (parm->tag == MSP_HP_PCT)
+    {
+        if (race)
+        {
+            int hp = _avg_hp(race);
+            int dam = hp * parm->v.hp_pct.pct / 100;
+            if (dam > parm->v.hp_pct.max)
+                dam = parm->v.hp_pct.max;
+            string_printf(s, "%d", dam);
+        }
+        else
+            string_printf(s, "%d%% up to %d", parm->v.hp_pct.pct, parm->v.hp_pct.max);
+    }
+}
+
 /*************************************************************************
  * Spell
  ************************************************************************/
@@ -896,7 +931,7 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
         cptr         suffix;
         if (prefix(name, "BR_"))
         {
-            spell->id.type = MST_BREATHE;
+            spell->id.type = MST_BREATH;
             spell->flags |= MSF_INNATE | MSF_TARGET;
             suffix = name + 3;
         }
@@ -955,7 +990,7 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
         else
             string_printf(s, "<color:%c>Summon %s</color>", attr_to_attr_char(p->color), p->name);
     }
-    else if (spell->id.type == MST_BREATHE)
+    else if (spell->id.type == MST_BREATH)
     {
         gf_info_ptr gf = gf_lookup(spell->id.effect);
         if (gf)
@@ -990,6 +1025,30 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
         else
             string_printf(s, "%s %d", mst->name, spell->id.effect);
     }
+}
+void mon_spell_display(mon_spell_ptr spell, string_ptr s)
+{
+    if (spell->id.type == MST_BREATH)
+    {
+        gf_info_ptr gf = gf_lookup(spell->id.effect);
+        if (gf)
+        {
+            string_printf(s, "<color:%c>%s</color>",
+                attr_to_attr_char(gf->color), gf->name);
+        }
+        else
+            string_printf(s, "Unknown %d", spell->id.effect);
+    }
+    else if (spell->id.type == MST_SUMMON)
+    {
+        parse_tbl_ptr p = summon_type_lookup(spell->id.effect);
+        if (p)
+            string_printf(s, "<color:%c>%s</color>", attr_to_attr_char(p->color), p->name);
+        else
+            string_printf(s, "Unknown %d", spell->id.effect);
+    }
+    else
+        mon_spell_print(spell, s);
 }
 
 void mon_spell_doc(mon_spell_ptr spell, doc_ptr doc)
@@ -1063,7 +1122,6 @@ mon_spells_ptr mon_spells_alloc(void)
 {
     mon_spells_ptr spells = malloc(sizeof(mon_spells_t));
     memset(spells, 0, sizeof(mon_spells_t));
-    spells->dam_pct = 100;
     return spells;
 }
 
@@ -1335,12 +1393,6 @@ static int _roll(dice_t dice)
         roll += damroll(dice.dd, dice.ds);
     return roll;
 }
-static int _scale(int amt)
-{
-    if (_current.race->spells->dam_pct)
-        amt = amt * _current.race->spells->dam_pct / 100;
-    return amt;
-}
 static int _avg_roll(dice_t dice)
 {
     int roll = dice.base;
@@ -1356,7 +1408,7 @@ static void _ball(void)
     int    flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
 
     assert(_current.spell->parm.tag == MSP_DICE);
-    dam = _scale(_roll(dice));
+    dam = _roll(dice);
     if (!(_current.spell->flags & MSF_BALL0))
     {
         /* XXX This was previously set on a spell by spell basis ... */
@@ -1407,7 +1459,7 @@ static void _bolt(void)
             0,
             _current.dest.y,
             _current.dest.x,
-            _scale(_roll(_current.spell->parm.v.dice)),
+            _roll(_current.spell->parm.v.dice),
             _current.spell->id.effect,
             flags,
             -1
@@ -1422,7 +1474,7 @@ static void _beam(void)
         0,
         _current.dest.y,
         _current.dest.x,
-        _scale(_roll(_current.spell->parm.v.dice)),
+        _roll(_current.spell->parm.v.dice),
         _current.spell->id.effect,
         PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER,
         -1
@@ -1435,8 +1487,6 @@ static void _curse(void)
     dam = _roll(_current.spell->parm.v.dice);
     if (_current.spell->id.effect == GF_HAND_DOOM)
         dam = dam * p_ptr->chp / 100;
-    else
-        dam = _scale(dam);
     project(
         _current.mon->id,
         0,
@@ -2025,7 +2075,7 @@ static void _spell_cast_aux(void)
     case MST_BEAM:    _beam();    break;
     case MST_BIFF:    _biff();    break;
     case MST_BOLT:    _bolt();    break;
-    case MST_BREATHE: _breathe(); break;
+    case MST_BREATH: _breathe(); break;
     case MST_BUFF:    _buff();    break;
     case MST_CURSE:   _curse();   break;
     case MST_ESCAPE:  _escape();  break;
@@ -2067,12 +2117,12 @@ static _custom_msg_t _mon_msg_tbl[] = {
         "",
         "$CASTER throws a syuriken at $TARGET.",
         "You throw a syuriken." },
-    { MON_JAIAN, {MST_BREATHE, GF_SOUND},
+    { MON_JAIAN, {MST_BREATH, GF_SOUND},
         "'Booooeeeeee'",
         "'Booooeeeeee'",
         "'Booooeeeeee'",
         "'Booooeeeeee'" },
-    { MON_BOTEI, {MST_BREATHE, GF_SHARDS},
+    { MON_BOTEI, {MST_BREATH, GF_SHARDS},
         "'Botei-Build cutter!!!'",
         "'Botei-Build cutter!!!'",
         "'Botei-Build cutter!!!'",
@@ -2254,7 +2304,7 @@ static cptr _get_msg(void)
     {
         switch (_current.spell->id.type)
         {
-        case MST_BREATHE:
+        case MST_BREATH:
             msg = _breathe_msg();
             break;
         case MST_BALL:
@@ -2399,7 +2449,7 @@ static bool _blink_check_p(mon_spell_ptr spell)
 {
     switch (spell->id.type)
     {
-    case MST_BREATHE:
+    case MST_BREATH:
     case MST_BALL:
     case MST_BOLT:
     case MST_BEAM:
@@ -2577,7 +2627,7 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     u32b           flags = cast->mon->smart;
 
     if (smart_cheat) flags = 0xFFFFFFFF;
-    _smart_remove_aux(spells->groups[MST_BREATHE], flags);
+    _smart_remove_aux(spells->groups[MST_BREATH], flags);
     _smart_remove_aux(spells->groups[MST_BALL], flags);
     if (_have_smart_flag(flags, SM_REFLETION) && p_ptr->reflect)
         _remove_group(spells->groups[MST_BOLT], NULL);
@@ -2619,7 +2669,7 @@ static void _ai_wounded(mon_spell_cast_ptr cast)
                 biff = 100;
                 _adjust_group(spells->groups[MST_SUMMON], NULL, 100 + buff/3);
             }
-            _adjust_group(spells->groups[MST_BREATHE], NULL, 100 - biff);
+            _adjust_group(spells->groups[MST_BREATH], NULL, 100 - biff);
             _adjust_group(spells->groups[MST_BALL], NULL, 100 - biff);
             _adjust_group(spells->groups[MST_BOLT], NULL, 100 - biff);
             _adjust_group(spells->groups[MST_BEAM], NULL, 100 - biff);
@@ -2676,7 +2726,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         {
             cast->dest = new_dest;
             cast->flags |= MSC_SPLASH;
-            _adjust_group(spells->groups[MST_BREATHE], NULL, 50);
+            _adjust_group(spells->groups[MST_BREATH], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
             _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
@@ -2685,13 +2735,13 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         }
         else
         {
-            _remove_group(spells->groups[MST_BREATHE], NULL);
+            _remove_group(spells->groups[MST_BREATH], NULL);
             _remove_group(spells->groups[MST_BALL], NULL);
             _remove_group(spells->groups[MST_SUMMON], NULL);
             _remove_group(spells->groups[MST_HEAL], NULL);
             _remove_group(spells->groups[MST_ESCAPE], NULL);
             _remove_group(spells->groups[MST_TACTIC], NULL);
-            spell = mon_spells_find(spells, _id(MST_BREATHE, GF_DISINTEGRATE));
+            spell = mon_spells_find(spells, _id(MST_BREATH, GF_DISINTEGRATE));
             if ( spell
               && cast->mon->cdis < MAX_RANGE / 2
               && _disintegrable(cast->src, cast->dest)
@@ -2750,7 +2800,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     spell = mon_spells_find(spells, _id(MST_BOLT, GF_ATTACK));
     if (spell)
     {
-        if (_distance(cast->src, cast->dest) < 2)
+        if (p_ptr->blind || _distance(cast->src, cast->dest) < 2)
             spell->prob = 0;
         else
             spell->prob *= 7;
@@ -2796,7 +2846,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
 
     if (p_ptr->invuln && (cast->flags & MSC_DIRECT))
     {
-        _remove_group(spells->groups[MST_BREATHE], NULL);
+        _remove_group(spells->groups[MST_BREATH], NULL);
         _remove_group(spells->groups[MST_BALL], NULL);
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_group(spells->groups[MST_BEAM], NULL);
@@ -2999,7 +3049,7 @@ static bool _is_attack_spell(mon_spell_ptr spell)
 {
     switch (spell->id.type)
     {
-    case MST_BREATHE: case MST_BALL: case MST_BOLT: case MST_BEAM: case MST_CURSE:
+    case MST_BREATH: case MST_BALL: case MST_BOLT: case MST_BEAM: case MST_CURSE:
         return TRUE;
     }
     return FALSE;
@@ -3008,7 +3058,7 @@ static bool _is_gf_spell(mon_spell_ptr spell)
 {
     switch (spell->id.type)
     {
-    case MST_BREATHE: case MST_BALL: case MST_BOLT: case MST_BEAM:
+    case MST_BREATH: case MST_BALL: case MST_BOLT: case MST_BEAM:
         return TRUE;
     }
     return FALSE;
@@ -3025,33 +3075,38 @@ static int _spell_res(mon_spell_ptr spell)
     return res;
 }
 
-int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
+static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
 {
     if (!_is_attack_spell(spell)) return 0;
     if (spell->parm.tag == MSP_DICE)
     {
         dice_t dice = spell->parm.v.dice;
         int dam = _avg_roll(dice);
-        int scale = r_info[mon->ap_r_idx].spells->dam_pct;
         int res = _spell_res(spell);
-        if (scale)
-            dam = dam * scale / 100;
         if (res)
             dam -= dam * res / 100;
         return dam;
     }
     if (spell->parm.tag == MSP_HP_PCT)
     {
-        hp_pct_t hp = spell->parm.v.hp_pct;
-        int dam = mon->hp * hp.pct / 100;
+        int dam = hp * spell->parm.v.hp_pct.pct / 100;
         int res = _spell_res(spell);
-        if (dam > hp.max) dam = hp.max;
-        if (res) dam -= dam * res / 100;
+        if (dam > spell->parm.v.hp_pct.max)
+            dam = spell->parm.v.hp_pct.max;
+        if (res)
+            dam -= dam * res / 100;
         return dam;
     }
     return 0;
 }
-
+int mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race)
+{
+    return _avg_spell_dam_aux(spell, _avg_hp(race));
+}
+int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
+{
+    return _avg_spell_dam_aux(spell, mon->hp);
+}
 void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
 {
     mon_spell_cast_t cast = {0};

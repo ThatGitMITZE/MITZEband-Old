@@ -393,41 +393,12 @@ static void _display_resists(monster_race *r_ptr, doc_ptr doc)
 static void _display_frequency(monster_race *r_ptr, doc_ptr doc)
 {
     int pct = 0;
-    /* monster_race.freq_spell is often inaccurate and doesn't account for
-     * variable AI strategies (uniques) or to other in-game spell frequency
-     * adjustments (anger_ct or ASC avoidance). Personally, I'd much prefer
-     * to show the actual observed frequency. If you keep your lore for long
-     * (same savefile) then this will be more accurate over time. It will also
-     * more truly reflect your playstyle, and the game's adjustments to that
-     * style (if any). Finally, and this is just personal preference, I prefer
-     * to reset my lore every game. Then, I have a nice handy record of all the
-     * battles I have fought. I can look up uniques and see what they did and
-     * how often they did it. If I remember a tough unique, I can consult the lore
-     * and see ... hmmm, Fangorn tossed boulders on 7 of 8 moves. Showing the
-     * "True Frequency" of 25% is not what I saw, and I really only care about
-     * my actual experiences, not my theoretical ones. But again, this is me, and
-     * I tend to use lore in a backward fashion (after the fact).
-     * Exceptions to my personal preference are for spoilers (ignore) and for
-     * probing. If the player probes a monster, then, in this case, we should indeed
-     * show the r_info spell frequency. At least if it is a new monster that we
-     * have yet to observe in action.
-     * Here is an example:
-     * Spells: 25.00% (11 of 21 moves) (easy_lore turned on)
-     * Spells: 52.38% (11 of 21 moves) (easy_lore turned off)
-     * One of these is grossly inaccurate. People have complained ...
-     * (BTW, _easy_lore() is much broader than easy_lore)
-     *
-     * UPDATE: If a monster has no non-innate attacks, you can correct the frequency
-     * as follows: f = 2 f*f / 100. So, Light Hounds spell 1_IN_5 for f = 20. This
-     * really needs to be f = 2 * 20 * 20 / 100 = 8. cf mspells1.c where I commented
-     * on this oddness (Hengband). Orc shooters are even worse: 1_IN_15 is actually
-     * more like 1 in 139! But 33% casting only goes down to ~22%, which is probably
-     * what is was designed for. */
+    assert(r_ptr->spells);
     if ( spoiler_hack
       || easy_lore
       || (!r_ptr->r_spell_turns && (r_ptr->r_xtra1 & MR1_LORE)) ) /* probing */
     {
-        pct = r_ptr->freq_spell * 100;
+        pct = r_ptr->spells->freq * 100;
     }
     else if (r_ptr->r_spell_turns)
     {
@@ -456,49 +427,63 @@ static void _display_frequency(monster_race *r_ptr, doc_ptr doc)
     }
     doc_newline(doc);
 }
+static bool _is_attack_spell(mon_spell_ptr spell)
+{
+    switch (spell->id.type)
+    {
+    case MST_BREATH: case MST_BALL: case MST_BOLT: case MST_BEAM:
+    case MST_CURSE: return TRUE;
+    }
+    return FALSE;
+}
+static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, vec_ptr v, bool short_names)
+{
+    int i;
+    if (!group) return;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        if (_easy_lore(r_ptr) || spell->lore)
+        {
+            string_ptr s = string_alloc();
+            if (short_names)
+                mon_spell_display(spell, s);
+            else
+                mon_spell_print(spell, s);
+            if (easy_lore || spell->lore > 5)
+            {
+                if (spell->parm.tag && spell->id.type != MST_SUMMON)
+                {
+                    string_append_c(s, ' ');
+                    string_append_c(s, '(');
+                    if (spoiler_hack && !_is_attack_spell(spell))
+                    {
+                        mon_spell_parm_print(&spell->parm, s, r_ptr);
+                        if (spell->id.type == MST_CURSE && spell->id.effect == GF_HAND_DOOM)
+                            string_append_c(s, '%');
+                    }
+                    else
+                        string_printf(s, "%d", mon_spell_avg_dam(spell, r_ptr));
+                    string_append_c(s, ')');
+                }
+            }
+            vec_add(v, s);
+        }
+    }
+}
 static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 {
-    int        i;
-    int        ct = 0;
-    bool       first = TRUE;
-    vec_ptr    v = vec_alloc((vec_free_f)string_free);
+    int            ct = 0;
+    vec_ptr        v = vec_alloc((vec_free_f)string_free);
+    mon_spells_ptr spells = r_ptr->spells;
+
+    assert(spells);
+    _display_frequency(r_ptr, doc);
 
     /* Breaths */
-    const int  flags[RES_MAX] = {
-        RF4_BR_ACID, RF4_BR_ELEC, RF4_BR_FIRE, RF4_BR_COLD, RF4_BR_POIS,
-        RF4_BR_LITE, RF4_BR_DARK, RF4_BR_CONF, RF4_BR_NETH, RF4_BR_NEXU, RF4_BR_SOUN,
-        RF4_BR_SHAR, RF4_BR_CHAO, RF4_BR_DISE, RF4_BR_TIME, -1, -1, -1};
-
-    for (i = 0; i < RES_MAX; i++)
-    {
-        int which = flags[i];
-        if (which >= 0 && (r_ptr->flags4 & which))
-            vec_add(v, _get_res_name(i));
-    }
-    if (r_ptr->flags4 & RF4_BR_INER)
-        vec_add(v, string_copy_s("<color:s>Inertia</color>"));
-    if (r_ptr->flags4 & RF4_BR_GRAV)
-        vec_add(v, string_copy_s("<color:s>Gravity</color>"));
-    if (r_ptr->flags4 & RF4_BR_PLAS)
-        vec_add(v, string_copy_s("<color:R>Plasma</color>"));
-    if (r_ptr->flags4 & RF4_BR_WALL)
-        vec_add(v, string_copy_s("<color:u>Force</color>"));
-    if (r_ptr->flags4 & RF4_BR_MANA)
-        vec_add(v, string_copy_s("<color:B>Mana</color>"));
-    if (r_ptr->flags4 & RF4_BR_NUKE)
-        vec_add(v, string_copy_s("<color:G>Toxic Waste</color>"));
-    if (r_ptr->flags4 & RF4_BR_DISI)
-        vec_add(v, string_copy_s("<color:s>Disintegration</color>"));
-    if (r_ptr->flags4 & RF4_BR_STORM)
-        vec_add(v, string_copy_s("<color:b>Storm</color>"));
-
+    _display_spell_group(r_ptr, spells->groups[MST_BREATH], v, TRUE);
     if (vec_length(v))
     {
-        if (first)
-        {
-            _display_frequency(r_ptr, doc);
-            first = FALSE;
-        }
         doc_insert(doc, "Breathe : <indent><style:indent>");
         _print_list(v, doc, ',', '\0');
         doc_insert(doc, "</style></indent>\n");
@@ -507,95 +492,24 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Offense */
     vec_clear(v);
-
-    if (r_ptr->flags4 & RF4_ROCKET)
-        vec_add(v, string_copy_s("<color:u>Rocket</color>"));
-    if (r_ptr->flags4 & RF4_SHOOT)
-        vec_add(v, string_copy_s("<color:u>Fire Arrow</color>"));
-
-    if (r_ptr->flags5 & RF5_BA_ACID)
-        vec_add(v, string_copy_s("<color:g>Acid Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_ELEC)
-        vec_add(v, string_copy_s("<color:b>Lightning Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_FIRE)
-        vec_add(v, string_copy_s("<color:r>Fire Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_COLD)
-        vec_add(v, string_copy_s("<color:W>Frost Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_POIS)
-        vec_add(v, string_copy_s("<color:G>Poison Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_NETH)
-        vec_add(v, string_copy_s("<color:D>Nether Ball</color>"));
-    if (r_ptr->flags5 & RF5_BA_WATE)
-        vec_add(v, string_copy_s("<color:b>Water Ball</color>"));
-    if (r_ptr->flags4 & RF4_BA_NUKE)
-        vec_add(v, string_copy_s("<color:G>Ball of Radiation</color>"));
-    if (r_ptr->flags4 & RF4_THROW)
-        vec_add(v, string_copy_s("<color:s>Throw Boulder</color>"));
-    if (r_ptr->flags5 & RF5_BA_MANA)
-        vec_add(v, string_copy_s("<color:B>Mana Storm</color>"));
-    if (r_ptr->flags5 & RF5_BA_DARK)
-        vec_add(v, string_copy_s("<color:D>Darkness Storm</color>"));
-    if (r_ptr->flags5 & RF5_BA_LITE)
-        vec_add(v, string_copy_s("<color:y>Starburst</color>"));
-    if (r_ptr->flags4 & RF4_BA_CHAO)
-        vec_add(v, string_copy_s("<color:v>Invoke Logrus</color>"));
-    if (r_ptr->flags6 & RF6_HAND_DOOM)
-        vec_add(v, string_copy_s("<color:v>Hand of Doom</color>"));
-    if (r_ptr->flags6 & RF6_PSY_SPEAR)
-        vec_add(v, string_copy_s("<color:y>Psycho-spear</color>"));
-    if (r_ptr->flags5 & RF5_DRAIN_MANA)
-        vec_add(v, string_copy_s("<color:s>Drain Mana</color>"));
-    if (r_ptr->flags5 & RF5_MIND_BLAST)
-        vec_add(v, string_copy_s("<color:R>Mind Blast</color>"));
-    if (r_ptr->flags5 & RF5_BRAIN_SMASH)
-        vec_add(v, string_copy_s("<color:r>Brain Smash</color>"));
-    if (r_ptr->flags5 & RF5_CAUSE_1)
-        vec_add(v, string_copy_s("<color:W>Cause Light Wounds</color>"));
-    if (r_ptr->flags5 & RF5_CAUSE_2)
-        vec_add(v, string_copy_s("<color:W>Cause Serious Wounds</color>"));
-    if (r_ptr->flags5 & RF5_CAUSE_3)
-        vec_add(v, string_copy_s("<color:W>Cause Critical Wounds</color>"));
-    if (r_ptr->flags5 & RF5_CAUSE_4)
-        vec_add(v, string_copy_s("<color:W>Cause Mortal Wounds</color>"));
-    if (r_ptr->flags5 & RF5_BO_ACID)
-        vec_add(v, string_copy_s("<color:g>Acid Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_ELEC)
-        vec_add(v, string_copy_s("<color:b>Lightning Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_FIRE)
-        vec_add(v, string_copy_s("<color:r>Fire Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_COLD)
-        vec_add(v, string_copy_s("<color:W>Frost Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_NETH)
-        vec_add(v, string_copy_s("<color:D>Nether Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_WATE)
-        vec_add(v, string_copy_s("<color:b>Water Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_MANA)
-        vec_add(v, string_copy_s("<color:B>Mana Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_PLAS)
-        vec_add(v, string_copy_s("<color:R>Plasma Bolt</color>"));
-    if (r_ptr->flags5 & RF5_BO_ICEE)
-        vec_add(v, string_copy_s("<color:w>Ice Bolt</color>"));
-    if (r_ptr->flags5 & RF5_MISSILE)
-        vec_add(v, string_copy_s("<color:s>Magic Missile</color>"));
-    if (r_ptr->flags5 & RF5_SCARE)
-        vec_add(v, string_copy_s("<color:s>Terrify</color>"));
-    if (r_ptr->flags5 & RF5_BLIND)
-        vec_add(v, string_copy_s("<color:D>Blind</color>"));
-    if (r_ptr->flags5 & RF5_CONF)
-        vec_add(v, string_copy_s("<color:U>Confuse</color>"));
-    if (r_ptr->flags5 & RF5_SLOW)
-        vec_add(v, string_copy_s("<color:u>Slow</color>"));
-    if (r_ptr->flags5 & RF5_HOLD)
-        vec_add(v, string_copy_s("<color:r>Paralyze</color>"));
-
+    _display_spell_group(r_ptr, spells->groups[MST_BALL], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_BOLT], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_BEAM], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_CURSE], v, FALSE);
     if (vec_length(v))
     {
-        if (first)
-        {
-            _display_frequency(r_ptr, doc);
-            first = FALSE;
-        }
         doc_insert(doc, "Offense : <indent><style:indent>");
+        _print_list(v, doc, ',', '\0');
+        doc_insert(doc, "</style></indent>\n");
+        ct += vec_length(v);
+    }
+
+    /* Annoy */
+    vec_clear(v);
+    _display_spell_group(r_ptr, spells->groups[MST_ANNOY], v, FALSE);
+    if (vec_length(v))
+    {
+        doc_insert(doc, "Annoy   : <indent><style:indent>");
         _print_list(v, doc, ',', '\0');
         doc_insert(doc, "</style></indent>\n");
         ct += vec_length(v);
@@ -603,62 +517,14 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Defense */
     vec_clear(v);
-
-    if (r_ptr->flags4 & RF4_SHRIEK)
-        vec_add(v, string_copy_s("<color:W>Shriek</color>"));
-    if (r_ptr->flags6 & RF6_HASTE)
-        vec_add(v, string_copy_s("<color:G>Haste Self</color>"));
-    if (r_ptr->flags6 & RF6_HEAL)
-        vec_add(v, string_copy_s("<color:w>Heal Self</color>"));
-    if (r_ptr->flags6 & RF6_INVULNER)
-        vec_add(v, string_copy_s("<color:w>Invulnerability</color>"));
-    if (r_ptr->flags4 & RF4_DISPEL)
-        vec_add(v, string_copy_s("<color:W>Dispel Magic</color>"));
-    if (r_ptr->flags4 & RF4_ANTI_MAGIC)
-        vec_add(v, string_copy_s("<color:W>Anti-magic</color>"));
-    if (r_ptr->flags4 & RF4_POLY)
-        vec_add(v, string_copy_s("<color:R>Polymorph</color>"));
-    if (r_ptr->flags6 & RF6_BLINK)
-        vec_add(v, string_copy_s("<color:u>Blink Self</color>"));
-    if (r_ptr->flags6 & RF6_TPORT)
-        vec_add(v, string_copy_s("<color:o>Teleport Self</color>"));
-    if (r_ptr->flags6 & RF6_WORLD)
-        vec_add(v, string_copy_s("<color:B>Stop Time</color>"));
-    if (r_ptr->flags6 & RF6_TELE_TO)
-        vec_add(v, string_copy_s("<color:U>Teleport To</color>"));
-    if (r_ptr->flags6 & RF6_TELE_AWAY)
-        vec_add(v, string_copy_s("<color:u>Teleport Away</color>"));
-    if (r_ptr->flags6 & RF6_TELE_LEVEL)
-        vec_add(v, string_copy_s("<color:o>Teleport Level</color>"));
-    if (r_ptr->flags6 & RF6_DARKNESS)
-    {
-        if ( p_ptr->pclass != CLASS_NINJA
-          || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE))
-          || (r_ptr->flags7 & RF7_DARK_MASK) )
-        {
-            vec_add(v, string_copy_s("<color:D>Create Darkness</color>"));
-        }
-        else
-        {
-            vec_add(v, string_copy_s("<color:y>Create Light</color>"));
-        }
-    }
-    if (r_ptr->flags6 & RF6_TRAPS)
-        vec_add(v, string_copy_s("<color:b>Create Traps</color>"));
-    if (r_ptr->flags6 & RF6_FORGET)
-        vec_add(v, string_copy_s("<color:b>Cause Amnesia</color>"));
-    if (r_ptr->flags6 & RF6_RAISE_DEAD)
-        vec_add(v, string_copy_s("<color:r>Raise Dead</color>"));
-    if (r_ptr->flags6 & RF6_SPECIAL)
-        vec_add(v, string_copy_s("<color:v>Special</color>"));
-
+    _display_spell_group(r_ptr, spells->groups[MST_BUFF], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_BIFF], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_HEAL], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_ESCAPE], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_TACTIC], v, FALSE);
+    _display_spell_group(r_ptr, spells->groups[MST_WEIRD], v, FALSE);
     if (vec_length(v))
     {
-        if (first)
-        {
-            _display_frequency(r_ptr, doc);
-            first = FALSE;
-        }
         doc_insert(doc, "Defense : <indent><style:indent>");
         _print_list(v, doc, ',', '\0');
         doc_insert(doc, "</style></indent>\n");
@@ -667,46 +533,9 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
 
     /* Summoning */
     vec_clear(v);
-    if (r_ptr->flags6 & RF6_S_MONSTER)
-        vec_add(v, string_copy_s("<color:s>Monster</color>"));
-    if (r_ptr->flags6 & RF6_S_MONSTERS)
-        vec_add(v, string_copy_s("<color:W>Monsters</color>"));
-    if (r_ptr->flags6 & RF6_S_KIN)
-        vec_add(v, string_copy_s("<color:o>Aid</color>"));
-    if (r_ptr->flags6 & RF6_S_ANT)
-        vec_add(v, string_copy_s("<color:r>Ants</color>"));
-    if (r_ptr->flags6 & RF6_S_SPIDER)
-        vec_add(v, string_copy_s("<color:D>Spiders</color>"));
-    if (r_ptr->flags6 & RF6_S_HOUND)
-        vec_add(v, string_copy_s("<color:U>Hounds</color>"));
-    if (r_ptr->flags6 & RF6_S_HYDRA)
-        vec_add(v, string_copy_s("<color:G>Hydras</color>"));
-    if (r_ptr->flags6 & RF6_S_ANGEL)
-        vec_add(v, string_copy_s("<color:y>Angel</color>"));
-    if (r_ptr->flags6 & RF6_S_DEMON)
-        vec_add(v, string_copy_s("<color:r>Demon</color>"));
-    if (r_ptr->flags6 & RF6_S_UNDEAD)
-        vec_add(v, string_copy_s("<color:D>Undead</color>"));
-    if (r_ptr->flags6 & RF6_S_DRAGON)
-        vec_add(v, string_copy_s("<color:o>Dragon</color>"));
-    if (r_ptr->flags6 & RF6_S_HI_UNDEAD)
-        vec_add(v, string_copy_s("<color:D>Greater Undead</color>"));
-    if (r_ptr->flags6 & RF6_S_HI_DRAGON)
-        vec_add(v, string_copy_s("<color:o>Ancient Dragons</color>"));
-    if (r_ptr->flags6 & RF6_S_CYBER)
-        vec_add(v, string_copy_s("<color:u>Cyberdemons</color>"));
-    if (r_ptr->flags6 & RF6_S_AMBERITES)
-        vec_add(v, string_copy_s("<color:v>Lords of Amber</color>"));
-    if (r_ptr->flags6 & RF6_S_UNIQUE)
-        vec_add(v, string_copy_s("<color:v>Uniques</color>"));
-
+    _display_spell_group(r_ptr, spells->groups[MST_SUMMON], v, FALSE);
     if (vec_length(v))
     {
-        if (first)
-        {
-            _display_frequency(r_ptr, doc);
-            first = FALSE;
-        }
         doc_insert(doc, "Summon  : <indent><style:indent>");
         _print_list(v, doc, ',', '\0');
         doc_insert(doc, "</style></indent>\n");
@@ -1109,7 +938,7 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
 
     _display_basic(&copy, doc);
     _display_resists(&copy, doc);
-    _display_spells(&copy, doc);
+    if (copy.spells) _display_spells(&copy, doc);
     _display_attacks(&copy, doc);
     _display_other(&copy, doc);
     _display_kills(&copy, doc);

@@ -3930,8 +3930,6 @@ static errr parse_mon_spells(char *buf, mon_race_ptr race)
             race->spells->freq = 100 / n;
         else if (1 == sscanf(token, "FREQ_%d", &n))
             race->spells->freq = n;
-        else if (1 == sscanf(token, "POWER_%d", &n))
-            race->spells->dam_pct = n;
         else
         {
             rc = mon_spells_parse(race->spells, race->level, token);

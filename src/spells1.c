@@ -25,7 +25,7 @@ int project_length = 0;
 bool allow_ticked_off(monster_race *r_ptr)
 {
     if (!r_ptr->spells) return FALSE;
-    if ( r_ptr->spells->groups[MST_BREATHE]
+    if ( r_ptr->spells->groups[MST_BREATH]
       || r_ptr->spells->groups[MST_BALL]
       || r_ptr->spells->groups[MST_BOLT]
       || r_ptr->spells->groups[MST_BEAM]

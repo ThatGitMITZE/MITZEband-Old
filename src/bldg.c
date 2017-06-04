@@ -1207,6 +1207,16 @@ static bool gamble_comm(int cmd)
     return (TRUE);
 }
 
+static bool _has_attack_spells(mon_race_ptr race)
+{
+    if (!race->spells) return FALSE;
+    if (race->spells->groups[MST_BREATH]) return TRUE;
+    if (race->spells->groups[MST_BALL]) return TRUE;
+    if (race->spells->groups[MST_BOLT]) return TRUE;
+    if (race->spells->groups[MST_BEAM]) return TRUE;
+    if (race->spells->groups[MST_CURSE]) return TRUE;
+    return FALSE;
+}
 static bool vault_aux_battle(int r_idx)
 {
     int i, j;
@@ -1236,10 +1246,10 @@ static bool vault_aux_battle(int r_idx)
                 dam += r_ptr->blows[i].effects[j].dd;
         }
     }
-    if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
+    if (!dam && !_has_attack_spells(r_ptr))
+        return FALSE;
 
-    /* Okay */
-    return (TRUE);
+    return TRUE;
 }
 
 void battle_monsters(void)
