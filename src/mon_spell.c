@@ -1147,6 +1147,7 @@ void mon_spells_add(mon_spells_ptr spells, mon_spell_ptr spell)
     if (!group)
     {
         group = mon_spell_group_alloc();
+        group->type = spell->id.type;
         spells->groups[spell->id.type] = group;
     }
     mon_spell_group_add(group, spell);

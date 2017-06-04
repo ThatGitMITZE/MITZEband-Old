@@ -934,14 +934,12 @@ static void _display_speed(doc_ptr doc, int speed)
 }
 
 static int _avg_dam_roll(int dd, int ds) { return dd * (ds + 1) / 2; }
-static int _avg_dam(int dd, int ds, int xtra, int mult)
+static int _mon_hp(mon_race_ptr r)
 {
-    int d = _avg_dam_roll(dd, ds);
-    d += xtra;
-    d *= mult;
-    return d;
+    if (r->flags1 & RF1_FORCE_MAXHP)
+        return r->hdice * r->hside;
+    return _avg_dam_roll(r->hdice, r->hside);
 }
-static int _max_breath(int hp, int div, int max) { return MIN(hp/div, max); }
 
 typedef struct {
     int dam[RES_MAX];
@@ -965,8 +963,6 @@ static void _add_spell_dam(_spell_dam_info_ptr info, int which, int amt)
     }
     else
     {
-        int pct = res_pct_known(which);
-        amt -= amt * pct / 100;
         if (info->dam[which] < amt)
             info->dam[which] = amt;
     }
@@ -995,140 +991,80 @@ static void _add_curse_dam(_spell_dam_info_ptr info, mon_race_ptr mon, int amt)
 
 static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
 {
+    int                 i;
     _spell_dam_info_ptr info = _spell_dam_info_alloc();
-    int                 hp = 0;
-    bool                powerful = FALSE;
-    int                 power_mult = powerful ? 2 : 1; /* elemental balls and bolts */
-    int                 power_mult2 = powerful ? 3 : 2; /* some high level balls */
-    int                 power_div = powerful ? 2 : 3; /* cause, you know, diversity is a good thing */
+    mon_spells_ptr      spells = r->spells;
+    mon_spell_group_ptr group;
 
-    if (r->flags1 & RF1_FORCE_MAXHP)
-        hp = r->hdice * r->hside;
-    else
-        hp = r->hdice * (1 + r->hside)/2;
-
-    /* Damage Logic Duplicated from mspells1.c */
-    if (r->flags4 & RF4_ROCKET)
-        _add_spell_dam(info, RES_SHARDS, _max_breath(hp, 6, 600));
-    if (r->flags4 & RF4_BR_ACID)
-        _add_spell_dam(info, RES_ACID, _max_breath(hp, 5, 900));
-    if (r->flags4 & RF4_BR_ELEC)
-        _add_spell_dam(info, RES_ELEC, _max_breath(hp, 5, 900));
-    if (r->flags4 & RF4_BR_FIRE)
-        _add_spell_dam(info, RES_FIRE, _max_breath(hp, 5, 900));
-    if (r->flags4 & RF4_BR_COLD)
-        _add_spell_dam(info, RES_COLD, _max_breath(hp, 5, 900));
-    if (r->flags4 & RF4_BR_POIS)
-        _add_spell_dam(info, RES_POIS, _max_breath(hp, 6, 600));
-    if (r->flags4 & RF4_BR_NETH)
-        _add_spell_dam(info, RES_NETHER, _max_breath(hp, 7, 550));
-    if (r->flags4 & RF4_BR_LITE)
-        _add_spell_dam(info, RES_LITE, _max_breath(hp, 6, 400));
-    if (r->flags4 & RF4_BR_DARK)
-        _add_spell_dam(info, RES_DARK, _max_breath(hp, 6, 400));
-    if (r->flags4 & RF4_BR_CONF)
-        _add_spell_dam(info, RES_CONF, _max_breath(hp, 6, 400));
-    if (r->flags4 & RF4_BR_SOUN)
-        _add_spell_dam(info, RES_SOUND, _max_breath(hp, 6, 450));
-    if (r->flags4 & RF4_BR_CHAO)
-        _add_spell_dam(info, RES_CHAOS, _max_breath(hp, 6, 600));
-    if (r->flags4 & RF4_BR_DISE)
-        _add_spell_dam(info, RES_DISEN, _max_breath(hp, 6, 500));
-    if (r->flags4 & RF4_BR_NEXU)
-        _add_spell_dam(info, RES_NEXUS, _max_breath(hp, 3, 250));
-    if (r->flags4 & RF4_BR_SHAR)
-        _add_spell_dam(info, RES_SHARDS, _max_breath(hp, 6, 500));
-    if (r->flags4 & RF4_BR_NUKE)
-        _add_spell_dam(info, RES_POIS, _max_breath(hp, 6, 600));
-
-
-    if (r->flags5 & RF5_BA_ACID)
-        _add_spell_dam(info, RES_ACID, _avg_dam(1, 3*r->level, 15, power_mult));
-    if (r->flags5 & RF5_BA_ELEC)
-        _add_spell_dam(info, RES_ELEC, _avg_dam(1, 3*r->level/2, 8, power_mult));
-    if (r->flags5 & RF5_BA_FIRE)
-        _add_spell_dam(info, RES_FIRE, _avg_dam(1, 7*r->level/2, 10, power_mult));
-    if (r->flags5 & RF5_BA_COLD)
-        _add_spell_dam(info, RES_COLD, _avg_dam(1, 3*r->level/2, 10, power_mult));
-    if (r->flags5 & RF5_BA_POIS)
-        _add_spell_dam(info, RES_POIS, _avg_dam(12, 2, 0, power_mult));
-    if (r->flags4 & RF4_BA_NUKE)
-        _add_spell_dam(info, RES_POIS, _avg_dam(10, 6, r->level, power_mult));
-    if (r->flags5 & RF5_BA_NETH)
-        _add_spell_dam(info, RES_NETHER, _avg_dam_roll(10, 10) + 50 + r->level*power_mult);
-
-    if (r->flags5 & RF5_BO_ACID)
-        _add_bolt_dam(info, RES_ACID, _avg_dam(7, 8, r->level/3, power_mult));
-    if (r->flags5 & RF5_BO_ELEC)
-        _add_bolt_dam(info, RES_ELEC, _avg_dam(4, 8, r->level/3, power_mult));
-    if (r->flags5 & RF5_BO_FIRE)
-        _add_bolt_dam(info, RES_FIRE, _avg_dam(9, 8, r->level/3, power_mult));
-    if (r->flags5 & RF5_BO_COLD)
-        _add_bolt_dam(info, RES_COLD, _avg_dam(6, 8, r->level/3, power_mult));
-    if (r->flags5 & RF5_BO_ICEE)
-        _add_bolt_dam(info, RES_COLD, _avg_dam_roll(6, 6) + r->level * 3 / power_div);
-    if (r->flags5 & RF5_BO_NETH)
-        _add_bolt_dam(info, RES_NETHER, 30 + _avg_dam_roll(5, 5) + r->level * 4 / power_div);
-
-    if (r->flags5 & RF5_BA_DARK)
-        _add_spell_dam(info, RES_DARK, _avg_dam_roll(10, 10) + r->level*4 + 50);
-    if (r->flags5 & RF5_BA_LITE)
-        _add_spell_dam(info, RES_LITE, _avg_dam_roll(10, 10) + r->level*4 + 50);
-    if (r->flags4 & RF4_BA_CHAO)
-        _add_spell_dam(info, RES_CHAOS, _avg_dam_roll(10, 10) + r->level*power_mult2);
-
-    if (r->flags4 & RF4_THROW)
-        _add_spell_dam(info, RES_INVALID, r->level*3);
-    if (r->flags4 & RF4_BR_STORM)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 7, 300));
-    if (r->flags4 & RF4_BR_INER)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 6, 200));
-    if (r->flags4 & RF4_BR_GRAV)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 200));
-    if (r->flags4 & RF4_BR_PLAS)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 6, 200));
-    if (r->flags4 & RF4_BR_WALL)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 200));
-    if (r->flags4 & RF4_BR_MANA)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 250));
-    if (r->flags4 & RF4_BR_DISI)
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 6, 150));
-    if (r->flags4 & RF4_BR_TIME) /* XXX RES_TIME, but its so rare and there's no report column */
-        _add_spell_dam(info, RES_INVALID, _max_breath(hp, 3, 150));
-
-    if (r->flags5 & RF5_MIND_BLAST)
-        _add_curse_dam(info, r, _avg_dam_roll(7, 7));
-    if (r->flags5 & RF5_BRAIN_SMASH)
-        _add_curse_dam(info, r, _avg_dam_roll(12, 12));
-    if (r->flags5 & RF5_CAUSE_1)
-        _add_curse_dam(info, r, _avg_dam_roll(3, 8));
-    if (r->flags5 & RF5_CAUSE_2)
-        _add_curse_dam(info, r, _avg_dam_roll(8, 8));
-    if (r->flags5 & RF5_CAUSE_3)
-        _add_curse_dam(info, r, _avg_dam_roll(10, 15));
-    if (r->flags5 & RF5_CAUSE_4)
-        _add_curse_dam(info, r, _avg_dam_roll(15, 15));
-    if (r->flags5 & RF5_MISSILE)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(2, 6) + r->level/3);
-
-    if (r->flags5 & RF5_BA_WATE)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(1, r->level*power_mult2) +  50);
-    if (r->flags5 & RF5_BO_WATE)
-        _add_bolt_dam(info, RES_INVALID, _avg_dam_roll(10, 10) + r->level * 3 / power_div);
-    if (r->flags5 & RF5_BO_PLAS)
-        _add_bolt_dam(info, RES_INVALID, 10 + _avg_dam_roll(8, 7) + r->level * 3 / power_div);
-    if (r->flags5 & RF5_BO_MANA)
-        _add_bolt_dam(info, RES_INVALID, _avg_dam_roll(1, 7*r->level/2) + 50);
-    if (r->flags5 & RF5_BA_MANA)
-        _add_spell_dam(info, RES_INVALID, _avg_dam_roll(10, 10) + r->level*4 + 50);
-    if (r->flags6 & RF6_HAND_DOOM)
-        _add_curse_dam(info, r, p_ptr->chp/2);
-    if (r->flags6 & RF6_PSY_SPEAR)
+    if (!spells) return info;
+    group = spells->groups[MST_BREATH];
+    if (group)
     {
-        _add_spell_dam(info, RES_INVALID, powerful ?  (_avg_dam_roll(1, 2*r->level) + 150)
-                                          :  (_avg_dam_roll(1, 3*r->level/2) + 100));
+        for (i = 0; i < group->count; i++)
+        {
+            mon_spell_ptr spell = &group->spells[i];
+            int           dam = mon_spell_avg_dam(spell, r);
+            gf_info_ptr   gf = gf_lookup(spell->id.effect);
+            int           res = RES_INVALID;
+            if (gf) res = gf->resist;
+            _add_spell_dam(info, res, dam);
+        }
     }
-
+    group = spells->groups[MST_BALL];
+    if (group)
+    {
+        for (i = 0; i < group->count; i++)
+        {
+            mon_spell_ptr spell = &group->spells[i];
+            int           dam = mon_spell_avg_dam(spell, r);
+            gf_info_ptr   gf = gf_lookup(spell->id.effect);
+            int           res = RES_INVALID;
+            if (gf) res = gf->resist;
+            if ( spell->id.effect == GF_MIND_BLAST
+              || spell->id.effect == GF_BRAIN_SMASH )
+            {
+                _add_curse_dam(info, r, dam);
+            }
+            else
+                _add_spell_dam(info, res, dam);
+        }
+    }
+    group = spells->groups[MST_BOLT];
+    if (group)
+    {
+        for (i = 0; i < group->count; i++)
+        {
+            mon_spell_ptr spell = &group->spells[i];
+            int           dam = mon_spell_avg_dam(spell, r);
+            gf_info_ptr   gf = gf_lookup(spell->id.effect);
+            int           res = RES_INVALID;
+            if (gf) res = gf->resist;
+            _add_bolt_dam(info, res, dam);
+        }
+    }
+    group = spells->groups[MST_BEAM];
+    if (group)
+    {
+        for (i = 0; i < group->count; i++)
+        {
+            mon_spell_ptr spell = &group->spells[i];
+            int           dam = mon_spell_avg_dam(spell, r);
+            gf_info_ptr   gf = gf_lookup(spell->id.effect);
+            int           res = RES_INVALID;
+            if (gf) res = gf->resist;
+            _add_spell_dam(info, res, dam);
+        }
+    }
+    group = spells->groups[MST_CURSE];
+    if (group)
+    {
+        for (i = 0; i < group->count; i++)
+        {
+            mon_spell_ptr spell = &group->spells[i];
+            int           dam = mon_spell_avg_dam(spell, r);
+            _add_curse_dam(info, r, dam);
+        }
+    }
     return info;
 }
 
@@ -1162,17 +1098,17 @@ static void _spoil_mon_spell_dam_aux(doc_ptr doc, vec_ptr v)
         else if (r->id > 1132)
             color = 'B';
         doc_printf(doc, "<color:%c>%-20.20s</color> %3d %5d", color, r_name + r->name, r->level, hp);
-        if (r->freq_spell)
+        if (r->spells)
         {
             char color;
-            if (r->freq_spell > 70) color = 'v';
-            else if (r->freq_spell >= 50) color = 'r';
-            else if (r->freq_spell >= 40) color = 'R';
-            else if (r->freq_spell >= 30) color = 'o';
-            else if (r->freq_spell >= 20) color = 'y';
-            else if (r->freq_spell >= 10) color = 'U';
+            if (r->spells->freq > 70) color = 'v';
+            else if (r->spells->freq >= 50) color = 'r';
+            else if (r->spells->freq >= 40) color = 'R';
+            else if (r->spells->freq >= 30) color = 'o';
+            else if (r->spells->freq >= 20) color = 'y';
+            else if (r->spells->freq >= 10) color = 'U';
             else color = 'w';
-            doc_printf(doc, " <color:%c>%3d%%</color>", color, r->freq_spell);
+            doc_printf(doc, " <color:%c>%3d%%</color>", color, r->spells->freq);
         }
         else
             doc_insert(doc, "     ");
@@ -1190,13 +1126,6 @@ typedef struct {
     int reduced;  /* HURT, SUPERHURT, SHATTER reduce by player's AC */
     int effective;/* account for 'dodge rate' (ie melee accuracy) */
 } _melee_dam_t;
-
-static int _mon_hp(mon_race_ptr r)
-{
-    if (r->flags1 & RF1_FORCE_MAXHP)
-        return r->hdice * r->hside;
-    return _avg_dam_roll(r->hdice, r->hside);
-}
 
 typedef struct {
     mon_race_ptr mon;
@@ -1314,6 +1243,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
     int j, k, blows = 0;
     int ac = p_ptr->ac + p_ptr->to_a;
     int ac2 = 3*ac/4;
+    int freq = r->spells ? r->spells->freq : 0;
     _mon_dam_info_ptr info = malloc(sizeof(_mon_dam_info_t));
     memset(info, 0, sizeof(_mon_dam_info_t));
 
@@ -1326,7 +1256,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         mon_blow_ptr blow = &r->blows[j];
         int skill, chance;
 
-        if (r->freq_spell == 100) break;
+        if (freq == 100) break;
         if (!blow->method) continue;
         if (blow->method == RBM_EXPLODE) continue;
 
@@ -1417,11 +1347,11 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
         }
     }
     if (info->spells->count)
-        info->nasty1 += (info->spells->total / info->spells->count) * r->freq_spell/100;
-    info->nasty1 += info->melee2.effective * (100 - r->freq_spell)/100;
+        info->nasty1 += (info->spells->total / info->spells->count) * freq/100;
+    info->nasty1 += info->melee2.effective * (100 - freq)/100;
 
     if (info->spells->count)
-        info->nasty2 += (info->spells->total / info->spells->count) * MIN(100, r->freq_spell + 12)/100;
+        info->nasty2 += (info->spells->total / info->spells->count) * MIN(100, freq + 12)/100;
 
     if (1)
     {
