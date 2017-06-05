@@ -1244,7 +1244,7 @@ static bool vault_aux_giant(int r_idx)
 
     if (!vault_monster_okay(r_idx)) return (FALSE);
     if (!(r_ptr->flags3 & RF3_GIANT)) return (FALSE);
-    if (r_ptr->flags4 & RF4_THROW) return FALSE;
+    /*if (r_ptr->flags4 & RF4_THROW) return FALSE;*/
     if (r_ptr->flags3 & RF3_GOOD) return (FALSE);
     if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
 
@@ -1266,7 +1266,7 @@ static bool vault_aux_dragon(int r_idx)
     if (!(r_ptr->flags3 & RF3_DRAGON)) return (FALSE);
 
     /* Hack -- Require correct "breath attack" */
-    if (r_ptr->flags4 != vault_aux_dragon_mask4) return (FALSE);
+    /*if (r_ptr->flags4 != vault_aux_dragon_mask4) return (FALSE);*/
 
     /* Decline undead */
     if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
@@ -1358,6 +1358,7 @@ static void vault_prep_symbol(void)
  */
 static void vault_prep_dragon(void)
 {
+    #if 0
     /* Pick dragon type */
     switch (randint0(6))
     {
@@ -1423,6 +1424,7 @@ static void vault_prep_dragon(void)
             break;
         }
     }
+    #endif
 }
 
 

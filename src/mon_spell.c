@@ -3349,4 +3349,135 @@ void mon_spells_save(mon_spells_ptr spells, savefile_ptr file)
     savefile_write_byte(file, 0xFF);
 }
 
+/*************************************************************************
+ * Queries that belong in mon.h.
+ ************************************************************************/
+bool mon_has_spell_type(mon_ptr mon, int type)
+{
+    return mon_race_has_spell_type(_race(mon), type);
+}
+bool mon_race_has_spell_type(mon_race_ptr race, int type)
+{
+    if (!race->spells) return FALSE;
+    return race->spells->groups[type] != NULL;
+}
+bool mon_has_summon_spell(mon_ptr mon)
+{
+    return mon_has_spell_type(mon, MST_SUMMON);
+}
+bool mon_race_has_summon_spell(mon_race_ptr race)
+{
+    return mon_race_has_spell_type(race, MST_SUMMON);
+}
+bool mon_has_attack_spell(mon_ptr mon)
+{
+    return mon_race_has_attack_spell(_race(mon));
+}
+bool mon_race_has_attack_spell(mon_race_ptr race)
+{
+    return mon_race_has_spell_type(race, MST_BREATH)
+        || mon_race_has_spell_type(race, MST_BALL)
+        || mon_race_has_spell_type(race, MST_BOLT)
+        || mon_race_has_spell_type(race, MST_BEAM)
+        || mon_race_has_spell_type(race, MST_CURSE);
+}
+bool mon_has_worthy_attack_spell(mon_ptr mon)
+{
+    return mon_race_has_worthy_attack_spell(_race(mon));
+}
+bool mon_race_has_worthy_attack_spell(mon_race_ptr race)
+{
+    /* XXX */
+    return mon_race_has_attack_spell(race);
+}
+int mon_spell_freq(mon_ptr mon)
+{
+    return mon_race_spell_freq(_race(mon));
+}
+int mon_race_spell_freq(mon_race_ptr race)
+{
+    if (!race->spells) return 0;
+    return race->spells->freq;
+}
+bool mon_is_magical(mon_ptr mon)
+{
+    return mon_race_is_magical(_race(mon));
+}
+bool mon_race_is_magical(mon_race_ptr race)
+{
+    int i, j;
+    if (!race->spells) return FALSE;
+    for (i = MST_BALL; i < MST_COUNT; i++) /* assume all MST_BREATH spells are innate */
+    {
+        mon_spell_group_ptr group = race->spells->groups[i];
+        if (!group) continue;
+        for (j = 0; j < group->count; j++)
+        {
+            mon_spell_ptr spell = &group->spells[j];
+            if (!(spell->flags & MSF_INNATE)) return TRUE;
+        }
+    }
+    return FALSE;
+}
+bool mon_has_innate_spell(mon_ptr mon) /* for anti-magic caves */
+{
+    return mon_race_has_innate_spell(_race(mon));
+}
+bool mon_race_has_innate_spell(mon_race_ptr race)
+{
+    int i, j;
+    if (!race->spells) return FALSE;
+    for (i = MST_BREATH; i < MST_COUNT; i++)
+    {
+        mon_spell_group_ptr group = race->spells->groups[i];
+        if (!group) continue;
+        for (j = 0; j < group->count; j++)
+        {
+            mon_spell_ptr spell = &group->spells[j];
+            if (spell->flags & MSF_INNATE) return TRUE;
+        }
+    }
+    return FALSE;
+}
+bool mon_race_has_invulnerability(mon_race_ptr race)
+{
+    if (!race->spells) return FALSE;
+    return mon_spells_find(race->spells, _id(MST_BUFF, BUFF_INVULN)) != NULL;
+}
+bool mon_race_has_healing(mon_race_ptr race)
+{
+    if (!race->spells) return FALSE;
+    return mon_spells_find(race->spells, _id(MST_HEAL, HEAL_SELF)) != NULL;
+}
+bool mon_race_has_drain_mana(mon_race_ptr race)
+{
+    if (!race->spells) return FALSE;
+    return mon_spells_find(race->spells, _id(MST_BALL, GF_DRAIN_MANA)) != NULL;
+}
+bool mon_race_can_summon(mon_race_ptr race, int summon_type)
+{
+    mon_spell_group_ptr group;
+    int                i;
+    if (!race->spells) return FALSE;
+    group = race->spells->groups[MST_SUMMON];
+    if (!group) return FALSE;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        if (spell->id.effect == summon_type) return TRUE;
+    }
+    return FALSE;
+}
+bool mon_race_can_teleport(mon_race_ptr race)
+{
+    if (!race->spells) return FALSE;
+    return mon_spells_find(race->spells, _id(MST_ESCAPE, ESCAPE_TELE_SELF)) != NULL;
+}
+bool mon_race_has_lite_dark_spell(mon_race_ptr race) /* glass castle */
+{
+    return mon_spells_find(race->spells, _id(MST_BREATH, GF_LITE))
+        || mon_spells_find(race->spells, _id(MST_BREATH, GF_DARK))
+        || mon_spells_find(race->spells, _id(MST_BALL, GF_LITE))
+        || mon_spells_find(race->spells, _id(MST_BALL, GF_DARK));
+}
 

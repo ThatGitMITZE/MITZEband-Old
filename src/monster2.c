@@ -619,48 +619,6 @@ void pack_info_wipe(void)
     }
 }
 
-bool mon_has_summon_spell(int m_idx)
-{
-    monster_type *m_ptr = &m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if ( (r_ptr->flags4 & RF4_SUMMON_MASK)
-        || (r_ptr->flags5 & RF5_SUMMON_MASK)
-        || (r_ptr->flags6 & RF6_SUMMON_MASK) )
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-bool mon_has_attack_spell(int m_idx)
-{
-    monster_type *m_ptr = &m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if ( (r_ptr->flags4 & RF4_ATTACK_MASK)
-        || (r_ptr->flags5 & RF5_ATTACK_MASK)
-        || (r_ptr->flags6 & RF6_ATTACK_MASK) )
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-bool mon_has_worthy_attack_spell(int m_idx)
-{
-    monster_type *m_ptr = &m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if ( (r_ptr->flags4 & RF4_ATTACK_MASK)
-        || (r_ptr->flags5 & RF5_WORTHY_ATTACK_MASK)
-        || (r_ptr->flags6 & RF6_WORTHY_ATTACK_MASK) )
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
-
 void pack_choose_ai(int m_idx)
 {
     monster_type *m_ptr = &m_list[m_idx];
@@ -674,15 +632,15 @@ void pack_choose_ai(int m_idx)
         {
             int p = randint0(100);
 
-            if (p < 5 && mon_has_worthy_attack_spell(m_idx))
+            if (p < 5 && mon_has_worthy_attack_spell(m_ptr))
                 pack_ptr->ai = AI_SHOOT;
-            else if (p < 15 && mon_has_summon_spell(m_idx))
+            else if (p < 15 && mon_has_summon_spell(m_ptr))
             {
                 /* Lure the player into an open room in order to surround
                     with evil summons! */
                 pack_ptr->ai = AI_LURE;
             }
-            else if (p < 25 && mon_has_worthy_attack_spell(m_idx))
+            else if (p < 25 && mon_has_worthy_attack_spell(m_ptr))
             {
                 /* Hang back and pelt the player from a distance */
                 pack_ptr->ai = AI_MAINTAIN_DISTANCE;
@@ -904,7 +862,7 @@ bool mon_is_type(int r_idx, int type)
         if (r_idx == 648) return TRUE;
         break;
     case SUMMON_DEMON_SUMMONER:
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && (r_ptr->flags6 & RF6_S_DEMON))
+        if (!(r_ptr->flags1 & RF1_UNIQUE) && mon_race_can_summon(r_ptr, SUMMON_DEMON))
             return TRUE;
         break;
     case SUMMON_MATURE_DRAGON:
@@ -917,12 +875,18 @@ bool mon_is_type(int r_idx, int type)
         }
         break;
     case SUMMON_DRAGON_SUMMONER:
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && (r_ptr->flags6 & (RF6_S_DRAGON | RF6_S_HI_DRAGON)))
+        if ( !(r_ptr->flags1 & RF1_UNIQUE)
+          && (mon_race_can_summon(r_ptr, SUMMON_DRAGON) || mon_race_can_summon(r_ptr, SUMMON_HI_DRAGON)) )
+        {
             return TRUE;
+        }
         break;
     case SUMMON_UNDEAD_SUMMONER:
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && (r_ptr->flags6 & (RF6_S_UNDEAD | RF6_S_HI_UNDEAD)))
+        if ( !(r_ptr->flags1 & RF1_UNIQUE)
+          && (mon_race_can_summon(r_ptr, SUMMON_UNDEAD) || mon_race_can_summon(r_ptr, SUMMON_HI_UNDEAD)) )
+        {
             return TRUE;
+        }
         break;
     case SUMMON_DARK_ELF:
         if ( r_idx == 122 || r_idx == 178 || r_idx == 182 || r_idx == 226 || r_idx == 348
@@ -1079,7 +1043,7 @@ bool mon_is_type(int r_idx, int type)
           && !(r_ptr->flags3 & RF3_UNDEAD)
           && !(r_ptr->flags3 & RF3_DEMON)
           && !(r_ptr->flags2 & RF2_MULTIPLY)
-          && !(r_ptr->flags4 || r_ptr->flags5 || r_ptr->flags6) )
+          && !r_ptr->spells )
         {
             return TRUE;
         }
@@ -1225,20 +1189,18 @@ static bool restrict_monster_to_dungeon(int r_idx)
     }
     if (d_ptr->flags1 & DF1_NO_MAGIC)
     {
-        if (r_idx != MON_CHAMELEON &&
-            r_ptr->freq_spell &&
-            !(r_ptr->flags4 & RF4_NOMAGIC_MASK) &&
-            !(r_ptr->flags5 & RF5_NOMAGIC_MASK) &&
-            !(r_ptr->flags6 & RF6_NOMAGIC_MASK))
+        if (r_idx != MON_CHAMELEON && !mon_race_has_innate_spell(r_ptr))
             return FALSE;
     }                                                              /* v--- ...but prevent the Summon Mold exploit. Sigh ... */
+    if (dungeon_type == DUNGEON_GLASS)
+    {
+        if (r_idx == MON_CHAMELEON) return TRUE;
+        if (!mon_race_has_lite_dark_spell(r_ptr)) return FALSE;
+    }
     if (d_ptr->flags1 & DF1_NO_MELEE && (summon_specific_who != -1 || !allow_pets))
     {                                 /* ^---- Block players spamming the anti-melee cave for better summons... */
         if (r_idx == MON_CHAMELEON) return TRUE;
-        if (!(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK)) &&
-            !(r_ptr->flags5 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
-            !(r_ptr->flags6 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
-            return FALSE;
+        if (!mon_race_has_attack_spell(r_ptr)) return FALSE;
     }
     if (d_ptr->flags1 & DF1_BEGINNER)
     {
@@ -1265,21 +1227,6 @@ static bool restrict_monster_to_dungeon(int r_idx)
         if (d_ptr->mflags3)
         {
             if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
-                return FALSE;
-        }
-        if (d_ptr->mflags4)
-        {
-            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
-                return FALSE;
-        }
-        if (d_ptr->mflags5)
-        {
-            if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
-                return FALSE;
-        }
-        if (d_ptr->mflags6)
-        {
-            if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
                 return FALSE;
         }
         if (d_ptr->mflags7)
@@ -1323,21 +1270,6 @@ static bool restrict_monster_to_dungeon(int r_idx)
             if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
                 return TRUE;
         }
-        if (d_ptr->mflags4)
-        {
-            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
-                return TRUE;
-        }
-        if (d_ptr->mflags5)
-        {
-            if ((d_ptr->mflags5 & r_ptr->flags5) != d_ptr->mflags5)
-                return TRUE;
-        }
-        if (d_ptr->mflags6)
-        {
-            if ((d_ptr->mflags6 & r_ptr->flags6) != d_ptr->mflags6)
-                return TRUE;
-        }
         if (d_ptr->mflags7)
         {
             if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
@@ -1367,9 +1299,6 @@ static bool restrict_monster_to_dungeon(int r_idx)
         if (r_ptr->flags1 & d_ptr->mflags1) return TRUE;
         if (r_ptr->flags2 & d_ptr->mflags2) return TRUE;
         if (r_ptr->flags3 & d_ptr->mflags3) return TRUE;
-        if (r_ptr->flags4 & d_ptr->mflags4) return TRUE;
-        if (r_ptr->flags5 & d_ptr->mflags5) return TRUE;
-        if (r_ptr->flags6 & d_ptr->mflags6) return TRUE;
         if (r_ptr->flags7 & d_ptr->mflags7) return TRUE;
         if (r_ptr->flags8 & d_ptr->mflags8) return TRUE;
         if (r_ptr->flags9 & d_ptr->mflags9) return TRUE;
@@ -1386,9 +1315,6 @@ static bool restrict_monster_to_dungeon(int r_idx)
         if (r_ptr->flags1 & d_ptr->mflags1) return FALSE;
         if (r_ptr->flags2 & d_ptr->mflags2) return FALSE;
         if (r_ptr->flags3 & d_ptr->mflags3) return FALSE;
-        if (r_ptr->flags4 & d_ptr->mflags4) return FALSE;
-        if (r_ptr->flags5 & d_ptr->mflags5) return FALSE;
-        if (r_ptr->flags6 & d_ptr->mflags6) return FALSE;
         if (r_ptr->flags7 & d_ptr->mflags7) return FALSE;
         if (r_ptr->flags8 & d_ptr->mflags8) return FALSE;
         if (r_ptr->flags9 & d_ptr->mflags9) return FALSE;
@@ -4025,7 +3951,7 @@ bool alloc_horde(int y, int x)
 
         if (r_ptr->flags1 & RF1_UNIQUE) continue;
         if (r_idx == MON_HAGURE) continue;
-        if (r_ptr->flags4 & RF4_THROW) continue;
+        /*if (r_ptr->flags4 & RF4_THROW) continue;*/
 
         break;
     }
@@ -4188,6 +4114,7 @@ static bool summon_specific_okay(int r_idx)
     /* Hack - Only summon dungeon monsters */
     if (!mon_hook_dungeon(r_idx)) return (FALSE);
 
+    #if 0
     if (summon_wall_scummer)
     {
         bool ok = FALSE;
@@ -4202,6 +4129,7 @@ static bool summon_specific_okay(int r_idx)
         if (!ok)
             return FALSE;
     }
+    #endif
     if (summon_ring_bearer)
     {
         if (!mon_is_type(r_idx, SUMMON_RING_BEARER))

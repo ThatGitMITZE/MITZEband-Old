@@ -1107,9 +1107,6 @@ extern void pack_on_slay_monster(int m_idx);
 extern void pack_on_damage_monster(int m_idx);
 extern pack_info_t *pack_info_ptr(int m_idx);
 extern void pack_choose_ai(int m_idx);
-extern bool mon_has_attack_spell(int m_idx);
-extern bool mon_has_worthy_attack_spell(int m_idx);
-extern bool mon_has_summon_spell(int m_idx);
 
 extern monster_type *mon_get_parent(monster_type *m_ptr);
 extern void mon_set_parent(monster_type *m_ptr, int pm_idx);
@@ -1931,11 +1928,6 @@ extern void race_legends(void);
 extern void race_score(int race_num);
 extern void show_highclass(void);
 
-/* mspells3.c */
-extern bool do_cmd_cast_learned(void);
-extern void learn_spell(int monspell);
-extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, int mode);
-
 /* hissatsu.c */
 extern void hissatsu_info(char *p, int power);
 extern void do_cmd_hissatsu(void);
@@ -2588,7 +2580,6 @@ extern class_t *time_lord_get_class(void);
 extern bool check_foresight(void);
 extern bool devolve_monster(int m_idx, bool msg);
 extern bool evolve_monster(int m_idx, bool msg);
-extern bool mon_amnesia(int m_idx);
 extern void mon_change_race(int m_idx, int new_r_idx, cptr verb);
 
 /* weaponmaster.c */

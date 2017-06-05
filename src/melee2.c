@@ -582,10 +582,7 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
     else if (py_on_surface())
         rng = AAF_LIMIT;
 
-    /* Can monster cast attack spell? */
-    if (r_ptr->flags4 & (RF4_ATTACK_MASK) ||
-        r_ptr->flags5 & (RF5_ATTACK_MASK) ||
-        r_ptr->flags6 & (RF6_ATTACK_MASK))
+    if (mon_has_attack_spell(m_ptr))
     {
         /* Can move spell castable grid? */
         if (get_moves_aux2(m_idx, yp, xp)) return (TRUE);
@@ -1159,7 +1156,7 @@ static bool get_moves(int m_idx, int *mm)
                 }
             }
             if (cave[py][px].info & CAVE_ROOM) room -= 2;
-            if (!r_ptr->flags4 && !r_ptr->flags5 && !r_ptr->flags6) room -= 2;
+            if (!r_ptr->spells) room -= 2;
 
             /* Not in a room and strong player */
             if (room < (8 * (p_ptr->chp + p_ptr->csp)) /
@@ -2753,7 +2750,7 @@ static void process_monster(int m_idx)
         if (!in_bounds2(ny, nx)) continue;
 
         /* Nerf ASC a bit */
-        if (mon_has_summon_spell(m_idx))
+        if (mon_has_summon_spell(m_ptr))
         {
             if ( p_ptr->chp > p_ptr->mhp * 4 / 5 /* If @ wounded, pursue! */
               && !player_bold(ny, nx)            /* Moving from out of LOS into LOS */

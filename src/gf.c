@@ -103,6 +103,9 @@ static int _rlev(int m_idx)
     }
     return 0;
 }
+static void learn_spell(int which)
+{
+}
 static int _plr_save_odds(int m_idx, int boost)
 {
     int rlev = _rlev(m_idx);
@@ -1496,21 +1499,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 note = " starts moving slower.";
         }
         break;
-    case GF_AMNESIA: {
-        int ml = r_ptr->level;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            ml += 10;
-
-        if (seen) obvious = TRUE;
-        _BABBLE_HACK()
-        if (randint1(dam) <= randint1(ml))
-            note = " resists.";
-        else if (mon_amnesia(c_ptr->m_idx))
-            note = " seems to have forgotten something.";
-        else
-            note = " doesn't seem to know much.";
-        dam = 0;
-        break; }
     case GF_TIME:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
@@ -1602,17 +1590,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 {
                     m_ptr->mspeed -= randint1(2);
                     note = " is permanently slowed!";
-                }
-                else if (which <= 80)
-                {
-                    if (mon_amnesia(c_ptr->m_idx))
-                        note = " seems to have forgotten something.";
-                    else
-                    {
-                        #ifdef _DEBUG
-                        note = " is unaffected by memory loss.";
-                        #endif
-                    }
                 }
                 else if (which <= 90)
                 {
@@ -2063,10 +2040,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                         {
                             note = " is frozen in terror!";
                             do_paralyzed = randint1(3);
-                        }
-                        else
-                        {
-                            gf_damage_m(who, where, GF_AMNESIA, power, flags);
                         }
                         break;
                     }
@@ -3246,7 +3219,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
     case GF_DRAINING_TOUCH:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
-        if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
+        if (mon_is_magical(m_ptr))
         {
             /*msg_format("You draw psychic energy from %s.", m_name);*/
             p_ptr->csp += dam;
@@ -3266,7 +3239,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
     case GF_DRAIN_MANA:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
-        if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
+        if (mon_is_magical(m_ptr))
         {
             if (who > 0)
             {

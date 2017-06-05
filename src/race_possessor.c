@@ -922,8 +922,9 @@ static int _breath_lvl(int base_lvl)
 
 int possessor_get_powers(spell_info* spells, int max)
 {
-    monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
     int           ct = 0;
+    #if 0
+    monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
     if (ct < max && (r_ptr->flags1 & RF1_TRUMP))
         _add_power(&spells[ct++], 1, 0, 0, blink_toggle_spell, p_ptr->stat_ind[A_DEX]);
     if (ct < max && (r_ptr->flags2 & RF2_MULTIPLY))
@@ -995,6 +996,7 @@ int possessor_get_powers(spell_info* spells, int max)
         else
             _add_power(&spells[ct++], 35, 30, 80, _rocket_spell, p_ptr->stat_ind[A_STR]);
     }
+    #endif
     return ct;
 }
 
@@ -1057,10 +1059,11 @@ static void _add_spell(spell_info* spell, int lvl, int cost, int fail, ang_spell
 
 int possessor_get_spells(spell_info* spells, int max) 
 {
-    monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
     int           ct = 0;
-    int           stat_idx = p_ptr->stat_ind[r_ptr->body.spell_stat];
 
+    #if 0
+    monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
+    int           stat_idx = p_ptr->stat_ind[r_ptr->body.spell_stat];
     if (ct < max && (r_ptr->flags9 & RF9_POS_BLESSING))
         _add_spell(&spells[ct++], 1, 1, 30, bless_spell, stat_idx);
     if (ct < max && (r_ptr->flags5 & RF5_MISSILE))
@@ -1225,7 +1228,7 @@ int possessor_get_spells(spell_info* spells, int max)
         _add_spell(&spells[ct++], 48, 120, 90, summon_amberites_spell, stat_idx);
     if (ct < max && (r_ptr->flags6 & RF6_S_UNIQUE))
         _add_spell(&spells[ct++], 50, 150, 95, summon_uniques_spell, stat_idx);
-
+    #endif
     return ct;
 }
 

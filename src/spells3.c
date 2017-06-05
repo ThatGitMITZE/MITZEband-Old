@@ -463,7 +463,7 @@ void teleport_player(int dis, u32b mode)
                  * The latter limitation is to avoid
                  * totally unkillable suckers...
                  */
-                if ((r_ptr->flags6 & RF6_TPORT) &&
+                if (mon_race_can_teleport(r_ptr) &&
                     !(r_ptr->flagsr & RFR_RES_TELE))
                 {
                     if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, 0L);
@@ -504,7 +504,7 @@ void teleport_player_away(int m_idx, int dis)
                  * The latter limitation is to avoid
                  * totally unkillable suckers...
                  */
-                if ((r_ptr->flags6 & RF6_TPORT) &&
+                if (mon_race_can_teleport(r_ptr) &&
                     !(r_ptr->flagsr & RFR_RES_TELE))
                 {
                     if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, py, px, r_ptr->level, 0L);
@@ -3739,6 +3739,9 @@ static int minus_ac(void)
 static int _inv_dam_pct(int dam)
 {
     return (dam < 30) ? 3 : (dam < 60) ? 6 : 9;
+}
+static void learn_spell(int which)
+{
 }
 
 int acid_dam(int dam, cptr kb_str, int monspell)

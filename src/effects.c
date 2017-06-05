@@ -5659,7 +5659,7 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
         disturb(1, 0);
     }
 
-    if (monspell >= 0) learn_spell(monspell);
+    /*if (monspell >= 0) learn_spell(monspell);*/
 
     /* Mega-Hack -- Apply "invulnerability" */
     if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))

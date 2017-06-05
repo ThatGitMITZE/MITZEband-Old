@@ -569,34 +569,6 @@ static int wiz_create_itemtype(void)
     return (choice[num]);
 }
 
-/* debug command for blue mage */
-static void do_cmd_wiz_blue_mage(void)
-{
-
-    int                i = 0;
-    int                j = 0;
-    s32b            f4 = 0, f5 = 0, f6 = 0;
-
-    for (j=1; j<6; j++)
-    {
-
-        set_rf_masks(&f4, &f5, &f6, j);
-
-        for (i = 0; i < 32; i++)
-        {
-            if ((0x00000001 << i) & f4) p_ptr->magic_num2[i] = 1;
-        }
-        for (; i < 64; i++)
-        {
-            if ((0x00000001 << (i - 32)) & f5) p_ptr->magic_num2[i] = 1;
-        }
-        for (; i < 96; i++)
-        {
-            if ((0x00000001 << (i - 64)) & f6) p_ptr->magic_num2[i] = 1;
-        }
-    }
-}
-
 /*
  * Wizard routine for creating objects        -RAK-
  * Heavily modified to allow magification and artifactification  -Bernd-
@@ -1521,14 +1493,6 @@ void do_cmd_debug(void)
     /* Edit character */
     case 'e':
         do_cmd_wiz_change();
-        break;
-
-    /* Blue Mage Only */
-    case 'E':
-        if (p_ptr->pclass == CLASS_BLUE_MAGE)
-        {
-            do_cmd_wiz_blue_mage();
-        }
         break;
 
     /* View item info */

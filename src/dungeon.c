@@ -3443,8 +3443,8 @@ static void _dispatch_command(int old_now_turn)
                     skillmaster_cast();
                 else if (p_ptr->pclass == CLASS_SAMURAI)
                     do_cmd_hissatsu();
-                else if (p_ptr->pclass == CLASS_BLUE_MAGE)
-                    do_cmd_cast_learned();
+                /*else if (p_ptr->pclass == CLASS_BLUE_MAGE)
+                    do_cmd_cast_learned();*/
                 else if (p_ptr->pclass == CLASS_GRAY_MAGE)
                     gray_mage_cast_spell();
                 else if (p_ptr->pclass == CLASS_ARCHAEOLOGIST ||

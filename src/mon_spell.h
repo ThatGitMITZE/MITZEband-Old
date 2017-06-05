@@ -168,5 +168,26 @@ extern mon_spell_ptr  mon_spell_find(mon_race_ptr race, mon_spell_id_t id);
 extern mon_spell_ptr  mon_spell_current(void);
 extern mon_ptr        mon_current(void);
 
+/* XXX Move these to mon.h */
+extern bool mon_is_magical(mon_ptr mon);
+extern bool mon_race_is_magical(mon_race_ptr race);
+extern bool mon_has_attack_spell(mon_ptr mon);
+extern bool mon_race_has_attack_spell(mon_race_ptr race);
+extern bool mon_has_worthy_attack_spell(mon_ptr mon);
+extern bool mon_race_has_worthy_attack_spell(mon_race_ptr race);
+extern bool mon_has_innate_spell(mon_ptr mon);
+extern bool mon_race_has_innate_spell(mon_race_ptr race);
+extern bool mon_has_summon_spell(mon_ptr mon);
+extern bool mon_race_has_summon_spell(mon_race_ptr race);
+extern bool mon_has_spell_type(mon_ptr mon, int type);
+extern bool mon_race_has_spell_type(mon_race_ptr race, int type);
+extern int  mon_spell_freq(mon_ptr mon);
+extern int  mon_race_spell_freq(mon_race_ptr race);
+extern bool mon_race_has_invulnerability(mon_race_ptr race);
+extern bool mon_race_has_healing(mon_race_ptr race);
+extern bool mon_race_has_drain_mana(mon_race_ptr race);
+extern bool mon_race_can_summon(mon_race_ptr race, int summon_type);
+extern bool mon_race_can_teleport(mon_race_ptr race);
+extern bool mon_race_has_lite_dark_spell(mon_race_ptr race);
 #endif
 

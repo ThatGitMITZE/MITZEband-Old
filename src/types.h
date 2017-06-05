@@ -385,7 +385,9 @@ struct object_type
 };
 #define object_is_(O, T, S) ((O)->tval == (T) && (O)->sval == (S))
 
-/* Monster blows ... Redone */
+/* Monster blows ... Redone. Note that changing any
+ * of the following values will break savefiles (or
+ * at least require special code to read old files). */
 #define MAX_MON_BLOW_EFFECTS 4
 #define MAX_MON_BLOWS        4
 #define MAX_MON_AURAS        3
@@ -490,9 +492,6 @@ struct monster_race
     u32b flags1;              /* Flags 1 (general) */
     u32b flags2;              /* Flags 2 (abilities) */
     u32b flags3;              /* Flags 3 (race/resist) */
-    u32b flags4;              /* Flags 4 (inate/breath) */
-    u32b flags5;              /* Flags 5 (normal spells) */
-    u32b flags6;              /* Flags 6 (special spells) */
     u32b flags7;              /* Flags 7 (movement related abilities) */
     u32b flags8;              /* Flags 8 (wilderness info) */
     u32b flags9;              /* Flags 9 (drops info; possessor info) */
@@ -708,10 +707,6 @@ struct monster_type
     byte ego_whip_pow;
     byte anti_magic_ct;
     byte anger;
-
-    u32b forgot4;
-    u32b forgot5;
-    u32b forgot6;
 
     s32b pexp;    /* player experience gained (x100). kept <= r_ptr->mexp */
 };

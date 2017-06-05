@@ -357,6 +357,7 @@ bool dispel_check(int m_idx)
     if (p_ptr->kabenuke) return TRUE;
 
     /* Elemental resistances */
+    #if 0
     if (r_ptr->flags4 & RF4_BR_ACID)
     {
         if (res_pct(RES_ACID) <= 75 && (p_ptr->oppose_acid || music_singing(MUSIC_RESIST))) return (TRUE);
@@ -386,6 +387,7 @@ bool dispel_check(int m_idx)
         if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST)) return (TRUE);
         if (p_ptr->special_defense & DEFENSE_POIS) return (TRUE);
     }
+    #endif
 
     /* Ultimate resistance */
     if (p_ptr->ult_res) return (TRUE);

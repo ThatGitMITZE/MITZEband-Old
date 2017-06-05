@@ -1333,11 +1333,11 @@ void battle_monsters(void)
                 power[i] = power[i] * (r_ptr->speed - 20) / 100;
             if (num_taisei > 2)
                 power[i] = power[i] * (num_taisei*2+5) / 10;
-            else if (r_ptr->flags6 & RF6_INVULNER)
+            else if (mon_race_has_invulnerability(r_ptr))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->flags6 & RF6_HEAL)
+            else if (mon_race_has_healing(r_ptr))
                 power[i] = power[i] * 4 / 3;
-            else if (r_ptr->flags5 & RF5_DRAIN_MANA)
+            else if (mon_race_has_drain_mana(r_ptr))
                 power[i] = power[i] * 11 / 10;
             if (r_ptr->flags1 & RF1_RAND_25)
                 power[i] = power[i] * 9 / 10;

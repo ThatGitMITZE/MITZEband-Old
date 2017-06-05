@@ -43,7 +43,7 @@ ANGFILES = \
     ego.o effects.o equip.o fear.o files.o flavor.o floors.o force_trainer.o generate.o gray_mage.o \
     grid.o hex.o high_mage.o hissatsu.o home.o imitator.o init1.o init2.o int-map.o inv.o load.o mage.o \
     magic_eater.o mauler.o melee1.o melee2.o menu.o message.o mindcrafter.o mirror_master.o \
-    mon_display.o monk.o monster.o monster1.o monster2.o mspells1.o mspells2.o mspells3.o mut.o \
+    mon_display.o monk.o monster.o monster1.o monster2.o mspells1.o mspells2.o mut.o \
     mut_a.o mystic.o necromancer.o ninja.o obj.o obj_display.o obj_prompt.o \
 	object1.o object2.o object3.o obj_kind.o pack.o paladin.o \
     personality.o priest.o psion.o py_birth.o py_display.o py_throw.o quest.o quiver.o \
@@ -60,4 +60,4 @@ ANGFILES = \
     warrior_mage.o weaponmaster.o weaponsmith.o wild.o wild_realm.o wild_talent.o \
     wizard1.o wizard2.o wiz_obj.o xtra1.o xtra2.o yellow_mage.o \
     mon_spell.o gf.o
-
+#Remove mspells3.o

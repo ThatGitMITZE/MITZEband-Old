@@ -2413,7 +2413,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
     if (!(r_ptr->flags7 & RF7_KILL_EXP))
     {
         expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
-        if (r_ptr->flags6 & RF6_HEAL) expdam = (expdam+1) * 2 / 3;
+        if (mon_race_has_healing(r_ptr)) expdam = (expdam+1) * 2 / 3;
 
         get_exp_from_mon(expdam, m_ptr);
 
@@ -2710,7 +2710,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
             virtue_add (VIRTUE_JUSTICE, -1);
         }
 
-        if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))  && !(r_ptr->flags5 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->flags6 & ~(RF6_NOMAGIC_MASK)))
+        if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !mon_race_is_magical(r_ptr))
         {
             if (one_in_(4)) virtue_add(VIRTUE_NATURE, -1);
         }

@@ -391,124 +391,6 @@ static cptr r_info_flags3[] =
 /*
  * Monster race flags
  */
-static cptr r_info_flags4[] =
-{
-    "SHRIEK",
-    "THROW",
-    "DISPEL",
-    "ROCKET",
-    "SHOOT",
-    "ANTI_MAGIC",
-    "POLY",
-    "BR_STORM",
-    "BR_ACID",
-    "BR_ELEC",
-    "BR_FIRE",
-    "BR_COLD",
-    "BR_POIS",
-    "BR_NETH",
-    "BR_LITE",
-    "BR_DARK",
-    "BR_CONF",
-    "BR_SOUN",
-    "BR_CHAO",
-    "BR_DISE",
-    "BR_NEXU",
-    "BR_TIME",
-    "BR_INER",
-    "BR_GRAV",
-    "BR_SHAR",
-    "BR_PLAS",
-    "BR_WALL",
-    "BR_MANA",
-    "BA_NUKE",
-    "BR_NUKE",
-    "BA_CHAO",
-    "BR_DISI",
-};
-
-/*
- * Monster race flags
- */
-static cptr r_info_flags5[] =
-{
-    "BA_ACID",
-    "BA_ELEC",
-    "BA_FIRE",
-    "BA_COLD",
-    "BA_POIS",
-    "BA_NETH",
-    "BA_WATE",
-    "BA_MANA",
-    "BA_DARK",
-    "DRAIN_MANA",
-    "MIND_BLAST",
-    "BRAIN_SMASH",
-    "CAUSE_1",
-    "CAUSE_2",
-    "CAUSE_3",
-    "CAUSE_4",
-    "BO_ACID",
-    "BO_ELEC",
-    "BO_FIRE",
-    "BO_COLD",
-    "BA_LITE",
-    "BO_NETH",
-    "BO_WATE",
-    "BO_MANA",
-    "BO_PLAS",
-    "BO_ICEE",
-    "MISSILE",
-    "SCARE",
-    "BLIND",
-    "CONF",
-    "SLOW",
-    "HOLD"
-};
-
-/*
- * Monster race flags
- */
-static cptr r_info_flags6[] =
-{
-    "HASTE",
-    "HAND_DOOM",
-    "HEAL",
-    "INVULNER",
-    "BLINK",
-    "TPORT",
-    "WORLD",
-    "SPECIAL",
-    "TELE_TO",
-    "TELE_AWAY",
-    "TELE_LEVEL",
-    "PSY_SPEAR",
-    "DARKNESS",
-    "TRAPS",
-    "FORGET",
-    "ANIM_DEAD", /* ToDo: Implement ANIM_DEAD */
-    "S_KIN",
-    "S_CYBER",
-    "S_MONSTER",
-    "S_MONSTERS",
-    "S_ANT",
-    "S_SPIDER",
-    "S_HOUND",
-    "S_HYDRA",
-    "S_ANGEL",
-    "S_DEMON",
-    "S_UNDEAD",
-    "S_DRAGON",
-    "S_HI_UNDEAD",
-    "S_HI_DRAGON",
-    "S_AMBERITES",
-    "S_UNIQUE"
-};
-
-
-/*
- * Monster race flags
- */
 static cptr r_info_flags7[] =
 {
     "AQUATIC",
@@ -3557,30 +3439,6 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
     return (1);
 }
 
-#if 0
-/*
- * Grab one (spell) flag in a monster_race from a textual string
- */
-static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
-{
-    if (grab_one_flag(&r_ptr->flags4, r_info_flags4, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&r_ptr->flags5, r_info_flags5, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&r_ptr->flags6, r_info_flags6, what) == 0)
-        return 0;
-
-    /* Oops */
-    msg_format("Unknown monster flag '%s'.", what);
-
-
-    /* Failure */
-    return (1);
-}
-#endif
-
 /*
  * b_info for monster body types
  */
@@ -4353,27 +4211,6 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 
 
 /*
- * Grab one (spell) flag in a monster_race from a textual string
- */
-static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
-{
-    if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&d_ptr->mflags5, r_info_flags5, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&d_ptr->mflags6, r_info_flags6, what) == 0)
-        return 0;
-
-    /* Oops */
-    msg_format("Unknown monster flag '%s'.", what);
-
-    /* Failure */
-    return (1);
-}
-
-/*
  * Initialize the "d_info" array, by parsing an ascii "template" file
  */
 errr parse_d_info(char *buf, header *head)
@@ -4646,39 +4483,6 @@ errr parse_d_info(char *buf, header *head)
         }
     }
 
-    /* Process 'S' for "Spell Flags" (multiple lines) */
-    else if (buf[0] == 'S')
-    {
-        /* Parse every entry */
-        for (s = buf + 2; *s; )
-        {
-                /* Find the end of this entry */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
-
-                /* Nuke and skip any dividers */
-            if (*t)
-            {
-                *t++ = '\0';
-                while ((*t == ' ') || (*t == '|')) t++;
-            }
-
-                /* XXX XXX XXX Hack -- Read spell frequency */
-            if (1 == sscanf(s, "1_IN_%d", &i))
-            {
-                /* Start at next entry */
-                s = t;
-
-                    /* Continue */
-                continue;
-            }
-
-                /* Parse this entry */
-            if (0 != grab_one_spell_monster_flag(d_ptr, s)) return (5);
-
-                /* Start the next entry */
-            s = t;
-        }
-    }
 
     /* Oops */
     else return (6);
