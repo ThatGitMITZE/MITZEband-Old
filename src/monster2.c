@@ -2102,18 +2102,6 @@ int lore_do_probe(int r_idx)
     if (r_ptr->r_ignore != MAX_UCHAR) n++;
     r_ptr->r_wake = r_ptr->r_ignore = MAX_UCHAR;
 
-    /* Observe "maximal" attacks */
-    for (i = 0; i < MAX_MON_BLOWS; i++)
-    {
-        /* Examine "actual" blows */
-        if (r_ptr->blows[i].effects[0].effect || r_ptr->blows[i].method)
-        {
-            /* Maximal observations */
-            if (r_ptr->r_blows[i] != MAX_UCHAR) n++;
-            r_ptr->r_blows[i] = MAX_UCHAR;
-        }
-    }
-
     /* Maximal drops */
     tmp_byte =
         (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +

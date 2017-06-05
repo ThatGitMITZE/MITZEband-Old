@@ -147,6 +147,7 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
 static void wr_lore(savefile_ptr file, int r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
+    int           i, j;
 
     savefile_write_s16b(file, r_ptr->r_sights);
     savefile_write_s16b(file, r_ptr->r_deaths);
@@ -162,10 +163,6 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_byte(file, r_ptr->r_drop_item);
     savefile_write_u32b(file, r_ptr->r_spell_turns);
     savefile_write_u32b(file, r_ptr->r_move_turns);
-    savefile_write_byte(file, r_ptr->r_blows[0]);
-    savefile_write_byte(file, r_ptr->r_blows[1]);
-    savefile_write_byte(file, r_ptr->r_blows[2]);
-    savefile_write_byte(file, r_ptr->r_blows[3]);
     savefile_write_u32b(file, r_ptr->r_flags1);
     savefile_write_u32b(file, r_ptr->r_flags2);
     savefile_write_u32b(file, r_ptr->r_flags3);
@@ -176,6 +173,16 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_u32b(file, r_ptr->flagsx);
     if (r_ptr->spells)
         mon_spells_save(r_ptr->spells, file);
+    for (i = 0; i < MAX_MON_BLOWS; i++)
+    {
+        mon_blow_ptr blow = &r_ptr->blows[i];
+        savefile_write_s16b(file, blow->lore);
+        for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
+        {
+            mon_effect_ptr effect = &blow->effects[j];
+            savefile_write_s16b(file, effect->lore);
+        }
+    }
 }
 
 static void wr_xtra_kind(savefile_ptr file, int k_idx)

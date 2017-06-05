@@ -549,8 +549,6 @@ struct monster_race
     u32b r_move_turns;        /* Includes attacking the player */
                               /* Now we can report accurate observed spell frequencies! */
 
-    byte r_blows[MAX_MON_BLOWS];/* Number of times each blow type was seen */
-
     u32b r_flags1;            /* Observed racial flags */
     u32b r_flags2;            /* Observed racial flags */
     u32b r_flags3;            /* Observed racial flags */

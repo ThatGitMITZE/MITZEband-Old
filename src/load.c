@@ -138,8 +138,8 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
 static void rd_lore(savefile_ptr file, int r_idx)
 {
     bool pact = FALSE;
-
     monster_race *r_ptr = &r_info[r_idx];
+    int  i, j;
 
     r_ptr->r_sights = savefile_read_s16b(file);
     r_ptr->r_deaths = savefile_read_s16b(file);
@@ -156,10 +156,6 @@ static void rd_lore(savefile_ptr file, int r_idx)
     r_ptr->r_spell_turns = savefile_read_u32b(file);
     r_ptr->r_move_turns = savefile_read_u32b(file);
 
-    r_ptr->r_blows[0] = savefile_read_byte(file);
-    r_ptr->r_blows[1] = savefile_read_byte(file);
-    r_ptr->r_blows[2] = savefile_read_byte(file);
-    r_ptr->r_blows[3] = savefile_read_byte(file);
     r_ptr->r_flags1 = savefile_read_u32b(file);
     r_ptr->r_flags2 = savefile_read_u32b(file);
     r_ptr->r_flags3 = savefile_read_u32b(file);
@@ -171,6 +167,16 @@ static void rd_lore(savefile_ptr file, int r_idx)
 
     if (r_ptr->spells)
         mon_spells_load(r_ptr->spells, file);
+    for (i = 0; i < MAX_MON_BLOWS; i++)
+    {
+        mon_blow_ptr blow = &r_ptr->blows[i];
+        blow->lore = savefile_read_s16b(file);
+        for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
+        {
+            mon_effect_ptr effect = &blow->effects[j];
+            effect->lore = savefile_read_s16b(file);
+        }
+    }
 
     if (r_ptr->r_flagsr & (RFR_PACT_MONSTER)) pact = TRUE;
 
