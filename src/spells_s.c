@@ -573,7 +573,7 @@ void sterility_spell(int cmd, variant *res)
         break;
     case SPELL_CAST:
         msg_print("You suddenly have a headache!");
-        take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "the strain of forcing abstinence", -1);
+        take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, "the strain of forcing abstinence");
 
         /* Fake a population explosion. */
         num_repro += MAX_REPRO;

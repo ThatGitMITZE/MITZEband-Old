@@ -791,7 +791,7 @@ static void cast_meteor(int dam, int rad)
 
         if (count > 20) continue;
 
-        project(0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+        project(0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }
 
@@ -875,7 +875,7 @@ bool cast_wrath_of_the_god(int dam, int rad)
             !in_disintegration_range(ty, tx, y, x))
             continue;
 
-        project(0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+        project(0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
     }
 
     return TRUE;
@@ -1926,7 +1926,7 @@ static cptr do_sorcery_spell(int spell, int mode)
 
         if (cast)
         {
-            project(0, 1, py, px, 0, GF_MAKE_DOOR, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE, -1);
+            project(0, 1, py, px, 0, GF_MAKE_DOOR, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE);
             p_ptr->update |= (PU_FLOW);
             p_ptr->redraw |= (PR_MAP);
         }
@@ -2145,7 +2145,7 @@ static cptr do_nature_spell(int spell, int mode)
                   && !res_save_default(RES_LITE) )
                 {
                     msg_print("The daylight scorches your flesh!");
-                    take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "daylight", -1);
+                    take_hit(DAMAGE_NOESCAPE, damroll(2, 2), "daylight");
                 }
             }
         }
@@ -2502,7 +2502,7 @@ static cptr do_nature_spell(int spell, int mode)
                   && !res_save_default(RES_LITE) )
                 {
                     msg_print("The sunlight scorches your flesh!");
-                    take_hit(DAMAGE_NOESCAPE, 50, "sunlight", -1);
+                    take_hit(DAMAGE_NOESCAPE, 50, "sunlight");
                 }
             }
         }
@@ -2658,8 +2658,7 @@ static cptr do_nature_spell(int spell, int mode)
                     px,
                     spell_power((100 + plev + p_ptr->to_d_spell) * 2),
                     GF_DISINTEGRATE,
-                    PROJECT_KILL | PROJECT_ITEM,
-                    -1
+                    PROJECT_KILL | PROJECT_ITEM
                 );
                 break;
 
@@ -2692,8 +2691,7 @@ static cptr do_nature_spell(int spell, int mode)
                     px,
                     spell_power((120 + plev + p_ptr->to_d_spell) * 2),
                     GF_FIRE,
-                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL,
-                    -1
+                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL
                 );
                 project(
                     0,
@@ -2702,8 +2700,7 @@ static cptr do_nature_spell(int spell, int mode)
                     px,
                     spell_power((120 + plev + p_ptr->to_d_spell) * 2),
                     GF_COLD,
-                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL,
-                    -1
+                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL
                 );
                 project(
                     0,
@@ -2712,8 +2709,7 @@ static cptr do_nature_spell(int spell, int mode)
                     px,
                     spell_power((120 + plev + p_ptr->to_d_spell) * 2),
                     GF_ELEC,
-                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL,
-                    -1
+                    PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL
                 );
                 break;
 
@@ -2981,7 +2977,7 @@ static cptr do_chaos_spell(int spell, int mode)
             if (cast)
             {
                 msg_print("BOOM! Shake the room!");
-                project(0, rad, py, px, dam*2, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(0, rad, py, px, dam*2, GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -3640,7 +3636,7 @@ static cptr do_death_spell(int spell, int mode)
 
             if (cast)
             {
-                project(0, rad, py, px, dam, GF_POIS, PROJECT_GRID | PROJECT_KILL | PROJECT_ITEM, -1);
+                project(0, rad, py, px, dam, GF_POIS, PROJECT_GRID | PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -6435,7 +6431,7 @@ static cptr do_daemon_spell(int spell, int mode)
                 if (!get_fire_dir(&dir)) return NULL;
 
                 fire_ball(GF_HELL_FIRE, dir, dam, rad);
-                take_hit(DAMAGE_USELIFE, 20 + randint1(30), "the strain of casting Hellfire", -1);
+                take_hit(DAMAGE_USELIFE, 20 + randint1(30), "the strain of casting Hellfire");
             }
         }
         break;
@@ -7036,7 +7032,7 @@ static cptr do_crusade_spell(int spell, int mode)
 
             if (cast)
             {
-                project(0, 1, py, px, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
+                project(0, 1, py, px, b_dam, GF_HOLY_FIRE, PROJECT_KILL);
                 dispel_monsters(d_dam);
                 slow_monsters(power);
                 stun_monsters(power);
@@ -7396,7 +7392,7 @@ static cptr do_music_spell(int spell, int mode)
 
             if (cont || cast)
             {
-                project(0, rad, py, px, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
+                project(0, rad, py, px, 0, GF_IDENTIFY, PROJECT_ITEM);
             }
         }
 
@@ -7542,7 +7538,7 @@ static cptr do_music_spell(int spell, int mode)
             if (cont || cast)
             {
                 project(0, 0, py, px,
-                    0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
+                    0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE);
             }
         }
         break;
@@ -7630,7 +7626,7 @@ static cptr do_music_spell(int spell, int mode)
             {
                 msg_print("Reality whirls wildly as you sing a dizzying melody...");
 
-                project(0, rad, py, px, power, GF_AWAY_ALL, PROJECT_KILL, -1);
+                project(0, rad, py, px, power, GF_AWAY_ALL, PROJECT_KILL);
             }
         }
         break;
@@ -8201,7 +8197,7 @@ static cptr do_hex_spell(int spell, int mode)
                 if (power)
                 {
                     project(0, rad, py, px, power, GF_HELL_FIRE,
-                        (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                        (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
                 if (p_ptr->wizard)
                 {
@@ -9058,7 +9054,7 @@ static cptr do_armageddon_spell(int spell, int mode)
             if (cast)
             {
                 msg_print("BOOM!");
-                project(0, rad, py, px, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(0, rad, py, px, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;

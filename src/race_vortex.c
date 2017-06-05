@@ -406,7 +406,7 @@ static void _unleash_elements_spell(int cmd, variant *res)
                 if (!player_bold(y, x)) break;
             }
             project(0, 3, y, x, dam, _breath_effect(),
-                (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
         }
         var_set_bool(res, TRUE);
         break;

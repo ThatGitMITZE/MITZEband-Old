@@ -854,7 +854,7 @@ static void _star_ball_spell(int cmd, variant *res)
                 if (!player_bold(y, x)) break;
             }
             project(0, 3, y, x, dam, e,
-                (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
         }
         var_set_bool(res, TRUE);
         break;
@@ -2189,7 +2189,7 @@ static void _wing_storm_spell(int cmd, variant *res)
         break;
     case SPELL_CAST:
         msg_print("You bring your wings down powerfully!");
-        project(0, 5, py, px, randint1(p_ptr->lev * 3), GF_STORM, PROJECT_KILL | PROJECT_ITEM, -1);
+        project(0, 5, py, px, randint1(p_ptr->lev * 3), GF_STORM, PROJECT_KILL | PROJECT_ITEM);
         var_set_bool(res, TRUE);
         break;
     default:

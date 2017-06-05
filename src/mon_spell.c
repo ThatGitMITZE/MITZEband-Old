@@ -1390,8 +1390,7 @@ static void _breath(void)
         _current.dest.x,
         dam,
         _current.spell->id.effect,
-        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER,
-        -1
+        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER
     );
 }
 
@@ -1440,8 +1439,7 @@ static void _ball(void)
         _current.dest.x,
         dam,
         _current.spell->id.effect,
-        flags,
-        -1
+        flags
     );
 }
 static void _bolt(void)
@@ -1465,8 +1463,7 @@ static void _bolt(void)
             _current.dest.x,
             _roll(_current.spell->parm.v.dice),
             _current.spell->id.effect,
-            flags,
-            -1
+            flags
         );
     }
 }
@@ -1480,8 +1477,7 @@ static void _beam(void)
         _current.dest.x,
         _roll(_current.spell->parm.v.dice),
         _current.spell->id.effect,
-        PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER,
-        -1
+        PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER
     );
 }
 static void _curse(void)
@@ -1499,8 +1495,7 @@ static void _curse(void)
         dam,
         _current.spell->id.effect,
         PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL |
-        PROJECT_PLAYER | PROJECT_HIDE | PROJECT_AIMED,
-        -1
+        PROJECT_PLAYER | PROJECT_HIDE | PROJECT_AIMED
     );
 }
 static int _curse_save_odds_aux(int rlev, int sav)
@@ -1731,7 +1726,7 @@ static void _tactic(void)
         project( _current.mon->id, 5, _current.src.y, _current.src.x,
             _roll(_current.spell->parm.v.dice) * 2,
             _current.spell->id.effect,
-            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER, -1);
+            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER);
         teleport_away(_current.mon->id, 10, 0); 
         p_ptr->update |= PU_MONSTERS;
         break;
@@ -1979,7 +1974,7 @@ static void _weird_bird(void)
         /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
            -- henkma
          */
-        get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name, -1);
+        get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name);
         if (get_damage > 0)
             weaponmaster_do_readied_shot(_current.mon);
 
@@ -1990,7 +1985,7 @@ static void _weird_bird(void)
             monster_desc(m_name_self, _current.mon, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
             msg_format("The attack of %s has wounded %s!", _current.name, m_name_self);
-            project(0, 0, _current.src.y, _current.src.x, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL, -1);
+            project(0, 0, _current.src.y, _current.src.x, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL);
             if (p_ptr->tim_eyeeye)
                 set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
         }

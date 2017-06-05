@@ -391,7 +391,7 @@ static void _rengoku_kaen_spell(int cmd, variant *res)
                 if (!player_bold(y, x)) break;
             }
             project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), typ,
-                (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+                (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
 
         var_set_bool(res, TRUE);

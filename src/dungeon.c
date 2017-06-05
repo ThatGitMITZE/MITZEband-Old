@@ -371,7 +371,7 @@ static void wreck_the_pattern(void)
     msg_print("Something terrible happens!");
 
     if (!IS_INVULN())
-        take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern", -1);
+        take_hit(DAMAGE_NOESCAPE, damroll(10, 8), "corrupting the Pattern");
 
     to_ruin = randint1(45) + 35;
 
@@ -445,14 +445,14 @@ static bool pattern_effect(void)
 
     case PATTERN_TILE_WRECKED:
         if (!IS_INVULN())
-            take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern", -1);
+            take_hit(DAMAGE_NOESCAPE, 200, "walking the corrupted Pattern");
         break;
 
     default:
         if (prace_is_(RACE_AMBERITE) && !one_in_(2))
             return TRUE;
         else if (!IS_INVULN())
-            take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern", -1);
+            take_hit(DAMAGE_NOESCAPE, damroll(1, 3), "walking the Pattern");
         break;
     }
 
@@ -959,7 +959,7 @@ static void process_world_aux_hp_and_sp(void)
         /* Take 15 "game turns" for the entire effect ------^ */
         if (amt > p_ptr->poisoned) amt = p_ptr->poisoned;
         /*msg_format("<color:G> %d Poison Damage</color>", amt);*/
-        take_hit(DAMAGE_NOESCAPE, amt, "poison", -1);
+        take_hit(DAMAGE_NOESCAPE, amt, "poison");
         set_poisoned(p_ptr->poisoned - amt, TRUE);
     }
 
@@ -970,7 +970,7 @@ static void process_world_aux_hp_and_sp(void)
         if (cut.dam)
         {
             /*msg_format("<color:r> %d Cut Damage</color>", cut.dam);*/
-            take_hit(DAMAGE_NOESCAPE, cut.dam, "a fatal wound", -1);
+            take_hit(DAMAGE_NOESCAPE, cut.dam, "a fatal wound");
         }
     }
 
@@ -986,7 +986,7 @@ static void process_world_aux_hp_and_sp(void)
             if ((cave[py][px].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
             {
                 msg_print("The sun's rays scorch your undead flesh!");
-                take_hit(DAMAGE_NOESCAPE, 1, "sunlight", -1);
+                take_hit(DAMAGE_NOESCAPE, 1, "sunlight");
                 cave_no_regen = TRUE;
             }
         }
@@ -1008,7 +1008,7 @@ static void process_world_aux_hp_and_sp(void)
                 cave_no_regen = TRUE;
                 object_desc(o_name, lite, OD_NAME_ONLY);
                 sprintf(ouch, "wielding %s", o_name);
-                if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, 1, ouch, -1);
+                if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, 1, ouch);
             }
         }
     }
@@ -1036,13 +1036,13 @@ static void process_world_aux_hp_and_sp(void)
             if (p_ptr->levitation)
             {
                 msg_print("The heat burns you!");
-                take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_info[get_feat_mimic(&cave[py][px])].name), -1);
+                take_hit(DAMAGE_NOESCAPE, damage, format("flying over %s", f_name + f_info[get_feat_mimic(&cave[py][px])].name));
             }
             else
             {
                 cptr name = f_name + f_info[get_feat_mimic(&cave[py][px])].name;
                 msg_format("The %s burns you!", name);
-                take_hit(DAMAGE_NOESCAPE, damage, name, -1);
+                take_hit(DAMAGE_NOESCAPE, damage, name);
             }
 
             cave_no_regen = TRUE;
@@ -1056,7 +1056,7 @@ static void process_world_aux_hp_and_sp(void)
         {
             /* Take damage */
             msg_print("You are drowning!");
-            take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning", -1);
+            take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), "drowning");
 
             cave_no_regen = TRUE;
         }
@@ -1072,7 +1072,7 @@ static void process_world_aux_hp_and_sp(void)
             if (dam > 0)
             {
                 msg_print("It's hot!");
-                take_hit(DAMAGE_NOESCAPE, dam, "Fire aura", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "Fire aura");
             }
         }
         if (r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC)
@@ -1083,7 +1083,7 @@ static void process_world_aux_hp_and_sp(void)
             if (dam > 0)
             {
                 msg_print("It hurts!");
-                take_hit(DAMAGE_NOESCAPE, dam, "Elec aura", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "Elec aura");
             }
         }
         if (r_info[m_list[p_ptr->riding].r_idx].flags3 & RF3_AURA_COLD)
@@ -1093,7 +1093,7 @@ static void process_world_aux_hp_and_sp(void)
             if (dam > 0)
             {
                 msg_print("It's cold!");
-                take_hit(DAMAGE_NOESCAPE, dam, "Cold aura", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "Cold aura");
             }
         }
     }
@@ -1136,7 +1136,7 @@ static void process_world_aux_hp_and_sp(void)
             if (dam)
             {
                 cave_no_regen = TRUE;
-                take_hit(DAMAGE_NOESCAPE, dam, dam_desc, -1);
+                take_hit(DAMAGE_NOESCAPE, dam, dam_desc);
             }
         }
     }
@@ -1928,7 +1928,7 @@ static void process_world_aux_curse(void)
 
             object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format("Your %s drains HP from you!", o_name);
-            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
+            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name);
             obj_learn_curse(o_ptr, OFC_DRAIN_HP);
         }
         /* Handle mana draining */
@@ -1961,7 +1961,7 @@ static void process_world_aux_curse(void)
                 msg_print("The Jewel of Judgement drains life from you!");
             else
                 msg_print("Something drains life from you!");
-            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Jewel of Judgement", -1);
+            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Jewel of Judgement");
         }
     }
 
@@ -2010,7 +2010,7 @@ static void process_world_aux_curse(void)
                 msg_print("The Hand of Vecna strangles you!");
             else
                 msg_print("The Hand strangles you!");
-            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Hand of Vecna", -1);
+            take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Hand of Vecna");
         }
     }
 
@@ -2869,7 +2869,7 @@ static void process_world(void)
                 int dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
 
                 /* Take damage */
-                if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "starvation", -1);
+                if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, "starvation");
             }
         }
     }
@@ -3409,8 +3409,6 @@ static void _dispatch_command(int old_now_turn)
                 cptr which_power = "magic";
                 if (p_ptr->pclass == CLASS_MINDCRAFTER || p_ptr->pclass == CLASS_PSION)
                     which_power = "psionic powers";
-                else if (p_ptr->pclass == CLASS_IMITATOR)
-                    which_power = "imitation";
                 else if (p_ptr->pclass == CLASS_SAMURAI)
                     which_power = "hissatsu";
                 else if (p_ptr->pclass == CLASS_MIRROR_MASTER)
@@ -3435,16 +3433,12 @@ static void _dispatch_command(int old_now_turn)
             {
                 if (p_ptr->prace == RACE_MON_RING)
                     ring_cast();
-                else if (p_ptr->pclass == CLASS_IMITATOR)
-                    imitator_cast(FALSE);
                 else if (p_ptr->pclass == CLASS_MAGIC_EATER)
                     magic_eater_cast(0);
                 else if (p_ptr->pclass == CLASS_SKILLMASTER)
                     skillmaster_cast();
                 else if (p_ptr->pclass == CLASS_SAMURAI)
                     do_cmd_hissatsu();
-                /*else if (p_ptr->pclass == CLASS_BLUE_MAGE)
-                    do_cmd_cast_learned();*/
                 else if (p_ptr->pclass == CLASS_GRAY_MAGE)
                     gray_mage_cast_spell();
                 else if (p_ptr->pclass == CLASS_ARCHAEOLOGIST ||
@@ -4518,20 +4512,6 @@ static void process_player(void)
                         }
                     }
                 }
-            }
-            if (p_ptr->pclass == CLASS_IMITATOR)
-            {
-                if (p_ptr->mane_num > (p_ptr->lev > 44 ? 3 : p_ptr->lev > 29 ? 2 : 1))
-                {
-                    p_ptr->mane_num--;
-                    for (i = 0; i < p_ptr->mane_num; i++)
-                    {
-                        p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
-                        p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
-                    }
-                }
-                new_mane = FALSE;
-                p_ptr->redraw |= PR_EFFECTS;
             }
             if (p_ptr->action == ACTION_LEARN)
             {

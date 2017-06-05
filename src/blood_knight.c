@@ -81,7 +81,7 @@ void _blood_spray_spell(int cmd, variant *res)
         int rad = (p_ptr->lev < 30) ? 3 : 4;
         int base = p_ptr->lev + p_ptr->lev/4;
 
-        project(0, rad, py, px, 2*(damroll(dice, sides) + base), GF_BLOOD, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+        project(0, rad, py, px, 2*(damroll(dice, sides) + base), GF_BLOOD, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
         var_set_bool(res, TRUE);
         break;

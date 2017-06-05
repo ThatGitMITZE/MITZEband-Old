@@ -1411,7 +1411,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
                 msg_print("The mirror was crashed!");
                 sound(SOUND_GLASS);
                 remove_mirror(y, x);
-                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
             }
 
             if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
@@ -1439,7 +1439,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
                 msg_print("The mirror was crashed!");
                 sound(SOUND_GLASS);
                 remove_mirror(y, x);
-                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
             }
 
             if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
@@ -1868,7 +1868,7 @@ static int _reduce_dam(int dam, int distance)
     int pct[8] = { 100, 80, 60, 50, 44, 37, 33, 30 };
     return (dam * pct[MIN(7, distance)] + 50) / 100;
 }
-static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg, int monspell)
+static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int typ, int flg)
 {
 
     /* Hack -- assume obvious */
@@ -1955,7 +1955,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
             t_x = px - 2 + randint0(5);
         }
 
-        project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
+        project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE));
 
         disturb(1, 0);
         return TRUE;
@@ -2036,9 +2036,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     if (psion_drain())
         dam = psion_do_drain(dam);
 
-    mon_spell_hack = monspell;
     get_damage = gf_damage_p(who, typ, dam, GF_DAMAGE_SPELL);
-    mon_spell_hack = 0;
 
     /* Hex - revenge damage stored */
     revenge_store(get_damage);
@@ -2051,7 +2049,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
         char m_name_self[80];
         monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
-        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL, -1);
+        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL);
         if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
     }
 
@@ -2587,7 +2585,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, byte *gx, byte *gy, byte 
  * in the blast radius, in case the "illumination" of the grid was changed,
  * and "update_view()" and "update_monsters()" need to be called.
  */
-bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int monspell)
+bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
 {
     int i, t, dist;
 
@@ -3215,7 +3213,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
     if (!grids)
     {
         if (who > 0 && p_ptr->spell_turned)
-            project(-1, old_rad, y1, x1, dam, typ, flg, 0);
+            project(-1, old_rad, y1, x1, dam, typ, flg);
         return (FALSE);
     }
 
@@ -3434,7 +3432,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
                     else flg |= PROJECT_PLAYER;
 
                     /* The bolt is reflected */
-                    project(cave[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+                    project(cave[y][x].m_idx, 0, t_y, t_x, dam, typ, flg);
 
                     /* Don't affect the monster any longer */
                     continue;
@@ -3625,7 +3623,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
             }
 
             /* Affect the player */
-            if (project_p(who, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
+            if (project_p(who, who_name, effective_dist, y, x, dam, typ, flg)) notice = TRUE;
         }
     }
 
@@ -3652,7 +3650,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg, int mons
     }
 
     if (who > 0 && p_ptr->spell_turned)
-        project(-1, old_rad, y1, x1, dam, typ, flg, 0);
+        project(-1, old_rad, y1, x1, dam, typ, flg);
 
     /* Return "something was noticed" */
     return (notice);

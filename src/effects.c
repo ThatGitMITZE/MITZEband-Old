@@ -5374,7 +5374,7 @@ void do_poly_wounds(void)
     if (Nasty_effect)
     {
         msg_print("A new wound was created!");
-        take_hit(DAMAGE_LOSELIFE, change / 2, "a polymorphed wound", -1);
+        take_hit(DAMAGE_LOSELIFE, change / 2, "a polymorphed wound");
 
         set_cut(change, FALSE);
     }
@@ -5593,7 +5593,7 @@ void do_poly_self(void)
         if (one_in_(6))
         {
             msg_print("You find living difficult in your present form!");
-            take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), p_ptr->lev), "a lethal mutation", -1);
+            take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), p_ptr->lev), "a lethal mutation");
 
             power -= 10;
         }
@@ -5637,7 +5637,7 @@ void do_poly_self(void)
  * setting the player to "dead".
  */
 
-int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
+int take_hit(int damage_type, int damage, cptr hit_from)
 {
     int old_chp = p_ptr->chp;
 
@@ -5658,8 +5658,6 @@ int take_hit(int damage_type, int damage, cptr hit_from, int monspell)
         /* Disturb */
         disturb(1, 0);
     }
-
-    /*if (monspell >= 0) learn_spell(monspell);*/
 
     /* Mega-Hack -- Apply "invulnerability" */
     if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))

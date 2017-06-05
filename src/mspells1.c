@@ -262,7 +262,6 @@ int anti_magic_check(void)
         return 20;
 
     case CLASS_MINDCRAFTER:
-    case CLASS_IMITATOR:
     case CLASS_FORCETRAINER:
     case CLASS_PSION:
         return 30;

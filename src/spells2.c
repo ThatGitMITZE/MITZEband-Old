@@ -1873,7 +1873,7 @@ bool project_hack(int typ, int dam)
         x = m_ptr->fx;
 
         /* Jump directly to the target monster */
-        if (project(0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
+        if (project(0, 0, y, x, dam, typ, flg)) obvious = TRUE;
     }
 
     /* Result */
@@ -2096,7 +2096,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
     if (player_cast)
     {
         /* Take damage */
-        take_hit(DAMAGE_GENO, randint1(dam_side), format("the strain of casting %^s", spell_name), -1);
+        take_hit(DAMAGE_GENO, randint1(dam_side), format("the strain of casting %^s", spell_name));
     }
 
     /* Visual feedback */
@@ -2909,7 +2909,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                 killer = "an earthquake";
             }
 
-            take_hit(DAMAGE_ATTACK, damage, killer, -1);
+            take_hit(DAMAGE_ATTACK, damage, killer);
         }
     }
 
@@ -3235,7 +3235,7 @@ void discharge_minion(void)
         if (dam > 800) dam = 800;
         project(i, 2+(r_ptr->level/20), m_ptr->fy,
             m_ptr->fx, dam, typ,
-            PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+            PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 
         delete_monster_idx(i);
     }
@@ -3661,7 +3661,7 @@ bool lite_area(int dam, int rad)
     }
 
     /* Hook into the "project()" function */
-    (void)project(0, rad, py, px, dam, GF_LITE_WEAK, flg, -1);
+    (void)project(0, rad, py, px, dam, GF_LITE_WEAK, flg);
 
     /* Lite up the room */
     lite_room(py, px);
@@ -3687,7 +3687,7 @@ bool unlite_area(int dam, int rad)
     }
 
     /* Hook into the "project()" function */
-    (void)project(0, rad, py, px, dam, GF_DARK_WEAK, flg, -1);
+    (void)project(0, rad, py, px, dam, GF_DARK_WEAK, flg);
 
     /* Lite up the room */
     unlite_room(py, px);
@@ -3733,7 +3733,7 @@ bool fire_ball_aux(int typ, int dir, int dam, int rad, int xtra_flgs)
     }
 
     /* Analyze the "dir" and the "target". Hurt items on floor. */
-    return (project(0, rad, ty, tx, dam, typ, flg, -1));
+    return (project(0, rad, ty, tx, dam, typ, flg));
 }
 
 
@@ -3761,7 +3761,7 @@ bool fire_rocket(int typ, int dir, int dam, int rad)
     }
 
     /* Analyze the "dir" and the "target". Hurt items on floor. */
-    return (project(0, rad, ty, tx, dam, typ, flg, -1));
+    return (project(0, rad, ty, tx, dam, typ, flg));
 }
 
 
@@ -3790,7 +3790,7 @@ bool fire_ball_hide(int typ, int dir, int dam, int rad)
     }
 
     /* Analyze the "dir" and the "target". Hurt items on floor. */
-    return (project(0, rad, ty, tx, dam, typ, flg, -1));
+    return (project(0, rad, ty, tx, dam, typ, flg));
 }
 
 
@@ -3807,7 +3807,7 @@ bool fire_meteor(int who, int typ, int y, int x, int dam, int rad)
     int flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
     /* Analyze the "target" and the caster. */
-    return (project(who, rad, y, x, dam, typ, flg, -1));
+    return (project(who, rad, y, x, dam, typ, flg));
 }
 
 
@@ -3854,7 +3854,7 @@ bool fire_blast(int typ, int dir, int dd, int ds, int num, int dev)
         }
 
         /* Analyze the "dir" and the "target". */
-        if (!project(0, 0, y, x, damroll(dd, ds), typ, flg, -1))
+        if (!project(0, 0, y, x, damroll(dd, ds), typ, flg))
         {
             result = FALSE;
         }
@@ -3959,7 +3959,7 @@ bool project_hook(int typ, int dir, int dam, int flg)
     }
 
     /* Analyze the "dir" and the "target", do NOT explode */
-    return (project(0, 0, ty, tx, dam, typ, flg, -1));
+    return (project(0, 0, ty, tx, dam, typ, flg));
 }
 
 
@@ -4138,28 +4138,28 @@ bool teleport_monster(int dir)
 bool door_creation(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(0, 1, py, px, 0, GF_MAKE_DOOR, flg, -1));
+    return (project(0, 1, py, px, 0, GF_MAKE_DOOR, flg));
 }
 
 
 bool trap_creation(int y, int x)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
+    return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg));
 }
 
 
 bool tree_creation(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(0, 1, py, px, 0, GF_MAKE_TREE, flg, -1));
+    return (project(0, 1, py, px, 0, GF_MAKE_TREE, flg));
 }
 
 
 bool glyph_creation(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM;
-    return (project(0, 1, py, px, 0, GF_MAKE_GLYPH, flg, -1));
+    return (project(0, 1, py, px, 0, GF_MAKE_GLYPH, flg));
 }
 
 
@@ -4167,7 +4167,7 @@ bool wall_stone(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 
-    bool dummy = (project(0, 1, py, px, 0, GF_STONE_WALL, flg, -1));
+    bool dummy = (project(0, 1, py, px, 0, GF_STONE_WALL, flg));
 
     /* Update stuff */
     p_ptr->update |= (PU_FLOW);
@@ -4182,21 +4182,21 @@ bool wall_stone(void)
 bool destroy_doors_touch(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(0, 1, py, px, 0, GF_KILL_DOOR, flg, -1));
+    return (project(0, 1, py, px, 0, GF_KILL_DOOR, flg));
 }
 
 
 bool sleep_monsters_touch(void)
 {
     int flg = PROJECT_KILL | PROJECT_HIDE;
-    return (project(0, 1, py, px, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
+    return (project(0, 1, py, px, p_ptr->lev, GF_OLD_SLEEP, flg));
 }
 
 
 bool animate_dead(int who, int y, int x)
 {
     int flg = PROJECT_ITEM | PROJECT_HIDE;
-    return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
+    return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg));
 }
 
 
@@ -4280,8 +4280,8 @@ bool activate_ty_curse(bool stop_ty, int *count)
                 int dam = damroll(10, 10);
                 msg_print("A portal opens to a plane of raw mana!");
 
-                project(0, 8, py, px, dam, GF_MANA, flg, -1);
-                take_hit(DAMAGE_NOESCAPE, dam, "released pure mana", -1);
+                project(0, 8, py, px, dam, GF_MANA, flg);
+                take_hit(DAMAGE_NOESCAPE, dam, "released pure mana");
                 if (!one_in_(6)) break;
             }
         case 32: case 33:
@@ -4299,8 +4299,8 @@ bool activate_ty_curse(bool stop_ty, int *count)
             wall_breaker();
             if (!randint0(7))
             {
-                project(0, 7, py, px, 50, GF_KILL_WALL, flg, -1);
-                take_hit(DAMAGE_NOESCAPE, 50, "surge of energy", -1);
+                project(0, 7, py, px, 50, GF_KILL_WALL, flg);
+                take_hit(DAMAGE_NOESCAPE, 50, "surge of energy");
             }
             if (!one_in_(6)) break;
         case 1: case 2: case 3: case 16: case 17:
@@ -4506,7 +4506,7 @@ void wall_breaker(void)
         }
 
         project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
-                  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
     }
     else if (randint1(100) > 30)
     {
@@ -4526,7 +4526,7 @@ void wall_breaker(void)
             }
 
             project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
-                      (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                      (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
         }
     }
 }

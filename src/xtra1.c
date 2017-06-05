@@ -1913,8 +1913,6 @@ static void prt_effects(void)
         sprintf(tmp, "Study (%d)", p_ptr->new_spells);
         c_put_str(TERM_L_BLUE, tmp, row++, col);
     }
-    else if (p_ptr->pclass == CLASS_IMITATOR && p_ptr->mane_num)
-        c_put_str(TERM_L_BLUE, "Imitate", row++, col);
 }
 
 /*****************************************************************************
@@ -3193,13 +3191,11 @@ static int _calc_xtra_hp(int amt)
 
     case CLASS_ROGUE:
     case CLASS_MONK:
-    case CLASS_IMITATOR:
     case CLASS_NINJA:
     case CLASS_RUNE_KNIGHT:
         w1 = 1; w2 = 1; w3 = 0;
         break;
 
-    case CLASS_BLUE_MAGE:
     case CLASS_RED_MAGE:
     case CLASS_MIRROR_MASTER:
     case CLASS_TIME_LORD:

@@ -407,7 +407,7 @@ static void chest_trap(int y, int x, s16b o_idx)
     if (trap & (CHEST_LOSE_STR))
     {
         msg_print("A small needle has pricked you!");
-        take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle", -1);
+        take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle");
 
         (void)do_dec_stat(A_STR);
     }
@@ -416,7 +416,7 @@ static void chest_trap(int y, int x, s16b o_idx)
     if (trap & (CHEST_LOSE_CON))
     {
         msg_print("A small needle has pricked you!");
-        take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle", -1);
+        take_hit(DAMAGE_NOESCAPE, damroll(1, 4), "a poison needle");
 
         (void)do_dec_stat(A_CON);
     }
@@ -546,7 +546,7 @@ static void chest_trap(int y, int x, s16b o_idx)
             /* ...but a high saving throw does help a little. */
             if (randint1(100+o_ptr->pval*2) > p_ptr->skills.sav)
             {
-                if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "a chest dispel-player trap", -1);
+                if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), "a chest dispel-player trap");
                 else if (one_in_(5)) (void)set_cut(p_ptr->cut + 200, FALSE);
                 else if (one_in_(4))
                 {
@@ -588,7 +588,7 @@ static void chest_trap(int y, int x, s16b o_idx)
 
         o_ptr->pval = 0;
         sound(SOUND_EXPLODE);
-        take_hit(DAMAGE_ATTACK, damroll(5, 8), "an exploding chest", -1);
+        take_hit(DAMAGE_ATTACK, damroll(5, 8), "an exploding chest");
 
     }
     /* Scatter contents. */
@@ -3293,7 +3293,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
             if (shoot_hack == SP_KILL_TRAP)
             {
                 project(0, 0, ny, nx, 0, GF_KILL_TRAP,
-                    (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM), -1);
+                    (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM));
             }
             if (shoot_hack == SP_EVILNESS)
             {
@@ -3501,14 +3501,14 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                     {
                         u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(0, ((p_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg, -1);
+                        project(0, ((p_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg);
                         break;
                     }
                     if (arrow.name2 == EGO_AMMO_EXPLODING)
                     {
                         u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(0, 3, ny, nx, tdam, GF_MISSILE, flg, -1);
+                        project(0, 3, ny, nx, tdam, GF_MISSILE, flg);
                         break;
                     }
                     if (shoot_hack == SHOOT_ELEMENTAL)
@@ -3517,11 +3517,11 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         int flg = PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID;
                         if (weaponmaster_get_toggle() == TOGGLE_EXPLODING_BOLT)
                             rad = randint1(2+p_ptr->lev/40);
-                        project(0, rad, ny, nx, tdam, GF_FIRE, flg, -1);
-                        project(0, rad, ny, nx, tdam, GF_COLD, flg, -1);
-                        project(0, rad, ny, nx, tdam, GF_ELEC, flg, -1);
-                        project(0, rad, ny, nx, tdam, GF_ACID, flg, -1);
-                        project(0, rad, ny, nx, tdam, GF_POIS, flg, -1);
+                        project(0, rad, ny, nx, tdam, GF_FIRE, flg);
+                        project(0, rad, ny, nx, tdam, GF_COLD, flg);
+                        project(0, rad, ny, nx, tdam, GF_ELEC, flg);
+                        project(0, rad, ny, nx, tdam, GF_ACID, flg);
+                        project(0, rad, ny, nx, tdam, GF_POIS, flg);
                         break;
                     }
                     if (shoot_hack == SHOOT_SHATTER)
@@ -3531,14 +3531,14 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         if (weaponmaster_get_toggle() == TOGGLE_EXPLODING_BOLT)
                             rad = randint1(2+p_ptr->lev/40);
                         tdam = tdam * (100 + p_ptr->lev*2)/100;
-                        project(0, rad, ny, nx, tdam, GF_SHARDS, flg, -1);
+                        project(0, rad, ny, nx, tdam, GF_SHARDS, flg);
                         break;
                     }
                     if (weaponmaster_get_toggle() == TOGGLE_EXPLODING_BOLT)
                     {
                         int flg = PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID;
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(0, randint1(2+p_ptr->lev/40), ny, nx, tdam, GF_MISSILE, flg, -1);
+                        project(0, randint1(2+p_ptr->lev/40), ny, nx, tdam, GF_MISSILE, flg);
                         break;
                     }
                     if (shoot_hack == SP_HOLYNESS)

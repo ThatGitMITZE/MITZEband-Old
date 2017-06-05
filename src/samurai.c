@@ -759,7 +759,7 @@ cptr do_hissatsu_spell(int spell, int mode)
                 equip_learn_flag(OF_NO_TELE);
                 break;
             }
-            project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
+            project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL);
             teleport_player_to(y, x, 0L);
         }
         break;
@@ -844,7 +844,7 @@ cptr do_hissatsu_spell(int spell, int mode)
                 damage *= NUM_BLOWS(hand)/100;
                 total_damage += damage / 200;
             }
-            project(0, (cave_have_flag_bold(y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+            project(0, (cave_have_flag_bold(y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
         }
         break;
 
@@ -869,7 +869,7 @@ cptr do_hissatsu_spell(int spell, int mode)
                 msg_print("There is no monster.");
                 return NULL;
             }
-            take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "exhaustion on using Keiun-Kininken", -1);
+            take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), "exhaustion on using Keiun-Kininken");
         }
         break;
 
@@ -890,13 +890,13 @@ cptr do_hissatsu_spell(int spell, int mode)
             if (i != '@') return NULL;
             if (p_ptr->total_winner)
             {
-                take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
+                take_hit(DAMAGE_FORCE, 9999, "Seppuku");
                 p_ptr->total_winner = TRUE;
             }
             else
             {
                 msg_print("Meaning of Bushi-do is found in the death.");
-                take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
+                take_hit(DAMAGE_FORCE, 9999, "Seppuku");
             }
         }
         break;

@@ -1236,7 +1236,7 @@ static void _vengeful_blast(int cmd, variant *res)
         if (!get_fire_dir(&dir)) return;
 
         fire_ball(GF_ELDRITCH, dir, dam, 0);
-        take_hit(DAMAGE_USELIFE, 100, "vengeful blast", -1);
+        take_hit(DAMAGE_USELIFE, 100, "vengeful blast");
 
         var_set_bool(res, TRUE);
         break;
@@ -1393,7 +1393,7 @@ static void _dog_whistle_spell(int cmd, variant *res)
         var_set_string(res, "By emitting a shrill whistle, unaudible to most, you attempt to control nearby canines.");
         break;
     case SPELL_CAST:
-        project(0, 18, py, px, 1000, GF_CONTROL_PACT_MONSTER, PROJECT_KILL | PROJECT_HIDE, -1);
+        project(0, 18, py, px, 1000, GF_CONTROL_PACT_MONSTER, PROJECT_KILL | PROJECT_HIDE);
         var_set_bool(res, TRUE);
         break;
     default:

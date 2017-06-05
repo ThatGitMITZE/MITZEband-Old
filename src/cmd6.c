@@ -157,7 +157,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_WEAKNESS:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food");
                 do_dec_stat(A_STR);
                 ident = TRUE;
                 break;
@@ -165,7 +165,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_SICKNESS:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(6, 6), "poisonous food");
                 do_dec_stat(A_CON);
                 ident = TRUE;
                 break;
@@ -173,7 +173,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_STUPIDITY:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food");
                 do_dec_stat(A_INT);
                 ident = TRUE;
                 break;
@@ -181,7 +181,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_NAIVETY:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(8, 8), "poisonous food");
                 do_dec_stat(A_WIS);
                 ident = TRUE;
                 break;
@@ -189,7 +189,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_UNHEALTH:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food");
                 do_dec_stat(A_CON);
                 ident = TRUE;
                 break;
@@ -197,7 +197,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_DISEASE:
             {
-                take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food", -1);
+                take_hit(DAMAGE_NOESCAPE, damroll(10, 10), "poisonous food");
                 do_dec_stat(A_STR);
                 ident = TRUE;
                 break;
@@ -956,7 +956,7 @@ static void do_cmd_device_aux(obj_ptr obj)
         project(
             PROJECT_WHO_UNCTRL_POWER, 4, py, px,
             device_sp(obj), GF_MANA,
-            PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+            PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
         obj->number = 0;
         obj_release(obj, OBJ_RELEASE_QUIET);
         return;

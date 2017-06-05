@@ -416,7 +416,7 @@ static cptr _do_potion(int sval, int mode)
         if (cast)
         {
             msg_print("Your nerves and muscles feel weak and lifeless!");
-            take_hit(DAMAGE_LOSELIFE, damroll(10, 10), "a potion of Ruination", -1);
+            take_hit(DAMAGE_LOSELIFE, damroll(10, 10), "a potion of Ruination");
 
             dec_stat(A_DEX, 25, TRUE);
             dec_stat(A_WIS, 25, TRUE);
@@ -474,7 +474,7 @@ static cptr _do_potion(int sval, int mode)
         if (cast)
         {
             msg_print("Massive explosions rupture your body!");
-            take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "a potion of Detonation", -1);
+            take_hit(DAMAGE_NOESCAPE, damroll(50, 20), "a potion of Detonation");
 
             set_stun(MAX(p_ptr->stun, STUN_MASSIVE), FALSE);
             set_cut(p_ptr->cut + 5000, FALSE);
@@ -488,7 +488,7 @@ static cptr _do_potion(int sval, int mode)
             virtue_add(VIRTUE_VITALITY, -1);
             virtue_add(VIRTUE_UNLIFE, 5);
             msg_print("A feeling of Death flows through your body.");
-            take_hit(DAMAGE_LOSELIFE, 5000, "a potion of Death", -1);
+            take_hit(DAMAGE_LOSELIFE, 5000, "a potion of Death");
             device_noticed = TRUE;
         }
         break;
@@ -1431,7 +1431,6 @@ static cptr _do_scroll(int sval, int mode)
         if (cast)
         {
             if (p_ptr->pclass == CLASS_WARRIOR ||
-                p_ptr->pclass == CLASS_IMITATOR ||
                 p_ptr->pclass == CLASS_MINDCRAFTER ||
                 p_ptr->pclass == CLASS_PSION ||
                 p_ptr->pclass == CLASS_SORCERER ||
@@ -1440,7 +1439,6 @@ static cptr _do_scroll(int sval, int mode)
                 p_ptr->pclass == CLASS_DEVICEMASTER ||
                 p_ptr->pclass == CLASS_RED_MAGE ||
                 p_ptr->pclass == CLASS_SAMURAI ||
-                p_ptr->pclass == CLASS_BLUE_MAGE ||
                 p_ptr->pclass == CLASS_CAVALRY ||
                 p_ptr->pclass == CLASS_BERSERKER ||
                 p_ptr->pclass == CLASS_WEAPONSMITH ||
@@ -1600,7 +1598,7 @@ static cptr _do_scroll(int sval, int mode)
             else if (n < 27)
             {
                 msg_print("The scroll explodes violently!");
-                project(0, 10, py, px, 300, GF_MANA, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(0, 10, py, px, 300, GF_MANA, PROJECT_KILL | PROJECT_ITEM);
             }
             else if (n < 50)
             {
@@ -1647,7 +1645,7 @@ static cptr _do_scroll(int sval, int mode)
             if (!devicemaster_is_(DEVICEMASTER_SCROLLS) && !res_save_default(RES_FIRE))
             {
                 int dam = res_calc_dam(RES_FIRE, 25 + randint1(25));
-                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Fire", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Fire");
             }
         }
         break;
@@ -1661,7 +1659,7 @@ static cptr _do_scroll(int sval, int mode)
             if (!devicemaster_is_(DEVICEMASTER_SCROLLS) && !res_save_default(RES_COLD))
             {
                 int dam = res_calc_dam(RES_COLD, 30 + randint1(30));
-                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Ice", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Ice");
             }
         }
         break;
@@ -1675,7 +1673,7 @@ static cptr _do_scroll(int sval, int mode)
             if (!devicemaster_is_(DEVICEMASTER_SCROLLS) && !res_save_default(RES_CHAOS))
             {
                 int dam = res_calc_dam(RES_CHAOS, 50 + randint1(50));
-                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Logrus", -1);
+                take_hit(DAMAGE_NOESCAPE, dam, "a Scroll of Logrus");
             }
         }
         break;
@@ -1687,7 +1685,7 @@ static cptr _do_scroll(int sval, int mode)
             device_noticed = TRUE;
             fire_ball(GF_MANA, 0, _scroll_power(1100), 4);
             if (!devicemaster_is_(DEVICEMASTER_SCROLLS))
-                take_hit(DAMAGE_NOESCAPE, 50 + randint1(50), "a Scroll of Mana", -1);
+                take_hit(DAMAGE_NOESCAPE, 50 + randint1(50), "a Scroll of Mana");
         }
         break;
     case SV_SCROLL_BANISHMENT:
@@ -5991,7 +5989,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
                     if (!player_bold(y, x)) break;
                 }
                 project(0, 3, y, x, _BOOST(dam), GF_ELEC,
-                    (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                    (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
             }
         }
         break;
@@ -6055,7 +6053,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             msg_print("Mighty magics rend your enemies!");
             project(0, 5, py, px,
                 _BOOST(dam*2),
-                GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+                GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
             device_noticed = TRUE;
         }
         break;
@@ -6130,7 +6128,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
                 set_blind(p_ptr->blind + 3 + randint1(5), FALSE);
             }
             project(0, 5, py, px, _BOOST(dam*2),
-                    GF_LITE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+                    GF_LITE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
             device_noticed = TRUE;
         }
         break;
@@ -6150,7 +6148,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
                 set_blind(p_ptr->blind + 3 + randint1(5), FALSE);
             }
             project(0, 5, py, px, _BOOST(dam*2),
-                    GF_DARK, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+                    GF_DARK, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
             device_noticed = TRUE;
         }
         break;
@@ -6467,7 +6465,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
                     if (!player_bold(y, x)) break;
                 }
                 project(0, 0, y, x, _BOOST(damroll(dd, 10)), GF_LITE_WEAK,
-                          PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL, -1);
+                          PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL);
             }
             device_noticed = TRUE;
         }
@@ -6602,7 +6600,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             virtue_add(VIRTUE_ENLIGHTENMENT, 1);
             wiz_lite(p_ptr->tim_superstealth > 0);
             msg_print("The Jewel drains your vitality...");
-            take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement", -1);
+            take_hit(DAMAGE_LOSELIFE, damroll(3, 8), "the Jewel of Judgement");
             detect_traps(DETECT_RAD_DEFAULT, TRUE);
             detect_doors(DETECT_RAD_DEFAULT);
             detect_stairs(DETECT_RAD_DEFAULT);
@@ -6661,7 +6659,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (value) return format("%d", 10000);
         if (cast)
         {
-            take_hit(DAMAGE_LOSELIFE, damroll(8, 8), "the Eye of Vecna", -1);
+            take_hit(DAMAGE_LOSELIFE, damroll(8, 8), "the Eye of Vecna");
             wiz_lite(TRUE);
             device_noticed = TRUE;
         }
@@ -6795,8 +6793,8 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (cast)
         {
             if (!res_save_default(RES_SOUND))
-                project(-1, 0, py, px, _BOOST(dam), GF_SOUND, PROJECT_KILL | PROJECT_HIDE, -1);
-            project(0, 18, py, px, _BOOST(dam*2), GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(-1, 0, py, px, _BOOST(dam), GF_SOUND, PROJECT_KILL | PROJECT_HIDE);
+            project(0, 18, py, px, _BOOST(dam*2), GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
             device_noticed = TRUE;
         }
         break;

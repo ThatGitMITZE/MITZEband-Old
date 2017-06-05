@@ -109,7 +109,6 @@ void init_blows_calc(object_type *o_ptr, weapon_info_t *info_ptr)
     case CLASS_NECROMANCER:
     case CLASS_BLOOD_MAGE:
     case CLASS_HIGH_MAGE:
-    case CLASS_BLUE_MAGE:
     case CLASS_YELLOW_MAGE:
     case CLASS_GRAY_MAGE:
         info_ptr->blows_calc.max = 400;
@@ -233,9 +232,6 @@ void init_blows_calc(object_type *o_ptr, weapon_info_t *info_ptr)
 
     case CLASS_DUELIST:
         info_ptr->blows_calc.max = 100; info_ptr->blows_calc.wgt = 70; info_ptr->blows_calc.mult = 40; break;
-
-    case CLASS_IMITATOR:
-        info_ptr->blows_calc.max = 550; info_ptr->blows_calc.wgt = 70; info_ptr->blows_calc.mult = 40; break;
 
     case CLASS_WILD_TALENT:
         info_ptr->blows_calc.max = 450; info_ptr->blows_calc.wgt = 70; info_ptr->blows_calc.mult = 40; break;

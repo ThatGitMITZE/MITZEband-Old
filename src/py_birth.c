@@ -937,7 +937,6 @@ static vec_ptr _get_classes_aux(int ids[])
     {
         int id = ids[i];
         if (id == -1) break;
-        if (id == CLASS_BLUE_MAGE || id == CLASS_IMITATOR) continue; /* broken ... but needs rewrite anyway */
         if (!_is_valid_race_class(p_ptr->prace, id)) continue;
         vec_add(v, get_class_aux(id, 0));
     }
@@ -957,7 +956,7 @@ static _class_group_t _class_groups[_MAX_CLASS_GROUPS] = {
                     CLASS_WEAPONSMITH, -1} },
     { "Archery", {CLASS_ARCHER, CLASS_SNIPER, -1} },
     { "Martial Arts", {CLASS_FORCETRAINER, CLASS_MONK, CLASS_MYSTIC, -1} },
-    { "Magic", {CLASS_BLOOD_MAGE, CLASS_BLUE_MAGE, CLASS_GRAY_MAGE, CLASS_HIGH_MAGE, CLASS_MAGE,
+    { "Magic", {CLASS_BLOOD_MAGE, CLASS_GRAY_MAGE, CLASS_HIGH_MAGE, CLASS_MAGE,
                     CLASS_NECROMANCER, CLASS_SORCERER, CLASS_YELLOW_MAGE, -1} },
     { "Devices", {CLASS_DEVICEMASTER, CLASS_MAGIC_EATER, -1} },
     { "Prayer", {CLASS_PRIEST, -1} },
@@ -967,7 +966,7 @@ static _class_group_t _class_groups[_MAX_CLASS_GROUPS] = {
     { "Riding", {CLASS_BEASTMASTER, CLASS_CAVALRY, -1} },
     { "Mind", {CLASS_MINDCRAFTER, CLASS_MIRROR_MASTER, CLASS_PSION,
                     CLASS_TIME_LORD, CLASS_WARLOCK, -1} },
-    { "Other", {CLASS_ARCHAEOLOGIST, CLASS_BARD, CLASS_IMITATOR, CLASS_RAGE_MAGE,
+    { "Other", {CLASS_ARCHAEOLOGIST, CLASS_BARD, CLASS_RAGE_MAGE,
                     CLASS_SKILLMASTER, CLASS_TOURIST, CLASS_WILD_TALENT, -1} },
 };
 
@@ -2110,7 +2109,6 @@ static void _stats_init(void)
         }
         case CLASS_MAGE:
         case CLASS_HIGH_MAGE:
-        case CLASS_BLUE_MAGE:
         case CLASS_GRAY_MAGE:
         case CLASS_YELLOW_MAGE:
         case CLASS_MIRROR_MASTER:

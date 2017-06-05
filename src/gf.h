@@ -179,5 +179,4 @@ extern int gf_hell_dam(int dam);
 
 /* XXX Remove these ... */
 extern int gf_distance_hack;
-extern int mon_spell_hack;
 #endif

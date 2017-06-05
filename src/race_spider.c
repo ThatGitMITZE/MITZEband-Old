@@ -74,7 +74,7 @@ void spider_web_spell(int cmd, variant *res)
         break;
     case SPELL_CAST:
         if (p_ptr->lev >= 50)
-            project(0, 1, py, px, 0, GF_WEB, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE, -1);
+            project(0, 1, py, px, 0, GF_WEB, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE);
         else
         {
             int attempts = 0;

@@ -802,7 +802,7 @@ void do_cmd_spell(void)
         energy_use = get_spell_energy(spell->fn);
 
         if ((caster->options & CASTER_USE_HP) && spell->cost > 0)
-            take_hit(DAMAGE_USELIFE, spell->cost, "concentrating too hard", -1);
+            take_hit(DAMAGE_USELIFE, spell->cost, "concentrating too hard");
         if ((caster->options & CASTER_USE_AU) && spell->cost > 0)
         {
             p_ptr->au -= spell->cost;
@@ -910,7 +910,7 @@ void do_cmd_power(void)
         {
             int cost = spell->cost - p_ptr->csp;
             p_ptr->csp = 0;
-            take_hit(DAMAGE_USELIFE, cost, "concentrating too hard", -1);
+            take_hit(DAMAGE_USELIFE, cost, "concentrating too hard");
         }
         else
             p_ptr->csp -= spell->cost;

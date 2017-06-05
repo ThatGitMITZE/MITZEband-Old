@@ -507,7 +507,7 @@ static void _devour_flesh_spell(int cmd, variant *res)
         msg_print("You devour your own flesh!");
         set_food(PY_FOOD_MAX - 1);
         set_cut(p_ptr->cut + CUT_SEVERE, FALSE);
-        take_hit(DAMAGE_USELIFE, p_ptr->mhp / 3, "devouring your own flesh", -1);
+        take_hit(DAMAGE_USELIFE, p_ptr->mhp / 3, "devouring your own flesh");
         var_set_bool(res, TRUE);
         break;
     default:

@@ -582,7 +582,7 @@ static void _smash_ground_spell(int cmd, variant *res)
             return;
         }
         msg_print("You smash your weapon mightily on the ground.");
-        project(0, 8, py, px, device_power(dam*2), GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+        project(0, 8, py, px, device_power(dam*2), GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
 
         var_set_bool(res, TRUE);
         break;

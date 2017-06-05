@@ -874,7 +874,7 @@ static int _get_powers(spell_info* spells, int max)
     if (ct < max)
         _add_power(&spells[ct++], 1, 0, 0, _mimic_spell, p_ptr->stat_ind[A_DEX]);
 
-    ct += possessor_get_powers(spells + ct, max - ct);
+    /*ct += possessor_get_powers(spells + ct, max - ct);*/
     return ct;
 }
 
@@ -941,8 +941,6 @@ race_t *mon_mimic_get_race(void)
 
         me.load_player = _load;
         me.save_player = _save;
-
-        me.calc_innate_attacks = possessor_calc_innate_attacks;
 
         me.flags = RACE_IS_MONSTER;
         me.boss_r_idx = MON_CHAMELEON_K;

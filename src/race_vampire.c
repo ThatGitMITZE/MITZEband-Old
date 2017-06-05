@@ -134,7 +134,7 @@ static void _bite_spell(int cmd, variant *res)
             amt = _bite_amt();
 
             vampiric_drain_hack = TRUE;
-            if (project(0, 0, y, x, amt, GF_OLD_DRAIN, PROJECT_STOP | PROJECT_KILL | PROJECT_THRU, -1))
+            if (project(0, 0, y, x, amt, GF_OLD_DRAIN, PROJECT_STOP | PROJECT_KILL | PROJECT_THRU))
             {
                 vampire_feed(amt);
             }

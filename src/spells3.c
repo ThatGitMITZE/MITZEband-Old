@@ -597,7 +597,7 @@ void teleport_away_followable(int m_idx)
     {
         bool follow = FALSE;
 
-        if (mut_present(MUT_TELEPORT) || (p_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
+        if (mut_present(MUT_TELEPORT)) follow = TRUE;
         else if (p_ptr->pclass == CLASS_DUELIST
               && p_ptr->duelist_target_idx == m_idx
               && p_ptr->lev >= 30 )
@@ -1497,7 +1497,7 @@ void call_the_(void)
                 msg_print("The dungeon trembles.");
         }
 
-        take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void", -1);
+        take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), "a suicidal Call the Void");
     }
 }
 
@@ -2500,7 +2500,7 @@ bool recharge_from_player(int power)
         p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
     }
     else if (p_ptr->pclass == CLASS_BLOOD_MAGE)
-        take_hit(DAMAGE_NOESCAPE, amt, "recharging", -1);
+        take_hit(DAMAGE_NOESCAPE, amt, "recharging");
     else
         sp_player(-amt);
 
@@ -2922,7 +2922,7 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
     }
 
     (void)project(who, radius, y, x, dam, dt,
-        (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
+        (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL));
 
     /* XXX  those potions that explode need to become "known" */
     return angry;
@@ -3740,11 +3740,8 @@ static int _inv_dam_pct(int dam)
 {
     return (dam < 30) ? 3 : (dam < 60) ? 6 : 9;
 }
-static void learn_spell(int which)
-{
-}
 
-int acid_dam(int dam, cptr kb_str, int monspell)
+int acid_dam(int dam, cptr kb_str)
 {
     int get_damage;
     int inv = _inv_dam_pct(dam);
@@ -3752,11 +3749,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
     dam = res_calc_dam(RES_ACID, dam);
 
     /* Total Immunity */
-    if (dam <= 0)
-    {
-        learn_spell(monspell);
-        return 0;
-    }
+    if (dam <= 0) return 0;
 
     if (!CHECK_MULTISHADOW())
     {
@@ -3768,7 +3761,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
     }
 
     /* Take damage */
-    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str);
 
     /* Inventory damage */
     inven_damage(set_acid_destroy, inv, RES_ACID);
@@ -3780,7 +3773,7 @@ int acid_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with electricity
  */
-int elec_dam(int dam, cptr kb_str, int monspell)
+int elec_dam(int dam, cptr kb_str)
 {
     int get_damage;
     int inv = _inv_dam_pct(dam);
@@ -3788,11 +3781,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
     dam = res_calc_dam(RES_ELEC, dam);
 
     /* Total immunity */
-    if (dam <= 0)
-    {
-        learn_spell(monspell);
-        return 0;
-    }
+    if (dam <= 0) return 0;
 
     if (!CHECK_MULTISHADOW())
     {
@@ -3801,7 +3790,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
     }
 
     /* Take damage */
-    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str);
 
     /* Inventory damage */
     inven_damage(set_elec_destroy, inv, RES_ELEC);
@@ -3813,7 +3802,7 @@ int elec_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with Fire
  */
-int fire_dam(int dam, cptr kb_str, int monspell)
+int fire_dam(int dam, cptr kb_str)
 {
     int get_damage;
     int inv = _inv_dam_pct(dam);
@@ -3821,11 +3810,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
     dam = res_calc_dam(RES_FIRE, dam);
 
     /* Totally immune */
-    if (dam <= 0)
-    {
-        learn_spell(monspell);
-        return 0;
-    }
+    if (dam <= 0) return 0;
 
     if (!CHECK_MULTISHADOW())
     {
@@ -3834,7 +3819,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
     }
 
     /* Take damage */
-    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str);
 
     /* Inventory damage */
     inven_damage(set_fire_destroy, inv, RES_FIRE);
@@ -3846,7 +3831,7 @@ int fire_dam(int dam, cptr kb_str, int monspell)
 /*
  * Hurt the player with Cold
  */
-int cold_dam(int dam, cptr kb_str, int monspell)
+int cold_dam(int dam, cptr kb_str)
 {
     int get_damage;
     int inv = _inv_dam_pct(dam);
@@ -3854,11 +3839,7 @@ int cold_dam(int dam, cptr kb_str, int monspell)
     dam = res_calc_dam(RES_COLD, dam);
 
     /* Total immunity */
-    if (dam <= 0)
-    {
-        learn_spell(monspell);
-        return 0;
-    }
+    if (dam <= 0) return 0;
 
     if (!CHECK_MULTISHADOW())
     {
@@ -3867,7 +3848,7 @@ int cold_dam(int dam, cptr kb_str, int monspell)
     }
 
     /* Take damage */
-    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str, monspell);
+    get_damage = take_hit(DAMAGE_ATTACK, dam, kb_str);
 
     /* Inventory damage */
     inven_damage(set_cold_destroy, inv, RES_COLD);

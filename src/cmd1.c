@@ -370,7 +370,7 @@ void death_scythe_miss(object_type *o_ptr, int hand, int mode)
 
     if (k < 0) k = 0;
 
-    take_hit(DAMAGE_FORCE, k, "Death scythe", -1);
+    take_hit(DAMAGE_FORCE, k, "Death scythe");
 }
 
 /*
@@ -1446,7 +1446,7 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, i
             }
             if (p_ptr->tim_blood_feast)
             {
-                take_hit(DAMAGE_ATTACK, 15, "blood feast", -1);
+                take_hit(DAMAGE_ATTACK, 15, "blood feast");
             }
             break;
         }
@@ -1616,7 +1616,7 @@ static void hit_trap(bool break_trap)
                 dam = damroll(2, 8);
                 name = "a trap door";
 
-                take_hit(DAMAGE_NOESCAPE, dam, name, -1);
+                take_hit(DAMAGE_NOESCAPE, dam, name);
 
                 /* Still alive and autosave enabled */
                 if (autosave_l && (p_ptr->chp >= 0))
@@ -1644,7 +1644,7 @@ static void hit_trap(bool break_trap)
                 dam = damroll(2, 6);
                 name = "a pit trap";
 
-                take_hit(DAMAGE_NOESCAPE, dam, name, -1);
+                take_hit(DAMAGE_NOESCAPE, dam, name);
             }
             break;
         }
@@ -1679,7 +1679,7 @@ static void hit_trap(bool break_trap)
                 }
 
                 /* Take the damage */
-                take_hit(DAMAGE_NOESCAPE, dam, name, -1);
+                take_hit(DAMAGE_NOESCAPE, dam, name);
             }
             break;
         }
@@ -1723,7 +1723,7 @@ static void hit_trap(bool break_trap)
                 }
 
                 /* Take the damage */
-                take_hit(DAMAGE_NOESCAPE, dam, name, -1);
+                take_hit(DAMAGE_NOESCAPE, dam, name);
             }
 
             break;
@@ -1766,7 +1766,7 @@ static void hit_trap(bool break_trap)
             msg_print("You are enveloped in flames!");
 
             dam = damroll(4, 6);
-            (void)fire_dam(dam, "a fire trap", -1);
+            (void)fire_dam(dam, "a fire trap");
 
             break;
         }
@@ -1776,7 +1776,7 @@ static void hit_trap(bool break_trap)
             msg_print("You are splashed with acid!");
 
             dam = damroll(4, 6);
-            (void)acid_dam(dam, "an acid trap", -1);
+            (void)acid_dam(dam, "an acid trap");
 
             break;
         }
@@ -1788,7 +1788,7 @@ static void hit_trap(bool break_trap)
                 msg_print("A small dart hits you!");
 
                 dam = damroll(1, 4);
-                take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
+                take_hit(DAMAGE_ATTACK, dam, "a dart trap");
 
                 if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
             }
@@ -1807,7 +1807,7 @@ static void hit_trap(bool break_trap)
                 msg_print("A small dart hits you!");
 
                 dam = damroll(1, 4);
-                take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
+                take_hit(DAMAGE_ATTACK, dam, "a dart trap");
 
                 if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_STR);
             }
@@ -1826,7 +1826,7 @@ static void hit_trap(bool break_trap)
                 msg_print("A small dart hits you!");
 
                 dam = damroll(1, 4);
-                take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
+                take_hit(DAMAGE_ATTACK, dam, "a dart trap");
 
                 if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_DEX);
             }
@@ -1845,7 +1845,7 @@ static void hit_trap(bool break_trap)
                 msg_print("A small dart hits you!");
 
                 dam = damroll(1, 4);
-                take_hit(DAMAGE_ATTACK, dam, "a dart trap", -1);
+                take_hit(DAMAGE_ATTACK, dam, "a dart trap");
 
                 if (!CHECK_MULTISHADOW()) (void)do_dec_stat(A_CON);
             }
@@ -1915,7 +1915,7 @@ static void hit_trap(bool break_trap)
             msg_print("There is a bright flash of light!");
 
             /* Make some new traps */
-            project(0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
+            project(0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
 
             break;
         }
@@ -1933,7 +1933,7 @@ static void hit_trap(bool break_trap)
         {
             msg_print("Suddenly, surrounding walls are opened!");
             /*TODO: Fire beams in 4 principle directions that kill adjacent walls ... */
-            project(0, 10, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+            project(0, 10, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
             aggravate_monsters(0);
 
             break;
@@ -2078,7 +2078,7 @@ void touch_zap_player(int m_idx)
 
             msg_format("You are %s.", buf);
             monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-            take_hit(DAMAGE_NOESCAPE, fire_dam + cold_dam + elec_dam, m_name, -1);
+            take_hit(DAMAGE_NOESCAPE, fire_dam + cold_dam + elec_dam, m_name);
             handle_stuff();
         }
     }
@@ -3687,7 +3687,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (mauler_get_toggle() == MAULER_TOGGLE_SPLATTER)
                 {
                     project(0, 2, y, x, k,
-                            GF_BLOOD, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_FULL_DAM, -1);
+                            GF_BLOOD, PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_FULL_DAM);
                 }
 
                 if ( o_ptr
@@ -4621,6 +4621,10 @@ bool py_attack(int y, int x, int mode)
         return TRUE;
     }
 
+    if (p_ptr->current_r_idx && !mdeath && !fear_stop)
+    {
+        possessor_attack(point(x,y), &fear, &mdeath);
+    }
     if (p_ptr->innate_attack_ct && !mdeath && !fear_stop)
     {
         bool do_innate_attacks = TRUE;
@@ -5138,7 +5142,7 @@ bool move_player_effect(int ny, int nx, u32b mpe_mode)
         if (music_singing(MUSIC_WALL))
         {
             (void)project(0, 0, py, px, (60 + p_ptr->lev), GF_DISINTEGRATE,
-                PROJECT_KILL | PROJECT_ITEM, -1);
+                PROJECT_KILL | PROJECT_ITEM);
 
             if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
         }

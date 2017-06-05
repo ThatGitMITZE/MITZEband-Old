@@ -603,7 +603,7 @@ static void _pharaohs_curse_spell(int cmd, variant *res)
                     msg_print("You have disturbed the rest of an ancient pharaoh!");
                 }
             }
-            take_hit(DAMAGE_USELIFE, p_ptr->lev + randint1(p_ptr->lev), "the Pharaoh's Curse", -1);
+            take_hit(DAMAGE_USELIFE, p_ptr->lev + randint1(p_ptr->lev), "the Pharaoh's Curse");
             var_set_bool(res, TRUE);
         }
         break;
@@ -664,7 +664,7 @@ static void _remove_obstacles_spell(int cmd, variant *res)
             int dir = 5;
             if (get_aim_dir(&dir))
             {
-                project(0, 1, py, px, 0, GF_REMOVE_OBSTACLE, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE, -1);
+                project(0, 1, py, px, 0, GF_REMOVE_OBSTACLE, PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE);
                 project_hook(GF_REMOVE_OBSTACLE, dir, 0, PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM);
                 b = TRUE;
             }

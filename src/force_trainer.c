@@ -150,7 +150,7 @@ static void _improve_force_spell(int cmd, variant *res)
         {
             msg_print("The Force exploded!");
             fire_ball(GF_MANA, 0, p_ptr->magic_num1[0] / 2, 10);
-            take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, "Explosion of the Force", -1);
+            take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, "Explosion of the Force");
             p_ptr->magic_num1[0] = 0;
             p_ptr->update |= (PU_BONUS);
             var_set_bool(res, FALSE); /* no energy consumed?? */

@@ -435,7 +435,7 @@ bool make_attack_normal(int m_idx)
                         tmp_damage = MAX(effect_dam, tmp_damage*2);
                         tmp_damage = reduce_melee_dam_p(tmp_damage);
 
-                        blow_dam += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
+                        blow_dam += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc);
                         break;
                     }
                 case RBE_HURT: {
@@ -444,7 +444,7 @@ bool make_attack_normal(int m_idx)
                     obvious = TRUE;
                     effect_dam = effect_dam * pct / 100;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     break; }
 
@@ -457,7 +457,7 @@ bool make_attack_normal(int m_idx)
 
                     /* Take some damage */
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -538,7 +538,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_EAT_GOLD:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
@@ -595,7 +595,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_EAT_ITEM:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
@@ -661,7 +661,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_EAT_FOOD:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -696,7 +696,7 @@ bool make_attack_normal(int m_idx)
                     int slot = equip_find_obj(TV_LITE, SV_ANY);
 
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (slot)
@@ -719,7 +719,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_BLIND:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead) break;
                     if (!res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
                     {
@@ -732,7 +732,7 @@ bool make_attack_normal(int m_idx)
                 case RBE_CONFUSE: /* XXX Consider changing titans: B:HIT:HURT(XdY):CONFUSE(XdY) */
                     if (explode) break;
                     effect_dam = reduce_melee_dam_p(effect_dam); /* XXX Make effect_dam the confuse amount */
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead) break;
                     if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
                     {
@@ -744,7 +744,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_TERRIFY:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead) break;
 
                     if (!CHECK_MULTISHADOW())
@@ -757,7 +757,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_PARALYZE: /* XXX Replace with B:GAZE:HURT(XdY):PARALYZE:CONFUSE:STUN(20) */
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (p_ptr->free_act)
@@ -781,49 +781,49 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_STR)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_INT:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_INT)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_WIS:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_WIS)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_DEX:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_DEX)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_CON:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_CON)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_CHR:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_CHR)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_ALL:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (do_dec_stat(A_STR)) obvious = TRUE;
@@ -840,7 +840,7 @@ bool make_attack_normal(int m_idx)
                     obvious = TRUE;
                     effect_dam = effect_dam * pct / 100;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     if (effect_dam > 23 || explode)
                         earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
@@ -850,7 +850,7 @@ bool make_attack_normal(int m_idx)
                     s32b d = damroll(10, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     obvious = TRUE;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     drain_exp(d, d / 10, 95);
@@ -860,7 +860,7 @@ bool make_attack_normal(int m_idx)
                     s32b d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     obvious = TRUE;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     drain_exp(d, d / 10, 90);
@@ -870,7 +870,7 @@ bool make_attack_normal(int m_idx)
                     s32b d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     obvious = TRUE;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     drain_exp(d, d / 10, 75);
@@ -880,7 +880,7 @@ bool make_attack_normal(int m_idx)
                     s32b d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
                     obvious = TRUE;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     drain_exp(d, d / 10, 50);
@@ -888,7 +888,7 @@ bool make_attack_normal(int m_idx)
 
                 case RBE_DISEASE:
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     /* XXX should we do both immediate and delayed damage? */
@@ -915,7 +915,7 @@ bool make_attack_normal(int m_idx)
 
                     obvious = TRUE;
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc, -1);
+                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     resist_drain = !drain_exp(d, d / 10, 50);
@@ -1159,7 +1159,7 @@ bool make_attack_normal(int m_idx)
                     {
                         int dam = (subjugation_power()+1)/2;
                         msg_format("%^s feels the force of your presence!", m_name);
-                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_SUBJUGATION, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID, -1);
+                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_SUBJUGATION, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID);
                         if (MON_CSLEEP(m_ptr) || !is_hostile(m_ptr) || MON_MONFEAR(m_ptr))
                             break;
                     }
@@ -1186,7 +1186,7 @@ bool make_attack_normal(int m_idx)
                             msg_format("%^s <color:B>withers</color>!", m_name);
                             break;
                         }
-                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_TIME, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID, -1);
+                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_TIME, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID);
                         if (m_ptr->paralyzed)
                             break;
                     }
@@ -1198,7 +1198,7 @@ bool make_attack_normal(int m_idx)
 
                 if (p_ptr->sh_fear && alive && !p_ptr->is_dead)
                 {
-                    project(0, 0, m_ptr->fy, m_ptr->fx, 2*p_ptr->lev, GF_TURN_ALL, PROJECT_KILL|PROJECT_HIDE, -1);
+                    project(0, 0, m_ptr->fy, m_ptr->fx, 2*p_ptr->lev, GF_TURN_ALL, PROJECT_KILL|PROJECT_HIDE);
                     if (MON_MONFEAR(m_ptr))
                         break;
                 }
@@ -1311,7 +1311,7 @@ bool make_attack_normal(int m_idx)
                                 default: if (object_is_shield(o_ptr)) effect = GF_OLD_SLEEP;
                                 }
                                 if (effect)
-                                    project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), effect, flg, -1);
+                                    project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), effect, flg);
                             }
                         }
                     }
@@ -1416,7 +1416,7 @@ bool make_attack_normal(int m_idx)
         monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
         msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
-        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(total_dam), GF_MISSILE, PROJECT_KILL, -1);
+        project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(total_dam), GF_MISSILE, PROJECT_KILL);
         if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
     }
 
