@@ -160,7 +160,6 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_byte(file, r_ptr->r_xtra2);
     savefile_write_byte(file, r_ptr->r_drop_gold);
     savefile_write_byte(file, r_ptr->r_drop_item);
-    savefile_write_byte(file, r_ptr->r_cast_spell);
     savefile_write_u32b(file, r_ptr->r_spell_turns);
     savefile_write_u32b(file, r_ptr->r_move_turns);
     savefile_write_byte(file, r_ptr->r_blows[0]);
@@ -170,14 +169,13 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_u32b(file, r_ptr->r_flags1);
     savefile_write_u32b(file, r_ptr->r_flags2);
     savefile_write_u32b(file, r_ptr->r_flags3);
-    savefile_write_u32b(file, r_ptr->r_flags4);
-    savefile_write_u32b(file, r_ptr->r_flags5);
-    savefile_write_u32b(file, r_ptr->r_flags6);
     savefile_write_u32b(file, r_ptr->r_flagsr);
     savefile_write_byte(file, r_ptr->max_num);
     savefile_write_s16b(file, r_ptr->floor_id);
     savefile_write_byte(file, r_ptr->stolen_ct);
     savefile_write_u32b(file, r_ptr->flagsx);
+    if (r_ptr->spells)
+        mon_spells_save(r_ptr->spells, file);
 }
 
 static void wr_xtra_kind(savefile_ptr file, int k_idx)

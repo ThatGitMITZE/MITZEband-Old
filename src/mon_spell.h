@@ -126,6 +126,8 @@ extern errr           mon_spells_parse(mon_spells_ptr spells, int rlev, char *to
 extern vec_ptr        mon_spells_all(mon_spells_ptr spells);
 extern mon_spell_ptr  mon_spells_find(mon_spells_ptr spells, mon_spell_id_t id);
 extern mon_spell_ptr  mon_spells_random(mon_spells_ptr spells); /* stupid monsters */
+extern void           mon_spells_load(mon_spells_ptr spells, savefile_ptr file);
+extern void           mon_spells_save(mon_spells_ptr spells, savefile_ptr file);
 
 /* Finally, it is time to cast a spell!
  * Note, this is slightly more complicated then I would like since monsters

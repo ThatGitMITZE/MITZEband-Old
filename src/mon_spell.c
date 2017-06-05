@@ -508,9 +508,17 @@ mon_spell_parm_t mon_spell_parm_hp_pct(int pct, int max)
     return parm;
 }
 
+/* This is for clang that complains about any default {0} or { {0} } initialization.
+ * I think it wants {{{0}}}, but I got tired of trying to appease it. */
+static mon_spell_parm_t _empty(void)
+{
+    mon_spell_parm_t p;
+    memset(&p, 0, sizeof(mon_spell_parm_t));
+    return p;
+}
 static mon_spell_parm_t _breath_parm(int which)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_HP_PCT;
     switch (which)
     {
@@ -576,7 +584,7 @@ static mon_spell_parm_t _breath_parm(int which)
 
 static mon_spell_parm_t _ball_parm(int which, int rlev)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -638,7 +646,7 @@ static mon_spell_parm_t _ball_parm(int which, int rlev)
 
 static mon_spell_parm_t _bolt_parm(int which, int rlev)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -683,7 +691,7 @@ static mon_spell_parm_t _bolt_parm(int which, int rlev)
 
 static mon_spell_parm_t _beam_parm(int which, int rlev)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -702,7 +710,7 @@ static mon_spell_parm_t _beam_parm(int which, int rlev)
 
 static mon_spell_parm_t _curse_parm(int which)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -729,7 +737,7 @@ static mon_spell_parm_t _curse_parm(int which)
 
 static mon_spell_parm_t _heal_parm(int which, int rlev)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -744,7 +752,7 @@ static mon_spell_parm_t _heal_parm(int which, int rlev)
 
 static mon_spell_parm_t _summon_parm(int which)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     parm.tag = MSP_DICE;
     switch (which)
     {
@@ -759,7 +767,7 @@ static mon_spell_parm_t _summon_parm(int which)
 
 static mon_spell_parm_t _tactic_parm(int which, int rlev)
 {
-    mon_spell_parm_t parm = {0};
+    mon_spell_parm_t parm = _empty();
     if (which >= TACTIC_BLINK) return parm;
     parm.tag = MSP_DICE;
     parm.v.dice = _dice(0, 0, rlev);
@@ -768,7 +776,7 @@ static mon_spell_parm_t _tactic_parm(int which, int rlev)
 
 mon_spell_parm_t mon_spell_parm_default(mon_spell_id_t id, int rlev)
 {
-    mon_spell_parm_t empty = {0};
+    mon_spell_parm_t empty = _empty();
 
     switch (id.type)
     {
@@ -1155,7 +1163,7 @@ void mon_spells_add(mon_spells_ptr spells, mon_spell_ptr spell)
 
 errr mon_spells_parse(mon_spells_ptr spells, int rlev, char *token)
 {
-    mon_spell_t spell = {0};
+    mon_spell_t spell = {{0}};
     errr        rc = mon_spell_parse(&spell, rlev, token);
 
     if (rc == 0)
@@ -1339,8 +1347,8 @@ static bool _spell_fail(void)
 
     if (fail && randint0(100) < fail)
     {
-        mon_lore_aux_spell(_current.race);
-        msg_format("%^s tries to cast a spell, but fails.", _current.name);
+        mon_lore_aux_spell_turns(_current.race);
+        msg_format("%s tries to cast a spell, but fails.", _current.name);
         return TRUE;
     }
     return FALSE;
@@ -2065,7 +2073,7 @@ static void _spell_cast_aux(void)
         return;
     _spell_msg();
     if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */
-        _current.spell->lore = MIN(MAX_SHORT, _current.spell->lore + 1);
+        mon_lore_spell(_current.mon, _current.spell);
 
     switch (_current.spell->id.type)
     {
@@ -2074,7 +2082,7 @@ static void _spell_cast_aux(void)
     case MST_BEAM:    _beam();    break;
     case MST_BIFF:    _biff();    break;
     case MST_BOLT:    _bolt();    break;
-    case MST_BREATH:  _breath(); break;
+    case MST_BREATH:  _breath();  break;
     case MST_BUFF:    _buff();    break;
     case MST_CURSE:   _curse();   break;
     case MST_ESCAPE:  _escape();  break;
@@ -3151,7 +3159,6 @@ static bool _default_ai_mon(mon_spell_cast_ptr cast)
     return cast->spell != NULL;
 }
 
-
 /*************************************************************************
  * Wizard Probe
  ************************************************************************/
@@ -3301,4 +3308,45 @@ void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
     doc_printf(doc, "<tab:65><color:r>%d</color>", total_dam / total);
     doc_newline(doc);
 }
+
+/*************************************************************************
+ * Savefiles
+ ************************************************************************/
+void mon_spells_load(mon_spells_ptr spells, savefile_ptr file)
+{
+    byte type = savefile_read_byte(file); /* never read inside an assert()!! */
+    s16b effect, lore;
+    mon_spell_ptr spell;
+    assert(type == 0xEE);
+    for (;;)
+    {
+        type = savefile_read_byte(file);
+        if (type == 0xFF) break;
+        effect = savefile_read_s16b(file);
+        lore = savefile_read_s16b(file); /* be sure to read if spell no longer exists */
+        spell = mon_spells_find(spells, _id(type, effect));
+        if (spell)
+            spell->lore = lore;
+    }
+}
+
+void mon_spells_save(mon_spells_ptr spells, savefile_ptr file)
+{
+    int i,j;
+    savefile_write_byte(file, 0xEE); /* early detection of corrupt savefile, please */
+    for (i = 0; i < MST_COUNT; i++)
+    {
+        mon_spell_group_ptr group = spells->groups[i];
+        if (!group) continue;
+        for (j = 0; j < group->count; j++)
+        {
+            mon_spell_ptr spell = &group->spells[j];
+            savefile_write_byte(file, spell->id.type);
+            savefile_write_s16b(file, spell->id.effect);
+            savefile_write_s16b(file, spell->lore);
+        }
+    }
+    savefile_write_byte(file, 0xFF);
+}
+
 

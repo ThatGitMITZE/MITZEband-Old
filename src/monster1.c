@@ -99,24 +99,6 @@ void mon_lore_3(monster_type *m_ptr, u32b mask)
         mon_lore_aux_3(&r_info[m_ptr->r_idx], mask);
 }
 
-void mon_lore_4(monster_type *m_ptr, u32b mask)
-{
-    if (is_original_ap_and_seen(m_ptr))
-        mon_lore_aux_4(&r_info[m_ptr->r_idx], mask);
-}
-
-void mon_lore_5(monster_type *m_ptr, u32b mask)
-{
-    if (is_original_ap_and_seen(m_ptr))
-        mon_lore_aux_5(&r_info[m_ptr->r_idx], mask);
-}
-
-void mon_lore_6(monster_type *m_ptr, u32b mask)
-{
-    if (is_original_ap_and_seen(m_ptr))
-        mon_lore_aux_6(&r_info[m_ptr->r_idx], mask);
-}
-
 void mon_lore_r(monster_type *m_ptr, u32b mask)
 {
     if (is_original_ap_and_seen(m_ptr))
@@ -163,6 +145,34 @@ void mon_lore_aux_effect(monster_race *r_ptr, mon_effect_ptr effect)
     }
 }
 
+void mon_lore_spell(mon_ptr mon, mon_spell_ptr spell)
+{
+    if (is_original_ap_and_seen(mon))
+        mon_lore_aux_spell(&r_info[mon->r_idx], spell);
+}
+
+void mon_lore_aux_spell(mon_race_ptr race, mon_spell_ptr spell)
+{
+    if (spell->lore < MAX_SHORT)
+    {
+        spell->lore++;
+        if (race->id == p_ptr->monster_race_idx)
+            p_ptr->window |= PW_MONSTER;
+    }
+    mon_lore_aux_spell_turns(race);
+}
+
+void mon_lore_aux_spell_turns(mon_race_ptr race)
+{
+    u32b old = race->r_spell_turns;
+    race->r_spell_turns++;
+    if (race->r_spell_turns < old) /* wrap? */
+        race->r_spell_turns = old;
+
+    if (race->r_spell_turns != old && race->id == p_ptr->monster_race_idx)
+        p_ptr->window |= PW_MONSTER;
+}
+
 void mon_lore_aux_1(monster_race *r_ptr, u32b mask)
 {
     u32b old = r_ptr->r_flags1;
@@ -190,24 +200,6 @@ void mon_lore_aux_3(monster_race *r_ptr, u32b mask)
         p_ptr->window |= PW_MONSTER;
 }
 
-void mon_lore_aux_spell(monster_race *r_ptr)
-{
-    u32b old = r_ptr->r_spell_turns;
-    r_ptr->r_spell_turns++;
-    if (r_ptr->r_spell_turns < old) /* wrap? */
-        r_ptr->r_spell_turns = old;
-
-    if (r_ptr->r_spell_turns != old && r_ptr->id == p_ptr->monster_race_idx)
-        p_ptr->window |= PW_MONSTER;
-
-    if (r_ptr->r_cast_spell < MAX_UCHAR)
-    {
-        r_ptr->r_cast_spell++;
-        if (r_ptr->id == p_ptr->monster_race_idx)
-            p_ptr->window |= PW_MONSTER;
-    }
-}
-
 static void _mon_lore_aux_move(monster_race *r_ptr)
 {
     u32b old = r_ptr->r_move_turns;
@@ -222,36 +214,6 @@ void mon_lore_move(monster_type *m_ptr)
 {
     if (is_original_ap_and_seen(m_ptr))
         _mon_lore_aux_move(&r_info[m_ptr->r_idx]);
-}
-
-void mon_lore_aux_4(monster_race *r_ptr, u32b mask)
-{
-    u32b old = r_ptr->r_flags4;
-
-    mon_lore_aux_spell(r_ptr);
-    r_ptr->r_flags4 |= (r_ptr->flags4 & mask);
-    if (r_ptr->r_flags4 != old && r_ptr->id == p_ptr->monster_race_idx)
-        p_ptr->window |= PW_MONSTER;
-}
-
-void mon_lore_aux_5(monster_race *r_ptr, u32b mask)
-{
-    u32b old = r_ptr->r_flags5;
-
-    mon_lore_aux_spell(r_ptr);
-    r_ptr->r_flags5 |= (r_ptr->flags5 & mask);
-    if (r_ptr->r_flags5 != old && r_ptr->id == p_ptr->monster_race_idx)
-        p_ptr->window |= PW_MONSTER;
-}
-
-void mon_lore_aux_6(monster_race *r_ptr, u32b mask)
-{
-    u32b old = r_ptr->r_flags6;
-
-    mon_lore_aux_spell(r_ptr);
-    r_ptr->r_flags6 |= (r_ptr->flags6 & mask);
-    if (r_ptr->r_flags6 != old && r_ptr->id == p_ptr->monster_race_idx)
-        p_ptr->window |= PW_MONSTER;
 }
 
 void mon_lore_aux_r(monster_race *r_ptr, u32b mask)

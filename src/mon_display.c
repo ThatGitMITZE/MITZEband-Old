@@ -459,10 +459,16 @@ static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, 
                     }
                     else
                         string_printf(s, "%d", mon_spell_avg_dam(spell, r_ptr));
+                    if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+                        string_printf(s, ", %dx", spell->lore);
                     string_append_c(s, ')');
                 }
+                else if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+                    string_printf(s, " (%dx)", spell->lore);
             }
-            vec_add(v, s);
+            else if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+                string_printf(s, " (%dx)", spell->lore);
+             vec_add(v, s);
         }
     }
 }
@@ -885,6 +891,10 @@ void mon_display_rect(monster_race *r_ptr, rect_t display)
 }
 void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
 {
+    /* XXX Struct copy is a bad idea ... for example, mon_race->spells is
+     * not copied, but the pointer is. Try to see why we need to copy
+     * to correctly display lore. I mean, can't the other code just use
+     * the r_flags instead of the flags? */
     monster_race copy = *r_ptr;
     if (!_easy_lore(r_ptr))
     {
@@ -892,9 +902,6 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
         copy.flags1 &= copy.r_flags1;
         copy.flags2 &= copy.r_flags2;
         copy.flags3 &= copy.r_flags3;
-        copy.flags4 &= copy.r_flags4;
-        copy.flags5 &= copy.r_flags5;
-        copy.flags6 &= copy.r_flags6;
         copy.flagsr &= copy.r_flagsr;
 
         /* Assume some "obvious" flags */

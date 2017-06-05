@@ -545,9 +545,7 @@ struct monster_race
     byte r_drop_gold;         /* Max number of gold dropped at once */
     byte r_drop_item;         /* Max number of item dropped at once */
 
-    byte r_cast_spell;        /* (DEPRECATED) Max number of other spells seen */
-
-    u32b r_spell_turns;       /* Same as r_cast_spell, but keep on counting 'em (savefile compat) */
+    u32b r_spell_turns;       /* Number of spells cast or failed (so may exceed sum(spell->lore)) */
     u32b r_move_turns;        /* Includes attacking the player */
                               /* Now we can report accurate observed spell frequencies! */
 
@@ -556,10 +554,6 @@ struct monster_race
     u32b r_flags1;            /* Observed racial flags */
     u32b r_flags2;            /* Observed racial flags */
     u32b r_flags3;            /* Observed racial flags */
-    u32b r_flags4;            /* Observed racial flags */
-    u32b r_flags5;            /* Observed racial flags */
-    u32b r_flags6;            /* Observed racial flags */
-    /* u32b r_flags7; */      /* Observed racial flags */
     u32b r_flagsr;            /* Observed racial resistance flags */
 
     byte stolen_ct;           /* For uniques in this lifetime only. Prevents PickPocket scumming of excellent drop uniques */

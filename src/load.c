@@ -153,7 +153,6 @@ static void rd_lore(savefile_ptr file, int r_idx)
     r_ptr->r_xtra2 = savefile_read_byte(file);
     r_ptr->r_drop_gold = savefile_read_byte(file);
     r_ptr->r_drop_item = savefile_read_byte(file);
-    r_ptr->r_cast_spell = savefile_read_byte(file);
     r_ptr->r_spell_turns = savefile_read_u32b(file);
     r_ptr->r_move_turns = savefile_read_u32b(file);
 
@@ -164,17 +163,14 @@ static void rd_lore(savefile_ptr file, int r_idx)
     r_ptr->r_flags1 = savefile_read_u32b(file);
     r_ptr->r_flags2 = savefile_read_u32b(file);
     r_ptr->r_flags3 = savefile_read_u32b(file);
-    r_ptr->r_flags4 = savefile_read_u32b(file);
-    r_ptr->r_flags5 = savefile_read_u32b(file);
-    r_ptr->r_flags6 = savefile_read_u32b(file);
     r_ptr->r_flagsr = savefile_read_u32b(file);
     r_ptr->max_num = savefile_read_byte(file);
     r_ptr->floor_id = savefile_read_s16b(file);
     r_ptr->stolen_ct = savefile_read_byte(file);
-    if (savefile_is_older_than(file, 6, 0, 3, 1))
-        r_ptr->flagsx = 0; /* we will repair RFX_QUESTOR later ... */
-    else
-        r_ptr->flagsx = savefile_read_u32b(file);
+    r_ptr->flagsx = savefile_read_u32b(file);
+
+    if (r_ptr->spells)
+        mon_spells_load(r_ptr->spells, file);
 
     if (r_ptr->r_flagsr & (RFR_PACT_MONSTER)) pact = TRUE;
 
@@ -182,9 +178,6 @@ static void rd_lore(savefile_ptr file, int r_idx)
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
     r_ptr->r_flags3 &= r_ptr->flags3;
-    r_ptr->r_flags4 &= r_ptr->flags4;
-    r_ptr->r_flags5 &= r_ptr->flags5;
-    r_ptr->r_flags6 &= r_ptr->flags6;
     r_ptr->r_flagsr &= r_ptr->flagsr;
 
     if (pact)
