@@ -460,7 +460,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
             sanity_blast(m_ptr, FALSE);
         break;
     case GF_STUN:
-        if (touch) set_stun(p_ptr->stun + dam, FALSE);
+        set_stun(p_ptr->stun + dam, FALSE);
         break;
     case GF_AMNESIA:
         if (_plr_save(who, 0))
@@ -606,7 +606,7 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         else if (_plr_save(who, dam))
             msg_print("You resist the effects!");
-        else
+        else if (!p_ptr->paralyzed)
             set_paralyzed(randint1(3), FALSE);
         update_smart_learn(who, SM_FREE_ACTION);
         break;

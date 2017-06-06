@@ -113,7 +113,6 @@ static int _get_r_blow_effect(cptr which)
         {"EAT_LITE", RBE_EAT_LITE},
         {"BLIND", RBE_BLIND},
         {"CONFUSE", RBE_CONFUSE},
-        {"PARALYZE", RBE_PARALYZE},
         {"LOSE_STR", RBE_LOSE_STR},
         {"LOSE_INT", RBE_LOSE_INT},
         {"LOSE_WIS", RBE_LOSE_WIS},
@@ -3603,7 +3602,6 @@ static int _default_blow_power(int effect)
     case RBE_CONFUSE:
         return 10;
     case RBE_BLIND:
-    case RBE_PARALYZE:
     case RBE_LOSE_ALL:
         return 2;
     case GF_DISENCHANT:

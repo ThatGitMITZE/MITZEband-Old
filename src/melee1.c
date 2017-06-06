@@ -722,30 +722,6 @@ bool make_attack_normal(int m_idx)
                     update_smart_learn(m_idx, RES_CONF);
                     break;
 
-                case RBE_PARALYZE: /* XXX Replace with B:GAZE:HURT(XdY):PARALYZE:CONFUSE:STUN(20) */
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    if (p_ptr->free_act)
-                    {
-                        msg_print("You are unaffected!");
-                        equip_learn_flag(OF_FREE_ACT);
-                        obvious = TRUE;
-                    }
-                    else if (randint0(100 + r_ptr->level/2) < p_ptr->skills.sav)
-                    {
-                        msg_print("You resist the effects!");
-                        obvious = TRUE;
-                    }
-                    else if (!p_ptr->paralyzed)
-                    {
-                        if (set_paralyzed(randint1(3), FALSE))
-                            obvious = TRUE;
-                    }
-                    update_smart_learn(m_idx, SM_FREE_ACTION);
-                    break;
-
                 case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
                     effect_dam = reduce_melee_dam_p(effect_dam);
                     blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);

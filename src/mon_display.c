@@ -592,7 +592,6 @@ static cptr _effect_desc(int effect)
     case RBE_EAT_LITE:    return "Absorb Light";
     case RBE_BLIND:       return "Blind";
     case RBE_CONFUSE:     return "<color:U>Confuse</color>";
-    case RBE_PARALYZE:    return "<color:v>Paralyze</color>";
     case RBE_LOSE_STR:    return "Reduce Strength";
     case RBE_LOSE_INT:    return "Reduce Intelligence";
     case RBE_LOSE_WIS:    return "Reduce Wisdom";

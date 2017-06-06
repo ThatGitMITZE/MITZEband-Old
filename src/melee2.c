@@ -1774,10 +1774,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     pt = GF_CONFUSION;
                     break;
 
-                case RBE_PARALYZE:
-                    effect_type = BLOW_EFFECT_TYPE_SLEEP;
-                    break;
-
                 case RBE_SHATTER:
                     damage = damage * ac_melee_pct(ac) / 100;
                     if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);

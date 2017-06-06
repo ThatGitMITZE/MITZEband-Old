@@ -96,6 +96,7 @@ cptr gf_name(int which)
     case GF_HELL_FIRE: return "<color:r>Hell Fire</color>";
     case GF_GENOCIDE: return "<color:D>Death</color>";
     case GF_OLD_POLY: return "<color:v>Change</color>";
+    case GF_PARALYSIS: return "<color:v>Paralyze</color>";
     }
     return "something";
 }
