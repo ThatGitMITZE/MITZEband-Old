@@ -709,19 +709,6 @@ bool make_attack_normal(int m_idx)
                     update_smart_learn(m_idx, RES_BLIND);
                     break;
 
-                case RBE_CONFUSE: /* XXX Consider changing titans: B:HIT:HURT(XdY):CONFUSE(XdY) */
-                    if (explode) break;
-                    effect_dam = reduce_melee_dam_p(effect_dam); /* XXX Make effect_dam the confuse amount */
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead) break;
-                    if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
-                    {
-                        if (set_confused(p_ptr->confused + 3 + randint1(rlev), FALSE))
-                            obvious = TRUE;
-                    }
-                    update_smart_learn(m_idx, RES_CONF);
-                    break;
-
                 case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
                     effect_dam = reduce_melee_dam_p(effect_dam);
                     blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
@@ -944,7 +931,9 @@ bool make_attack_normal(int m_idx)
                     else
                         cmsg_print(TERM_L_UMBER, "(You retaliate:");
 
+                    retaliation_hack = TRUE;
                     py_attack(m_ptr->fy, m_ptr->fx, WEAPONMASTER_RETALIATION);
+                    retaliation_hack = FALSE;
                     if (!m_ptr->r_idx) /* Dead? */
                         alive = FALSE;
                     equip_learn_flag(OF_AURA_REVENGE);

@@ -1770,10 +1770,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 case RBE_LOSE_ALL:
                     break;
 
-                case RBE_CONFUSE:
-                    pt = GF_CONFUSION;
-                    break;
-
                 case RBE_SHATTER:
                     damage = damage * ac_melee_pct(ac) / 100;
                     if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);

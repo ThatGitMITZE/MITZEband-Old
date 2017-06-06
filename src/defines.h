@@ -2990,7 +2990,6 @@ enum {
     RBE_EAT_FOOD,
     RBE_EAT_LITE,
     RBE_BLIND,
-    RBE_CONFUSE, /* XXX replace with CONFUSION */
     RBE_LOSE_STR,
     RBE_LOSE_INT,
     RBE_LOSE_WIS,

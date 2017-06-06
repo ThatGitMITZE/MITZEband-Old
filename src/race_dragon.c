@@ -64,6 +64,7 @@ static void _do_breathe(int effect, int dir, int dam)
 
 cptr gf_name(int which)
 {
+    gf_info_ptr gf;
     switch (which)
     {
     case GF_FIRE: return "<color:r>Fire</color>";
@@ -96,8 +97,10 @@ cptr gf_name(int which)
     case GF_HELL_FIRE: return "<color:r>Hell Fire</color>";
     case GF_GENOCIDE: return "<color:D>Death</color>";
     case GF_OLD_POLY: return "<color:v>Change</color>";
-    case GF_PARALYSIS: return "<color:v>Paralyze</color>";
     }
+    gf = gf_lookup(which);
+    if (gf)
+        return format("<color:%c>%s</color>", attr_to_attr_char(gf->color), gf->name);
     return "something";
 }
 

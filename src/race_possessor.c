@@ -304,7 +304,7 @@ static bool _blow_is_masked(mon_blow_ptr blow)
 
     return FALSE;
 }
-void possessor_attack(point_t where, bool *fear, bool *mdeath)
+void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 {
     mon_race_ptr body, foe_race;
     mon_ptr      foe = _get_mon(where);
@@ -325,6 +325,15 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
     for (i = 0; i < MAX_MON_BLOWS; i++)
     {
         mon_blow_ptr blow = &body->blows[i];
+        if (mode == WEAPONMASTER_RETALIATION)
+        {
+            for (;;)
+            {
+                i = randint0(4);
+                blow = &body->blows[i];
+                if (blow->method) break;
+            }
+        }
 
         if (*mdeath) break;
         if (!blow->method) break;
@@ -345,7 +354,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
             skill -= skill * MIN(100, p_ptr->stun) / 150;
         if (test_hit_norm(skill, ac, foe->ml))
         {
-            msg_format("You %s %s", _hit_msg(blow), m_name_object);
+            msg_format("You %s %s.", _hit_msg(blow), m_name_object);
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
                 mon_effect_ptr effect = &blow->effects[j];
@@ -394,6 +403,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
         {
             msg_print("You miss.");
         }
+        if (mode == WEAPONMASTER_RETALIATION) break;
     }
 }
 
