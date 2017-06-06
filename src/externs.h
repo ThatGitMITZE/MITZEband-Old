@@ -1138,6 +1138,7 @@ extern void monster_drop_carried_objects(monster_type *m_ptr);
 extern void mon_display(monster_race *r_ptr);
 extern void mon_display_rect(monster_race *r_ptr, rect_t display);
 extern void mon_display_doc(monster_race *r_ptr, doc_ptr doc);
+extern void mon_display_possessor(monster_race *r_ptr, doc_ptr doc);
 
 /* obj_display.c */
 extern void obj_display(object_type *o_ptr);

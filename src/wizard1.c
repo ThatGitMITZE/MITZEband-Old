@@ -1003,7 +1003,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         for (i = 0; i < group->count; i++)
         {
             mon_spell_ptr spell = &group->spells[i];
-            int           dam = mon_spell_avg_dam(spell, r);
+            int           dam = mon_spell_avg_dam(spell, r, TRUE);
             gf_info_ptr   gf = gf_lookup(spell->id.effect);
             int           res = RES_INVALID;
             if (gf) res = gf->resist;
@@ -1016,7 +1016,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         for (i = 0; i < group->count; i++)
         {
             mon_spell_ptr spell = &group->spells[i];
-            int           dam = mon_spell_avg_dam(spell, r);
+            int           dam = mon_spell_avg_dam(spell, r, TRUE);
             gf_info_ptr   gf = gf_lookup(spell->id.effect);
             int           res = RES_INVALID;
             if (gf) res = gf->resist;
@@ -1035,7 +1035,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         for (i = 0; i < group->count; i++)
         {
             mon_spell_ptr spell = &group->spells[i];
-            int           dam = mon_spell_avg_dam(spell, r);
+            int           dam = mon_spell_avg_dam(spell, r, TRUE);
             gf_info_ptr   gf = gf_lookup(spell->id.effect);
             int           res = RES_INVALID;
             if (gf) res = gf->resist;
@@ -1048,7 +1048,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         for (i = 0; i < group->count; i++)
         {
             mon_spell_ptr spell = &group->spells[i];
-            int           dam = mon_spell_avg_dam(spell, r);
+            int           dam = mon_spell_avg_dam(spell, r, TRUE);
             gf_info_ptr   gf = gf_lookup(spell->id.effect);
             int           res = RES_INVALID;
             if (gf) res = gf->resist;
@@ -1061,7 +1061,7 @@ static _spell_dam_info_ptr _calc_spell_dam_info(mon_race_ptr r)
         for (i = 0; i < group->count; i++)
         {
             mon_spell_ptr spell = &group->spells[i];
-            int           dam = mon_spell_avg_dam(spell, r);
+            int           dam = mon_spell_avg_dam(spell, r, TRUE);
             _add_curse_dam(info, r, dam);
         }
     }

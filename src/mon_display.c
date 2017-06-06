@@ -10,6 +10,8 @@
 extern void mon_display(monster_race *r_ptr);
 extern void mon_display_rect(monster_race *r_ptr, rect_t display);
 extern void mon_display_doc(monster_race *r_ptr, doc_ptr doc);
+extern void mon_display_possessor(monster_race *r_ptr, doc_ptr doc);
+static bool _possessor_hack = FALSE;
 
 static void _display_basic(monster_race *r_ptr, doc_ptr doc);
 static void _display_resists(monster_race *r_ptr, doc_ptr doc);
@@ -72,23 +74,26 @@ static bool _know_armor_hp(monster_race *r_ptr)
     return FALSE;
 }
 
+static bool _know_damage_aux(int ct, int dam, int lvl, bool unique)
+{
+    int need = MIN(100, MAX(5, 80*dam/MAX(1, lvl)));
+    if (unique) need = (need + 1)/2;
+    return ct >= need;
+}
+
 static bool _know_melee_damage(mon_race_ptr race, mon_effect_ptr effect)
 {
-    int l = race->level + 4;
-    int ct = effect->lore;
-    int d = effect->dd * effect->ds;
-
     if (_easy_lore(race)) return TRUE;
+    return _know_damage_aux(effect->lore, effect->dd*effect->ds,
+        race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
+}
 
-    /* XXX This calc is ancient and perhaps a bit stingy.
-     * I think it is trying for ct > MIN(255, dd*ds*l) */
-    if (d >= (l*MAX_UCHAR)/80)
-        d = (l*MAX_UCHAR-1)/80;
-
-    if (l * ct > 80 * d) return TRUE;
-    else if ((race->flags1 & RF1_UNIQUE) && l * 2 * ct > 80 * d) return TRUE;
-
-    return FALSE;
+static bool _know_spell_damage(mon_race_ptr race, mon_spell_ptr spell)
+{
+    if (_easy_lore(race)) return TRUE;
+    return _know_damage_aux(
+        spell->lore, mon_spell_avg_dam(spell, race, FALSE),
+        race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
 }
 
 static bool _know_alertness(monster_race *r_ptr)
@@ -281,7 +286,7 @@ static void _display_basic(monster_race *r_ptr, doc_ptr doc)
 
         /* Column 2 */
         _display_speed(r_ptr, cols[1]);
-        _display_alertness(r_ptr, cols[1]);
+        if (!_possessor_hack) _display_alertness(r_ptr, cols[1]);
         _display_type(r_ptr, cols[1]);
 
         doc_insert_cols(doc, cols, 2, 0);
@@ -443,7 +448,7 @@ static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, 
         {
             string_ptr s = string_alloc();
             mon_spell_display(spell, s);
-            if (_easy_lore(r_ptr) || spell->lore > 5) /* XXX How many? */
+            if (_know_spell_damage(r_ptr, spell))
             {
                 if (spell->parm.tag && spell->id.type != MST_SUMMON)
                 {
@@ -456,15 +461,15 @@ static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, 
                             string_append_c(s, '%');
                     }
                     else
-                        string_printf(s, "%d", mon_spell_avg_dam(spell, r_ptr));
-                    if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+                        string_printf(s, "%d", mon_spell_avg_dam(spell, r_ptr, !_possessor_hack));
+                    if (!spoiler_hack && !_possessor_hack && spell->lore) /* XXX stop repeating yourself! */
                         string_printf(s, ", %dx", spell->lore);
                     string_append_c(s, ')');
                 }
-                else if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+                else if (!spoiler_hack && !_possessor_hack && spell->lore) /* XXX stop repeating yourself! */
                     string_printf(s, " (%dx)", spell->lore);
             }
-            else if (!spoiler_hack && spell->lore) /* XXX stop repeating yourself! */
+            else if (!spoiler_hack && !_possessor_hack && spell->lore) /* XXX stop repeating yourself! */
                 string_printf(s, " (%dx)", spell->lore);
              vec_add(v, s);
         }
@@ -477,7 +482,7 @@ static void _display_spells(monster_race *r_ptr, doc_ptr doc)
     mon_spells_ptr spells = r_ptr->spells;
 
     assert(spells);
-    _display_frequency(r_ptr, doc);
+    if (!_possessor_hack) _display_frequency(r_ptr, doc);
 
     /* Breaths */
     _display_spell_group(r_ptr, spells->groups[MST_BREATH], v);
@@ -946,7 +951,15 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
     if (copy.spells) _display_spells(&copy, doc);
     _display_attacks(&copy, doc);
     _display_other(&copy, doc);
-    _display_kills(&copy, doc);
+    if (!_possessor_hack) _display_kills(&copy, doc);
 
     _display_desc(&copy, doc);
 }
+
+void mon_display_possessor(monster_race *r_ptr, doc_ptr doc)
+{
+    _possessor_hack = TRUE;
+    mon_display_doc(r_ptr, doc);
+    _possessor_hack = FALSE;
+}
+

@@ -324,16 +324,16 @@ static int _dam_boost(int method, int rlev)
     }
     return 0;
 }
-static bool _do_vorpal(mon_blow_ptr blow)
+static int _vorpal_pct(mon_blow_ptr blow)
 {
     int i;
     /* Assume CUT is never the first effect ... */
     for (i = 1; i < MAX_MON_BLOW_EFFECTS; i++)
     {
         if (blow->effects[i].effect == RBE_CUT)
-            return one_in_(6);
+            return blow->effects[i].pct; /* XXX Too much? */
     }
-    return FALSE;
+    return 0;
 }
 void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 {
@@ -398,9 +398,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 dam = damroll(effect->dd, effect->ds);
-                dam += p_ptr->to_d_m; /* XXX Need to subtract out later for non-damage effects */
-                dam += _dam_boost(blow->method, body->level);
-                if (j == 0 && _do_vorpal(blow))
+                if (j == 0 && randint0(100) < _vorpal_pct(blow))
                 {
                     int m = 2;
                     while (one_in_(4)) m++;
@@ -416,9 +414,14 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     default: msg_format("You <color:v>shred</color> %s!", m_name_object); break;
                     }
                 }
+                if (j == 0)
+                {
+                    dam += p_ptr->to_d_m; /* XXX Need to subtract out later for non-damage effects */
+                    dam += _dam_boost(blow->method, body->level);
+                }
                 if (p_ptr->stun)
                     dam -= dam*MIN(100, p_ptr->stun) / 150;
-                if (blow->method == RBM_EXPLODE) /* XXX What about other effects? */
+                if (blow->method == RBM_EXPLODE)
                 {
                     possessor_explode(dam);
                     return;
@@ -1314,7 +1317,7 @@ void possessor_character_dump(doc_ptr doc)
         bool old_use_graphics = use_graphics;
         use_graphics = FALSE;
         doc_printf(doc, "<topic:CurrentForm>================================ <color:keypress>C</color>urrent Form =================================\n\n");
-        mon_display_doc(race, doc);
+        mon_display_possessor(race, doc);
         doc_newline(doc);
         use_graphics = old_use_graphics;
     }

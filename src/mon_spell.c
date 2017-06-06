@@ -3226,9 +3226,9 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp, bool apply_resist)
     }
     return 0;
 }
-int mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race)
+int mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race, bool apply_resist)
 {
-    return _avg_spell_dam_aux(spell, _avg_hp(race), TRUE);
+    return _avg_spell_dam_aux(spell, _avg_hp(race), apply_resist);
 }
 int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
 {
