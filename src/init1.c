@@ -3627,21 +3627,6 @@ static errr parse_mon_blow(char *buf, mon_blow_ptr blow)
     rc = parse_mon_blow_method(commands[0], blow);
     if (rc) return rc;
 
-    /* Look for legacy format. I don't have time to convert all the old stuff!! */
-    if (command_ct == 3 && sscanf(commands[2], "%dd%d", &dd, &ds))
-    {
-        blow->effects[0].effect = _get_r_blow_effect(commands[1]);
-        if (!blow->effects[0].effect)
-        {
-            msg_format("Error: Unknown monster blow effect %s.", commands[1]);
-            return PARSE_ERROR_UNDEFINED_DIRECTIVE;
-        }
-        blow->power = _default_blow_power(blow->effects[0].effect);
-        blow->effects[0].dd = dd;
-        blow->effects[0].ds = ds;
-        return rc;
-    }
-
     if (command_ct - 1 > MAX_MON_BLOW_EFFECTS)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
