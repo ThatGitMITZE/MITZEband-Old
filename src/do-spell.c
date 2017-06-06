@@ -3540,7 +3540,7 @@ static cptr do_death_spell(int spell, int mode)
                 if (!get_fire_dir(&dir)) return NULL;
 
                 fear_monster(dir, power);
-                stun_monster(dir, power);
+                stun_monster(dir, 5 + plev/5);
             }
         }
         break;
@@ -5958,7 +5958,7 @@ static cptr do_daemon_spell(int spell, int mode)
                 if (!get_fire_dir(&dir)) return NULL;
 
                 fear_monster(dir, power);
-                stun_monster(dir, power);
+                stun_monster(dir, 5 + plev/5);
             }
         }
         break;
@@ -7035,7 +7035,7 @@ static cptr do_crusade_spell(int spell, int mode)
                 project(0, 1, py, px, b_dam, GF_HOLY_FIRE, PROJECT_KILL);
                 dispel_monsters(d_dam);
                 slow_monsters(power);
-                stun_monsters(power);
+                stun_monsters(5 + plev/5);
                 confuse_monsters(power);
                 turn_monsters(power);
                 stasis_monsters(power/3);
@@ -8644,11 +8644,9 @@ static cptr do_hex_spell(int spell, int mode)
     case 28:
         if (name) return "Word of stun";
         if (desc) return "Stuns all monsters in your sight.";
-        power = plev * 4;
-        if (info) return info_power(power);
         if (cast || cont)
         {
-            stun_monsters(power);
+            stun_monsters(5 + plev/5);
         }
         break;
 

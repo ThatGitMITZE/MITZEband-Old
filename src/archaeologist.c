@@ -592,7 +592,7 @@ static void _pharaohs_curse_spell(int cmd, variant *res)
             if (p_ptr->lev >= 48)
                 turn_monsters(power);
             if (p_ptr->lev >= 49)
-                stun_monsters(power);
+                stun_monsters(5 + p_ptr->lev/5);
             if (one_in_(5))
             {
                 int mode = 0;

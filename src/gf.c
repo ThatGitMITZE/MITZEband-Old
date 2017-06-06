@@ -460,7 +460,8 @@ int gf_damage_p(int who, int type, int dam, int flags)
             sanity_blast(m_ptr, FALSE);
         break;
     case GF_STUN:
-        set_stun(p_ptr->stun + dam, FALSE);
+        if (p_ptr->stun < STUN_KNOCKED_OUT)
+            set_stun(p_ptr->stun + dam, FALSE);
         break;
     case GF_AMNESIA:
         if (_plr_save(who, 0))
@@ -2813,15 +2814,10 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         /* No "real" damage */
         dam = 0;
         break; }
-    case GF_STUN: {
-        int ml = r_ptr->level;
-        int pl = dam;
-
-        if (r_ptr->flags1 & RF1_UNIQUE) ml += 3;
-
+    case GF_STUN:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
-        do_stun = damroll(caster_lev/20 + 3, dam) + 1;
+        do_stun = dam;
         if (r_ptr->flags3 & RF3_NO_STUN)
         {
             do_stun = 0;
@@ -2829,14 +2825,8 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
             mon_lore_3(m_ptr, RF3_NO_STUN);
             obvious = FALSE;
         }
-        else if (randint1(ml) >= randint1(pl))
-        {
-            do_stun = 0;
-            note = " resists!";
-            obvious = FALSE;
-        }
         dam = 0;
-        break; }
+        break;
     case GF_LITE_WEAK:
         if (!dam)
         {

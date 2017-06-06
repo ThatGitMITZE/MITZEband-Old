@@ -3005,7 +3005,6 @@ enum {
     RBE_DISEASE,
     RBE_EXP_VAMP, /* XXX Add VAMP(XdY) as well off player hp */
     RBE_CUT,
-    RBE_STUN,
 };
 
 /*** Monster flag values (hard-coded) ***/

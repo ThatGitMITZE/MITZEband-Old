@@ -383,14 +383,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     break;
                 case RBE_CUT:
                     break;
-                case RBE_STUN: {
-                    int old = MON_STUNNED(foe);
-                    dam -= p_ptr->to_d_m;
-                    if (set_monster_stunned(foe->id, old + dam))
-                        msg_format("%s is <color:B>stunned</color>.", m_name_object);
-                    else
-                        msg_format("%s is more <color:B>stunned</color>.", m_name_object);
-                    break; }
                 default:
                     gf_damage_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
                 }

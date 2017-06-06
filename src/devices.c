@@ -6071,7 +6071,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             msg_print("You glare nearby monsters with a dazzling array of confusing lights!");
             pow = _BOOST(pow);
             slow_monsters(pow);
-            stun_monsters(pow);
+            stun_monsters(5 + pow/10);
             confuse_monsters(pow);
             turn_monsters(pow);
             stasis_monsters(pow/3);
@@ -6738,7 +6738,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
                 msg_format("%^s says 'WHO do you think this person is! Bow your head, down your knees!'", kakusan);
 
                 sukekaku = TRUE;
-                stun_monsters(120);
+                stun_monsters(15);
                 confuse_monsters(120);
                 turn_monsters(120);
                 stasis_monsters(120);

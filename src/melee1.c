@@ -868,10 +868,6 @@ bool make_attack_normal(int m_idx)
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);
                     break;
-                case RBE_STUN:
-                    if (p_ptr->stun < STUN_KNOCKED_OUT)
-                        set_stun(p_ptr->stun + effect_dam, FALSE);
-                    break;
                 default: /* using GF_* ... damage 0 is OK: B:BITE:HURT(4d4):DISENCHANT */
                     if (!explode)
                     {

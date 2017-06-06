@@ -4098,7 +4098,7 @@ bool confuse_monster(int dir, int plev)
 bool stun_monster(int dir, int plev)
 {
     int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(GF_STUN, dir, plev, flg));
+    return (project_hook(GF_STUN, dir, 5 + plev/5, flg));
 }
 
 

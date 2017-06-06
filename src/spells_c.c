@@ -280,7 +280,7 @@ void confusing_lights_spell(int cmd, variant *res)
     case SPELL_CAST:
         msg_print("You glare nearby monsters with a dazzling array of confusing lights!");
         slow_monsters(p_ptr->lev * 4);
-        stun_monsters(p_ptr->lev * 4);
+        stun_monsters(5 + p_ptr->lev/5);
         confuse_monsters(p_ptr->lev * 4);
         turn_monsters(p_ptr->lev * 4);
         stasis_monsters(p_ptr->lev * 3 / 2);
@@ -776,7 +776,7 @@ void dazzle_spell(int cmd, variant *res)
         var_set_string(res, "You can emit confusing, blinding radiation.");
         break;
     case SPELL_CAST:
-        stun_monsters(p_ptr->lev * 4);
+        stun_monsters(5 + p_ptr->lev/5);
         confuse_monsters(p_ptr->lev * 4);
         turn_monsters(p_ptr->lev * 4);
         var_set_bool(res, TRUE);

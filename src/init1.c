@@ -127,7 +127,6 @@ static int _get_r_blow_effect(cptr which)
         {"DISEASE", RBE_DISEASE},
         {"EXP_VAMP", RBE_EXP_VAMP},
         {"CUT", RBE_CUT},
-        {"STUN", RBE_STUN},
         {0}};
     for (i = 0;; i++)
     {

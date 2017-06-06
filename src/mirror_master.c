@@ -189,10 +189,9 @@ static void _illusion_light_spell(int cmd, variant *res)
         break;
     case SPELL_CAST:
         slow_monsters(power);
-        stun_monsters(power);
+        stun_monsters(5 + p_ptr->lev/5);
         confuse_monsters(power);
         turn_monsters(power);
-        stun_monsters(power);
         stasis_monsters(power);
         var_set_bool(res, TRUE);
         break;
