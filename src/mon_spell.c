@@ -932,6 +932,7 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
         }
         spell->id.type = MST_SUMMON;
         spell->id.effect = p->id;
+        spell->flags = MSF_TARGET;
     }
     else
     {
@@ -1256,7 +1257,6 @@ static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
     _mon_desc(mon, cast->name, 'G'); 
     cast->flags = MSC_SRC_MONSTER | MSC_DEST_PLAYER;
 }
-
 static void _spell_cast_init_mon(mon_spell_cast_ptr cast, mon_ptr mon)
 {
     cast->mon = mon;
@@ -1265,6 +1265,15 @@ static void _spell_cast_init_mon(mon_spell_cast_ptr cast, mon_ptr mon)
     cast->src = point(mon->fx, mon->fy);
     _mon_desc(mon, cast->name, 'G'); 
     cast->flags = MSC_SRC_MONSTER | MSC_DEST_MONSTER;
+}
+static void _spell_cast_init_plr(mon_spell_cast_ptr cast, mon_race_ptr race)
+{
+    cast->mon = NULL;
+    cast->race = race;
+    cast->spell = NULL;
+    cast->src = point(px, py);
+    cast->dest = point(px, py);
+    cast->flags = MSC_SRC_PLAYER | MSC_DEST_MONSTER;
 }
 
 static bool _can_cast(mon_ptr mon)
@@ -1333,6 +1342,7 @@ bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
 static bool _spell_fail(void)
 {
     int fail;
+    int stun = 0;
 
     if (_current.spell->flags & MSF_INNATE)
         return FALSE;
@@ -1340,20 +1350,28 @@ static bool _spell_fail(void)
         return FALSE;
     if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
         return TRUE;
+    if (_current.flags & MSC_SRC_PLAYER)
+        stun = p_ptr->stun;
+    else
+        stun = MON_STUNNED(_current.mon);
 
     fail = 25 - (_current.race->level + 3)/4;
-    if (MON_STUNNED(_current.mon))
-        fail += 50 * MIN(100, MON_STUNNED(_current.mon))/100;
+    if (stun)
+        fail += 50 * MIN(100, stun)/100;
 
     if (fail && randint0(100) < fail)
     {
-        mon_lore_aux_spell_turns(_current.race);
-        msg_format("%s tries to cast a spell, but fails.", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You try to cast a spell, but fail.");
+        else
+        {
+            mon_lore_aux_spell_turns(_current.race);
+            msg_format("%s tries to cast a spell, but fails.", _current.name);
+        }
         return TRUE;
     }
     return FALSE;
 }
-
 static bool _spell_blocked(void)
 {
     if (_current.spell->flags & MSF_INNATE)
@@ -1371,27 +1389,36 @@ static bool _spell_blocked(void)
     }
     return FALSE;
 }
-
+static int _who(void)
+{
+    if (_current.flags & MSC_SRC_PLAYER) return PROJECT_WHO_PLAYER;
+    return _current.mon->id;
+}
 static void _breath(void)
 {
     int dam;
     int pct = _current.spell->parm.v.hp_pct.pct;
     int max = _current.spell->parm.v.hp_pct.max;
+    int flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    int rad = _current.race->level >= 50 ? -3 : -2;
 
     assert(_current.spell->parm.tag == MSP_HP_PCT);
 
-    dam = _current.mon->hp * pct / 100;
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        int hp = _avg_hp(_current.race);
+        int chp = hp * p_ptr->chp / p_ptr->mhp;
+        dam = chp * pct / 100;
+    }
+    else
+    {
+        dam = _current.mon->hp * pct / 100;
+        flags |= PROJECT_PLAYER;
+    }
     if (dam > max) dam = max;
 
-    project(
-        _current.mon->id,
-        _current.race->level >= 50 ? -3 : -2,
-        _current.dest.y,
-        _current.dest.x,
-        dam,
-        _current.spell->id.effect,
-        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER
-    );
+    project(_who(), rad, _current.dest.y, _current.dest.x,
+        dam, _current.spell->id.effect, flags);
 }
 
 static int _roll(dice_t dice)
@@ -1413,7 +1440,10 @@ static void _ball(void)
     int    dam;
     dice_t dice = _current.spell->parm.v.dice;
     int    rad = 2;
-    int    flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
+    int    flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+
+    if (_current.flags & MSC_SRC_MONSTER)
+        flags |= PROJECT_PLAYER;
 
     assert(_current.spell->parm.tag == MSP_DICE);
     dam = _roll(dice);
@@ -1432,20 +1462,17 @@ static void _ball(void)
         break;
     }
 
-    project(
-        _current.mon->id,
-        rad,
-        _current.dest.y,
-        _current.dest.x,
-        dam,
-        _current.spell->id.effect,
-        flags
-    );
+    project(_who(), rad, _current.dest.y, _current.dest.x,
+        dam, _current.spell->id.effect, flags);
 }
 static void _bolt(void)
 {
     int ct = 1, i;
-    int flags = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER | PROJECT_REFLECTABLE;
+    int flags = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+
+    if (_current.flags & MSC_SRC_MONSTER)
+        flags |= PROJECT_PLAYER;
+
     assert(_current.spell->parm.tag == MSP_DICE);
     if (_current.race->id == MON_ARTEMIS && _spell_is_(_current.spell, MST_BOLT, GF_ARROW))
     {
@@ -1456,47 +1483,38 @@ static void _bolt(void)
         flags |= PROJECT_HIDE;
     for (i = 0; i < ct; i++)
     {
-        project(
-            _current.mon->id,
-            0,
-            _current.dest.y,
-            _current.dest.x,
+        project(_who(), 0, _current.dest.y, _current.dest.x,
             _roll(_current.spell->parm.v.dice),
-            _current.spell->id.effect,
-            flags
-        );
+            _current.spell->id.effect, flags);
     }
 }
 static void _beam(void)
 {
+    int flags = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
+
+    if (_current.flags & MSC_SRC_MONSTER)
+        flags |= PROJECT_PLAYER;
     assert(_current.spell->parm.tag == MSP_DICE);
-    project(
-        _current.mon->id,
-        0,
-        _current.dest.y,
-        _current.dest.x,
+    project(_who(), 0, _current.dest.y, _current.dest.x,
         _roll(_current.spell->parm.v.dice),
-        _current.spell->id.effect,
-        PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER
-    );
+        _current.spell->id.effect, flags);
 }
 static void _curse(void)
 {
     int dam;
+    int flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_AIMED;
     assert(_current.spell->parm.tag == MSP_DICE);
     dam = _roll(_current.spell->parm.v.dice);
-    if (_current.spell->id.effect == GF_HAND_DOOM)
-        dam = dam * p_ptr->chp / 100;
-    project(
-        _current.mon->id,
-        0,
-        _current.dest.y,
-        _current.dest.x,
-        dam,
-        _current.spell->id.effect,
-        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL |
-        PROJECT_PLAYER | PROJECT_HIDE | PROJECT_AIMED
-    );
+    if (_current.flags & MSC_SRC_MONSTER)
+    {
+        flags |= PROJECT_PLAYER;
+        if (_current.spell->id.effect == GF_HAND_DOOM)
+            dam = dam * p_ptr->chp / 100;
+    }
+    else if (_current.spell->id.effect == GF_HAND_DOOM) /* XXX Inconsistent ... */
+        dam = 3 * p_ptr->lev;
+    project(_who(), 0, _current.dest.y, _current.dest.x,
+        dam, _current.spell->id.effect, flags);
 }
 static int _curse_save_odds_aux(int rlev, int sav)
 {
@@ -1514,7 +1532,20 @@ static bool _curse_save(void)
     return randint0(100) < odds;
 }
 static bool _projectable(point_t src, point_t dest);
-static void _annoy(void)
+static void _annoy_m(void)
+{
+    switch (_current.spell->id.effect)
+    {
+    case ANNOY_AMNESIA:
+        gf_damage_m(_who(), _current.dest, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_ANIMATE_DEAD:
+        animate_dead(_who(), _current.src.y, _current.src.x);
+        break;
+    /* XXX */
+    }
+}
+static void _annoy_p(void)
 {
     switch (_current.spell->id.effect)
     {
@@ -1522,7 +1553,7 @@ static void _annoy(void)
         gf_damage_p(_current.mon->id, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_ANIMATE_DEAD:
-        animate_dead(_current.mon->id, _current.mon->fy, _current.mon->fx);
+        animate_dead(_current.mon->id, _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
         if (res_save_default(RES_BLIND) || _curse_save())
@@ -1610,6 +1641,13 @@ static void _annoy(void)
     /* XXX this sort of stuff needs to be a class hook ... */
     if (p_ptr->tim_spell_reaction && !p_ptr->fast)
         set_fast(4, FALSE);
+}
+static void _annoy(void)
+{
+    if (_current.flags & MSC_DEST_PLAYER)
+        _annoy_p();
+    else
+        _annoy_m();
 }
 static void _biff(void)
 {
@@ -1784,18 +1822,20 @@ static void _summon_r_idx(int r_idx)
 static void _summon_type(int type)
 {
     int who = SUMMON_WHO_NOBODY;
+    int mode = PM_ALLOW_GROUP;
     if (_current.flags & MSC_SRC_PLAYER)
+    {
         who = SUMMON_WHO_PLAYER;
-    else if (_current.mon)
-        who = _current.mon->id;
-    summon_specific(
-        who,
-        _current.dest.y,
-        _current.dest.x,
-        _current.race->level,
-        type,
-        PM_ALLOW_GROUP | PM_ALLOW_UNIQUE
-    );
+        mode |= PM_FORCE_PET;
+    }
+    else
+    {
+        mode |= PM_ALLOW_UNIQUE;
+        if (_current.mon)
+            who = _current.mon->id;
+    }
+    summon_specific(who, _current.dest.y, _current.dest.x,
+        _current.race->level, type, mode);
 }
 /* XXX Vanilla has a 'friends' concept ... perhaps we could do likewise? */
 static void _summon_special(void)
@@ -2062,14 +2102,19 @@ static void _weird(void)
 static void _spell_msg(void);
 static void _spell_cast_aux(void)
 {
-    disturb(1, 0);
-    reset_target(_current.mon);
-    if (_spell_fail() || _spell_blocked())
+    if (_current.flags & MSC_SRC_MONSTER)
+    {
+        assert(_current.mon);
+        disturb(1, 0);
+        reset_target(_current.mon);
+        if (_spell_fail() || _spell_blocked()) return;
+        if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */
+            mon_lore_spell(_current.mon, _current.spell);
+    }
+    else if (_spell_fail())
         return;
-    _spell_msg();
-    if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */
-        mon_lore_spell(_current.mon, _current.spell);
 
+    _spell_msg();
     switch (_current.spell->id.type)
     {
     case MST_ANNOY:   _annoy();   break;
@@ -3474,5 +3519,142 @@ bool mon_race_has_lite_dark_spell(mon_race_ptr race) /* glass castle */
         || mon_spells_find(race->spells, _id(MST_BREATH, GF_DARK))
         || mon_spells_find(race->spells, _id(MST_BALL, GF_LITE))
         || mon_spells_find(race->spells, _id(MST_BALL, GF_DARK));
+}
+
+/*************************************************************************
+ * Possessor/Mimic
+ ************************************************************************/
+static void _sync_term(doc_ptr doc)
+{
+    rect_t r = ui_map_rect();
+    Term_load();
+    doc_sync_term(doc, doc_range_top_lines(doc, r.cy), doc_pos_create(r.x, r.y));
+}
+static int _inkey(void)
+{
+    return inkey_special(TRUE);
+}
+static bool _no_magic(void)
+{
+    if (p_ptr->anti_magic) return TRUE;
+    if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC)) return TRUE;
+    return FALSE;
+}
+static vec_ptr _spells_plr(mon_spell_cast_ptr cast)
+{
+    vec_ptr v = vec_alloc(NULL);
+    int     i, j;
+    bool    no_magic = _no_magic();
+
+    for (i = 0; i < MST_COUNT; i++)
+    {
+        mon_spell_group_ptr group = cast->race->spells->groups[i];
+        if (!group) continue;
+        for (j = 0; j < group->count; j++)
+        {
+            mon_spell_ptr spell = &group->spells[j];
+            if (no_magic && !(spell->flags & MSF_INNATE)) continue;
+            vec_add(v, spell);
+        }
+    }
+
+    return v;
+}
+static void _list_spells(doc_ptr doc, vec_ptr spells)
+{
+    int i;
+    for (i = 0; i < vec_length(spells); i++)
+    {
+        mon_spell_ptr spell = vec_get(spells, i);
+        doc_printf(doc, " %c) ", I2A(i));
+        mon_spell_doc(spell, doc);
+        doc_newline(doc);
+    }
+}
+static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
+{
+    doc_ptr doc;
+    int     cmd, i;
+
+    if (REPEAT_PULL(&cmd))
+    {
+        i = A2I(cmd);
+        if (0 <= i && i < vec_length(spells))
+        {
+            cast->spell = vec_get(spells, i);
+            return;
+        }
+    }
+
+    doc = doc_alloc(80);
+    msg_line_clear();
+    Term_save();
+    for (;;)
+    {
+        doc_clear(doc);
+        _list_spells(doc, spells);
+        _sync_term(doc);
+        cmd = _inkey();
+        if (cmd == ESCAPE) break;
+        if (islower(cmd))
+        {
+            i = A2I(cmd);
+            if (0 <= i && i < vec_length(spells))
+            {
+                cast->spell = vec_get(spells, i);
+                REPEAT_PUSH(cmd);
+                break;
+            }
+        }
+    }
+    Term_load();
+    doc_free(doc);
+}
+static bool _prompt_plr(mon_spell_cast_ptr cast)
+{
+    vec_ptr spells = _spells_plr(cast);
+    if (vec_length(spells))
+        _prompt_plr_aux(cast, spells);
+    vec_free(spells);
+
+    if ( cast->spell != NULL
+      && (cast->flags & MSC_SRC_PLAYER)
+      && (cast->spell->flags & MSF_TARGET) )
+    {
+        int dir;
+        if (_spell_is_(cast->spell, MST_BREATH, GF_DISINTEGRATE))
+        {
+            if (!get_fire_dir_aux(&dir, TARGET_DISI)) return FALSE;
+        }
+        else if (!get_fire_dir(&dir)) return FALSE;
+        cast->dest.x = px + 99*ddx[dir];
+        cast->dest.y = py + 99*ddy[dir];
+        if (dir == 5)
+        {
+            cast->dest.x = target_col;
+            cast->dest.y = target_row;
+        }
+    }
+    return cast->spell != NULL;
+}
+bool mon_spell_cast_possessor(mon_race_ptr race)
+{
+    mon_spell_cast_t cast = {0};
+    _spell_cast_init_plr(&cast, race);
+    assert(cast.race->spells);
+    if (_prompt_plr(&cast))
+    {
+        _current = cast;
+        _spell_cast_aux();
+        memset(&_current, 0, sizeof(mon_spell_cast_t));
+        return TRUE;
+    }
+    return FALSE;
+}
+bool mon_spell_ai_wizard(mon_spell_cast_ptr cast)
+{
+    if (!cast->race->spells) return FALSE;
+    if ((cast->flags & MSC_DEST_MONSTER) && !_choose_target(cast)) return FALSE;
+    return _prompt_plr(cast);
 }
 

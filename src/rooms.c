@@ -972,8 +972,8 @@ static int vault_aux_race;
 /* Race index for "monster pit (symbol clone)" */
 static char vault_aux_char;
 
-/* Breath mask for "monster pit (dragon)" */
-static u32b vault_aux_dragon_mask4;
+/* Breath mask for "monster pit (dragon)"
+static u32b vault_aux_dragon_mask4; XXX */
 
 /*
  * Helper monster selection function

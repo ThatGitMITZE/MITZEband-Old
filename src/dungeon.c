@@ -3391,20 +3391,24 @@ static void _dispatch_command(int old_now_turn)
                 msg_print("You are too scared!");
                 energy_use = 100;
             }
-            else if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC)
-                && p_ptr->pclass != CLASS_BERSERKER
-                && p_ptr->pclass != CLASS_BLOOD_KNIGHT
-                && p_ptr->pclass != CLASS_WEAPONMASTER
-                && p_ptr->pclass != CLASS_MAULER )
+            else if ( dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC)
+                   && p_ptr->pclass != CLASS_BERSERKER
+                   && p_ptr->pclass != CLASS_BLOOD_KNIGHT
+                   && p_ptr->pclass != CLASS_WEAPONMASTER
+                   && p_ptr->pclass != CLASS_MAULER
+                   && p_ptr->prace  != RACE_MON_POSSESSOR
+                   && p_ptr->prace  != RACE_MON_MIMIC)
             {
                 msg_print("The dungeon absorbs all attempted magic!");
                 msg_print(NULL);
             }
-            else if (p_ptr->anti_magic
-                    && p_ptr->pclass != CLASS_BERSERKER
-                    && p_ptr->pclass != CLASS_BLOOD_KNIGHT
-                    && p_ptr->pclass != CLASS_WEAPONMASTER
-                    && p_ptr->pclass != CLASS_MAULER )
+            else if ( p_ptr->anti_magic
+                   && p_ptr->pclass != CLASS_BERSERKER
+                   && p_ptr->pclass != CLASS_BLOOD_KNIGHT
+                   && p_ptr->pclass != CLASS_WEAPONMASTER
+                   && p_ptr->pclass != CLASS_MAULER
+                   && p_ptr->prace  != RACE_MON_POSSESSOR
+                   && p_ptr->prace  != RACE_MON_MIMIC)
             {
                 cptr which_power = "magic";
                 if (p_ptr->pclass == CLASS_MINDCRAFTER || p_ptr->pclass == CLASS_PSION)
@@ -3433,6 +3437,8 @@ static void _dispatch_command(int old_now_turn)
             {
                 if (p_ptr->prace == RACE_MON_RING)
                     ring_cast();
+                else if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
+                    possessor_cast();
                 else if (p_ptr->pclass == CLASS_MAGIC_EATER)
                     magic_eater_cast(0);
                 else if (p_ptr->pclass == CLASS_SKILLMASTER)

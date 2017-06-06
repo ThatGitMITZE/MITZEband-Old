@@ -158,17 +158,18 @@ typedef struct {
 
 /* Allow clients to plug in a smarter/alternative AI */
 typedef bool (*mon_spell_ai)(mon_spell_cast_ptr cast);
+extern bool           mon_spell_ai_wizard(mon_spell_cast_ptr cast);
 
 extern bool           mon_spell_cast(mon_ptr mon, mon_spell_ai ai);
 extern bool           mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai);
 extern void           mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc);
 extern mon_spell_ptr  mon_spell_find(mon_race_ptr race, mon_spell_id_t id);
+extern bool           mon_spell_cast_possessor(mon_race_ptr race);
 
 /* Some classes need to know what spell is being cast, and who is doing it: */
 extern mon_spell_ptr  mon_spell_current(void);
 extern mon_ptr        mon_current(void);
 
-/* XXX Move these to mon.h */
 extern bool mon_is_magical(mon_ptr mon);
 extern bool mon_race_is_magical(mon_race_ptr race);
 extern bool mon_has_attack_spell(mon_ptr mon);

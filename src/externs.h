@@ -2236,8 +2236,7 @@ extern void    possessor_on_take_hit(void);
 extern void    possessor_on_birth(void);
 extern bool    possessor_can_attack(void);
 extern void    possessor_attack(point_t where, bool *fear, bool *mdeath, int mode);
-extern int     possessor_get_powers(spell_info* spells, int max);
-extern int     possessor_get_spells(spell_info* spells, int max);
+extern void    possessor_cast(void);
 extern
 caster_info   *possessor_caster_info(void);
 extern void    possessor_calc_bonuses(void);

@@ -625,7 +625,13 @@ static void wiz_create_item(void)
     }
     else if (k_info[k_idx].tval == TV_CORPSE) /* Possessor Testing! */
     {
-        n = get_quantity("Which monster? ", max_r_idx);
+        char buf[81];
+        buf[0] = 0;
+        if (msg_input("Which monster? ", buf, 80))
+        {
+            n = parse_lookup_monster(buf, 0);
+            if (!n) n = atoi(buf);
+        }
     }
     else
     {

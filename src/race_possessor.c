@@ -222,6 +222,13 @@ static int _max_lvl(void)
 /**********************************************************************
  * Attacks
  **********************************************************************/
+bool possessor_can_attack(void)
+{
+    if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
+        return p_ptr->current_r_idx != 0;
+    return FALSE;
+}
+
 static cptr _hit_msg(mon_blow_ptr blow)
 {
     switch (blow->method) /* XXX table this up ... monsters need this too! */
@@ -441,6 +448,23 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 case RBE_EAT_FOOD:
                     if (leprechaun_steal(foe->id))
                         steal_ct++;
+                    dam = mon_damage_mod(foe, dam, FALSE);
+                    if (dam > 0)
+                        anger_monster(foe);
+                    *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
+                    break;
+                case RBE_BLIND: /* XXX Confuse instead? */
+                case RBE_LOSE_STR:
+                case RBE_LOSE_INT:
+                case RBE_LOSE_WIS:
+                case RBE_LOSE_DEX:
+                case RBE_LOSE_CON:
+                case RBE_LOSE_CHR:
+                case RBE_LOSE_ALL:
+                    dam = mon_damage_mod(foe, dam, FALSE);
+                    if (dam > 0)
+                        anger_monster(foe);
+                    *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
                     break;
                 case RBE_DISEASE:
                     if (dam)
@@ -470,7 +494,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 }
                 *mdeath = (foe->r_idx == 0);
             }
-            if (_touched(blow))
+            if (_touched(blow) && !*mdeath)
                 touch_zap_player(foe->id);
         }
         else
@@ -488,6 +512,26 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
         else
             teleport_player(25 + p_ptr->lev/2, 0);
     }
+}
+
+/**********************************************************************
+ * Spells
+ **********************************************************************/
+void possessor_cast(void)
+{
+    mon_race_ptr race = &r_info[p_ptr->current_r_idx];
+    if (!race->spells)
+    {
+        msg_print("Your current body has no spells.");
+        return;
+    }
+    if (p_ptr->confused)
+    {
+        msg_print("You are too confused.");
+        return;
+    }
+    if (mon_spell_cast_possessor(race))
+        energy_use = 100;
 }
 
 /**********************************************************************
@@ -1003,6 +1047,8 @@ void possessor_get_flags(u32b flgs[OF_ARRAY_SIZE])
         add_flag(flgs, OF_RES_CONF);
     if (r_ptr->flags3 & RF3_NO_SLEEP)
         add_flag(flgs, OF_FREE_ACT);
+    if (r_ptr->flags2 & RF2_AURA_REVENGE)
+        add_flag(flgs, OF_AURA_REVENGE);
 
     if (r_ptr->flags7 & RF7_CAN_FLY)
         add_flag(flgs, OF_LEVITATION);
@@ -1181,13 +1227,6 @@ bool possessor_can_gain_exp(void)
     if (max < PY_MAX_LEVEL && p_ptr->lev >= max)
         return FALSE;
     return TRUE;
-}
-
-bool possessor_can_attack(void)
-{
-    if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
-        return p_ptr->current_r_idx != 0;
-    return FALSE;
 }
 
 s32b possessor_max_exp(void)
