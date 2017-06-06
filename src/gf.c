@@ -35,7 +35,7 @@ static gf_info_t _gf_tbl[] = {
     { GF_DRAIN_MANA, "Drain Mana", TERM_L_BLUE, RES_INVALID, "DRAIN_MANA" },
     { GF_OLD_SLEEP, "Sleep", TERM_BLUE, RES_INVALID, "SLEEP" },
     { GF_OLD_SLOW, "Slow", TERM_L_UMBER, RES_INVALID, "SLOW" },
-    { GF_TURN_ALL, "Terrify", TERM_RED, RES_INVALID, "FEAR" },
+    { GF_TURN_ALL, "Terrify", TERM_RED, RES_INVALID, "TERRIFY" },
     { GF_STUN, "Stun", TERM_L_BLUE, RES_INVALID, "STUN" },
     { GF_AMNESIA, "Amnesia", TERM_L_DARK, RES_INVALID, "AMNESIA" },
     { GF_PARALYSIS, "Paralyze", TERM_VIOLET, RES_INVALID, "PARALYZE" },

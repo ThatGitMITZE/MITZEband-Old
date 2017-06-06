@@ -722,19 +722,6 @@ bool make_attack_normal(int m_idx)
                     update_smart_learn(m_idx, RES_CONF);
                     break;
 
-                case RBE_TERRIFY:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead) break;
-
-                    if (!CHECK_MULTISHADOW())
-                    {
-                        fear_terrify_p(m_ptr);
-                        obvious = TRUE;
-                    }
-                    update_smart_learn(m_idx, RES_FEAR);
-                    break;
-
                 case RBE_PARALYZE: /* XXX Replace with B:GAZE:HURT(XdY):PARALYZE:CONFUSE:STUN(20) */
                     effect_dam = reduce_melee_dam_p(effect_dam);
                     blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);

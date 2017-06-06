@@ -2991,7 +2991,6 @@ enum {
     RBE_EAT_LITE,
     RBE_BLIND,
     RBE_CONFUSE, /* XXX replace with CONFUSION */
-    RBE_TERRIFY, /* XXX GF_FEAR? */
     RBE_PARALYZE, /* XXX GF_PARALYSIS */
     RBE_LOSE_STR,
     RBE_LOSE_INT,

@@ -1774,10 +1774,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     pt = GF_CONFUSION;
                     break;
 
-                case RBE_TERRIFY:
-                    effect_type = BLOW_EFFECT_TYPE_FEAR;
-                    break;
-
                 case RBE_PARALYZE:
                     effect_type = BLOW_EFFECT_TYPE_SLEEP;
                     break;
