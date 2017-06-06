@@ -4315,7 +4315,7 @@ bool py_attack(int y, int x, int mode)
 
     energy_use = 100;
 
-    if (!p_ptr->weapon_ct && !p_ptr->innate_attack_ct)
+    if (!p_ptr->weapon_ct && !p_ptr->innate_attack_ct && !possessor_can_attack())
     {
         msg_print("You have no melee attacks.");
         energy_use = 0;
@@ -4621,11 +4621,11 @@ bool py_attack(int y, int x, int mode)
         return TRUE;
     }
 
-    if (p_ptr->current_r_idx && !mdeath && !fear_stop)
+    if (possessor_can_attack() && !mdeath && !fear_stop)
     {
         possessor_attack(point(x,y), &fear, &mdeath);
     }
-    if (p_ptr->innate_attack_ct && !mdeath && !fear_stop)
+    else if (p_ptr->innate_attack_ct && !mdeath && !fear_stop)
     {
         bool do_innate_attacks = TRUE;
 

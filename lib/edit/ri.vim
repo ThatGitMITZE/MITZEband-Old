@@ -92,6 +92,7 @@ syn region riGFExp matchgroup=riOp start=/NETHER(/ end=/)/ contains=riDice,riPer
 syn region riGFExp matchgroup=riOp start=/NEXUS(/ end=/)/ contains=riDice,riPercent contained
 syn region riGFExp matchgroup=riOp start=/PLASMA(/ end=/)/ contains=riDice,riPercent contained
 syn region riGFExp matchgroup=riOp start=/POISON(/ end=/)/ contains=riDice,riPercent contained
+syn region riGFExp matchgroup=riOp start=/POLYMORPH(/ end=/)/ contains=riDice,riPercent contained
 syn region riGFExp matchgroup=riOp start=/SOUND(/ end=/)/ contains=riDice,riPercent contained
 syn region riGFExp matchgroup=riOp start=/SHARDS(/ end=/)/ contains=riDice,riPercent contained
 syn region riGFExp matchgroup=riOp start=/STUN(/ end=/)/ contains=riDice,riPercent contained
@@ -107,35 +108,40 @@ syn match riGFFlag /ACID/ contained
 syn match riGFFlag /ELEC/ contained
 syn match riGFFlag /FIRE/ contained
 syn match riGFFlag /COLD/ contained
-syn match riGFFlag /POIS/ contained
+syn match riGFFlag /POISON/ contained
 syn match riGFFlag /LITE/ contained
 syn match riGFFlag /DARK/ contained
-syn match riGFFlag /NETH/ contained
-syn match riGFFlag /NEXU/ contained
-syn match riGFFlag /CHAO/ contained
-syn match riGFFlag /DISE/ contained
-syn match riGFFlag /SOUN/ contained
-syn match riGFFlag /SHAR/ contained
+syn match riGFFlag /NETHER/ contained
+syn match riGFFlag /NEXUS/ contained
+syn match riGFFlag /CHAOS/ contained
+syn match riGFFlag /DISENCHANT/ contained
+syn match riGFFlag /SOUND/ contained
+syn match riGFFlag /SHARDS/ contained
 syn match riGFFlag /NUKE/ contained
-syn match riGFFlag /DISI/ contained
-syn match riGFFlag /CONF/ contained
+syn match riGFFlag /DISINTEGRATE/ contained
+syn match riGFFlag /CONFUSION/ contained
 syn match riGFFlag /TIME/ contained
-syn match riGFFlag /INER/ contained
-syn match riGFFlag /GRAV/ contained
-syn match riGFFlag /PLAS/ contained
-syn match riGFFlag /WALL/ contained
+syn match riGFFlag /INERTIA/ contained
+syn match riGFFlag /GRAVITY/ contained
+syn match riGFFlag /PLASMA/ contained
+syn match riGFFlag /FORCE/ contained
 syn match riGFFlag /MANA/ contained
-syn match riGFFlag /WATE/ contained
-syn match riGFFlag /ICEE/ contained
+syn match riGFFlag /WATER/ contained
+syn match riGFFlag /ICE/ contained
+syn match riGFFlag /HELL_FIRE/ contained
+syn match riGFFlag /HOLY_FIRE/ contained
 syn region riSBRFlag start=/BR_/ end=/\>/ contains=riGFFlag contained
 syn match riSInnateFlag /ROCKET/ contained
 syn match riSInnateFlag /SHOOT/ contained
 syn match riSInnateFlag /THROW/ contained
 syn region riSBAFlag start=/BA_/ end=/\>/ contains=riGFFlag contained
 syn region riSBOFlag start=/BO_/ end=/\>/ contains=riGFFlag contained
+syn match riSSpell /MANA_STORM/ contained
+syn match riSSpell /HAND_DOOM/ contained
+syn match riSSpell /PSY_SPEAR/ contained
 syn region riSFreq matchgroup=riOp start=/1_IN_/ end=/\>/ contains=riNumber contained
 syn region riSFreq matchgroup=riOp start=/FREQ_/ end=/\>/ contains=riNumber contained
-syn region riSLine matchgroup=riLinePrefix start=/^S:/ end=/$/ contains=riSBRFlag,riSFreq,riSInnateFlag,riSBAFlag,riSBOFlag
+syn region riSLine matchgroup=riLinePrefix start=/^S:/ end=/$/ contains=riSBRFlag,riSFreq,riSInnateFlag,riSBAFlag,riSBOFlag,riSSpell
 
 hi def link riOp Operator
 hi def link riLinePrefix Type
@@ -151,6 +157,7 @@ hi def link riFilename Identifier
 hi riSBRFlag term=bold ctermfg=Brown
 hi riSInnateFlag term=bold ctermfg=Brown
 hi riSBAFlag term=bold ctermfg=Red
+hi riSSpell term=bold ctermfg=Magenta
 hi riSBOFlag term=bold ctermfg=Blue
 
 hi def link riInclude PreProc

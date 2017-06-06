@@ -311,7 +311,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
     int          i, j, ac, skill;
     char         m_name_subject[MAX_NLEN], m_name_object[MAX_NLEN];
 
-    if (!p_ptr->current_r_idx) return;
+    if (!possessor_can_attack()) return;
     if (!foe) return;
 
     set_monster_csleep(foe->id, 0);
@@ -345,7 +345,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
             skill -= skill * MIN(100, p_ptr->stun) / 150;
         if (test_hit_norm(skill, ac, foe->ml))
         {
-            msg_format("You %s %s", _hit_msg, m_name_object);
+            msg_format("You %s %s", _hit_msg(blow), m_name_object);
             for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
             {
                 mon_effect_ptr effect = &blow->effects[j];
@@ -356,6 +356,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 dam = damroll(effect->dd, effect->ds);
+                dam += p_ptr->to_d_m; /* XXX Need to subtract out later for non-damage effects */
                 if (p_ptr->stun)
                     dam -= dam*MIN(100, p_ptr->stun) / 150;
                 if (blow->method == RBM_EXPLODE) /* XXX What about other effects? */
@@ -375,11 +376,11 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
                     break;
                 case RBE_STUN: {
                     int old = MON_STUNNED(foe);
+                    dam -= p_ptr->to_d_m;
                     if (set_monster_stunned(foe->id, old + dam))
-                    {
-                        if (old) msg_format("%s is more stunned.", m_name_object);
-                        else msg_format("%s is stunned.", m_name_object);
-                    }
+                        msg_format("%s is <color:B>stunned</color>.", m_name_object);
+                    else
+                        msg_format("%s is more <color:B>stunned</color>.", m_name_object);
                     break; }
                 case RBE_DR_MANA: /* XXX Replace this with DRAIN_MANA in r_info */
                     gf_damage_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA, dam, GF_DAMAGE_ATTACK);
@@ -1090,6 +1091,13 @@ bool possessor_can_gain_exp(void)
     if (max < PY_MAX_LEVEL && p_ptr->lev >= max)
         return FALSE;
     return TRUE;
+}
+
+bool possessor_can_attack(void)
+{
+    if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
+        return p_ptr->current_r_idx != 0;
+    return FALSE;
 }
 
 s32b possessor_max_exp(void)

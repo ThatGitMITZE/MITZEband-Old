@@ -1240,7 +1240,7 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
             dam += effect_dam;
             switch (effect->effect)
             {
-            case RBE_HURT: case RBE_SHATTER: case RBE_SUPERHURT:
+            case RBE_HURT: case RBE_SHATTER:
                 dam1 += effect_dam * ac_melee_pct_aux(ac, 60, 150) / 100;
                 dam2 += effect_dam * ac_melee_pct(ac) / 100;
                 break;
@@ -1835,7 +1835,10 @@ static void spoil_spells_by_class(void)
     vec_ptr vec = vec_alloc(NULL);
 
     for (i = 0; i < MAX_CLASS; i++)
+    {
+        if (i == CLASS_XXX12 || i == CLASS_XXX21) continue;
         vec_add_int(vec, i);
+    }
 
     vec_sort(vec, (vec_cmp_f)_cmp_class_name);
 
@@ -1933,6 +1936,7 @@ static void _spoil_spells_by_realm_aux2(int realm_idx, int class1_idx)
 
     for (class_idx = 0; class_idx < MAX_CLASS; class_idx++)
     {
+        if (class_idx == CLASS_XXX12 || class_idx == CLASS_XXX21) continue;
         if (_check_realm(class_idx, realm_idx))
             vec_add_int(vec, class_idx);
     }
@@ -1980,6 +1984,7 @@ static void _spoil_spells_by_realm_aux1(int realm_idx)
 
     for (class_idx = 0; class_idx < MAX_CLASS; class_idx++)
     {
+        if (class_idx == CLASS_XXX12 || class_idx == CLASS_XXX21) continue;
         if (_check_realm(class_idx, realm_idx))
             vec_add_int(vec, class_idx);
     }

@@ -130,7 +130,6 @@ static int _get_r_blow_effect(cptr which)
         {"DISEASE", RBE_DISEASE},
         {"EXP_VAMP", RBE_EXP_VAMP},
         {"DR_MANA", RBE_DR_MANA},
-        {"SUPERHURT", RBE_SUPERHURT},
         {"CUT", RBE_CUT},
         {"STUN", RBE_STUN},
         {0}};
@@ -3589,7 +3588,6 @@ static int _default_blow_power(int effect)
 {
     switch (effect)
     {
-    case RBE_SUPERHURT:
     case RBE_HURT:
     case RBE_SHATTER:
         return 60;

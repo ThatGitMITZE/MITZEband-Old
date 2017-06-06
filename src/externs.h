@@ -2233,6 +2233,7 @@ extern int     possessor_get_toggle(void);
 extern s32b    possessor_max_exp(void);
 extern void    possessor_on_take_hit(void);
 extern void    possessor_on_birth(void);
+extern bool    possessor_can_attack(void);
 extern void    possessor_attack(point_t where, bool *fear, bool *mdeath);
 extern int     possessor_get_powers(spell_info* spells, int max);
 extern int     possessor_get_spells(spell_info* spells, int max);

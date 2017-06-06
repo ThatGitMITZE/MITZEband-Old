@@ -418,26 +418,6 @@ bool make_attack_normal(int m_idx)
 
                 switch (effect->effect)
                 {
-                case RBE_SUPERHURT: /* XXX Replace with multiple HURT effects ... */
-                    if ((randint1(rlev*2+300) > ac+200 || one_in_(13)) && !CHECK_MULTISHADOW())
-                    {
-                        int pct = ac_melee_pct_aux(ac, 60, 200);
-                        int tmp_damage = effect_dam * pct / 100;
-
-                        msg_print("It was a critical hit!");
-
-                        /* XXX I'm guessing we are trying to at least completely negate
-                         * all the effects af AC damage reduction. But, if the player's
-                         * AC is really poor, then we'll do even more damage!
-                         * e.g. If player gets standard 60% ac reduction, then they take
-                         * the full attack damage, which is 250% of normal. However, they
-                         * always take at least 200% of expected damage. Ouch! */
-                        tmp_damage = MAX(effect_dam, tmp_damage*2);
-                        tmp_damage = reduce_melee_dam_p(tmp_damage);
-
-                        blow_dam += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc);
-                        break;
-                    }
                 case RBE_HURT: {
                     int pct = ac_melee_pct(ac);
 

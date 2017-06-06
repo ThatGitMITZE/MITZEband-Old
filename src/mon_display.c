@@ -584,7 +584,6 @@ static cptr _effect_desc(int effect)
 {
     switch (effect)
     {
-    case RBE_SUPERHURT:   return "Critical Hits";
     case RBE_HURT:        return "Hurt";
     case RBE_DRAIN_CHARGES: return "Drain Charges";
     case RBE_EAT_GOLD:    return "Steal Gold";

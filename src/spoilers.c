@@ -1522,7 +1522,7 @@ static void _skills_class_table(FILE* fp)
     {
         int max_j = 1;
 
-        if (i == CLASS_MONSTER)
+        if (i == CLASS_MONSTER || i == CLASS_XXX12 || i == CLASS_XXX21)
             continue;
         else if (i == CLASS_WEAPONMASTER)
             max_j = WEAPONMASTER_MAX;
@@ -1565,8 +1565,11 @@ static void _spells_table(FILE* fp) /*m_info.txt*/
     fputs("Class,Realm,Index,Name,Level,Cost,Fail\n", fp);
     for (class_idx = 0; class_idx < MAX_CLASS; class_idx++)
     {
-        class_t      *class_ptr = get_class_aux(class_idx, 0);
-        player_magic *magic_ptr = &m_info[class_idx];
+        class_t      *class_ptr;
+        player_magic *magic_ptr;
+        if (class_idx == CLASS_XXX12 || class_idx == CLASS_XXX21) continue;
+        class_ptr = get_class_aux(class_idx, 0);
+        magic_ptr = &m_info[class_idx];
         for (realm_idx = REALM_LIFE; realm_idx <= MAX_MAGIC; realm_idx++)
         {
             for (spell_idx = 0; spell_idx < 32; spell_idx++)

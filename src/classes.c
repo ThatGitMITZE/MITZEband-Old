@@ -11,6 +11,7 @@ int lookup_class_idx(cptr name)
     int i;
     for (i = 0; i < MAX_CLASS; i++)
     {
+        if (i == CLASS_XXX12 || i == CLASS_XXX21) continue;
         if (strcmp(name, get_class_aux(i, 0)->name) == 0)
             return i;
     }

@@ -1745,16 +1745,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     damage = pt = 0;
                     break;
 
-                case RBE_SUPERHURT:
-                    if ((randint1(rlev*2+250) > (ac+200)) || one_in_(13))
-                    {
-                        int pct = ac_melee_pct_aux(ac, 60, 200);
-                        damage = MAX(damage * 2 * pct / 100, damage);
-                        break;
-                    }
-
-                    /* Fall through */
-
                 case RBE_HURT:
                     damage = damage * ac_melee_pct(ac) / 100;
                     break;

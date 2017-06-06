@@ -3008,7 +3008,6 @@ enum {
     RBE_DISEASE,
     RBE_EXP_VAMP, /* XXX Add VAMP(XdY) as well off player hp */
     RBE_DR_MANA,
-    RBE_SUPERHURT, /* XXX deprecated */
     RBE_CUT,
     RBE_STUN,
 };

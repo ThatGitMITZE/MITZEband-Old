@@ -806,7 +806,6 @@ static vec_ptr _get_races_aux(int ids[])
     {
         int id = ids[i];
         if (id == -1) break;
-        if (id == RACE_MON_POSSESSOR || id == RACE_MON_MIMIC) continue;
         if (!_is_valid_race_class(id, p_ptr->pclass)) continue;
         vec_add(v, get_race_aux(id, 0));
     }
