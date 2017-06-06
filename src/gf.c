@@ -2078,8 +2078,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 dragon_vamp_amt += dam;
             do_time = (dam+7)/8;
         }
-
-            break;
+        break;
     case GF_DEATH_TOUCH:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()

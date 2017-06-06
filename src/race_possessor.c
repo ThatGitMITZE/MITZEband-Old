@@ -304,11 +304,43 @@ static bool _blow_is_masked(mon_blow_ptr blow)
 
     return FALSE;
 }
+static int _dam_boost(int method, int rlev)
+{
+    /* Most early monsters with innate attacks aren't worth possessing as
+       their damage is just too low ... Heck, a Mean Looking Mercenary with
+       a good longsword is usually a much better option! */
+    switch (method)
+    {
+    case RBM_HIT:
+    case RBM_PUNCH:
+    case RBM_KICK:
+    case RBM_CLAW:
+    case RBM_BITE:
+    case RBM_STING:
+    case RBM_SLASH:
+    case RBM_BUTT:
+    case RBM_CRUSH:
+        return  2 + (rlev + 4) / 5;
+    }
+    return 0;
+}
+static bool _do_vorpal(mon_blow_ptr blow)
+{
+    int i;
+    /* Assume CUT is never the first effect ... */
+    for (i = 1; i < MAX_MON_BLOW_EFFECTS; i++)
+    {
+        if (blow->effects[i].effect == RBE_CUT)
+            return one_in_(6);
+    }
+    return FALSE;
+}
 void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 {
     mon_race_ptr body, foe_race;
     mon_ptr      foe = _get_mon(where);
-    int          i, j, ac, skill;
+    int          i, j, ac, skill, steal_ct = 0;
+    bool         delay_quake = FALSE;
     char         m_name_subject[MAX_NLEN], m_name_object[MAX_NLEN];
 
     if (!possessor_can_attack()) return;
@@ -325,7 +357,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
     for (i = 0; i < MAX_MON_BLOWS; i++)
     {
         mon_blow_ptr blow = &body->blows[i];
-        if (mode == WEAPONMASTER_RETALIATION)
+        if (mode == WEAPONMASTER_RETALIATION) /* mystics */
         {
             for (;;)
             {
@@ -362,10 +394,28 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 
                 if (*mdeath) break;
                 if (!effect->effect) break;
+                if (effect->effect == RBE_CUT) continue;
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 dam = damroll(effect->dd, effect->ds);
                 dam += p_ptr->to_d_m; /* XXX Need to subtract out later for non-damage effects */
+                dam += _dam_boost(blow->method, body->level);
+                if (j == 0 && _do_vorpal(blow))
+                {
+                    int m = 2;
+                    while (one_in_(4)) m++;
+                    dam *= m;
+                    switch (m)
+                    {
+                    case 2: msg_format("You <color:U>gouge</color> %s!", m_name_object); break;
+                    case 3: msg_format("You <color:y>maim</color> %s!", m_name_object); break;
+                    case 4: msg_format("You <color:R>carve</color> %s!", m_name_object); break;
+                    case 5: msg_format("You <color:r>cleave</color> %s!", m_name_object); break;
+                    case 6: msg_format("You <color:v>smite</color> %s!", m_name_object); break;
+                    case 7: msg_format("You <color:v>eviscerate</color> %s!", m_name_object); break;
+                    default: msg_format("You <color:v>shred</color> %s!", m_name_object); break;
+                    }
+                }
                 if (p_ptr->stun)
                     dam -= dam*MIN(100, p_ptr->stun) / 150;
                 if (blow->method == RBM_EXPLODE) /* XXX What about other effects? */
@@ -375,18 +425,47 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 }
                 switch (effect->effect)
                 {
+                case RBE_SHATTER:
+                    if (dam > 23) delay_quake = TRUE;
                 case RBE_HURT:
                     dam = mon_damage_mod(foe, dam, FALSE);
                     if (dam > 0)
                         anger_monster(foe);
                     *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
                     break;
-                case RBE_CUT:
+                case RBE_EAT_GOLD:
+                case RBE_EAT_ITEM:
+                case RBE_EAT_FOOD:
+                    if (leprechaun_steal(foe->id))
+                        steal_ct++;
+                    break;
+                case RBE_DISEASE:
+                    if (dam)
+                        gf_damage_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_DAMAGE_ATTACK);
+                    break;
+                case RBE_DRAIN_CHARGES:
+                    gf_damage_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
+                        (dam ? dam : p_ptr->lev), GF_DAMAGE_ATTACK);
+                    break;
+                case RBE_EXP_10:
+                case RBE_EXP_20:
+                case RBE_EXP_40:
+                case RBE_EXP_80:
+                    if (dam)
+                        gf_damage_m(GF_WHO_PLAYER, where, GF_NETHER, dam, GF_DAMAGE_ATTACK);
+                    break;
+                case RBE_EXP_VAMP:
+                    if (monster_living(foe_race) && gf_damage_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))
+                    {
+                        msg_format("You <color:D>drain life</color> from %s!", m_name_object);
+                        hp_player(dam);
+                        /* XXX limit amt per turn? */
+                    }
                     break;
                 default:
                     gf_damage_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
                 }
-
+                *mdeath = (foe->r_idx == 0);
             }
             if (_touched(blow))
                 touch_zap_player(foe->id);
@@ -396,6 +475,15 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
             msg_print("You miss.");
         }
         if (mode == WEAPONMASTER_RETALIATION) break;
+    }
+    if (delay_quake)
+        earthquake(py, px, 10);
+    if (steal_ct && !*mdeath)
+    {
+        if (mon_save_p(foe->r_idx, A_DEX))
+            msg_print("You fail to run away!");
+        else
+            teleport_player(25 + p_ptr->lev/2, 0);
     }
 }
 
