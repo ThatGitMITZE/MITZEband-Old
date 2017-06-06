@@ -1242,7 +1242,7 @@ static bool vault_aux_battle(int r_idx)
         if (r_ptr->blows[i].method == RBM_EXPLODE) return (FALSE);
         for (j = 0; j < MAX_MON_BLOW_EFFECTS; j++)
         {
-            if (r_ptr->blows[i].effects[j].effect != RBE_DR_MANA)
+            if (r_ptr->blows[i].effects[j].effect != GF_DRAIN_MANA)
                 dam += r_ptr->blows[i].effects[j].dd;
         }
     }

@@ -1741,10 +1741,6 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 switch (e.effect)
                 {
                 case 0:
-                case RBE_DR_MANA:
-                    damage = pt = 0;
-                    break;
-
                 case RBE_HURT:
                     damage = damage * ac_melee_pct(ac) / 100;
                     break;

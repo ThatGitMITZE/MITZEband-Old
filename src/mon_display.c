@@ -608,7 +608,6 @@ static cptr _effect_desc(int effect)
     case RBE_EXP_80:      return "<color:D>Lower Experience</color>";
     case RBE_DISEASE:     return "Disease";
     case RBE_EXP_VAMP:    return "Drain Life Force";
-    case RBE_DR_MANA:     return "Drain Mana";
     case RBE_CUT:         return "<color:r>Cut</color>";
     case RBE_STUN:        return "<color:B>Stun</color>";
     default:              return gf_name(effect);

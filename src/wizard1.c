@@ -1225,7 +1225,6 @@ static _mon_dam_info_ptr _mon_dam_info_alloc(mon_race_ptr r)
 
             if (!effect->effect) continue;
             /* skip non-damaging effects */
-            if (effect->effect == RBE_DR_MANA) continue;
             if (effect->effect == RBE_STUN) continue;
             if (effect->effect == RBE_CUT) continue;
             /* XXX Delayed damage: if (effect->effect == GF_POIS) continue;*/

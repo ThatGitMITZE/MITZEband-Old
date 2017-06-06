@@ -915,25 +915,6 @@ bool make_attack_normal(int m_idx)
                     }
                     break; }
 
-                case RBE_DR_MANA:
-                    obvious = TRUE;
-                    if (CHECK_MULTISHADOW())
-                    {
-                        msg_print("The attack hits Shadow, you are unharmed!");
-                    }
-                    else if (psion_mental_fortress())
-                        msg_print("Your mental fortress is impenetrable!");
-                    else if ( prace_is_(RACE_DEMIGOD)
-                           && p_ptr->psubrace == DEMIGOD_HERA
-                           && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
-                    {
-                        msg_print("You keep your wits about you!");
-                    }
-                    else
-                    {
-                        sp_player(-effect_dam);
-                    }
-                    break;
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);
                     break;

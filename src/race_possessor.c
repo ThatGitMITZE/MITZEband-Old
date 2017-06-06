@@ -382,9 +382,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath)
                     else
                         msg_format("%s is more <color:B>stunned</color>.", m_name_object);
                     break; }
-                case RBE_DR_MANA: /* XXX Replace this with DRAIN_MANA in r_info */
-                    gf_damage_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA, dam, GF_DAMAGE_ATTACK);
-                    break;
                 default:
                     gf_damage_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
                 }
