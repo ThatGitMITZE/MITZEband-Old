@@ -1308,6 +1308,16 @@ void possessor_character_dump(doc_ptr doc)
     char         lvl[80];
     char         loc[255];
     
+    if (p_ptr->current_r_idx)
+    {
+        mon_race_ptr race = &r_info[p_ptr->current_r_idx];
+        bool old_use_graphics = use_graphics;
+        use_graphics = FALSE;
+        doc_printf(doc, "<topic:CurrentForm>================================ <color:keypress>C</color>urrent Form =================================\n\n");
+        mon_display_doc(race, doc);
+        doc_newline(doc);
+        use_graphics = old_use_graphics;
+    }
     doc_printf(doc, "<topic:RecentForms>================================ <color:keypress>R</color>ecent Forms =================================\n\n");
     doc_insert(doc, "<style:table>");
     doc_printf(doc, "<color:G>%-33.33s CL Day  Time  DL %-28.28s</color>\n", "Most Recent Forms", "Location");

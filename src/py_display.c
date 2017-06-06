@@ -911,7 +911,8 @@ static void _build_equipment(doc_ptr doc)
 /****************************** Combat ************************************/
 static void _build_melee(doc_ptr doc)
 {
-    if (p_ptr->prace != RACE_MON_RING)
+    if (p_ptr->prace == RACE_MON_RING) return;
+    if (possessor_can_attack() && !p_ptr->weapon_ct) return;
     {
         int i;
         doc_insert(doc, "<topic:Melee>==================================== <color:keypress>M</color>elee ====================================\n\n");

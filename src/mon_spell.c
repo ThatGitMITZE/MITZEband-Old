@@ -3198,14 +3198,14 @@ static int _align_dam(mon_spell_ptr spell, int dam)
     }
     return dam;
 }
-static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
+static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp, bool apply_resist)
 {
     if (!_is_attack_spell(spell)) return 0;
     if (spell->parm.tag == MSP_DICE)
     {
         dice_t dice = spell->parm.v.dice;
         int dam = _avg_roll(dice);
-        int res = _spell_res(spell);
+        int res = apply_resist ? _spell_res(spell) : 0;
         dam = _align_dam(spell, dam);
         if (res)
             dam -= dam * res / 100;
@@ -3216,7 +3216,7 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
     if (spell->parm.tag == MSP_HP_PCT)
     {
         int dam = hp * spell->parm.v.hp_pct.pct / 100;
-        int res = _spell_res(spell);
+        int res = apply_resist ? _spell_res(spell) : 0;
         if (dam > spell->parm.v.hp_pct.max)
             dam = spell->parm.v.hp_pct.max;
         dam = _align_dam(spell, dam);
@@ -3228,11 +3228,11 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp)
 }
 int mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race)
 {
-    return _avg_spell_dam_aux(spell, _avg_hp(race));
+    return _avg_spell_dam_aux(spell, _avg_hp(race), TRUE);
 }
 int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
 {
-    return _avg_spell_dam_aux(spell, mon->hp);
+    return _avg_spell_dam_aux(spell, mon->hp, TRUE);
 }
 void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
 {

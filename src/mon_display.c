@@ -72,26 +72,24 @@ static bool _know_armor_hp(monster_race *r_ptr)
     return FALSE;
 }
 
-#if 0
-static bool _know_damage(monster_race *r_ptr, int i)
+static bool _know_melee_damage(mon_race_ptr race, mon_effect_ptr effect)
 {
-    int l = r_ptr->level + 4;
-    int ct = r_ptr->r_blows[i];
-    int d1 = r_ptr->blow[i].d_dice;
-    int d2 = r_ptr->blow[i].d_side;
-    int d = d1 * d2;
+    int l = race->level + 4;
+    int ct = effect->lore;
+    int d = effect->dd * effect->ds;
 
-    if (_easy_lore(r_ptr)) return TRUE;
+    if (_easy_lore(race)) return TRUE;
 
+    /* XXX This calc is ancient and perhaps a bit stingy.
+     * I think it is trying for ct > MIN(255, dd*ds*l) */
     if (d >= (l*MAX_UCHAR)/80)
         d = (l*MAX_UCHAR-1)/80;
 
     if (l * ct > 80 * d) return TRUE;
-    else if ((r_ptr->flags1 & RF1_UNIQUE) && l * 2 * ct > 80 * d) return TRUE;
+    else if ((race->flags1 & RF1_UNIQUE) && l * 2 * ct > 80 * d) return TRUE;
 
     return FALSE;
 }
-#endif
 
 static bool _know_alertness(monster_race *r_ptr)
 {
@@ -445,7 +443,7 @@ static void _display_spell_group(mon_race_ptr r_ptr, mon_spell_group_ptr group, 
         {
             string_ptr s = string_alloc();
             mon_spell_display(spell, s);
-            if (easy_lore || spell->lore > 5) /* XXX How many? */
+            if (_easy_lore(r_ptr) || spell->lore > 5) /* XXX How many? */
             {
                 if (spell->parm.tag && spell->id.type != MST_SUMMON)
                 {
@@ -580,35 +578,47 @@ static cptr _method_desc(int method)
     }
     return "Weird";
 }
-static cptr _effect_desc(int effect)
+static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
 {
-    switch (effect)
+    string_ptr s;
+
+    switch (effect->effect)
     {
-    case RBE_HURT:        return "Hurt";
-    case RBE_DRAIN_CHARGES: return "Drain Charges";
-    case RBE_EAT_GOLD:    return "Steal Gold";
-    case RBE_EAT_ITEM:    return "Steal Item";
-    case RBE_EAT_FOOD:    return "Eat Your Food";
-    case RBE_EAT_LITE:    return "Absorb Light";
-    case RBE_BLIND:       return "Blind";
-    case RBE_LOSE_STR:    return "Reduce Strength";
-    case RBE_LOSE_INT:    return "Reduce Intelligence";
-    case RBE_LOSE_WIS:    return "Reduce Wisdom";
-    case RBE_LOSE_DEX:    return "Reduce Dexterity";
-    case RBE_LOSE_CON:    return "Reduce Constitution";
-    case RBE_LOSE_CHR:    return "Reduce Charisma";
-    case RBE_LOSE_ALL:    return "Reduce All Stats";
-    case RBE_SHATTER:     return "Shatter";
+    case RBE_HURT:        s = string_copy_s("Hurt"); break;
+    case RBE_DRAIN_CHARGES: s = string_copy_s("Drain Charges"); break;
+    case RBE_EAT_GOLD:    s = string_copy_s("Steal Gold"); break;
+    case RBE_EAT_ITEM:    s = string_copy_s("Steal Item"); break;
+    case RBE_EAT_FOOD:    s = string_copy_s("Steal Food"); break;
+    case RBE_EAT_LITE:    s = string_copy_s("Absorb Light"); break;
+    case RBE_BLIND:       s = string_copy_s("Blind"); break;
+    case RBE_LOSE_STR:    s = string_copy_s("Reduce Strength"); break;
+    case RBE_LOSE_INT:    s = string_copy_s("Reduce Intelligence"); break;
+    case RBE_LOSE_WIS:    s = string_copy_s("Reduce Wisdom"); break;
+    case RBE_LOSE_DEX:    s = string_copy_s("Reduce Dexterity"); break;
+    case RBE_LOSE_CON:    s = string_copy_s("Reduce Constitution"); break;
+    case RBE_LOSE_CHR:    s = string_copy_s("Reduce Charisma"); break;
+    case RBE_LOSE_ALL:    s = string_copy_s("Reduce All Stats"); break;
+    case RBE_SHATTER:     s = string_copy_s("Shatter"); break;
     case RBE_EXP_10:
     case RBE_EXP_20:
     case RBE_EXP_40:
-    case RBE_EXP_80:      return "<color:D>Lower Experience</color>";
-    case RBE_DISEASE:     return "Disease";
-    case RBE_EXP_VAMP:    return "Drain Life Force";
-    case RBE_CUT:         return "<color:r>Cut</color>";
-    default:              return gf_name(effect);
+    case RBE_EXP_80:      s = string_copy_s("<color:D>Lower Experience</color>"); break;
+    case RBE_DISEASE:     s = string_copy_s("Disease"); break;
+    case RBE_EXP_VAMP:    s = string_copy_s("Drain Life Force"); break;
+    case RBE_CUT:         s = string_copy_s("<color:r>Cut</color>"); break;
+    default:              s = string_copy_s(gf_name(effect->effect));
     }
-    return "";
+    assert(s);
+    if (_know_melee_damage(race, effect))
+    {
+        if (effect->pct && effect->dd && effect->ds)
+            string_printf(s, ":%dd%d,%d%%", effect->dd, effect->ds, effect->pct);
+        else if (effect->dd && effect->ds)
+            string_printf(s, ":%dd%d", effect->dd, effect->ds);
+        else if (effect->pct)
+            string_printf(s, ":%d%%", effect->pct);
+    }
+    return s;
 }
 static int _ct_known_attacks(monster_race *r_ptr)
 {
@@ -630,7 +640,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
     {
         int i,j;
         /* XXX Damage display needs some rethinking ... */
-        doc_printf(doc, "Attacks : <color:G>%-7.7s Effect</color>\n", "Type");
+        doc_printf(doc, "Attacks : <color:G>%-7.7s Effects</color>\n", "Type");
         for (i = 0; i < MAX_MON_BLOWS; i++)
         {
             mon_blow_ptr blow = &r_ptr->blows[i];
@@ -644,15 +654,14 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
             {
                 mon_effect_ptr effect = &blow->effects[j];
                 if (!effect->effect) continue;
-                if (effect->effect == RBE_HURT) continue;
                 if (!_easy_lore(r_ptr) && !effect->lore) continue;
-                vec_add(v, string_copy_s(_effect_desc(effect->effect)));
+                vec_add(v, _effect_desc(r_ptr, effect));
             }
             doc_printf(doc, "          %-7.7s",  _method_desc(blow->method));
             if (vec_length(v))
             {
                 doc_insert(doc, " <indent><style:indent>");
-                _print_list(v, doc, ',', '\0');
+                _print_list(v, doc, ';', '\0');
                 doc_insert(doc, "</style></indent>");
             }
             doc_newline(doc);
