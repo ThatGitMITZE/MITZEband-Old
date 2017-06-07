@@ -94,10 +94,10 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
         savefile_write_byte(file, SAVE_MON_AC);
         savefile_write_s16b(file, m_ptr->ac_adj);
     }
-    if (m_ptr->melee_adj)
+    if (m_ptr->power != 100)
     {
-        savefile_write_byte(file, SAVE_MON_MELEE);
-        savefile_write_s16b(file, m_ptr->melee_adj);
+        savefile_write_byte(file, SAVE_MON_POWER);
+        savefile_write_s16b(file, m_ptr->power);
     }
     if (m_ptr->drop_ct)
     {

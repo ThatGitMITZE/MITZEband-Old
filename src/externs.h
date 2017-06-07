@@ -1015,7 +1015,7 @@ extern void wr_item(savefile_ptr file, object_type *o_ptr); /* save.c */
 /* melee1.c */
 extern int ac_melee_pct_aux(int ac, int max_reduce, int max_ac);
 extern int ac_melee_pct(int ac);
-extern int check_hit(int power, int level, int stun, int m_idx);
+extern int mon_ac(mon_ptr mon);
 
 /* melee2.c */
 extern bool retaliation_hack;

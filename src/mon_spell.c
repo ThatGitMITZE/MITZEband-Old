@@ -1431,6 +1431,12 @@ static int _roll(dice_t dice)
         roll += damroll(dice.dd, dice.ds);
     return roll;
 }
+static int _scale(int dam)
+{
+    if (_current.mon)
+        return MAX(1, dam * _current.mon->power / 100);
+    return dam;
+}
 static int _avg_roll(dice_t dice)
 {
     int roll = dice.base;
@@ -1449,7 +1455,7 @@ static void _ball(void)
         flags |= PROJECT_PLAYER;
 
     assert(_current.spell->parm.tag == MSP_DICE);
-    dam = _roll(dice);
+    dam = _scale(_roll(dice));
     if (_current.spell->flags & MSF_BALL0) rad = 0;
     else if (_current.spell->flags & MSF_BALL4) rad = 4;
 
@@ -1487,7 +1493,7 @@ static void _bolt(void)
     for (i = 0; i < ct; i++)
     {
         project(_who(), 0, _current.dest.y, _current.dest.x,
-            _roll(_current.spell->parm.v.dice),
+            _scale(_roll(_current.spell->parm.v.dice)),
             _current.spell->id.effect, flags);
     }
 }
@@ -1499,7 +1505,7 @@ static void _beam(void)
         flags |= PROJECT_PLAYER;
     assert(_current.spell->parm.tag == MSP_DICE);
     project(_who(), 0, _current.dest.y, _current.dest.x,
-        _roll(_current.spell->parm.v.dice),
+        _scale(_roll(_current.spell->parm.v.dice)),
         _current.spell->id.effect, flags);
 }
 static void _curse(void)
@@ -1513,6 +1519,8 @@ static void _curse(void)
         flags |= PROJECT_PLAYER;
         if (_current.spell->id.effect == GF_HAND_DOOM)
             dam = dam * p_ptr->chp / 100;
+        else
+            dam = _scale(dam);
     }
     else if (_current.spell->id.effect == GF_HAND_DOOM) /* XXX Inconsistent ... */
         dam = 3 * p_ptr->lev;

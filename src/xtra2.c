@@ -2450,7 +2450,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
         msg_format("%^s armor melts.", m_name);
         m_ptr->ac_adj -= randint1(2);
         if (p_ptr->wizard || cheat_xtra)
-            msg_format("Melt Armor: AC is now %d", MON_AC(r_ptr, m_ptr));
+            msg_format("Melt Armor: AC is now %d", mon_ac(m_ptr));
     }
 
     /* Rage Mage: "Blood Lust" */

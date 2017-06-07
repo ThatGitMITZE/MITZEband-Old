@@ -2236,7 +2236,7 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
 
         for (j = 0; j < blows; j++)
         {
-            int ac = MON_AC(r_ptr, m_ptr);
+            int ac = mon_ac(m_ptr);
 
             if (m_ptr->fy != old_fy || m_ptr->fx != old_fx) break; /* Teleport Effect? */
 
@@ -2989,7 +2989,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
             success_hit = TRUE;
         }
         else if (weaponmaster_get_toggle() == TOGGLE_BURNING_BLADE) success_hit = TRUE;
-        else success_hit = test_hit_norm(chance, MON_AC(r_ptr, m_ptr), m_ptr->ml);
+        else success_hit = test_hit_norm(chance, mon_ac(m_ptr), m_ptr->ml);
 
         if (mode == HISSATSU_MAJIN)
         {
@@ -4225,7 +4225,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
     if (weaponmaster_get_toggle() == TOGGLE_TRIP && mode == 0 && !(*mdeath) && !fear_stop)
     {
-        if (test_hit_norm(chance, MON_AC(r_ptr, m_ptr), m_ptr->ml))
+        if (test_hit_norm(chance, mon_ac(m_ptr), m_ptr->ml))
         {
             if (m_ptr->mflag2 & MFLAG2_TRIPPED)
                 msg_format("%^s is already tripped up.", m_name_subject);

@@ -3422,7 +3422,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
     /* Extract the monster base speed */
     m_ptr->mspeed = get_mspeed(r_ptr);
     m_ptr->ac_adj = 0;
-    m_ptr->melee_adj = 0;
+    m_ptr->power = 100;
 
     if (mode & PM_HASTE) (void)set_monster_fast(c_ptr->m_idx, 100);
 
@@ -4444,7 +4444,7 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
         m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
     }
 
-    /* Discourage farming ... */
+    /* Discourage farming ...
     if (num_repro_kill >= 50)
     {
         m_list[hack_m_idx_ii].mspeed += MIN(5 * num_repro_kill / 50, 20);
@@ -4452,8 +4452,8 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
         m_list[hack_m_idx_ii].max_maxhp += MIN(m_list[hack_m_idx_ii].max_maxhp * num_repro_kill / 50, 2000);
         m_list[hack_m_idx_ii].hp = m_list[hack_m_idx_ii].maxhp;
         m_list[hack_m_idx_ii].ac_adj += MIN(10 * num_repro_kill / 50, 100);
-        m_list[hack_m_idx_ii].melee_adj += MIN(5 * num_repro_kill / 50, 100);
-    }
+        m_list[hack_m_idx_ii].power += MIN(5 * num_repro_kill / 50, 100);
+    } */
 
     return TRUE;
 }

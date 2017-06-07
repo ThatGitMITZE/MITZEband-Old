@@ -235,7 +235,7 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
 {
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    int           ac = MON_AC(r_ptr, m_ptr);
+    int           ac = mon_ac(m_ptr);
     bool          visible = m_ptr->ml;
 
     if (test_hit_fire(context->skill - (context->path_pos + 1), ac, m_ptr->ml))

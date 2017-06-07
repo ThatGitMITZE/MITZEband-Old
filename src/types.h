@@ -466,9 +466,6 @@ typedef struct monster_body_s monster_body_t;
 
 typedef struct monster_race monster_race;
 
-#define MON_AC(r_ptr, m_ptr) MAX((r_ptr)->ac + (m_ptr)->ac_adj, 0)
-#define MON_MELEE_LVL(r_ptr, m_ptr) MAX(((r_ptr)->melee_level ? (r_ptr)->melee_level : (r_ptr)->level) + (m_ptr)->melee_adj, 1)
-
 struct monster_race
 {
     u32b name;                /* Name (offset) */
@@ -476,7 +473,7 @@ struct monster_race
 
     byte hdice;               /* Creatures hit dice count */
     byte hside;               /* Creatures hit dice sides */
-    s16b ac;                  /* Armour Class */
+    s16b ac;                  /* Armour Class: Always use mon_ac(mon) instead! */
 
     s16b sleep;               /* Inactive counter (base) */
     byte aaf;                 /* Area affect radius (1-100) */
@@ -670,7 +667,7 @@ struct monster_type
     s16b maxhp;        /* Max Hit points */
     s16b max_maxhp;        /* Max Max Hit points */
     s16b ac_adj;
-    s16b melee_adj;
+    s16b power;
 
     s16b mtimed[MAX_MTIMED];    /* Timed status counter */
     s16b paralyzed;

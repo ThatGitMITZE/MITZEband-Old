@@ -1525,10 +1525,10 @@ bool mon_attack_mon(int m_idx, int t_idx)
     if (d_info[dungeon_type].flags1 & DF1_NO_MELEE) return (FALSE);
 
     /* Total armor */
-    ac = MON_AC(tr_ptr, t_ptr);
+    ac = mon_ac(t_ptr);
 
     /* Extract the effective monster level */
-    rlev = MON_MELEE_LVL(r_ptr, m_ptr);
+    rlev = r_ptr->level;
 
     /* Apply Dragon Songs to the player's mount */
     if (p_ptr->riding == m_idx && warlock_is_(WARLOCK_DRAGONS))

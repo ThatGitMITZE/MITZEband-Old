@@ -45,6 +45,7 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
     int  which;
 
     assert(m_ptr->id);
+    m_ptr->power = 100;
     m_ptr->r_idx = savefile_read_s16b(file);
     m_ptr->ap_r_idx = m_ptr->r_idx;
     m_ptr->fy = savefile_read_byte(file);
@@ -101,8 +102,8 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
         case SAVE_MON_AC:
             m_ptr->ac_adj = savefile_read_s16b(file);
             break;
-        case SAVE_MON_MELEE:
-            m_ptr->melee_adj = savefile_read_s16b(file);
+        case SAVE_MON_POWER:
+            m_ptr->power = savefile_read_s16b(file);
             break;
         case SAVE_MON_DROP_CT:
             m_ptr->drop_ct = savefile_read_byte(file);

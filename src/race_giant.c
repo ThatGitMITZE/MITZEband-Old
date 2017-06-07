@@ -192,7 +192,7 @@ bool monster_toss(int m_idx)
         return TRUE;
     }
     chance = p_ptr->skills.thn + ((p_ptr->lev + p_ptr->to_h_m) * BTH_PLUS_ADJ);
-    if (!test_hit_norm(chance, MON_AC(r_ptr, m_ptr), TRUE))
+    if (!test_hit_norm(chance, mon_ac(m_ptr), TRUE))
     {
         msg_format("You lose hold of %s.", m_name);
         return TRUE;
@@ -319,13 +319,12 @@ static void _monster_toss_imp(_monster_toss_info *info)
         {
             cave_type *c_ptr = &cave[ny][nx];
             monster_type *m_ptr2 = &m_list[c_ptr->m_idx];
-            monster_race *r_ptr2 = &r_info[m_ptr->r_idx];
             char m_name2[80];
             bool visible = m_ptr2->ml;
 
             monster_desc(m_name2, m_ptr2, 0);
 
-            if (test_hit_fire(chance - cur_dis, MON_AC(r_ptr2, m_ptr2), visible))
+            if (test_hit_fire(chance - cur_dis, mon_ac(m_ptr2), visible))
             {
                 bool fear = FALSE;
                 critical_t crit;

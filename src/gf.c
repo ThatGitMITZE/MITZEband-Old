@@ -1596,7 +1596,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
                 }
                 else if (which <= 90)
                 {
-                    m_ptr->melee_adj -= randint1(1 + r_ptr->level/10);
+                    m_ptr->power = MAX(30, m_ptr->power * (85 + randint0(10)) / 100);
                     note = " shrinks!";
                 }
                 else

@@ -1836,7 +1836,7 @@ void _circle_kick(void)
 
             monster_desc(m_name, m_ptr, 0);
 
-            if (test_hit_norm(chance, MON_AC(r_ptr, m_ptr), m_ptr->ml))
+            if (test_hit_norm(chance, mon_ac(m_ptr), m_ptr->ml))
             {
                 int dam = damroll(dd, ds) + p_ptr->to_d_m;
 

@@ -3342,7 +3342,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                 if (p_ptr->riding)
                     skills_riding_gain_archery(r_ptr);
 
-                armour = MON_AC(r_ptr, m_ptr);
+                armour = mon_ac(m_ptr);
                 if (p_ptr->concent)
                 {
                     armour *= (10 - p_ptr->concent);

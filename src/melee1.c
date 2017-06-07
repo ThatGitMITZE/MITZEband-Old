@@ -12,41 +12,40 @@
 
 #include "angband.h"
 
+int mon_ac(mon_ptr mon)
+{
+    mon_race_ptr race = &r_info[mon->r_idx];
+    int          ac = race->ac;
+
+    ac += mon->ac_adj;
+    ac = ac * mon->power / 100;
+    if (ac < 0) ac = 0;
+    return ac;
+}
+
 /*
  * Determine if a monster attack against the player succeeds.
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
-int check_hit(int power, int level, int stun, int m_idx)
+static int _check_hit(int skill, int ac)
 {
-    int i, k, ac;
+    int k;
 
     /* Percentile dice */
     k = randint0(100);
 
-    /* Calculate the "attack quality" */
-    i = (power + (level * 3));
-    if (stun)
-        i -= i*MIN(100, stun) / 150;
-
-    /* Total armor */
-    ac = p_ptr->ac + p_ptr->to_a;
+    /* Drunken Boxing does not give AC damage reduction ... */
     if (p_ptr->special_attack & ATTACK_SUIKEN) ac += (p_ptr->lev * 2);
-
-    if ( p_ptr->pclass == CLASS_DUELIST
-      && p_ptr->duelist_target_idx == m_idx )
-    {
-        ac += 100;
-    }
 
     /* Hack -- Always miss or hit */
     if (k < 10) return (k < 5);
 
     /* Power and Level compete against Armor */
-    if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
+    if (skill > 0 && randint1(skill) > ac*3/4) return TRUE;
 
     /* Assume miss */
-    return (FALSE);
+    return FALSE;
 }
 
 
@@ -133,7 +132,7 @@ bool make_attack_normal(int m_idx)
 
     int ap_cnt, ht_cnt;
 
-    int j, k, ac, rlev;
+    int j, k, ac, rlev, skill;
 
     s32b gold;
 
@@ -160,7 +159,7 @@ bool make_attack_normal(int m_idx)
     if (!is_hostile(m_ptr)) return FALSE;
 
     /* Extract the effective monster level */
-    rlev = MON_MELEE_LVL(r_ptr, m_ptr);
+    rlev = r_ptr->level;
 
     /* Get the monster name (or "it") */
     monster_desc(m_name, m_ptr, 0);
@@ -236,12 +235,20 @@ bool make_attack_normal(int m_idx)
             mon_lore_2(m_ptr, RF2_AURA_REVENGE);
         }
 
-        /* Total armor */
+        /* Calculate correct AC here (rather than in check_hit as formerly)
+         * since AC is used to reduce melee damage. */
         ac = p_ptr->ac + p_ptr->to_a;
+        if (p_ptr->pclass == CLASS_DUELIST && p_ptr->duelist_target_idx == m_idx)
+            ac += 100;
+
+        skill = blow->power + rlev*3;
+        skill = skill * m_ptr->power / 100;
+        if (stun)
+            skill -= skill*MIN(100, stun) / 150;
 
         /* Monster hits player */
         if ( !blow->effects[0].effect  /* XXX B:BEG or B:INSULT */
-          || check_hit(blow->power, rlev, stun, m_idx))
+          || _check_hit(skill, ac))
         {
             /* Always disturbing */
             disturb(1, 0);
@@ -404,6 +411,7 @@ bool make_attack_normal(int m_idx)
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 effect_dam = damroll(effect->dd, effect->ds);
+                effect_dam = effect_dam * m_ptr->power / 100;
                 if (stun)
                     effect_dam -= effect_dam*MIN(100, stun) / 150;
 

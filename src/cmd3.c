@@ -1113,7 +1113,7 @@ static void _mon_display_probe(doc_ptr doc, int m_idx)
         m_ptr->hp,
         m_ptr->maxhp
     );
-    doc_printf(doc, "AC   : <color:G>%13d</color>\n", MON_AC(r_ptr, m_ptr));
+    doc_printf(doc, "AC   : <color:G>%13d</color>\n", mon_ac(m_ptr));
 
     if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD))
         doc_printf(doc, "Align: <color:B>%13.13s</color>\n", "Good&Evil");
