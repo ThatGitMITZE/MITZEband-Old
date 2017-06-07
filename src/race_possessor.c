@@ -338,7 +338,11 @@ static int _vorpal_pct(mon_blow_ptr blow)
     for (i = 1; i < MAX_MON_BLOW_EFFECTS; i++)
     {
         if (blow->effects[i].effect == RBE_CUT)
-            return blow->effects[i].pct; /* XXX Too much? */
+        {
+            int chance = blow->effects[i].pct;
+            if (!chance) chance = 100;
+            return chance;
+        }
     }
     return 0;
 }
@@ -402,6 +406,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 if (*mdeath) break;
                 if (!effect->effect) break;
                 if (effect->effect == RBE_CUT) continue;
+                if (effect->effect == RBE_DRAIN_EXP) continue;
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 /* The first effect is the base damage, and gets boosted by combat boosting
@@ -480,13 +485,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 case RBE_DRAIN_CHARGES:
                     gf_damage_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
                         (dam ? dam : p_ptr->lev), GF_DAMAGE_ATTACK);
-                    break;
-                case RBE_EXP_10:
-                case RBE_EXP_20:
-                case RBE_EXP_40:
-                case RBE_EXP_80:
-                    if (dam)
-                        gf_damage_m(GF_WHO_PLAYER, where, GF_NETHER, dam, GF_DAMAGE_ATTACK);
                     break;
                 case RBE_EXP_VAMP:
                     if (monster_living(foe_race) && gf_damage_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))

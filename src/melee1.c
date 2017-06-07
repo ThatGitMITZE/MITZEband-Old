@@ -776,44 +776,14 @@ bool make_attack_normal(int m_idx)
                         earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
                     break; }
 
-                case RBE_EXP_10: { /* XXX Replace with B:HIT(60):HURT(5d5):EXP(XdY) */
-                    s32b d = damroll(10, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
+                case RBE_DRAIN_EXP: {
+                    int resist = 95 - effect_dam/15;
+                    effect_dam += MON_DRAIN_LIFE * p_ptr->exp / 100;
+                    if (effect_dam > 10000) effect_dam = 10000;
                     obvious = TRUE;
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
+                    if (CHECK_MULTISHADOW()) break;
 
-                    drain_exp(d, d / 10, 95);
-                    break; }
-
-                case RBE_EXP_20: {
-                    s32b d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-                    obvious = TRUE;
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    drain_exp(d, d / 10, 90);
-                    break; }
-
-                case RBE_EXP_40: {
-                    s32b d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-                    obvious = TRUE;
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    drain_exp(d, d / 10, 75);
-                    break; }
-
-                case RBE_EXP_80: {
-                    s32b d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-                    obvious = TRUE;
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-                    drain_exp(d, d / 10, 50);
+                    drain_exp(effect_dam, effect_dam/10, resist);
                     break; }
 
                 case RBE_DISEASE:

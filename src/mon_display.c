@@ -604,10 +604,7 @@ static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
     case RBE_LOSE_CHR:    s = string_copy_s("Reduce Charisma"); break;
     case RBE_LOSE_ALL:    s = string_copy_s("Reduce All Stats"); break;
     case RBE_SHATTER:     s = string_copy_s("Shatter"); break;
-    case RBE_EXP_10:
-    case RBE_EXP_20:
-    case RBE_EXP_40:
-    case RBE_EXP_80:      s = string_copy_s("<color:D>Lower Experience</color>"); break;
+    case RBE_DRAIN_EXP:   s = string_copy_s("<color:D>Lower Experience</color>"); break;
     case RBE_DISEASE:     s = string_copy_s("Disease"); break;
     case RBE_EXP_VAMP:    s = string_copy_s("Drain Life Force"); break;
     case RBE_CUT:         s = string_copy_s("<color:r>Cut</color>"); break;

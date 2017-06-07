@@ -2998,10 +2998,7 @@ enum {
     RBE_LOSE_CHR,
     RBE_LOSE_ALL,
     RBE_SHATTER,
-    RBE_EXP_10,  /* XXX DR_EXP(10d60), etc. */
-    RBE_EXP_20,
-    RBE_EXP_40,
-    RBE_EXP_80,
+    RBE_DRAIN_EXP,
     RBE_DISEASE,
     RBE_EXP_VAMP, /* XXX Add VAMP(XdY) as well off player hp */
     RBE_CUT,

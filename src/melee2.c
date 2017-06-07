@@ -1775,11 +1775,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
                     break;
 
-                case RBE_EXP_10:
-                case RBE_EXP_20:
-                case RBE_EXP_40:
-                case RBE_EXP_80:
-                    pt = GF_NETHER;
+                case RBE_DRAIN_EXP:
+                    pt = 0;
                     break;
 
                 case RBE_EXP_VAMP:
