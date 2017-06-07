@@ -595,9 +595,24 @@ int gf_damage_p(int who, int type, int dam, int flags)
         }
         set_paralyzed(dam, FALSE);
         break;
+    case GF_OLD_BLIND:
+        if (res_save_default(RES_BLIND) || _plr_save(who, 0))
+            msg_print("You resist the effects!");
+        else
+            set_blind(12 + randint0(4), FALSE);
+        update_smart_learn(who, RES_BLIND);
+        break;
+    case GF_OLD_CONF:
+        if (res_save_default(RES_CONF) || _plr_save(who, 0))
+            msg_print("You disbelieve the feeble spell.");
+        else
+            set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
+        update_smart_learn(who, RES_CONF);
+        break;
     case GF_TURN_ALL:
         if (fuzzy) msg_print("Your will is shaken!");
         fear_scare_p(m_ptr);
+        update_smart_learn(who, RES_FEAR);
         break;
     case GF_PARALYSIS:
         if (p_ptr->free_act)
@@ -2781,6 +2796,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         }
         dam = 0;
         break; }
+    case GF_OLD_BLIND:
     case GF_OLD_CONF: {
         int ml = r_ptr->level;
         int pl = dam;
@@ -2795,12 +2811,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
             do_conf = 0;
             note = " is immune!";
             mon_lore_3(m_ptr, RF3_NO_CONF);
-            obvious = FALSE;
-        }
-        else if (r_ptr->flags1 & RF1_UNIQUE) /* Historical ... I'd like to remove this. */
-        {
-            do_conf = 0;
-            note = " is immune!";
             obvious = FALSE;
         }
         else if (randint1(ml) >= randint1(pl))
@@ -3824,10 +3834,7 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
             get_angry = TRUE;
         }
 
-        /* Confusion and Chaos resisters (and sleepers) never confuse */
-        if (do_conf && (type == GF_ELDRITCH_CONFUSE || (
-             !(r_ptr->flags3 & RF3_NO_CONF) &&
-             !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))))
+        if (do_conf && (type == GF_ELDRITCH_CONFUSE || !(r_ptr->flags3 & RF3_NO_CONF)))
         {
             /* Obvious */
             if (seen) obvious = TRUE;
@@ -3835,14 +3842,20 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
             /* Already partially confused */
             if (MON_CONFUSED(m_ptr))
             {
-                note = " looks more confused.";
+                if (type == GF_OLD_BLIND)
+                    note = " is more blinded.";
+                else
+                    note = " looks more confused.";
                 tmp = MON_CONFUSED(m_ptr) + (do_conf / 2);
             }
 
             /* Was not confused */
             else
             {
-                note = " looks confused.";
+                if (type == GF_OLD_BLIND)
+                    note = " is blinded.";
+                else
+                    note = " looks confused.";
                 tmp = do_conf;
             }
 

@@ -37,6 +37,7 @@
 #define GF_MAKE_DOOR    46
 #define GF_MAKE_TRAP    47
 #define GF_MAKE_TREE    48
+#define GF_OLD_BLIND    49  /* HACK */
 #define GF_OLD_CLONE    51
 #define GF_OLD_POLY     52
 #define GF_OLD_HEAL     53

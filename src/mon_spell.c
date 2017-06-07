@@ -100,15 +100,16 @@ static _parse_t _annoy_tbl[] = {
     { "TELE_LEVEL", { MST_ANNOY, ANNOY_TELE_LEVEL },
         { "Teleport Level", TERM_WHITE,
           "$CASTER gestures at your feet.",
-          "$CASTER mumbles strangely."}, MSF_TARGET},
+          "$CASTER mumbles strangely."}, MSF_TARGET | MSF_DIRECT},
     { "TELE_TO", { MST_ANNOY, ANNOY_TELE_TO },
         { "Teleport To", TERM_WHITE,
           "$CASTER commands you to return.",
-          "$CASTER mumbles." }, MSF_TARGET},
+          "$CASTER mumbles." }, MSF_TARGET | MSF_DIRECT},
     { "TRAPS", { MST_ANNOY, ANNOY_TRAPS },
         { "Create Traps", TERM_WHITE,
           "$CASTER casts a spell and cackles evilly.",
-          "$CASTER mumbles gleefully." }, MSF_TARGET},
+          "$CASTER mumbles gleefully.",
+          "You create a trap." }},
     { "WORLD", { MST_ANNOY, ANNOY_WORLD },
         { "Stop Time", TERM_L_BLUE}},
     {0}
@@ -126,13 +127,13 @@ static _parse_t _biff_tbl[] = {
           "$CASTER invokes <color:B>Anti-Magic</color>.",
           "$CASTER mumbles powerfully.",
           ""
-          "You invoke <color:B>Anti-Magic</color>." }, MSF_TARGET},
+          "You invoke <color:B>Anti-Magic</color>." }, MSF_TARGET | MSF_DIRECT},
     { "DISPEL_MAGIC", { MST_BIFF, BIFF_DISPEL_MAGIC },
         { "Dispel Magic", TERM_L_BLUE,
           "$CASTER invokes <color:B>Dispel Magic</color>.",
           "$CASTER mumbles powerfully.",
           "",
-          "You invoke <color:B>Dispel Magic</color>." }, MSF_TARGET},
+          "You invoke <color:B>Dispel Magic</color>." }, MSF_TARGET | MSF_DIRECT},
     { "POLYMORPH", { MST_BIFF, BIFF_POLYMORPH },
         { "Polymorph Other", TERM_RED,
           "$CASTER invokes <color:r>Polymorph Other</color>.",
@@ -330,7 +331,7 @@ enum {
 };
 static _parse_t _escape_tbl[] = {
     { "TELE_OTHER", { MST_ESCAPE, ESCAPE_TELE_OTHER },
-        { "Teleport Away", TERM_WHITE }, MSF_TARGET },
+        { "Teleport Away", TERM_WHITE }, MSF_TARGET | MSF_DIRECT },
     { "TELE_SELF", { MST_ESCAPE, ESCAPE_TELE_SELF },
         { "Teleport", TERM_WHITE }},
     {0}
@@ -343,7 +344,7 @@ static _parse_t _tactic_tbl[] = {
     { "BLINK", { MST_TACTIC, TACTIC_BLINK },
         { "Blink", TERM_WHITE }},
     { "BLINK_OTHER", { MST_TACTIC, TACTIC_BLINK_OTHER },
-        { "Blink Away", TERM_WHITE }, MSF_TARGET },
+        { "Blink Away", TERM_WHITE }, MSF_TARGET | MSF_DIRECT },
     {0}
 };
 
@@ -364,10 +365,13 @@ static _parse_t _heal_tbl[] = {
 /* MST_WEIRD */
 enum {
     WEIRD_SPECIAL, /* XXX */
+    WEIRD_BIRD,
 };
 static _parse_t _weird_tbl[] = {
     { "SPECIAL", { MST_WEIRD, WEIRD_SPECIAL },
         { "Something Weird", TERM_RED }},
+    { "BIRD_DROP", { MST_WEIRD, WEIRD_BIRD },
+        { "Drop Monster", TERM_RED }, MSF_TARGET | MSF_DIRECT},
     {0}
 };
 
@@ -1531,6 +1535,32 @@ static bool _curse_save(void)
     int odds = _curse_save_odds();
     return randint0(100) < odds;
 }
+static bool _m_resist_tele(mon_ptr mon, cptr name)
+{
+    mon_race_ptr race = &r_info[mon->r_idx];
+    if (race->flagsr & RFR_RES_TELE)
+    {
+        if ((race->flags1 & RF1_UNIQUE) || (race->flagsr & RFR_RES_ALL))
+        {
+            if (is_seen(mon))
+            {
+                mon_lore_r(mon, RFR_RES_TELE);
+                msg_format("%s is unaffected!", name);
+            }
+            return TRUE;
+        }
+        else if (race->level > randint1(100))
+        {
+            if (is_seen(mon))
+            {
+                mon_lore_r(mon, RFR_RES_TELE);
+                msg_format("%s resists!", name);
+            }
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
 static bool _projectable(point_t src, point_t dest);
 static void _annoy_m(void)
 {
@@ -1542,7 +1572,72 @@ static void _annoy_m(void)
     case ANNOY_ANIMATE_DEAD:
         animate_dead(_who(), _current.src.y, _current.src.x);
         break;
-    /* XXX */
+    case ANNOY_BLIND:
+        gf_damage_m(_who(), _current.dest, GF_OLD_BLIND, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_CONFUSE:
+        gf_damage_m(_who(), _current.dest, GF_OLD_CONF, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_DARKNESS:
+        unlite_room(_current.dest.y, _current.dest.x);
+        break;
+    case ANNOY_PARALYZE:
+        gf_damage_m(_who(), _current.dest, GF_PARALYSIS, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_SCARE:
+        gf_damage_m(_who(), _current.dest, GF_TURN_ALL, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_SHRIEK:
+        aggravate_monsters(_who());
+        break;
+    case ANNOY_SLOW:
+        gf_damage_m(_who(), _current.dest, GF_OLD_SLOW, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    case ANNOY_TELE_LEVEL: {
+        mon_race_ptr race2;
+        if (!_current.mon2) break; /* MSF_DIRECT */
+        race2 = &r_info[_current.mon2->r_idx];
+        if (race2->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE))
+        {
+            if (is_seen(_current.mon2))
+                msg_format("%s is unaffected!", _current.name2);
+        }
+        else if ((_current.mon2->mflag2 & MFLAG2_QUESTOR) ||
+                 randint0(100 + _current.race->level/2) < race2->level )
+        {
+            if (is_seen(_current.mon2))
+                msg_format("%s resists the effects!", _current.name2);
+        }
+        else
+        {
+            int who = _current.mon2->id;
+            if (who == p_ptr->riding) who = 0; /* player */
+            teleport_level(who);
+        }
+        set_monster_csleep(_current.mon2->id, 0);
+        break; }
+    case ANNOY_TELE_TO:
+        if (!_current.mon2) break; /* MSF_DIRECT */
+        if (!_m_resist_tele(_current.mon2, _current.name2))
+        {
+            int who = _current.mon2->id;
+            if (who == p_ptr->riding)
+                teleport_player_to(_current.src.y, _current.src.x, TELEPORT_PASSIVE);
+            else
+                teleport_monster_to(who, _current.src.y, _current.src.x, 100, TELEPORT_PASSIVE);
+        }
+        set_monster_csleep(_current.mon2->id, 0);
+        break;
+    case ANNOY_TRAPS:
+        if (_current.flags & MSC_SRC_PLAYER)
+            set_trap(_current.src.y, _current.src.x, feat_rogue_trap2);
+        /*else
+            trap_creation(_current.dest.y, _current.dest.x);*/
+        break;
+    case ANNOY_WORLD:
+        if (_current.flags & MSC_SRC_PLAYER)
+            cast_spell(stop_time_spell);
+        break;
     }
 }
 static void _annoy_p(void)
@@ -1556,18 +1651,10 @@ static void _annoy_p(void)
         animate_dead(_current.mon->id, _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        if (res_save_default(RES_BLIND) || _curse_save())
-            msg_print("You resist the effects!");
-        else
-            set_blind(12 + randint0(4), FALSE);
-        update_smart_learn(_current.mon->id, RES_BLIND);
+        gf_damage_p(_current.mon->id, GF_OLD_BLIND, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_CONFUSE:
-        if (res_save_default(RES_CONF) || _curse_save())
-            msg_print("You disbelieve the feeble spell.");
-        else
-            set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
-        update_smart_learn(_current.mon->id, RES_CONF);
+        gf_damage_p(_current.mon->id, GF_OLD_CONF, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_DARKNESS:
         if (p_ptr->blind)
@@ -1592,8 +1679,7 @@ static void _annoy_p(void)
         gf_damage_p(_current.mon->id, GF_PARALYSIS, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SCARE:
-        fear_scare_p(_current.mon);
-        update_smart_learn(_current.mon->id, RES_FEAR);
+        gf_damage_p(_current.mon->id, GF_TURN_ALL, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_current.mon->id);
@@ -1649,7 +1735,7 @@ static void _annoy(void)
     else
         _annoy_m();
 }
-static void _biff(void)
+static void _biff_p(void)
 {
     if (check_foresight()) return;
     switch (_current.spell->id.effect)
@@ -1681,7 +1767,31 @@ static void _biff(void)
         break;
     }
 }
-static void _buff(void)
+static void _biff_m(void)
+{
+    switch (_current.spell->id.effect)
+    {
+    case BIFF_ANTI_MAGIC:
+        /* please implement this!!! */
+        break;
+    case BIFF_DISPEL_MAGIC:
+        if (!_current.mon2) break; /* MSF_DIRECT */
+        if (_current.mon2->id == p_ptr->riding) dispel_player();
+        dispel_monster_status(_current.mon2->id);
+        break;
+    case BIFF_POLYMORPH:
+        gf_damage_m(_who(), _current.dest, GF_OLD_POLY, _current.race->level, GF_DAMAGE_SPELL);
+        break;
+    }
+}
+static void _biff(void)
+{
+    if (_current.flags & MSC_DEST_PLAYER)
+        _biff_p();
+    else
+        _biff_m();
+}
+static void _m_buff(void)
 {
     switch (_current.spell->id.effect)
     {
@@ -1695,48 +1805,85 @@ static void _buff(void)
         break;
     }
 }
+static void _p_buff(void)
+{
+    switch (_current.spell->id.effect)
+    {
+    case BUFF_HASTE:
+        if (!p_ptr->fast) /* monsters won't cast if hasted ... */
+            set_fast(100, FALSE);
+        break;
+    case BUFF_INVULN:
+        if (!p_ptr->invuln)
+            set_invuln(randint1(4) + 4, FALSE);
+        break;
+    }
+}
+static void _buff(void)
+{
+    if (_current.flags & MSC_SRC_PLAYER)
+        _p_buff();
+    else
+        _m_buff();
+}
 static void _escape(void)
 {
     switch (_current.spell->id.effect)
     {
     case ESCAPE_TELE_SELF:
-        if (teleport_barrier(_current.mon->id))
+        if (_current.flags & MSC_SRC_PLAYER)
+            teleport_player(10 + 2*_current.race->level, 0);
+        else if (teleport_barrier(_current.mon->id))
             msg_format("Magic barrier obstructs teleporting of %s.", _current.name);
         else
         {
-            if (!p_ptr->blind && _current.mon->ml)
+            if (is_seen(_current.mon))
                 msg_format("%s teleports away.", _current.name);
             teleport_away_followable(_current.mon->id);
         }
         break;
     case ESCAPE_TELE_OTHER:
-        /* Duelist Unending Pursuit */
-        if ( p_ptr->pclass == CLASS_DUELIST
-          && p_ptr->duelist_target_idx == _current.mon->id
-          && p_ptr->lev >= 30 )
+        if (_current.flags & MSC_DEST_PLAYER)
         {
-            if (get_check(format("%^s is attempting to teleport you. Prevent? ", _current.name)))
+            /* Duelist Unending Pursuit */
+            if ( p_ptr->pclass == CLASS_DUELIST
+              && p_ptr->duelist_target_idx == _current.mon->id
+              && p_ptr->lev >= 30 )
             {
-                if (one_in_(3))
-                    msg_print("Failed!");
-                else
+                if (get_check(format("%^s is attempting to teleport you. Prevent? ", _current.name)))
                 {
-                    msg_print("You invoke Unending Pursuit ... The duel continues!");
-                    break;
+                    if (one_in_(3))
+                        msg_print("Failed!");
+                    else
+                    {
+                        msg_print("You invoke Unending Pursuit ... The duel continues!");
+                        break;
+                    }
                 }
             }
+            msg_format("%s teleports you away.", _current.name);
+            if (res_save_default(RES_TELEPORT))
+                msg_print("You resist the effects!");
+            else
+                teleport_player_away(_current.mon->id, 100);
+            update_smart_learn(_current.mon->id, RES_TELEPORT);
         }
-
-        msg_format("%s teleports you away.", _current.name);
-        if (res_save_default(RES_TELEPORT))
-            msg_print("You resist the effects!");
-        else
-            teleport_player_away(_current.mon->id, 100);
-        update_smart_learn(_current.mon->id, RES_TELEPORT);
+        else if (_current.mon2) /* MSF_DIRECT */
+        {
+            if (!_m_resist_tele(_current.mon2, _current.name2))
+            {
+                int who = _current.mon2->id;
+                if (who == p_ptr->riding)
+                    teleport_player_away(_who(), MAX_SIGHT * 2 + 5); /* XXX Player targets mount? Seems unlikely ... */
+                else
+                    teleport_away(who, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
+            }
+            set_monster_csleep(_current.mon2->id, 0);
+        }
         break;
     }
 }
-static void _tactic(void)
+static void _m_tactic(void)
 {
     switch (_current.spell->id.effect)
     {
@@ -1761,14 +1908,48 @@ static void _tactic(void)
         break;
     default: /* JMP_<type> */
         assert(_current.spell->parm.tag == MSP_DICE);
-        project( _current.mon->id, 5, _current.src.y, _current.src.x,
+        project(_current.mon->id, 5, _current.src.y, _current.src.x,
             _roll(_current.spell->parm.v.dice) * 2,
             _current.spell->id.effect,
             PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER);
         teleport_away(_current.mon->id, 10, 0); 
         p_ptr->update |= PU_MONSTERS;
-        break;
     }
+}
+static void _p_tactic(void)
+{
+    switch (_current.spell->id.effect)
+    {
+    case TACTIC_BLINK:
+        teleport_player(10, 0);
+        break;
+    case TACTIC_BLINK_OTHER:
+        if (!_current.mon2) break; /* MSF_DIRECT */
+        if (!_m_resist_tele(_current.mon2, _current.name2))
+        {
+            int who = _current.mon2->id;
+            if (who == p_ptr->riding)
+                teleport_player(10, 0);
+            else
+                teleport_away(who, 10, 0);
+        }
+        set_monster_csleep(_current.mon2->id, 0);
+        break;
+    default: /* JMP_<type> */
+        assert(_current.spell->parm.tag == MSP_DICE);
+        project(PROJECT_WHO_PLAYER, 5, _current.src.y, _current.src.x,
+            _roll(_current.spell->parm.v.dice) * 2,
+            _current.spell->id.effect,
+            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        teleport_player(10, 0);
+    }
+}
+static void _tactic(void)
+{
+    if (_current.flags & MSC_SRC_PLAYER)
+        _p_tactic();
+    else
+        _m_tactic();
 }
 
 static void hp_mon(mon_ptr mon, int amt) /* this should be public */
@@ -1802,7 +1983,14 @@ static void _heal(void)
     int amt;
     assert(_current.spell->parm.tag == MSP_DICE);
     amt = _roll(_current.spell->parm.v.dice);
-    hp_mon(_current.mon, amt);
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        hp_player(amt);
+        set_stun(0, TRUE);
+        set_cut(0, TRUE);
+    }
+    else
+        hp_mon(_current.mon, amt);
 }
 static void _summon_r_idx(int r_idx)
 {
@@ -1979,18 +2167,13 @@ static void _summon(void)
     for (i = 0; i < ct; i++)
         _summon_type(_current.spell->id.effect);
 }
-static void _weird_bird(void)
+static void _weird_bird_p(void)
 {
-    if (_current.flags & MSC_SRC_PLAYER)
-    {
-        msg_print("Not implemented yet!");
-        return;
-    }
     if (one_in_(3) || !(_current.flags & MSC_DIRECT))
     {
-        msg_format("%s suddenly go out of your sight!", _current.name);
+        msg_format("%s suddenly goes out of your sight!", _current.name);
         teleport_away(_current.mon->id, 10, TELEPORT_NONMAGICAL);
-        p_ptr->update |= (PU_MONSTERS);
+        p_ptr->update |= PU_MONSTERS;
     }
     else
     {
@@ -2038,11 +2221,79 @@ static void _weird_bird(void)
         }
     }
 }
+static void _weird_bird_m(void)
+{
+    if (one_in_(3) && (_current.flags & MSC_SRC_MONSTER))
+    {
+        if (is_seen(_current.mon))
+            msg_format("%s suddenly goes out of your sight!", _current.name);
+        teleport_away(_current.mon->id, 10, TELEPORT_NONMAGICAL);
+        p_ptr->update |= PU_MONSTERS;
+    }
+    else if (_current.mon2) /* MSF_DIRECT */
+    {
+        mon_race_ptr race2 = &r_info[_current.mon2->r_idx];
+        bool fear = FALSE;
+        int dam = 0;
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_format("You hold %s and drop from the sky.", _current.name2);
+        else if (is_seen(_current.mon) || is_seen(_current.mon2))
+            msg_format("%s holds %s and drops from the sky.", _current.name, _current.name2);
+
+        dam = damroll(4, 8);
+        if (_current.mon2->id == p_ptr->riding)
+            teleport_player_to(_current.src.y, _current.src.x, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+        else
+            teleport_monster_to(_current.mon2->id, _current.src.y, _current.src.x, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+
+        sound(SOUND_FALL);
+        if (race2->flags7 & RF7_CAN_FLY)
+        {
+            if (is_seen(_current.mon2))
+                msg_format("%s floats gently down to the ground.", _current.name2);
+        }
+        else
+        {
+            if (is_seen(_current.mon2))
+                msg_format("%s crashes into the ground.", _current.name2);
+            dam += damroll(6, 8);
+        }
+
+        if (_current.mon2->id == p_ptr->riding)
+        {
+            int get_damage = 0;
+
+            /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
+               -- henkma
+             */
+            get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name);
+            if (get_damage > 0)
+                weaponmaster_do_readied_shot(_current.mon);
+            if (IS_REVENGE() && get_damage > 0 && !p_ptr->is_dead)
+            {
+                char m_name_self[80];
+
+                /* hisself */
+                monster_desc(m_name_self, _current.mon, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+
+                msg_format("The attack of %s has wounded %s!", _current.name, m_name_self);
+                project(0, 0, _current.src.y, _current.src.x, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL);
+                if (p_ptr->tim_eyeeye) set_tim_eyeeye(p_ptr->tim_eyeeye-5, TRUE);
+            }
+        }
+
+        mon_take_hit_mon(_current.mon2->id, dam, &fear,
+            extract_note_dies(real_r_ptr(_current.mon2)), _who());
+    }
+}
 static void _weird(void)
 {
-    if (_current.race->d_char == 'B')
+    if (_current.spell->id.effect == WEIRD_BIRD)
     {
-        _weird_bird();
+        if (_current.flags & MSC_DEST_PLAYER)
+            _weird_bird_p();
+        else
+            _weird_bird_m();
         return;
     }
     switch (_current.race->id)
@@ -2098,6 +2349,7 @@ static void _weird(void)
 
         break; }
     }
+    /* XXX Chameleons have SPECIAL too, but I don't see any code for this ... */
 } 
 static void _spell_msg(void);
 static void _spell_cast_aux(void)
@@ -3129,9 +3381,15 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
     assert(_projectable(cast->src, cast->dest));
     cast->flags |= MSC_DIRECT;
 
+    /* Remove spells that don't work well against monsters. For example,
+     * traps only affect the player! */
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_AMNESIA));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_DARKNESS));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_WORLD));
+
     /* XXX not implemented ... yet */
-    _remove_group(spells->groups[MST_ANNOY], NULL);
-    _remove_group(spells->groups[MST_BIFF], NULL);
+    _remove_spell(spells, _id(MST_BIFF, BIFF_ANTI_MAGIC));
     _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
 
     if (p_ptr->inside_arena || p_ptr->inside_battle)
@@ -3610,6 +3868,12 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
     Term_load();
     doc_free(doc);
 }
+static void _set_target(mon_spell_cast_ptr cast, int m_idx)
+{
+    cast->mon2 = &m_list[m_idx];
+    _mon_desc(cast->mon2, cast->name2, 'o');
+    cast->dest = point(cast->mon2->fx, cast->mon2->fy);
+}
 static bool _prompt_plr(mon_spell_cast_ptr cast)
 {
     vec_ptr spells = _spells_plr(cast);
@@ -3621,18 +3885,34 @@ static bool _prompt_plr(mon_spell_cast_ptr cast)
       && (cast->flags & MSC_SRC_PLAYER)
       && (cast->spell->flags & MSF_TARGET) )
     {
-        int dir;
-        if (_spell_is_(cast->spell, MST_BREATH, GF_DISINTEGRATE))
+        int dir, m_idx;
+        if (cast->spell->flags & MSF_DIRECT)
         {
-            if (!get_fire_dir_aux(&dir, TARGET_DISI)) return FALSE;
+            if (!target_set(TARGET_KILL)) return FALSE;
+            m_idx = cave[target_row][target_col].m_idx;
+            if (!m_idx)
+            {
+                msg_print("You need to target a monster.");
+                return FALSE;
+            }
+            _set_target(cast, m_idx);
         }
-        else if (!get_fire_dir(&dir)) return FALSE;
-        cast->dest.x = px + 99*ddx[dir];
-        cast->dest.y = py + 99*ddy[dir];
-        if (dir == 5)
+        else
         {
-            cast->dest.x = target_col;
-            cast->dest.y = target_row;
+            if (_spell_is_(cast->spell, MST_BREATH, GF_DISINTEGRATE))
+            {
+                if (!get_fire_dir_aux(&dir, TARGET_DISI)) return FALSE;
+            }
+            else if (!get_fire_dir(&dir)) return FALSE;
+            cast->dest.x = px + 99*ddx[dir];
+            cast->dest.y = py + 99*ddy[dir];
+            if (dir == 5)
+            {
+                cast->dest.x = target_col;
+                cast->dest.y = target_row;
+                m_idx = cave[target_row][target_col].m_idx;
+                if (m_idx) _set_target(cast, m_idx);
+            }
         }
     }
     return cast->spell != NULL;

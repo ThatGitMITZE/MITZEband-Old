@@ -31,6 +31,7 @@ enum {
 #define MSF_BALL0  0x0002 /* hack for THROW = {MST_BALL, GF_ROCK} */
 #define MSF_BALL4  0x0004 /* hack for Mana Storm, Starburst, et. al. */
 #define MSF_TARGET 0x0008 /* spell requires a target (possessor) */
+#define MSF_DIRECT 0x0010 /* non-projection; requires monster target, not location */
 
 /* Every spell can be identified by (Type, Effect) pair */
 typedef struct {
