@@ -404,28 +404,35 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 if (effect->effect == RBE_CUT) continue;
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
-                dam = damroll(effect->dd, effect->ds);
-                if (j == 0 && randint0(100) < _vorpal_pct(blow))
-                {
-                    int m = 2;
-                    while (one_in_(4)) m++;
-                    dam *= m;
-                    switch (m)
-                    {
-                    case 2: msg_format("You <color:U>gouge</color> %s!", m_name_object); break;
-                    case 3: msg_format("You <color:y>maim</color> %s!", m_name_object); break;
-                    case 4: msg_format("You <color:R>carve</color> %s!", m_name_object); break;
-                    case 5: msg_format("You <color:r>cleave</color> %s!", m_name_object); break;
-                    case 6: msg_format("You <color:v>smite</color> %s!", m_name_object); break;
-                    case 7: msg_format("You <color:v>eviscerate</color> %s!", m_name_object); break;
-                    default: msg_format("You <color:v>shred</color> %s!", m_name_object); break;
-                    }
-                }
+                /* The first effect is the base damage, and gets boosted by combat boosting
+                 * magic (e.g. rings of combat, weaponmaster, et. al.) */
                 if (j == 0)
                 {
+                    dam = damroll(effect->dd + p_ptr->innate_attack_info.to_dd, effect->ds);
+                    /* Translate CUT into vorpal since monsters cannot bleed the way players can */
+                    if (randint0(100) < _vorpal_pct(blow))
+                    {
+                        int m = 2;
+                        while (one_in_(4)) m++;
+                        dam *= m;
+                        switch (m)
+                        {
+                        case 2: msg_format("You <color:U>gouge</color> %s!", m_name_object); break;
+                        case 3: msg_format("You <color:y>maim</color> %s!", m_name_object); break;
+                        case 4: msg_format("You <color:R>carve</color> %s!", m_name_object); break;
+                        case 5: msg_format("You <color:r>cleave</color> %s!", m_name_object); break;
+                        case 6: msg_format("You <color:v>smite</color> %s!", m_name_object); break;
+                        case 7: msg_format("You <color:v>eviscerate</color> %s!", m_name_object); break;
+                        default: msg_format("You <color:v>shred</color> %s!", m_name_object); break;
+                        }
+                    }
                     dam += p_ptr->to_d_m; /* XXX Need to subtract out later for non-damage effects */
                     dam += _dam_boost(blow->method, body->level);
                 }
+                /* Subsequent effects are add-ons, and should not be damage boosted */
+                else
+                    dam = damroll(effect->dd, effect->ds);
+
                 if (p_ptr->stun)
                     dam -= dam*MIN(100, p_ptr->stun) / 150;
                 if (blow->method == RBM_EXPLODE)

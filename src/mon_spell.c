@@ -358,7 +358,7 @@ static _parse_t _heal_tbl[] = {
           "$CASTER concentrates on $CASTER_POS wounds.",
           "$CASTER mumbles.",
           "$CASTER concentrates on $CASTER_POS wounds.",
-          "$CASTER concentrates on $CASTER_POS wounds." }},
+          "You concentrate on your wounds." }},
     {0}
 };
 
