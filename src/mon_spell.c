@@ -2931,7 +2931,7 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     if (smart_cheat) flags = 0xFFFFFFFF;
     _smart_remove_aux(spells->groups[MST_BREATH], flags);
     _smart_remove_aux(spells->groups[MST_BALL], flags);
-    if (_have_smart_flag(flags, SM_REFLETION) && p_ptr->reflect)
+    if (_have_smart_flag(flags, SM_REFLECTION) && p_ptr->reflect)
         _remove_group(spells->groups[MST_BOLT], NULL);
     else
         _smart_remove_aux(spells->groups[MST_BOLT], flags);
