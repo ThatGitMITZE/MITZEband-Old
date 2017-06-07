@@ -688,7 +688,7 @@ caster_info *possessor_caster_info(void)
     static caster_info info = {0};
     monster_race      *r_ptr = &r_info[p_ptr->current_r_idx];
 
-    /* This is a hack since the mimic's default class (Imitator)
+    /* This is a hack since the mimic's default class
        normally lacks mana. But if we do this, then every time the
        mimic assumes a magical form, they will start with 0sp! */
     if (p_ptr->current_r_idx == MON_MIMIC)
@@ -710,7 +710,17 @@ caster_info *possessor_caster_info(void)
         {
             info = *class_ptr->caster_info();
             info.which_stat = r_ptr->body.spell_stat; /* r_info can now override the default spell stat */
-            info.options &=  ~CASTER_USE_HP;
+            /*XXX Why? I suppose that many giant forms have HEALING
+             * and cast as 'Maulers'. Giving a HP based healing spell
+             * would probably be broken! */
+            if (info.options & CASTER_USE_HP)
+            {
+                info.options &= ~CASTER_USE_HP;
+                /* Most CASTER_USE_HP info ignores encumbrance */
+                info.encumbrance.max_wgt = 3000;
+                info.encumbrance.weapon_pct = 0;
+                info.encumbrance.enc_wgt = 1200;
+            }
             return &info;
         }
     }

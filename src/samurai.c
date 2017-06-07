@@ -1303,7 +1303,7 @@ class_t *samurai_get_class(void)
         me.flags = CLASS_SENSE1_FAST | CLASS_SENSE1_STRONG;
 
         me.birth = _birth;
-        me.caster_info = _caster_info;        
+        me.caster_info = _caster_info;
         me.calc_bonuses = _calc_bonuses;
         me.calc_stats = _calc_stats;
         me.get_flags = _get_flags;

@@ -936,7 +936,6 @@ errr mon_spell_parse(mon_spell_ptr spell, int rlev, char *token)
         }
         spell->id.type = MST_SUMMON;
         spell->id.effect = p->id;
-        spell->flags = MSF_TARGET;
     }
     else
     {
@@ -1995,35 +1994,38 @@ static void _heal(void)
 static void _summon_r_idx(int r_idx)
 {
     int who = SUMMON_WHO_NOBODY;
-    if (_current.flags & MSC_SRC_PLAYER)
-        who = SUMMON_WHO_PLAYER;
-    else if (_current.mon)
-        who = _current.mon->id;  /* Banor=Rupart deletes himself when splitting */
-    summon_named_creature(
-        who,
-        _current.dest.y,
-        _current.dest.x,
-        r_idx,
-        PM_ALLOW_GROUP | PM_ALLOW_UNIQUE
-    );
-}
-static void _summon_type(int type)
-{
-    int who = SUMMON_WHO_NOBODY;
-    int mode = PM_ALLOW_GROUP;
+    int mode = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE;
+    point_t where = _current.dest;
     if (_current.flags & MSC_SRC_PLAYER)
     {
         who = SUMMON_WHO_PLAYER;
+        where = _current.src;
         mode |= PM_FORCE_PET;
     }
     else
     {
-        mode |= PM_ALLOW_UNIQUE;
         if (_current.mon)
             who = _current.mon->id;
     }
-    summon_specific(who, _current.dest.y, _current.dest.x,
-        _current.race->level, type, mode);
+    summon_named_creature(who, where.y, where.x, r_idx, mode);
+}
+static void _summon_type(int type)
+{
+    int who = SUMMON_WHO_NOBODY;
+    int mode = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE;
+    point_t where = _current.dest;
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        who = SUMMON_WHO_PLAYER;
+        where = _current.src;
+        mode |= PM_FORCE_PET;
+    }
+    else
+    {
+        if (_current.mon)
+            who = _current.mon->id;
+    }
+    summon_specific(who, where.y, where.x, _current.race->level, type, mode);
 }
 /* XXX Vanilla has a 'friends' concept ... perhaps we could do likewise? */
 static void _summon_special(void)
@@ -3792,13 +3794,131 @@ static int _inkey(void)
 {
     return inkey_special(TRUE);
 }
+static int _breath_cost_div(mon_race_ptr race)
+{
+    switch (race->d_char)
+    {
+    case 'b': return 6;
+    case 'D': return 15;
+    case 'd': return 12;
+    case 'Z': return 8;
+    case 'C': return 10; /* Cerberus */
+    case 'B': return 12; /* Fenghuang, Petshop */
+    case 'R': return 12; /* Tarrasque, Godzilla */
+    case 'P': return 10; /* Elder giants; Typhoeus */
+    }
+    return 7;
+}
+static int _breath_cost(mon_spell_ptr spell, mon_race_ptr race)
+{
+    int div = _breath_cost_div(race);
+    int dam = MIN(600, mon_spell_avg_dam(spell, race, FALSE));
+    return (dam + div - 1)/div;
+}
+static int _dam_cost(int dam)
+{
+    int cost = 0, div = 5, step = 50;
+    while (dam > 0)
+    {
+        int xtra = MIN(step, dam);
+        cost += (10*xtra + div - 1)/div;
+        dam -= xtra;
+        div++;
+    }
+    return cost/10;
+}
+static int _heal_pct(mon_race_ptr race)
+{
+    switch (race->body.class_idx)
+    {
+    case CLASS_PRIEST: return 75;
+    case CLASS_PALADIN: return 85;
+    case CLASS_MYSTIC:
+    case CLASS_MONK: return 100;
+    case CLASS_MAGE: return 110;
+    case CLASS_ROGUE: return 125;
+    case CLASS_RAGE_MAGE:
+    case CLASS_WARRIOR:
+    case CLASS_MAULER: return 150;
+    }
+    return 125;
+}
+static int _spell_cost_aux(mon_spell_ptr spell, mon_race_ptr race)
+{
+    switch (spell->id.type)
+    {
+    case MST_BREATH: return _breath_cost(spell, race);
+    case MST_BALL:
+    case MST_BOLT:
+    case MST_BEAM:
+    case MST_CURSE: {
+        int dam = mon_spell_avg_dam(spell, race, FALSE);
+        return _dam_cost(dam); }
+    case MST_HEAL: {
+        dice_t dice = spell->parm.v.dice;
+        int heal = _avg_roll(dice);
+        int pct = _heal_pct(race);
+        return _dam_cost(heal)*pct/100; }
+    }
+    return 0;
+}
+static int _spell_cost(mon_spell_ptr spell, mon_race_ptr race)
+{
+    int cost = _spell_cost_aux(spell, race);
+    if (p_ptr->dec_mana && cost > 0)
+        cost = MAX(1, cost * 3 / 4);
+    return cost;
+}
+static void _list_dice(doc_ptr doc, dice_t dice)
+{
+    if (dice.dd && dice.ds && dice.base)
+        doc_printf(doc, "%dd%d+%d", dice.dd, dice.ds, dice.base);
+    else if (dice.dd && dice.ds)
+        doc_printf(doc, "%dd%d", dice.dd, dice.ds);
+    else
+        doc_printf(doc, "%d", dice.base);
+}
+static void _list_spell_info(doc_ptr doc, mon_spell_ptr spell, mon_race_ptr race)
+{
+    switch (spell->id.type)
+    {
+    case MST_BREATH: {
+        int pct = spell->parm.v.hp_pct.pct;
+        int max = spell->parm.v.hp_pct.max;
+        int hp = _avg_hp(race);
+        int chp = hp * p_ptr->chp / p_ptr->mhp;
+        int dam = MIN(max, chp * pct / 100);
+        doc_printf(doc, " dam %d", dam);
+        break; }
+    case MST_BALL:
+    case MST_BOLT:
+    case MST_BEAM:
+    case MST_CURSE:
+        doc_insert(doc, " dam ");
+        _list_dice(doc, spell->parm.v.dice);
+        break;
+    case MST_HEAL:
+        doc_insert(doc, " heal ");
+        _list_dice(doc, spell->parm.v.dice);
+        break;
+    }
+}
 static bool _no_magic(void)
 {
     if (p_ptr->anti_magic) return TRUE;
     if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC)) return TRUE;
     return FALSE;
 }
-static vec_ptr _spells_plr(mon_spell_cast_ptr cast)
+static int _cmp_spells(mon_spell_ptr left, mon_spell_ptr right)
+{
+    if (left->id.type < right->id.type) return -1;
+    if (left->id.type > right->id.type) return 1;
+    /* XXX */
+    if (left->id.effect < right->id.effect) return -1;
+    if (left->id.effect > right->id.effect) return 1;
+    return 0;
+}
+static vec_ptr _spells_plr(mon_race_ptr race, _spell_p filter)
 {
     vec_ptr v = vec_alloc(NULL);
     int     i, j;
@@ -3806,26 +3926,40 @@ static vec_ptr _spells_plr(mon_spell_cast_ptr cast)
 
     for (i = 0; i < MST_COUNT; i++)
     {
-        mon_spell_group_ptr group = cast->race->spells->groups[i];
+        mon_spell_group_ptr group = race->spells->groups[i];
         if (!group) continue;
         for (j = 0; j < group->count; j++)
         {
             mon_spell_ptr spell = &group->spells[j];
             if (no_magic && !(spell->flags & MSF_INNATE)) continue;
+            if (filter && !filter(spell)) continue;
             vec_add(v, spell);
         }
     }
 
+    vec_sort(v, (vec_cmp_f)_cmp_spells);
     return v;
 }
-static void _list_spells(doc_ptr doc, vec_ptr spells)
+static void _list_spells(doc_ptr doc, vec_ptr spells, mon_race_ptr race)
 {
     int i;
+    doc_insert(doc, " <color:R>Cast which spell?</color>");
+    doc_insert(doc, "<color:G><tab:30>Cost Info</color>\n");
     for (i = 0; i < vec_length(spells); i++)
     {
         mon_spell_ptr spell = vec_get(spells, i);
-        doc_printf(doc, " %c) ", I2A(i));
+        int           cost = _spell_cost(spell, race);
+        int           avail = p_ptr->csp;
+        if (spell->flags & MSF_INNATE)
+            avail += p_ptr->chp;
+        doc_printf(doc, " <color:%c>%c</color>) ",
+            cost > avail ? 'D' : 'y', I2A(i));
         mon_spell_doc(spell, doc);
+        if (cost)
+            doc_printf(doc, "<tab:30>%4d", cost);
+        else
+            doc_insert(doc, "<tab:30>    ");
+        _list_spell_info(doc, spell, race);
         doc_newline(doc);
     }
 }
@@ -3839,18 +3973,26 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
         i = A2I(cmd);
         if (0 <= i && i < vec_length(spells))
         {
-            cast->spell = vec_get(spells, i);
-            return;
+            mon_spell_ptr spell = vec_get(spells, i);
+            int           cost = _spell_cost(spell, cast->race);
+            int           avail = p_ptr->csp;
+            if (spell->flags & MSF_INNATE)
+                avail += p_ptr->chp;
+            if (cost <= avail)
+            {
+                cast->spell = spell;
+                return;
+            }
         }
     }
 
-    doc = doc_alloc(80);
+    doc = doc_alloc(MIN(72, ui_map_rect().cx));
     msg_line_clear();
     Term_save();
     for (;;)
     {
         doc_clear(doc);
-        _list_spells(doc, spells);
+        _list_spells(doc, spells, cast->race);
         _sync_term(doc);
         cmd = _inkey();
         if (cmd == ESCAPE) break;
@@ -3859,7 +4001,13 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
             i = A2I(cmd);
             if (0 <= i && i < vec_length(spells))
             {
-                cast->spell = vec_get(spells, i);
+                mon_spell_ptr spell = vec_get(spells, i);
+                int           cost = _spell_cost(spell, cast->race);
+                int           avail = p_ptr->csp;
+                if (spell->flags & MSF_INNATE)
+                    avail += p_ptr->chp;
+                if (cost > avail) continue; /* already grayed out */
+                cast->spell = spell;
                 REPEAT_PUSH(cmd);
                 break;
             }
@@ -3874,9 +4022,102 @@ static void _set_target(mon_spell_cast_ptr cast, int m_idx)
     _mon_desc(cast->mon2, cast->name2, 'o');
     cast->dest = point(cast->mon2->fx, cast->mon2->fy);
 }
+static bool _spell_is_breath(mon_spell_ptr spell) { return spell->id.type == MST_BREATH; }
+static bool _spell_is_offense(mon_spell_ptr spell) { return _is_attack_spell(spell) && !_spell_is_breath(spell); }
+static bool _spell_is_summon(mon_spell_ptr spell) { return spell->id.type == MST_SUMMON; }
+static bool _spell_is_defense(mon_spell_ptr spell) { return !_is_attack_spell(spell) && !_spell_is_summon(spell); }
+typedef struct {
+    cptr name;
+    _spell_p filter;
+} _group_t, *_group_ptr;
+static _group_t _groups[] = {
+    { "Breath", _spell_is_breath },
+    { "Offense", _spell_is_offense },
+    { "Defense", _spell_is_defense },
+    { "Summon", _spell_is_summon },
+    { 0 }
+};
+static vec_ptr _spell_groups(mon_race_ptr race)
+{
+    int i;
+    vec_ptr groups = vec_alloc(NULL);
+    for (i = 0;; i++)
+    {
+        _group_ptr g = &_groups[i];
+        vec_ptr    v;
+        if (!g->name) break;
+        v = _spells_plr(race, g->filter);
+        if (vec_length(v))
+            vec_add(groups, g);
+        vec_free(v);
+    }
+    return groups;
+}
+static void _list_groups(doc_ptr doc, vec_ptr groups)
+{
+    int i;
+    doc_insert(doc, " <color:R>Cast spell from which group?</color>\n");
+    for (i = 0; i < vec_length(groups); i++)
+    {
+        _group_ptr group = vec_get(groups, i);
+        doc_printf(doc, " <color:y>%c</color>) %s\n", I2A(i), group->name);
+    }
+}
+static vec_ptr _prompt_spell_group(mon_race_ptr race)
+{
+    doc_ptr doc;
+    int     cmd, i;
+    vec_ptr groups = _spell_groups(race);
+    vec_ptr spells = NULL;
+
+    if (REPEAT_PULL(&cmd))
+    {
+        i = A2I(cmd);
+        if (0 <= i && i < vec_length(groups))
+        {
+            _group_ptr g = vec_get(groups, i);
+            spells = _spells_plr(race, g->filter);
+            vec_free(groups);
+            return spells;
+        }
+    }
+
+    doc = doc_alloc(MIN(72, ui_map_rect().cx));
+    msg_line_clear();
+    Term_save();
+    for (;;)
+    {
+        doc_clear(doc);
+        _list_groups(doc, groups);
+        _sync_term(doc);
+        cmd = _inkey();
+        if (cmd == ESCAPE) break;
+        if (islower(cmd))
+        {
+            i = A2I(cmd);
+            if (0 <= i && i < vec_length(groups))
+            {
+                _group_ptr g = vec_get(groups, i);
+                spells = _spells_plr(race, g->filter);
+                REPEAT_PUSH(cmd);
+                break;
+            }
+        }
+    }
+    Term_load();
+    doc_free(doc);
+    vec_free(groups);
+    return spells;
+}
 static bool _prompt_plr(mon_spell_cast_ptr cast)
 {
-    vec_ptr spells = _spells_plr(cast);
+    vec_ptr spells = _spells_plr(cast->race, NULL);
+    if (vec_length(spells) > 26)
+    {
+        vec_free(spells);
+        spells = _prompt_spell_group(cast->race);
+        if (!spells) return FALSE;
+    }
     if (vec_length(spells))
         _prompt_plr_aux(cast, spells);
     vec_free(spells);
@@ -3924,6 +4165,14 @@ bool mon_spell_cast_possessor(mon_race_ptr race)
     assert(cast.race->spells);
     if (_prompt_plr(&cast))
     {
+        int cost = _spell_cost(cast.spell, cast.race);
+        if ((cast.spell->flags & MSF_INNATE) && p_ptr->csp < cost)
+        {
+            int hp = cost - p_ptr->csp;
+            sp_player(-p_ptr->csp);
+            take_hit(DAMAGE_USELIFE, hp, "concentrating too hard");
+        }
+        else sp_player(-cost);
         _current = cast;
         _spell_cast_aux();
         memset(&_current, 0, sizeof(mon_spell_cast_t));
