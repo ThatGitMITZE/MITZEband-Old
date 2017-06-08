@@ -667,7 +667,8 @@ struct monster_type
     s16b maxhp;        /* Max Hit points */
     s16b max_maxhp;        /* Max Max Hit points */
     s16b ac_adj;
-    s16b power;
+    s16b mpower;    /* Monster power scales various things like melee skill, damage, AC, etc.
+                       This field is a per mill value, just like p_ptr->clp */
 
     s16b mtimed[MAX_MTIMED];    /* Timed status counter */
     s16b paralyzed;
@@ -997,13 +998,16 @@ struct player_type
     s16b wilderness_dy;
     bool wild_mode;
 
+    s32b mmhp;           /* Max Max hit pts */
     s32b mhp;            /* Max hit pts */
     s32b chp;            /* Cur hit pts */
-    u32b chp_frac;        /* Cur hit frac (times 2^16) */
+    u32b chp_frac;       /* Cur hit frac (times 2^16) */
 
     s32b msp;            /* Max mana pts */
     s32b csp;            /* Cur mana pts */
-    u32b csp_frac;        /* Cur mana frac (times 2^16) */
+    u32b csp_frac;       /* Cur mana frac (times 2^16) */
+
+    s16b clp;            /* Cur life pts (per mill) */
 
     s16b max_plv;        /* Max Player Level */
 
@@ -1351,7 +1355,7 @@ struct player_type
     bool free_act;       /* Never (?) paralyzed */
     bool see_inv;        /* Can see invisible */
     s16b regen;          /* Rate of regeneration: 100 = 100%, 200 = 200%, etc. */
-    bool hold_life;      /* Resist life draining */
+    s16b hold_life;      /* Resist life draining */
 
     bool auto_id;
     bool auto_pseudo_id;

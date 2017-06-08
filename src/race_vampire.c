@@ -443,7 +443,7 @@ static void _calc_bonuses(void)
     res_add(RES_COLD);
     res_add(RES_POIS);
     res_add_vuln(RES_LITE);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->see_nocto = TRUE;
 
     if (equip_find_art(ART_NIGHT))
@@ -748,7 +748,7 @@ static void _bat_calc_bonuses(void)
     res_add(RES_POIS);
     p_ptr->see_nocto = TRUE;
     p_ptr->pspeed += 5 + p_ptr->lev * 3 / 10;
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
 }
 static void _bat_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
@@ -815,7 +815,7 @@ static void _mist_calc_bonuses(void)
     p_ptr->no_passwall_dam = TRUE;
     p_ptr->see_inv = TRUE;
     p_ptr->see_nocto = TRUE;
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
 
     res_add(RES_ACID);
     res_add(RES_COLD);

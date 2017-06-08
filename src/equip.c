@@ -1403,7 +1403,7 @@ void equip_calc_bonuses(void)
         if (have_flag(flgs, OF_SEE_INVIS))   p_ptr->see_inv = TRUE;
         if (have_flag(flgs, OF_LEVITATION))  p_ptr->levitation = TRUE;
         if (have_flag(flgs, OF_FREE_ACT))    p_ptr->free_act = TRUE;
-        if (have_flag(flgs, OF_HOLD_LIFE))   p_ptr->hold_life = TRUE;
+        if (have_flag(flgs, OF_HOLD_LIFE))   p_ptr->hold_life++;
         if (have_flag(flgs, OF_WARNING))
         {
             if (!obj->inscription || !(my_strchr(quark_str(obj->inscription),'$')))

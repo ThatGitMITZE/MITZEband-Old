@@ -336,7 +336,7 @@ static void _demeter_get_flags(u32b flgs[OF_ARRAY_SIZE])
 static void _hades_calc_bonuses(void)
 {
     res_add(RES_NETHER);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->sustain_con = TRUE;
 }
 static void _hades_get_flags(u32b flgs[OF_ARRAY_SIZE])

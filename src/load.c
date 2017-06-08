@@ -45,7 +45,7 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
     int  which;
 
     assert(m_ptr->id);
-    m_ptr->power = 100;
+    m_ptr->mpower = 1000;
     m_ptr->r_idx = savefile_read_s16b(file);
     m_ptr->ap_r_idx = m_ptr->r_idx;
     m_ptr->fy = savefile_read_byte(file);
@@ -103,7 +103,7 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
             m_ptr->ac_adj = savefile_read_s16b(file);
             break;
         case SAVE_MON_POWER:
-            m_ptr->power = savefile_read_s16b(file);
+            m_ptr->mpower = savefile_read_s16b(file);
             break;
         case SAVE_MON_DROP_CT:
             m_ptr->drop_ct = savefile_read_byte(file);
@@ -399,12 +399,14 @@ static void rd_extra(savefile_ptr file)
     p_ptr->oldpx = savefile_read_s16b(file);
     p_ptr->oldpy = savefile_read_s16b(file);
 
+    p_ptr->mmhp = savefile_read_s32b(file);
     p_ptr->mhp = savefile_read_s32b(file);
     p_ptr->chp = savefile_read_s32b(file);
     p_ptr->chp_frac = savefile_read_u32b(file);
     p_ptr->msp = savefile_read_s32b(file);
     p_ptr->csp = savefile_read_s32b(file);
     p_ptr->csp_frac = savefile_read_u32b(file);
+    p_ptr->clp = savefile_read_s16b(file);
     p_ptr->max_plv = savefile_read_s16b(file);
 
     {

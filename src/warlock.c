@@ -366,7 +366,7 @@ static void _undead_calc_bonuses(void)
     if (p_ptr->lev >= 30)
     {
         res_add(RES_NETHER);
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     }
     if (p_ptr->lev >= 35)
         res_add(RES_DARK);
@@ -1180,7 +1180,7 @@ static void _demon_calc_bonuses(void)
     p_ptr->skills.dev += 50 * p_ptr->lev/50;
     p_ptr->device_power += 5 * p_ptr->lev/50;
     if (p_ptr->lev >= 15)
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     if (p_ptr->lev >= 30)
         p_ptr->no_eldritch = TRUE;
     if (p_ptr->lev >= 40)

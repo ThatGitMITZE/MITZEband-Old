@@ -1409,7 +1409,7 @@ static void prt_hp(void)
 
     if (p_ptr->chp >= p_ptr->mhp)
         color = TERM_L_GREEN;
-    else if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10)
+    else if (p_ptr->chp > (p_ptr->mmhp * hitpoint_warn) / 10)
         color = TERM_YELLOW;
     else
         color = TERM_RED;
@@ -1418,10 +1418,10 @@ static void prt_hp(void)
 
     put_str( "/", r.y + ROW_CURHP, r.x + COL_CURHP + 7 );
 
-    sprintf(tmp, "%4d", p_ptr->mhp);
+    sprintf(tmp, "%4d", p_ptr->mmhp);
     color = TERM_L_GREEN;
 
-    c_put_str(color, tmp, r.y + ROW_CURHP, r.x + COL_CURHP + 8 );
+    c_put_str(color, tmp, r.y + ROW_CURHP, r.x + COL_CURHP + 8);
 }
 
 /*
@@ -1891,6 +1891,14 @@ static void prt_effects(void)
         sprintf(tmp, "%d", p_ptr->poisoned);
         c_put_str(TERM_GREEN, "Poison:", row, col);
         c_put_str(TERM_L_GREEN, tmp, row, col + 7);
+        row++;
+    }
+    if (p_ptr->clp < 1000)
+    {
+        char tmp[20];
+        sprintf(tmp, "%d.%d%%", p_ptr->clp/10, p_ptr->clp%10);
+        c_put_str(TERM_YELLOW, "Life:", row, col);
+        c_put_str(TERM_YELLOW, tmp, row, col + 5);
         row++;
     }
     if (p_ptr->food >= PY_FOOD_FULL || p_ptr->food < PY_FOOD_ALERT)
@@ -3245,39 +3253,46 @@ static int _calc_xtra_hp(int amt)
  */
 static void calc_hitpoints(void)
 {
-    int      mhp;
+    int      mmhp, mhp;
     race_t  *race_ptr = get_race();
     class_t *class_ptr = get_class();
     personality_ptr pers_ptr = get_personality();
 
-    mhp = p_ptr->player_hp[p_ptr->lev - 1] * 10 / 100; /* 255 hp total */
-    mhp += _calc_xtra_hp(300);
+    mmhp = p_ptr->player_hp[p_ptr->lev - 1] * 10 / 100; /* 255 hp total */
+    mmhp += _calc_xtra_hp(300);
 
-    mhp = mhp * race_ptr->life / 100;
-    mhp = mhp * class_ptr->life / 100;
-    mhp = mhp * pers_ptr->life / 100;
-    mhp = mhp * p_ptr->life / 100;
+    mmhp = mmhp * race_ptr->life / 100;
+    mmhp = mmhp * class_ptr->life / 100;
+    mmhp = mmhp * pers_ptr->life / 100;
+    mmhp = mmhp * p_ptr->life / 100;
 
     if (p_ptr->prace == RACE_MON_DRAGON)
     {
         dragon_realm_ptr realm = dragon_get_realm(p_ptr->dragon_realm);
-        mhp = mhp * realm->life / 100;
+        mmhp = mmhp * realm->life / 100;
     }
 
-    mhp += class_ptr->base_hp;
-    mhp += race_ptr->base_hp;
+    mmhp += class_ptr->base_hp;
+    mmhp += race_ptr->base_hp;
 
-    if (mhp < 1)
-        mhp = 1;
+    if (mmhp < 1)
+        mmhp = 1;
 
-    if (IS_HERO()) mhp += 10;
-    if (IS_SHERO() && (p_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
-    if (p_ptr->tsuyoshi) mhp += 50;
-    if (hex_spelling(HEX_XTRA_MIGHT)) mhp += 15;
-    if (hex_spelling(HEX_BUILDING)) mhp += 60;
-    if (p_ptr->tim_building_up) mhp += 10 + p_ptr->lev/2;
-    if (mut_present(MUT_UNYIELDING)) mhp += p_ptr->lev;
+    if (IS_HERO()) mmhp += 10;
+    if (IS_SHERO() && (p_ptr->pclass != CLASS_BERSERKER)) mmhp += 30;
+    if (p_ptr->tsuyoshi) mmhp += 50;
+    if (hex_spelling(HEX_XTRA_MIGHT)) mmhp += 15;
+    if (hex_spelling(HEX_BUILDING)) mmhp += 60;
+    if (p_ptr->tim_building_up) mmhp += 10 + p_ptr->lev/2;
+    if (mut_present(MUT_UNYIELDING)) mmhp += p_ptr->lev;
 
+    mhp = mmhp;
+    mhp -= mhp*(1000 - p_ptr->clp)/2000;
+    if (p_ptr->mmhp != mmhp)
+    {
+        p_ptr->mmhp = mmhp;
+        p_ptr->redraw |= PR_HP;
+    }
     if (p_ptr->mhp != mhp)
     {
         if (p_ptr->mhp)
@@ -3287,7 +3302,7 @@ static void calc_hitpoints(void)
 
         p_ptr->chp_frac = 0;
         p_ptr->mhp = mhp;
-        p_ptr->redraw |= (PR_HP);
+        p_ptr->redraw |= PR_HP;
     }
 }
 
@@ -3569,7 +3584,7 @@ void calc_bonuses(void)
     p_ptr->regen = 100;
     p_ptr->can_swim = FALSE;
     p_ptr->levitation = FALSE;
-    p_ptr->hold_life = FALSE;
+    p_ptr->hold_life = 0;
     p_ptr->auto_id = FALSE;
     p_ptr->auto_pseudo_id = FALSE;
     p_ptr->auto_id_sp = 0;
@@ -3666,7 +3681,7 @@ void calc_bonuses(void)
     if (p_ptr->tim_sustain_dex) p_ptr->sustain_dex = TRUE;
     if (p_ptr->tim_sustain_con) p_ptr->sustain_con = TRUE;
     if (p_ptr->tim_sustain_chr) p_ptr->sustain_chr = TRUE;
-    if (p_ptr->tim_hold_life) p_ptr->hold_life = TRUE;
+    if (p_ptr->tim_hold_life) p_ptr->hold_life++;
     if (p_ptr->tim_inven_prot) p_ptr->inven_prot = TRUE;
     if (p_ptr->tim_quick_walk) p_ptr->quick_walk = TRUE;
 
@@ -3803,7 +3818,7 @@ void calc_bonuses(void)
 
         if (p_ptr->special_defense & KATA_MUSOU)
         {
-            p_ptr->hold_life = TRUE;
+            p_ptr->hold_life++;
             p_ptr->sustain_str = TRUE;
             p_ptr->sustain_int = TRUE;
             p_ptr->sustain_wis = TRUE;

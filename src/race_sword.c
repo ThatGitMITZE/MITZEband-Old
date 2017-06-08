@@ -390,7 +390,7 @@ static void _calc_bonuses(void)
     p_ptr->no_cut = TRUE;
     res_add(RES_BLIND);
     res_add(RES_POIS);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
 
     if (p_ptr->lev >= 10)
         p_ptr->pspeed += 1;

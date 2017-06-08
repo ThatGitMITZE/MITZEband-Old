@@ -254,6 +254,28 @@ bool fear_save_p(int ml)
     return FALSE;
 }
 
+bool life_save_p(int ml)
+{
+    int pl;
+    int rolls;
+    int i;
+
+    pl = _plev() + adj_stat_save[p_ptr->stat_ind[A_CHR]];
+    if (pl < 1) pl = 1;
+
+    rolls = p_ptr->hold_life;
+
+    for (i = 0; i < rolls; i++)
+    {
+        if (randint1(ml) <= randint1(pl))
+        {
+            equip_learn_resist(OF_HOLD_LIFE);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 bool fear_save_m(monster_type *m_ptr)
 {
     int           pl = _plev();

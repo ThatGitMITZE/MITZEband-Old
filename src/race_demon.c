@@ -161,7 +161,7 @@ static void _khorne_calc_bonuses(void)
     res_add(RES_NETHER);
 
     p_ptr->slow_digest = TRUE;
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->no_eldritch = TRUE;
 
     switch (p_ptr->current_r_idx)
@@ -421,7 +421,7 @@ static void _marilith_calc_bonuses(void) {
     res_add(RES_NETHER);
 
     p_ptr->slow_digest = TRUE;
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->no_eldritch = TRUE;
 
     switch (p_ptr->current_r_idx)
@@ -644,7 +644,7 @@ static void _balrog_calc_bonuses(void) {
     res_add(RES_FIRE);
     res_add(RES_NETHER);
 
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->no_eldritch = TRUE;
     p_ptr->pspeed += p_ptr->lev/8; /* Angels get +7 speed. Demons get +6 speed. */
     p_ptr->sh_fire = TRUE;
@@ -835,7 +835,7 @@ static void _cyber_calc_bonuses(void)
 /*  Cyberdemons are vulnerable to confusion. See res_pct_aux() in resist.c
     res_add_vuln(RES_CONF); */
 
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->no_eldritch = TRUE;
     p_ptr->free_act = TRUE;
 }

@@ -1421,7 +1421,7 @@ static cptr do_life_spell(int spell, int mode)
 
     case 28:
         if (name) return "Restoration";
-        if (desc) return "Restores all stats and experience.";
+        if (desc) return "Restores all stats, life and experience.";
 
         {
             if (cast)
@@ -1433,6 +1433,7 @@ static cptr do_life_spell(int spell, int mode)
                 do_res_stat(A_CON);
                 do_res_stat(A_CHR);
                 restore_level();
+                lp_player(1000);
             }
         }
         break;
@@ -3860,7 +3861,7 @@ static cptr do_death_spell(int spell, int mode)
                 for (i = 0; i < 3; i++)
                 {
                     if (drain_life(dir, dam) && p_ptr->pclass != CLASS_BLOOD_MAGE)
-                        hp_player(dam);
+                        vamp_player(dam);
                 }
             }
         }
@@ -3993,12 +3994,13 @@ static cptr do_death_spell(int spell, int mode)
 
     case 28:
         if (name) return "Restore Life";
-        if (desc) return "Restore lost experience.";
+        if (desc) return "Restore lost life force and experience.";
 
         {
             if (cast)
             {
                 restore_level();
+                lp_player(1000);
             }
         }
         break;
@@ -7896,6 +7898,7 @@ static cptr do_music_spell(int spell, int mode)
                 (void)do_res_stat(A_CON);
                 (void)do_res_stat(A_CHR);
                 (void)restore_level();
+                lp_player(1000);
             }
         }
         break;

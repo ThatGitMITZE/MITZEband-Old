@@ -3422,7 +3422,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
     /* Extract the monster base speed */
     m_ptr->mspeed = get_mspeed(r_ptr);
     m_ptr->ac_adj = 0;
-    m_ptr->power = 100;
+    m_ptr->mpower = 1000;
 
     if (mode & PM_HASTE) (void)set_monster_fast(c_ptr->m_idx, 100);
 

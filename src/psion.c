@@ -2014,7 +2014,7 @@ static void _calc_bonuses(void)
         p_ptr->sustain_dex = TRUE;
         p_ptr->sustain_con = TRUE;
         p_ptr->sustain_chr = TRUE;
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     }
 }
 

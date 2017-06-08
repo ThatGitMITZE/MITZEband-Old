@@ -2532,7 +2532,7 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                             else
                             {
                                 msg_format("You <color:D>drain life</color> from %s!", m_name_object);
-                                hp_player(amt);
+                                vamp_player(amt);
                             }
                             drain_amt += amt;
                         }
@@ -3985,7 +3985,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                                 drain_msg = FALSE;
                             }
                             drain_heal = (drain_heal * mutant_regenerate_mod) / 100;
-                            hp_player_aux(drain_heal);
+                            vamp_player(drain_heal);
                             obj_learn_slay(o_ptr, OF_BRAND_VAMP, "is <color:D>Vampiric</color>");
                         }
                     }

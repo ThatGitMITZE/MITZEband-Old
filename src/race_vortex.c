@@ -450,7 +450,7 @@ static void _calc_bonuses(void)
     p_ptr->no_cut = TRUE;
     p_ptr->no_eldritch = TRUE;
     p_ptr->move_random = TRUE;
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->levitation = TRUE;
 
     switch (p_ptr->current_r_idx)

@@ -1369,7 +1369,7 @@ static void _calc_bonuses(void)
         p_ptr->easy_spell = TRUE;
 
     if (_essences[OF_HOLD_LIFE] >= 7)
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++; /* XXX */
 
     if (_essences[OF_SUST_STR] >= 5)
         p_ptr->sustain_str = TRUE;

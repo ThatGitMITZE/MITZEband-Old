@@ -948,6 +948,7 @@ bool set_paralyzed(int v, bool do_dec)
             {
                 msg_print("You awake refreshed!");
                 restore_level();
+                lp_player(1000);
                 set_poisoned(0, TRUE);
                 set_blind(0, TRUE);
                 set_confused(0, TRUE);
@@ -5123,6 +5124,61 @@ bool hp_player_aux(int num)
     return (FALSE);
 }
 
+bool lp_player(int num)
+{
+    bool notice = FALSE;
+    int old_clp = p_ptr->clp;
+
+    p_ptr->clp += num;
+    if (p_ptr->clp > 1000) p_ptr->clp = 1000;
+    if (p_ptr->clp <= 0)
+    {
+        if (p_ptr->pclass != CLASS_MONSTER)
+        {
+            int which;
+            switch (randint1(4))
+            {
+            case 1: which = RACE_VAMPIRE; break;
+            case 2: which = RACE_SKELETON; break;
+            case 3: which = RACE_ZOMBIE; break;
+            case 4: which = RACE_SPECTRE; break;
+            }
+
+            msg_print("<color:v>Your life force is exhausted!</color>");
+            change_race(which, "");
+            p_ptr->clp = 1000; /* full unlife */
+            assert(get_race()->flags & RACE_IS_NONLIVING); /* no more life drain */
+        }
+        else
+            p_ptr->clp = 0; /* monsters can't change their race ... */
+    }
+    if (p_ptr->clp != old_clp)
+    {
+        if (num < 0) msg_print("You feel your life draining away!");
+        else if (num > 0) msg_print("You feel your life returning.");
+        p_ptr->update |= PU_HP;
+        p_ptr->redraw |= PR_EFFECTS;
+        notice = TRUE;
+    }
+    return notice;
+}
+
+/* vampiric drain goes first to recovering the player's life,
+ * and then, if any is left over, to recovering hit points */
+bool vamp_player(int num)
+{
+    if (p_ptr->clp + num <= 1000)
+        return lp_player(num);
+    else if (p_ptr->clp < 1000)
+    {
+        int lp = 1000 - p_ptr->clp;
+        lp_player(lp);
+        num -= lp;
+        assert(num > 0);
+    }
+    return hp_player_aux(num);
+}
+
 bool sp_player(int num)
 {
     bool notice = FALSE;
@@ -5321,7 +5377,6 @@ bool restore_level(void)
     }
     return FALSE;
 }
-
 
 /*
  * Forget everything
@@ -5957,14 +6012,19 @@ void lose_exp(s32b amount)
  */
 bool drain_exp(s32b drain, s32b slip, int hold_life_prob)
 {
+    int i;
+
     /* Androids and their mimics are never drained */
     if (p_ptr->prace == RACE_ANDROID) return FALSE;
 
-    if (p_ptr->hold_life && (randint0(100) < hold_life_prob))
+    for (i = 0; i < p_ptr->hold_life; i++)
     {
-        /* Hold experience */
-        msg_print("You keep hold of your life force!");
-        return FALSE;
+        if (p_ptr->hold_life && (randint0(100) < hold_life_prob))
+        {
+            /* Hold experience */
+            msg_print("You keep hold of your life force!");
+            return FALSE;
+        }
     }
 
     /* Hold experience failed */

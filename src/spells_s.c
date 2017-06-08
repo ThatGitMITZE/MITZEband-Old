@@ -1772,7 +1772,7 @@ void vampirism_spell(int cmd, variant *res)
             {
                 /* No heal if we are "full" */
                 if (p_ptr->food < PY_FOOD_FULL)
-                    hp_player(dummy);
+                    vamp_player(dummy);
                 else
                     msg_print("You were not hungry.");
 

@@ -162,10 +162,10 @@ static void _build_general2(doc_ptr doc)
     doc_newline(doc);
 
     string_clear(s);
-    string_printf(s, "%d/%d", p_ptr->chp , p_ptr->mhp);
+    string_printf(s, "%d/%d", p_ptr->chp , p_ptr->mmhp);
     doc_printf(doc, "<tab:9>HP   : <color:%c>%9.9s</color>\n",
                     p_ptr->chp >= p_ptr->mhp ? 'G' :
-                        p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10 ? 'y' : 'r',
+                        p_ptr->chp > (p_ptr->mmhp * hitpoint_warn) / 10 ? 'y' : 'r',
                     string_buffer(s));
 
     string_clear(s);
@@ -622,7 +622,12 @@ static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
     _build_flags(doc, "Levitation", OF_LEVITATION, OF_INVALID, flagzilla);
     _build_flags(doc, "Perm Lite", OF_LITE, OF_INVALID, flagzilla);
     _build_flags(doc, "Reflection", OF_REFLECT, OF_INVALID, flagzilla);
-    _build_flags(doc, "Hold Life", OF_HOLD_LIFE, OF_INVALID, flagzilla);
+
+    _build_flags_imp(doc, "Hold Life", OF_HOLD_LIFE, OF_INVALID, flagzilla);
+    if (p_ptr->hold_life)
+        doc_printf(doc, " %3dx", p_ptr->hold_life);
+    doc_newline(doc);
+
     _build_flags(doc, "Dec Mana", OF_DEC_MANA, OF_INVALID, flagzilla);
     _build_flags(doc, "Easy Spell", OF_EASY_SPELL, OF_INVALID, flagzilla);
     _build_flags(doc, "Anti Magic", OF_NO_MAGIC, OF_INVALID, flagzilla);

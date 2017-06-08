@@ -674,6 +674,7 @@ static void _shatter_device_spell(int cmd, variant *res)
         {
             msg_print("You feel life flow through your body!");
             restore_level();
+            lp_player(1000);
             (void)set_poisoned(0, TRUE);
             (void)set_blind(0, TRUE);
             (void)set_confused(0, TRUE);

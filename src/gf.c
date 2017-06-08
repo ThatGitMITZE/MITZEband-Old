@@ -195,10 +195,12 @@ gf_info_ptr gf_parse_name(cptr token)
 
 gf_info_ptr gf_lookup(int id)
 {
-    gf_info_ptr gf;
-    assert(0 < id && id < GF_COUNT);
-    gf = &_gf_tbl[id];
-    assert(gf->id == id);
+    gf_info_ptr gf = NULL;
+    if (0 < id && id < GF_COUNT)
+    {
+        gf = &_gf_tbl[id];
+        assert(gf->id == id);
+    }
     return gf;
 }
 
@@ -395,15 +397,18 @@ int gf_affect_p(int who, int type, int dam, int flags)
 
         if (!touch) inven_damage(set_acid_destroy, 3, RES_FIRE);
         break;
-    case GF_NETHER:
+    case GF_NETHER: {
+        int unlife;
         if (touch) msg_print("You are <color:D>drained</color>!");
         else if (fuzzy) msg_print("You are hit by nether forces!");
         dam = res_calc_dam(RES_NETHER, dam);
-        if (!res_save_default(RES_NETHER) && !CHECK_MULTISHADOW())
-            drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
+        unlife = dam/10;
+        dam -= unlife;
+        if (!(get_race()->flags & RACE_IS_NONLIVING) && !life_save_p(rlev))
+            lp_player(-unlife);
         result = take_hit(DAMAGE_ATTACK, dam, m_name);
         update_smart_learn(who, RES_NETHER);
-        break;
+        break; }
     case GF_WATER:
     case GF_WATER2:
         if (fuzzy) msg_print("You are hit by something wet!");
@@ -1724,7 +1729,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
                 }
                 else if (which <= 90)
                 {
-                    m_ptr->power = MAX(30, m_ptr->power * (85 + randint0(10)) / 100);
+                    m_ptr->mpower = MAX(300, m_ptr->mpower * (850 + randint0(100)) / 1000);
                     note = " shrinks!";
                 }
                 else

@@ -1738,6 +1738,8 @@ extern bool res_stat(int stat);
 extern bool hp_player(int num);
 extern bool hp_player_aux(int num);
 extern bool sp_player(int num);
+extern bool lp_player(int num);
+extern bool vamp_player(int num);
 extern bool do_dec_stat(int stat);
 extern bool do_res_stat(int stat);
 extern bool do_inc_stat(int stat);

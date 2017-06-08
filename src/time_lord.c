@@ -630,6 +630,7 @@ static void _remember_spell(int cmd, variant *res)
         do_res_stat(A_CON);
         do_res_stat(A_CHR);
         restore_level();
+        lp_player(1000);
         var_set_bool(res, TRUE);
         break;
     default:

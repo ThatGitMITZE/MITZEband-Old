@@ -418,7 +418,7 @@ static int _skeleton_get_powers(spell_info* spells, int max)
 static void _skeleton_calc_bonuses(void)
 {
     res_add(RES_SHARDS);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->see_inv = TRUE;
     res_add(RES_POIS);
     if (p_ptr->lev >= 10) res_add(RES_COLD);
@@ -599,7 +599,7 @@ static void _spectre_calc_bonuses(void)
 {
     p_ptr->levitation = TRUE;
     res_add(RES_NETHER);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->see_inv = TRUE;
     res_add(RES_POIS);
     p_ptr->slow_digest = TRUE;
@@ -850,7 +850,7 @@ static void _vampire_calc_bonuses(void)
     res_add(RES_COLD);
     res_add(RES_POIS);
     res_add_vuln(RES_LITE);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     if (p_ptr->pclass != CLASS_NINJA) p_ptr->lite = TRUE;
 }
 static void _vampire_get_flags(u32b flgs[OF_ARRAY_SIZE])
@@ -1055,7 +1055,7 @@ static int _zombie_get_powers(spell_info* spells, int max)
 static void _zombie_calc_bonuses(void)
 {
     res_add(RES_NETHER);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     p_ptr->see_inv = TRUE;
     res_add(RES_POIS);
     p_ptr->slow_digest = TRUE;

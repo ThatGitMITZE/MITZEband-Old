@@ -678,7 +678,7 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_LIFE:
-        if (desc) return "It heals you completely, restores experience and all your stats and cures blindness, confusion, poison, hallucination, stunned, cuts and berserk when you quaff it.";
+        if (desc) return "It heals you completely, restores life, experience and all your stats and cures blindness, confusion, poison, hallucination, stunned, cuts and berserk when you quaff it.";
         if (info) return info_heal(0, 0, _potion_power(5000));
         if (cast)
         {
@@ -686,6 +686,7 @@ static cptr _do_potion(int sval, int mode)
             virtue_add(VIRTUE_UNLIFE, -5);
             msg_print("You feel life flow through your body!");
             restore_level();
+            lp_player(1000);
             set_poisoned(0, TRUE);
             set_blind(0, TRUE);
             set_confused(0, TRUE);
@@ -745,10 +746,11 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_RESTORE_EXP:
-        if (desc) return "It restores your experience when you quaff it.";
+        if (desc) return "It restores your life and experience when you quaff it.";
         if (cast)
         {
             if (restore_level()) device_noticed = TRUE;
+            if (lp_player(150)) device_noticed = TRUE;
         }
         break;
     case SV_POTION_RES_STR:
@@ -4408,17 +4410,18 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         break;
     case EFFECT_RESTORE_EXP:
         if (name) return "Restore Life";
-        if (desc) return "It restores your experience.";
+        if (desc) return "It restores your life and experience.";
         if (value) return format("%d", 1000);
         if (color) return format("%d", TERM_L_GREEN);
         if (cast)
         {
             if (restore_level()) device_noticed = TRUE;
+            if (lp_player(150)) device_noticed = TRUE;
         }
         break;
     case EFFECT_RESTORING:
         if (name) return "Restoring";
-        if (desc) return "It restores your stats and experience.";
+        if (desc) return "It restores your stats, life and experience.";
         if (value) return format("%d", 6000);
         if (color) return format("%d", TERM_L_GREEN);
         if (cast)
@@ -4430,6 +4433,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             if (do_res_stat(A_CON)) device_noticed = TRUE;
             if (do_res_stat(A_CHR)) device_noticed = TRUE;
             if (restore_level()) device_noticed = TRUE;
+            if (lp_player(1000)) device_noticed = TRUE;
         }
         break;
     case EFFECT_HEAL:
@@ -5948,7 +5952,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_DRAIN_LIFE:
     {
         int dam = _extra(effect, 50 + effect->power/2);
-        if (name) return "Drain Life";
+        if (name) return "Vampirism";
         if (desc) return "It fires a bolt that steals life from a foe when you use it.";
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 35*dam);
@@ -5959,7 +5963,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             dam = _BOOST(dam);
             if (drain_life(dir, dam))
             {
-                hp_player(dam);
+                vamp_player(dam);
                 device_noticed = TRUE;
             }
         }

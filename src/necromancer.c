@@ -536,8 +536,9 @@ static void _calc_bonuses(void)
 
     if (p_ptr->lev >= 5) res_add(RES_COLD);
     if (p_ptr->lev >= 15) p_ptr->see_inv = TRUE;
-    if (p_ptr->lev >= 25) p_ptr->hold_life = TRUE;
+    if (p_ptr->lev >= 25) p_ptr->hold_life++;
     if (p_ptr->lev >= 35) res_add(RES_POIS);
+    if (p_ptr->lev >= 45) p_ptr->hold_life++;
 }
 
 static void _get_flags(u32b flgs[OF_ARRAY_SIZE])

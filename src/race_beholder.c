@@ -238,7 +238,7 @@ static void _calc_bonuses(void) {
         res_add(RES_CONF);
         p_ptr->free_act = TRUE;
         p_ptr->pspeed += 4;
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     }
     else if (p_ptr->lev >= 25)
     {

@@ -925,7 +925,7 @@ void possessor_calc_bonuses(void)
         p_ptr->align -= 200;
 
     if (r_ptr->flags9 & RF9_POS_HOLD_LIFE)
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     /*if (r_ptr->flags1 & (RF1_RAND_25 | RF1_RAND_50))
         p_ptr->move_random = TRUE;*/
     if (r_ptr->flags9 & RF9_POS_TELEPATHY)

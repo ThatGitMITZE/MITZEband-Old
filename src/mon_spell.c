@@ -1434,7 +1434,7 @@ static int _roll(dice_t dice)
 static int _scale(int dam)
 {
     if (_current.mon)
-        return MAX(1, dam * _current.mon->power / 100);
+        return MAX(1, dam * _current.mon->mpower / 1000);
     return dam;
 }
 static int _avg_roll(dice_t dice)

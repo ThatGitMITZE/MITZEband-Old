@@ -813,7 +813,7 @@ static void _calc_bonuses(void)
       || p_ptr->current_r_idx == MON_GREATER_ROTTING_QUYLTHULG )
     {
         res_add(RES_NETHER);
-        p_ptr->hold_life = TRUE;
+        p_ptr->hold_life++;
     }
 
     if ( p_ptr->current_r_idx == MON_DRACONIC_QUYLTHULG

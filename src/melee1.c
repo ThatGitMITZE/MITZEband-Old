@@ -18,7 +18,7 @@ int mon_ac(mon_ptr mon)
     int          ac = race->ac;
 
     ac += mon->ac_adj;
-    ac = ac * mon->power / 100;
+    ac = ac * mon->mpower / 1000;
     if (ac < 0) ac = 0;
     return ac;
 }
@@ -160,6 +160,7 @@ bool make_attack_normal(int m_idx)
 
     /* Extract the effective monster level */
     rlev = r_ptr->level;
+    rlev = rlev * m_ptr->mpower / 1000;
 
     /* Get the monster name (or "it") */
     monster_desc(m_name, m_ptr, 0);
@@ -242,7 +243,6 @@ bool make_attack_normal(int m_idx)
             ac += 100;
 
         skill = blow->power + rlev*3;
-        skill = skill * m_ptr->power / 100;
         if (stun)
             skill -= skill*MIN(100, stun) / 150;
 
@@ -411,7 +411,7 @@ bool make_attack_normal(int m_idx)
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 effect_dam = damroll(effect->dd, effect->ds);
-                effect_dam = effect_dam * m_ptr->power / 100;
+                effect_dam = effect_dam * m_ptr->mpower / 1000;
                 if (stun)
                     effect_dam -= effect_dam*MIN(100, stun) / 150;
 
@@ -772,8 +772,7 @@ bool make_attack_normal(int m_idx)
                         }
                     }
                     break;
-
-                case RBE_VAMP: {
+                case RBE_VAMP:
                     obvious = TRUE;
                     /* Interpretation: BITE:VAMP(3d10) is still a physically
                      * damaging blow, even if the player is non-living. This
@@ -795,8 +794,15 @@ bool make_attack_normal(int m_idx)
                                 msg_format("%^s appears healthier.", m_name);
                         }
                     }
-                    break; }
-
+                    break;
+                case RBE_UNLIFE:
+                    if (!(get_race()->flags & RACE_IS_NONLIVING) && !life_save_p(rlev))
+                    {
+                        lp_player(-effect_dam);
+                        m_ptr->mpower += effect_dam;
+                        msg_format("%^s grows more powerful!", m_name);
+                    }
+                    break;
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);
                     break;

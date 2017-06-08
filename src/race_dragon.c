@@ -67,34 +67,9 @@ cptr gf_name(int which)
     gf_info_ptr gf;
     switch (which)
     {
-    case GF_FIRE: return "<color:r>Fire</color>";
-    case GF_ACID: return "<color:g>Acid</color>";
-    case GF_COLD: return "<color:W>Cold</color>";
-    case GF_ELEC: return "<color:b>Lightning</color>";
-    case GF_POIS: return "<color:G>Poison</color>";
-    case GF_LITE: return "<color:y>Light</color>";
-    case GF_DARK: return "<color:D>Dark</color>";
-    case GF_CONFUSION: return "<color:U>Confusion</color>";
-    case GF_NETHER: return "<color:D>Nether</color>";
-    case GF_NEXUS: return "<color:v>Nexus</color>";
-    case GF_SOUND: return "<color:o>Sound</color>";
-    case GF_SHARDS: return "<color:U>Shards</color>";
-    case GF_CHAOS: return "<color:v>Chaos</color>";
-    case GF_DISENCHANT: return "<color:v>Disenchantment</color>";
-    case GF_TIME: return "<color:B>Time</color>";
-    case GF_MANA: return "<color:B>Mana</color>";
-    case GF_GRAVITY: return "<color:U>Gravity</color>";
-    case GF_INERT: return "<color:U>Inerta</color>";
-    case GF_PLASMA: return "<color:r>Plasma</color>";
-    case GF_FORCE: return "<color:B>Force</color>";
-    case GF_NUKE: return "<color:G>Nuke</color>";
-    case GF_DISINTEGRATE: return "<color:D>Disintegration</color>";
-    case GF_STORM: return "<color:b>Storm</color>";
-    case GF_HOLY_FIRE: return "<color:r>Holy Fire</color>";
     case GF_ELDRITCH_HOWL: return "<color:R>Fear</color>";
     case GF_ANIM_DEAD: return "<color:D>Reanimation</color>";
     case GF_OLD_DRAIN: return "<color:D>Vampirism</color>";
-    case GF_HELL_FIRE: return "<color:r>Hell Fire</color>";
     case GF_GENOCIDE: return "<color:D>Death</color>";
     case GF_OLD_POLY: return "<color:v>Change</color>";
     }
@@ -1989,7 +1964,7 @@ static void _realm_calc_bonuses(void)
         if (p_ptr->lev >= 20)
             p_ptr->sustain_chr = TRUE;
         if (p_ptr->lev >= 25)
-            p_ptr->hold_life = TRUE;
+            p_ptr->hold_life++;
         if (p_ptr->lev >= 30)
             p_ptr->no_cut = TRUE;
         if (p_ptr->lev >= 35)
@@ -2005,7 +1980,7 @@ static void _realm_calc_bonuses(void)
     case DRAGON_REALM_CRUSADE:
         p_ptr->align += 200;
         if (p_ptr->lev >= 15)
-            p_ptr->hold_life = TRUE;
+            p_ptr->hold_life++;
         if (p_ptr->lev >= 30)
             res_add(RES_FEAR);
         break;

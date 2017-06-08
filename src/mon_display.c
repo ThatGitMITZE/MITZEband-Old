@@ -606,6 +606,7 @@ static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
     case RBE_DRAIN_EXP:   s = string_copy_s("<color:D>Lower Experience</color>"); break;
     case RBE_DISEASE:     s = string_copy_s("Disease"); break;
     case RBE_VAMP:        s = string_copy_s("<color:D>Vampiric</color>"); break;
+    case RBE_UNLIFE:      s = string_copy_s("<color:D>Unlife</color>"); break;
     case RBE_CUT:         s = string_copy_s("<color:r>Cut</color>"); break;
     default:              s = string_copy_s(gf_name(effect->effect));
     }

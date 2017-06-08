@@ -94,10 +94,10 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
         savefile_write_byte(file, SAVE_MON_AC);
         savefile_write_s16b(file, m_ptr->ac_adj);
     }
-    if (m_ptr->power != 100)
+    if (m_ptr->mpower != 1000)
     {
         savefile_write_byte(file, SAVE_MON_POWER);
-        savefile_write_s16b(file, m_ptr->power);
+        savefile_write_s16b(file, m_ptr->mpower);
     }
     if (m_ptr->drop_ct)
     {
@@ -385,12 +385,14 @@ static void wr_extra(savefile_ptr file)
     savefile_write_byte(file, p_ptr->exit_bldg);
     savefile_write_s16b(file, p_ptr->oldpx);
     savefile_write_s16b(file, p_ptr->oldpy);
+    savefile_write_s32b(file, p_ptr->mmhp);
     savefile_write_s32b(file, p_ptr->mhp);
     savefile_write_s32b(file, p_ptr->chp);
     savefile_write_u32b(file, p_ptr->chp_frac);
     savefile_write_s32b(file, p_ptr->msp);
     savefile_write_s32b(file, p_ptr->csp);
     savefile_write_u32b(file, p_ptr->csp_frac);
+    savefile_write_s16b(file, p_ptr->clp);
     savefile_write_s16b(file, p_ptr->max_plv);
 
     tmp8u = (byte)max_d_idx;

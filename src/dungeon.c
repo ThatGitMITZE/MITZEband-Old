@@ -422,6 +422,7 @@ static bool pattern_effect(void)
         (void)do_res_stat(A_CHR);
         (void)restore_level();
         (void)hp_player(1000);
+        lp_player(1000);
 
         cave_set_feat(py, px, feat_pattern_old);
 
@@ -1654,7 +1655,7 @@ static void process_world_aux_timeout(void)
     {
         if (randint1(PY_FOOD_ALERT) > p_ptr->food)
         {
-            switch (randint1(7))
+            switch (randint1(8))
             {
             case 1: do_res_stat(A_STR); break;
             case 2: do_res_stat(A_INT); break;
@@ -1663,6 +1664,7 @@ static void process_world_aux_timeout(void)
             case 5: do_res_stat(A_CON); break;
             case 6: do_res_stat(A_CHR); break;
             case 7: restore_level(); break;
+            case 8: lp_player(150); break;
             }
         }
     }

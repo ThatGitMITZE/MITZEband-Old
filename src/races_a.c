@@ -218,7 +218,7 @@ static void _android_calc_bonuses(void)
     p_ptr->free_act = TRUE;
     res_add(RES_POIS);
     /*res_add_vuln(RES_ELEC); cf resists.c res_pct_aux() for an alternative*/
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
 }
 static void _android_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
@@ -369,7 +369,7 @@ static void _balrog_calc_bonuses(void)
 {
     res_add(RES_FIRE);
     res_add(RES_NETHER);
-    p_ptr->hold_life = TRUE;
+    p_ptr->hold_life++;
     if (p_ptr->lev >= 10) p_ptr->see_inv = TRUE;
     if (p_ptr->lev >= 45) res_add(RES_FIRE);
     p_ptr->align -= 200;
@@ -1786,7 +1786,7 @@ static void _golem_calc_bonuses(void)
     p_ptr->free_act = TRUE;
     p_ptr->see_inv = TRUE;
     res_add(RES_POIS);
-    if (p_ptr->lev >= 35) p_ptr->hold_life = TRUE;
+    if (p_ptr->lev >= 35) p_ptr->hold_life++;
 
     p_ptr->pspeed -= p_ptr->lev/16;
 }
