@@ -717,53 +717,31 @@ bool make_attack_normal(int m_idx)
                     update_smart_learn(m_idx, RES_BLIND);
                     break;
 
-                case RBE_LOSE_STR: /* XXX Replace with B:HIT:HURT(XdY):LOSE_STR:LOSE_CON */
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
+                case RBE_LOSE_STR:
                     if (do_dec_stat(A_STR)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_INT:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_INT)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_WIS:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_WIS)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_DEX:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_DEX)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_CON:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_CON)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_CHR:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
                     if (do_dec_stat(A_CHR)) obvious = TRUE;
                     break;
 
                 case RBE_LOSE_ALL:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
                     if (do_dec_stat(A_STR)) obvious = TRUE;
                     if (do_dec_stat(A_DEX)) obvious = TRUE;
                     if (do_dec_stat(A_CON)) obvious = TRUE;

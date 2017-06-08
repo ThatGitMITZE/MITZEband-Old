@@ -346,6 +346,19 @@ static int _vorpal_pct(mon_blow_ptr blow)
     }
     return 0;
 }
+static bool _skip_effect(int which)
+{
+    switch (which)
+    {
+    case RBE_CUT:
+    case RBE_DRAIN_EXP:
+    case RBE_LOSE_STR: case RBE_LOSE_INT: case RBE_LOSE_WIS:
+    case RBE_LOSE_DEX: case RBE_LOSE_CON: case RBE_LOSE_CHR:
+    case RBE_LOSE_ALL:
+        return TRUE;
+    }
+    return FALSE;
+}
 void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 {
     mon_race_ptr body, foe_race;
@@ -405,8 +418,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 
                 if (*mdeath) break;
                 if (!effect->effect) break;
-                if (effect->effect == RBE_CUT) continue;
-                if (effect->effect == RBE_DRAIN_EXP) continue;
+                if (_skip_effect(effect->effect)) continue;
                 if (effect->pct && randint1(100) > effect->pct) continue;
 
                 /* The first effect is the base damage, and gets boosted by combat boosting
@@ -466,13 +478,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
                     break;
                 case RBE_BLIND: /* XXX Confuse instead? */
-                case RBE_LOSE_STR:
-                case RBE_LOSE_INT:
-                case RBE_LOSE_WIS:
-                case RBE_LOSE_DEX:
-                case RBE_LOSE_CON:
-                case RBE_LOSE_CHR:
-                case RBE_LOSE_ALL:
                     dam = mon_damage_mod(foe, dam, FALSE);
                     if (dam > 0)
                         anger_monster(foe);

@@ -1761,6 +1761,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 case RBE_EAT_FOOD:
                 case RBE_EAT_LITE:
                 case RBE_BLIND:
+                    break;
+
                 case RBE_LOSE_STR:
                 case RBE_LOSE_INT:
                 case RBE_LOSE_WIS:
@@ -1768,6 +1770,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 case RBE_LOSE_CON:
                 case RBE_LOSE_CHR:
                 case RBE_LOSE_ALL:
+                    pt = 0;
                     break;
 
                 case RBE_SHATTER:

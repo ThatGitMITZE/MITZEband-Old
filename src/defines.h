@@ -2980,16 +2980,18 @@ enum obj_flags_e {
  * New monster blow effects
  * Note: monster blows can either use one of
  * the following, or they can directly use a 
- * GF_* attack code. Assert GF_COUNT < 5000.
+ * GF_* effect code. Assert GF_COUNT < 5000.
  */
 enum {
+    /* damaging effects */
     RBE_HURT = 5000,
-    RBE_DRAIN_CHARGES,
+    RBE_SHATTER,
+
+    /* non-damaging effects (in progress) */
     RBE_EAT_GOLD,
     RBE_EAT_ITEM,
     RBE_EAT_FOOD,
     RBE_EAT_LITE,
-    RBE_BLIND,
     RBE_LOSE_STR,
     RBE_LOSE_INT,
     RBE_LOSE_WIS,
@@ -2997,10 +2999,13 @@ enum {
     RBE_LOSE_CON,
     RBE_LOSE_CHR,
     RBE_LOSE_ALL,
-    RBE_SHATTER,
-    RBE_DRAIN_EXP,
     RBE_DISEASE,
-    RBE_EXP_VAMP, /* XXX Add VAMP(XdY) as well off player hp */
+    RBE_DRAIN_CHARGES,
+    RBE_DRAIN_EXP,
+    RBE_EXP_VAMP,
+    RBE_UNLIFE,
+    RBE_VAMP,
+    RBE_BLIND,
     RBE_CUT,
 };
 

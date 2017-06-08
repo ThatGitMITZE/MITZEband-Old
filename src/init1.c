@@ -105,13 +105,11 @@ static int _get_r_blow_effect(cptr which)
     int i;
     struct { cptr name; int id; } _table[] = {
         {"HURT", RBE_HURT},
-        {"DRAIN_CHARGES", RBE_DRAIN_CHARGES},
-        {"UN_POWER", RBE_DRAIN_CHARGES},
+        {"SHATTER", RBE_SHATTER},
         {"EAT_GOLD", RBE_EAT_GOLD},
         {"EAT_ITEM", RBE_EAT_ITEM},
         {"EAT_FOOD", RBE_EAT_FOOD},
         {"EAT_LITE", RBE_EAT_LITE},
-        {"BLIND", RBE_BLIND},
         {"LOSE_STR", RBE_LOSE_STR},
         {"LOSE_INT", RBE_LOSE_INT},
         {"LOSE_WIS", RBE_LOSE_WIS},
@@ -119,10 +117,13 @@ static int _get_r_blow_effect(cptr which)
         {"LOSE_CON", RBE_LOSE_CON},
         {"LOSE_CHR", RBE_LOSE_CHR},
         {"LOSE_ALL", RBE_LOSE_ALL},
-        {"SHATTER", RBE_SHATTER},
-        {"DRAIN_EXP", RBE_DRAIN_EXP},
         {"DISEASE", RBE_DISEASE},
+        {"DRAIN_CHARGES", RBE_DRAIN_CHARGES},
+        {"DRAIN_EXP", RBE_DRAIN_EXP},
         {"EXP_VAMP", RBE_EXP_VAMP},
+        {"UNLIFE", RBE_UNLIFE},
+        {"VAMP", RBE_VAMP},
+        {"BLIND", RBE_BLIND},
         {"CUT", RBE_CUT},
         {0}};
     for (i = 0;; i++)
