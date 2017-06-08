@@ -1,140 +1,164 @@
 #ifndef INCLUDED_GF_H
 #define INCLUDED_GF_H
 
-/* Player and monster effects. GF_ is a mysterious historical abbreviation */
-#define GF_ELEC         1
-#define GF_POIS         2
-#define GF_ACID         3
-#define GF_COLD         4
-#define GF_FIRE         5
-#define GF_PSY_SPEAR    9
-#define GF_MISSILE      10
-#define GF_ARROW        11
-#define GF_PLASMA       12
-#define GF_WATER        14
-#define GF_LITE         15
-#define GF_DARK         16
-#define GF_LITE_WEAK    17  /* Only hurts monsters vulnerable to light ... */
-#define GF_DARK_WEAK    18  /* Only hurts monsters vulnerable to dark ... */
-#define GF_SHARDS       20
-#define GF_SOUND        21
-#define GF_CONFUSION    22
-#define GF_FORCE        23
-#define GF_INERT        24  /* M$ now uses GF_INERTIA for mouse gestures */
-#define GF_MANA         26
-#define GF_METEOR       27
-#define GF_ICE          28
-#define GF_CHAOS        30
-#define GF_NETHER       31
-#define GF_DISENCHANT   32
-#define GF_NEXUS        33
-#define GF_TIME         34
-#define GF_GRAVITY      35
-#define GF_KILL_WALL    40
-#define GF_KILL_DOOR    41
-#define GF_KILL_TRAP    42
-#define GF_MAKE_WALL    45
-#define GF_MAKE_DOOR    46
-#define GF_MAKE_TRAP    47
-#define GF_MAKE_TREE    48
-#define GF_OLD_BLIND    49  /* HACK */
-#define GF_OLD_CLONE    51
-#define GF_OLD_POLY     52
-#define GF_OLD_HEAL     53
-#define GF_OLD_SPEED    54
-#define GF_OLD_SLOW     55
-#define GF_OLD_CONF     56
-#define GF_OLD_SLEEP    57
-#define GF_OLD_DRAIN    58
-#define GF_AWAY_UNDEAD  61
-#define GF_AWAY_EVIL    62
-#define GF_AWAY_ALL     63
-#define GF_TURN_UNDEAD  64
-#define GF_TURN_EVIL    65
-#define GF_TURN_ALL     66
-#define GF_DISP_UNDEAD  67
-#define GF_DISP_EVIL    68
-#define GF_DISP_ALL     69
-#define GF_DISP_DEMON   70      /* New types for Zangband begin here... */
-#define GF_DISP_LIVING  71
-#define GF_ROCKET       72
-#define GF_NUKE         73
-#define GF_MAKE_GLYPH   74
-#define GF_STASIS       75
-#define GF_STONE_WALL   76
-#define GF_DEATH_RAY    77
-#define GF_STUN         78
-#define GF_HOLY_FIRE    79
-#define GF_HELL_FIRE    80
-#define GF_DISINTEGRATE 81
-#define GF_CHARM        82
-#define GF_CONTROL_UNDEAD   83
-#define GF_CONTROL_ANIMAL   84
-#define GF_PSI         85
-#define GF_PSI_DRAIN   86
-#define GF_TELEKINESIS  87
-#define GF_JAM_DOOR     88
-#define GF_DOMINATION   89
-#define GF_DISP_GOOD    90
-#define GF_DRAIN_MANA   91
-#define GF_MIND_BLAST   92
-#define GF_BRAIN_SMASH  93
-#define GF_CAUSE_1      94
-#define GF_CAUSE_2      95
-#define GF_CAUSE_3      96
-#define GF_CAUSE_4      97
-#define GF_HAND_DOOM    98
-#define GF_CAPTURE      99
-#define GF_ANIM_DEAD   100
-#define GF_CONTROL_LIVING   101
-#define GF_IDENTIFY    102
-#define GF_ATTACK      103
-#define GF_ENGETSU     104
-#define GF_GENOCIDE    105
-#define GF_PHOTO       106
-#define GF_CONTROL_DEMON   107
-#define GF_LAVA_FLOW   108
-#define GF_BLOOD_CURSE 109
-#define GF_SEEKER 110
-#define GF_SUPER_RAY 111
-#define GF_STAR_HEAL 112
-#define GF_WATER_FLOW   113
-#define GF_CRUSADE     114
-#define GF_STASIS_EVIL 115
-#define GF_WOUNDS      116
-#define GF_BLOOD       117
-#define GF_ELDRITCH            118
-#define GF_ELDRITCH_STUN    119
-#define GF_ELDRITCH_DRAIN    120
-#define GF_ELDRITCH_DISPEL    121
-#define GF_ELDRITCH_CONFUSE    122
-#define GF_REMOVE_OBSTACLE    123
-#define GF_PHARAOHS_CURSE   124
-#define GF_ISOLATION        125
-#define GF_ELDRITCH_HOWL 126
-#define GF_ENTOMB    127
-#define GF_UNHOLY_WORD  128
-#define GF_DRAINING_TOUCH 129
-#define GF_DEATH_TOUCH 130
-#define GF_PSI_EGO_WHIP 131
-#define GF_PSI_BRAIN_SMASH 132
-#define GF_PSI_STORM 133
-#define GF_MANA_CLASH 134
-#define GF_ANTIMAGIC 135
-#define GF_ROCK      136
-#define GF_WEB      137
-#define GF_AMNESIA  138
-#define GF_STEAL    139
-#define GF_WATER2   140
-#define GF_STORM    141
-#define GF_QUAKE    142
-#define GF_CHARM_RING_BEARER  143
-#define GF_SUBJUGATION 144
-#define GF_PARALYSIS 145
-#define GF_CONTROL_PACT_MONSTER  146
+/* Player and monster effects. GF_ is a mysterious historical abbreviation
+ * Note: I reordered constants for the mon_spell system to provide sensible
+ *       sorting (cf Possessor Spell UI).
+ * Note: These constants are used in savefiles for purposes of monster lore.
+ *       Any changes or reordering should be avoided (add to end instead).*/
+enum {
+    GF_NONE = 0,  /* if (type) project(..., type,...) */
 
-#define MAX_GF                147
+    /* Elemental Effects */
+    GF_ACID,
+    GF_ELEC,
+    GF_FIRE,
+    GF_COLD,
+    GF_POIS,
+    GF_LITE,
+    GF_DARK,
+    GF_CONFUSION,
+    GF_NETHER,
+    GF_NEXUS,
+    GF_SOUND,
+    GF_SHARDS,
+    GF_CHAOS,
+    GF_DISENCHANT,
+    GF_TIME,
 
+    GF_MANA,
+    GF_GRAVITY,
+    GF_INERT,
+    GF_PLASMA,
+    GF_FORCE,
+    GF_NUKE,
+    GF_DISINTEGRATE,
+    GF_STORM,
+    GF_HOLY_FIRE,
+    GF_HELL_FIRE,
+    GF_ICE,
+    GF_WATER,
+    GF_ROCKET,
+    GF_METEOR,
+    GF_ROCK,
+    GF_ARROW,
+    GF_MISSILE,
+
+    /* Curses */
+    GF_CAUSE_1,
+    GF_CAUSE_2,
+    GF_CAUSE_3,
+    GF_CAUSE_4,
+    GF_HAND_DOOM,
+    GF_BLOOD_CURSE,
+
+    /* Mental Attacks */
+    GF_PSY_SPEAR,
+    GF_PSI,
+    GF_PSI_DRAIN,
+    GF_PSI_EGO_WHIP,
+    GF_PSI_BRAIN_SMASH,
+    GF_PSI_STORM,
+    GF_TELEKINESIS,
+    GF_DOMINATION,
+    GF_SUBJUGATION,
+    GF_DRAIN_MANA,
+    GF_MIND_BLAST,
+    GF_BRAIN_SMASH,
+    GF_AMNESIA,
+
+    /* Status Effects */
+    GF_OLD_BLIND,
+    GF_OLD_CLONE,
+    GF_OLD_POLY,
+    GF_OLD_HEAL,
+    GF_STAR_HEAL,  /* smash potion effect */
+    GF_OLD_SPEED,
+    GF_OLD_SLOW,
+    GF_OLD_CONF,
+    GF_OLD_SLEEP,
+    GF_OLD_DRAIN,
+    GF_STASIS,
+    GF_STASIS_EVIL,
+    GF_PARALYSIS,
+    GF_STUN,
+    GF_ELDRITCH,
+    GF_ANTIMAGIC,
+    GF_CRUSADE,
+    GF_UNHOLY_WORD,
+
+    /* Terrain Effects */
+    GF_LITE_WEAK,
+    GF_DARK_WEAK,
+    GF_KILL_WALL,
+    GF_KILL_DOOR,
+    GF_KILL_TRAP,
+    GF_REMOVE_OBSTACLE,
+    GF_MAKE_DOOR,
+    GF_MAKE_TRAP,
+    GF_MAKE_TREE,
+    GF_MAKE_GLYPH,
+    GF_MAKE_WALL,
+    GF_JAM_DOOR,
+    GF_WATER_FLOW,
+    GF_WATER2,
+    GF_LAVA_FLOW,
+    GF_WEB,
+    GF_QUAKE,
+
+    /* Turning, Dispelling, Controlling, etc */
+    GF_AWAY_UNDEAD,
+    GF_AWAY_EVIL,
+    GF_AWAY_ALL,
+    GF_ISOLATION,
+    GF_TURN_UNDEAD,
+    GF_TURN_EVIL,
+    GF_TURN_ALL,
+    GF_DISP_UNDEAD,
+    GF_DISP_EVIL,
+    GF_DISP_GOOD,
+    GF_DISP_DEMON,
+    GF_DISP_LIVING,
+    GF_DISP_ALL,
+    GF_CONTROL_UNDEAD,
+    GF_CONTROL_DEMON,
+    GF_CONTROL_ANIMAL,
+    GF_CONTROL_LIVING,
+    GF_CONTROL_PACT_MONSTER,
+    GF_CHARM,
+    GF_CHARM_RING_BEARER,
+    GF_CAPTURE,
+    GF_ANIM_DEAD,
+    GF_DEATH_RAY,
+    GF_GENOCIDE,
+
+    /* Object Effects */
+    GF_IDENTIFY,
+
+    /* Class Specific */
+    GF_PHOTO,
+    GF_ATTACK,
+    GF_ENGETSU,
+    GF_SEEKER,
+    GF_SUPER_RAY,
+    GF_BLOOD,
+    GF_ELDRITCH_STUN,
+    GF_ELDRITCH_DRAIN,
+    GF_ELDRITCH_DISPEL,
+    GF_ELDRITCH_CONFUSE,
+    GF_ELDRITCH_HOWL,
+    GF_ENTOMB,
+    GF_MANA_CLASH,
+    GF_PHARAOHS_CURSE,
+    GF_DRAINING_TOUCH,
+    GF_DEATH_TOUCH,
+    GF_STEAL,
+
+    /* New Stuff (unsorted) */
+    /* Add new effects here. Reorganize later for next major version upgrade. */
+
+    GF_COUNT  /* enumerate 0 <= i < GF_COUNT */
+};            /* allocate gf[GF_COUNT] */
 
 typedef struct {
     int  id;
@@ -154,7 +178,7 @@ extern gf_info_ptr gf_lookup(int id);
  *
  * We still need a "who" done it parameter. This is either the player (0)
  * or a monster index (m_idx > 0). Occasionally, it might be a special
- * negative code when using project(), but not for the gf_damage_* routines.
+ * negative code when using project(), but not for the gf_affect_* routines.
  */
 #define GF_WHO_PLAYER      0  /* same as PROJECT_WHO_PLAYER */
 
@@ -170,8 +194,8 @@ extern gf_info_ptr gf_lookup(int id);
 #define GF_DAMAGE_SPELL  0x01 /* Monster spell or breath from a project() */
 #define GF_DAMAGE_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
 #define GF_DAMAGE_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
-extern int gf_damage_p(int who, int type, int dam, int flags);
-extern bool gf_damage_m(int who, point_t where, int type, int dam, int flags);
+extern int gf_affect_p(int who, int type, int dam, int flags);
+extern bool gf_affect_m(int who, point_t where, int type, int dam, int flags);
 
 /* exposed for the sake of wizard commands: calculate damage based
  * on the player's alignment */

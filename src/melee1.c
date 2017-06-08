@@ -850,7 +850,7 @@ bool make_attack_normal(int m_idx)
                     if (!explode)
                     {
                         effect_dam = reduce_melee_dam_p(effect_dam);
-                        gf_damage_p(m_idx, effect->effect, effect_dam, GF_DAMAGE_ATTACK);
+                        gf_affect_p(m_idx, effect->effect, effect_dam, GF_DAMAGE_ATTACK);
                     }
                 } /* switch (effect) */
                 mon_lore_effect(m_ptr, effect);

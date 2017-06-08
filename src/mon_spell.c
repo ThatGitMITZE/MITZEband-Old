@@ -1574,31 +1574,31 @@ static void _annoy_m(void)
     switch (_current.spell->id.effect)
     {
     case ANNOY_AMNESIA:
-        gf_damage_m(_who(), _current.dest, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_ANIMATE_DEAD:
         animate_dead(_who(), _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        gf_damage_m(_who(), _current.dest, GF_OLD_BLIND, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_OLD_BLIND, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_CONFUSE:
-        gf_damage_m(_who(), _current.dest, GF_OLD_CONF, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_OLD_CONF, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_DARKNESS:
         unlite_room(_current.dest.y, _current.dest.x);
         break;
     case ANNOY_PARALYZE:
-        gf_damage_m(_who(), _current.dest, GF_PARALYSIS, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_PARALYSIS, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SCARE:
-        gf_damage_m(_who(), _current.dest, GF_TURN_ALL, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_TURN_ALL, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_who());
         break;
     case ANNOY_SLOW:
-        gf_damage_m(_who(), _current.dest, GF_OLD_SLOW, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_OLD_SLOW, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_TELE_LEVEL: {
         mon_race_ptr race2;
@@ -1652,16 +1652,16 @@ static void _annoy_p(void)
     switch (_current.spell->id.effect)
     {
     case ANNOY_AMNESIA:
-        gf_damage_p(_current.mon->id, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_AMNESIA, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_ANIMATE_DEAD:
         animate_dead(_current.mon->id, _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        gf_damage_p(_current.mon->id, GF_OLD_BLIND, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_OLD_BLIND, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_CONFUSE:
-        gf_damage_p(_current.mon->id, GF_OLD_CONF, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_OLD_CONF, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_DARKNESS:
         if (p_ptr->blind)
@@ -1683,10 +1683,10 @@ static void _annoy_p(void)
         }
         break;
     case ANNOY_PARALYZE:
-        gf_damage_p(_current.mon->id, GF_PARALYSIS, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_PARALYSIS, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SCARE:
-        gf_damage_p(_current.mon->id, GF_TURN_ALL, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_TURN_ALL, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_current.mon->id);
@@ -1770,7 +1770,7 @@ static void _biff_p(void)
         }
         break;
     case BIFF_POLYMORPH:
-        gf_damage_p(_current.mon->id, GF_OLD_POLY, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_OLD_POLY, 0, GF_DAMAGE_SPELL);
         break;
     }
 }
@@ -1787,7 +1787,7 @@ static void _biff_m(void)
         dispel_monster_status(_current.mon2->id);
         break;
     case BIFF_POLYMORPH:
-        gf_damage_m(_who(), _current.dest, GF_OLD_POLY, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_OLD_POLY, _current.race->level, GF_DAMAGE_SPELL);
         break;
     }
 }

@@ -2980,7 +2980,7 @@ enum obj_flags_e {
  * New monster blow effects
  * Note: monster blows can either use one of
  * the following, or they can directly use a 
- * GF_* attack code. Assert MAX_GF < 5000.
+ * GF_* attack code. Assert GF_COUNT < 5000.
  */
 enum {
     RBE_HURT = 5000,

@@ -3,12 +3,15 @@
 
 #include <assert.h>
 
-static gf_info_t _gf_tbl[] = {
+static gf_info_t _gf_tbl[GF_COUNT] = {
+    { GF_NONE, "None", TERM_L_DARK, RES_INVALID, "NONE"},
+
+    /* Elemental Effects */
     { GF_ACID, "Acid", TERM_GREEN, RES_ACID, "ACID" },
     { GF_ELEC, "Lightning", TERM_BLUE, RES_ELEC, "ELEC" },
     { GF_FIRE, "Fire", TERM_RED, RES_FIRE, "FIRE" },
     { GF_COLD, "Cold", TERM_L_WHITE, RES_COLD, "COLD" },
-    { GF_POIS, "Poison", TERM_L_GREEN, RES_POIS, "POISON" },
+    { GF_POIS, "Poison", TERM_L_GREEN, RES_POIS, "POIS" },
     { GF_LITE, "Light", TERM_YELLOW, RES_LITE, "LITE" },
     { GF_DARK, "Dark", TERM_L_DARK, RES_DARK, "DARK" },
     { GF_CONFUSION, "Confusion", TERM_L_UMBER, RES_CONF, "CONFUSION" },
@@ -19,6 +22,7 @@ static gf_info_t _gf_tbl[] = {
     { GF_CHAOS, "Chaos", TERM_VIOLET, RES_CHAOS, "CHAOS" },
     { GF_DISENCHANT, "Disenchantment", TERM_VIOLET, RES_DISEN, "DISENCHANT" },
     { GF_TIME, "Time", TERM_L_BLUE, RES_TIME, "TIME" },
+
     { GF_MANA, "Mana", TERM_L_BLUE, RES_INVALID, "MANA" },
     { GF_GRAVITY, "Gravity", TERM_L_UMBER, RES_INVALID, "GRAVITY" },
     { GF_INERT, "Inertia", TERM_L_UMBER, RES_INVALID, "INERTIA" },
@@ -32,46 +36,170 @@ static gf_info_t _gf_tbl[] = {
     { GF_ICE, "Ice", TERM_L_WHITE, RES_COLD, "ICE" },
     { GF_WATER, "Water", TERM_L_BLUE, RES_INVALID, "WATER" },
     { GF_ROCKET, "Rocket", TERM_RED, RES_SHARDS, "ROCKET" },
-    { GF_DRAIN_MANA, "Drain Mana", TERM_L_BLUE, RES_INVALID, "DRAIN_MANA" },
-    { GF_OLD_SLEEP, "Sleep", TERM_BLUE, RES_INVALID, "SLEEP" },
-    { GF_OLD_SLOW, "Slow", TERM_L_UMBER, RES_INVALID, "SLOW" },
-    { GF_TURN_ALL, "Terrify", TERM_RED, RES_INVALID, "TERRIFY" },
-    { GF_STUN, "Stun", TERM_L_BLUE, RES_INVALID, "STUN" },
-    { GF_AMNESIA, "Amnesia", TERM_L_DARK, RES_INVALID, "AMNESIA" },
-    { GF_PARALYSIS, "Paralyze", TERM_VIOLET, RES_INVALID, "PARALYZE" },
-    { GF_MIND_BLAST, "Mind Blast", TERM_L_BLUE, RES_INVALID, "MIND_BLAST" },
-    { GF_BRAIN_SMASH, "Brain Smash", TERM_L_BLUE, RES_INVALID, "BRAIN_SMASH" },
+    { GF_METEOR, "Meteor", TERM_RED, RES_INVALID, "METEOR" },
+    { GF_ROCK, "Rock", TERM_L_UMBER, RES_INVALID, "ROCK" },
+    { GF_ARROW, "Arrow", TERM_L_UMBER, RES_INVALID, "ARROW" },
+    { GF_MISSILE, "Missile", TERM_L_UMBER, RES_INVALID, "MISSILE" },
+
+    /* Curses */
     { GF_CAUSE_1, "Cause Light Wounds", TERM_RED, RES_INVALID, "CAUSE_1" },
     { GF_CAUSE_2, "Cause Serious Wounds", TERM_RED, RES_INVALID, "CAUSE_2" },
     { GF_CAUSE_3, "Cause Critical Wounds", TERM_RED, RES_INVALID, "CAUSE_3" },
     { GF_CAUSE_4, "Cause Mortal Wounds", TERM_RED, RES_INVALID, "CAUSE_4" },
     { GF_HAND_DOOM, "Hand of Doom", TERM_VIOLET, RES_INVALID, "HAND_DOOM" },
+    { GF_BLOOD_CURSE, "Blood Curse", TERM_VIOLET, RES_INVALID, "BLOOD_CURSE" },
+
+    /* Mental Attacks */
+    { GF_PSY_SPEAR, "Psycho-Spear", TERM_L_BLUE, RES_INVALID, "PSY_SPEAR" },
+    { GF_PSI, "Psionics", TERM_L_BLUE, RES_INVALID, "PSI" },
+    { GF_PSI_DRAIN, "Psionic Drain", TERM_L_BLUE, RES_INVALID, "PSI_DRAIN" },
+    { GF_PSI_EGO_WHIP, "Ego Whip", TERM_L_BLUE, RES_INVALID, "PSI_EGO_WHIP" },
+    { GF_PSI_BRAIN_SMASH, "Brain Smash", TERM_L_BLUE, RES_INVALID, "PSI_BRAIN_SMASH" },
+    { GF_PSI_STORM, "Psycho-Storm", TERM_L_BLUE, RES_INVALID, "PSI_STORM" },
+    { GF_TELEKINESIS, "Pulverise", TERM_L_BLUE, RES_INVALID, "TELEKINESIS" },
+    { GF_DOMINATION, "Domination", TERM_RED, RES_INVALID, "DOMINATION" },
+    { GF_SUBJUGATION, "Subjugation", TERM_RED, RES_INVALID, "SUBJUGATION" },
+    { GF_DRAIN_MANA, "Drain Mana", TERM_L_BLUE, RES_INVALID, "DRAIN_MANA" },
+    { GF_MIND_BLAST, "Mind Blast", TERM_L_BLUE, RES_INVALID, "MIND_BLAST" },
+    { GF_BRAIN_SMASH, "Brain Smash", TERM_L_BLUE, RES_INVALID, "BRAIN_SMASH" },
+    { GF_AMNESIA, "Amnesia", TERM_L_DARK, RES_INVALID, "AMNESIA" },
+
+    /* Status Effects */
+    { GF_OLD_BLIND, "Blind", TERM_L_DARK, RES_INVALID, "OLD_BLIND" },
+    { GF_OLD_CLONE, "Clone", TERM_RED, RES_INVALID, "OLD_CLONE" },
+    { GF_OLD_POLY, "Polymorph", TERM_RED, RES_INVALID, "OLD_POLY" },
+    { GF_OLD_HEAL, "Heal", TERM_WHITE, RES_INVALID, "OLD_HEAL" },
+    { GF_STAR_HEAL, "Heal", TERM_WHITE, RES_INVALID, "STAR_HEAL" },
+    { GF_OLD_SPEED, "Haste", TERM_L_RED, RES_INVALID, "OLD_SPEED" },
+    { GF_OLD_SLOW, "Slow", TERM_L_UMBER, RES_INVALID, "OLD_SLOW" },
+    { GF_OLD_CONF, "Confuse", TERM_L_UMBER, RES_INVALID, "OLD_CONF" },
+    { GF_OLD_SLEEP, "Sleep", TERM_BLUE, RES_INVALID, "OLD_SLEEP" },
+    { GF_OLD_DRAIN, "Drain", TERM_L_DARK, RES_INVALID, "OLD_DRAIN" },
+    { GF_STASIS, "Freeze", TERM_BLUE, RES_INVALID, "STASIS" },
+    { GF_STASIS_EVIL, "Freeze Evil", TERM_BLUE, RES_INVALID, "STASIS_EVIL" },
+    { GF_PARALYSIS, "Paralyze", TERM_VIOLET, RES_INVALID, "PARALYZE" },
+    { GF_STUN, "Stun", TERM_L_BLUE, RES_INVALID, "STUN" },
     { GF_ELDRITCH, "Eldritch Horror", TERM_VIOLET, RES_INVALID, "ELDRITCH" },
-    { GF_MISSILE, "Damage", TERM_L_UMBER, RES_INVALID, "DAM" },
-    { GF_OLD_POLY, "Polymorph", TERM_RED, RES_INVALID, "POLYMORPH" },
-    {0}
+    { GF_ANTIMAGIC, "Anti-magic", TERM_RED, RES_INVALID, "ANTIMAGIC" },
+    { GF_CRUSADE, "Crusade", TERM_WHITE, RES_INVALID, "CRUSADE" },
+    { GF_UNHOLY_WORD, "Unholy Word", TERM_L_DARK, RES_INVALID, "UNHOLY_WORD" },
+
+    /* Terrain Effects */
+    { GF_LITE_WEAK, "Light", TERM_YELLOW, RES_INVALID, "LITE_WEAK" },
+    { GF_DARK_WEAK, "Dark", TERM_L_DARK, RES_INVALID, "DARK_WEAK" },
+    { GF_KILL_WALL, "Stone to Mud", TERM_L_UMBER, RES_INVALID, "KILL_WALL" },
+    { GF_KILL_DOOR, "Door Destruction", TERM_RED, RES_INVALID, "KILL_DOOR" },
+    { GF_KILL_TRAP, "Trap Destruction", TERM_RED, RES_INVALID, "KILL_TRAP" },
+    { GF_REMOVE_OBSTACLE, "Remove Obstacle", TERM_RED, RES_INVALID, "REMOVE_OBSTACLE" },
+    { GF_MAKE_DOOR, "Door Creation", TERM_L_BLUE, RES_INVALID, "MAKE_DOOR" },
+    { GF_MAKE_TRAP, "Trap Creation", TERM_L_RED, RES_INVALID, "MAKE_TRAP" },
+    { GF_MAKE_TREE, "Forest Creation", TERM_L_GREEN, RES_INVALID, "MAKE_TREE" },
+    { GF_MAKE_GLYPH, "Glyph of Warding", TERM_L_BLUE, RES_INVALID, "MAKE_GLYPH" },
+    { GF_MAKE_WALL, "Wall Creation", TERM_SLATE, RES_INVALID, "MAKE_WALL" },
+    { GF_JAM_DOOR, "Wizard Lock", TERM_RED, RES_INVALID, "JAM_DOOR" },
+    { GF_WATER_FLOW, "Flow of Water", TERM_BLUE, RES_INVALID, "WATER_FLOW" },
+    { GF_WATER2, "Flow of Water", TERM_BLUE, RES_INVALID, "WATER2" },
+    { GF_LAVA_FLOW, "Flow of Lava", TERM_RED, RES_INVALID, "LAVA_FLOW" },
+    { GF_WEB, "Web Spinning", TERM_SLATE, RES_INVALID, "WEB" },
+    { GF_QUAKE, "Earthquake", TERM_L_UMBER, RES_INVALID, "QUAKE" },
+
+    /* Turning, Dispelling, Controlling, etc */
+    { GF_AWAY_UNDEAD, "Banish Undead", TERM_L_BLUE, RES_INVALID, "AWAY_UNDEAD" },
+    { GF_AWAY_EVIL, "Banish Evil", TERM_L_BLUE, RES_INVALID, "AWAY_EVIL" },
+    { GF_AWAY_ALL, "Banishment", TERM_L_BLUE, RES_INVALID, "AWAY_ALL" },
+    { GF_ISOLATION, "Isolation", TERM_L_BLUE, RES_INVALID, "ISOLATION" },
+    { GF_TURN_UNDEAD, "Turn Undead", TERM_RED, RES_INVALID, "TURN_UNDEAD" },
+    { GF_TURN_EVIL, "Turn Evil", TERM_RED, RES_INVALID, "TURN_EVIL" },
+    { GF_TURN_ALL, "Turn Monsters", TERM_RED, RES_INVALID, "TURN_ALL" },
+    { GF_DISP_UNDEAD, "Dispel Undead", TERM_L_RED, RES_INVALID, "DISP_UNDEAD" },
+    { GF_DISP_EVIL, "Dispel Evil", TERM_L_RED, RES_INVALID, "DISP_EVIL" },
+    { GF_DISP_GOOD, "Dispel Good", TERM_L_RED, RES_INVALID, "DISP_GOOD" },
+    { GF_DISP_DEMON, "Dispel Demon", TERM_L_RED, RES_INVALID, "DISP_DEMON" },
+    { GF_DISP_LIVING, "Dispel Living", TERM_L_RED, RES_INVALID, "DISP_LIVING" },
+    { GF_DISP_ALL, "Dispel Monsters", TERM_L_RED, RES_INVALID, "DISP_ALL" },
+    { GF_CONTROL_UNDEAD, "Enslave Undead", TERM_L_BLUE, RES_INVALID, "CONTROL_UNDEAD" },
+    { GF_CONTROL_DEMON, "Dominate Demon", TERM_L_BLUE, RES_INVALID, "CONTROL_DEMON" },
+    { GF_CONTROL_ANIMAL, "Charm Animal", TERM_L_BLUE, RES_INVALID, "CONTROL_ANIMAL" },
+    { GF_CONTROL_LIVING, "Charm Living", TERM_L_BLUE, RES_INVALID, "CONTROL_LIVING" },
+    { GF_CONTROL_PACT_MONSTER, "Control Pact Monster", TERM_L_BLUE, RES_INVALID, "CONTROL_PACT_MONSTER" },
+    { GF_CHARM, "Charm Monster", TERM_L_BLUE, RES_INVALID, "CHARM" },
+    { GF_CHARM_RING_BEARER, "Charm Ring Bearer", TERM_L_BLUE, RES_INVALID, "CHARM_RING_BEARER" },
+    { GF_CAPTURE, "Capture Monster", TERM_L_BLUE, RES_INVALID, "CAPTURE" },
+    { GF_ANIM_DEAD, "Raise Dead", TERM_L_DARK, RES_INVALID, "ANIM_DEAD" },
+    { GF_DEATH_RAY, "Death Ray", TERM_L_DARK, RES_INVALID, "DEATH_RAY" },
+    { GF_GENOCIDE, "Genocide", TERM_L_DARK, RES_INVALID, "GENOCIDE" },
+
+    /* Object Effects */
+    { GF_IDENTIFY, "Identify", TERM_L_BLUE, RES_INVALID, "IDENTIFY" },
+
+    /* Class Specific */
+    { GF_PHOTO, "Photograph", TERM_YELLOW, RES_INVALID, "PHOTO" },
+    { GF_ATTACK, "Attack", TERM_RED, RES_INVALID, "ATTACK" },
+    { GF_ENGETSU, "Moon Dazzling", TERM_YELLOW, RES_INVALID, "ENGETSU" },
+    { GF_SEEKER, "Seeker Ray", TERM_YELLOW, RES_INVALID, "SEEKER" },
+    { GF_SUPER_RAY, "Super Ray", TERM_YELLOW, RES_INVALID, "SUPER_RAY" },
+    { GF_BLOOD, "Blood", TERM_RED, RES_INVALID, "BLOOD" },
+    { GF_ELDRITCH_STUN, "Eldritch Stun", TERM_L_BLUE, RES_INVALID, "ELDRITCH_STUN" },
+    { GF_ELDRITCH_DRAIN, "Eldritch Drain", TERM_L_DARK, RES_INVALID, "ELDRITCH_DRAIN" },
+    { GF_ELDRITCH_DISPEL, "Eldritch Dispel", TERM_L_RED, RES_INVALID, "ELDRITCH_DISPEL" },
+    { GF_ELDRITCH_CONFUSE, "Eldritch Confuse", TERM_L_UMBER, RES_INVALID, "ELDRITCH_CONFUSE" },
+    { GF_ELDRITCH_HOWL, "Eldritch Howl", TERM_L_DARK, RES_INVALID, "ELDRITCH_HOWL" },
+    { GF_ENTOMB, "Entomb", TERM_L_UMBER, RES_INVALID, "ENTOMB" },
+    { GF_MANA_CLASH, "Mana Clash", TERM_L_BLUE, RES_INVALID, "MANA_CLASH" },
+    { GF_PHARAOHS_CURSE, "Pharaoh's Curse", TERM_VIOLET, RES_INVALID, "PHARAOHS_CURSE" },
+    { GF_DRAINING_TOUCH, "Draining Touch", TERM_L_DARK, RES_INVALID, "DRAINING_TOUCH" },
+    { GF_DEATH_TOUCH, "Touch of Death", TERM_L_DARK, RES_INVALID, "DEATH_TOUCH" },
+    { GF_STEAL, "Steal", TERM_WHITE, RES_INVALID, "STEAL" },
+};
+
+typedef struct {
+    cptr parse;
+    int id;
+} _alias_t, *_alias_ptr;
+static _alias_t _aliases[] = {
+    { "DAM", GF_MISSILE },
+    { "POISON", GF_POIS },
+    { "LIGHT", GF_LITE },
+    { "CONF", GF_CONFUSION },
+    { "CONFUSE", GF_CONFUSION },
+    { "DISENCHANTMENT", GF_DISENCHANT },
+    { "PULVERISE", GF_TELEKINESIS },
+    { "TERRIFY", GF_TURN_ALL },
+    { "POLYMORPH", GF_OLD_POLY },
+    { "SLOW", GF_OLD_SLOW },
+    { "SLEEP", GF_OLD_SLEEP },
+    { 0 }
 };
 
 gf_info_ptr gf_parse_name(cptr token)
 {
-    int i;
-    for (i = 0; ; i++)
+    static str_map_ptr _map = NULL;
+    if (!_map)
     {
-        gf_info_ptr info = &_gf_tbl[i];
-        if (!info->parse) return NULL;
-        if (strcmp(info->parse, token) == 0) return info;
+        int i;
+        _map = str_map_alloc(NULL);
+        for (i = 0; i < GF_COUNT; i++)
+        {
+            gf_info_ptr info = &_gf_tbl[i];
+            str_map_add(_map, info->parse, info);
+        }
+        for (i = 0; ; i++)
+        {
+            _alias_ptr alias = &_aliases[i];
+            if (!alias->parse) break;
+            str_map_add(_map, alias->parse, gf_lookup(alias->id));
+        }
     }
+    return str_map_find(_map, token);
 }
 
 gf_info_ptr gf_lookup(int id)
 {
-    int i;
-    for (i = 0; ; i++)
-    {
-        gf_info_ptr info = &_gf_tbl[i];
-        if (!info->parse) return NULL;
-        if (info->id == id) return info;
-    }
+    gf_info_ptr gf;
+    assert(0 < id && id < GF_COUNT);
+    gf = &_gf_tbl[id];
+    assert(gf->id == id);
+    return gf;
 }
 
 #define HURT_CHANCE 16
@@ -90,7 +218,7 @@ gf_info_ptr gf_lookup(int id)
    OLD: project(m_idx, 0, py, px, dam, aura->effect,
             PROJECT_KILL | PROJECT_PLAYER | PROJECT_HIDE |
             PROJECT_AIMED | PROJECT_JUMP | PROJECT_AURA, -1);  <== 13 parameters 
-   NEW: gf_damage_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA); <==  4 parameters
+   NEW: gf_affect_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA); <==  4 parameters
  */
 static int _rlev(int m_idx)
 {
@@ -130,7 +258,7 @@ int gf_hell_dam(int dam)
 {
     return dam * _align_dam_pct(-p_ptr->align) / 100;
 }
-int gf_damage_p(int who, int type, int dam, int flags)
+int gf_affect_p(int who, int type, int dam, int flags)
 {
     int          result = 0;
     mon_ptr      m_ptr = NULL;
@@ -958,7 +1086,7 @@ static int _stun_amount(int dam)
                 break; \
             }
 
-bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
+bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
 {
     int tmp;
 
@@ -3748,15 +3876,6 @@ bool gf_damage_m(int who, point_t where, int type, int dam, int flags)
         }
         dam = 0;
         break; }
-    case GF_WOUNDS:
-        if (seen) obvious = TRUE;
-        _BABBLE_HACK()
-        if (randint0(50 + dam*3) < (20 + r_ptr->level))
-        {
-            note = " is unaffected!";
-            dam = 0;
-        }
-        break;
     default:
         skipped = TRUE;
         dam = 0;

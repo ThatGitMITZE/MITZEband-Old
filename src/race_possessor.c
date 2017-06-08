@@ -480,14 +480,14 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     break;
                 case RBE_DISEASE:
                     if (dam)
-                        gf_damage_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_DAMAGE_ATTACK);
+                        gf_affect_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_DAMAGE_ATTACK);
                     break;
                 case RBE_DRAIN_CHARGES:
-                    gf_damage_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
+                    gf_affect_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
                         (dam ? dam : p_ptr->lev), GF_DAMAGE_ATTACK);
                     break;
                 case RBE_EXP_VAMP:
-                    if (monster_living(foe_race) && gf_damage_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))
+                    if (monster_living(foe_race) && gf_affect_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))
                     {
                         msg_format("You <color:D>drain life</color> from %s!", m_name_object);
                         hp_player(dam);
@@ -495,7 +495,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     }
                     break;
                 default:
-                    gf_damage_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
+                    gf_affect_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
                 }
                 *mdeath = (foe->r_idx == 0);
             }

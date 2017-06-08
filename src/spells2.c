@@ -4039,7 +4039,7 @@ bool wall_stone(void)
 {
     int flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
 
-    bool dummy = (project(0, 1, py, px, 0, GF_STONE_WALL, flg));
+    bool dummy = (project(0, 1, py, px, 0, GF_MAKE_WALL, flg));
 
     /* Update stuff */
     p_ptr->update |= (PU_FLOW);

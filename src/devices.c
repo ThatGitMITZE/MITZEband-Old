@@ -6366,7 +6366,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (cast)
         {
             if (!get_aim_dir(&dir)) return NULL;
-            fire_beam(GF_STONE_WALL, dir, 0);
+            fire_beam(GF_MAKE_WALL, dir, 0);
             device_noticed = TRUE;
         }
         break;

@@ -1014,7 +1014,7 @@ s32b max_wild_y;
 /*
  * Default spell color table (quark index)
  */
-s16b gf_color[MAX_GF];
+s16b gf_color[GF_COUNT];
 
 /*
  * The "highscore" file descriptor, if available.
