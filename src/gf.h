@@ -68,7 +68,7 @@ enum {
     GF_AMNESIA,
 
     /* Status Effects */
-    GF_OLD_BLIND,
+    GF_BLIND,
     GF_OLD_CLONE,
     GF_OLD_POLY,
     GF_OLD_HEAL,

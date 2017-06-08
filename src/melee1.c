@@ -705,18 +705,6 @@ bool make_attack_normal(int m_idx)
                     }
                     break; }
 
-                case RBE_BLIND:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-                    if (p_ptr->is_dead) break;
-                    if (!res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
-                    {
-                        if (set_blind(p_ptr->blind + 10 + randint1(rlev), FALSE))
-                            obvious = TRUE;
-                    }
-                    update_smart_learn(m_idx, RES_BLIND);
-                    break;
-
                 case RBE_LOSE_STR:
                     if (do_dec_stat(A_STR)) obvious = TRUE;
                     break;

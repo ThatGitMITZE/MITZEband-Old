@@ -3005,7 +3005,6 @@ enum {
     RBE_EXP_VAMP,
     RBE_UNLIFE,
     RBE_VAMP,
-    RBE_BLIND,
     RBE_CUT,
 };
 

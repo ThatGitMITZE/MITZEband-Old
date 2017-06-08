@@ -123,7 +123,6 @@ static int _get_r_blow_effect(cptr which)
         {"EXP_VAMP", RBE_EXP_VAMP},
         {"UNLIFE", RBE_UNLIFE},
         {"VAMP", RBE_VAMP},
-        {"BLIND", RBE_BLIND},
         {"CUT", RBE_CUT},
         {0}};
     for (i = 0;; i++)
@@ -3596,7 +3595,6 @@ static int _default_blow_power(int effect)
     case GF_FIRE:
     case GF_COLD:
         return 10;
-    case RBE_BLIND:
     case RBE_LOSE_ALL:
         return 2;
     case GF_DISENCHANT:

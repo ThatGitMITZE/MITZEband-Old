@@ -1580,7 +1580,7 @@ static void _annoy_m(void)
         animate_dead(_who(), _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        gf_affect_m(_who(), _current.dest, GF_OLD_BLIND, _current.race->level, GF_DAMAGE_SPELL);
+        gf_affect_m(_who(), _current.dest, GF_BLIND, _current.race->level, GF_DAMAGE_SPELL);
         break;
     case ANNOY_CONFUSE:
         gf_affect_m(_who(), _current.dest, GF_OLD_CONF, _current.race->level, GF_DAMAGE_SPELL);
@@ -1658,7 +1658,7 @@ static void _annoy_p(void)
         animate_dead(_current.mon->id, _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        gf_affect_p(_current.mon->id, GF_OLD_BLIND, 0, GF_DAMAGE_SPELL);
+        gf_affect_p(_current.mon->id, GF_BLIND, 0, GF_DAMAGE_SPELL);
         break;
     case ANNOY_CONFUSE:
         gf_affect_p(_current.mon->id, GF_OLD_CONF, 0, GF_DAMAGE_SPELL);

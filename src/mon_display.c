@@ -595,7 +595,6 @@ static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
     case RBE_EAT_ITEM:    s = string_copy_s("Steal Item"); break;
     case RBE_EAT_FOOD:    s = string_copy_s("Steal Food"); break;
     case RBE_EAT_LITE:    s = string_copy_s("Absorb Light"); break;
-    case RBE_BLIND:       s = string_copy_s("Blind"); break;
     case RBE_LOSE_STR:    s = string_copy_s("Reduce Strength"); break;
     case RBE_LOSE_INT:    s = string_copy_s("Reduce Intelligence"); break;
     case RBE_LOSE_WIS:    s = string_copy_s("Reduce Wisdom"); break;

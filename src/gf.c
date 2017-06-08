@@ -65,7 +65,7 @@ static gf_info_t _gf_tbl[GF_COUNT] = {
     { GF_AMNESIA, "Amnesia", TERM_L_DARK, RES_INVALID, "AMNESIA" },
 
     /* Status Effects */
-    { GF_OLD_BLIND, "Blind", TERM_L_DARK, RES_INVALID, "OLD_BLIND" },
+    { GF_BLIND, "Blind", TERM_L_DARK, RES_INVALID, "BLIND" },
     { GF_OLD_CLONE, "Clone", TERM_RED, RES_INVALID, "OLD_CLONE" },
     { GF_OLD_POLY, "Polymorph", TERM_RED, RES_INVALID, "OLD_POLY" },
     { GF_OLD_HEAL, "Heal", TERM_WHITE, RES_INVALID, "OLD_HEAL" },
@@ -723,8 +723,8 @@ int gf_affect_p(int who, int type, int dam, int flags)
         }
         set_paralyzed(dam, FALSE);
         break;
-    case GF_OLD_BLIND:
-        if (res_save_default(RES_BLIND) || _plr_save(who, 0))
+    case GF_BLIND:
+        if (res_save_default(RES_BLIND) || (!touch && _plr_save(who, 0)))
             msg_print("You resist the effects!");
         else
             set_blind(12 + randint0(4), FALSE);
@@ -2924,16 +2924,16 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         dam = 0;
         break; }
-    case GF_OLD_BLIND:
+    case GF_BLIND:
     case GF_OLD_CONF: {
         int ml = r_ptr->level;
-        int pl = dam;
+        int pl = caster_lev;
 
         if (r_ptr->flags1 & RF1_UNIQUE) ml += 3;
 
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
-        do_conf = damroll(3, (dam / 2)) + 1;
+        do_conf = damroll(3, (pl / 2)) + 1;
         if (r_ptr->flags3 & RF3_NO_CONF)
         {
             do_conf = 0;
@@ -3961,7 +3961,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
             /* Already partially confused */
             if (MON_CONFUSED(m_ptr))
             {
-                if (type == GF_OLD_BLIND)
+                if (type == GF_BLIND)
                     note = " is more blinded.";
                 else
                     note = " looks more confused.";
@@ -3971,7 +3971,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
             /* Was not confused */
             else
             {
-                if (type == GF_OLD_BLIND)
+                if (type == GF_BLIND)
                     note = " is blinded.";
                 else
                     note = " looks confused.";

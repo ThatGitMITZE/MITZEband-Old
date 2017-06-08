@@ -477,12 +477,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                         anger_monster(foe);
                     *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
                     break;
-                case RBE_BLIND: /* XXX Confuse instead? */
-                    dam = mon_damage_mod(foe, dam, FALSE);
-                    if (dam > 0)
-                        anger_monster(foe);
-                    *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
-                    break;
                 case RBE_DISEASE:
                     if (dam)
                         gf_affect_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_DAMAGE_ATTACK);
