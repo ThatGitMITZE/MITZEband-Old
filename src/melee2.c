@@ -1775,7 +1775,7 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
                     break;
 
-                case RBE_EXP_VAMP:
+                case RBE_VAMP:
                     pt = GF_OLD_DRAIN;
                     effect_type = BLOW_EFFECT_TYPE_HEAL;
                     break;

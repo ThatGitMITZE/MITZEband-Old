@@ -2986,6 +2986,8 @@ enum {
     /* damaging effects */
     RBE_HURT = 5000,
     RBE_SHATTER,
+    RBE_DISEASE,
+    RBE_VAMP,
 
     /* non-damaging effects (in progress) */
     RBE_EAT_GOLD,
@@ -2999,12 +3001,9 @@ enum {
     RBE_LOSE_CON,
     RBE_LOSE_CHR,
     RBE_LOSE_ALL,
-    RBE_DISEASE,
     RBE_DRAIN_CHARGES,
     RBE_DRAIN_EXP,
-    RBE_EXP_VAMP,
     RBE_UNLIFE,
-    RBE_VAMP,
     RBE_CUT,
 };
 

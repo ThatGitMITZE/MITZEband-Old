@@ -482,7 +482,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     gf_affect_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
                         (dam ? dam : p_ptr->lev), GF_DAMAGE_ATTACK);
                     break;
-                case RBE_EXP_VAMP:
+                case RBE_VAMP:
                     if (monster_living(foe_race) && gf_affect_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))
                     {
                         msg_format("You <color:D>drain life</color> from %s!", m_name_object);

@@ -120,7 +120,6 @@ static int _get_r_blow_effect(cptr which)
         {"DISEASE", RBE_DISEASE},
         {"DRAIN_CHARGES", RBE_DRAIN_CHARGES},
         {"DRAIN_EXP", RBE_DRAIN_EXP},
-        {"EXP_VAMP", RBE_EXP_VAMP},
         {"UNLIFE", RBE_UNLIFE},
         {"VAMP", RBE_VAMP},
         {"CUT", RBE_CUT},

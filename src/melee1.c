@@ -773,29 +773,27 @@ bool make_attack_normal(int m_idx)
                     }
                     break;
 
-                case RBE_EXP_VAMP: {
-                    s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
-                    bool resist_drain;
-
+                case RBE_VAMP: {
                     obvious = TRUE;
+                    /* Interpretation: BITE:VAMP(3d10) is still a physically
+                     * damaging blow, even if the player is non-living. This
+                     * effect is pure vamp, no longer combining exp drain. Do
+                     * B:BITE:VAMP(3d10):DRAIN_EXP(40d6) if you want both. */
                     effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
+                    effect_dam = take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
+                    blow_dam += effect_dam;
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-                    resist_drain = !drain_exp(d, d / 10, 50);
-                    if (get_race()->flags & RACE_IS_NONLIVING)
-                        resist_drain = TRUE;
-
-                    if (effect_dam > 5 && !resist_drain)
+                    if (!(get_race()->flags & RACE_IS_NONLIVING))
                     {
-                        bool did_heal = FALSE;
-
-                        if (m_ptr->hp < m_ptr->maxhp) did_heal = TRUE;
-                        m_ptr->hp += damroll(4, effect_dam / 6);
-                        if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-                        check_mon_health_redraw(m_idx);
-                        if (m_ptr->ml && did_heal)
-                            msg_format("%^s appears healthier.", m_name);
+                        if (m_ptr->hp < m_ptr->maxhp)
+                        {
+                            m_ptr->hp += effect_dam;
+                            if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+                            check_mon_health_redraw(m_idx);
+                            if (m_ptr->ml)
+                                msg_format("%^s appears healthier.", m_name);
+                        }
                     }
                     break; }
 
