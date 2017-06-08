@@ -525,9 +525,6 @@ bool make_attack_normal(int m_idx)
                     break; }
 
                 case RBE_EAT_GOLD:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
 
@@ -582,8 +579,6 @@ bool make_attack_normal(int m_idx)
                     break;
 
                 case RBE_EAT_ITEM:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
 
                     /* Confused monsters cannot steal successfully. -LM-*/
                     if (MON_CONFUSED(m_ptr)) break;
@@ -648,9 +643,6 @@ bool make_attack_normal(int m_idx)
                     break;
 
                 case RBE_EAT_FOOD:
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
-
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (r_ptr->flags2 & RF2_THIEF)
@@ -683,8 +675,6 @@ bool make_attack_normal(int m_idx)
                 case RBE_EAT_LITE: {
                     int slot = equip_find_obj(TV_LITE, SV_ANY);
 
-                    effect_dam = reduce_melee_dam_p(effect_dam);
-                    blow_dam += take_hit(DAMAGE_ATTACK, effect_dam, ddesc);
                     if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
                     if (slot)

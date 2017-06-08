@@ -1753,15 +1753,12 @@ bool mon_attack_mon(int m_idx, int t_idx)
                     pt = GF_DISENCHANT;
                     break;
 
+                /* non-damaging attacks */
                 case RBE_EAT_ITEM:
                 case RBE_EAT_GOLD:
                     if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
-                    break;
-
                 case RBE_EAT_FOOD:
                 case RBE_EAT_LITE:
-                    break;
-
                 case RBE_LOSE_STR:
                 case RBE_LOSE_INT:
                 case RBE_LOSE_WIS:
@@ -1769,16 +1766,13 @@ bool mon_attack_mon(int m_idx, int t_idx)
                 case RBE_LOSE_CON:
                 case RBE_LOSE_CHR:
                 case RBE_LOSE_ALL:
+                case RBE_DRAIN_EXP:
                     pt = 0;
                     break;
 
                 case RBE_SHATTER:
                     damage = damage * ac_melee_pct(ac) / 100;
                     if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
-                    break;
-
-                case RBE_DRAIN_EXP:
-                    pt = 0;
                     break;
 
                 case RBE_EXP_VAMP:

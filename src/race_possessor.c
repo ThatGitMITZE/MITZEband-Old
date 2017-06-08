@@ -355,6 +355,7 @@ static bool _skip_effect(int which)
     case RBE_LOSE_STR: case RBE_LOSE_INT: case RBE_LOSE_WIS:
     case RBE_LOSE_DEX: case RBE_LOSE_CON: case RBE_LOSE_CHR:
     case RBE_LOSE_ALL:
+    case RBE_EAT_LITE:
         return TRUE;
     }
     return FALSE;
@@ -472,10 +473,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                 case RBE_EAT_FOOD:
                     if (leprechaun_steal(foe->id))
                         steal_ct++;
-                    dam = mon_damage_mod(foe, dam, FALSE);
-                    if (dam > 0)
-                        anger_monster(foe);
-                    *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
                     break;
                 case RBE_DISEASE:
                     if (dam)
