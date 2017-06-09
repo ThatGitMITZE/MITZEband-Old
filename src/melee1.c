@@ -743,11 +743,13 @@ bool make_attack_normal(int m_idx)
                 case RBE_DRAIN_EXP: {
                     int resist = 95 - effect_dam/15;
                     effect_dam += MON_DRAIN_LIFE * p_ptr->exp / 100;
-                    if (effect_dam > 10000) effect_dam = 10000;
+                    if (effect_dam > 25000) effect_dam = 25000;
                     obvious = TRUE;
                     if (CHECK_MULTISHADOW()) break;
 
-                    drain_exp(effect_dam, effect_dam/10, resist);
+                    effect_dam = drain_exp(effect_dam, effect_dam/10, resist);
+                    if (effect_dam)
+                        mon_gain_exp(m_ptr, effect_dam);
                     break; }
 
                 case RBE_DISEASE:

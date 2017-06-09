@@ -6008,38 +6008,33 @@ void lose_exp(s32b amount)
 
 /*
  * Drain experience
- * If resisted to draining, return FALSE
+ * Return amount drained.
  */
-bool drain_exp(s32b drain, s32b slip, int hold_life_prob)
+int drain_exp(s32b drain, s32b slip, int hold_life_prob)
 {
     int i;
 
-    /* Androids and their mimics are never drained */
-    if (p_ptr->prace == RACE_ANDROID) return FALSE;
+    /* Androids use construction points, not experience points */
+    if (p_ptr->prace == RACE_ANDROID) return 0;
 
     for (i = 0; i < p_ptr->hold_life; i++)
     {
         if (p_ptr->hold_life && (randint0(100) < hold_life_prob))
         {
-            /* Hold experience */
             msg_print("You keep hold of your life force!");
-            return FALSE;
+            return 0;
         }
     }
 
-    /* Hold experience failed */
     if (p_ptr->hold_life)
     {
         msg_print("You feel your life slipping away!");
         lose_exp(slip);
+        return slip;
     }
-    else
-    {
-        msg_print("You feel your life draining away!");
-        lose_exp(drain);
-    }
-
-    return TRUE;
+    msg_print("You feel your life draining away!");
+    lose_exp(drain);
+    return drain;
 }
 
 

@@ -1038,6 +1038,7 @@ extern void curse_equipment(int chance, int heavy_chance);
 extern void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who);
 extern bool process_the_world(int num, int who, bool vs_player);
 extern void monster_gain_exp(int m_idx, int s_idx);
+extern void mon_gain_exp(mon_ptr mon, int amt);
 
 /* monster1.c */
 extern bool mon_save_p(int r_idx, int stat);
@@ -1747,7 +1748,7 @@ extern bool lose_all_info(void);
 extern void gain_exp_64(s32b amount, u32b amount_frac);
 extern void gain_exp(s32b amount);
 extern void lose_exp(s32b amount);
-extern bool drain_exp(s32b drain, s32b slip, int hold_life_prob);
+extern int  drain_exp(s32b drain, s32b slip, int hold_life_prob);
 extern void do_poly_self(void);
 extern bool set_ultimate_res(int v, bool do_dec);
 extern bool set_tim_res_nether(int v, bool do_dec);
