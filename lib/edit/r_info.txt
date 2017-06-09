@@ -14490,7 +14490,7 @@ P:Copy:Human:Sorcerer
 P:Stats:0:0:0:0:0:20
 P:Body:Quylthulg
 S:1_IN_1 |
-S:S_MONSTER(1d1) | S_MONSTER | S_UNDEAD | S_HI_DEMON | S_DRAGON | S_ANGEL |
+S:S_MONSTER | S_UNDEAD | S_HI_DEMON | S_DRAGON | S_ANGEL |
 S:S_HYDRA | S_SPIDER | S_ANT | S_HOUND | S_UNIQUE | S_AMBERITE |
 S:S_HI_UNDEAD | S_HI_DRAGON | S_KIN
 D:This disgusting creature squeals and snorts as it writhes on the floor.
