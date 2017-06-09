@@ -3693,7 +3693,6 @@ void process_monsters(void)
 
         /* Save global index */
         hack_m_idx = i;
-        hack_m_spell = 0;
 
         /* Process the monster */
         msg_boundary();
@@ -3714,7 +3713,6 @@ void process_monsters(void)
 
     /* Reset global index */
     hack_m_idx = 0;
-    hack_m_spell = 0;
 }
 
 

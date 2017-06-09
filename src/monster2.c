@@ -4205,6 +4205,10 @@ static bool summon_specific_okay(int r_idx)
 bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 {
     int x, y, r_idx;
+    bool mon_summoned = FALSE;
+
+    if (who > 0 && mon_spell_current() && mon_spell_current()->id.type == MST_SUMMON)
+        mon_summoned = TRUE;
 
     if (type != SUMMON_RING_BEARER)
     {
@@ -4214,8 +4218,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
     /* Note: summon_specific does not imply summoning at all, despite the name ...
        Let's try to guess whether or not this is really a summon spell ...
     */
-    if ( (who > 0 && hack_m_spell) /* monster cast a spell ... probably a summon spell */
-      || who == -1 )               /* player did something ... probably a summon spell/activation */
+    if (mon_summoned || who == SUMMON_WHO_PLAYER)
     {
         if (p_ptr->anti_summon && !one_in_(3))
         {
@@ -4333,7 +4336,7 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
 
     if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN)) mode |= PM_NO_KAGE;
 
-    if (who > 0 && hack_m_spell && p_ptr->cult_of_personality)
+    if (mon_summoned && p_ptr->cult_of_personality)
     {
         if (one_in_(2) && !mon_save_p(r_idx, A_CHR))
         {

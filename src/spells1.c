@@ -1987,46 +1987,34 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     /* Reduce damage by distance */
     dam = _reduce_dam(dam, r);
 
-    /* Yes, it is as ugly as this ... sigh
-       These attacks (Breathe * and Throw Boulder) are considered
-       innate attacks, and are non-magical. Evasion and Nimble Dodge
-       only work on innate attacks. Magic Resistance works on everything
-       else.
-       96+1 = RF4_THROW
-       96+3 = RF4_ROCKET
-       96+4 = RF4_SHOOT
-       
-       Note: See above for comments on the Rune-Knight. They absorb before
-       they evade (for demigods) and we need to exclude them in the magic
-       resistance check in the else branch below.
-     */
-    if ( (hack_m_spell >= 96+7 && hack_m_spell <= 96+31)
-      || hack_m_spell == 96+1 || hack_m_spell == 96+3 || hack_m_spell == 96+4)
+    if (mon_spell_current())
     {
-        bool evaded = FALSE; /* Demigod Scout with Evasion talent *and* Nimble Dodge cast? */
-
-        if (p_ptr->tim_nimble_dodge)
+        if (mon_spell_current()->flags & MSF_INNATE)
         {
-            int odds = 7 * p_ptr->open_terrain_ct;
-            if (randint0(100) < odds)
+            bool evaded = FALSE; /* Demigod Scout with Evasion talent *and* Nimble Dodge cast? */
+
+            if (p_ptr->tim_nimble_dodge)
             {
-                msg_print("You nimbly dodge the attack!");
-                dam = 0;
-                evaded = TRUE;
+                int odds = 7 * p_ptr->open_terrain_ct;
+                if (randint0(100) < odds)
+                {
+                    msg_print("You nimbly dodge the attack!");
+                    dam = 0;
+                    evaded = TRUE;
+                }
+            }
+
+            if (!evaded && mut_present(MUT_EVASION))
+            {
+                msg_print("You evade the attack!");
+                dam -= dam * (10 + randint1(10))/100;
             }
         }
-
-        if (!evaded && mut_present(MUT_EVASION))
+        else if (p_ptr->pclass != CLASS_RUNE_KNIGHT && p_ptr->magic_resistance)
         {
-            msg_print("You evade the attack!");
-            dam -= dam * (10 + randint1(10))/100;
+            dam -= dam * p_ptr->magic_resistance / 100;
         }
     }
-    else if (p_ptr->pclass != CLASS_RUNE_KNIGHT && p_ptr->magic_resistance)
-    {
-        dam -= dam * p_ptr->magic_resistance / 100;
-    }
-
 
     if ( p_ptr->pclass == CLASS_DUELIST
       && p_ptr->duelist_target_idx == who )
