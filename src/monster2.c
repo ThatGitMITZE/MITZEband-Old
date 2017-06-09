@@ -1966,6 +1966,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         strcat(desc, " (Painted)");
     }
 
+    #if 0
     if (p_ptr->wizard && m_ptr->pack_idx)
     {
         switch (pack_info_list[m_ptr->pack_idx].ai)
@@ -1997,7 +1998,6 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         }
         }
     }
-    #if 0
     if (p_ptr->wizard && m_ptr->anger)
     {
         char buf[100];

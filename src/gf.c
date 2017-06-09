@@ -275,7 +275,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     {
         m_ptr = &m_list[who];
         r_ptr = &r_info[m_ptr->r_idx];
-        rlev = MIN(1, r_ptr->level);
+        rlev = MAX(1, r_ptr->level*m_ptr->mpower/1000);
 
         monster_desc(m_name, m_ptr, 0);
         monster_desc(m_name_subject, m_ptr, MD_PRON_VISIBLE);

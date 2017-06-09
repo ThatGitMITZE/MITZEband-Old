@@ -265,6 +265,7 @@ bool life_save_p(int ml)
 
     rolls = p_ptr->hold_life;
 
+    if (p_ptr->wizard) msg_format("<color:D>life_save_p: 1d%d <= 1d%d</color>", ml, pl);
     for (i = 0; i < rolls; i++)
     {
         if (randint1(ml) <= randint1(pl))
