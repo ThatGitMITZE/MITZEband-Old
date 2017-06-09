@@ -607,6 +607,8 @@ static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
     case RBE_DISEASE:     s = string_copy_s("Disease"); break;
     case RBE_VAMP:        s = string_copy_s("<color:D>Vampiric</color>"); break;
     case RBE_CUT:         s = string_copy_s("<color:r>Cut</color>"); break;
+    case GF_MISSILE:      s = string_copy_s("Damage"); break;
+    case GF_TURN_ALL:     s = string_copy_s("<color:r>Terrify</color>"); break;
     default:              s = string_copy_s(gf_name(effect->effect));
     }
     assert(s);
