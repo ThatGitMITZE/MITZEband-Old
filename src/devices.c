@@ -960,6 +960,7 @@ static cptr _do_potion(int sval, int mode)
         if (cast)
         {
             do_cmd_rerate(FALSE);
+            lp_player(1000);
             get_max_stats();
             p_ptr->update |= PU_BONUS;
             mut_lose_all();
