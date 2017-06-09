@@ -1833,7 +1833,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 
     /* Do it ... shared with other non-projection damage like melee attacks and auras */
     gf_distance_hack = r;
-    result = gf_affect_m(who, point(x,y), typ, dam, flg & GF_DAMAGE_SPELL);
+    result = gf_affect_m(who, point(x,y), typ, dam, flg & GF_AFFECT_SPELL);
     gf_distance_hack = 1;
 
     /* Track it */
@@ -2037,7 +2037,7 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     if (psion_drain())
         dam = psion_do_drain(dam);
 
-    get_damage = gf_affect_p(who, typ, dam, GF_DAMAGE_SPELL);
+    get_damage = gf_affect_p(who, typ, dam, GF_AFFECT_SPELL);
 
     /* Hex - revenge damage stored */
     revenge_store(get_damage);

@@ -5154,8 +5154,8 @@ bool lp_player(int num)
     }
     if (p_ptr->clp != old_clp)
     {
-        if (num < 0) msg_print("You feel your life draining away!");
-        else if (num > 0) msg_print("You feel your life returning.");
+        if (num < 0) msg_print("<color:D>You feel your life draining away!</color>");
+        else if (num > 0) msg_print("<color:B>You feel your life returning.</color>");
         p_ptr->update |= PU_HP;
         p_ptr->redraw |= PR_EFFECTS;
         notice = TRUE;

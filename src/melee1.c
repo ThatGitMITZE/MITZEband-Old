@@ -795,14 +795,6 @@ bool make_attack_normal(int m_idx)
                         }
                     }
                     break;
-                case RBE_UNLIFE:
-                    if (!(get_race()->flags & RACE_IS_NONLIVING) && !life_save_p(rlev))
-                    {
-                        lp_player(-effect_dam);
-                        m_ptr->mpower += effect_dam;
-                        msg_format("%^s grows more powerful!", m_name);
-                    }
-                    break;
                 case RBE_CUT:
                     set_cut(p_ptr->cut + effect_dam, FALSE);
                     break;
@@ -810,7 +802,7 @@ bool make_attack_normal(int m_idx)
                     if (!explode)
                     {
                         effect_dam = reduce_melee_dam_p(effect_dam);
-                        gf_affect_p(m_idx, effect->effect, effect_dam, GF_DAMAGE_ATTACK);
+                        gf_affect_p(m_idx, effect->effect, effect_dam, GF_AFFECT_ATTACK);
                     }
                 } /* switch (effect) */
                 mon_lore_effect(m_ptr, effect);

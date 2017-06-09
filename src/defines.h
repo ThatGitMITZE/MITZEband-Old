@@ -3003,7 +3003,6 @@ enum {
     RBE_LOSE_ALL,
     RBE_DRAIN_CHARGES,
     RBE_DRAIN_EXP,
-    RBE_UNLIFE,
     RBE_CUT,
 };
 

@@ -83,6 +83,7 @@ static gf_info_t _gf_tbl[GF_COUNT] = {
     { GF_ANTIMAGIC, "Anti-magic", TERM_RED, RES_INVALID, "ANTIMAGIC" },
     { GF_CRUSADE, "Crusade", TERM_WHITE, RES_INVALID, "CRUSADE" },
     { GF_UNHOLY_WORD, "Unholy Word", TERM_L_DARK, RES_INVALID, "UNHOLY_WORD" },
+    { GF_UNLIFE, "Unlife", TERM_L_DARK, RES_INVALID, "UNLIFE" },
 
     /* Terrain Effects */
     { GF_LITE_WEAK, "Light", TERM_YELLOW, RES_INVALID, "LITE_WEAK" },
@@ -220,7 +221,7 @@ gf_info_ptr gf_lookup(int id)
    OLD: project(m_idx, 0, py, px, dam, aura->effect,
             PROJECT_KILL | PROJECT_PLAYER | PROJECT_HIDE |
             PROJECT_AIMED | PROJECT_JUMP | PROJECT_AURA, -1);  <== 13 parameters 
-   NEW: gf_affect_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA); <==  4 parameters
+   NEW: gf_affect_p(m_idx, aura->effect, dam, GF_AFFECT_AURA); <==  4 parameters
  */
 static int _rlev(int m_idx)
 {
@@ -266,8 +267,8 @@ int gf_affect_p(int who, int type, int dam, int flags)
     mon_ptr      m_ptr = NULL;
     mon_race_ptr r_ptr = NULL;
     int          rlev = 1;
-    char         m_name[80];
-    bool         touch = BOOL(flags & (GF_DAMAGE_AURA | GF_DAMAGE_ATTACK));
+    char         m_name[MAX_NLEN], m_name_subject[MAX_NLEN];
+    bool         touch = BOOL(flags & (GF_AFFECT_AURA | GF_AFFECT_ATTACK));
     bool         fuzzy = BOOL(p_ptr->blind);
 
     if (who > 0)
@@ -277,6 +278,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         rlev = MIN(1, r_ptr->level);
 
         monster_desc(m_name, m_ptr, 0);
+        monster_desc(m_name_subject, m_ptr, MD_PRON_VISIBLE);
     }
     else
     {
@@ -397,15 +399,25 @@ int gf_affect_p(int who, int type, int dam, int flags)
 
         if (!touch) inven_damage(set_acid_destroy, 3, RES_FIRE);
         break;
+    case GF_UNLIFE:
+        if (!(get_race()->flags & RACE_IS_NONLIVING) && !life_save_p(rlev))
+        {
+            lp_player(-dam);
+            if (touch && m_ptr)
+            {
+                m_ptr->mpower += dam;
+                msg_format("<color:R>%^s grows more powerful!</color>", m_name_subject);
+            }
+        }
+        break;
     case GF_NETHER: {
         int unlife;
         if (touch) msg_print("You are <color:D>drained</color>!");
         else if (fuzzy) msg_print("You are hit by nether forces!");
         dam = res_calc_dam(RES_NETHER, dam);
-        unlife = dam/10;
+        unlife = dam*15/100;
+        gf_affect_p(who, GF_UNLIFE, unlife, flags);
         dam -= unlife;
-        if (!(get_race()->flags & RACE_IS_NONLIVING) && !life_save_p(rlev))
-            lp_player(-unlife);
         result = take_hit(DAMAGE_ATTACK, dam, m_name);
         update_smart_learn(who, RES_NETHER);
         break; }
@@ -511,7 +523,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         if (touch) msg_print("You are <color:v>disenchanted</color>!");
         else if (fuzzy) msg_print("You are hit by something static!");
         dam = res_calc_dam(RES_DISEN, dam);
-        if (!(flags & GF_DAMAGE_SPELL) && !one_in_(5) && !CHECK_MULTISHADOW())
+        if (!(flags & GF_AFFECT_SPELL) && !one_in_(5) && !CHECK_MULTISHADOW())
         {
             if (!res_save_default(RES_DISEN) || one_in_(5))
                 disenchant_player();
@@ -1011,12 +1023,12 @@ int gf_affect_p(int who, int type, int dam, int flags)
           || p_ptr->prace == RACE_DOPPELGANGER
           || mut_present(MUT_DRACONIAN_METAMORPHOSIS) )
         {
-            if (flags & GF_DAMAGE_SPELL)
+            if (flags & GF_AFFECT_SPELL)
                 msg_print("You are unaffected!");
         }
         else if (_plr_save(who, 0))
         {
-            if (flags & GF_DAMAGE_SPELL)
+            if (flags & GF_AFFECT_SPELL)
                 msg_print("You resist the effects!");
         }
         else
@@ -1197,7 +1209,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
     if (m_ptr->hp < 0) return (FALSE);
 
     /* Get the monster name (BEFORE polymorphing) */
-    if (flags & GF_DAMAGE_SPELL)
+    if (flags & GF_AFFECT_SPELL)
     {
         monster_desc(m_name, m_ptr, 0);
         monster_desc(m_name_object, m_ptr, 0);
@@ -1388,6 +1400,16 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
             mon_lore_r(m_ptr, RFR_RES_PLAS);
         }
         break;
+    case GF_UNLIFE:
+        if (monster_living(r_ptr) /* && some sort of save */)
+        {
+            m_ptr->mpower -= dam;
+            msg_format("%^s grows less powerful.", m_name);
+            if (!(flags & GF_AFFECT_SPELL) && who == GF_WHO_PLAYER)
+                lp_player(dam);
+            return TRUE; /* using note causes messages out of order */
+        }
+        return FALSE;
     case GF_NETHER:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
@@ -3999,7 +4021,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
 
             if (do_time)
             {
-                if (flags & GF_DAMAGE_SPELL)
+                if (flags & GF_AFFECT_SPELL)
                     note = " seems weakened.";
                 m_ptr->maxhp -= do_time;
                 if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
@@ -4230,7 +4252,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
                 msg_format("%^s%s", m_name, note);
 
             /* Hack -- Pain message */
-            else if (known && dam && !(flags & GF_DAMAGE_SPELL))
+            else if (known && dam && !(flags & GF_AFFECT_SPELL))
             {
                 message_pain(c_ptr->m_idx, dam);
             }

@@ -1896,9 +1896,16 @@ static void prt_effects(void)
     if (p_ptr->clp < 1000)
     {
         char tmp[20];
-        sprintf(tmp, "%d.%d%%", p_ptr->clp/10, p_ptr->clp%10);
-        c_put_str(TERM_YELLOW, "Life:", row, col);
-        c_put_str(TERM_YELLOW, tmp, row, col + 5);
+        byte color;
+        int  pct = p_ptr->clp/10;
+        sprintf(tmp, "%d%%", pct);
+        if (pct < 25) color = TERM_VIOLET;
+        else if (pct < 50) color = TERM_RED;
+        else if (pct < 70) color = TERM_L_RED;
+        else if (pct < 90) color = TERM_YELLOW;
+        else color = TERM_L_UMBER;
+        c_put_str(TERM_WHITE, "Life:", row, col);
+        c_put_str(color, tmp, row, col + 6);
         row++;
     }
     if (p_ptr->food >= PY_FOOD_FULL || p_ptr->food < PY_FOOD_ALERT)

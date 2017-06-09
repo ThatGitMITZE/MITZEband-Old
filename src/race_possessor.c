@@ -476,14 +476,14 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     break;
                 case RBE_DISEASE:
                     if (dam)
-                        gf_affect_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_DAMAGE_ATTACK);
+                        gf_affect_m(GF_WHO_PLAYER, where, GF_POIS, dam, GF_AFFECT_ATTACK);
                     break;
                 case RBE_DRAIN_CHARGES:
                     gf_affect_m(GF_WHO_PLAYER, where, GF_DRAIN_MANA,
-                        (dam ? dam : p_ptr->lev), GF_DAMAGE_ATTACK);
+                        (dam ? dam : p_ptr->lev), GF_AFFECT_ATTACK);
                     break;
                 case RBE_VAMP:
-                    if (monster_living(foe_race) && gf_affect_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_DAMAGE_ATTACK))
+                    if (monster_living(foe_race) && gf_affect_m(GF_WHO_PLAYER, where, GF_OLD_DRAIN, dam, GF_AFFECT_ATTACK))
                     {
                         msg_format("You <color:D>drain life</color> from %s!", m_name_object);
                         hp_player(dam);
@@ -491,7 +491,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     }
                     break;
                 default:
-                    gf_affect_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_DAMAGE_ATTACK);
+                    gf_affect_m(GF_WHO_PLAYER, where, effect->effect, dam, GF_AFFECT_ATTACK);
                 }
                 *mdeath = (foe->r_idx == 0);
             }
@@ -1220,6 +1220,14 @@ int           r_idx = p_ptr->current_r_idx, i;
         race_ptr->pseudo_class_idx = r_ptr->body.class_idx;
 
         race_ptr->subname = mon_name(r_idx);
+
+        race_ptr->flags = RACE_IS_MONSTER;
+        if (r_ptr->flags3 & RF3_UNDEAD)
+            race_ptr->flags |= RACE_IS_UNDEAD | RACE_IS_NONLIVING;
+        if (r_ptr->flags3 & RF3_NONLIVING)
+            race_ptr->flags |= RACE_IS_NONLIVING;
+        if (r_ptr->flags3 & RF3_DEMON)
+            race_ptr->flags |= RACE_IS_DEMON | RACE_IS_NONLIVING;
     }
     if (birth_hack || spoiler_hack)
     {
@@ -1267,7 +1275,6 @@ race_t *mon_possessor_get_race(void)
         me.load_player = possessor_on_load;
         me.character_dump = possessor_character_dump;
         
-        me.flags = RACE_IS_MONSTER;
         init = TRUE;
     }
 

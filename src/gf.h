@@ -86,6 +86,7 @@ enum {
     GF_ANTIMAGIC,
     GF_CRUSADE,
     GF_UNHOLY_WORD,
+    GF_UNLIFE,
 
     /* Terrain Effects */
     GF_LITE_WEAK,
@@ -185,15 +186,15 @@ extern gf_info_ptr gf_lookup(int id);
 /* We also need information on whether the effect is spell/breath based,
  * or whether it is the result of melee contact. Mostly, this if for message
  * purposes, but, occasionally, it has gameplay effects. For example, GF_DISENCHANT
- * will usually dispel_player() on a touch effect (GF_DAMAGE_ATTACK or _AURA)
- * while it always apply_disenchant()s on a breath (GF_DAMAGE_SPELL).
- * The flags param only contains the following GF_DAMAGE_* flags, and never
+ * will usually dispel_player() on a touch effect (GF_AFFECT_ATTACK or _AURA)
+ * while it always apply_disenchant()s on a breath (GF_AFFECT_SPELL).
+ * The flags param only contains the following GF_AFFECT_* flags, and never
  * needs any of the PROJECT_* stuff. At the moment, using bits is inappropriate
  * as the options are mutually exclusive, but other options may follow in the future.
  */
-#define GF_DAMAGE_SPELL  0x01 /* Monster spell or breath from a project() */
-#define GF_DAMAGE_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
-#define GF_DAMAGE_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
+#define GF_AFFECT_SPELL  0x01 /* Monster spell or breath from a project() */
+#define GF_AFFECT_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
+#define GF_AFFECT_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
 extern int gf_affect_p(int who, int type, int dam, int flags);
 extern bool gf_affect_m(int who, point_t where, int type, int dam, int flags);
 

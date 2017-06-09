@@ -1997,6 +1997,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         }
         }
     }
+    #if 0
     if (p_ptr->wizard && m_ptr->anger)
     {
         char buf[100];
@@ -2006,6 +2007,11 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
     if (p_ptr->wizard && m_ptr->summon_ct)
     {
         strcat(desc, format(" (%d summons)", m_ptr->summon_ct));
+    }
+    #endif
+    if (p_ptr->wizard && m_ptr->mpower != 1000)
+    {
+        strcat(desc, format(" (%d.%d%%)", m_ptr->mpower/10, m_ptr->mpower%10));
     }
 }
 

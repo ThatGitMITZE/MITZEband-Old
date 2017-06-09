@@ -2091,7 +2091,7 @@ void touch_zap_player(int m_idx)
         if (aura->pct && randint1(100) > aura->pct) continue;
         dam = damroll(aura->dd, aura->ds);
         if (!dam) continue;
-        gf_affect_p(m_idx, aura->effect, dam, GF_DAMAGE_AURA);
+        gf_affect_p(m_idx, aura->effect, dam, GF_AFFECT_AURA);
     }
 }
 
@@ -2146,7 +2146,7 @@ void wizard_report_damage(int amt)
 
 static bool _gf_innate(mon_ptr m, int type, int dam)
 {
-    return gf_affect_m(GF_WHO_PLAYER, point(m->fx, m->fy), type, dam, GF_DAMAGE_ATTACK);
+    return gf_affect_m(GF_WHO_PLAYER, point(m->fx, m->fy), type, dam, GF_AFFECT_ATTACK);
 }
 
 static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
@@ -3733,7 +3733,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (o_ptr && o_ptr->name1 == ART_ETERNAL_BLADE)
                 {
                     /* Hack: Time Brand. Effectively a 2x slay ... k2 is damage from dice alone.*/
-                    gf_affect_m(GF_WHO_PLAYER, point(x,y), GF_TIME, k2, GF_DAMAGE_ATTACK);
+                    gf_affect_m(GF_WHO_PLAYER, point(x,y), GF_TIME, k2, GF_AFFECT_ATTACK);
                     *mdeath = (m_ptr->r_idx == 0);
                     if (*mdeath) break;
                 }
