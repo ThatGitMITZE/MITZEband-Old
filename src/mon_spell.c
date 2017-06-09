@@ -1108,11 +1108,20 @@ static void _group_grow(mon_spell_group_ptr group)
 
 void mon_spell_group_add(mon_spell_group_ptr group, mon_spell_ptr spell)
 {
+    int i;
     assert(spell);
     if (group->count == group->allocated)
         _group_grow(group);
     assert(group->count < group->allocated);
-    group->spells[group->count++] = *spell;
+/*  group->spells[group->count++] = *spell; */
+    for (i = 0; i < group->count; i++)
+        if (group->spells[i].id.effect > spell->id.effect)
+            break;
+
+    if (i < group->count)
+        memmove(group->spells + i + 1, group->spells + i, (group->count - i)*sizeof(mon_spell_t));
+    group->spells[i] = *spell;
+    group->count++;
 }
 
 mon_spell_ptr mon_spell_group_find(mon_spell_group_ptr group, mon_spell_id_t id)
