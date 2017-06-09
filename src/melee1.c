@@ -825,6 +825,7 @@ bool make_attack_normal(int m_idx)
 
                 weaponmaster_do_readied_shot(m_ptr); /* XXX Bowmaster */
 
+                possessor_do_auras(m_ptr);
                 if (weaponmaster_get_toggle() == TOGGLE_TRADE_BLOWS)
                 {
                     do_retaliate = TRUE;

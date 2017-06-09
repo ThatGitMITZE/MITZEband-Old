@@ -1376,6 +1376,24 @@ void possessor_set_current_r_idx(int r_idx)
     }
 }
 
+void possessor_do_auras(mon_ptr mon)
+{
+    mon_race_ptr race;
+    int          i;
+    if (p_ptr->prace != RACE_MON_POSSESSOR && p_ptr->prace != RACE_MON_MIMIC) return;
+    race = &r_info[p_ptr->current_r_idx];
+    for (i = 0; i < MAX_MON_AURAS; i++)
+    {
+        mon_effect_ptr aura = &race->auras[i];
+        int            dam;
+        if (!aura->effect) continue;
+        if (aura->pct && randint1(100) > aura->pct) continue;
+        dam = damroll(aura->dd, aura->ds);
+        if (!dam) continue;
+        gf_affect_m(GF_WHO_PLAYER, point(mon->fx, mon->fy), aura->effect, dam, GF_AFFECT_AURA);
+    }
+}
+
 void possessor_explode(int dam)
 {
     if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)

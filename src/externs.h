@@ -2253,6 +2253,7 @@ extern void    possessor_on_save(savefile_ptr file);
 extern void    possessor_set_current_r_idx(int r_idx);
 extern void    possessor_explode(int dam);
 extern void    possessor_init_race_t(race_t *race_ptr, int default_r_idx);
+extern void    possessor_do_auras(mon_ptr mon);
 extern void    mimic_dispel_player(void);
 extern void    mimic_on_kill_monster(int r_idx);
 
