@@ -96,6 +96,13 @@ static bool _know_spell_damage(mon_race_ptr race, mon_spell_ptr spell)
         race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
 }
 
+static bool _know_aura_damage(mon_race_ptr race, mon_effect_ptr effect)
+{
+    if (_easy_lore(race)) return TRUE;
+    return _know_damage_aux(effect->lore, effect->dd*effect->ds,
+        race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
+}
+
 static bool _know_alertness(monster_race *r_ptr)
 {
     int wake = r_ptr->r_wake;
@@ -682,11 +689,11 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
  **************************************************************************/
 static void _display_other(monster_race *r_ptr, doc_ptr doc)
 {
-    int        ct = 0;
+    int        ct = 0, i;
     vec_ptr    v = vec_alloc((vec_free_f)string_free);
 
     if (r_ptr->flags2 & RF2_KILL_WALL)
-        vec_add(v, string_copy_s("<color:U>Eats Walls</color>"));
+        vec_add(v, string_copy_s("<color:U>Destroys Walls</color>"));
 
     if (r_ptr->flags2 & RF2_PASS_WALL)
         vec_add(v, string_copy_s("<color:B>Passes through Walls</color>"));
@@ -745,6 +752,21 @@ static void _display_other(monster_race *r_ptr, doc_ptr doc)
         vec_add(v, _get_res_name(RES_COLD));
     if (r_ptr->flags2 & RF2_AURA_ELEC)
         vec_add(v, _get_res_name(RES_ELEC));
+
+    for (i = 0; i < MAX_MON_AURAS; i++)
+    {
+        mon_effect_ptr aura = &r_ptr->auras[i];
+        gf_info_ptr    gf;
+        if (!aura->effect) continue;
+        gf = gf_lookup(aura->effect);
+        if (gf)
+        {
+            string_ptr s = string_alloc_format("<color:%c>%s</color>", attr_to_attr_char(gf->color), gf->name);
+            if (_know_aura_damage(r_ptr, aura))
+                string_printf(s, " (%dd%d)", aura->dd, aura->ds);
+            vec_add(v, s);
+        }
+    }
 
     if (vec_length(v))
     {
