@@ -1802,6 +1802,7 @@ typedef struct {
     byte color;
     cptr desc;
     cptr parse;
+    int  xtra;
 } parse_tbl_t, *parse_tbl_ptr;
 
 /*

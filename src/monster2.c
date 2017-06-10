@@ -1546,7 +1546,7 @@ s16b get_mon_num(int level)
         if (!summon_specific_who && dungeon_type == DUNGEON_ARENA && table[i].level < MIN(50, dun_level-5)) continue;
 
         /* Hack: Sparing early unique monsters is no longer a viable end game strategy */
-        if (summon_specific_who && summon_specific_type == SUMMON_UNIQUE)
+        if (summon_specific_who > 0 && summon_specific_type == SUMMON_UNIQUE)
         {
             monster_type *who_ptr = &m_list[summon_specific_who];
             int           who_lvl = r_info[who_ptr->r_idx].level;

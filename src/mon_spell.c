@@ -2052,27 +2052,42 @@ static void _summon_special(void)
     switch (_current.race->id)
     {
     case MON_SANTACLAUS:
-        msg_format("%s says 'Now Dasher! Now Dancer! Now, Prancer and Vixen! On, Comet! On, Cupid! On, Donner and Blitzen!'", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You say 'Now Dasher! Now Dancer! Now, Prancer and Vixen! On, Comet! On, Cupid! On, Donner and Blitzen!'");
+        else
+            msg_format("%s says 'Now Dasher! Now Dancer! Now, Prancer and Vixen! On, Comet! On, Cupid! On, Donner and Blitzen!'", _current.name);
         r_idx = MON_REINDEER;
         break;
      case MON_ZEUS:
-        msg_format("%s summons Shamblers!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon Shamblers!");
+        else
+            msg_format("%s summons Shamblers!", _current.name);
         r_idx = MON_SHAMBLER;
         break;
     case MON_POSEIDON:
         fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
-        msg_format("%s summons Greater Kraken!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon Greater Kraken!");
+        else
+            msg_format("%s summons Greater Kraken!", _current.name);
         r_idx = MON_GREATER_KRAKEN;
         break;
     case MON_HADES:
         num = randint1(2);
         fire_ball_hide(GF_LAVA_FLOW, 0, 3, 8);
-        msg_format("%s summons Death!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon Death!");
+        else
+            msg_format("%s summons Death!", _current.name);
         r_idx = MON_GREATER_BALROG;
         r_idx2 = MON_ARCHLICH;
         break;
     case MON_ATHENA:
-        msg_format("%s summons friends!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon friends!");
+        else
+            msg_format("%s summons friends!", _current.name);
         if (one_in_(3) && r_info[MON_ZEUS].max_num == 1)
         {
             num = 1;
@@ -2086,12 +2101,18 @@ static void _summon_special(void)
         break;
     case MON_ARES:
         num = 1;
-        msg_format("%s yells 'Mommy! Daddy! Help!!'", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You yell 'Mommy! Daddy! Help!!");
+        else
+            msg_format("%s yells 'Mommy! Daddy! Help!!'", _current.name);
         r_idx = MON_ZEUS;
         r_idx2 = MON_HERA;
         break;
     case MON_APOLLO:
-        msg_format("%s summons help!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon help!");
+        else
+            msg_format("%s summons help!", _current.name);
         if (one_in_(3) && r_info[MON_ARTEMIS].max_num == 1)
         {
             num = 1;
@@ -2102,11 +2123,17 @@ static void _summon_special(void)
         break;
     case MON_ARTEMIS:
         num = 1;
-        msg_format("%s summons help!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon help!");
+        else
+            msg_format("%s summons help!", _current.name);
         r_idx = MON_APOLLO;
         break;
     case MON_HEPHAESTUS:
-        msg_format("%s summons friends!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon friends!");
+        else
+            msg_format("%s summons friends!", _current.name);
         if (one_in_(3) && r_info[MON_ZEUS].max_num == 1)
         {
             num = 1;
@@ -2122,11 +2149,17 @@ static void _summon_special(void)
         break;
     case MON_HERMES:
         num = randint1(16); /* XXX Why so high, RF1_FRIENDS? */
-        msg_format("%s summons friends!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon friends!");
+        else
+            msg_format("%s summons friends!", _current.name);
         r_idx = MON_MAGIC_MUSHROOM;
         break;
     case MON_HERA:
-        msg_format("%s summons aid!'", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon aid!");
+        else
+            msg_format("%s summons aid!'", _current.name);
         if (one_in_(3) && r_info[MON_ARES].max_num == 1)
         {
             num = 1;
@@ -2141,27 +2174,44 @@ static void _summon_special(void)
             r_idx = MON_DEATH_BEAST;
         break;
     case MON_DEMETER:
-        msg_format("%s summons ents!", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon ents!");
+        else
+            msg_format("%s summons ents!", _current.name);
         r_idx = MON_ENT;
         break;
     case MON_ROLENTO:
-        if (p_ptr->blind) msg_format("%s spreads something.", _current.name);
-        else msg_format("%s throws some hand grenades.", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You throw some hand grenades.");
+        else
+        {
+            if (p_ptr->blind) msg_format("%s spreads something.", _current.name);
+            else msg_format("%s throws some hand grenades.", _current.name);
+        }
         num = 1 + randint1(3);
         r_idx = MON_SHURYUUDAN;
         break;
     case MON_BULLGATES:
-        msg_format("%s summons his minions.", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon your minions!");
+        else
+            msg_format("%s summons his minions.", _current.name);
         r_idx = MON_IE;
         break;
     case MON_CALDARM:
         num = randint1(3);
-        msg_format("%s summons his minions.", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon your minions!");
+        else
+            msg_format("%s summons his minions.", _current.name);
         r_idx = MON_LOCKE_CLONE;
         break;
     case MON_TALOS:
         num = randint1(3);
-        msg_format("%s summons his minions.", _current.name);
+        if (_current.flags & MSC_SRC_PLAYER)
+            msg_print("You summon your minions!");
+        else
+            msg_format("%s summons his minions.", _current.name);
         r_idx = MON_SPELLWARP_AUTOMATON;
         break;
     }
@@ -2589,6 +2639,8 @@ static cptr _bolt_msg(void)
 static cptr _summon_msg(void)
 {
     parse_tbl_ptr p = summon_type_lookup(_current.spell->id.effect);
+    if (_current.spell->id.effect == SUMMON_SPECIAL) return NULL;
+    p = summon_type_lookup(_current.spell->id.effect);
     assert(p);
     if (_current.flags & MSC_SRC_PLAYER)
     {
@@ -3823,6 +3875,8 @@ static int _breath_cost_div(mon_race_ptr race)
     case 'B': return 12; /* Fenghuang, Petshop */
     case 'R': return 12; /* Tarrasque, Godzilla */
     case 'P': return 10; /* Elder giants; Typhoeus */
+    case 'A': return 12; /* Raphael, et. al. */
+    case 'J': return 12; /* Abhoth, Apophis, Serpent of Chaos! */
     }
     return 7;
 }
@@ -3860,6 +3914,79 @@ static int _heal_pct(mon_race_ptr race)
     }
     return 125;
 }
+static int _buff_cost(mon_spell_ptr spell)
+{
+    switch (spell->id.effect)
+    {
+    case BUFF_HASTE: return 15;
+    case BUFF_INVULN: return 60;
+    }
+    return 0;
+}
+static int _biff_cost(mon_spell_ptr spell)
+{
+    switch (spell->id.effect)
+    {
+    case BIFF_ANTI_MAGIC: return 35;
+    case BIFF_DISPEL_MAGIC: return 25;
+    case BIFF_POLYMORPH: return 15;
+    }
+    return 0;
+}
+static int _escape_cost(mon_spell_ptr spell)
+{
+    switch (spell->id.effect)
+    {
+    case ESCAPE_TELE_OTHER: return 20;
+    case ESCAPE_TELE_SELF: return 10;
+    }
+    return 0;
+}
+static int _annoy_cost(mon_spell_ptr spell)
+{
+    switch (spell->id.effect)
+    {
+    case ANNOY_AMNESIA: return 10;
+    case ANNOY_ANIMATE_DEAD: return 15;
+    case ANNOY_BLIND: return 10;
+    case ANNOY_CONFUSE: return 10;
+    case ANNOY_DARKNESS: return 5;
+    case ANNOY_PARALYZE: return 10;
+    case ANNOY_SCARE: return 10;
+    case ANNOY_SHRIEK: return 10;
+    case ANNOY_SLOW: return 10;
+    case ANNOY_TELE_LEVEL: return 20;
+    case ANNOY_TELE_TO: return 15;
+    case ANNOY_TRAPS: return 10;
+    case ANNOY_WORLD: return 150;
+    }
+    return 0;
+}
+static int _summon_cost(mon_spell_ptr spell)
+{
+    parse_tbl_ptr p = summon_type_lookup(spell->id.effect);
+    if (p) return p->xtra;
+    return 0;
+}
+static int _tactic_cost(mon_spell_ptr spell)
+{
+    switch (spell->id.effect)
+    {
+    case TACTIC_BLINK: return 3;
+    case TACTIC_BLINK_OTHER: return 10;
+    default: return 15;
+    }
+    return 0;
+}
+static int _weird_cost(mon_spell_ptr spell, mon_race_ptr race)
+{
+    switch (spell->id.effect)
+    {
+    case WEIRD_BIRD: return 15;
+    case WEIRD_SPECIAL: return 10; /* might use race someday */
+    }
+    return 0;
+}
 static int _spell_cost_aux(mon_spell_ptr spell, mon_race_ptr race)
 {
     switch (spell->id.type)
@@ -3876,6 +4003,13 @@ static int _spell_cost_aux(mon_spell_ptr spell, mon_race_ptr race)
         int heal = _avg_roll(dice);
         int pct = _heal_pct(race);
         return _dam_cost(heal)*pct/100; }
+    case MST_BUFF: return _buff_cost(spell);
+    case MST_BIFF: return _biff_cost(spell);
+    case MST_ESCAPE: return _escape_cost(spell);
+    case MST_ANNOY: return _annoy_cost(spell);
+    case MST_SUMMON: return _summon_cost(spell);
+    case MST_TACTIC: return _tactic_cost(spell);
+    case MST_WEIRD: return _weird_cost(spell, race);
     }
     return 0;
 }
