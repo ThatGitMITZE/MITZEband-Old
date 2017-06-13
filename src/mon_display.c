@@ -968,7 +968,7 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
 
     _display_basic(&copy, doc);
     _display_resists(&copy, doc);
-    if (copy.spells) _display_spells(&copy, doc);
+    if (copy.spells && copy.spells->freq) _display_spells(&copy, doc);
     _display_attacks(&copy, doc);
     _display_other(&copy, doc);
     if (!_possessor_hack) _display_kills(&copy, doc);

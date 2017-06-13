@@ -171,8 +171,7 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_s16b(file, r_ptr->floor_id);
     savefile_write_byte(file, r_ptr->stolen_ct);
     savefile_write_u32b(file, r_ptr->flagsx);
-    if (r_ptr->spells)
-        mon_spells_save(r_ptr->spells, file);
+    mon_spells_save(r_ptr->spells, file);
     for (i = 0; i < MAX_MON_BLOWS; i++)
     {
         mon_blow_ptr blow = &r_ptr->blows[i];

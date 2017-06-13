@@ -23,6 +23,7 @@ enum {
     MST_HEAL,
     MST_TACTIC,
     MST_WEIRD,
+    MST_POSSESSOR,
     MST_COUNT
 };
 

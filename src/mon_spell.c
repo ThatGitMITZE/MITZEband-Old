@@ -375,6 +375,63 @@ static _parse_t _weird_tbl[] = {
     {0}
 };
 
+/* MST_POSSESSOR: These spells won't be cast by monsters.
+ * Rather, they exist for the mimic and the possessor, offering
+ * access to gameplay aspects that don't affect monsters 
+ * (such as detection or object lore). */
+enum {
+    POS_DETECT_TRAPS,
+    POS_DETECT_EVIL,
+    POS_DETECT_MONSTERS,
+    POS_DETECT_OBJECTS,
+    POS_IDENTIFY,
+    POS_MAPPING,
+    POS_CLAIRVOYANCE,
+    POS_MULTIPLY,
+    /* XXX These should be MST_BUFF, but they aren't yet
+     * implemented for monsters. */
+    POS_BLESS,
+    POS_HEROISM,
+    POS_BERSERK,
+};
+static _parse_t _pos_tbl[] = {
+    { "DETECT_TRAPS", { MST_POSSESSOR, POS_DETECT_TRAPS },
+        { "Detect Traps", TERM_L_UMBER }},
+    { "DETECT_EVIL", { MST_POSSESSOR, POS_DETECT_EVIL },
+        { "Detect Evil", TERM_L_UMBER }},
+    { "DETECT_MONSTERS", { MST_POSSESSOR, POS_DETECT_MONSTERS },
+        { "Detect Monsters", TERM_L_UMBER }},
+    { "DETECT_OBJECTS", { MST_POSSESSOR, POS_DETECT_OBJECTS },
+        { "Detect Objects", TERM_L_UMBER }},
+    { "IDENTIFY", { MST_POSSESSOR, POS_IDENTIFY },
+        { "Identify", TERM_L_BLUE }},
+    { "MAPPING", { MST_POSSESSOR, POS_MAPPING },
+        { "Mapping", TERM_L_BLUE }},
+    { "CLAIRVOYANCE", { MST_POSSESSOR, POS_CLAIRVOYANCE },
+        { "Clairvoyance", TERM_L_BLUE }},
+    { "MULTIPLY", { MST_POSSESSOR, POS_MULTIPLY },
+        { "Multiply", TERM_RED }},
+    { "BLESS", { MST_POSSESSOR, POS_BLESS },
+        { "Bless", TERM_WHITE,
+          "$CASTER prays for aid.",
+          "$CASTER mumbles a petition.",
+          "$CASTER prays for aid.",
+          "You pray for aid."}},
+    { "HEROISM", { MST_POSSESSOR, POS_HEROISM },
+        { "Heroism", TERM_WHITE,
+          "$CASTER prays for aid.",
+          "$CASTER mumbles a petition.",
+          "$CASTER prays for aid.",
+          "You pray for aid."}},
+    { "BERSERK", { MST_POSSESSOR, POS_BERSERK },
+        { "Berserk", TERM_RED,
+          "$CASTER enters into a berserk frenzy.",
+          "$CASTER sounds furious!",
+          "$CASTER enters into a berserk frenzy.",
+          "You enter into a berserk frenzy."}, MSF_INNATE},
+    {0}
+};
+
 static _parse_ptr _spell_parse_name_aux(cptr token, _parse_ptr tbl)
 {
     int i;
@@ -390,7 +447,7 @@ static _parse_ptr _spell_parse_name(cptr token)
 {
     _parse_ptr tbls[] = {_annoy_tbl, _ball_tbl, _beam_tbl, _biff_tbl,
                          _bolt_tbl, _buff_tbl, _curse_tbl, _escape_tbl,
-                         _heal_tbl, _tactic_tbl, _weird_tbl, NULL};
+                         _heal_tbl, _tactic_tbl, _weird_tbl, _pos_tbl,  NULL};
     int i;
     for (i = 0;; i++)
     {
@@ -426,7 +483,7 @@ typedef struct {
     byte color;
     int  prob;
 } _mst_info_t, *_mst_info_ptr;
-static _mst_info_t _mst_tbl[] = {
+static _mst_info_t _mst_tbl[MST_COUNT] = {
     { MST_BREATH, "Breathe", TERM_RED, 15 },
     { MST_BALL, "Ball", TERM_RED, 15 },
     { MST_BOLT, "Bolt", TERM_RED, 15 },
@@ -440,17 +497,15 @@ static _mst_info_t _mst_tbl[] = {
     { MST_HEAL, "Heal", TERM_L_BLUE, 10 },
     { MST_TACTIC, "Tactic", TERM_L_BLUE, 10 },
     { MST_WEIRD, "Weird", TERM_L_UMBER, 100 },
-    { 0 }
+    { MST_POSSESSOR, "Possessor", TERM_L_BLUE, 0 }, /* <== 0 prevents monster casting */
 };
 static _mst_info_ptr _mst_lookup(int which)
 {
-    int i;
-    for (i = 0;; i++)
-    {
-        _mst_info_ptr p = &_mst_tbl[i];
-        if (!p->name) return NULL;
-        if (p->id == which) return p;
-    }
+    _mst_info_ptr p;
+    assert (0 <= which && which < MST_COUNT);
+    p = & _mst_tbl[which];
+    assert(p->id == which);
+    return p;
 }
 
 /*************************************************************************
@@ -1415,7 +1470,7 @@ static void _breath(void)
     int rad = _current.race->level >= 50 ? -3 : -2;
 
     assert(_current.spell->parm.tag == MSP_HP_PCT);
-
+    if (_current.race->d_char == 'D') rad = -3;
     if (_current.flags & MSC_SRC_PLAYER)
     {
         int hp = _avg_hp(_current.race);
@@ -2421,6 +2476,7 @@ static void _weird(void)
     /* XXX Chameleons have SPECIAL too, but I don't see any code for this ... */
 } 
 static void _spell_msg(void);
+static void _possessor(void);
 static void _spell_cast_aux(void)
 {
     if (_current.flags & MSC_SRC_MONSTER)
@@ -2451,6 +2507,7 @@ static void _spell_cast_aux(void)
     case MST_SUMMON:  _summon();  break;
     case MST_TACTIC:  _tactic();  break;
     case MST_WEIRD:   _weird();   break;
+    case MST_POSSESSOR: _possessor(); break;
     }
 }
 
@@ -3685,7 +3742,6 @@ void mon_spells_load(mon_spells_ptr spells, savefile_ptr file)
 {
     byte type = savefile_read_byte(file); /* never read inside an assert()!! */
     s16b effect, lore;
-    mon_spell_ptr spell;
     assert(type == 0xEE);
     for (;;)
     {
@@ -3693,9 +3749,12 @@ void mon_spells_load(mon_spells_ptr spells, savefile_ptr file)
         if (type == 0xFF) break;
         effect = savefile_read_s16b(file);
         lore = savefile_read_s16b(file); /* be sure to read if spell no longer exists */
-        spell = mon_spells_find(spells, _id(type, effect));
-        if (spell)
-            spell->lore = lore;
+        if (spells) /* don't break savefiles on r_info.txt edits */
+        {
+            mon_spell_ptr spell = mon_spells_find(spells, _id(type, effect));
+            if (spell)
+                spell->lore = lore;
+        }
     }
 }
 
@@ -3703,16 +3762,19 @@ void mon_spells_save(mon_spells_ptr spells, savefile_ptr file)
 {
     int i,j;
     savefile_write_byte(file, 0xEE); /* early detection of corrupt savefile, please */
-    for (i = 0; i < MST_COUNT; i++)
+    if (spells) /* don't break savefiles on r_info.txt edits */
     {
-        mon_spell_group_ptr group = spells->groups[i];
-        if (!group) continue;
-        for (j = 0; j < group->count; j++)
+        for (i = 0; i < MST_COUNT; i++)
         {
-            mon_spell_ptr spell = &group->spells[j];
-            savefile_write_byte(file, spell->id.type);
-            savefile_write_s16b(file, spell->id.effect);
-            savefile_write_s16b(file, spell->lore);
+            mon_spell_group_ptr group = spells->groups[i];
+            if (!group) continue;
+            for (j = 0; j < group->count; j++)
+            {
+                mon_spell_ptr spell = &group->spells[j];
+                savefile_write_byte(file, spell->id.type);
+                savefile_write_s16b(file, spell->id.effect);
+                savefile_write_s16b(file, spell->lore);
+            }
         }
     }
     savefile_write_byte(file, 0xFF);
@@ -3853,6 +3915,45 @@ bool mon_race_has_lite_dark_spell(mon_race_ptr race) /* glass castle */
 /*************************************************************************
  * Possessor/Mimic
  ************************************************************************/
+static void _possessor(void)
+{
+    switch (_current.spell->id.effect)
+    {
+    case POS_DETECT_TRAPS:
+        detect_traps(DETECT_RAD_DEFAULT, TRUE);
+        break;
+    case POS_DETECT_EVIL:
+        detect_monsters_evil(DETECT_RAD_DEFAULT);
+        break;
+    case POS_DETECT_MONSTERS:
+        detect_monsters_normal(DETECT_RAD_DEFAULT);
+        break;
+    case POS_DETECT_OBJECTS:
+        detect_objects_normal(DETECT_RAD_DEFAULT);
+        break;
+    case POS_IDENTIFY:
+        ident_spell(NULL);
+        break;
+    case POS_MAPPING:
+        map_area(DETECT_RAD_MAP);
+        break;
+    case POS_CLAIRVOYANCE:
+        wiz_lite(FALSE);
+        break;
+    case POS_MULTIPLY:
+        _summon_r_idx(p_ptr->current_r_idx);
+        break;
+    case POS_BLESS:
+        set_blessed(randint1(12) + 12, FALSE);
+        break;
+    case POS_HEROISM:
+        set_hero(randint1(25) + 25, FALSE);
+        break;
+    case POS_BERSERK:
+        set_shero(10 + randint1(p_ptr->lev), FALSE);
+        break;
+    }
+}
 static void _sync_term(doc_ptr doc)
 {
     rect_t r = ui_map_rect();
@@ -3987,6 +4088,24 @@ static int _weird_cost(mon_spell_ptr spell, mon_race_ptr race)
     }
     return 0;
 }
+static int _possessor_cost(mon_spell_ptr spell, mon_race_ptr race)
+{
+    switch (spell->id.effect)
+    {
+    case POS_DETECT_TRAPS: return 2;
+    case POS_DETECT_EVIL: return 3;
+    case POS_DETECT_MONSTERS: return 3;
+    case POS_DETECT_OBJECTS: return 4;
+    case POS_IDENTIFY: return 5;
+    case POS_MAPPING: return 8;
+    case POS_CLAIRVOYANCE: return 30;
+    case POS_MULTIPLY: return 1 + race->level/2;
+    case POS_BLESS: return 5;
+    case POS_HEROISM: return 8;
+    case POS_BERSERK: return 10;
+    }
+    return 0;
+}
 static int _spell_cost_aux(mon_spell_ptr spell, mon_race_ptr race)
 {
     switch (spell->id.type)
@@ -4010,6 +4129,7 @@ static int _spell_cost_aux(mon_spell_ptr spell, mon_race_ptr race)
     case MST_SUMMON: return _summon_cost(spell);
     case MST_TACTIC: return _tactic_cost(spell);
     case MST_WEIRD: return _weird_cost(spell, race);
+    case MST_POSSESSOR: return _possessor_cost(spell, race);
     }
     return 0;
 }

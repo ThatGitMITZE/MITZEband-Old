@@ -166,8 +166,7 @@ static void rd_lore(savefile_ptr file, int r_idx)
     r_ptr->stolen_ct = savefile_read_byte(file);
     r_ptr->flagsx = savefile_read_u32b(file);
 
-    if (r_ptr->spells)
-        mon_spells_load(r_ptr->spells, file);
+    mon_spells_load(r_ptr->spells, file);
     for (i = 0; i < MAX_MON_BLOWS; i++)
     {
         mon_blow_ptr blow = &r_ptr->blows[i];

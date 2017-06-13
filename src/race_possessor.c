@@ -521,40 +521,12 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
  * XXX Powers
     if (ct < max && (r_ptr->flags1 & RF1_TRUMP))
         _add_power(&spells[ct++], 1, 0, 0, blink_toggle_spell, p_ptr->stat_ind[A_DEX]);
-    if (ct < max && (r_ptr->flags2 & RF2_MULTIPLY))
-        _add_power(&spells[ct++], 1, 5, 40, _multiply_spell, p_ptr->stat_ind[A_CHR]);
-    if (ct < max && r_ptr->d_char == 'V')
-        _add_power(&spells[ct++], 2, 1, 60, vampirism_spell, p_ptr->stat_ind[A_CON]);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_BERSERK))
-        _add_power(&spells[ct++], 13, 9, 50, berserk_spell, p_ptr->stat_ind[A_STR]);
     if (ct < max && (r_ptr->body.class_idx == CLASS_MAGE || r_ptr->body.class_idx == CLASS_HIGH_MAGE || r_ptr->body.class_idx == CLASS_SORCERER))
         _add_power(&spells[ct++], 25, 1, 90, eat_magic_spell, p_ptr->stat_ind[A_INT]);
     if (ct < max && _is_monk())
         _add_power(&spells[ct++], 30, 30, 80, monk_double_attack_spell, p_ptr->stat_ind[A_STR]);
 
    XXX Spells
-    if (ct < max && (r_ptr->flags9 & RF9_POS_BLESSING))
-        _add_spell(&spells[ct++], 1, 1, 30, bless_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_DETECT_TRAPS))
-        _add_spell(&spells[ct++], 3, 2, 30, detect_traps_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_DETECT_EVIL))
-        _add_spell(&spells[ct++], 3, 2, 30, detect_evil_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_DETECT_MONSTERS))
-        _add_spell(&spells[ct++], 7, 3, 40, detect_monsters_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_HEROISM))
-        _add_spell(&spells[ct++], 8, 5, 40, heroism_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_DETECT_OBJECTS))
-        _add_spell(&spells[ct++], 9, 5, 40, detect_objects_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_IDENTIFY))
-        _add_spell(&spells[ct++], 10, 7, 50, identify_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_DETECT_OBJECTS))
-        _add_spell(&spells[ct++], 9, 5, 40, detect_objects_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_IDENTIFY))
-        _add_spell(&spells[ct++], 10, 7, 50, identify_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_MAPPING))
-        _add_spell(&spells[ct++], 15, 10, 50, magic_mapping_spell, stat_idx);
-    if (ct < max && (r_ptr->flags9 & RF9_POS_CLAIRVOYANCE))
-        _add_spell(&spells[ct++], 15, 20, 50, clairvoyance_spell, stat_idx);
     if (ct < max && (r_ptr->flags6 & RF6_SPECIAL) && r_ptr->d_char == 'B')
         _add_spell(&spells[ct++], 15, 8, 40, teleport_spell, stat_idx);
     if (ct < max && (r_ptr->flags2 & RF2_THIEF))
