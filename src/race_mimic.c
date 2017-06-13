@@ -874,7 +874,7 @@ static int _get_powers(spell_info* spells, int max)
     if (ct < max)
         _add_power(&spells[ct++], 1, 0, 0, _mimic_spell, p_ptr->stat_ind[A_DEX]);
 
-    /*ct += possessor_get_powers(spells + ct, max - ct);*/
+    ct += possessor_get_powers(spells + ct, max - ct);
     return ct;
 }
 

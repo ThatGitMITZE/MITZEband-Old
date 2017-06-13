@@ -2232,6 +2232,7 @@ extern void    hound_leap_spell(int cmd, variant *res);
 extern int     vortex_get_effect(void);
 
 extern bool    possessor_can_gain_exp(void);
+extern int     possessor_get_powers(spell_info* spells, int max);
 extern int     possessor_get_toggle(void);
 extern s32b    possessor_max_exp(void);
 extern void    possessor_on_take_hit(void);

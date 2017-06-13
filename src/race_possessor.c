@@ -517,21 +517,6 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 
 /**********************************************************************
  * Spells
- *
- * XXX Powers
-    if (ct < max && (r_ptr->flags1 & RF1_TRUMP))
-        _add_power(&spells[ct++], 1, 0, 0, blink_toggle_spell, p_ptr->stat_ind[A_DEX]);
-    if (ct < max && (r_ptr->body.class_idx == CLASS_MAGE || r_ptr->body.class_idx == CLASS_HIGH_MAGE || r_ptr->body.class_idx == CLASS_SORCERER))
-        _add_power(&spells[ct++], 25, 1, 90, eat_magic_spell, p_ptr->stat_ind[A_INT]);
-    if (ct < max && _is_monk())
-        _add_power(&spells[ct++], 30, 30, 80, monk_double_attack_spell, p_ptr->stat_ind[A_STR]);
-
-   XXX Spells
-    if (ct < max && (r_ptr->flags6 & RF6_SPECIAL) && r_ptr->d_char == 'B')
-        _add_spell(&spells[ct++], 15, 8, 40, teleport_spell, stat_idx);
-    if (ct < max && (r_ptr->flags2 & RF2_THIEF))
-        _add_spell(&spells[ct++], 30, 20, 60, panic_hit_spell, stat_idx);
-
  **********************************************************************/
 void possessor_cast(void)
 {
@@ -682,6 +667,17 @@ static void _add_power(spell_info* spell, int lvl, int cost, int fail, ang_spell
     spell->fn = fn;
 }
 
+int possessor_get_powers(spell_info* spells, int max)
+{
+    mon_race_ptr race = &r_info[p_ptr->current_r_idx];
+    int          ct = 0;
+    if (ct < max && (race->flags1 & RF1_TRUMP))
+        _add_power(&spells[ct++], 1, 0, 0, blink_toggle_spell, p_ptr->stat_ind[A_DEX]);
+    if (ct < max && (race->body.class_idx == CLASS_MAGE || race->body.class_idx == CLASS_HIGH_MAGE || race->body.class_idx == CLASS_SORCERER))
+        _add_power(&spells[ct++], 25, 1, 90, eat_magic_spell, p_ptr->stat_ind[A_INT]);
+    return ct;
+}
+
 static int _get_powers(spell_info* spells, int max)
 {
     int ct = 0;
@@ -691,6 +687,7 @@ static int _get_powers(spell_info* spells, int max)
     if (ct < max && p_ptr->current_r_idx != MON_POSSESSOR_SOUL)
         _add_power(&spells[ct++], 1, 0, 0, _unpossess_spell, p_ptr->stat_ind[A_DEX]);
 
+    ct += possessor_get_powers(spells + ct, max - ct);
     return ct;
 }
 
