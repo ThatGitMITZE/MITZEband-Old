@@ -1029,7 +1029,7 @@ bool make_attack_normal(int m_idx)
                             break;
                         }
                         project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_TIME, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID);
-                        if (m_ptr->paralyzed)
+                        if (MON_PARALYZED(m_ptr))
                             break;
                     }
                     else

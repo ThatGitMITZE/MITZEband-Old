@@ -947,12 +947,6 @@ static errr init_other(void)
 
     C_MAKE(pack_info_list, max_pack_info_idx, pack_info_t);
 
-    /* Allocate and Wipe the monster process list */
-    for (i = 0; i < MAX_MTIMED; i++)
-    {
-        C_MAKE(mproc_list[i], max_m_idx, s16b);
-    }
-
     /* Allocate and Wipe the max dungeon level */
     C_MAKE(max_dlv, max_d_idx, s16b);
     C_MAKE(dungeon_flags, max_d_idx, u32b);

@@ -2828,9 +2828,6 @@ void do_cmd_save_game(int is_autosave)
     /* Update stuff */
     update_stuff();
 
-    /* Initialize monster process */
-    mproc_init();
-
     /* HACK -- reset the hackish flag */
     hack_mind = TRUE;
 }

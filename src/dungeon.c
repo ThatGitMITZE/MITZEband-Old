@@ -2740,18 +2740,6 @@ static void process_world(void)
     if (!(game_turn % (TURNS_PER_TICK*10)) && !p_ptr->inside_battle) regen_monsters();
     if (!(game_turn % (TURNS_PER_TICK*3))) regen_captured_monsters();
 
-    if (!p_ptr->leaving)
-    {
-        int i;
-
-        /* Hack -- Process the counters of monsters if needed */
-        for (i = 0; i < MAX_MTIMED; i++)
-        {
-            if (mproc_max[i] > 0) process_monsters_mtimed(i);
-        }
-    }
-
-
     /* Date changes */
     if (!hour && !min)
     {
@@ -4725,9 +4713,6 @@ static void dungeon(bool load_game)
 
     /* Not leaving dungeon */
     p_ptr->leaving_dungeon = 0;
-
-    /* Initialize monster process */
-    mproc_init();
 
     /* Main loop */
     while (TRUE)

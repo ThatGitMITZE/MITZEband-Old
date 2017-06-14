@@ -2106,7 +2106,7 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
                 Term_queue_char(col++, row, TERM_L_BLUE, '@', 0, 0);
             if (MON_INVULNER(m_ptr))
                 Term_queue_char(col++, row, TERM_WHITE, 'I', 0, 0);
-            if (m_ptr->paralyzed)
+            if (MON_PARALYZED(m_ptr))
                 Term_queue_char(col++, row, TERM_BLUE, 'P', 0, 0);
             if (MON_CSLEEP(m_ptr))
                 Term_queue_char(col++, row, TERM_BLUE, 'Z', 0, 0); /* ZZZ */
@@ -2118,7 +2118,7 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
         else
         {
             if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
-            else if (m_ptr->paralyzed) attr = TERM_BLUE;
+            else if (MON_PARALYZED(m_ptr)) attr = TERM_BLUE;
             else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
             else if (MON_STUNNED(m_ptr)) attr = TERM_L_BLUE;
             else if (MON_CONFUSED(m_ptr)) attr = TERM_UMBER;

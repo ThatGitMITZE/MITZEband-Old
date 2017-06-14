@@ -670,8 +670,7 @@ struct monster_type
     s16b mpower;    /* Monster power scales various things like melee skill, damage, AC, etc.
                        This field is a per mill value, just like p_ptr->clp */
 
-    s16b mtimed[MAX_MTIMED];    /* Timed status counter */
-    s16b paralyzed;
+    s16b mtimed[MTIMED_COUNT];    /* Timed status counter */
 
     byte mspeed;            /* Monster "speed" */
     s16b energy_need;    /* Monster "energy" */

@@ -4864,7 +4864,6 @@ enum mon_save_fields_e {
     SAVE_MON_DROP_CT,
     SAVE_MON_STOLEN_CT,
     SAVE_MON_PEXP,
-    SAVE_MON_PARALYZED,
     SAVE_MON_ANGER,
 };
 
@@ -4947,16 +4946,17 @@ enum mon_save_fields_e {
 #define MPE_DONT_SWAP_MON 0x00000080
 
 
-#define MTIMED_CSLEEP   0 /* Monster is sleeping */
-#define MTIMED_FAST     1 /* Monster is temporarily fast */
-#define MTIMED_SLOW     2 /* Monster is temporarily slow */
-#define MTIMED_STUNNED  3 /* Monster is stunned */
-#define MTIMED_CONFUSED 4 /* Monster is confused */
-#define MTIMED_MONFEAR  5 /* Monster is afraid */
-#define MTIMED_INVULNER 6 /* Monster is temporarily invulnerable */
-
-#define MTIMED_MAX      7
-#define MAX_MTIMED      7
+enum {
+    MTIMED_CSLEEP,
+    MTIMED_FAST,
+    MTIMED_SLOW,
+    MTIMED_STUNNED,
+    MTIMED_CONFUSED,
+    MTIMED_MONFEAR,
+    MTIMED_INVULNER,
+    MTIMED_PARALYZED,
+    MTIMED_COUNT
+};
 
 #define MON_CSLEEP(M_PTR)   ((M_PTR)->mtimed[MTIMED_CSLEEP])
 #define MON_FAST(M_PTR)     ((M_PTR)->mtimed[MTIMED_FAST])
@@ -4965,6 +4965,7 @@ enum mon_save_fields_e {
 #define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
 #define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
 #define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
+#define MON_PARALYZED(M_PTR) ((M_PTR)->mtimed[MTIMED_PARALYZED])
 
 /*
  * Bit flags for screen_object()

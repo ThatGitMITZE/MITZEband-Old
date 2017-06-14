@@ -4167,7 +4167,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
 
             /* Hack -- handle sleep */
             if (do_sleep) (void)set_monster_csleep(c_ptr->m_idx, do_sleep);
-            if (do_paralyzed && !m_ptr->paralyzed)
+            if (do_paralyzed && !MON_PARALYZED(m_ptr))
                 set_monster_paralyzed(c_ptr->m_idx, do_paralyzed);
         }
     }
@@ -4293,7 +4293,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
 
             /* Hack -- handle sleep */
             if (do_sleep) (void)set_monster_csleep(c_ptr->m_idx, do_sleep);
-            if (do_paralyzed && !m_ptr->paralyzed)
+            if (do_paralyzed && !MON_PARALYZED(m_ptr))
                 set_monster_paralyzed(c_ptr->m_idx, do_paralyzed);
         }
     }

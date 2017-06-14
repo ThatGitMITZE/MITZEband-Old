@@ -415,8 +415,6 @@ extern s16b pack_info_free_list;
 extern s16b pack_info_count;
 
 
-extern s16b *mproc_list[MAX_MTIMED];
-extern s16b mproc_max[MAX_MTIMED];
 extern s16b alloc_kind_size;
 extern alloc_entry *alloc_kind_table;
 extern s16b alloc_race_size;
@@ -1021,8 +1019,6 @@ extern bool retaliation_hack;
 extern int retaliation_count;
 extern bool make_attack_normal(int m_idx);
 extern void process_monsters(void);
-extern int get_mproc_idx(int m_idx, int mproc_type);
-extern void mproc_init(void);
 extern bool set_monster_csleep(int m_idx, int v);
 extern bool set_monster_fast(int m_idx, int v);
 extern bool set_monster_slow(int m_idx, int v);
@@ -1031,7 +1027,6 @@ extern bool set_monster_confused(int m_idx, int v);
 extern bool set_monster_monfear(int m_idx, int v);
 extern bool set_monster_invulner(int m_idx, int v, bool energy_need);
 extern bool set_monster_paralyzed(int m_idx, int v);
-extern void process_monsters_mtimed(int mtimed_idx);
 extern void dispel_monster_status(int m_idx);
 extern u32b get_curse(int power, object_type *o_ptr);
 extern void curse_equipment(int chance, int heavy_chance);

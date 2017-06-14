@@ -5467,7 +5467,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
             oktomove = FALSE;
             disturb(0,0);
         }
-        else if (riding_m_ptr->paralyzed)
+        else if (MON_PARALYZED(riding_m_ptr))
         {
             char m_name[80];
             monster_desc(m_name, riding_m_ptr, 0);

@@ -40,7 +40,7 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
         savefile_write_byte(file, SAVE_MON_SUB_ALIGN);
         savefile_write_byte(file, m_ptr->sub_align);
     }
-    for (i = 0; i < MTIMED_MAX; i++)
+    for (i = 0; i < MTIMED_COUNT; i++)
     {
         if (m_ptr->mtimed[i])
         {
@@ -129,11 +129,6 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
     {
         savefile_write_byte(file, SAVE_MON_PEXP);
         savefile_write_s32b(file, m_ptr->pexp);
-    }
-    if (m_ptr->paralyzed)
-    {
-        savefile_write_byte(file, SAVE_MON_PARALYZED);
-        savefile_write_s16b(file, m_ptr->paralyzed);
     }
     if (m_ptr->anger)
     {

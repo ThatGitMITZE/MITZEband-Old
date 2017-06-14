@@ -3497,6 +3497,9 @@ static void process_monster(int m_idx)
     }
 }
 
+static u32b csleep_noise;
+static void process_mon_mtimed(mon_ptr mon);
+
 /*
  * Process all the "live" monsters, once per game turn.
  *
@@ -3544,6 +3547,9 @@ void process_monsters(void)
     /* Clear monster fighting indicator */
     mon_fight = FALSE;
 
+    if (game_turn%TURNS_PER_TICK == 0)
+        csleep_noise = (1L << (30 - p_ptr->skills.stl));
+
     /* Process the monsters (backwards) */
     for (i = m_max - 1; i >= 1; i--)
     {
@@ -3570,6 +3576,9 @@ void process_monsters(void)
             /* Skip */
             continue;
         }
+
+        if (game_turn%TURNS_PER_TICK == 0)
+            process_mon_mtimed(m_ptr);
 
         /* Hack -- Require proximity */
         if (p_ptr->action == ACTION_GLITTER)
@@ -3685,9 +3694,9 @@ void process_monsters(void)
         if (!fear_process_m(i))
             continue;
 
-        if (m_ptr->paralyzed)
+        if (m_ptr->mtimed[MTIMED_PARALYZED])
         {
-            set_monster_paralyzed(i, m_ptr->paralyzed - 1);
+            set_monster_paralyzed(i, m_ptr->mtimed[MTIMED_PARALYZED] - 1);
             continue;
         }
 
@@ -3715,429 +3724,260 @@ void process_monsters(void)
     hack_m_idx = 0;
 }
 
-
-int get_mproc_idx(int m_idx, int mproc_type)
+/* Bound a number to a valid range. This could be a public utility.
+ * Note: bound(int, int, int) is ambiguous in argument order while
+ *       bound(int, range_t) leaves no doubt. */
+typedef struct { int min; int max; } _range_t;
+static _range_t _range(int min, int max)
 {
-    s16b *cur_mproc_list = mproc_list[mproc_type];
-    int i;
-
-    for (i = mproc_max[mproc_type] - 1; i >= 0; i--)
-    {
-        if (cur_mproc_list[i] == m_idx) return i;
-    }
-
-    return -1;
+    _range_t r;
+    r.min = min;
+    r.max = max;
+    return r;
 }
-
-
-static void mproc_add(int m_idx, int mproc_type)
+static int _bound(int n, _range_t r)
 {
-    if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = m_idx;
+    if (n < r.min) return r.min;
+    if (n > r.max) return r.max;
+    return n;
 }
-
-
-static void mproc_remove(int m_idx, int mproc_type)
-{
-    int mproc_idx = get_mproc_idx(m_idx, mproc_type);
-    if (mproc_idx >= 0) mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
-}
-
-
-/*
- * Initialize monster process
- */
-void mproc_init(void)
-{
-    monster_type *m_ptr;
-    int          i, cmi;
-
-    /* Reset "mproc_max[]" */
-    for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 0;
-
-    /* Process the monsters (backwards) */
-    for (i = m_max - 1; i >= 1; i--)
-    {
-        /* Access the monster */
-        m_ptr = &m_list[i];
-
-        /* Ignore "dead" monsters */
-        if (!m_ptr->r_idx) continue;
-
-        for (cmi = 0; cmi < MAX_MTIMED; cmi++)
-        {
-            if (m_ptr->mtimed[cmi]) mproc_add(i, cmi);
-        }
-    }
-}
-
+/* All mtimed set functions return whether or not the
+ * change could be observed by the player */
 bool set_monster_paralyzed(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
+    v = _bound(v, _range(0, 100));
     if (v)
     {
-        if (!m_ptr->paralyzed)
+        if (!MON_PARALYZED(m_ptr))
             notice = TRUE;
     }
     else
     {
-        if (m_ptr->paralyzed)
+        if (MON_PARALYZED(m_ptr))
             notice = TRUE;
     }
-    m_ptr->paralyzed = v;
+    m_ptr->mtimed[MTIMED_PARALYZED] = v;
     if (notice)
     {
         if (m_ptr->ml)
-        {
             check_mon_health_redraw(m_idx);
-        }
-
-        if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= PU_MON_LITE;
+        if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK)
+            p_ptr->update |= PU_MON_LITE;
     }
     return notice;
 }
 
-/*
- * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
- */
 bool set_monster_csleep(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 10000));
     if (v)
     {
         if (!MON_CSLEEP(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_CSLEEP);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_CSLEEP(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_CSLEEP);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_CSLEEP] = v;
 
     if (!notice) return FALSE;
 
     if (m_ptr->ml)
-    {
-        /* Update health bar as needed */
         check_mon_health_redraw(m_idx);
-    }
 
-    if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK) p_ptr->update |= (PU_MON_LITE);
+    if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK)
+        p_ptr->update |= (PU_MON_LITE);
 
     p_ptr->window |= PW_MONSTER_LIST;
 
     return TRUE;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
- */
 bool set_monster_fast(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_FAST(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_FAST);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_FAST(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_FAST);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_FAST] = v;
 
     if (!notice) return FALSE;
 
-    if ((p_ptr->riding == m_idx) && !p_ptr->leaving) p_ptr->update |= (PU_BONUS);
+    if ((p_ptr->riding == m_idx) && !p_ptr->leaving)
+        p_ptr->update |= PU_BONUS;
 
     return TRUE;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_SLOW]", notice observable changes
- */
 bool set_monster_slow(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_SLOW(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_SLOW);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_SLOW(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_SLOW);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_SLOW] = v;
 
     if (!notice) return FALSE;
 
-    if ((p_ptr->riding == m_idx) && !p_ptr->leaving) p_ptr->update |= (PU_BONUS);
+    if ((p_ptr->riding == m_idx) && !p_ptr->leaving)
+        p_ptr->update |= PU_BONUS;
 
     return TRUE;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
- */
 bool set_monster_stunned(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_STUNNED(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_STUNNED);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_STUNNED(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_STUNNED);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_STUNNED] = v;
 
     if (m_ptr->ml)
-    {
         check_mon_health_redraw(m_idx);
-    }
 
     return notice;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
- */
 bool set_monster_confused(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_CONFUSED(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_CONFUSED);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_CONFUSED(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_CONFUSED);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_CONFUSED] = v;
 
     if (m_ptr->ml)
-    {
         check_mon_health_redraw(m_idx);
-    }
 
     return notice;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
- */
 bool set_monster_monfear(int m_idx, int v)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_MONFEAR(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_MONFEAR);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_MONFEAR(m_ptr))
-        {
-            mproc_remove(m_idx, MTIMED_MONFEAR);
             notice = TRUE;
-        }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_MONFEAR] = v;
 
     if (!notice) return FALSE;
 
     if (m_ptr->ml)
-    {
         check_mon_health_redraw(m_idx);
-    }
 
     return TRUE;
 }
 
-
-/*
- * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
- */
 bool set_monster_invulner(int m_idx, int v, bool energy_need)
 {
     monster_type *m_ptr = &m_list[m_idx];
     bool notice = FALSE;
 
-    /* Hack -- Force good values */
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    /* Open */
+    v = _bound(v, _range(0, 200));
     if (v)
     {
         if (!MON_INVULNER(m_ptr))
-        {
-            mproc_add(m_idx, MTIMED_INVULNER);
             notice = TRUE;
-        }
     }
-
-    /* Shut */
     else
     {
         if (MON_INVULNER(m_ptr))
         {
-            mproc_remove(m_idx, MTIMED_INVULNER);
             if (energy_need && !p_ptr->wild_mode) m_ptr->energy_need += ENERGY_NEED();
             notice = TRUE;
         }
     }
 
-    /* Use the value */
     m_ptr->mtimed[MTIMED_INVULNER] = v;
 
     if (!notice) return FALSE;
 
     if (m_ptr->ml)
-    {
         check_mon_health_redraw(m_idx);
-    }
 
     return TRUE;
 }
 
-
-static u32b csleep_noise;
-
-static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
+static void process_mon_mtimed(mon_ptr mon)
 {
-    monster_type *m_ptr = &m_list[m_idx];
-
-    switch (mtimed_idx)
+    mon_race_ptr race = &r_info[mon->r_idx];
+    if (mon->mtimed[MTIMED_CSLEEP])
     {
-    case MTIMED_CSLEEP:
-    {
-        monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-        /* Assume does not wake up */
         bool test = FALSE;
 
-        /* Hack -- Require proximity */
-        if (m_ptr->cdis < AAF_LIMIT)
+        if (mon->cdis < AAF_LIMIT)
         {
-            /* Handle "sensing radius" */
-            if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
+            int aaf = race->aaf;
+            if (is_pet(mon)) aaf = MIN(MAX_SIGHT, aaf);
+            if (mon->cdis <= aaf) test = TRUE;
+            else if (mon->cdis <= MAX_SIGHT
+                && (player_has_los_bold(mon->fy, mon->fx)))
             {
-                /* We may wake up */
-                test = TRUE;
-            }
-
-            /* Handle "sight" and "aggravation" */
-            else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(m_ptr->fy, m_ptr->fx)))
-            {
-                /* We may wake up */
                 test = TRUE;
             }
         }
@@ -4147,174 +3987,110 @@ static void process_monsters_mtimed_aux(int m_idx, int mtimed_idx)
             u32b notice = randint0(1024);
             u32b noise = csleep_noise;
 
-            /* Nightmare monsters are more alert */
             if (ironman_nightmare) notice /= 2;
 
-            /* Hack -- See if monster "notices" player */
-            if ((notice * notice * notice) <= noise)
+            if (notice * notice * notice <= noise)
             {
-                /* Hack -- amount of "waking" */
                 /* Wake up faster near the player */
-                int d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
+                int d = (mon->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / mon->cdis) : 1;
 
                 /* Hack -- amount of "waking" is affected by speed of player */
                 d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
                 if (d < 0) d = 1;
 
-                /* Monster wakes up "a little bit" */
 
                 /* Still asleep */
-                if (!set_monster_csleep(m_idx, MON_CSLEEP(m_ptr) - d))
+                if (!set_monster_csleep(mon->id, MON_CSLEEP(mon) - d))
                 {
-                    /* Notice the "not waking up" */
-                    if (is_original_ap_and_seen(m_ptr))
+                    if (is_original_ap_and_seen(mon))
                     {
-                        /* Hack -- Count the ignores */
-                        if (r_ptr->r_ignore < MAX_UCHAR) r_ptr->r_ignore++;
+                        if (race->r_ignore < MAX_UCHAR) race->r_ignore++;
                     }
                 }
-
                 /* Just woke up */
                 else
                 {
-                    /* Notice the "waking up" */
-                    if (m_ptr->ml && disturb_minor)
+                    if (mon->ml && disturb_minor)
                     {
                         char m_name[80];
-
-                        /* Acquire the monster name */
-                        monster_desc(m_name, m_ptr, 0);
-
-                        /* Dump a message */
+                        monster_desc(m_name, mon, 0);
                         msg_format("%^s wakes up.", m_name);
                     }
-
-                    if (is_original_ap_and_seen(m_ptr))
+                    if (is_original_ap_and_seen(mon))
                     {
-                        /* Hack -- Count the wakings */
-                        if (r_ptr->r_wake < MAX_UCHAR) r_ptr->r_wake++;
+                        if (race->r_wake < MAX_UCHAR) race->r_wake++;
                     }
                 }
             }
         }
-        break;
     }
-
-    case MTIMED_FAST:
-        /* Reduce by one, note if expires */
-        if (set_monster_fast(m_idx, MON_FAST(m_ptr) - 1))
+    if (mon->mtimed[MTIMED_FAST])
+    {
+        if (set_monster_fast(mon->id, mon->mtimed[MTIMED_FAST] - 1))
         {
-            if (is_seen(m_ptr))
+            if (is_seen(mon))
             {
                 char m_name[80];
-
-                /* Acquire the monster name */
-                monster_desc(m_name, m_ptr, 0);
-
-                /* Dump a message */
+                monster_desc(m_name, mon, 0);
                 msg_format("%^s is no longer fast.", m_name);
             }
         }
-        break;
-
-    case MTIMED_SLOW:
-        /* Reduce by one, note if expires */
-        if (set_monster_slow(m_idx, MON_SLOW(m_ptr) - 1))
+    }
+    if (mon->mtimed[MTIMED_SLOW])
+    {
+        if (set_monster_slow(mon->id, mon->mtimed[MTIMED_SLOW] - 1))
         {
-            if (is_seen(m_ptr))
+            if (is_seen(mon))
             {
                 char m_name[80];
-
-                /* Acquire the monster name */
-                monster_desc(m_name, m_ptr, 0);
-
-                /* Dump a message */
+                monster_desc(m_name, mon, 0);
                 msg_format("%^s is no longer slow.", m_name);
             }
         }
-        break;
-
-    case MTIMED_STUNNED:
+    }
+    if (mon->mtimed[MTIMED_STUNNED])
     {
-        int stun = MON_STUNNED(m_ptr);
-        int rlev = r_info[m_ptr->r_idx].level;
+        int stun = mon->mtimed[MTIMED_STUNNED];
+        int rlev = race->level;
         int dec = 1 + rlev/10;
         if (randint0(10000) < rlev * rlev) /* shake it off ... */
             dec = MAX(dec, stun/2);
-        if (set_monster_stunned(m_idx, MON_STUNNED(m_ptr) - dec))
+        if (set_monster_stunned(mon->id, MON_STUNNED(mon) - dec))
         {
-            if (is_seen(m_ptr))
+            if (is_seen(mon))
             {
                 char m_name[80];
-                monster_desc(m_name, m_ptr, 0);
+                monster_desc(m_name, mon, 0);
                 msg_format("%^s is no longer stunned.", m_name);
             }
         }
-        break;
     }
-
-    case MTIMED_CONFUSED:
-        /* Reduce the confusion */
-        if (set_monster_confused(m_idx, MON_CONFUSED(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
+    if (mon->mtimed[MTIMED_CONFUSED])
+    {
+        int dec = randint1(race->level/20 + 1);
+        if (set_monster_confused(mon->id, MON_CONFUSED(mon) - dec)) 
         {
-            /* Message if visible */
-            if (is_seen(m_ptr))
+            if (is_seen(mon))
             {
                 char m_name[80];
-
-                /* Acquire the monster name */
-                monster_desc(m_name, m_ptr, 0);
-
-                /* Dump a message */
+                monster_desc(m_name, mon, 0);
                 msg_format("%^s is no longer confused.", m_name);
             }
         }
-        break;
-
-    case MTIMED_MONFEAR:
-        break;
-
-    case MTIMED_INVULNER:
-        /* Reduce by one, note if expires */
-        if (set_monster_invulner(m_idx, MON_INVULNER(m_ptr) - 1, TRUE))
+    }
+    if (mon->mtimed[MTIMED_INVULNER])
+    {
+        if (set_monster_invulner(mon->id, mon->mtimed[MTIMED_INVULNER] - 1, TRUE))
         {
-            if (is_seen(m_ptr))
+            if (is_seen(mon))
             {
                 char m_name[80];
-
-                /* Acquire the monster name */
-                monster_desc(m_name, m_ptr, 0);
-
-                /* Dump a message */
+                monster_desc(m_name, mon, 0);
                 msg_format("%^s is no longer invulnerable.", m_name);
             }
         }
-        break;
     }
 }
-
-
-/*
- * Process the counters of monsters (once per 10 game turns)
- *
- * These functions are to process monsters' counters same as player's.
- */
-void process_monsters_mtimed(int mtimed_idx)
-{
-    int  i;
-    s16b *cur_mproc_list = mproc_list[mtimed_idx];
-
-    /* Hack -- calculate the "player noise" */
-    if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - p_ptr->skills.stl));
-
-    /* Process the monsters (backwards) */
-    for (i = mproc_max[mtimed_idx] - 1; i >= 0; i--)
-    {
-        /* Access the monster */
-        process_monsters_mtimed_aux(cur_mproc_list[i], mtimed_idx);
-    }
-}
-
 
 void dispel_monster_status(int m_idx)
 {

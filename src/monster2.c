@@ -385,12 +385,6 @@ static void compact_monsters_aux(int i1, int i2)
 
     /* Wipe the hole */
     (void)WIPE(&m_list[i1], monster_type);
-
-    for (i = 0; i < MAX_MTIMED; i++)
-    {
-        int mproc_idx = get_mproc_idx(i1, i);
-        if (mproc_idx >= 0) mproc_list[i][mproc_idx] = i2;
-    }
 }
 
 
@@ -551,9 +545,6 @@ void wipe_m_list(void)
 
     /* Reset "m_cnt" */
     m_cnt = 0;
-
-    /* Reset "mproc_max[]" */
-    for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
 
     /* Hack -- reset "reproducer" count */
     num_repro = 0;
@@ -3303,7 +3294,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
 
 
     /* No "timed status" yet */
-    for (cmi = 0; cmi < MAX_MTIMED; cmi++) m_ptr->mtimed[cmi] = 0;
+    for (cmi = 0; cmi < MTIMED_COUNT; cmi++) m_ptr->mtimed[cmi] = 0;
 
     /* Unknown distance */
     m_ptr->cdis = 0;

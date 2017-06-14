@@ -653,13 +653,6 @@ s16b pack_info_count;
 
 
 /*
- * The array to process dungeon monsters [max_m_idx]
- */
-s16b *mproc_list[MAX_MTIMED];
-s16b mproc_max[MAX_MTIMED]; /* Number of monsters to be processed */
-
-
-/*
  * The size of "alloc_kind_table" (at most max_k_idx * 4)
  */
 s16b alloc_kind_size;

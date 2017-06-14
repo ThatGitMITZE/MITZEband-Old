@@ -70,10 +70,13 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
         case SAVE_MON_SUB_ALIGN:
             m_ptr->sub_align = savefile_read_byte(file);
             break;
-        case SAVE_MON_TIMER:
+        case SAVE_MON_TIMER: {
+            int n;
             which = savefile_read_byte(file);
-            m_ptr->mtimed[which] = savefile_read_s16b(file);
-            break;
+            n = savefile_read_s16b(file);
+            if (0 <= which && which < MTIMED_COUNT)
+                m_ptr->mtimed[which] = n;
+            break; }
         case SAVE_MON_TARGET_Y:
             m_ptr->target_y = savefile_read_s16b(file);
             break;
@@ -123,9 +126,6 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
             break;
         case SAVE_MON_PEXP:
             m_ptr->pexp = savefile_read_s32b(file);
-            break;
-        case SAVE_MON_PARALYZED:
-            m_ptr->paralyzed = savefile_read_s16b(file);
             break;
         case SAVE_MON_ANGER:
             m_ptr->anger = savefile_read_byte(file);
