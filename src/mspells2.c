@@ -189,13 +189,3 @@ void get_project_point(int sy, int sx, int *ty, int *tx, int flg)
 }
 
 
-/*
- * Monster tries to 'cast a spell' (or breath, etc)
- * at another monster.
- *
- * The player is only disturbed if able to be affected by the spell.
- */
-bool mon_spell_mon(int m_idx, int options)
-{
-    return FALSE;
-}

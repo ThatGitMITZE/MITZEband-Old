@@ -567,6 +567,7 @@ static void place_pet(void)
             *m_ptr = party_mon[i];
             r_ptr = real_r_ptr(m_ptr);
 
+            m_ptr->id = m_idx;
             m_ptr->fy = cy;
             m_ptr->fx = cx;
             m_ptr->ml = TRUE;

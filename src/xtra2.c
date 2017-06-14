@@ -4557,6 +4557,7 @@ bool get_fire_dir_aux(int *dp, int target_mode)
             monster_type *m_ptr = &m_list[i];
             if (!m_ptr->r_idx) continue;
             if (!m_ptr->ml) continue;
+            if (!target_pet && is_pet(m_ptr)) continue;
             if (target_mode != TARGET_DISI && !projectable(py, px, m_ptr->fy, m_ptr->fx)) continue;
             if (m_ptr->cdis < best_dis)
             {

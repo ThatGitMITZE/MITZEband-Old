@@ -1874,8 +1874,6 @@ extern int  anti_magic_check(void);
 extern bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr);
 extern bool breath_direct(int y1, int x1, int y2, int x2, int rad, int typ, bool friend);
 extern void get_project_point(int sy, int sx, int *ty, int *tx, int flg);
-#define DRAGONRIDER_HACK 0x01 /* sorry about this one, but damn, mon_spell_mon needs refactoring! I don't have the patience right now ... */
-extern bool mon_spell_mon(int m_idx, int options);
 
 /* artifact.c */
 extern int original_score;
