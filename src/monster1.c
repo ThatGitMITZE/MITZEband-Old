@@ -43,7 +43,7 @@ while end game uniques keep their nearly 60% fail (Serpent goes from
 power 100 to 127 with this change so his save goes from 60% to 65%).
 */
 
-static int _r_level(int r_idx)
+int mon_save_r_level(int r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     int           ml = r_ptr->level;
@@ -59,12 +59,14 @@ static int _r_level(int r_idx)
 
 bool mon_save_aux(int r_idx, int power)
 {
-    int  ml = _r_level(r_idx);
+    int  ml = mon_save_r_level(r_idx);
     bool result = FALSE;
 
     if (power < 1)
         power = 1;
 
+    /*if (p_ptr->wizard)
+        msg_format("mon_save_aux: 1d%d <= 1d%d", power, ml);*/
     if (randint1(power) <= randint1(ml))
         result = TRUE;
 
@@ -79,6 +81,11 @@ bool mon_save_p(int r_idx, int stat)
         pl += adj_stat_save[p_ptr->stat_ind[stat]];
 
     return mon_save_aux(r_idx, pl);
+}
+
+bool mon_save_m(int r_idx, int src_r_idx)
+{
+    return mon_save_aux(r_idx, mon_save_r_level(src_r_idx));
 }
 
 void mon_lore_1(monster_type *m_ptr, u32b mask)

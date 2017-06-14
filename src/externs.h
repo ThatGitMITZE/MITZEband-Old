@@ -1012,7 +1012,6 @@ extern void wr_item(savefile_ptr file, object_type *o_ptr); /* save.c */
 /* melee1.c */
 extern int ac_melee_pct_aux(int ac, int max_reduce, int max_ac);
 extern int ac_melee_pct(int ac);
-extern int mon_ac(mon_ptr mon);
 
 /* melee2.c */
 extern bool retaliation_hack;
@@ -1037,7 +1036,9 @@ extern void mon_gain_exp(mon_ptr mon, int amt);
 
 /* monster1.c */
 extern bool mon_save_p(int r_idx, int stat);
+extern bool mon_save_m(int r_idx, int src_r_idx);
 extern bool mon_save_aux(int r_idx, int power);
+extern int  mon_save_r_level(int r_idx);
 extern void roff_top(int r_idx);
 extern bool mon_hook_dungeon(int r_idx);
 

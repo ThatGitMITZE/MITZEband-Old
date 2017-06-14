@@ -12,17 +12,6 @@
 
 #include "angband.h"
 
-int mon_ac(mon_ptr mon)
-{
-    mon_race_ptr race = &r_info[mon->r_idx];
-    int          ac = race->ac;
-
-    ac += mon->ac_adj;
-    ac = ac * mon->mpower / 1000;
-    if (ac < 0) ac = 0;
-    return ac;
-}
-
 /*
  * Determine if a monster attack against the player succeeds.
  * Always miss 5% of the time, Always hit 5% of the time.

@@ -3428,11 +3428,32 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else msg_format("%^s is unaffected.", m_name);
         dam = 0;
         break;
-    case GF_ANTIMAGIC:
+    case GF_ANTIMAGIC: { /* Formerly restricted to rage-mage. But now, mon vs mon */
+        bool save = FALSE;/* and the possessor can use the ANTIMAGIC monster spell */
         if (seen) obvious = TRUE;
-        _BABBLE_HACK()
-        if ( mon_save_p(m_ptr->r_idx, A_STR)
-          && (!p_ptr->shero || mon_save_p(m_ptr->r_idx, A_STR)) )
+        _BABBLE_HACK()            /*v---Possessor uses monster level (dam) for the save */
+        if (who == GF_WHO_PLAYER && !mon_spell_current())
+        {
+            int stat = A_CHR;
+            int rolls = 1, made = 0;
+            int i;
+            if (p_ptr->pclass == CLASS_RAGE_MAGE)
+            {
+                stat = A_STR;
+                if (p_ptr->shero) rolls++;
+            }
+            for (i = 0; i < rolls; i++)
+            {
+                if (mon_save_p(m_ptr->r_idx, stat))
+                    made++;
+            }
+            save = (made == rolls);
+        }
+        else
+        {
+            save = mon_save_aux(m_ptr->r_idx, dam);
+        }
+        if (save)
         {
             msg_format("%^s resists!", m_name);
             dam = 0;
@@ -3442,14 +3463,12 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else
         {
             int dur = 2 + randint1(2);
-            /* XXX Better odds of success is probably enough.
-             * if (p_ptr->shero) dur *= 2; */
             m_ptr->anti_magic_ct = dur;
             msg_format("%^s can no longer cast spells!", m_name);
             dam = 0;
             return TRUE;
         }
-        break;
+        break; }
     case GF_PSI_EGO_WHIP:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()

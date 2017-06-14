@@ -1309,15 +1309,10 @@ static void _mon_desc(mon_ptr mon, char *buf, char color)
     tmp[0] = toupper(tmp[0]);
     sprintf(buf, "<color:%c>%s</color>", color, tmp);
 }
-static mon_race_ptr _race(mon_ptr mon)
-{
-    if (!mon) return NULL;
-    return &r_info[mon->ap_r_idx];
-}
 static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
 {
     cast->mon = mon;
-    cast->race = _race(mon);
+    cast->race = mon_race(mon);
     cast->spell = NULL;
     cast->src = point(mon->fx, mon->fy);
     cast->dest = point(px, py);
@@ -1327,7 +1322,7 @@ static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
 static void _spell_cast_init_mon(mon_spell_cast_ptr cast, mon_ptr mon)
 {
     cast->mon = mon;
-    cast->race = _race(mon);
+    cast->race = mon_race(mon);
     cast->spell = NULL;
     cast->src = point(mon->fx, mon->fy);
     _mon_desc(mon, cast->name, 'G'); 
@@ -1843,7 +1838,7 @@ static void _biff_m(void)
     switch (_current.spell->id.effect)
     {
     case BIFF_ANTI_MAGIC:
-        /* please implement this!!! */
+        gf_affect_m(_who(), _current.dest, GF_ANTIMAGIC, mon_save_r_level(_current.race->id), GF_AFFECT_SPELL);
         break;
     case BIFF_DISPEL_MAGIC:
         if (!_current.mon2) break; /* MSF_DIRECT */
@@ -2769,7 +2764,7 @@ static cptr _msg_var(cptr var)
     {
         if (_current.flags & MSC_DEST_PLAYER)
             return "your";
-        return _possessive(_race(_current.mon2));
+        return _possessive(mon_race(_current.mon2));
     }
     
     /*return format("<color:v>%s</color>", var);*/
@@ -3540,7 +3535,6 @@ static void _ai_think_mon(mon_spell_cast_ptr cast)
     _remove_spell(spells, _id(MST_ANNOY, ANNOY_WORLD));
 
     /* XXX not implemented ... yet */
-    _remove_spell(spells, _id(MST_BIFF, BIFF_ANTI_MAGIC));
     _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
 
     if (p_ptr->inside_arena || p_ptr->inside_battle)
@@ -3573,6 +3567,14 @@ static void _ai_think_mon(mon_spell_cast_ptr cast)
 
     spell = mon_spells_find(spells, _id(MST_BUFF, BUFF_HASTE));
     if (spell && cast->mon->mtimed[MTIMED_FAST])
+        spell->prob = 0;
+
+    /* Useless biffs? */
+    spell = mon_spells_find(spells, _id(MST_BIFF, BIFF_DISPEL_MAGIC));
+    if (spell && !(cast->mon2->mtimed[MTIMED_INVULNER] /*|| ...*/))
+        spell->prob = 0;
+    spell = mon_spells_find(spells, _id(MST_BIFF, BIFF_ANTI_MAGIC));
+    if (spell && cast->mon2->anti_magic_ct)
         spell->prob = 0;
 
     /* require a direct shot for bolts */
@@ -3808,7 +3810,7 @@ void mon_spells_save(mon_spells_ptr spells, savefile_ptr file)
  ************************************************************************/
 bool mon_has_spell_type(mon_ptr mon, int type)
 {
-    return mon_race_has_spell_type(_race(mon), type);
+    return mon_race_has_spell_type(mon_race(mon), type);
 }
 bool mon_race_has_spell_type(mon_race_ptr race, int type)
 {
@@ -3825,7 +3827,7 @@ bool mon_race_has_summon_spell(mon_race_ptr race)
 }
 bool mon_has_attack_spell(mon_ptr mon)
 {
-    return mon_race_has_attack_spell(_race(mon));
+    return mon_race_has_attack_spell(mon_race(mon));
 }
 bool mon_race_has_attack_spell(mon_race_ptr race)
 {
@@ -3837,7 +3839,7 @@ bool mon_race_has_attack_spell(mon_race_ptr race)
 }
 bool mon_has_worthy_attack_spell(mon_ptr mon)
 {
-    return mon_race_has_worthy_attack_spell(_race(mon));
+    return mon_race_has_worthy_attack_spell(mon_race(mon));
 }
 bool mon_race_has_worthy_attack_spell(mon_race_ptr race)
 {
@@ -3846,7 +3848,7 @@ bool mon_race_has_worthy_attack_spell(mon_race_ptr race)
 }
 int mon_spell_freq(mon_ptr mon)
 {
-    return mon_race_spell_freq(_race(mon));
+    return mon_race_spell_freq(mon_race(mon));
 }
 int mon_race_spell_freq(mon_race_ptr race)
 {
@@ -3855,7 +3857,7 @@ int mon_race_spell_freq(mon_race_ptr race)
 }
 bool mon_is_magical(mon_ptr mon)
 {
-    return mon_race_is_magical(_race(mon));
+    return mon_race_is_magical(mon_race(mon));
 }
 bool mon_race_is_magical(mon_race_ptr race)
 {
@@ -3875,7 +3877,7 @@ bool mon_race_is_magical(mon_race_ptr race)
 }
 bool mon_has_innate_spell(mon_ptr mon) /* for anti-magic caves */
 {
-    return mon_race_has_innate_spell(_race(mon));
+    return mon_race_has_innate_spell(mon_race(mon));
 }
 bool mon_race_has_innate_spell(mon_race_ptr race)
 {
@@ -4423,7 +4425,10 @@ static bool _prompt_plr(mon_spell_cast_ptr cast)
         int dir, m_idx;
         if (cast->spell->flags & MSF_DIRECT)
         {
-            if (!target_set(TARGET_KILL)) return FALSE;
+            if (use_old_target && target_okay_aux(TARGET_KILL))
+            {
+            }
+            else if (!target_set(TARGET_KILL)) return FALSE;
             m_idx = cave[target_row][target_col].m_idx;
             if (!m_idx)
             {
