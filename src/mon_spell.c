@@ -364,7 +364,7 @@ static _parse_t _heal_tbl[] = {
 
 /* MST_WEIRD */
 enum {
-    WEIRD_SPECIAL, /* XXX */
+    WEIRD_SPECIAL,
     WEIRD_BIRD,
 };
 static _parse_t _weird_tbl[] = {
@@ -1068,7 +1068,7 @@ void mon_spell_print(mon_spell_ptr spell, string_ptr s)
         else
             string_printf(s, "Breathe %d", spell->id.effect);
     }
-    else if (spell->id.type == MST_TACTIC) /* XXX BLINK and BLINK_OTHER have spell->display set */
+    else if (spell->id.type == MST_TACTIC) /* BLINK and BLINK_OTHER have spell->display set */
     {
         gf_info_ptr gf = gf_lookup(spell->id.effect);
         if (gf)
@@ -2474,7 +2474,6 @@ static void _weird(void)
 
         break; }
     }
-    /* XXX Chameleons have SPECIAL too, but I don't see any code for this ... */
 } 
 static void _spell_msg(void);
 static void _possessor(void);
@@ -3074,6 +3073,22 @@ static bool _summon_possible(point_t where)
 {
     return summon_possible(where.y, where.x);
 }
+static int _wall_ct(point_t pt)
+{
+    int x, y, ct = 0;
+
+    for (y = pt.y - 2; y <= pt.y + 2; y++)
+    {
+        for (x = pt.x - 2; x <= pt.x + 2; x++)
+        {
+            if (!in_bounds(y, x)) continue;
+            if (_distance(pt, point(x,y)) > 2) continue;
+            if (cave_have_flag_bold(y, x, FF_PERMANENT)) continue;
+            if (cave_have_flag_bold(y, x, FF_HURT_DISI)) ct++;
+        }
+    }
+    return ct;
+}
 
 /* When wounded, skew the spell probabilities away from offense
  * and trickery to summoning, healing and escape tactics. Make
@@ -3209,7 +3224,9 @@ static void _ai_direct(mon_spell_cast_ptr cast)
     if (spells->groups[MST_SUMMON] && !_summon_possible(cast->dest))
     {
         _remove_group(spells->groups[MST_SUMMON], NULL);
-        /* XXX Use GF_DISINTEGRATE to open things up */
+        spell = mon_spells_find(spells, _id(MST_BREATH, GF_DISINTEGRATE));
+        if (spell && _wall_ct(point(px, py)) > 1)
+            spell->prob = 50;
     }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_ANIMATE_DEAD));
