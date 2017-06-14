@@ -1613,7 +1613,7 @@ static bool _m_resist_tele(mon_ptr mon, cptr name)
     {
         if ((race->flags1 & RF1_UNIQUE) || (race->flagsr & RFR_RES_ALL))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 mon_lore_r(mon, RFR_RES_TELE);
                 msg_format("%s is unaffected!", name);
@@ -1622,7 +1622,7 @@ static bool _m_resist_tele(mon_ptr mon, cptr name)
         }
         else if (race->level > randint1(100))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 mon_lore_r(mon, RFR_RES_TELE);
                 msg_format("%s resists!", name);
@@ -1670,13 +1670,13 @@ static void _annoy_m(void)
         race2 = &r_info[_current.mon2->r_idx];
         if (race2->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE))
         {
-            if (is_seen(_current.mon2))
+            if (mon_show_msg(_current.mon2))
                 msg_format("%s is unaffected!", _current.name2);
         }
         else if ((_current.mon2->mflag2 & MFLAG2_QUESTOR) ||
                  randint0(100 + _current.race->level/2) < race2->level )
         {
-            if (is_seen(_current.mon2))
+            if (mon_show_msg(_current.mon2))
                 msg_format("%s resists the effects!", _current.name2);
         }
         else
@@ -1908,7 +1908,7 @@ static void _escape(void)
             msg_format("Magic barrier obstructs teleporting of %s.", _current.name);
         else
         {
-            if (is_seen(_current.mon))
+            if (mon_show_msg(_current.mon))
                 msg_format("%s teleports away.", _current.name);
             teleport_away_followable(_current.mon->id);
         }
@@ -2029,23 +2029,29 @@ static void hp_mon(mon_ptr mon, int amt) /* this should be public */
     if (mon->hp >= mon->maxhp)
     {
         mon->hp = mon->maxhp;
-        if (!p_ptr->blind && mon->ml)
-            msg_format("%s looks completely healed!", _current.name); /* XXX */
-        else if (!(_current.flags & MSC_UNVIEW))
+        if (!p_ptr->blind)
+        {
+            if (mon_show_msg(mon))
+                msg_format("%s looks completely healed!", _current.name); /* XXX */
+        }
+        else if (mon_show_msg(mon))
             msg_format("%s sounds healed!", _current.name); /* XXX */
     }
     else
     {
-        if (!p_ptr->blind && mon->ml)
-            msg_format("%s looks healther.", _current.name); /* XXX */
-        else if (!(_current.flags & MSC_UNVIEW))
+        if (!p_ptr->blind)
+        {
+            if (mon_show_msg(mon))
+                msg_format("%s looks healther.", _current.name); /* XXX */
+        }
+        else if (mon_show_msg(mon))
             msg_format("%s looks sounds healthier.", _current.name); /* XXX */
     }
     check_mon_health_redraw(mon->id);
     if (MON_MONFEAR(mon))
     {
         set_monster_monfear(mon->id, 0);
-        if (!p_ptr->blind && mon->ml)
+        if (!p_ptr->blind && mon_show_msg(mon))
             msg_format("%s recovers its courage.", _current.name); /* XXX */
     }
 }
@@ -2349,7 +2355,7 @@ static void _weird_bird_m(void)
 {
     if (one_in_(3) && (_current.flags & MSC_SRC_MONSTER))
     {
-        if (is_seen(_current.mon))
+        if (mon_show_msg(_current.mon))
             msg_format("%s suddenly goes out of your sight!", _current.name);
         teleport_away(_current.mon->id, 10, TELEPORT_NONMAGICAL);
         p_ptr->update |= PU_MONSTERS;
@@ -2361,7 +2367,7 @@ static void _weird_bird_m(void)
         int dam = 0;
         if (_current.flags & MSC_SRC_PLAYER)
             msg_format("You hold %s and drop from the sky.", _current.name2);
-        else if (is_seen(_current.mon) || is_seen(_current.mon2))
+        else if (mon_show_msg(_current.mon) || mon_show_msg(_current.mon2))
             msg_format("%s holds %s and drops from the sky.", _current.name, _current.name2);
 
         dam = damroll(4, 8);
@@ -2373,12 +2379,12 @@ static void _weird_bird_m(void)
         sound(SOUND_FALL);
         if (race2->flags7 & RF7_CAN_FLY)
         {
-            if (is_seen(_current.mon2))
+            if (mon_show_msg(_current.mon2))
                 msg_format("%s floats gently down to the ground.", _current.name2);
         }
         else
         {
-            if (is_seen(_current.mon2))
+            if (mon_show_msg(_current.mon2))
                 msg_format("%s crashes into the ground.", _current.name2);
             dam += damroll(6, 8);
         }
@@ -2815,7 +2821,7 @@ static void _spell_msg(void)
 /*************************************************************************
  * AI
  ************************************************************************/
-static void _init_spells(mon_spells_ptr spells)
+static void _ai_init(mon_spells_ptr spells)
 {
     int i, j;
     for (i = 0; i < MST_COUNT; i++)
@@ -3116,83 +3122,26 @@ static void _ai_wounded(mon_spell_cast_ptr cast)
         }
     }
 }
-
-static void _remove_bad_spells(mon_spell_cast_ptr cast)
+static void _ai_direct(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
     bool           smart  = BOOL(cast->race->flags2 & RF2_SMART);
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
 
-    /* Apply monster knowledge of player's strengths and weaknesses */
-    if (!stupid && (smart_cheat || smart_learn))
-        _smart_remove(cast);
-
-    /* Require a projectable player for projection spells. Even stupid
-     * monsters aren't dumb enough to bounce spells off walls! Non-stupid
-     * monsters will splash the player if possible, though with reduced
-     * odds. */
-    if (_projectable(cast->src, cast->dest))
-        cast->flags |= MSC_DIRECT;
-    else
-    {
-        point_t new_dest = {0};
-        
-        if (!stupid)
-            new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
-
-        _remove_group(spells->groups[MST_ANNOY], NULL);
-        _remove_group(spells->groups[MST_BOLT], NULL);
-        _remove_group(spells->groups[MST_BEAM], NULL);
-        _remove_group(spells->groups[MST_BIFF], NULL);
-        _remove_group(spells->groups[MST_BUFF], NULL);
-        _remove_group(spells->groups[MST_CURSE], NULL);
-        _remove_group(spells->groups[MST_WEIRD], NULL);
-        _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
-
-        if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
-        {
-            cast->dest = new_dest;
-            cast->flags |= MSC_SPLASH;
-            _adjust_group(spells->groups[MST_BREATH], NULL, 50);
-            _adjust_group(spells->groups[MST_BALL], NULL, 50);
-            _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
-            _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
-            /* Heal and Self Telportation OK */
-            _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
-        }
-        else
-        {
-            _remove_group(spells->groups[MST_BREATH], NULL);
-            _remove_group(spells->groups[MST_BALL], NULL);
-            _remove_group(spells->groups[MST_SUMMON], NULL);
-            _remove_group(spells->groups[MST_HEAL], NULL);
-            _remove_group(spells->groups[MST_ESCAPE], NULL);
-            _remove_group(spells->groups[MST_TACTIC], NULL);
-            spell = mon_spells_find(spells, _id(MST_BREATH, GF_DISINTEGRATE));
-            if ( spell
-              && cast->mon->cdis < MAX_RANGE / 2
-              && _disintegrable(cast->src, cast->dest)
-              && one_in_(10) ) /* Note: This will be the only spell possible so any prob = 100% */
-            {
-                spell->prob = 150;
-            }
-        }
-    }
-    if (p_ptr->inside_arena || p_ptr->inside_battle)
-        _remove_group(spells->groups[MST_SUMMON], NULL);
+    cast->flags |= MSC_DIRECT;
 
     /* Stupid monsters are done! */
     if (stupid)
         return;
 
-    /* Anti-magic caves? Don't bother casting spells with 100% fail rates */
-    if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
-        _remove_spells(spells, _not_innate_p);
+    /* Apply monster knowledge of player's strengths and weaknesses */
+    if (smart_cheat || smart_learn)
+        _smart_remove(cast);
 
     _ai_wounded(cast);
 
-    if (smart && (cast->flags & MSC_DIRECT))
+    if (smart)
     {
         spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
         if (spell && TELE_LEVEL_IS_INEFF(0))
@@ -3256,7 +3205,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
         _remove_spell(spells, _id(MST_ANNOY, ANNOY_CONFUSE));
 
     /* require a direct shot to player for bolts */
-    if ((cast->flags & MSC_DIRECT) && !_clean_shot(cast->src, cast->dest))
+    if (!_clean_shot(cast->src, cast->dest))
     {
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
@@ -3272,7 +3221,7 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
     if (spell && !raise_possible(cast->mon))
         spell->prob = 0;
 
-    if (p_ptr->invuln && (cast->flags & MSC_DIRECT))
+    if (p_ptr->invuln)
     {
         _remove_group(spells->groups[MST_BREATH], NULL);
         _remove_group(spells->groups[MST_BALL], NULL);
@@ -3284,8 +3233,79 @@ static void _remove_bad_spells(mon_spell_cast_ptr cast)
             spell->prob = 30;
     }
 }
+static void _ai_indirect(mon_spell_cast_ptr cast)
+{
+    bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
+    mon_spells_ptr spells = cast->race->spells;
+    mon_spell_ptr  spell;
+    point_t        new_dest = {0};
 
-static mon_spell_ptr _choose_spell(mon_spells_ptr spells)
+    if (!stupid)
+        new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
+
+    _remove_group(spells->groups[MST_ANNOY], NULL);
+    _remove_group(spells->groups[MST_BOLT], NULL);
+    _remove_group(spells->groups[MST_BEAM], NULL);
+    _remove_group(spells->groups[MST_BIFF], NULL);
+    _remove_group(spells->groups[MST_BUFF], NULL);
+    _remove_group(spells->groups[MST_CURSE], NULL);
+    _remove_group(spells->groups[MST_WEIRD], NULL);
+    _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
+
+    if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
+    {
+        cast->dest = new_dest;
+        cast->flags |= MSC_SPLASH;
+
+        if (!stupid && (smart_cheat || smart_learn))
+            _smart_remove(cast);
+
+        _adjust_group(spells->groups[MST_BREATH], NULL, 50);
+        _adjust_group(spells->groups[MST_BALL], NULL, 50);
+        _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
+        _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
+        /* Heal and Self Telportation OK */
+        _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
+    }
+    else
+    {
+        _remove_group(spells->groups[MST_BREATH], NULL);
+        _remove_group(spells->groups[MST_BALL], NULL);
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+        _remove_group(spells->groups[MST_HEAL], NULL);
+        _remove_group(spells->groups[MST_ESCAPE], NULL);
+        _remove_group(spells->groups[MST_TACTIC], NULL);
+        spell = mon_spells_find(spells, _id(MST_BREATH, GF_DISINTEGRATE));
+        if ( spell
+          && cast->mon->cdis < MAX_RANGE / 2
+          && _disintegrable(cast->src, cast->dest)
+          && one_in_(10) ) /* Note: This will be the only spell possible so any prob = 100% */
+        {
+            spell->prob = 150;
+        }
+
+        /* XXX Bring back evil non-direct TELE_TO? */
+    }
+}
+static void _ai_think(mon_spell_cast_ptr cast)
+{
+    /* Hack: Restrict for special dungeons or town buildings */
+    if (p_ptr->inside_arena || p_ptr->inside_battle)
+        _remove_group(cast->race->spells->groups[MST_SUMMON], NULL);
+
+    if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+        _remove_spells(cast->race->spells, _not_innate_p);
+
+    /* Generally, we require direct los to spell against the player.
+     * However, smart monsters might splash, summon, heal or escape.
+     * Change _ai_indirect if you don't like this. */
+    if (_projectable(cast->src, cast->dest))
+        _ai_direct(cast);
+    else
+        _ai_indirect(cast);
+}
+
+static mon_spell_ptr _choose_random(mon_spells_ptr spells)
 {
     int i, j, total = 0, roll;
     for (i = 0; i < MST_COUNT; i++)
@@ -3313,13 +3333,16 @@ static mon_spell_ptr _choose_spell(mon_spells_ptr spells)
     }
     return NULL; /* ?! */
 }
-
+static void _ai_choose(mon_spell_cast_ptr cast)
+{
+    cast->spell = _choose_random(cast->race->spells);
+}
 static bool _default_ai(mon_spell_cast_ptr cast)
 {
     if (!cast->race->spells) return FALSE;
-    _init_spells(cast->race->spells);
-    _remove_bad_spells(cast);
-    cast->spell = _choose_spell(cast->race->spells);
+    _ai_init(cast->race->spells);
+    _ai_think(cast);
+    _ai_choose(cast);
     return cast->spell != NULL;
 }
 
@@ -3377,7 +3400,7 @@ static bool _choose_target(mon_spell_cast_ptr cast)
         cast->mon2 = mon2;
         _mon_desc(mon2, cast->name2, 'o');
         cast->dest = point(mon2->fx, mon2->fy);
-        if (!cast->mon->ml && !cast->mon2->ml)
+        if (!mon_show_msg(cast->mon) && !mon_show_msg(cast->mon2))
             cast->flags |= MSC_UNVIEW;
         return TRUE;
     }
@@ -3395,7 +3418,7 @@ static bool _small_ball_p(mon_spell_ptr spell)
     if (spell->flags & MSF_BALL4) return FALSE;
     return TRUE;
 }
-static void _remove_bad_spells_pet(mon_spell_cast_ptr cast)
+static void _ai_think_pet(mon_spell_cast_ptr cast)
 {
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
@@ -3500,7 +3523,7 @@ static void _remove_bad_spells_pet(mon_spell_cast_ptr cast)
     }
 }
 
-static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
+static void _ai_think_mon(mon_spell_cast_ptr cast)
 {
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
@@ -3524,7 +3547,7 @@ static void _remove_bad_spells_mon(mon_spell_cast_ptr cast)
         _remove_group(spells->groups[MST_SUMMON], NULL);
 
     if (is_pet(cast->mon))
-        _remove_bad_spells_pet(cast);
+        _ai_think_pet(cast);
 
     /* Stupid monsters are done! */
     if (cast->race->flags2 & RF2_STUPID)
@@ -3579,9 +3602,9 @@ static bool _default_ai_mon(mon_spell_cast_ptr cast)
 {
     if (!cast->race->spells) return FALSE;
     if (!_choose_target(cast)) return FALSE;
-    _init_spells(cast->race->spells);
-    _remove_bad_spells_mon(cast);
-    cast->spell = _choose_spell(cast->race->spells);
+    _ai_init(cast->race->spells);
+    _ai_think_mon(cast);
+    _ai_choose(cast);
     return cast->spell != NULL;
 }
 

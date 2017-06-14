@@ -55,6 +55,7 @@
 #include "py_throw.h"
 #include "quest.h"
 #include "gf.h"
+#include "mon.h"
 #include "mon_spell.h"
 
 #include "types.h"

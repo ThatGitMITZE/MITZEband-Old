@@ -479,7 +479,7 @@ bool fear_process_m(int m_idx)
                     MON_MONFEAR(m_ptr) - randint1(r_ptr->level / 20 + 1));
             }
 
-            if (recovered && is_seen(m_ptr))
+            if (recovered && mon_show_msg(m_ptr))
             {
                 char m_name[80];
                 char m_poss[80];
@@ -492,7 +492,7 @@ bool fear_process_m(int m_idx)
         }
         else if (one_in_(3) && !fear_save_m(m_ptr))
         {
-            if (is_seen(m_ptr))
+            if (mon_show_msg(m_ptr))
             {
                 char m_name[80];
                 monster_desc(m_name, m_ptr, 0);

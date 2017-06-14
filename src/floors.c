@@ -463,7 +463,7 @@ static void preserve_pet(void)
         {
             /* Its parent have gone, it also goes away. */
 
-            if (is_seen(m_ptr))
+            if (mon_show_msg(m_ptr))
             {
                 char m_name[80];
 

@@ -653,6 +653,27 @@ enum {
     SM_MAX
 };
 
+enum {
+    MTIMED_CSLEEP,
+    MTIMED_FAST,
+    MTIMED_SLOW,
+    MTIMED_STUNNED,
+    MTIMED_CONFUSED,
+    MTIMED_MONFEAR,
+    MTIMED_INVULNER,
+    MTIMED_PARALYZED,
+    MTIMED_COUNT
+};
+
+#define MON_CSLEEP(M_PTR)   ((M_PTR)->mtimed[MTIMED_CSLEEP])
+#define MON_FAST(M_PTR)     ((M_PTR)->mtimed[MTIMED_FAST])
+#define MON_SLOW(M_PTR)     ((M_PTR)->mtimed[MTIMED_SLOW])
+#define MON_STUNNED(M_PTR)  ((M_PTR)->mtimed[MTIMED_STUNNED])
+#define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
+#define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
+#define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
+#define MON_PARALYZED(M_PTR) ((M_PTR)->mtimed[MTIMED_PARALYZED])
+
 struct monster_type
 {
     int  id;

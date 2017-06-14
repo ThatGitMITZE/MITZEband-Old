@@ -3286,7 +3286,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
 
     if (flg & PROJECT_KILL)
     {
-        see_s_msg = (who > 0) ? is_seen(&m_list[who]) :
+        see_s_msg = (who > 0) ? mon_show_msg(&m_list[who]) :
             (!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(py, px, y1, x1)));
     }
 
@@ -3410,7 +3410,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
                         t_x = x_saver;
                     }
 
-                    if (is_seen(m_ptr))
+                    if (mon_show_msg(m_ptr))
                     {
                         msg_print("The attack bounces!");
                     }

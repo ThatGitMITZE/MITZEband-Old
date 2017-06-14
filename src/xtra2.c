@@ -2093,10 +2093,8 @@ int mon_damage_mod(monster_type *m_ptr, int dam, bool is_psy_spear)
     {
         if (is_psy_spear)
         {
-            if (!p_ptr->blind && is_seen(m_ptr))
-            {
+            if (mon_show_msg(m_ptr))
                 msg_print("The barrier is penetrated!");
-            }
         }
         else if (!one_in_(PENETRATE_INVULNERABILITY))
         {
@@ -2135,10 +2133,8 @@ int mon_damage_mod_mon(monster_type *m_ptr, int dam, bool is_psy_spear)
     {
         if (is_psy_spear)
         {
-            if (!p_ptr->blind && is_seen(m_ptr))
-            {
+            if (mon_show_msg(m_ptr))
                 msg_print("The barrier is penetrated!");
-            }
         }
         else if (!one_in_(PENETRATE_INVULNERABILITY))
         {

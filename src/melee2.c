@@ -195,7 +195,7 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 
     char m_name[160];
 
-    bool seen = is_seen(m_ptr);
+    bool seen = mon_show_msg(m_ptr);
 
     /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT);
@@ -1508,8 +1508,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
     int             x_saver = t_ptr->fx;
     int             effect_type;
 
-    bool see_m = is_seen(m_ptr);
-    bool see_t = is_seen(t_ptr);
+    bool see_m = mon_show_msg(m_ptr);
+    bool see_t = mon_show_msg(t_ptr);
     bool see_either = see_m || see_t;
 
     /* Can the player be aware of this attack? */
@@ -2072,7 +2072,7 @@ static void process_monster(int m_idx)
 
     bool            is_riding_mon = (m_idx == p_ptr->riding);
 
-    bool            see_m = is_seen(m_ptr);
+    bool            see_m = mon_show_msg(m_ptr);
 
     /* Hack: Trump monsters blink continually for free.
        Note, if you move this code below, the monster actually spawns???  Probably,
@@ -2504,20 +2504,21 @@ static void process_monster(int m_idx)
             {
                 if (!mon_save_p(m_ptr->r_idx, A_STR))
                 {
-                    msg_format("%^s tries to break your anti-magic ray but fails.", m_name);
+                    if (mon_show_msg(m_ptr))
+                        msg_format("%^s tries to break your anti-magic ray but fails.", m_name);
                     m_ptr->anti_magic_ct--;
                     return;
                 }
                 else
                 {
-                    msg_format("%^s breaks your anti-magic ray.", m_name);
+                    if (mon_show_msg(m_ptr))
+                        msg_format("%^s breaks your anti-magic ray.", m_name);
                     m_ptr->anti_magic_ct = 0;
                 }
             }
             /* Other monsters continue to take a move, but can't cast spells */
             else
             {
-                msg_format("%^s says 'Just you wait until I can cast spells again!'", m_name);
                 blocked_magic = TRUE;
                 m_ptr->anti_magic_ct--;
             }
@@ -4028,7 +4029,7 @@ static void process_mon_mtimed(mon_ptr mon)
     {
         if (set_monster_fast(mon->id, mon->mtimed[MTIMED_FAST] - 1))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 char m_name[80];
                 monster_desc(m_name, mon, 0);
@@ -4040,7 +4041,7 @@ static void process_mon_mtimed(mon_ptr mon)
     {
         if (set_monster_slow(mon->id, mon->mtimed[MTIMED_SLOW] - 1))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 char m_name[80];
                 monster_desc(m_name, mon, 0);
@@ -4057,7 +4058,7 @@ static void process_mon_mtimed(mon_ptr mon)
             dec = MAX(dec, stun/2);
         if (set_monster_stunned(mon->id, MON_STUNNED(mon) - dec))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 char m_name[80];
                 monster_desc(m_name, mon, 0);
@@ -4070,7 +4071,7 @@ static void process_mon_mtimed(mon_ptr mon)
         int dec = randint1(race->level/20 + 1);
         if (set_monster_confused(mon->id, MON_CONFUSED(mon) - dec)) 
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 char m_name[80];
                 monster_desc(m_name, mon, 0);
@@ -4082,7 +4083,7 @@ static void process_mon_mtimed(mon_ptr mon)
     {
         if (set_monster_invulner(mon->id, mon->mtimed[MTIMED_INVULNER] - 1, TRUE))
         {
-            if (is_seen(mon))
+            if (mon_show_msg(mon))
             {
                 char m_name[80];
                 monster_desc(m_name, mon, 0);

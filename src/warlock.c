@@ -1001,7 +1001,7 @@ static void _pets_breathe_spell(int cmd, variant *res)
                 m_ptr->energy_need += ENERGY_NEED();
                 if (one_in_(2))
                 {
-                    if (is_seen(m_ptr))
+                    if (mon_show_msg(m_ptr))
                     {
                         char m_name[MAX_NLEN];
                         monster_desc(m_name, m_ptr, 0);

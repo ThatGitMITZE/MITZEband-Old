@@ -1117,9 +1117,15 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
 
     char killer[80];
 
-    /* Is the monster "seen"? */
+    /* Is the monster "seen"? Note: mon_show_msg() requires
+     * the monster sqaure to be lit if ignore_unview is on. This
+     * means that if the player is lobbing fireballs at a telepathically
+     * seen monster, they would miss the resistance message. So, if
+     * the player is doing this, then we just use ml instead. If the
+     * player is not doing this affect, then we better respect ignore_unview
+     * or we'll turn the message spammer back on full blast! */
     bool seen = m_ptr->ml;
-    bool seen_msg = seen;
+    bool seen_msg = (who == GF_WHO_PLAYER) ? m_ptr->ml : mon_show_msg(m_ptr);
 
     bool slept = BOOL(MON_CSLEEP(m_ptr));
 
@@ -1248,7 +1254,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
             dam = dam * MIN(66, r_ptr->freq_spell) / 100;
         break;
     case GF_ACID:
-        if (touch) msg_format("%^s is <color:G>dissolved</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:G>dissolved</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_ACID)
@@ -1265,7 +1271,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_ELEC:
-        if (touch) msg_format("%^s is <color:b>shocked</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:b>shocked</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_ELEC)
@@ -1282,7 +1288,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_FIRE:
-        if (touch) msg_format("%^s is <color:r>burned</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:r>burned</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_FIRE)
@@ -1305,7 +1311,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_COLD:
-        if (touch) msg_format("%^s is <color:W>frozen</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:W>frozen</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_COLD)
@@ -1328,7 +1334,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_POIS:
-        if (touch) msg_format("%^s is <color:G>poisoned</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:G>poisoned</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_POIS)
@@ -1345,7 +1351,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_NUKE:
-        if (touch) msg_format("%^s is <color:G>irradiated</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:G>irradiated</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_IM_POIS)
@@ -1363,7 +1369,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else if (one_in_(3)) do_poly = TRUE;
         break;
     case GF_HELL_FIRE:
-        if (touch) msg_format("%^s is <color:D>%s</color>!", m_name, (r_ptr->flags3 & RF3_GOOD) ? "*burned*" : "burned");
+        if (touch && seen_msg) msg_format("%^s is <color:D>%s</color>!", m_name, (r_ptr->flags3 & RF3_GOOD) ? "*burned*" : "burned");
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flags3 & RF3_GOOD)
@@ -1384,14 +1390,14 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         else if (r_ptr->flags3 & RF3_EVIL)
         {
-            if (touch) msg_format("%^s is <color:D>*burned*</color>!", m_name);
+            if (touch && seen_msg) msg_format("%^s is <color:D>*burned*</color>!", m_name);
             dam *= 2;
             note = " is hit hard.";
             mon_lore_3(m_ptr, RF3_EVIL);
         }
         else
         {
-            if (touch) msg_format("%^s is <color:D>burned</color>!", m_name);
+            if (touch && seen_msg) msg_format("%^s is <color:D>burned</color>!", m_name);
             dam *= 3; dam /= randint1(6) + 6;
         }
         break;
@@ -1400,7 +1406,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         _BABBLE_HACK()
         break;
     case GF_PLASMA:
-        if (touch) msg_format("%^s is <color:R>burned</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:R>burned</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_PLAS)
@@ -1421,7 +1427,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         return FALSE;
     case GF_NETHER:
-        if (touch) msg_format("%^s is <color:D>drained</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:D>drained</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_NETH)
@@ -1471,7 +1477,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else do_stun = _stun_amount(dam);
         break;
     case GF_CHAOS:
-        if (touch) msg_format("%^s is <color:v>unmade</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:v>unmade</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_CHAO)
@@ -1498,7 +1504,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_SHARDS:
-        if (touch) msg_format("%^s is <color:U>shredded</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:U>shredded</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_SHAR)
@@ -1605,7 +1611,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_CONFUSION:
-        if (touch) msg_format("%^s is <color:U>baffled</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:U>baffled</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flags3 & RF3_NO_CONF)
@@ -1617,7 +1623,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else do_conf = _gf_distance_mod(10 + randint1(15));
         break;
     case GF_DISENCHANT:
-        if (touch) msg_format("%^s is <color:v>disenchanted</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:v>disenchanted</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_DISE)
@@ -1628,7 +1634,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_NEXUS:
-        if (touch) msg_format("%^s is <color:v>scrambled</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:v>scrambled</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_NEXU)
@@ -1674,7 +1680,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_TIME:
-        if (touch) msg_format("%^s is <color:B>chronosmashed</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:B>chronosmashed</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_TIME)
@@ -2224,7 +2230,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break; }
     case GF_ICE:
-        if (touch) msg_format("%^s is <color:W>frozen</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:W>frozen</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (who || !mon_save_p(m_ptr->r_idx, A_NONE))
@@ -3038,7 +3044,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         else dam = 0;
         break;
     case GF_LITE:
-        if (touch) msg_format("%^s is <color:y>dazzled</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:y>dazzled</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_LITE)
@@ -3058,7 +3064,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         }
         break;
     case GF_DARK:
-        if (touch) msg_format("%^s is <color:D>benighted</color>!", m_name);
+        if (touch && seen_msg) msg_format("%^s is <color:D>benighted</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (r_ptr->flagsr & RFR_RES_DARK)

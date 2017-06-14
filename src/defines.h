@@ -3322,12 +3322,6 @@ enum r_drop_e
 #define is_original_ap_and_seen(A) \
      (bool)((A)->ml && !p_ptr->image && ((A)->ap_r_idx == (A)->r_idx))
 
-/*
- * Is the monster seen by the player?
- */
-#define is_seen(A) \
-    ((bool)((A)->ml && (!ignore_unview || p_ptr->inside_battle || \
-     (player_can_see_bold((A)->fy, (A)->fx) && projectable(py, px, (A)->fy, (A)->fx)))))
 
 
 /*** Option Definitions ***/
@@ -4945,27 +4939,6 @@ enum mon_save_fields_e {
 #define MPE_BREAK_TRAP    0x00000040
 #define MPE_DONT_SWAP_MON 0x00000080
 
-
-enum {
-    MTIMED_CSLEEP,
-    MTIMED_FAST,
-    MTIMED_SLOW,
-    MTIMED_STUNNED,
-    MTIMED_CONFUSED,
-    MTIMED_MONFEAR,
-    MTIMED_INVULNER,
-    MTIMED_PARALYZED,
-    MTIMED_COUNT
-};
-
-#define MON_CSLEEP(M_PTR)   ((M_PTR)->mtimed[MTIMED_CSLEEP])
-#define MON_FAST(M_PTR)     ((M_PTR)->mtimed[MTIMED_FAST])
-#define MON_SLOW(M_PTR)     ((M_PTR)->mtimed[MTIMED_SLOW])
-#define MON_STUNNED(M_PTR)  ((M_PTR)->mtimed[MTIMED_STUNNED])
-#define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
-#define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
-#define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
-#define MON_PARALYZED(M_PTR) ((M_PTR)->mtimed[MTIMED_PARALYZED])
 
 /*
  * Bit flags for screen_object()

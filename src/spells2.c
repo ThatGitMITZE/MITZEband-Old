@@ -2066,7 +2066,7 @@ bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spe
 
     if (resist && player_cast)
     {
-        bool see_m = is_seen(m_ptr);
+        bool see_m = mon_show_msg(m_ptr);
         char m_name[80];
 
         monster_desc(m_name, m_ptr, 0);
@@ -2336,7 +2336,7 @@ bool destroy_area(int y1, int x1, int r, int power)
 
                     if (resist)
                     {
-                        bool see_m = is_seen(m_ptr);
+                        bool see_m = mon_show_msg(m_ptr);
                         char m_name[80];
 
                         monster_desc(m_name, m_ptr, 0);
@@ -2867,7 +2867,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                     monster_desc(m_name, m_ptr, 0);
 
                     /* Scream in pain */
-                    if (!ignore_unview || is_seen(m_ptr)) msg_format("%^s wails out in pain!", m_name);
+                    if (mon_show_msg(m_ptr)) msg_format("%^s wails out in pain!", m_name);
 
                     /* Take damage from the quake */
                     damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
@@ -2881,7 +2881,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                     /* Delete (not kill) "dead" monsters */
                     if (m_ptr->hp < 0)
                     {
-                        if (!ignore_unview || is_seen(m_ptr)) msg_format("%^s is embedded in the rock!", m_name);
+                        if (mon_show_msg(m_ptr)) msg_format("%^s is embedded in the rock!", m_name);
 
                         /* Delete the monster */
                         delete_monster(yy, xx);
