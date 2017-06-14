@@ -940,7 +940,6 @@ void mon_display_doc(monster_race *r_ptr, doc_ptr doc)
         /* Assume some "creation" flags */
         if (r_ptr->flags1 & RF1_FRIENDS) copy.flags1 |= RF1_FRIENDS;
         if (r_ptr->flags1 & RF1_ESCORT)  copy.flags1 |= RF1_ESCORT;
-        if (r_ptr->flags1 & RF1_ESCORTS) copy.flags1 |= RF1_ESCORTS;
 
         /* Killing a monster reveals some properties */
         if (r_ptr->r_tkills)

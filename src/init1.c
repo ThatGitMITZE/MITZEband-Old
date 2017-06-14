@@ -280,7 +280,7 @@ static cptr r_info_flags1[] =
     "ATTR_SEMIRAND",
     "FRIENDS",
     "ESCORT",
-    "ESCORTS",
+    "XXX16",
     "NEVER_BLOW",
     "NEVER_MOVE",
     "RAND_25",

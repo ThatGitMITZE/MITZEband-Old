@@ -3845,22 +3845,6 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 
                 /* Place a single escort */
                 (void)place_monster_one(place_monster_m_idx, ny, nx, z, pack_idx, mode);
-
-                /* I'm removing the following. Really, having Great Cthulhu or Gothmog come
-                 * with an entourage of up to 150 monsters is just plain absurd, and asking for 
-                 * a stray accidental bad teleport death. Pack sizes have been capped for quite
-                 * a while (at 40), but allowing RF1_ESCORTS to process destroys pack diversity.
-                 * Better if we just skip that flag altogether, giving up to 32 monsters in the 
-                 * pack. Usually only 20 to 22 seem to show up, presumably due to scatter()
-                 * picking an occupied spot.
-                 *
-                 * Place a "group" of escorts if needed
-                if ((r_info[z].flags1 & RF1_FRIENDS) ||
-                    (r_ptr->flags1 & RF1_ESCORTS))
-                {
-                    if (dungeon_type != DUNGEON_ARENA)
-                        (void)place_monster_group(place_monster_m_idx, ny, nx, z, pack_idx, mode);
-                } */
             }
             pack_choose_ai(m_idx);
         }
