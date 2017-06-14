@@ -2044,7 +2044,7 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
     /* Tracking an unseen monster */
     if (!m_ptr->ml)
     {
-        const monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+        const monster_race *r_ptr = mon_apparent_race(m_ptr);
         Term_queue_bigchar(col, row, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 
         /* Indicate that the monster health is "unknown" */
@@ -2078,7 +2078,7 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
 
         /* Default to almost dead */
         byte attr = TERM_RED;
-        const monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+        const monster_race *r_ptr = mon_apparent_race(m_ptr);
 
         Term_queue_bigchar(col, row, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 

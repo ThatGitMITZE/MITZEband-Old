@@ -1739,7 +1739,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         return;
     }
 
-    r_ptr = &r_info[m_ptr->ap_r_idx];
+    r_ptr = mon_apparent_race(m_ptr);
 
     /* Mode of MD_TRUE_NAME will reveal Chameleon's true name */
     if (mode & MD_TRUE_NAME) name = (r_name + real_r_ptr(m_ptr)->name);
@@ -2146,7 +2146,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
     if (!necro)
     {
         char            m_name[80];
-        monster_race    *r_ptr = &r_info[m_ptr->ap_r_idx];
+        monster_race    *r_ptr = mon_apparent_race(m_ptr);
 
         power = r_ptr->level / 2;
 
@@ -2448,7 +2448,7 @@ void update_mon(int m_idx, bool full)
     /* Do disturb? */
     if (disturb_high)
     {
-        monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+        monster_race *ap_r_ptr = mon_apparent_race(m_ptr);
 
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)
             do_disturb = TRUE;
@@ -3485,7 +3485,7 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
 
     /* Hack -- Notice new multi-hued monsters */
     {
-        monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+        monster_race *ap_r_ptr = mon_apparent_race(m_ptr);
         if (ap_r_ptr->flags1 & (RF1_ATTR_MULTI | RF1_SHAPECHANGER))
             shimmer_monsters = TRUE;
     }

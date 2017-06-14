@@ -254,7 +254,7 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
                 cmsg_format(TERM_RED, "The %s cruelly hits %s.", context->obj_name, m_name);
             else
                 msg_format("The %s hits %s.", context->obj_name, m_name);
-            if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+            if (!p_ptr->image) mon_track(m_ptr);
             health_track(m_idx);
         }
 

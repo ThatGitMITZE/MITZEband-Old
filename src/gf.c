@@ -1375,7 +1375,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         if (r_ptr->flags3 & RF3_GOOD)
         {
             dam *= 2;
-            note = " is hit hard.";
+            if (!touch) note = " is hit hard.";
             mon_lore_3(m_ptr, RF3_GOOD);
         }
         break;
@@ -1385,14 +1385,14 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         if (r_ptr->flags3 & RF3_GOOD)
         {
             dam = 0;
-            note = " is immune.";
+            if (!touch) note = " is immune.";
             mon_lore_3(m_ptr, RF3_GOOD);
         }
         else if (r_ptr->flags3 & RF3_EVIL)
         {
             if (touch && seen_msg) msg_format("%^s is <color:D>*burned*</color>!", m_name);
             dam *= 2;
-            note = " is hit hard.";
+            if (!touch) note = " is hit hard.";
             mon_lore_3(m_ptr, RF3_EVIL);
         }
         else
@@ -3267,7 +3267,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
         do_fear = damroll(3, (dam / 2)) + 1;
         if ((r_ptr->flags3 & RF3_NO_FEAR) || fear_save_m(m_ptr))
         {
-            note = " is unaffected!";
+            if (!touch) note = " is unaffected!";
             obvious = FALSE;
             do_fear = 0;
         }
@@ -4297,7 +4297,7 @@ bool gf_affect_m(int who, point_t where, int type, int dam, int flags)
                 msg_format("%^s%s", m_name, note);
 
             /* Hack -- Pain message */
-            else if (known && dam && !(flags & GF_AFFECT_SPELL))
+            else if (known && dam && (flags & GF_AFFECT_SPELL))
             {
                 message_pain(c_ptr->m_idx, dam);
             }

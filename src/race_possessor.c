@@ -376,7 +376,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
     monster_desc(m_name_object, foe, MD_PRON_VISIBLE | MD_OBJECTIVE);
 
     body = &r_info[p_ptr->current_r_idx];
-    foe_race = &r_info[foe->ap_r_idx];
+    foe_race = mon_race(foe);
     ac = mon_ac(foe);
 
     for (i = 0; i < MAX_MON_BLOWS; i++)

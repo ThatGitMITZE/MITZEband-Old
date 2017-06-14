@@ -5121,13 +5121,15 @@ void health_track(int m_idx)
 /*
  * Hack -- track the given monster race
  */
+void mon_track(mon_ptr mon)
+{
+    monster_race_track(mon->ap_r_idx);
+}
 void monster_race_track(int r_idx)
 {
     p_ptr->monster_race_idx = r_idx;
     p_ptr->window |= PW_MONSTER;
 }
-
-
 
 /*
  * Hack -- track the given object kind

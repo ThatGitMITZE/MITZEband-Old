@@ -2567,7 +2567,7 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
             else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
 
             /* Hack -- Auto-recall */
-            monster_race_track(m_ptr->ap_r_idx);
+            mon_track(m_ptr);
         }
 
         /* Don't kill Amberites */
@@ -3074,7 +3074,7 @@ void viewport_verify(void)
 
 cptr mon_health_desc(monster_type *m_ptr)
 {
-    monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+    monster_race *ap_r_ptr = mon_apparent_race(m_ptr);
     bool          living = monster_living(ap_r_ptr);
     int           perc = 100 * m_ptr->hp / m_ptr->maxhp;
 
@@ -3644,7 +3644,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
     if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
     {
         monster_type *m_ptr = &m_list[c_ptr->m_idx];
-        monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+        monster_race *ap_r_ptr = mon_apparent_race(m_ptr);
         char m_name[80];
         bool recall = FALSE;
 
@@ -3655,7 +3655,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
         monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 
         /* Hack -- track this monster race */
-        monster_race_track(m_ptr->ap_r_idx);
+        mon_track(m_ptr);
 
         /* Hack -- health bar for this monster */
         health_track(c_ptr->m_idx);
@@ -3675,7 +3675,7 @@ static int target_set_aux(int y, int x, int mode, cptr info)
                 screen_save();
 
                 /* Recall on screen */
-                mon_display_doc(&r_info[m_ptr->ap_r_idx], doc);
+                mon_display_doc(ap_r_ptr, doc);
                 doc_sync_term(doc, doc_range_all(doc), doc_pos_create(0, 1));
                 doc_free(doc);
 

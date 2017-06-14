@@ -3423,7 +3423,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
 
                         if (m_ptr->ml)
                         {
-                            if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                            if (!p_ptr->image) mon_track(m_ptr);
                             health_track(c_ptr->m_idx);
                         }
                     }

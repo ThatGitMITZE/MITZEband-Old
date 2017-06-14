@@ -336,7 +336,7 @@ static void _monster_toss_imp(_monster_toss_info *info)
                     msg_format("%^s hits %s.", m_name, m_name2);
                     if (visible)
                     {
-                        if (!p_ptr->image) monster_race_track(m_ptr2->ap_r_idx);
+                        if (!p_ptr->image) mon_track(m_ptr2);
                         health_track(c_ptr->m_idx);
                     }
                 }

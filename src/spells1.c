@@ -1833,7 +1833,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 
     /* Do it ... shared with other non-projection damage like melee attacks and auras */
     gf_distance_hack = r;
-    result = gf_affect_m(who, point(x,y), typ, dam, flg & GF_AFFECT_SPELL);
+    result = gf_affect_m(who, point(x,y), typ, dam, flg | GF_AFFECT_SPELL);
     gf_distance_hack = 1;
 
     /* Track it */
@@ -2843,7 +2843,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
                         if (m_ptr->ml)
                         {
                           /* Hack -- auto-recall */
-                          if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                          if (!p_ptr->image) mon_track(m_ptr);
 
                           /* Hack - auto-track */
                           health_track(cave[project_m_y][project_m_x].m_idx);
@@ -2869,7 +2869,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
                 if (m_ptr->ml)
                 {
                   /* Hack -- auto-recall */
-                  if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                  if (!p_ptr->image) mon_track(m_ptr);
 
                   /* Hack - auto-track */
                   health_track(cave[project_m_y][project_m_x].m_idx);
@@ -3001,7 +3001,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
                 if (m_ptr->ml)
                 {
                   /* Hack -- auto-recall */
-                  if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                  if (!p_ptr->image) mon_track(m_ptr);
 
                   /* Hack - auto-track */
                   health_track(cave[project_m_y][project_m_x].m_idx);
@@ -3531,7 +3531,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
                 if (m_ptr->ml)
                 {
                     /* Hack -- auto-recall */
-                    if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                    if (!p_ptr->image) mon_track(m_ptr);
 
                     /* Hack - auto-track */
                     if (m_ptr->ml) health_track(cave[y][x].m_idx);

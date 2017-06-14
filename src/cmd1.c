@@ -4332,7 +4332,7 @@ bool py_attack(int y, int x, int mode)
     monster_desc(m_name, m_ptr, 0);
     if (m_ptr->ml)
     {
-        if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+        if (!p_ptr->image) mon_track(m_ptr);
         health_track(c_ptr->m_idx);
     }
 
@@ -5364,7 +5364,7 @@ void move_player(int dir, bool do_pickup, bool break_trap)
             if (m_ptr->ml)
             {
                 /* Auto-Recall if possible and visible */
-                if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+                if (!p_ptr->image) mon_track(m_ptr);
 
                 /* Track a new monster */
                 health_track(c_ptr->m_idx);
