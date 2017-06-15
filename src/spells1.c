@@ -1826,6 +1826,9 @@ static bool project_o(int who, int r, int y, int x, int dam, int typ)
 bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see_s_msg)
 {
     bool result;
+    int  m_idx = cave[y][x].m_idx;
+
+    if (!m_idx) return FALSE;
 
     /* Reduce damage by distance */
     if (!(flg & PROJECT_FULL_DAM))
@@ -1833,7 +1836,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 
     /* Do it ... shared with other non-projection damage like melee attacks and auras */
     gf_distance_hack = r;
-    result = gf_affect_m(who, point(x,y), typ, dam, flg | GF_AFFECT_SPELL);
+    result = gf_affect_m(who, &m_list[m_idx], typ, dam, flg | GF_AFFECT_SPELL);
     gf_distance_hack = 1;
 
     /* Track it */

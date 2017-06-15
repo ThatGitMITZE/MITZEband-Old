@@ -196,7 +196,7 @@ extern gf_info_ptr gf_lookup(int id);
 #define GF_AFFECT_ATTACK 0x02 /* Monster melee B:HIT:HURT(10d10):DISENCHANT */
 #define GF_AFFECT_AURA   0x04 /* Monster aura  A:DISENCHANT(3d5) */
 extern int gf_affect_p(int who, int type, int dam, int flags);
-extern bool gf_affect_m(int who, point_t where, int type, int dam, int flags);
+extern bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags);
 
 /* exposed for the sake of wizard commands: calculate damage based
  * on the player's alignment */

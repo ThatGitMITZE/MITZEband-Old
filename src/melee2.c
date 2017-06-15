@@ -1488,7 +1488,7 @@ static int check_hit2(int power, int level, int ac, int stun)
 /* Monster attacks monster */
 static bool _mon_gf_mon(int who, mon_ptr tgt, int type, int dam)
 {
-    return gf_affect_m(who, point(tgt->fx, tgt->fy), type, dam, GF_AFFECT_ATTACK);
+    return gf_affect_m(who, tgt, type, dam, GF_AFFECT_ATTACK);
 }
 bool mon_attack_mon(int m_idx, int t_idx)
 {

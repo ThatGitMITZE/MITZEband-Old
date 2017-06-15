@@ -1029,7 +1029,7 @@ bool make_attack_normal(int m_idx)
 
                 if (p_ptr->sh_fear && alive && !p_ptr->is_dead)
                 {
-                    gf_affect_m(GF_WHO_PLAYER, point(m_ptr->fx, m_ptr->fy), GF_TURN_ALL, 2*p_ptr->lev, GF_AFFECT_AURA);
+                    gf_affect_m(GF_WHO_PLAYER, m_ptr, GF_TURN_ALL, 2*p_ptr->lev, GF_AFFECT_AURA);
                     if (MON_MONFEAR(m_ptr))
                         break;
                 }

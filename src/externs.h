@@ -1504,7 +1504,7 @@ extern bool rustproof(void);
 extern bool curse_armor(int slot);
 extern bool curse_weapon(bool force, int slot);
 extern void blast_object(object_type *o_ptr);
-extern bool polymorph_monster(int y, int x);
+extern bool polymorph_monster(mon_ptr mon);
 extern bool dimension_door(int rng);
 extern bool summon_kin_player(int level, int y, int x, u32b mode);
 
@@ -2580,7 +2580,7 @@ extern class_t *time_lord_get_class(void);
 extern bool check_foresight(void);
 extern bool devolve_monster(int m_idx, bool msg);
 extern bool evolve_monster(int m_idx, bool msg);
-extern void mon_change_race(int m_idx, int new_r_idx, cptr verb);
+extern void mon_change_race(mon_ptr mon, int new_r_idx, cptr verb);
 
 /* weaponmaster.c */
 extern class_t *weaponmaster_get_class(int subclass);

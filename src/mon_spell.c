@@ -1630,34 +1630,35 @@ static bool _m_resist_tele(mon_ptr mon, cptr name)
 static bool _projectable(point_t src, point_t dest);
 static void _annoy_m(void)
 {
+    if (!_current.mon2) return;
     switch (_current.spell->id.effect)
     {
     case ANNOY_AMNESIA:
-        gf_affect_m(_who(), _current.dest, GF_AMNESIA, 0, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_AMNESIA, 0, GF_AFFECT_SPELL);
         break;
     case ANNOY_ANIMATE_DEAD:
         animate_dead(_who(), _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
-        gf_affect_m(_who(), _current.dest, GF_BLIND, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_BLIND, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_CONFUSE:
-        gf_affect_m(_who(), _current.dest, GF_OLD_CONF, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_OLD_CONF, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_DARKNESS:
         unlite_room(_current.dest.y, _current.dest.x);
         break;
     case ANNOY_PARALYZE:
-        gf_affect_m(_who(), _current.dest, GF_PARALYSIS, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_PARALYSIS, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_SCARE:
-        gf_affect_m(_who(), _current.dest, GF_TURN_ALL, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_TURN_ALL, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_who());
         break;
     case ANNOY_SLOW:
-        gf_affect_m(_who(), _current.dest, GF_OLD_SLOW, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_OLD_SLOW, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_TELE_LEVEL: {
         mon_race_ptr race2;
@@ -1835,18 +1836,18 @@ static void _biff_p(void)
 }
 static void _biff_m(void)
 {
+    if (!_current.mon2) return; /* MSF_DIRECT */
     switch (_current.spell->id.effect)
     {
     case BIFF_ANTI_MAGIC:
-        gf_affect_m(_who(), _current.dest, GF_ANTIMAGIC, mon_save_r_level(_current.race->id), GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_ANTIMAGIC, mon_save_r_level(_current.race->id), GF_AFFECT_SPELL);
         break;
     case BIFF_DISPEL_MAGIC:
-        if (!_current.mon2) break; /* MSF_DIRECT */
         if (_current.mon2->id == p_ptr->riding) dispel_player();
         dispel_monster_status(_current.mon2->id);
         break;
     case BIFF_POLYMORPH:
-        gf_affect_m(_who(), _current.dest, GF_OLD_POLY, _current.race->level, GF_AFFECT_SPELL);
+        gf_affect_m(_who(), _current.mon2, GF_OLD_POLY, _current.race->level, GF_AFFECT_SPELL);
         break;
     }
 }

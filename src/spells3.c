@@ -4063,15 +4063,14 @@ static s16b poly_r_idx(int r_idx)
 }
 
 
-bool polymorph_monster(int y, int x)
+bool polymorph_monster(mon_ptr mon)
 {
-    cave_type    *c_ptr = &cave[y][x];
-    monster_type *m_ptr = &m_list[c_ptr->m_idx];
-    int           r_idx = poly_r_idx(m_ptr->r_idx);
+    int r_idx;
 
-    if (m_ptr->mflag2 & MFLAG2_QUESTOR) return FALSE;
-    if (r_idx != m_ptr->r_idx || p_ptr->wizard)
-        mon_change_race(c_ptr->m_idx, r_idx, "polymorphed");
+    if (mon->mflag2 & MFLAG2_QUESTOR) return FALSE;
+    r_idx = poly_r_idx(mon->r_idx);
+    if (r_idx != mon->r_idx || p_ptr->wizard)
+        mon_change_race(mon, r_idx, "polymorphed");
     return TRUE;
 }
 

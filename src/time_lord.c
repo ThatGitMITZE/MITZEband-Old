@@ -1,5 +1,7 @@
 #include "angband.h"
 
+#include <assert.h>
+
 /****************************************************************
  * Private Helpers
  ****************************************************************/
@@ -40,66 +42,65 @@ static int _find_devolution_idx(int r_idx)
     any great understanding on my part.
     UPDATE: Use this for polymorph monster as well (spells3.c).
 */
-void mon_change_race(int m_idx, int new_r_idx, cptr verb)
+void mon_change_race(mon_ptr mon, int new_r_idx, cptr verb)
 {
     char m_name[80], new_name[80];
     int old_hp, old_maxhp, old_r_idx;
     byte old_sub_align;
-    monster_type *m_ptr;
-    monster_race *r_ptr;
+    monster_race *race;
 
-    if (m_idx <= 0 || new_r_idx <= 0) return;
+    assert(mon);
+    if (new_r_idx <= 0) return;
 
-    m_ptr = &m_list[m_idx];
-    old_hp = m_ptr->hp;
-    old_maxhp = m_ptr->max_maxhp;
-    old_r_idx = m_ptr->r_idx;
-    old_sub_align = m_ptr->sub_align;
+    old_hp = mon->hp;
+    old_maxhp = mon->max_maxhp;
+    old_r_idx = mon->r_idx;
+    old_sub_align = mon->sub_align;
 
-    real_r_ptr(m_ptr)->cur_num--;
+    mon_true_race(mon)->cur_num--;
 
-    monster_desc(m_name, m_ptr, 0);
-    m_ptr->r_idx = new_r_idx;
-    m_ptr->drop_ct = get_monster_drop_ct(m_ptr);
+    monster_desc(m_name, mon, 0);
+    mon->r_idx = new_r_idx;
+    mon->drop_ct = get_monster_drop_ct(mon);
 
-    real_r_ptr(m_ptr)->cur_num++;
+    mon_true_race(mon)->cur_num++;
 
-    m_ptr->ap_r_idx = m_ptr->r_idx;
-    r_ptr = &r_info[m_ptr->r_idx];
+    mon->ap_r_idx = mon->r_idx;
+    race = mon_race(mon);
 
-    if (r_ptr->flags1 & RF1_FORCE_MAXHP)
+    if (race->flags1 & RF1_FORCE_MAXHP)
     {
-        m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
+        mon->max_maxhp = maxroll(race->hdice, race->hside);
     }
     else
     {
-        m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);
+        mon->max_maxhp = damroll(race->hdice, race->hside);
     }
     if (ironman_nightmare)
     {
-        u32b hp = m_ptr->max_maxhp * 2L;
+        u32b hp = mon->max_maxhp * 2L;
 
-        m_ptr->max_maxhp = (s16b)MIN(30000, hp);
+        mon->max_maxhp = (s16b)MIN(30000, hp);
     }
-    m_ptr->maxhp = m_ptr->max_maxhp;
-    m_ptr->hp = old_hp * m_ptr->maxhp / old_maxhp;
+    mon->maxhp = mon->max_maxhp;
+    mon->hp = old_hp * mon->maxhp / old_maxhp;
 
-    m_ptr->mspeed = get_mspeed(r_ptr);
+    mon->mspeed = get_mspeed(race);
 
-    if (!is_pet(m_ptr) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
-        m_ptr->sub_align = old_sub_align;
+    if (!is_pet(mon) && !(race->flags3 & (RF3_EVIL | RF3_GOOD)))
+        mon->sub_align = old_sub_align;
     else
     {
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->flags3 & RF3_EVIL) m_ptr->sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD) m_ptr->sub_align |= SUB_ALIGN_GOOD;
+        mon->sub_align = SUB_ALIGN_NEUTRAL;
+        if (race->flags3 & RF3_EVIL) mon->sub_align |= SUB_ALIGN_EVIL;
+        if (race->flags3 & RF3_GOOD) mon->sub_align |= SUB_ALIGN_GOOD;
     }
 
-    m_ptr->exp = 0;
+    mon->exp = 0;
 
-    if (is_pet(m_ptr) || m_ptr->ml)
+    if (is_pet(mon) || mon->ml)
     {
-        if (!ignore_unview || player_can_see_bold(m_ptr->fy, m_ptr->fx))
+        if (!ignore_unview || player_can_see_bold(mon->fy, mon->fx))
         {
             if (p_ptr->image)
             {
@@ -113,16 +114,16 @@ void mon_change_race(int m_idx, int new_r_idx, cptr verb)
             }
             else
             {
-                monster_desc(new_name, m_ptr, 0);
+                monster_desc(new_name, mon, 0);
                 cmsg_format(TERM_L_BLUE, "%^s %s into %s.", m_name, verb, new_name);
             }
         }
         if (!p_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
-        mon_set_parent(m_ptr, 0);
+        mon_set_parent(mon, 0);
     }
 
-    update_mon(m_idx, FALSE);
-    lite_spot(m_ptr->fy, m_ptr->fx);
+    update_mon(mon->id, FALSE);
+    lite_spot(mon->fy, mon->fx);
 }
 
 static bool _monster_save(monster_race* r_ptr, int power)
@@ -163,7 +164,7 @@ bool devolve_monster(int m_idx, bool msg)
     }
 
     set_monster_csleep(m_idx, 0);
-    mon_change_race(m_idx, r_idx, "devolved");
+    mon_change_race(m_ptr, r_idx, "devolved");
     return TRUE;
 }
 
@@ -192,7 +193,7 @@ bool evolve_monster(int m_idx, bool msg)
             msg_format("%^s resists.", m_name);
         return FALSE;
     }
-    mon_change_race(m_idx, r_idx, "evolved");
+    mon_change_race(m_ptr, r_idx, "evolved");
     return TRUE;
 }
 

@@ -2146,7 +2146,7 @@ void wizard_report_damage(int amt)
 
 static bool _gf_innate(mon_ptr m, int type, int dam)
 {
-    return gf_affect_m(GF_WHO_PLAYER, point(m->fx, m->fy), type, dam, GF_AFFECT_ATTACK);
+    return gf_affect_m(GF_WHO_PLAYER, m, type, dam, GF_AFFECT_ATTACK);
 }
 
 static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
@@ -3733,7 +3733,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (o_ptr && o_ptr->name1 == ART_ETERNAL_BLADE)
                 {
                     /* Hack: Time Brand. Effectively a 2x slay ... k2 is damage from dice alone.*/
-                    gf_affect_m(GF_WHO_PLAYER, point(x,y), GF_TIME, k2, GF_AFFECT_ATTACK);
+                    gf_affect_m(GF_WHO_PLAYER, m_ptr, GF_TIME, k2, GF_AFFECT_ATTACK);
                     *mdeath = (m_ptr->r_idx == 0);
                     if (*mdeath) break;
                 }
@@ -4070,7 +4070,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     !(m_ptr->mflag2 & MFLAG2_QUESTOR) && 
                     !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
                 {
-                    if (polymorph_monster(y, x))
+                    if (polymorph_monster(m_ptr))
                     {
                         msg_format("%^s changes!", m_name_subject);
                         *fear = FALSE;
