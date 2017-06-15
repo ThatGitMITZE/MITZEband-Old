@@ -459,8 +459,8 @@ static void _mirror_shifting_spell(int cmd, variant *res)
 
 static void _mirror_sleeping_fn(int y, int x)
 {
-    project(0, 2, y, x, p_ptr->lev, GF_OLD_SLEEP, 
-        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI);
+    project(PROJECT_WHO_MIRROR, 2, y, x, p_ptr->lev, GF_OLD_SLEEP, 
+        PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 }
 static void _mirror_sleeping_spell(int cmd, variant *res)
 {
@@ -920,8 +920,8 @@ void remove_mirror(int y, int x)
 static void _explode_fn(int y, int x)
 {
     remove_mirror(y, x);
-    project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
-            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI);
+    project(PROJECT_WHO_MIRROR, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
+            PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 }
 void remove_all_mirrors(bool explode)
 {

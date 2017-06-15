@@ -4427,12 +4427,14 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
     if ((dam > 0) && !is_pet(mon) && !is_friendly(mon))
     {
-        if (!who)
+        if (who == GF_WHO_PLAYER)
         {
-            if (!(flags & PROJECT_NO_HANGEKI))
-            {
-                set_target(mon, monster_target_y, monster_target_x);
-            }
+            assert(GF_WHO_PLAYER == PROJECT_WHO_PLAYER);
+            /* FYI: monster_target_* is generally the player, but
+             * it gets changed for various mirror master effects. I
+             * suppose this is a subtle touch to confuse monsters
+             * but I never noticed this when I played one ... */
+            set_target(mon, monster_target_y, monster_target_x);
         }
         else if ((who > 0) && is_pet(caster_ptr) && !player_bold(mon->target_y, mon->target_x))
         {

@@ -1411,7 +1411,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
                 msg_print("The mirror was crashed!");
                 sound(SOUND_GLASS);
                 remove_mirror(y, x);
-                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
+                project(PROJECT_WHO_MIRROR, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP));
             }
 
             if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
@@ -1439,7 +1439,7 @@ static bool project_f(int who, int r, int y, int x, int dam, int typ)
                 msg_print("The mirror was crashed!");
                 sound(SOUND_GLASS);
                 remove_mirror(y, x);
-                project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
+                project(PROJECT_WHO_MIRROR, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP));
             }
 
             if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
@@ -1836,7 +1836,7 @@ bool project_m(int who, int r, int y, int x, int dam, int typ, int flg, bool see
 
     /* Do it ... shared with other non-projection damage like melee attacks and auras */
     gf_distance_hack = r;
-    result = gf_affect_m(who, &m_list[m_idx], typ, dam, flg | GF_AFFECT_SPELL);
+    result = gf_affect_m(who, &m_list[m_idx], typ, dam, GF_AFFECT_SPELL);
     gf_distance_hack = 1;
 
     /* Track it */

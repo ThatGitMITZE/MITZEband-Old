@@ -2121,7 +2121,6 @@ enum {
  *          Depend on PROJECT_PLAYER.
  *          (used for minimum (rad == 0) balls on riding player)
  *   REFLECTABLE: Refrectable spell attacks (used for "bolts")
- *   NO_HANGEKI: Avoid counter attacks of monsters
  *   PATH: Only used for printing project path
  *   FAST: Hide "visual" of flying bolts until blast
  */
@@ -2137,7 +2136,7 @@ enum {
 #define PROJECT_PLAYER         0x000200
 #define PROJECT_AIMED          0x000400
 #define PROJECT_REFLECTABLE    0x000800
-#define PROJECT_NO_HANGEKI     0x001000
+#define PROJECT_XXXX           0x001000
 #define PROJECT_PATH           0x002000
 #define PROJECT_FAST           0x004000
 #define PROJECT_LOS            0x008000
@@ -2149,6 +2148,8 @@ enum {
 #define PROJECT_WHO_PLAYER        0
 #define PROJECT_WHO_UNCTRL_POWER -1
 #define PROJECT_WHO_GLASS_SHARDS -2
+#define PROJECT_WHO_TRAP         -3
+#define PROJECT_WHO_MIRROR       -4
 
 #define SUMMON_WHO_PLAYER -1  /* gotta love inconsistency! */
 #define SUMMON_WHO_NOBODY  0
