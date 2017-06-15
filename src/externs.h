@@ -1635,6 +1635,7 @@ extern void big_num_display(int num, char *buf);
 extern void check_mon_health_redraw(int m_idx);
 
 /* effects.c */
+extern bool free_act_save_p(int ml);
 extern void set_action(int typ);
 extern void reset_tim_flags(void);
 extern void dispel_player(void);

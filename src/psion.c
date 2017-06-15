@@ -1978,7 +1978,7 @@ static void _calc_bonuses(void)
 
     if (p_ptr->magic_num1[_SHIELDING])
     {
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         if (!p_ptr->shield)
         {
             p_ptr->to_a += 15 * p_ptr->magic_num2[_SHIELDING];

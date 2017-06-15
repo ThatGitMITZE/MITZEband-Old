@@ -668,7 +668,7 @@ static void _calc_bonuses(void)
         p_ptr->pspeed += p_ptr->lev/10;
         p_ptr->sh_retaliation = TRUE;
         if  (p_ptr->lev >= 25)
-            p_ptr->free_act = TRUE;
+            p_ptr->free_act++;
     }
     monk_ac_bonus();
 }

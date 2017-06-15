@@ -719,26 +719,24 @@ int gf_affect_p(int who, int type, int dam, int flags)
         set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         break;
     case GF_OLD_SLEEP:
-        if (p_ptr->free_act)
+        if (!free_act_save_p(rlev))
         {
-            equip_learn_flag(OF_FREE_ACT);
-            break;
+            if (fuzzy) msg_print("You fall asleep!");
+            if (ironman_nightmare)
+            {
+                msg_print("A horrible vision enters your mind.");
+
+                /* Pick a nightmare */
+                get_mon_num_prep(get_nightmare, NULL);
+
+                /* Have some nightmares */
+                have_nightmare(get_mon_num(MAX_DEPTH));
+
+                /* Remove the monster restriction */
+                get_mon_num_prep(NULL, NULL);
+            }
+            set_paralyzed(dam, FALSE);
         }
-        if (fuzzy) msg_print("You fall asleep!");
-        if (ironman_nightmare)
-        {
-            msg_print("A horrible vision enters your mind.");
-
-            /* Pick a nightmare */
-            get_mon_num_prep(get_nightmare, NULL);
-
-            /* Have some nightmares */
-            have_nightmare(get_mon_num(MAX_DEPTH));
-
-            /* Remove the monster restriction */
-            get_mon_num_prep(NULL, NULL);
-        }
-        set_paralyzed(dam, FALSE);
         break;
     case GF_BLIND:
         if (res_save_default(RES_BLIND) || (!touch && _plr_save(who, 0)))
@@ -760,14 +758,9 @@ int gf_affect_p(int who, int type, int dam, int flags)
         update_smart_learn(who, RES_FEAR);
         break;
     case GF_PARALYSIS:
-        if (p_ptr->free_act)
-        {
-            msg_print("You are unaffected!");
-            equip_learn_flag(OF_FREE_ACT);
-        }
-        else if (_plr_save(who, dam))
+        if (free_act_save_p(rlev) || _plr_save(who, dam))
             msg_print("You resist the effects!");
-        else if (!p_ptr->paralyzed)
+        else
             set_paralyzed(randint1(3), FALSE);
         update_smart_learn(who, SM_FREE_ACTION);
         break;
@@ -912,10 +905,8 @@ int gf_affect_p(int who, int type, int dam, int flags)
                     set_blind(p_ptr->blind + 8 + randint0(8), FALSE);
                 if (!res_save_default(RES_CONF))
                     set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
-                if (!p_ptr->free_act)
+                if (!free_act_save_p(rlev))
                     set_paralyzed(randint1(4), FALSE);
-                else
-                    equip_learn_flag(OF_FREE_ACT);
 
                 set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
                 set_stun(p_ptr->stun + MIN(50, dam/6 + randint1(dam/6)), FALSE);
@@ -1975,26 +1966,21 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                     {
                         switch (randint1(4))
                         {
-                            case 1:
-                                set_confused(p_ptr->confused + 3 + randint1(dam), FALSE);
-                                break;
-                            case 2:
-                                set_stun(p_ptr->stun + randint1(dam), FALSE);
-                                break;
-                            case 3:
-                            {
-                                if (race->flags3 & RF3_NO_FEAR)
-                                    note = " is unaffected.";
-
-                                else
-                                    fear_add_p(FEAR_SCARED);
-                                break;
-                            }
-                            default:
-                                if (!p_ptr->free_act)
-                                    (void)set_paralyzed(randint1(dam), FALSE);
-                                else equip_learn_flag(OF_FREE_ACT);
-                                break;
+                        case 1:
+                            set_confused(p_ptr->confused + 3 + randint1(dam), FALSE);
+                            break;
+                        case 2:
+                            set_stun(p_ptr->stun + randint1(dam), FALSE);
+                            break;
+                        case 3:
+                            if (race->flags3 & RF3_NO_FEAR)
+                                note = " is unaffected.";
+                            else
+                                fear_add_p(FEAR_SCARED);
+                            break;
+                        default:
+                            if (!free_act_save_p(race->level))
+                                set_paralyzed(randint1(dam), FALSE);
                         }
                     }
                 }

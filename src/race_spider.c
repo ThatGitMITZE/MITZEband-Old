@@ -307,7 +307,7 @@ static void _phase_spider_calc_bonuses(void)
     res_add(RES_NEXUS);
     res_add(RES_CONF);
     res_add_immune(RES_TELEPORT);
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_nocto = TRUE;
 }
 static void _phase_spider_get_flags(u32b flgs[OF_ARRAY_SIZE])
@@ -388,7 +388,7 @@ static void _aranea_calc_bonuses(void)
     res_add(RES_CONF);
     res_add(RES_FEAR);
 
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_nocto = TRUE;
 }
 static void _aranea_get_flags(u32b flgs[OF_ARRAY_SIZE])
@@ -469,7 +469,7 @@ static void _elder_aranea_calc_bonuses(void)
 
     res_add_vuln(RES_LITE);
 
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_inv = TRUE;
     p_ptr->regen += 100;
     p_ptr->see_nocto = TRUE;

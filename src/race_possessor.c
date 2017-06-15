@@ -956,7 +956,7 @@ void possessor_calc_bonuses(void)
     if (r_ptr->flags3 & RF3_NO_CONF)
         res_add(RES_CONF);
     if (r_ptr->flags3 & RF3_NO_SLEEP)
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
 
     if (r_ptr->flags7 & RF7_CAN_FLY)
         p_ptr->levitation = TRUE;

@@ -2246,7 +2246,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
         {
             (void)set_confused(p_ptr->confused + randint0(4) + 4, FALSE);
         }
-        if (!p_ptr->free_act)
+        if (!free_act_save_p(power))
         {
             (void)set_paralyzed(randint1(4), FALSE);
         }

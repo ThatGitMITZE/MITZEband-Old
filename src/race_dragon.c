@@ -2054,7 +2054,7 @@ static void _dragon_calc_bonuses(void)
     p_ptr->levitation = TRUE;
     if (p_ptr->lev >= 20)
     {
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
     }
     if (p_ptr->lev >= 30)

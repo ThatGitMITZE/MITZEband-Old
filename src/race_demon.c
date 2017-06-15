@@ -183,7 +183,7 @@ static void _khorne_calc_bonuses(void)
         p_ptr->to_a += 100;
         p_ptr->dis_to_a += 100;
         p_ptr->reflect = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
 
         res_add(RES_COLD);
@@ -198,7 +198,7 @@ static void _khorne_calc_bonuses(void)
         p_ptr->dis_to_a += 50;
         p_ptr->regen += 150;
         p_ptr->levitation = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
         res_add(RES_ACID);
         res_add(RES_COLD);
@@ -434,7 +434,7 @@ static void _marilith_calc_bonuses(void) {
         res_add(RES_CONF);
         res_add(RES_POIS);
         p_ptr->sh_fire = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
         break;
     case MON_DEATH_QUASIT:
@@ -445,7 +445,7 @@ static void _marilith_calc_bonuses(void) {
         p_ptr->levitation = TRUE;
         p_ptr->pass_wall = TRUE;
         p_ptr->no_passwall_dam = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
         break;
     case MON_MARILITH:
@@ -453,7 +453,7 @@ static void _marilith_calc_bonuses(void) {
         res_add(RES_CONF);
         res_add(RES_CHAOS);
         p_ptr->pspeed += 5;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
         break;
     }
@@ -837,7 +837,7 @@ static void _cyber_calc_bonuses(void)
 
     p_ptr->hold_life++;
     p_ptr->no_eldritch = TRUE;
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
 }
 
 static void _cyber_get_flags(u32b flgs[OF_ARRAY_SIZE])

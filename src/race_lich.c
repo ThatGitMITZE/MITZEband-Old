@@ -152,7 +152,7 @@ static void _calc_bonuses(void) {
         p_ptr->pspeed += 1;
         res_add(RES_CONF);
         res_add(RES_TELEPORT);
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
     }
     if (p_ptr->lev >= 40)
     {

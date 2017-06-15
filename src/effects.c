@@ -14,6 +14,20 @@
 
 #include <assert.h>
 
+bool free_act_save_p(int ml)
+{
+    int i;
+    for (i = 0; i < p_ptr->free_act; i++)
+    {
+        if (randint0(100 + ml/2) < p_ptr->skills.sav)
+        {
+            equip_learn_flag(OF_FREE_ACT);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 void set_action(int typ)
 {
     int prev_typ = p_ptr->action;

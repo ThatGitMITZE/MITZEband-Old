@@ -215,7 +215,7 @@ static void _android_calc_bonuses(void)
     p_ptr->dis_to_a += ac;
 
     p_ptr->slow_digest = TRUE;
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     res_add(RES_POIS);
     /*res_add_vuln(RES_ELEC); cf resists.c res_pct_aux() for an alternative*/
     p_ptr->hold_life++;
@@ -1711,7 +1711,7 @@ static int _gnome_get_powers(spell_info* spells, int max)
 }
 static void _gnome_calc_bonuses(void)
 {
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
 }
 static void _gnome_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
@@ -1783,7 +1783,7 @@ static void _golem_calc_bonuses(void)
     p_ptr->no_stun = TRUE;
 
     p_ptr->slow_digest = TRUE;
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_inv = TRUE;
     res_add(RES_POIS);
     if (p_ptr->lev >= 35) p_ptr->hold_life++;

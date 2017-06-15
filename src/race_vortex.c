@@ -441,7 +441,7 @@ static void _calc_bonuses(void)
     p_ptr->to_a += 5 + 5*r;
     p_ptr->dis_to_a += 5 + 5*r;
 
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     res_add(RES_CONF);
     res_add_immune(RES_BLIND);
     res_add_immune(RES_FEAR);

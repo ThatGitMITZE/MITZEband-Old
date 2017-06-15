@@ -379,7 +379,7 @@ static cptr _do_potion(int sval, int mode)
         if (desc) return "It paralyzes you when you quaff it.";
         if (cast)
         {
-            if (!p_ptr->free_act)
+            if (!free_act_save_p(0))
             {
                 msg_print("You fall asleep.");
 
@@ -395,7 +395,6 @@ static cptr _do_potion(int sval, int mode)
                     device_noticed = TRUE;
                 }
             }
-            else equip_learn_flag(OF_FREE_ACT);
         }
         break;
     case SV_POTION_LOSE_MEMORIES:

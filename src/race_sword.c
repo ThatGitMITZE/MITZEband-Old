@@ -478,7 +478,7 @@ static void _calc_bonuses(void)
     if (_essences[OF_NO_MAGIC] >= 5)
         p_ptr->anti_magic = TRUE;
     if (_essences[OF_FREE_ACT] >= 2)
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
     if (_essences[OF_SEE_INVIS] >= 3)
         p_ptr->see_inv = TRUE;
     if (_essences[OF_SLOW_DIGEST] >= 2)

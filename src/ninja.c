@@ -532,7 +532,7 @@ static void _calc_bonuses(void)
         p_ptr->pspeed += p_ptr->lev/10;
         p_ptr->skills.stl += p_ptr->lev/10;
         if (p_ptr->lev >= 25)
-            p_ptr->free_act = TRUE;
+            p_ptr->free_act++;
         /* Ninjas are not archers, and have relatively poor thb skills.
          * However, they excel at throwing (tht)! */
         p_ptr->skill_tht += 30 + p_ptr->lev;

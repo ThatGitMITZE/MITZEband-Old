@@ -219,7 +219,7 @@ static void _calc_bonuses(void) {
         res_add(RES_TELEPORT);
         res_add(RES_POIS);
         res_add(RES_CONF);
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->pspeed += 6;
     }
     else if (p_ptr->lev >= 35)
@@ -236,7 +236,7 @@ static void _calc_bonuses(void) {
         res_add(RES_POIS);
         res_add(RES_NETHER);
         res_add(RES_CONF);
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->pspeed += 4;
         p_ptr->hold_life++;
     }
@@ -248,7 +248,7 @@ static void _calc_bonuses(void) {
         res_add(RES_TELEPORT);
         res_add(RES_POIS);
         res_add(RES_CONF);
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->pspeed += 2;
     }
     else if (p_ptr->lev >= 10)
@@ -258,7 +258,7 @@ static void _calc_bonuses(void) {
 
         res_add(RES_FEAR);
         res_add(RES_CONF);
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
     }
     else
     {

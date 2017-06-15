@@ -1885,7 +1885,7 @@ static void hit_trap(bool break_trap)
         {
             msg_print("A strange white mist surrounds you!");
 
-            if (!p_ptr->free_act)
+            if (!free_act_save_p(0))
             {
                 msg_print("You fall asleep.");
 
@@ -5274,9 +5274,6 @@ bool trap_can_be_ignored(int feat)
         break;
     case TRAP_POISON:
         if (res_can_ignore(RES_POIS)) return TRUE;
-        break;
-    case TRAP_SLEEP:
-        if (p_ptr->free_act) return TRUE;
         break;
     }
 

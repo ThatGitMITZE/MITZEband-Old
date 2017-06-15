@@ -1372,7 +1372,7 @@ struct player_type
     bool can_swim;       /* No damage falling */
     bool levitation;     /* No damage falling */
     bool lite;           /* Permanent light */
-    bool free_act;       /* Never (?) paralyzed */
+    s16b free_act;       /* Resist paralysis; perhaps slowing */
     bool see_inv;        /* Can see invisible */
     s16b regen;          /* Rate of regeneration: 100 = 100%, 200 = 200%, etc. */
     s16b hold_life;      /* Resist life draining */

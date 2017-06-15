@@ -433,13 +433,8 @@ static void chest_trap(int y, int x, s16b o_idx)
     if (trap & (CHEST_PARALYZE))
     {
         msg_print("A puff of yellow gas surrounds you!");
-
-
-        if (!p_ptr->free_act)
-        {
-            (void)set_paralyzed(randint1(4), FALSE);
-        }
-        else equip_learn_flag(OF_FREE_ACT);
+        if (!free_act_save_p(0))
+            set_paralyzed(randint1(4), FALSE);
     }
 
     /* Summon monsters */
@@ -550,13 +545,10 @@ static void chest_trap(int y, int x, s16b o_idx)
                 else if (one_in_(5)) (void)set_cut(p_ptr->cut + 200, FALSE);
                 else if (one_in_(4))
                 {
-                    if (!p_ptr->free_act)
-                        (void)set_paralyzed(randint1(4), FALSE);
+                    if (!free_act_save_p(0))
+                        set_paralyzed(randint1(4), FALSE);
                     else
-                    {
-                        equip_learn_flag(OF_FREE_ACT);
-                        (void)set_stun(p_ptr->stun + 10 + randint0(100), FALSE);
-                    }
+                        set_stun(p_ptr->stun + 10 + randint0(100), FALSE);
                 }
                 else if (one_in_(3)) apply_disenchant(0);
                 else if (one_in_(2))

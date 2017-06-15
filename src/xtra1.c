@@ -3586,7 +3586,7 @@ void calc_bonuses(void)
     p_ptr->easy_spell = FALSE;
     p_ptr->heavy_spell = FALSE;
     p_ptr->see_inv = FALSE;
-    p_ptr->free_act = FALSE;
+    p_ptr->free_act = 0;
     p_ptr->slow_digest = FALSE;
     p_ptr->regen = 100;
     p_ptr->can_swim = FALSE;
@@ -3818,7 +3818,7 @@ void calc_bonuses(void)
     if (p_ptr->ult_res)
     {
         p_ptr->see_inv = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->slow_digest = TRUE;
         p_ptr->regen += 100;
         p_ptr->levitation = TRUE;
@@ -4011,7 +4011,7 @@ void calc_bonuses(void)
         res_add(RES_BLIND);
         res_add(RES_CONF);
         p_ptr->reflect = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->levitation = TRUE;
     }
 

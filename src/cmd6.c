@@ -144,14 +144,8 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
 
             case SV_FOOD_PARALYSIS:
             {
-                if (!p_ptr->free_act)
-                {
-                    if (set_paralyzed(randint1(4), FALSE))
-                    {
-                        ident = TRUE;
-                    }
-                }
-                else equip_learn_flag(OF_FREE_ACT);
+                if (!free_act_save_p(0))
+                    ident = set_paralyzed(randint1(4), FALSE);
                 break;
             }
 

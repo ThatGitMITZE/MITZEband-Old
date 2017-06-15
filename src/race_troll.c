@@ -304,14 +304,14 @@ static void _calc_bonuses(void)
         res_add(RES_POIS);
         break;
     case MON_ETTIN:
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         res_add(RES_POIS);
         res_add(RES_CONF);
         break;
     case MON_SPIRIT_TROLL:
         p_ptr->pass_wall = TRUE;
         p_ptr->no_passwall_dam = TRUE;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         p_ptr->see_inv = TRUE;
         p_ptr->levitation = TRUE;
         res_add(RES_COLD);
@@ -327,7 +327,7 @@ static void _calc_bonuses(void)
         break;
     case MON_TROLL_KING:
         p_ptr->pspeed += 7;
-        p_ptr->free_act = TRUE;
+        p_ptr->free_act++;
         res_add(RES_POIS);
         res_add(RES_CONF);
         break;

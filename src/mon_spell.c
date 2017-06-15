@@ -1752,12 +1752,7 @@ static void _annoy_p(void)
         aggravate_monsters(_current.mon->id);
         break;
     case ANNOY_SLOW:
-        if (p_ptr->free_act)
-        {
-            msg_print("You are unaffected!");
-            equip_learn_flag(OF_FREE_ACT);
-        }
-        else if (_curse_save())
+        if (free_act_save_p(_current.race->level) || _curse_save())
             msg_print("You resist the effects!");
         else
             set_slow(p_ptr->slow + randint0(4) + 4, FALSE);

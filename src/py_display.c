@@ -611,7 +611,12 @@ static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
     _equippy_heading(doc, "Abilities", 14);
 
     _build_flags(doc, "Speed", OF_SPEED, OF_DEC_SPEED, flagzilla);
-    _build_flags(doc, "Free Act", OF_FREE_ACT, OF_INVALID, flagzilla);
+
+    _build_flags_imp(doc, "Free Act", OF_FREE_ACT, OF_INVALID, flagzilla);
+    if (p_ptr->free_act)
+        doc_printf(doc, " %3dx", p_ptr->free_act);
+    doc_newline(doc);
+
     _build_flags(doc, "See Invis", OF_SEE_INVIS, OF_INVALID, flagzilla);
     _build_flags(doc, "Warning", OF_WARNING, OF_INVALID, flagzilla);
     _build_flags(doc, "Slow Digest", OF_SLOW_DIGEST, OF_INVALID, flagzilla);

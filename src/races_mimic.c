@@ -5,7 +5,7 @@
  ****************************************************************/
 static void _clay_golem_calc_bonuses(void)
 {
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->hold_life++;
     p_ptr->to_a += 10;
     p_ptr->dis_to_a += 10;
@@ -61,7 +61,7 @@ race_t *clay_golem_get_race(void)
  ****************************************************************/
 static void _colossus_calc_bonuses(void)
 {
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_inv = TRUE;
     p_ptr->hold_life++;
     res_add(RES_POIS);
@@ -306,7 +306,7 @@ race_t *demon_lord_get_race(void)
  ****************************************************************/
 static void _iron_golem_calc_bonuses(void)
 {
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_inv = TRUE;
     p_ptr->hold_life++;
     res_add(RES_POIS);
@@ -409,7 +409,7 @@ race_t *mangy_leper_get_race(void)
  ****************************************************************/
 static void _mithril_golem_calc_bonuses(void)
 {
-    p_ptr->free_act = TRUE;
+    p_ptr->free_act++;
     p_ptr->see_inv = TRUE;
     p_ptr->hold_life++;
     res_add(RES_POIS);
