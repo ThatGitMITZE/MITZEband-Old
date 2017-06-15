@@ -1557,11 +1557,12 @@ static void spoil_mon_anger(void)
         doc_insert(cols[doc_idx], "<color:G>Base Actual Mean  Std Max</color>\n");
         for (freq_idx = 0;; freq_idx++)
         {
-            vec_ptr runs = vec_alloc(NULL);
+            vec_ptr runs;
             _stat_t stat;
             int i, j, cast = 0, total = 0;
             int freq = freqs[freq_idx];
             if (freq < 0) break;
+            runs = vec_alloc(NULL);
             for (i = 0; i < 10000; i++)
             {
                 int a = 0;    /* anger */
@@ -2145,8 +2146,8 @@ void do_cmd_spoilers(void)
         row++;
 
         /* Prompt */
-        prt("ESC) Exit menu", 21, 1);
-        prt("Command: ", 20, 0);
+        prt("ESC) Exit menu", 27, 1);
+        prt("Command: ", 26, 0);
 
         /* Prompt */
         i = inkey();

@@ -306,6 +306,7 @@ extern bool alert_trap_detect;    /* Alert when leaving trap detected area */
 
 extern bool easy_id;        /* Easy Identify */
 extern bool easy_lore;      /* Easy Monster Lore */
+extern bool allow_spoilers;
 extern bool smart_learn;    /* Monsters learn from their mistakes (*) */
 extern bool smart_cheat;    /* Monsters exploit players weaknesses (*) */
 extern bool no_wilderness;  /* Play without a normal wilderness */
@@ -2073,6 +2074,11 @@ extern vec_ptr stats_rand_arts(void);
 extern void stats_add_rand_art(object_type *o_ptr);
 extern vec_ptr stats_egos(void);
 extern void stats_add_ego(object_type *o_ptr);
+#ifdef ALLOW_SPOILERS
+extern void do_cmd_spoilers(void);
+#endif
+
+
 
 /* wiz_obj.c */
 extern void wiz_obj_create(void);

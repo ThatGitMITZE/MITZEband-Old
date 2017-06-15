@@ -999,16 +999,6 @@ static void do_cmd_wiz_create_feature(void)
     prev_mimic = tmp_mimic;
 }
 
-#ifdef ALLOW_SPOILERS
-
-/*
- * External function
- */
-extern void do_cmd_spoilers(void);
-
-#endif /* ALLOW_SPOILERS */
-
-
 static doc_ptr _wiz_doc = NULL;
 static bool    _wiz_show_scores = TRUE;
 static int     _wiz_obj_count = 0;
