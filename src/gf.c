@@ -758,7 +758,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         update_smart_learn(who, RES_FEAR);
         break;
     case GF_PARALYSIS:
-        if (free_act_save_p(rlev) || _plr_save(who, dam))
+        if (free_act_save_p(rlev) || (!touch && _plr_save(who, dam)))
             msg_print("You resist the effects!");
         else
             set_paralyzed(randint1(3), FALSE);

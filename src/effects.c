@@ -940,7 +940,7 @@ bool set_paralyzed(int v, bool do_dec)
             if (repose_of_the_dead)
                 msg_print("You enter a deep sleep!");
             else
-                msg_print("You are paralyzed!");
+                msg_print("<color:v>You are paralyzed!</color>");
 
             /* Sniper */
             if (p_ptr->concent) reset_concentration(TRUE);
@@ -991,7 +991,7 @@ bool set_paralyzed(int v, bool do_dec)
                 repose_of_the_dead = FALSE;
             }
             else
-                msg_print("You can move again.");
+                msg_print("<color:B>You can move again.</color>");
 
             notice = TRUE;
         }
