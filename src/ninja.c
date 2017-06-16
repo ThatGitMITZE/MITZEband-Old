@@ -546,7 +546,7 @@ static void _calc_bonuses(void)
     res_add(RES_FEAR);
     if (p_ptr->lev >= 20) res_add(RES_POIS);
     if (p_ptr->lev >= 25) p_ptr->sustain_dex = TRUE;
-    if (p_ptr->lev >= 30) p_ptr->see_inv = TRUE;
+    if (p_ptr->lev >= 30) p_ptr->see_inv++;
     if (p_ptr->lev >= 45) res_add(RES_POIS);
     p_ptr->see_nocto = TRUE;
 }

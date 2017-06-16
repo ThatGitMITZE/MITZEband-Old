@@ -470,7 +470,7 @@ static void _elder_aranea_calc_bonuses(void)
     res_add_vuln(RES_LITE);
 
     p_ptr->free_act++;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     p_ptr->regen += 100;
     p_ptr->see_nocto = TRUE;
 }

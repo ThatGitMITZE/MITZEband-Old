@@ -141,7 +141,7 @@ static void _calc_bonuses(void) {
         res_add_vuln(RES_LITE);
 
     p_ptr->align -= 200;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     p_ptr->slow_digest = TRUE;
     p_ptr->hold_life++;
     res_add(RES_COLD);

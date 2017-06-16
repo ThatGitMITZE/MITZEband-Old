@@ -37,7 +37,7 @@ static void _calc_bonuses(void)
     if (p_ptr->lev >= 5)
         res_add(RES_POIS);
     if (p_ptr->lev >= 10)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (p_ptr->lev >= 15)
         p_ptr->free_act++;
 }

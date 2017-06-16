@@ -360,7 +360,7 @@ static void _undead_calc_bonuses(void)
     res_add(RES_COLD);
     if (p_ptr->lev >= 15)
     {
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         res_add(RES_POIS);
     }
     if (p_ptr->lev >= 30)
@@ -1109,7 +1109,7 @@ static void _angel_calc_bonuses(void)
     p_ptr->align += 200;
     p_ptr->levitation = TRUE;
     if (p_ptr->lev >= 15)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (p_ptr->lev >= 35)
         p_ptr->reflect = TRUE;
 

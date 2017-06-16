@@ -1236,8 +1236,11 @@ void equip_calc_bonuses(void)
 
         if (have_flag(flgs, OF_STEALTH)) p_ptr->skills.stl += obj->pval;
         if (have_flag(flgs, OF_DEC_STEALTH)) p_ptr->skills.stl -= obj->pval;
-        if (have_flag(flgs, OF_SEARCH)) p_ptr->skills.srh += (obj->pval * 5);
-        if (have_flag(flgs, OF_SEARCH)) p_ptr->skills.fos += (obj->pval * 5);
+        if (have_flag(flgs, OF_SEARCH))
+        {
+            p_ptr->skills.srh += (obj->pval * 5);
+            p_ptr->skills.fos += (obj->pval * 5);
+        }
         if (have_flag(flgs, OF_INFRA)) p_ptr->see_infra += obj->pval;
         if (have_flag(flgs, OF_TUNNEL)) p_ptr->skill_dig += (obj->pval * 20);
         if (have_flag(flgs, OF_SPEED)) p_ptr->pspeed += obj->pval;
@@ -1400,7 +1403,7 @@ void equip_calc_bonuses(void)
         if (have_flag(flgs, OF_ESP_NONLIVING)) p_ptr->esp_nonliving = TRUE;
         if (have_flag(flgs, OF_ESP_UNIQUE))  p_ptr->esp_unique = TRUE;
 
-        if (have_flag(flgs, OF_SEE_INVIS))   p_ptr->see_inv = TRUE;
+        if (have_flag(flgs, OF_SEE_INVIS))   p_ptr->see_inv++;
         if (have_flag(flgs, OF_LEVITATION))  p_ptr->levitation = TRUE;
         if (have_flag(flgs, OF_FREE_ACT))    p_ptr->free_act++;
         if (have_flag(flgs, OF_HOLD_LIFE))   p_ptr->hold_life++;

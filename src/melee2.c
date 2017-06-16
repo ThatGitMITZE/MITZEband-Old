@@ -1127,13 +1127,6 @@ static bool get_moves(int m_idx, int *mm)
     /* Handle Packs ... */
     if (!done && !will_run && is_hostile(m_ptr) && pack_ptr)
     {
-        /*
-        (
-         (los(m_ptr->fy, m_ptr->fx, py, px) && projectable(m_ptr->fy, m_ptr->fx, py, px)) ||
-         cave[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2
-        )
-        */
-
         if (pack_ptr->ai == AI_LURE &&  !can_pass_wall && !(r_ptr->flags2 & RF2_KILL_WALL))
         {
             int i, room = 0;
@@ -1449,6 +1442,21 @@ static bool get_moves(int m_idx, int *mm)
             mm[4] = 3;
         }
         break;
+    }
+
+    /* invisible monsters, currently undetected, attempt to fool the
+     * player by moving somewhat unpredictably (but not erratically) */
+    if ((r_ptr->flags2 & RF2_INVISIBLE) && !m_ptr->ml && one_in_(2))
+    {
+        int i;
+        /* permute mm[0..2] (first three primary directions) */
+        for (i = 0; i < 2; i++)
+        {
+            int j = rand_range(i, 2);
+            int t = mm[i];
+            mm[i] = mm[j];
+            mm[j] = t;
+        }
     }
 
     /* Wants to move... */

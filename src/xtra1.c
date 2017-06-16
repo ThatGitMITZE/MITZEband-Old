@@ -3485,7 +3485,7 @@ void calc_bonuses(void)
     bool old_esp_nonliving = p_ptr->esp_nonliving;
     bool old_esp_unique = p_ptr->esp_unique;
     bool old_esp_magical = p_ptr->esp_magical;
-    bool old_see_inv = p_ptr->see_inv;
+    s16b old_see_inv = p_ptr->see_inv;
 
     /* Save the old armor class */
     s16b old_dis_ac = p_ptr->dis_ac;
@@ -3585,7 +3585,7 @@ void calc_bonuses(void)
     p_ptr->spell_cap = 0;
     p_ptr->easy_spell = FALSE;
     p_ptr->heavy_spell = FALSE;
-    p_ptr->see_inv = FALSE;
+    p_ptr->see_inv = 0;
     p_ptr->free_act = 0;
     p_ptr->slow_digest = FALSE;
     p_ptr->regen = 100;
@@ -3817,7 +3817,7 @@ void calc_bonuses(void)
 
     if (p_ptr->ult_res)
     {
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         p_ptr->free_act++;
         p_ptr->slow_digest = TRUE;
         p_ptr->regen += 100;
@@ -4091,7 +4091,7 @@ void calc_bonuses(void)
     }
 
     if (p_ptr->tim_invis)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
 
     if (IS_TIM_INFRA())
         p_ptr->see_infra+=3;

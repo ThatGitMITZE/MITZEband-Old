@@ -749,7 +749,7 @@ static void _calc_bonuses(void)
     p_ptr->see_infra += p_ptr->lev/10;
     p_ptr->skill_dig += 2*p_ptr->lev;
     if (p_ptr->lev >= 20)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (p_ptr->lev >= 38)
         res_add(RES_DARK);
 

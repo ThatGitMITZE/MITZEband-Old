@@ -301,7 +301,7 @@ race_t *android_get_race(void)
 static void _archon_calc_bonuses(void)
 {
     p_ptr->levitation = TRUE;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     p_ptr->align += 200;
 }
 static void _archon_get_flags(u32b flgs[OF_ARRAY_SIZE])
@@ -370,7 +370,7 @@ static void _balrog_calc_bonuses(void)
     res_add(RES_FIRE);
     res_add(RES_NETHER);
     p_ptr->hold_life++;
-    if (p_ptr->lev >= 10) p_ptr->see_inv = TRUE;
+    if (p_ptr->lev >= 10) p_ptr->see_inv++;
     if (p_ptr->lev >= 45) res_add(RES_FIRE);
     p_ptr->align -= 200;
 }
@@ -829,7 +829,7 @@ static void _dark_elf_calc_bonuses(void)
 {
     res_add(RES_DARK);
     p_ptr->spell_cap += 3;
-    if (p_ptr->lev >= 20) p_ptr->see_inv = TRUE;
+    if (p_ptr->lev >= 20) p_ptr->see_inv++;
 }
 static void _dark_elf_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
@@ -1784,7 +1784,7 @@ static void _golem_calc_bonuses(void)
 
     p_ptr->slow_digest = TRUE;
     p_ptr->free_act++;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     res_add(RES_POIS);
     if (p_ptr->lev >= 35) p_ptr->hold_life++;
 
@@ -2132,7 +2132,7 @@ race_t *half_troll_get_race(void)
 static void _high_elf_calc_bonuses(void)
 {
     res_add(RES_LITE);
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
 }
 static void _high_elf_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
@@ -2319,7 +2319,7 @@ static int _imp_get_powers(spell_info* spells, int max)
 static void _imp_calc_bonuses(void)
 {
     res_add(RES_FIRE);
-    if (p_ptr->lev >= 10) p_ptr->see_inv = TRUE;
+    if (p_ptr->lev >= 10) p_ptr->see_inv++;
 }
 static void _imp_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {

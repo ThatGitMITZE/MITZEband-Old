@@ -900,9 +900,9 @@ void possessor_calc_bonuses(void)
     if (r_ptr->flags9 & RF9_POS_TELEPATHY)
         p_ptr->telepathy = TRUE;
     if (r_ptr->flags9 & RF9_POS_SEE_INVIS)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (r_ptr->flags2 & RF2_INVISIBLE)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (r_ptr->flags9 & RF9_POS_BACKSTAB)
         p_ptr->ambush = TRUE;
 

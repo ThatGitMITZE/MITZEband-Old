@@ -617,7 +617,11 @@ static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
         doc_printf(doc, " %3dx", p_ptr->free_act);
     doc_newline(doc);
 
-    _build_flags(doc, "See Invis", OF_SEE_INVIS, OF_INVALID, flagzilla);
+    _build_flags_imp(doc, "See Invis", OF_SEE_INVIS, OF_INVALID, flagzilla);
+    if (p_ptr->see_inv)
+        doc_printf(doc, " %3dx", p_ptr->see_inv);
+    doc_newline(doc);
+
     _build_flags(doc, "Warning", OF_WARNING, OF_INVALID, flagzilla);
     _build_flags(doc, "Slow Digest", OF_SLOW_DIGEST, OF_INVALID, flagzilla);
 

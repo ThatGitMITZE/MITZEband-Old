@@ -184,7 +184,7 @@ static void _khorne_calc_bonuses(void)
         p_ptr->dis_to_a += 100;
         p_ptr->reflect = TRUE;
         p_ptr->free_act++;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
 
         res_add(RES_COLD);
         res_add(RES_ELEC);
@@ -199,7 +199,7 @@ static void _khorne_calc_bonuses(void)
         p_ptr->regen += 150;
         p_ptr->levitation = TRUE;
         p_ptr->free_act++;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         res_add(RES_ACID);
         res_add(RES_COLD);
         res_add(RES_POIS);
@@ -428,14 +428,14 @@ static void _marilith_calc_bonuses(void) {
     {
     case MON_QUASIT:
         p_ptr->levitation = TRUE;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         break;
     case MON_BODAK:
         res_add(RES_CONF);
         res_add(RES_POIS);
         p_ptr->sh_fire = TRUE;
         p_ptr->free_act++;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         break;
     case MON_DEATH_QUASIT:
         res_add(RES_CONF);
@@ -446,7 +446,7 @@ static void _marilith_calc_bonuses(void) {
         p_ptr->pass_wall = TRUE;
         p_ptr->no_passwall_dam = TRUE;
         p_ptr->free_act++;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         break;
     case MON_MARILITH:
         res_add(RES_POIS);
@@ -454,7 +454,7 @@ static void _marilith_calc_bonuses(void) {
         res_add(RES_CHAOS);
         p_ptr->pspeed += 5;
         p_ptr->free_act++;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         break;
     }
 }
@@ -656,7 +656,7 @@ static void _balrog_calc_bonuses(void) {
     }
 
     if (p_ptr->lev >= 10)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
 
     if (p_ptr->lev >= 30)
     {

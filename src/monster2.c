@@ -87,6 +87,17 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 
 };
 
+bool py_see_invis(int rlev)
+{
+    int i;
+    for (i = 0; i < p_ptr->see_inv; i++)
+    {
+        if (randint0(50 + rlev/2) < p_ptr->skills.srh)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 monster_type *mon_get_parent(monster_type *m_ptr)
 {
     monster_type *result = NULL;
@@ -2693,7 +2704,7 @@ void update_mon(int m_idx, bool full)
                     do_invisible = TRUE;
 
                     /* See invisible */
-                    if (p_ptr->see_inv)
+                    if (py_see_invis(r_ptr->level))
                     {
                         /* Easy to see */
                         easy = flag = TRUE;

@@ -177,7 +177,7 @@ static void _calc_bonuses(void)
     {
         p_ptr->to_a += 10;
         p_ptr->dis_to_a += 10;
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
         res_add(RES_FIRE);
         res_add(RES_COLD);
         res_add(RES_ELEC);

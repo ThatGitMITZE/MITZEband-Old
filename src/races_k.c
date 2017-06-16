@@ -217,7 +217,7 @@ static void _mindflayer_calc_bonuses(void)
 {
     p_ptr->sustain_int = TRUE;
     p_ptr->sustain_wis = TRUE;
-    if (p_ptr->lev >= 15) p_ptr->see_inv = TRUE;
+    if (p_ptr->lev >= 15) p_ptr->see_inv++;
     if (p_ptr->lev >= 30) p_ptr->telepathy = TRUE;
 }
 static void _mindflayer_get_flags(u32b flgs[OF_ARRAY_SIZE])
@@ -419,7 +419,7 @@ static void _skeleton_calc_bonuses(void)
 {
     res_add(RES_SHARDS);
     p_ptr->hold_life++;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     res_add(RES_POIS);
     if (p_ptr->lev >= 10) res_add(RES_COLD);
 }
@@ -600,7 +600,7 @@ static void _spectre_calc_bonuses(void)
     p_ptr->levitation = TRUE;
     res_add(RES_NETHER);
     p_ptr->hold_life++;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     res_add(RES_POIS);
     p_ptr->slow_digest = TRUE;
     res_add(RES_COLD);
@@ -1056,7 +1056,7 @@ static void _zombie_calc_bonuses(void)
 {
     res_add(RES_NETHER);
     p_ptr->hold_life++;
-    p_ptr->see_inv = TRUE;
+    p_ptr->see_inv++;
     res_add(RES_POIS);
     p_ptr->slow_digest = TRUE;
     if (p_ptr->lev >= 5) res_add(RES_COLD);

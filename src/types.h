@@ -1373,7 +1373,7 @@ struct player_type
     bool levitation;     /* No damage falling */
     bool lite;           /* Permanent light */
     s16b free_act;       /* Resist paralysis; perhaps slowing */
-    bool see_inv;        /* Can see invisible */
+    s16b see_inv;        /* Can see invisible */
     s16b regen;          /* Rate of regeneration: 100 = 100%, 200 = 200%, etc. */
     s16b hold_life;      /* Resist life draining */
 

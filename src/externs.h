@@ -1086,6 +1086,7 @@ extern bool monster_magical(monster_race *r_ptr);
 extern cptr horror_desc[MAX_SAN_HORROR];
 extern cptr funny_desc[MAX_SAN_FUNNY];
 extern cptr funny_comments[MAX_SAN_COMMENT];
+extern bool py_see_invis(int rlev);
 extern void set_target(monster_type *m_ptr, int y, int x);
 extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);

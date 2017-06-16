@@ -1416,7 +1416,7 @@ static void _calc_bonuses(void)
     if (_essences[OF_FREE_ACT] >= 1)
         p_ptr->free_act++;
     if (_essences[OF_SEE_INVIS] >= 1)
-        p_ptr->see_inv = TRUE;
+        p_ptr->see_inv++;
     if (_essences[OF_SLOW_DIGEST] >= 2)
         p_ptr->slow_digest = TRUE;
     if (_essences[OF_REGEN] >= 7)
