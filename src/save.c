@@ -165,9 +165,9 @@ static void wr_lore(savefile_ptr file, int r_idx)
     savefile_write_byte(file, r_ptr->max_num);
     savefile_write_s16b(file, r_ptr->floor_id);
     savefile_write_byte(file, r_ptr->stolen_ct);
-    savefile_write_u32b(file, r_ptr->flagsx);
-    mon_spells_save(r_ptr->spells, file);
-    for (i = 0; i < MAX_MON_BLOWS; i++)
+    savefile_write_u32b(file, r_ptr->flagsx);   /* 50 bytes */
+    mon_spells_save(r_ptr->spells, file); /* 2 + 5S bytes */
+    for (i = 0; i < MAX_MON_BLOWS; i++) /* 40 bytes */
     {
         mon_blow_ptr blow = &r_ptr->blows[i];
         savefile_write_s16b(file, blow->lore);
@@ -982,19 +982,19 @@ static bool wr_savefile_new(savefile_ptr file)
 
     tmp16u = max_r_idx;
     savefile_write_u16b(file, tmp16u);
-    for (i = 0; i < tmp16u; i++) wr_lore(file, i);
+    for (i = 0; i < tmp16u; i++) wr_lore(file, i);   /* 136k */
 
     tmp16u = max_k_idx;
     savefile_write_u16b(file, tmp16u);
-    for (i = 0; i < tmp16u; i++) wr_xtra_kind(file, i);
+    for (i = 0; i < tmp16u; i++) wr_xtra_kind(file, i); /* 16k */
 
     tmp16u = max_e_idx;
     savefile_write_u16b(file, tmp16u);
-    for (i = 0; i < tmp16u; i++) wr_xtra_ego(file, i);
+    for (i = 0; i < tmp16u; i++) wr_xtra_ego(file, i); /* 33k */
 
     tmp16u = max_a_idx;
     savefile_write_u16b(file, tmp16u);
-    for (i = 0; i < tmp16u; i++) wr_xtra_art(file, i);
+    for (i = 0; i < tmp16u; i++) wr_xtra_art(file, i); /* 8k */
 
     quests_save(file);
 
@@ -1011,7 +1011,7 @@ static bool wr_savefile_new(savefile_ptr file)
     {
         for (j = 0; j < max_wild_y; j++)
             savefile_write_u32b(file, wilderness[j][i].seed);
-    }
+    } /* 26k */
 
     tmp16u = max_a_idx;
     savefile_write_u16b(file, tmp16u);
