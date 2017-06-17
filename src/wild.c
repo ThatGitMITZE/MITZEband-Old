@@ -971,7 +971,7 @@ static void _generate_entrance(int x, int y, int dx, int dy)
             {
                 if (!m_list[i].r_idx) continue;
 
-                if ( (m_list[i].smart & SM_GUARDIAN)
+                if ( (m_list[i].smart & (1U << SM_GUARDIAN))
                   && m_list[i].pack_idx
                   && pack_info_list[m_list[i].pack_idx].guard_idx == dun_idx )
                 {

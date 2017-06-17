@@ -215,7 +215,10 @@ static _parse_t _ball_tbl[] = {
           "$CASTER gazes deep into the eyes of $TARGET.",
           "You gaze deeply." }, MSF_BALL0 | MSF_TARGET },
     { "DRAIN_MANA", { MST_BALL, GF_DRAIN_MANA },
-        { "Drain Mana", TERM_L_BLUE}, MSF_BALL0 | MSF_TARGET },
+        { "Drain Mana", TERM_L_BLUE,
+          "$CASTER drains psychic energy from you.",
+          "$CASTER drains psychic energy from you.",
+          "$CASTER drains psychic energy from $TARGET."}, MSF_BALL0 | MSF_TARGET },
     { "MIND_BLAST", { MST_BALL, GF_MIND_BLAST },
         { "Mind Blast", TERM_L_BLUE,
           "$CASTER gazes deep into your eyes.",
@@ -3267,6 +3270,7 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
 
         if (!stupid && (smart_cheat || smart_learn))
             _smart_remove(cast);
+        _ai_wounded(cast);
 
         _adjust_group(spells->groups[MST_BREATH], NULL, 50);
         _adjust_group(spells->groups[MST_BALL], NULL, 50);

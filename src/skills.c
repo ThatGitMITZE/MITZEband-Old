@@ -831,6 +831,7 @@ cptr skills_innate_calc_name(innate_attack_ptr attack)
 {
     static char buf[MAX_NLEN];
     buf[0] = '\0';
+#if 0
     if ((p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC) && p_ptr->current_r_idx)
     {
         monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
@@ -840,6 +841,7 @@ cptr skills_innate_calc_name(innate_attack_ptr attack)
             sprintf(buf, "%c.%s", r_ptr->d_char, attack->name);
     }
     else
+#endif
         sprintf(buf, "%s", attack->name);
     return buf;
 }

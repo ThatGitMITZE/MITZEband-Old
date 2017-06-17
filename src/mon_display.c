@@ -76,8 +76,9 @@ static bool _know_armor_hp(monster_race *r_ptr)
 
 static bool _know_damage_aux(int ct, int dam, int lvl, bool unique)
 {
-    int need = MIN(100, MAX(5, 80*dam/MAX(1, lvl)));
-    if (unique) need = (need + 1)/2;
+    int need = 80*dam/MAX(1, lvl);
+    if (unique) need /= 5;
+    need = MIN(100, MAX(5, need));
     return ct >= need;
 }
 
@@ -92,7 +93,7 @@ static bool _know_spell_damage(mon_race_ptr race, mon_spell_ptr spell)
 {
     if (_easy_lore(race)) return TRUE;
     return _know_damage_aux(
-        spell->lore, mon_spell_avg_dam(spell, race, FALSE),
+        spell->lore, mon_spell_avg_dam(spell, race, FALSE)/5,
         race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
 }
 

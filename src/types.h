@@ -449,6 +449,15 @@ typedef struct {
     char thb[SKILL_DESC_LEN];
 } skills_desc_t, *skills_desc_ptr;
 
+/* For the blows calculation, see calculate_base_blows in combat.c
+ * This structure should be initialized in the appropriate calc_weapon_bonuses
+ * cf calc_bonuses in xtra1.c */
+typedef struct {
+    int max;
+    int wgt;
+    int mult;
+} _blows_calc_t;
+
 struct monster_body_s
 {
     s16b     stats[MAX_STATS];
@@ -460,6 +469,7 @@ struct monster_body_s
     s16b     body_idx;
     s16b     class_idx;
     s16b     speed;
+    _blows_calc_t blows_calc;
 };
 typedef struct monster_body_s monster_body_t;
 
@@ -886,15 +896,6 @@ struct player_pact
 #define MAX_HANDS 6
 #define MAX_ARMS  3
 #define HAND_NONE -1
-
-/* For the blows calculation, see calculate_base_blows in combat.c
- * This structure should be initialized in the appropriate calc_weapon_bonuses
- * cf calc_bonuses in xtra1.c */
-typedef struct {
-    int max;
-    int wgt;
-    int mult;
-} _blows_calc_t;
 
 typedef struct {
     int  wield_how;

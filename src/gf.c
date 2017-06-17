@@ -10,7 +10,7 @@ static gf_info_t _gf_tbl[GF_COUNT] = {
     { GF_ACID, "Acid", TERM_GREEN, RES_ACID, "ACID" },
     { GF_ELEC, "Lightning", TERM_BLUE, RES_ELEC, "ELEC" },
     { GF_FIRE, "Fire", TERM_RED, RES_FIRE, "FIRE" },
-    { GF_COLD, "Cold", TERM_L_WHITE, RES_COLD, "COLD" },
+    { GF_COLD, "Frost", TERM_L_WHITE, RES_COLD, "COLD" },
     { GF_POIS, "Poison", TERM_L_GREEN, RES_POIS, "POIS" },
     { GF_LITE, "Light", TERM_YELLOW, RES_LITE, "LITE" },
     { GF_DARK, "Dark", TERM_L_DARK, RES_DARK, "DARK" },

@@ -505,6 +505,7 @@ F:ANIMAL | DROP_CORPSE
 P:Copy:Snotling:Warrior
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:It is about three feet long with large teeth.
 
 N:28:Large brown snake
@@ -929,6 +930,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Life:50
 P:Body:Worm
+S:MULTIPLY
 D:It is a large slimy mass of worms.
 
 N:59:Large yellow snake
@@ -1091,6 +1093,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:It is six inches long.
 
 N:70:Piranha
@@ -1115,6 +1118,7 @@ F:BASH_DOOR | CAN_SWIM
 F:EVIL
 P:Copy:Yeek:Warrior
 P:Body:Naga
+P:Blows:150
 D:A large black serpent's body with a female torso.
 
 N:72:Spotted mushroom patch
@@ -1216,6 +1220,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Life:50
 P:Body:Worm
+S:MULTIPLY
 D:It is a large slimy mass of worms.
 
 N:79:Clear worm mass
@@ -1232,6 +1237,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Life:50
 P:Body:Worm
+S:MULTIPLY
 D:It is a disgusting mass of poisonous worms.
 
 N:80:Radiation eye
@@ -1324,6 +1330,7 @@ F:ANIMAL
 P:Copy:Snotling:Warrior
 P:Life:60
 P:Body:Scrawny
+S:MULTIPLY
 D:It is a very vicious rodent.
 
 N:87:Snotling
@@ -1365,6 +1372,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Life:50
 P:Body:Worm
+S:MULTIPLY
 D:It is a large slimy mass of worms.
 
 N:90:Large grey snake
@@ -1435,6 +1443,7 @@ F:BASH_DOOR | CAN_SWIM | WILD_SHORE |
 F:EVIL | RES_ACID
 P:Copy:Yeek:Warrior
 P:Body:Naga
+P:Blows:150
 D:A large green serpent with a female's torso. Her green skin glistens with
 D:acid.
 
@@ -1587,6 +1596,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Life:60
 P:Body:Worm
+S:MULTIPLY
 D:It is a large slimy mass of worms.
 
 N:106:Copperhead snake
@@ -1943,6 +1953,7 @@ F:TAKE_ITEM | BASH_DOOR | DROP_CORPSE
 F:EVIL
 P:Copy:Yeek:Warrior
 P:Body:Naga
+P:Blows:150
 D:A large red snake with a woman's torso.
 
 N:131:Red jelly
@@ -2273,6 +2284,7 @@ B:BITE:HURT(1d4):EAT_FOOD
 F:MULTIPLY | RES_POIS | RES_DARK | HURT_LITE | EVIL | DEMON | OPEN_DOOR |
 F:TAKE_ITEM | CAN_SWIM
 P:Copy:Yeek:Rogue
+S:MULTIPLY
 D:Don't splash water on them, and don't feed them after midnight!
 
 N:154:Yeti
@@ -2316,6 +2328,7 @@ F:ANIMAL | RES_POIS
 P:Copy:Snotling:Warrior
 P:Life:80
 P:Body:Scrawny
+S:MULTIPLY
 D:It is a rodent of unusual size.
 
 N:157:Black harpy
@@ -2751,6 +2764,7 @@ F:ATTR_CLEAR |
 F:NEVER_MOVE | INVISIBLE | COLD_BLOOD | MULTIPLY |
 F:STUPID | EMPTY_MIND | CAN_SWIM |
 F:NO_CONF | NO_SLEEP | NO_FEAR
+S:MULTIPLY
 D:Yum! It looks quite tasty.
 
 N:185:Quiver slot
@@ -2761,7 +2775,7 @@ B:SPORE:CONFUSION(1d1)
 F:NEVER_MOVE | COLD_BLOOD | MULTIPLY |
 F:STUPID | EMPTY_MIND |
 F:NO_CONF | NO_SLEEP | NO_FEAR
-S:1_IN_5 | SHOOT(2d5)
+S:1_IN_5 | SHOOT(2d5) | MULTIPLY
 D:It looks weird.
 
 N:186:Grishnakh, the Hill Orc
@@ -2933,6 +2947,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:A fast-breeding, annoying pest.
 
 N:198:Panther
@@ -3010,6 +3025,7 @@ F:HURT_LITE | RES_NETH | COLD_BLOOD | EVIL | NEVER_MOVE | MULTIPLY
 F:POS_GAIN_AC | POS_SEE_INVIS | POS_SUST_CON
 P:Copy:Human:Priest
 P:Body:Jelly3
+S:MULTIPLY
 D:A sickening mound of decaying flesh, bones, hands and so on. It seems to
 D:be growing.
 
@@ -3186,6 +3202,7 @@ F:ANIMAL | HURT_LITE | RES_NETH | NO_FEAR
 F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Body:Worm
+S:MULTIPLY
 D:It is a disgusting mass of dark worms, eating each other, the floor,
 D:the air, you....
 
@@ -3200,6 +3217,7 @@ F:ANIMAL | HURT_LITE | RES_DARK | NO_FEAR | KILL_WALL | COLD_BLOOD | INVISIBLE
 F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Body:Worm
+S:MULTIPLY
 D:Even more disgusting dark worms, their essence that of unbeing.
 
 N:215:Golfimbul, the Hill Orc Chief
@@ -3618,7 +3636,7 @@ I:110:15d9:20:35:20:50
 W:16:3:50:64:0:0
 B:CLAW:HURT(1d8):TERRIFY
 B:CLAW:HURT(1d8):TERRIFY
-B:BITE:CONFUSION(1d6)
+B:BITE:CONFUSE(1d6)
 F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR |
 F:EVIL | DEMON | RES_FIRE | NO_CONF
@@ -3684,6 +3702,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:Oh no! They are everywhere!
 
 N:247:Lurker
@@ -3768,7 +3787,7 @@ F:RAND_50 |
 F:MULTIPLY | OPEN_DOOR | BASH_DOOR | CAN_SWIM | DROP_CORPSE
 F:EVIL | RES_POIS
 S:1_IN_8 |
-S:BLIND | CONFUSE | SCARE
+S:BLIND | CONFUSE | SCARE | MULTIPLY
 P:Copy:Snotling:Warrior-Mage
 P:Life:50
 P:Body:Icky
@@ -3786,7 +3805,7 @@ F:POS_GAIN_AC
 P:Copy:Imp:Priest
 P:Body:Jelly5
 S:1_IN_7
-S:SCARE | CONFUSE | BR_LITE | DETECT_MONSTERS
+S:SCARE | CONFUSE | BR_LITE | DETECT_MONSTERS | MULTIPLY
 D:A chaotic mass of pulsating flesh, mouths and eyes.
 
 N:254:Irish wolfhound of Flora
@@ -3861,7 +3880,7 @@ P:Skills:0:0:0:7:0:0:0:0
 P:Life:60
 P:Speed:+10
 S:1_IN_6
-S:BLINK | CLAIRVOYANCE
+S:BLINK | CLAIRVOYANCE | MULTIPLY
 D:A merry little gnome.
 
 N:259:Giant flea
@@ -3876,6 +3895,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:It makes you itch just to look at it.
 
 N:260:Ufthak of Cirith Ungol
@@ -3970,6 +3990,7 @@ S:1_IN_4
 S:PARALYZE | CONFUSE | BO_COLD | HEAL | DARKNESS
 P:Copy:Yeek:Mage
 P:Body:Naga
+P:Blows:200
 O:DROP_MAGE
 D:A giant snake-like figure with a woman's torso. Not as strong
 D:as other nagas, but more talented in magic.
@@ -4031,6 +4052,7 @@ F:OPEN_DOOR | BASH_DOOR | CAN_SWIM |
 F:EVIL
 P:Copy:Human:Warrior
 P:Body:Naga
+P:Blows:200
 D:A giant snake-like figure with a woman's torso.
 
 N:270:Wererat
@@ -4368,6 +4390,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:50
 P:Body:Scrawny
+S:MULTIPLY
 D:A giant buzzing wasp, its stinger drips venom.
 
 N:290:Lizardman
@@ -5115,6 +5138,7 @@ B:HIT:HURT(2d5)
 F:MULTIPLY | NEVER_MOVE | RES_COLD | COLD_BLOOD | RES_ACID | RES_ELEC | NO_FEAR |
 F:RES_FIRE | IM_POIS | NO_CONF | NO_SLEEP | FRIENDS | CHAR_MULTI | HURT_ROCK |
 F:RES_SHAR
+S:MULTIPLY
 D:A sentient section of wall.
 
 N:337:Earth hound
@@ -5689,8 +5713,7 @@ F:RES_POIS | NO_FEAR
 F:POS_GAIN_AC
 P:Copy:Yeek:Tourist
 P:Body:Jelly3
-S:1_IN_11 |
-S:DRAIN_MANA
+S:1_IN_11 | DRAIN_MANA | MULTIPLY
 D:It is a strangely moving puddle.
 
 N:372:Hardened warrior
@@ -6790,6 +6813,7 @@ F:EVIL | NO_CONF | NO_SLEEP |
 F:DROP_CORPSE | POS_SEE_INVIS
 P:Copy:Demigod:Priest
 P:Body:Naga
+P:Blows:200
 S:1_IN_4 |
 S:HEAL | BLIND | MIND_BLAST | DARKNESS
 D:A wraithly snake-like form with the torso of a beautiful woman, it is the
@@ -6991,6 +7015,7 @@ B:HIT:HURT(2d6)
 F:FORCE_SLEEP | COLD_BLOOD | EMPTY_MIND | KILL_WALL | RAND_50 | MULTIPLY |
 F:BASH_DOOR | RES_COLD | RES_ACID | RES_FIRE | RES_ELEC | IM_POIS | NONLIVING |
 F:HURT_ROCK | NO_CONF | NO_SLEEP | CHAR_MULTI | RES_SHAR
+S:MULTIPLY
 D:A sentient, moving section of wall.
 
 N:449:Mage
@@ -7062,6 +7087,7 @@ F:DROP_60 | DROP_90 |
 F:CAN_SWIM | BASH_DOOR | ELDRITCH_HORROR | RES_TELE |
 F:EVIL | DEMON | RES_FIRE | RES_COLD | RES_POIS | RES_WATE
 P:Copy:Imp:Warrior
+P:Blows:300
 D:"I thought their predominant color was a greyish-green,
 D:though they had white bellies. They were mostly shiny and
 D:slippery, but the ridges of their backs were scaly. Their
@@ -7175,7 +7201,7 @@ F:EMPTY_MIND | COLD_BLOOD |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_4 |
 S:BLIND | CONFUSE | SCARE | CAUSE_2 | BLINK
-S:S_MONSTER(1d1)
+S:S_MONSTER(1d1) | MULTIPLY
 D:It is a floor tile corrupted by chaos.
 
 N:459:Young blue dragon
@@ -8427,7 +8453,7 @@ P:Skills:0:0:0:7:0:0:0:0
 P:Life:75
 P:Speed:+10
 S:1_IN_6
-S:BLINK | TELE_SELF | TELE_TO | CAUSE_1 | CLAIRVOYANCE 
+S:BLINK | TELE_SELF | TELE_TO | CAUSE_1 | CLAIRVOYANCE | MULTIPLY
 D:This little creature has a fiendish gleam in its eyes.
 
 N:530:Eog golem
@@ -9299,6 +9325,7 @@ F:WEIRD_MIND | BASH_DOOR | ATTR_MULTI | ATTR_ANY |
 F:RES_CHAO | NO_CONF | NO_SLEEP | EVIL
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Hobbit:Warrior
+P:Blows:300
 S:FREQ_5 | BR_CONFUSION | BR_CHAOS
 D:"It had the appearance of a butterfly, but but a butterfly with
 D:wings so huge they blotted out the sun... it had a man's body,
@@ -10212,6 +10239,7 @@ F:CAN_SWIM | NO_CONF | NO_SLEEP |
 F:POS_GAIN_AC
 P:Copy:Barbarian:Warrior
 P:Body:Jelly6
+S:MULTIPLY
 D:Weird, jelly like creatures. No two look the same.
 
 N:627:Hammer of hell
@@ -10312,6 +10340,7 @@ F:ANIMAL | HURT_LITE | NO_FEAR | SELF_LITE_1
 F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Body:Worm
+S:MULTIPLY
 D:It is a strange mass of squirming worms. Magical energy crackles
 D:around its disgusting form.
 
@@ -10496,6 +10525,7 @@ S:PARALYZE | SCARE | CAUSE_3 | BO_FIRE | BO_PLASMA | BA_ACID |
 S:S_HYDRA
 P:Copy:Kobold:Chaos-Warrior
 P:Body:Naga
+P:Blows:200
 D:Brand's one-time mistress. Her face could sink a thousand
 D:ships, but Brand is not too selective.
 
@@ -11264,7 +11294,7 @@ P:Skills:0:0:0:7:0:0:0:0
 P:Life:85
 P:Speed:+10
 S:1_IN_6
-S:BLINK | TELE_SELF | TELE_TO | CAUSE_3 | ANIM_DEAD | CLAIRVOYANCE 
+S:BLINK | TELE_SELF | TELE_TO | CAUSE_3 | ANIM_DEAD | CLAIRVOYANCE | MULTIPLY 
 D:Nasty undead little creatures. They are chanting the name of the
 D:sinister wizard who created them: 'Bruce! Bruce..!'
 
@@ -11677,7 +11707,7 @@ F:EVIL | OPEN_DOOR | MALE | HAS_LITE_1 |
 P:Copy:Dark-Elf:Rogue
 P:Speed:+13
 S:1_IN_6
-S:BLINK | TELE_SELF | TELE_TO
+S:BLINK | TELE_SELF | TELE_TO | MULTIPLY
 D:These leprechauns are not afraid to die for their cause. They are
 D:carrying explosives and making terrorist strikes...
 
@@ -12037,6 +12067,7 @@ B:HIT:HURT(3d6)
 F:FORCE_SLEEP | COLD_BLOOD | EMPTY_MIND | PASS_WALL | RAND_50 | MULTIPLY |
 F:BASH_DOOR | RES_COLD | RES_ACID | RES_FIRE | RES_ELEC | RES_POIS | NONLIVING |
 F:HURT_ROCK | NO_CONF | NO_SLEEP | CHAR_MULTI | CAN_FLY | RES_SHAR
+S:MULTIPLY
 D:A sentient, moving section of wall.
 
 N:719:Nycadaemon
@@ -14263,8 +14294,7 @@ F:COLD_BLOOD | NONLIVING | RAND_50
 F:POS_GAIN_AC | POS_HOLD_LIFE
 P:Copy:Zombie:Rage-Mage
 P:Body:Demonic Horror
-S:1_IN_5 |
-S:BR_CHAOS
+S:1_IN_5 | BR_CHAOS | MULTIPLY
 D:Summoned from the Courts of Chaos, it is a mass of sentient Logrus,
 D:spreading uncontrollably and destroying everything in its path.
 
@@ -15483,8 +15513,7 @@ F:STUPID | WEIRD_MIND | ATTR_MULTI | ATTR_ANY | QUANTUM |
 F:ELDRITCH_HORROR | MULTIPLY | FRIENDS |
 F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | DROP_CORPSE
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN
-S:1_IN_2 |
-S:BLINK | MIND_BLAST
+S:1_IN_2 | BLINK | MIND_BLAST | MULTIPLY
 D:It is there and it is not.
 P:Copy:Yeek:Tourist
 P:Life:60
@@ -15688,6 +15717,7 @@ S:1_IN_2 |
 S:ROCKET(300) | HEAL(300) | JMP_SHARDS | INVULN
 P:Copy:Human:Beastmaster
 P:Speed:+15
+P:Blows:300
 D:His favorite food is roasting rice noodle.
 D:He is the lone wolf filled with the adventurous spirit.
 D:His righteousness and courage are more than the average.
@@ -15751,6 +15781,7 @@ F:ANIMAL | HURT_LITE | NO_FEAR
 F:POS_GAIN_AC
 P:Copy:Snotling:Warrior
 P:Body:Worm
+S:MULTIPLY
 D:A seething mass of thick, glowing worms.
 
 N:877:Bat of Gorgoroth
@@ -15904,6 +15935,7 @@ F:RES_FIRE | RES_COLD | RES_ACID | RES_ELEC | RES_POIS |
 F:NONLIVING | EMPTY_MIND | COLD_BLOOD |
 F:WILD_VOLCANO | WILD_SWAMP |
 F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
+S:MULTIPLY
 D:It is a swirling cloud of yellowish gas.
 
 N:885:Shallow puddle
@@ -16128,6 +16160,7 @@ B:TOUCH:HURT(3d3):PARALYZE
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_90 | ANIMAL | HURT_ROCK |
 F:NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN | EMPTY_MIND | COLD_BLOOD |
 F:RES_COLD | RES_FIRE | RES_ELEC | RES_POIS | RES_SHAR
+S:MULTIPLY
 D:Just a normal wall, boring gray rock. But wait! It seems to be growing...
 
 N:899:Fire troll
@@ -16184,6 +16217,7 @@ B:TOUCH:HURT(3d3):PARALYZE
 F:NEVER_MOVE | MULTIPLY | ONLY_GOLD | DROP_60 | DROP_90 | EMPTY_MIND |
 F:ANIMAL | HURT_ROCK | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN |
 F:RES_ACID | RES_ELEC | RES_POIS | RES_FIRE | RES_SHAR
+S:MULTIPLY
 D:It's just a block of dark rock. But wait! It seems to be growing...
 
 N:903:Small kraken
@@ -16311,6 +16345,7 @@ B:TOUCH:HURT(3d3):PARALYZE
 F:NEVER_MOVE | ONLY_GOLD | DROP_1D2 | DROP_90 | MULTIPLY | EMPTY_MIND
 F:ANIMAL | COLD_BLOOD | NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN
 F:HURT_ROCK | RES_FIRE | RES_ACID | RES_POIS | RES_COLD | RES_SHAR
+S:MULTIPLY
 D:Look! A nice vein of rock to dig in for gold! Wait a minute...
 
 N:912:Floating orb
@@ -16449,6 +16484,7 @@ F:EVIL | NO_CONF | NO_SLEEP | SMART
 F:POS_SEE_INVIS
 P:Copy:Demigod:Priest
 P:Body:Naga
+P:Blows:200
 S:1_IN_7 |
 S:DARKNESS | CAUSE_4 | BO_ICE
 D:A naga adapted to underwater life. She has a fish-like tail and a pair
@@ -17103,6 +17139,7 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 F:POS_GAIN_AC
 P:Copy:Barbarian:Warrior
 P:Body:Jelly5
+S:MULTIPLY
 D:A mysterious red jelly thing. It looks ready to explode.
 
 N:959:Blue puyo
@@ -17116,6 +17153,7 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 F:POS_GAIN_AC
 P:Copy:Barbarian:Warrior
 P:Body:Jelly5
+S:MULTIPLY
 D:A mysterious blue jelly thing. It looks ready to explode.
 
 N:960:Yellow puyo
@@ -17129,6 +17167,7 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 F:POS_GAIN_AC
 P:Copy:Barbarian:Warrior
 P:Body:Jelly5
+S:MULTIPLY
 D:A mysterious yellow jelly thing. It looks ready to explode.
 
 N:961:Green puyo
@@ -17142,6 +17181,7 @@ F:EMPTY_MIND | NO_FEAR | NO_CONF | NO_SLEEP
 F:POS_GAIN_AC
 P:Copy:Barbarian:Warrior
 P:Body:Jelly5
+S:MULTIPLY
 D:A mysterious green jelly thing. It looks ready to explode.
 
 N:962:Slime Mold
@@ -17154,8 +17194,7 @@ F:SMART | COLD_BLOOD |
 F:WEIRD_MIND | MULTIPLY | REGENERATE |
 F:MOVE_BODY | ANIMAL | GOOD | NONLIVING |
 F:RES_TELE | CAN_SWIM | WILD_SWAMP
-S:1_IN_10 |
-S:SHRIEK | MIND_BLAST
+S:1_IN_10 | SHRIEK | MIND_BLAST | MULTIPLY
 D:It`s a slime colony.
 D:If you so much as DARE to touch it.
 
@@ -17923,6 +17962,7 @@ F:POS_GAIN_AC
 P:Copy:Snotling:Tourist
 P:Life:60
 P:Body:Scrawny
+S:MULTIPLY
 D:Oh no! They are everywhere!
 
 N:1008:Demonologist
@@ -18381,6 +18421,7 @@ F:EVIL | UNIQUE
 F:DROP_SKELETON | DROP_CORPSE
 P:Copy:Demigod:Mauler
 P:Body:Minotaur
+P:Blows:300
 D:It is a cross between a human and a bull.
 
 N:1035:Living armor
@@ -20590,6 +20631,7 @@ F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | CAN_SWIM | COLD_BLOOD |
 F:RIDING
 P:Copy:Half-Ogre:Warrior-Mage
 P:Body:Naga
+P:Blows:200
 S:FREQ_10 | BR_POISON
 
 N:1163:Nagaraja
@@ -20606,6 +20648,7 @@ F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | CAN_SWIM | COLD_BLOOD |
 F:RIDING |
 P:Copy:Half-Ogre:Warrior-Mage
 P:Body:Naga
+P:Blows:200
 S:FREQ_25 | BR_POISON | S_HYDRA | BA_ACID(1d360+30) | BA_FIRE(1d420+20) | BO_MANA |
 S:SCARE | CONFUSE | PARALYZE | SLOW | BLIND
 D:A king of the naga.
@@ -20623,6 +20666,7 @@ F:OPEN_DOOR | BASH_DOOR | DROP_3D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT |
 F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | COLD_BLOOD | RIDING
 P:Copy:Half-Ogre:Warrior
 P:Body:Naga
+P:Blows:300
 S:FREQ_30 | BR_POISON | S_KIN
 D:A grand nagaraja. The gods and demons used him to churn the ocean and
 D:create amrita, causing poison to envelop the world.

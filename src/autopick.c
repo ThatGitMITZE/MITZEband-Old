@@ -1395,8 +1395,9 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
     if (IS_FLG(FLG_SPECIAL)) /* leave_special ... I'm trying to obsolesce the easy destroyer. */
     {
         bool is_special = FALSE;
-        if (prace_is_(RACE_BALROG) || prace_is_(RACE_MON_DEMON)
-            || p_ptr->realm1 == REALM_DAEMON || p_ptr->realm2 == REALM_DAEMON)
+        if ( (get_race()->flags & RACE_IS_DEMON)
+          || p_ptr->realm1 == REALM_DAEMON
+          || p_ptr->realm2 == REALM_DAEMON )
         {
             if (o_ptr->tval == TV_CORPSE &&
                 o_ptr->sval == SV_CORPSE &&

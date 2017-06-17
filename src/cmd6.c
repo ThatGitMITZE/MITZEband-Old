@@ -379,8 +379,10 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
         /* Don't consume the object */
         return;
     }
-    else if ((p_ptr->mimic_form == MIMIC_DEMON || p_ptr->mimic_form == MIMIC_DEMON_LORD || prace_is_(RACE_BALROG) || prace_is_(RACE_MON_DEMON))
-           && (obj->tval == TV_CORPSE && obj->sval == SV_CORPSE && my_strchr("pht", r_info[obj->pval].d_char)))
+    else if ( (get_race()->flags & RACE_IS_DEMON)
+           && obj->tval == TV_CORPSE
+           && obj->sval == SV_CORPSE
+           && my_strchr("pht", r_info[obj->pval].d_char) )
     {
         /* Drain vitality of humanoids */
         char o_name[MAX_NLEN];
@@ -455,7 +457,7 @@ static bool _can_eat(object_type *o_ptr)
         if (object_is_device(o_ptr))
             return TRUE;
     }
-    else if (prace_is_(RACE_BALROG) || prace_is_(RACE_MON_DEMON) || p_ptr->mimic_form == MIMIC_DEMON || p_ptr->mimic_form == MIMIC_DEMON_LORD)
+    else if (get_race()->flags & RACE_IS_DEMON)
     {
         if (o_ptr->tval == TV_CORPSE &&
             o_ptr->sval == SV_CORPSE &&

@@ -910,7 +910,7 @@ s32b armor_cost(object_type *o_ptr, int options)
 
     if ((options & COST_REAL) || object_is_known(o_ptr))
     {
-        to_h = o_ptr->to_h;
+        to_h = o_ptr->to_h - k_info[o_ptr->k_idx].to_h;
         to_d = o_ptr->to_d;
         to_a = o_ptr->to_a;
     }
@@ -948,6 +948,7 @@ s32b armor_cost(object_type *o_ptr, int options)
      * skew any sort of exponential formula.
      * XXX [8, +64] vs [40, +32] ... in other words, perhaps we should
      * consider the total ac when scoring? */
+    if (to_a)
     {
         point_t tbl[8] = { {1, 200}, {5, 1500}, {10, 4000}, {15, 7500}, {20, 11000},
                            {25, 15000}, {30, 20000}, {100, 90000} };

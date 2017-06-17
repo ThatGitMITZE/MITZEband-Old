@@ -4027,6 +4027,17 @@ errr parse_r_info(char *buf, header *head)
 
             if (!found) return PARSE_ERROR_OUT_OF_BOUNDS;
         }
+        else if (strcmp(zz[0], "Blows") == 0)
+        {
+            if (num < 2) return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            if (num > 4) return PARSE_ERROR_TOO_FEW_ARGUMENTS; /* s/FEW/MANY */
+            switch (num)
+            {
+            case 4: r_ptr->body.blows_calc.mult = atoi(zz[3]);
+            case 3: r_ptr->body.blows_calc.wgt = atoi(zz[2]);
+            case 2: r_ptr->body.blows_calc.max = atoi(zz[1]);
+            }
+        }
         else
             return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }

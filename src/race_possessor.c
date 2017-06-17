@@ -563,11 +563,17 @@ static void _possess_spell(int cmd, variant *res)
 
         var_set_bool(res, FALSE);
 
-        if ( p_ptr->current_r_idx != MON_POSSESSOR_SOUL 
+        if (p_ptr->current_r_idx != MON_POSSESSOR_SOUL)
+        {
+            msg_print("You must leave your current body first. Be careful!");
+            return;
+        }
+
+        /*if ( p_ptr->current_r_idx != MON_POSSESSOR_SOUL 
           && !get_check("Your current body may be destroyed. Are you sure? ") )
         {
             return;
-        }
+        }*/
 
         prompt.prompt = "Possess which corpse?";
         prompt.error = "You have nothing to possess.";
@@ -682,9 +688,9 @@ static int _get_powers(spell_info* spells, int max)
 {
     int ct = 0;
 
-    if (ct < max)
+    if (/*p_ptr->current_r_idx == MON_POSSESSOR_SOUL &&*/ ct < max)
         _add_power(&spells[ct++], 1, 0, 0, _possess_spell, p_ptr->stat_ind[A_DEX]);
-    if (ct < max && p_ptr->current_r_idx != MON_POSSESSOR_SOUL)
+    if (p_ptr->current_r_idx != MON_POSSESSOR_SOUL && ct < max)
         _add_power(&spells[ct++], 1, 0, 0, _unpossess_spell, p_ptr->stat_ind[A_DEX]);
 
     ct += possessor_get_powers(spells + ct, max - ct);
@@ -839,6 +845,17 @@ int possessor_r_ac(int r_idx)
         ac = ac * ac_percent / 100;
     }
     return MAX(0, ac);
+}
+
+static void _calc_weapon_bonuses(object_type *o_ptr, weapon_info_t *info_ptr)
+{
+    monster_race *r_ptr = &r_info[p_ptr->current_r_idx];
+    if (r_ptr->body.blows_calc.max)
+        info_ptr->blows_calc.max = r_ptr->body.blows_calc.max;
+    if (r_ptr->body.blows_calc.wgt)
+        info_ptr->blows_calc.max = r_ptr->body.blows_calc.wgt;
+    if (r_ptr->body.blows_calc.mult)
+        info_ptr->blows_calc.max = r_ptr->body.blows_calc.mult;
 }
 
 static void _calc_shooter_bonuses(object_type *o_ptr, shooter_info_t *info_ptr)
@@ -1238,6 +1255,7 @@ race_t *mon_possessor_get_race(void)
 
         me.calc_bonuses = possessor_calc_bonuses;
         me.calc_shooter_bonuses = _calc_shooter_bonuses;
+        me.calc_weapon_bonuses = _calc_weapon_bonuses;
         me.get_flags = possessor_get_flags;
         me.player_action = _player_action;
         me.save_player = possessor_on_save;
@@ -1340,7 +1358,7 @@ void possessor_set_current_r_idx(int r_idx)
             if (p_ptr->current_r_idx != MON_MIMIC)
                 _history_on_possess(r_idx);
         }
-        else
+        else if (p_ptr->current_r_idx != MON_POSSESSOR_SOUL)
             _history_on_possess(r_idx);    
     }
 }

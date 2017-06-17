@@ -4628,7 +4628,7 @@ bool py_attack(int y, int x, int mode)
         }
         else possessor_attack(point(x,y), &fear, &mdeath, mode);
     }
-    else if (p_ptr->innate_attack_ct && !mdeath && !fear_stop)
+    if (p_ptr->innate_attack_ct && !mdeath && !fear_stop)
     {
         bool do_innate_attacks = TRUE;
 
