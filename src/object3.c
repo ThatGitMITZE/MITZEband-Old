@@ -1147,6 +1147,9 @@ s32b weapon_cost(object_type *o_ptr, int options)
         double s = 1.0;
         int    ct = 0;
 
+        if (!object_is_known(o_ptr) && !(options & COST_REAL))
+            d = b;
+
         /* Figure average damage per strike. Not really because we are stacking slays
            albeit weighted by my off the cuff estimates of utility
            Update: Choose best slays first, and then decrease each increment based
@@ -1391,6 +1394,9 @@ static s32b _avg_dam_bow(object_type *o_ptr, int options) /* scaled by 10 */
 {
     s32b d = 0;
     s32b m = o_ptr->mult;
+
+    if (!object_is_known(o_ptr) && !(options & COST_REAL))
+        m = k_info[o_ptr->k_idx].mult;
 
     switch (o_ptr->sval)
     {
