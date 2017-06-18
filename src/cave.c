@@ -1258,8 +1258,14 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
                 a = r_ptr->x_attr;
                 c = r_ptr->x_char;
 
+                if (m_ptr->mflag2 & MFLAG2_FUZZY)
+                {
+                    a = TERM_WHITE;
+                    *ap = a;
+                    *cp = r_ptr->d_char; /* non-graphics */
+                }
                 /* Pets: Ideally, we could tweak the background. And what about tiles? */
-                if (!use_graphics && (p_ptr->pet_extra_flags & PF_HILITE) && is_pet(m_ptr))
+                else if (!use_graphics && (p_ptr->pet_extra_flags & PF_HILITE) && is_pet(m_ptr))
                 {
                     a = TERM_YELLOW;
                     *ap = a;

@@ -824,6 +824,7 @@ static _mon_list_ptr _create_monster_list(int mode)
 
         if (!r_idx) continue;
         if (!m_ptr->ml) continue;
+        if (m_ptr->mflag2 & MFLAG2_FUZZY) continue; /* XXX */
         if (p_ptr->image)
         {
             /* TODO: Zany stuff in the list?? */

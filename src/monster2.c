@@ -2451,6 +2451,8 @@ void update_mon(int m_idx, bool full)
 
     /* Seen at all */
     bool flag = FALSE;
+    bool fuzzy = FALSE;
+    bool old_fuzzy = BOOL(m_ptr->mflag2 & MFLAG2_FUZZY);
 
     /* Seen by vision */
     bool easy = FALSE;
@@ -2740,11 +2742,19 @@ void update_mon(int m_idx, bool full)
     if (p_ptr->wizard)
         flag = TRUE;
 
+    m_ptr->mflag2 &= ~MFLAG2_FUZZY;
+
     /* The monster is now visible */
     if (flag)
     {
-        /* It was previously unseen */
-        if (!m_ptr->ml)
+        if (!easy && !(m_ptr->mflag2 & MFLAG2_MARK) && !is_pet(m_ptr))
+        {
+            fuzzy = TRUE;
+            m_ptr->mflag2 |= MFLAG2_FUZZY;
+        }
+
+        /* It was previously unseen, or previously fuzzy */
+        if (!m_ptr->ml || fuzzy != old_fuzzy)
         {
             /* Mark as visible */
             m_ptr->ml = TRUE;
@@ -2765,12 +2775,13 @@ void update_mon(int m_idx, bool full)
             }
 
             /* Eldritch Horror */
-            if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
+            if (!fuzzy && (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR))
             {
                 sanity_blast(m_ptr, FALSE);
             }
 
-            fear_update_m(m_ptr);
+            if (!fuzzy)
+                fear_update_m(m_ptr);
 
             /* Disturb on appearance */
             if (disturb_near

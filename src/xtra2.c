@@ -3644,30 +3644,28 @@ static int target_set_aux(int y, int x, int mode, cptr info)
     if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
     {
         monster_type *m_ptr = &m_list[c_ptr->m_idx];
+        bool          fuzzy = BOOL(m_ptr->mflag2 & MFLAG2_FUZZY);
         monster_race *ap_r_ptr = mon_apparent_race(m_ptr);
         char m_name[80];
         bool recall = FALSE;
 
-        /* Not boring */
         boring = FALSE;
 
-        /* Get the monster name ("a kobold") */
-        monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-
-        /* Hack -- track this monster race */
-        mon_track(m_ptr);
-
-        /* Hack -- health bar for this monster */
-        health_track(c_ptr->m_idx);
-
-        /* Hack -- handle stuff */
-        handle_stuff();
+        if (fuzzy)
+            strcpy(m_name, "Monster");
+        else
+        {
+            monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+            mon_track(m_ptr);
+            health_track(c_ptr->m_idx);
+            handle_stuff();
+        }
 
         /* Interact */
         while (1)
         {
             /* Recall */
-            if (recall)
+            if (recall && !fuzzy)
             {
                 doc_ptr doc = doc_alloc(72);
 
@@ -3704,10 +3702,13 @@ static int target_set_aux(int y, int x, int mode, cptr info)
             sprintf(out_val, "%s%s%s%s ", s1, s2, s3, m_name);
             if (is_pet(m_ptr))
                 strcat(out_val, "(Pet) ");
-            else if (is_friendly(m_ptr))
-                strcat(out_val, "(Friendly) ");
-            else if (m_ptr->smart & (1U << SM_CLONED))
-                strcat(out_val, "(Clone) ");
+            else if (!fuzzy)
+            {
+                if (is_friendly(m_ptr))
+                    strcat(out_val, "(Friendly) ");
+                else if (m_ptr->smart & (1U << SM_CLONED))
+                    strcat(out_val, "(Clone) ");
+            }
             if (display_distance)
                 sprintf(out_val + strlen(out_val), "(Rng %d) ", m_ptr->cdis);
             sprintf(out_val + strlen(out_val), "[r,%s%s]", x_info, info);

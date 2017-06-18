@@ -1278,8 +1278,9 @@ bool detect_monsters_normal(int range)
         /* Only detect nearby monsters */
         if (distance(py, px, y, x) > range) continue;
 
-        /* Detect all non-invisible monsters */
-        if (!(r_ptr->flags2 & RF2_INVISIBLE) || py_see_invis(r_ptr->level))
+        /* Detect all non-invisible monsters
+         * N.B. update_mon() will roll the perception check for Invisibility */
+        if (!(r_ptr->flags2 & RF2_INVISIBLE) || p_ptr->see_inv)
         {
             /* Repair visibility later */
             repair_monsters = TRUE;
