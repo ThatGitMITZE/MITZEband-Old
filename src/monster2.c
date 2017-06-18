@@ -2432,9 +2432,11 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * "disturb_move" (monster which is viewable moves in some way), and
  * "disturb_near" (monster which is "easily" viewable moves in some
  * way). Note that "moves" includes "appears" and "disappears".
+ *
  */
 void update_mon(int m_idx, bool full)
 {
+    static int last_player_turn = 0;
     monster_type *m_ptr = &m_list[m_idx];
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2526,10 +2528,10 @@ void update_mon(int m_idx, bool full)
                 /* Weird mind, occasional telepathy */
                 else if (r_ptr->flags2 & (RF2_WEIRD_MIND))
                 {
-                    /* One in ten individuals are detectable */
-                    if ((m_idx % 10) == 5)
+                    if (last_player_turn == player_turn)
+                        flag = m_ptr->ml;
+                    else if (one_in_(10))
                     {
-                        /* Detectable */
                         flag = TRUE;
                         mon_lore_aux_2(r_ptr, RF2_WEIRD_MIND | RF2_SMART | RF2_STUPID);
                         equip_learn_flag(OF_TELEPATHY);
@@ -2704,7 +2706,9 @@ void update_mon(int m_idx, bool full)
                     do_invisible = TRUE;
 
                     /* See invisible */
-                    if (py_see_invis(r_ptr->level))
+                    if (last_player_turn == player_turn)
+                        easy = flag = m_ptr->ml;
+                    else if (py_see_invis(r_ptr->level))
                     {
                         /* Easy to see */
                         easy = flag = TRUE;
@@ -2847,6 +2851,7 @@ void update_mon(int m_idx, bool full)
             p_ptr->window |= PW_MONSTER_LIST;
         }
     }
+    last_player_turn = player_turn;
 }
 
 
