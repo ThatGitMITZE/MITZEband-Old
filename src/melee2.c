@@ -4019,7 +4019,7 @@ static void process_mon_mtimed(mon_ptr mon)
                 /* Just woke up */
                 else
                 {
-                    if (mon->ml && disturb_minor)
+                    if (mon->ml && disturb_minor && mon_show_msg(mon))
                     {
                         char m_name[80];
                         monster_desc(m_name, mon, 0);

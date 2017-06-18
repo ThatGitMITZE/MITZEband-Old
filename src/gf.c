@@ -4131,7 +4131,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 sad = TRUE;
 
             /* Give detailed messages if destroyed */
-            if (known && note)
+            if (known && note && seen_msg)
             {
                 monster_desc(m_name, mon, MD_TRUE_NAME);
                 msg_format("%^s%s", m_name, note);
@@ -4268,13 +4268,16 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             }
 
             /* Give detailed messages if visible or destroyed */
-            if (note && seen_msg)
-                msg_format("%^s%s", m_name, note);
-
-            /* Hack -- Pain message */
-            else if (known && dam && (flags & GF_AFFECT_SPELL))
+            if (seen_msg)
             {
-                message_pain(mon->id, dam);
+                if (note)
+                    msg_format("%^s%s", m_name, note);
+
+                /* Hack -- Pain message */
+                else if (known && dam && (flags & GF_AFFECT_SPELL))
+                {
+                    message_pain(mon->id, dam);
+                }
             }
 
             /* Anger monsters */
@@ -4288,7 +4291,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 sound(SOUND_FLEE);
 
                 /* Message */
-                msg_format("%^s flees in terror!", m_name);
+                if (seen_msg)
+                    msg_format("%^s flees in terror!", m_name);
             }
 
             /* Hack -- handle sleep */

@@ -1404,6 +1404,7 @@ bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
     return FALSE;
 }
 
+static bool _projectable(point_t src, point_t dest);
 static bool _spell_fail(void)
 {
     int fail;
@@ -1428,9 +1429,10 @@ static bool _spell_fail(void)
     {
         if (_current.flags & MSC_SRC_PLAYER)
             msg_print("You try to cast a spell, but fail.");
-        else
+        else if (mon_show_msg(_current.mon))
         {
-            mon_lore_aux_spell_turns(_current.race);
+            if (_projectable(point(px, py), _current.src))
+                mon_lore_aux_spell_turns(_current.race);
             msg_format("%s tries to cast a spell, but fails.", _current.name);
         }
         return TRUE;
@@ -1630,7 +1632,6 @@ static bool _m_resist_tele(mon_ptr mon, cptr name)
     }
     return FALSE;
 }
-static bool _projectable(point_t src, point_t dest);
 static void _annoy_m(void)
 {
     if (!_current.mon2) return;
@@ -1862,7 +1863,10 @@ static void _m_buff(void)
     {
     case BUFF_HASTE:
         if (set_monster_fast(_current.mon->id, MON_FAST(_current.mon) + 100))
-            msg_format("%s starts moving faster.", _current.name);
+        {
+            if (mon_show_msg(_current.mon))
+                msg_format("%s starts moving faster.", _current.name);
+        }
         break;
     case BUFF_INVULN:
         if (!MON_INVULNER(_current.mon))
