@@ -528,14 +528,11 @@ static void _ego_create_jewelry_defender(object_type *o_ptr, int level, int powe
             else
                 one_high_resistance(o_ptr);
             break;
-        case 2: /* High Defender */
+        case 2: {/* High Defender */
+            int ct = 0;
             one_high_resistance(o_ptr);
-            do
-            {
-                one_high_resistance(o_ptr);
-            }
-            while (one_in_(2));
-            break;
+            do { one_high_resistance(o_ptr); ct++; } while(one_in_(2 + ct));
+            break; } 
         case 3: /* Lordly Protection */
             o_ptr->to_a += 5;
             add_flag(o_ptr->flags, OF_RES_POIS);
@@ -737,6 +734,7 @@ static void _create_ring_aux(object_type *o_ptr, int level, int power, int mode)
                 {
                     add_flag(o_ptr->flags, OF_CON);
                     if (!o_ptr->pval) o_ptr->pval = _jewelry_pval(5, level);
+                    if (one_in_(3)) add_flag(o_ptr->flags, OF_SUST_CON);
                     break;
                 }
             case 2:
@@ -744,11 +742,13 @@ static void _create_ring_aux(object_type *o_ptr, int level, int power, int mode)
                 {
                     add_flag(o_ptr->flags, OF_DEX);
                     if (!o_ptr->pval) o_ptr->pval = _jewelry_pval(5, level);
+                    if (one_in_(3)) add_flag(o_ptr->flags, OF_SUST_DEX);
                     break;
                 }
             case 3:
                 add_flag(o_ptr->flags, OF_STR);
                 if (!o_ptr->pval) o_ptr->pval = _jewelry_pval(5, level);
+                if (one_in_(3)) add_flag(o_ptr->flags, OF_SUST_STR);
                 break;
             case 4:
                 o_ptr->to_h += randint1(5) + m_bonus(5, level);

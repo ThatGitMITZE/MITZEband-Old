@@ -1264,9 +1264,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
         return FALSE;
 
     /*** Dice boosted (weapon of slaying) ***/
-    if (IS_FLG(FLG_BOOSTED) && object_is_known(o_ptr))
+    if (IS_FLG(FLG_BOOSTED))
     {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
+
+        if (!object_is_known(o_ptr)) return FALSE;
 
         if (object_is_bow(o_ptr))
         {
@@ -1283,8 +1285,9 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
     }
 
     /*** Weapons which dd*ds is more than nn ***/
-    if (IS_FLG(FLG_MORE_DICE) && object_is_known(o_ptr))
+    if (IS_FLG(FLG_MORE_DICE))
     {
+        if (!object_is_known(o_ptr)) return FALSE;
         if (o_ptr->dd * o_ptr->ds <= entry->dice)
             return FALSE;
     }

@@ -3177,6 +3177,8 @@ static void process_monster(int m_idx)
 
             /* Do not move */
             do_move = FALSE;
+            if ((r_ptr->flags2 & RF2_INVISIBLE) && p_ptr->see_inv)
+                update_mon(m_idx, FALSE);
         }
 
         /* Creature has been allowed move */

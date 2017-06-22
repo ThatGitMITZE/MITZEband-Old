@@ -196,7 +196,7 @@ static _parse_t _ball_tbl[] = {
           "$CASTER mumbles.",
           "$CASTER casts a <color:G>Ball of Radiation</color> at $TARGET.",
           "You cast a <color:G>Ball of Radiation</color>." }, MSF_TARGET},
-    { "BA_POIS", { MST_BALL, GF_POIS },
+    { "BA_POISON", { MST_BALL, GF_POIS },
         { "Stinking Cloud", TERM_L_GREEN,
           "$CASTER casts a <color:G>Stinking Cloud</color>.",
           "$CASTER mumbles.",
