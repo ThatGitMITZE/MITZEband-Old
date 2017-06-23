@@ -349,6 +349,7 @@ cptr get_ordinal_number_suffix(int num)
  * selecting various things, such as graphics mode, so it must call
  * the "TERM_XTRA_REACT" hook before redrawing the windows.
  */
+bool redraw_hack;
 void do_cmd_redraw(void)
 {
     int j;
@@ -391,18 +392,10 @@ void do_cmd_redraw(void)
 
     update_playtime();
 
-    /* Hack -- update
-     * XXX Calculating mon->ml is no longer deterministic. This means that
-     * spamming redraw (^R) gives the player a way to cheat. We can detect this
-     * in update_mon() by caching the last player_turn, but, unfortunately,
-     * process_player optimistically increases the current turn for non-turn
-     * actions (and then says, oops, better decrement after the fact). So,
-     * we need an ugly hack here to make things work. I would just parameterize
-     * update_monsters, but we are using flags (PU_MONSTERS) to call functions (later)
-     * and flags don't take parameters (unless you add more flags)! */
-    player_turn--;
+    /* Prevent spamming ^R to circumvent fuzzy detection */
+    redraw_hack = TRUE;
     handle_stuff();
-    player_turn++;
+    redraw_hack = FALSE;
 
     if (p_ptr->prace == RACE_ANDROID) android_calc_exp();
 

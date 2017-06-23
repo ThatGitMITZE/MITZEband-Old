@@ -750,6 +750,7 @@ extern void fix_object_list(void);
 
 /* cmd4.c */
 extern cptr get_ordinal_number_suffix(int num);
+extern bool redraw_hack;
 extern void do_cmd_redraw(void);
 extern void do_cmd_knowledge_shooter(void);
 extern void do_cmd_knowledge_weapon(void);

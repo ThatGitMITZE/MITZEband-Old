@@ -2436,7 +2436,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  */
 void update_mon(int m_idx, bool full)
 {
-    static int last_player_turn = 0;
     monster_type *m_ptr = &m_list[m_idx];
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2530,7 +2529,7 @@ void update_mon(int m_idx, bool full)
                 /* Weird mind, occasional telepathy */
                 else if (r_ptr->flags2 & (RF2_WEIRD_MIND))
                 {
-                    if (last_player_turn == player_turn)
+                    if (redraw_hack)
                         flag = m_ptr->ml;
                     else if (one_in_(10))
                     {
@@ -2708,7 +2707,7 @@ void update_mon(int m_idx, bool full)
                     do_invisible = TRUE;
 
                     /* See invisible */
-                    if (last_player_turn == player_turn)
+                    if (redraw_hack)
                         easy = flag = m_ptr->ml;
                     else if (py_see_invis(r_ptr->level))
                     {
@@ -2862,7 +2861,6 @@ void update_mon(int m_idx, bool full)
             p_ptr->window |= PW_MONSTER_LIST;
         }
     }
-    last_player_turn = player_turn;
 }
 
 

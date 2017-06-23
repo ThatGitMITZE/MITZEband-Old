@@ -3011,6 +3011,8 @@ static void process_monster(int m_idx)
                 {
                     /* Do the attack */
                     (void)make_attack_normal(m_idx);
+                    if ((r_ptr->flags2 & RF2_INVISIBLE) && p_ptr->see_inv && !m_ptr->ml)
+                        update_mon(m_idx, FALSE);
 
                     /* Do not move */
                     do_move = FALSE;
