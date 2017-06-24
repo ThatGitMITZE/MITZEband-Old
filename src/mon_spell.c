@@ -2485,7 +2485,8 @@ static void _spell_cast_aux(void)
     if (_current.flags & MSC_SRC_MONSTER)
     {
         assert(_current.mon);
-        disturb(1, 0);
+        if (_current.flags & MSC_DEST_PLAYER)
+            disturb(1, 0);
         reset_target(_current.mon);
         if (_spell_fail() || _spell_blocked()) return;
         if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */

@@ -13,7 +13,7 @@ static gf_info_t _gf_tbl[GF_COUNT] = {
     { GF_COLD, "Frost", TERM_L_WHITE, RES_COLD, "COLD" },
     { GF_POIS, "Poison", TERM_L_GREEN, RES_POIS, "POIS" },
     { GF_LITE, "Light", TERM_YELLOW, RES_LITE, "LITE" },
-    { GF_DARK, "Dark", TERM_L_DARK, RES_DARK, "DARK" },
+    { GF_DARK, "Darkness", TERM_L_DARK, RES_DARK, "DARK" },
     { GF_CONFUSION, "Confusion", TERM_L_UMBER, RES_CONF, "CONFUSION" },
     { GF_NETHER, "Nether", TERM_L_DARK, RES_NETHER, "NETHER" },
     { GF_NEXUS, "Nexus", TERM_VIOLET, RES_NEXUS, "NEXUS" },
