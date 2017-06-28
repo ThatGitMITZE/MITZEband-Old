@@ -1828,7 +1828,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             }
 
             /* 2. stun */
-            do_stun = damroll((caster_lev / 20) + 3 , (dam)) + 1;
+            do_stun = _stun_amount(dam);
 
             /* Attempt a saving throw */
             if ((race->flags1 & (RF1_UNIQUE)) ||
@@ -1886,7 +1886,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             int mult = 1;
 
-            do_stun = damroll(caster_lev/20 + 3, dam) + 1;
+            do_stun = _stun_amount(dam);
             if (race->flags1 & RF1_UNIQUE)
                 mult++;
 
@@ -2088,7 +2088,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         }
 
         /* 1. stun */
-        do_stun = damroll((caster_lev / 20) + 3 , dam) + 1;
+        do_stun = _stun_amount(dam);
 
         /* Attempt a saving throw */
         if ((race->flags1 & RF1_UNIQUE) ||

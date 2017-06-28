@@ -100,7 +100,7 @@ static bool _know_spell_damage(mon_race_ptr race, mon_spell_ptr spell)
 static bool _know_aura_damage(mon_race_ptr race, mon_effect_ptr effect)
 {
     if (_easy_lore(race)) return TRUE;
-    return _know_damage_aux(effect->lore, effect->dd*effect->ds,
+    return _know_damage_aux(effect->lore, effect->dd*effect->ds*5,
         race->level + 4, BOOL(race->flags1 & RF1_UNIQUE));
 }
 
@@ -759,6 +759,7 @@ static void _display_other(monster_race *r_ptr, doc_ptr doc)
         mon_effect_ptr aura = &r_ptr->auras[i];
         gf_info_ptr    gf;
         if (!aura->effect) continue;
+        if (!_easy_lore(r_ptr) && !aura->lore) continue;
         gf = gf_lookup(aura->effect);
         if (gf)
         {

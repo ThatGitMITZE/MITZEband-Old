@@ -177,6 +177,11 @@ static void wr_lore(savefile_ptr file, int r_idx)
             savefile_write_s16b(file, effect->lore);
         }
     }
+    for (i = 0; i < MAX_MON_AURAS; i++)
+    {
+        mon_effect_ptr aura = &r_ptr->auras[i];
+        savefile_write_s16b(file, aura->lore);
+    }
 }
 
 static void wr_xtra_kind(savefile_ptr file, int k_idx)

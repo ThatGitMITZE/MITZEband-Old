@@ -2092,6 +2092,7 @@ void touch_zap_player(int m_idx)
         dam = damroll(aura->dd, aura->ds);
         if (!dam) continue;
         gf_affect_p(m_idx, aura->effect, dam, GF_AFFECT_AURA);
+        mon_lore_effect(m_ptr, aura);
     }
 }
 

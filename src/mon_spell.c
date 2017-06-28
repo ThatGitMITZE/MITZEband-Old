@@ -1968,12 +1968,27 @@ static void _m_tactic(void)
         }
         break;
     case TACTIC_BLINK_OTHER:
-        msg_format("%s blinks you away.", _current.name);
-        if (res_save_default(RES_TELEPORT))
-            msg_print("You resist the effects!");
+        if (_current.flags & MSC_DEST_PLAYER)
+        {
+            msg_format("%s blinks you away.", _current.name);
+            if (res_save_default(RES_TELEPORT))
+                msg_print("You resist the effects!");
+            else
+                teleport_player_away(_current.mon->id, 10);
+            update_smart_learn(_current.mon->id, RES_TELEPORT);
+        }
         else
-            teleport_player_away(_current.mon->id, 10);
-        update_smart_learn(_current.mon->id, RES_TELEPORT);
+        {
+            if (!_m_resist_tele(_current.mon2, _current.name2))
+            {
+                int who = _current.mon2->id;
+                if (who == p_ptr->riding)
+                    teleport_player(10, 0);
+                else
+                    teleport_away(who, 10, 0);
+            }
+            set_monster_csleep(_current.mon2->id, 0);
+        }
         break;
     default: /* JMP_<type> */
         assert(_current.spell->parm.tag == MSP_DICE);
@@ -3573,7 +3588,8 @@ static void _ai_think_mon(mon_spell_cast_ptr cast)
     if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
         _remove_spells(spells, _not_innate_p);
 
-    _ai_wounded(cast);
+    if (!(cast->flags & MSC_UNVIEW))
+        _ai_wounded(cast);
 
     /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
     if (spells->groups[MST_TACTIC] && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))

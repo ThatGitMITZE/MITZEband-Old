@@ -61,8 +61,6 @@ void spell_stats_on_load(savefile_ptr file)
         stats->ct_fail = savefile_read_s32b(file);
         stats->skill = savefile_read_s32b(file);
         stats->max_skill = savefile_read_s32b(file);
-        if (savefile_is_older_than(file, 6, 0, 6, 1))
-            savefile_read_s32b(file);
 
         str_map_add(map, name, stats);
     }

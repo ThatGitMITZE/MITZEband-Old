@@ -2080,7 +2080,10 @@ static void prt_mon_health_bar(int m_idx, int row, int col)
         byte attr = TERM_RED;
         const monster_race *r_ptr = mon_apparent_race(m_ptr);
 
-        Term_queue_bigchar(col, row, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+        if (m_ptr->mflag2 & MFLAG2_FUZZY)
+            Term_queue_bigchar(col, row, TERM_WHITE, r_ptr->d_char, 0, 0);
+        else
+            Term_queue_bigchar(col, row, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 
         if (pct >= 100) attr = TERM_L_GREEN;
         else if (pct >= 60) attr = TERM_YELLOW;

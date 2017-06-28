@@ -3717,7 +3717,8 @@ static int minus_ac(void)
         }
         if (have_flag(flgs, OF_IGNORE_ACID))
         {
-            msg_format("Your %s is unaffected!", o_name);
+            if (disturb_minor)
+                msg_format("Your %s is unaffected!", o_name);
             obj_learn_flag(o_ptr, OF_IGNORE_ACID);
             return TRUE;
         }

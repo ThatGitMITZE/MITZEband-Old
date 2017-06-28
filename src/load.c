@@ -177,6 +177,15 @@ static void rd_lore(savefile_ptr file, int r_idx)
             effect->lore = savefile_read_s16b(file);
         }
     }
+    if (!savefile_is_older_than(file, 7, 0, 0, 1))
+    {
+        for (i = 0; i < MAX_MON_AURAS; i++)
+        {
+            mon_effect_ptr aura = &r_ptr->auras[i];
+            aura->lore = savefile_read_s16b(file);
+        }
+    }
+
 
     if (r_ptr->r_flagsr & (RFR_PACT_MONSTER)) pact = TRUE;
 
@@ -224,15 +233,8 @@ static void rd_options(savefile_ptr file)
     delay_factor = savefile_read_byte(file);
     hitpoint_warn = savefile_read_byte(file);
     mana_warn = savefile_read_byte(file);
-    if (savefile_is_older_than(file, 6, 0, 1, 1))
-        random_artifact_pct = 100;
-    else
-        random_artifact_pct = savefile_read_byte(file);
-
-    if (savefile_is_older_than(file, 6, 0, 3, 2))
-        reduce_uniques_pct = 100;
-    else
-        reduce_uniques_pct = savefile_read_byte(file);
+    random_artifact_pct = savefile_read_byte(file);
+    reduce_uniques_pct = savefile_read_byte(file);
 
     /*** Cheating options ***/
     c = savefile_read_u16b(file);
@@ -357,10 +359,6 @@ static void rd_extra(savefile_ptr file)
     p_ptr->lev = savefile_read_s16b(file);
 
     for (i = 0; i < 64; i++) p_ptr->spell_exp[i] = savefile_read_s16b(file);
-    if (savefile_is_older_than(file, 6, 0, 6, 1))
-    {
-        for (i = 0; i < 64; i++) savefile_read_s32b(file);
-    }
     for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) p_ptr->weapon_exp[i][j] = savefile_read_s16b(file);
     for (i = 0; i < 10; i++) p_ptr->skill_exp[i] = savefile_read_s16b(file);
     for (i = 0; i < MAX_MAGIC_NUM; i++) p_ptr->magic_num1[i] = savefile_read_s32b(file);
