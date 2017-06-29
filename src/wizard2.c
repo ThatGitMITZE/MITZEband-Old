@@ -1862,6 +1862,14 @@ void do_cmd_debug(void)
         do_cmd_redraw();
         break;
     }
+    case '_':
+    {
+        int i;
+        for (i = 1; i < max_k_idx; i++)
+            if (!k_info[i].name)
+                msg_format("%d ", i);
+        break;
+    }
     default:
         msg_print("That is not a valid debug command.");
         break;

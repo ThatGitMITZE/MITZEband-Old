@@ -20464,10 +20464,8 @@ D:She is the spirit of the sun that lords Takamagahara that is the country
 D:of heaven. Her brightness lights up the world.
 D:She and her children plot to conquest of countries of the ground.
 
-#### GAP
-
 # Demons from Vanilla
-N:1151:Osyluth
+N:1143:Osyluth
 G:U:W
 I:130:40d100:20:145:40:100
 W:65:3:999:13000:0:0
@@ -20487,7 +20485,7 @@ D:It is a demon made almost entirely out of bones. It is humanoid, but with
 D:a large tail similar to that of a giant scorpion, and emits a foul smell
 D:of decay and rot. They are despised even in the hells.
 
-N:1152:Gelugon
+N:1144:Gelugon
 G:U:w
 I:130:45d100:20:120:40:250
 W:69:3:999:14000:0:0
@@ -20509,7 +20507,7 @@ D:great claws on its hands and pincers on its mouth, and its head bulges
 D:with great multi-faceted eyes. Its tail is covered with razor-sharp
 D:spikes.
 
-N:1153:Horned Reaper
+N:1145:Horned Reaper
 G:U:B
 I:130:50d100:40:140:40:250
 W:72:3:999:18000:0:0
@@ -20530,7 +20528,7 @@ D:by foes and friends alike when it flies into one of its berserk rages, the
 D:Horned Reaper will cut down anything in its path between it and you - even
 D:the minions it has just summoned.
 
-N:1154:Pit Fiend
+N:1146:Pit Fiend
 G:U:o
 I:130:60d100:30:140:35:300
 W:77:3:999:22000:0:0
@@ -20551,10 +20549,8 @@ D:and massive fangs dripping a foul green liquid, the Pit Fiend is a
 D:dreadful enemy from the lowest depths of the hells. They are often the
 D:commanders of vast demon armies.
 
-#### GAP
-
 # Tomenet
-N:1159:Cave Gorm
+N:1147:Cave Gorm
 G:R:D
 I:125:40d100:25:150:50:500
 W:60:5:999:18000:0:0
@@ -20573,7 +20569,7 @@ D:A large reptile in black scales, burning the earth with
 D:the touch of hell where it steps.
 
 # New things
-N:1160:Nebiros, the Marquis
+N:1148:Nebiros, the Marquis
 G:B:D
 I:140:70d100:20:150:15:300
 W:85:2:999:35000:0:0
@@ -20596,7 +20592,7 @@ S:S_HI_UNDEAD | S_UNDEAD | S_HI_DEMON | ANIM_DEAD |
 D:Nebiros, the General of Hell keeps watch over all demons. One of the
 D:greatest necromancers in Hell, he appears in the form of a raven.
 
-N:1161:Atropos, the Sister of Fate
+N:1149:Atropos, the Sister of Fate
 G:p:G
 I:130:80d100:50:130:8:130
 W:90:4:999:48000:0:0
@@ -20617,7 +20613,7 @@ S:SCARE | PARALYZE | BLIND | CONFUSE | TELE_SELF | HEAL | HASTE |
 D:Atropos is the eldest of the sisters of fate and cuts the threads of
 D:life with her shears. She has decided that your time is up.
 
-N:1162:Greater naga
+N:1150:Greater naga
 G:n:r
 I:120:30d100:30:130:7:600
 W:55:4:999:17000:0:0
@@ -20634,7 +20630,7 @@ P:Body:Naga
 P:Blows:200
 S:FREQ_10 | BR_POISON
 
-N:1163:Nagaraja
+N:1151:Nagaraja
 G:n:G
 I:120:30d100:30:130:7:600
 W:60:4:999:17000:0:0
@@ -20653,7 +20649,7 @@ S:FREQ_25 | BR_POISON | S_HYDRA | BA_ACID(1d360+30) | BA_FIRE(1d420+20) | BO_MAN
 S:SCARE | CONFUSE | PARALYZE | SLOW | BLIND
 D:A king of the naga.
 
-N:1164:Vasuki, the Serpent King
+N:1152:Vasuki, the Serpent King
 G:n:o
 I:130:79d79:50:150:7:1500
 W:70:3:999:42000:0:0
@@ -20671,7 +20667,7 @@ S:FREQ_30 | BR_POISON | S_KIN
 D:A grand nagaraja. The gods and demons used him to churn the ocean and
 D:create amrita, causing poison to envelop the world.
 
-N:1165:Shesha, the Infinite
+N:1153:Shesha, the Infinite
 G:n:W
 I:130:66d99:50:160:12:3000
 W:80:3:999:55000:0:0
@@ -20690,7 +20686,7 @@ P:Life:120
 S:FREQ_20 | BR_TIME | BR_DISINTEGRATE | S_KIN
 D:A serpent with 1000 heads, upon which Vishnu rests.
 
-N:1166:Thanatos, God of Death
+N:1154:Thanatos, God of Death
 G:P:D
 I:145:106d84:20:175:8:700
 W:88:2:999:66000:0:0
@@ -20710,9 +20706,7 @@ S:BO_MANA | BO_NETHER | TELE_TO |
 S:HASTE | HEAL | ANTI_MAGIC |
 D:"I win greater honor when the victims are young."
 
-#### GAP
-
-N:1169:Chitauli
+N:1155:Chitauli
 G:R:W
 I:130:107d65:60:120:1:300
 W:89:12:999:18000:0:0
@@ -20730,7 +20724,7 @@ D:"And there is another name by which these creatures are known. This name is
 D:Chitauli. Now, the word Chitauli means 'the dictators, the ones who tell us
 D:the law'. In other words, they who tell us, secretly, what we are to do."
 
-N:1170:Umbaba-Samahongo
+N:1156:Umbaba-Samahongo
 G:R:s
 I:130:120d100:70:160:1:500
 W:92:6:999:50000:0:0
@@ -20752,7 +20746,7 @@ D:human beings so that he, and his children, the Chitauli, can come out
 D:and enjoy the heat of the Sun."
 
 # Tomenet
-N:1171:Star Blade
+N:1157:Star Blade
 G:A:R
 I:130:60d100:100:155:255:250
 W:90:6:999:40000:0:0
@@ -20773,9 +20767,7 @@ D:their balance. Its aura is pure beyond expression, its eyes reflect supreme
 D:laws beyond comprehension, daring to look at it will drive you insane,
 D:let alone fighting it!
 
-#### GAP
-
-N:1194:Beelzebub, Lord of the Flies
+N:1158:Beelzebub, Lord of the Flies
 G:I:D
 I:130:100d87:40:175:10:1000
 W:90:2:999:41100:0:0
@@ -20793,9 +20785,7 @@ P:Copy:Balrog:Mauler
 S:FREQ_20 | BR_DARK | BR_CONFUSION | BR_INERTIA | S_HI_DEMON |
 D:The prince of evil.
 
-#### GAP
-
-N:1196:The Lurking Horror
+N:1159:The Lurking Horror
 G:H:D
 I:120:20d100:2:50:4:1000
 W:42:3:999:35000:0:0
@@ -20812,7 +20802,7 @@ S:DARKNESS | BLIND | CONFUSE | SCARE | TELE_TO | BR_DARK
 D:It waits for you in the ink-black of the dungeon.
 D:It seems to be made entirely of claws and of teeth.
 
-N:1197:The Shadow Fiend
+N:1160:The Shadow Fiend
 G:U:v
 I:120:30d100:35:100:80:1000
 W:48:3:999:27000:0:0
@@ -20831,7 +20821,7 @@ S:HAND_DOOM | CAUSE_2 | CAUSE_3 | CAUSE_4 | DISPEL_MAGIC | CONFUSE | BLIND |
 S:BRAIN_SMASH | MIND_BLAST | AMNESIA | ANIM_DEAD |
 
 # golems from Vanilla (Update: golems are 1_IN_8 in V)
-N:1198:Bronze golem
+N:1161:Bronze golem
 G:g:o
 I:120:55d100:25:170:50:1000
 W:65:3:999:26000:0:0
@@ -20846,7 +20836,7 @@ F:RES_LITE | REFLECTING
 S:FREQ_10 | BO_PLASMA | BA_FIRE | BR_FIRE | BA_ELEC | S_DEMON | TELE_TO
 D:A gigantic four-armed animated bronze statue, glowing with great heat.
 
-N:1199:Bone golem
+N:1162:Bone golem
 G:g:w
 I:120:45d100:20:170:50:1000
 W:65:3:999:23000:0:0
@@ -20862,7 +20852,7 @@ S:FREQ_10 | TELE_TO | CAUSE_4 | DRAIN_MANA | BRAIN_SMASH | BA_NETHER | S_HI_UNDE
 D:A skeletal form, black as night, constructed from the bones of its
 D:previous victims.
 
-N:1200:Pandemonium
+N:1163:Pandemonium
 G:E:v
 I:140:88d88:50:50:75:1000
 W:94:3:999:50000:0:0
@@ -20886,10 +20876,8 @@ S:BO_MANA | HEAL | HASTE | MIND_BLAST | BA_LITE | BA_ELEC(1d282+16) |
 S:S_HI_DEMON | S_CYBER | S_HI_UNDEAD | S_HI_DRAGON | S_MONSTER | S_UNIQUE |
 S:S_ANGEL | S_HOUND |
 
-#### GAP
-
 # new
-N:1208:Anubis, Keeper of the Balance
+N:1164:Anubis, Keeper of the Balance
 G:H:D
 I:130:80d100:20:155:0:130
 W:88:2:999:50000:0:0
@@ -20911,7 +20899,7 @@ D:The jackal headed god that weighs the hearts of the dead against the
 D:feather of Ma'at, the goddess of truth. Those that are lighter are
 D:guided to Osiris, those that are not are devoured by Ammit.
 
-N:1209:Ammit, the Devourer
+N:1165:Ammit, the Devourer
 G:H:U
 I:135:50d100:30:135:80:530
 W:66:2:999:30000:0:0
@@ -20931,7 +20919,7 @@ S:FREQ_15 | BR_NETHER | BR_FIRE | BR_DARK | BR_PLASMA
 D:Ammit annihilates the souls deemed unworthy to enter Sekhet-Aaru. She
 D:watches Anubis weigh the hearts of the dead in the Hall of Two Truths.
 
-N:1210:Horus, the Ancient
+N:1166:Horus, the Ancient
 G:B:o
 I:150:85d100:30:140:255:100
 W:92:4:999:50000:0:0
@@ -20948,7 +20936,7 @@ P:Copy:Dunadan:Mystic
 P:Body:Giant Bird
 S:FREQ_35 | BR_LITE | BR_FIRE | BR_COLD | BIRD_DROP | S_MONSTER
 
-N:1211:Apophis, the Primordial Chaos
+N:1167:Apophis, the Primordial Chaos
 G:J:v
 I:130:100d100:70:175:100:700
 W:89:2:999:45000:0:0
@@ -20970,7 +20958,7 @@ S:FREQ_25 | BR_CHAOS | BR_DARK | BR_SOUND | BR_STORM | S_DEMON
 D:Existing from the beginning of time and before creation, Apophis the
 D:serpent god embodies chaos and darkness.
 
-N:1212:Thoth, the Voice of Ra
+N:1168:Thoth, the Voice of Ra
 G:Y:g
 I:125:45d100:20:95:50:100
 W:60:2:999:30000:0:0
@@ -20987,7 +20975,7 @@ S:BO_MANA | CAUSE_4 | S_UNIQUE | TELE_SELF | BLINK | TELE_OTHER |
 D:The wisest of Egyptian gods and creator of writing and language, he
 D:fights with cunning and patience.
 
-N:1213:Sekhmet the Mistress of Fury
+N:1169:Sekhmet the Mistress of Fury
 G:f:r
 I:130:90d100:100:170:0:120
 W:97:5:999:50000:0:0
@@ -21006,7 +20994,7 @@ P:Body:Hound
 S:FREQ_30 | BR_FIRE | BR_SOUND | S_KIN | S_HI_DRAGON | TELE_TO
 D:A terrible god of violence and wrath, Sekhmet destroys all in her path.
 
-N:1214:The Wizard of Yendor
+N:1170:The Wizard of Yendor
 G:@:v
 I:120:39d92:22:70:89:120
 W:55:2:999:40000:0:0

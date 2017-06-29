@@ -5,17 +5,20 @@
 # Consumables
 #########################################
 mushroom of restoring#!E
+mushroom of cure poison#!E
 potions:resistance#!kq
 potions:healing#!kq
 potions:of life#!kq
 potions:*healing*#!kq
 potions:restore mana#!kq
+potions:curing
 
 ?:[NOT [EQU $CLASS Berserker]]
 scrolls:of destruction#!*
 scrolls:mass genocide#!*
 scrolls:genocide#!*
 scrolls:forest creation
+scrolls:teleport$
 ?:1
 
 #########################################
@@ -61,4 +64,8 @@ shooters:sling
 !armors more weight than 20
 ?:1
 
+?:[EQU $CLASS Priest]
+favorite weapons
+!weapons
+?:1
 

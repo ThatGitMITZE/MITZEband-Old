@@ -3735,7 +3735,11 @@ void mon_spell_wizard(mon_ptr mon, mon_spell_ai ai, doc_ptr doc)
     _spell_cast_init(&cast, mon);
     if (!ai) ai = _default_ai;
     if (!cast.race->spells) return;
-    if (!ai(&cast)) return;
+    if (!ai(&cast))
+    {
+        ai = _default_ai_mon;
+        if (!ai(&cast)) return;
+    }
     doc_printf(doc, "%s: %d%%\n", cast.name, cast.race->spells->freq);
     for (i = 0; i < MST_COUNT; i++)
     {
@@ -3834,6 +3838,7 @@ void mon_spells_save(mon_spells_ptr spells, savefile_ptr file)
             for (j = 0; j < group->count; j++)
             {
                 mon_spell_ptr spell = &group->spells[j];
+                if (!spell->lore) continue;
                 savefile_write_byte(file, spell->id.type);
                 savefile_write_s16b(file, spell->id.effect);
                 savefile_write_s16b(file, spell->lore);

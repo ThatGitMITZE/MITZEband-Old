@@ -115,7 +115,7 @@ struct counts_s
     s32b used;
     s32b destroyed;
 };
-typedef struct counts_s counts_t;
+typedef struct counts_s counts_t, *counts_ptr;
 
 typedef struct {
     s32b found;
@@ -202,7 +202,7 @@ struct object_kind
  * Note that "max_num" is always "1" (if that artifact "exists")
  */
 
-typedef struct artifact_type artifact_type;
+typedef struct artifact_type artifact_type, *art_ptr;
 
 struct artifact_type
 {
@@ -249,7 +249,7 @@ struct artifact_type
  * Information about "ego-items".
  */
 
-typedef struct ego_type ego_type;
+typedef struct ego_type ego_type, *ego_ptr;
 
 struct ego_type
 {

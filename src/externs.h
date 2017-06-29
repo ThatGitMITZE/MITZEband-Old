@@ -476,6 +476,7 @@ extern int  obj_drop_theme;
 extern bool monk_armour_aux;
 extern bool monk_notify_aux;
 extern wilderness_type **wilderness;
+extern u32b wilderness_seed;
 extern building_type building[MAX_BLDG];
 extern u16b max_quests;
 extern byte num_random_quests;
@@ -2063,6 +2064,7 @@ extern int  wilderness_level(int x, int y);
 extern errr init_wilderness(void);
 extern void init_wilderness_terrains(void);
 extern void seed_wilderness(void);
+extern void seed_wilderness_aux(void);
 extern errr parse_line_wilderness(char *buf, int options);
 extern bool change_wild_mode(void);
 

@@ -937,6 +937,7 @@ bool leave_special;
  * Wilderness
  */
 wilderness_type **wilderness;
+u32b wilderness_seed;
 
 
 /*

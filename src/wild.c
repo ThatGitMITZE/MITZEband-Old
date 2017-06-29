@@ -1423,11 +1423,11 @@ errr parse_line_wilderness(char *buf, int options)
 /*
  * Generate the random seeds for the wilderness
  */
-void seed_wilderness(void)
+void seed_wilderness_aux(void)
 {
     int x, y;
-
-    /* Init wilderness seeds */
+    Rand_quick = TRUE;
+    Rand_value = wilderness_seed;
     for (x = 0; x < max_wild_x; x++)
     {
         for (y = 0; y < max_wild_y; y++)
@@ -1436,6 +1436,12 @@ void seed_wilderness(void)
             wilderness[y][x].entrance = 0;
         }
     }
+    Rand_quick = FALSE;
+}
+void seed_wilderness(void)
+{
+    wilderness_seed = randint0(0x10000000);
+    seed_wilderness_aux();
 }
 
 
