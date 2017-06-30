@@ -20229,7 +20229,7 @@ P:Copy:Human:Mauler
 P:Body:Centipede6
 D:Oh my god, it's changing colors! Run!!
 
-# NEW MONSTERS ->
+# NEW MONSTERS (clouded ... heavily edited) ->
 # From XAngband
 N:1133:Takeminakata, Drastic Measures
 G:p:v
@@ -21010,38 +21010,116 @@ S:FREQ_50 |
 S:BRAIN_SMASH | BO_MANA | HEAL | HASTE | BO_WATER(10d10+82) | SHRIEK |
 S:S_MONSTER | BO_PLASMA(8d7+92) | BO_NETHER(5d5+140) | BO_ICE(6d8+82) |
 S:DRAIN_MANA | ANTI_MAGIC | POLYMORPH |
+# <- End of NEW MONSTERS (clouded ... heavily edited)
 
 N:1171:Flame spider
 G:S:r
 I:120:30d20:15:50:0:150
-W:40:3:999:200:0:0
-B:BITE:HURT(2d8):FIRE(2d8)
-B:BITE:HURT(2d8):FIRE(2d8)
+W:40:4:999:1000:0:0
+B:BITE:HURT(2d8):FIRE(1d8)
+B:BITE:HURT(2d8):FIRE(1d8)
 F:FRIENDS | WEIRD_MIND | BASH_DOOR |
 F:ANIMAL | AURA_FIRE | RES_FIRE
 F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
 P:Copy:Hobbit:Rogue
 P:Body:Spider
-S:1_IN_5 |
-S:JMP_FIRE | DETECT_MONSTERS
+S:1_IN_5 | JMP_FIRE | DETECT_MONSTERS
 D:A spider wreathed in flames. It seems to pulse and quiver with
 D:barely constrained energy.
 
 N:1172:Nexus spider
 G:S:v
 I:120:30d20:15:50:0:150
-W:45:3:999:300:0:0
-B:BITE:HURT(2d8):NEXUS(2d8)
-B:BITE:HURT(2d8):NEXUS(2d8)
+W:45:5:999:1250:0:0
+B:BITE:HURT(2d8):NEXUS(1d8)
+B:BITE:HURT(2d8):NEXUS(1d8)
 F:FRIENDS | WEIRD_MIND | BASH_DOOR |
 F:ANIMAL | RES_NEXU
 F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
 P:Copy:Hobbit:Rogue
 P:Body:Spider
-S:1_IN_5 |
-S:JMP_NEXUS | TELE_TO | DETECT_MONSTERS
+S:1_IN_5 | JMP_NEXUS | TELE_TO | DETECT_MONSTERS
 D:A spider which inhabits the crossroads of time and space, pulsating
 D:with barely constrained energy.
+
+N:1173:Ice spider
+G:S:w
+I:120:35d20:15:50:0:150
+W:50:4:999:1500:0:0
+B:BITE:HURT(2d8):ICE(1d8)
+B:BITE:HURT(2d8):ICE(1d8)
+A:ICE(3d3)
+F:FRIENDS | WEIRD_MIND | BASH_DOOR |
+F:ANIMAL | RES_COLD
+F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
+P:Copy:Hobbit:Rogue
+P:Body:Spider
+S:1_IN_5 | JMP_ICE | DETECT_MONSTERS
+D:A giant white spider, seemingly frozen solid yet with an odd
+D:sense of imminent motion.
+
+N:1174:Venom spider
+G:S:g
+I:120:30d20:15:50:0:150
+W:40:4:999:1000:0:0
+B:BITE:HURT(2d8):POISON(3d8)
+B:BITE:HURT(2d8):POISON(3d8)
+A:POISON(5d5)
+F:FRIENDS | WEIRD_MIND | BASH_DOOR |
+F:ANIMAL | RES_POIS
+F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
+P:Copy:Hobbit:Rogue
+P:Body:Spider
+S:1_IN_5 | JMP_POISON | DETECT_MONSTERS
+D:A giant spider covered in putresence. It seems ready to leap for your throat.
+
+N:1175:Disintegrate spider
+G:S:s
+I:125:40d20:15:50:0:150
+W:70:5:999:3000:0:0
+B:BITE:DISINTEGRATE(4d8)
+B:BITE:DISINTEGRATE(4d8)
+A:DISINTEGRATE(3d3)
+F:FRIENDS | WEIRD_MIND | BASH_DOOR |
+F:ANIMAL |
+F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
+P:Copy:Hobbit:Rogue
+P:Body:Spider
+S:1_IN_5 | JMP_DISINTEGRATE | DETECT_MONSTERS
+D:A large spider that seems capable of destroying the world around it, even you!
+
+N:1176:Undead spider
+G:S:D
+I:120:40d20:15:50:0:150
+W:60:4:999:2500:0:0
+B:BITE:HURT(2d8):UNLIFE(2d6)
+B:BITE:HURT(2d8):UNLIFE(2d6)
+A:NETHER(3d3)
+F:FRIENDS | WEIRD_MIND | BASH_DOOR |
+F:ANIMAL | UNDEAD | EVIL | HURT_LITE | SELF_DARK_1
+F:RES_POIS | RES_NETH
+F:POS_GAIN_AC
+P:Copy:Hobbit:Rogue
+P:Body:Spider
+S:1_IN_5 | JMP_NETHER | DETECT_MONSTERS
+D:Rotting, putrescent, and shrouded in darkness, this bloated
+D:abomination is back from the nether world to hunt the living.
+
+N:1177:Hell spider
+G:S:R
+I:125:60d20:15:50:0:150
+W:80:6:999:6000:0:0
+B:BITE:HELL_FIRE(6d6)
+B:BITE:HELL_FIRE(6d6)
+A:HELL_FIRE(2d6)
+F:FRIENDS | WEIRD_MIND | BASH_DOOR |
+F:ANIMAL | RES_FIRE | DEMON | EVIL
+F:POS_GAIN_AC
+P:Copy:Hobbit:Rogue
+P:Body:Spider
+S:1_IN_5 | JMP_HELL_FIRE(66) | DETECT_MONSTERS
+D:A giant spider from the planes of hell sent to rend your soul in
+D:eternal damnation.
 
 # N: serial number : monster name
 # G: symbol : color

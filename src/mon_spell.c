@@ -2746,6 +2746,17 @@ static cptr _summon_msg(void)
     }
     return NULL;
 }
+static cptr _tactic_msg(void)
+{
+    if (_current.spell->id.effect < GF_COUNT)
+    {
+        if (_current.flags & MSC_SRC_PLAYER)
+            return "You jump away.";
+        else
+            return "$CASTER jumps away.";
+    }
+    return NULL;
+}
 static cptr _get_msg(void)
 {
     cptr msg = _custom_msg();
@@ -2765,6 +2776,9 @@ static cptr _get_msg(void)
             break;
         case MST_SUMMON:
             msg = _summon_msg();
+            break;
+        case MST_TACTIC:
+            msg = _tactic_msg();
             break;
         }
     }
