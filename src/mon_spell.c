@@ -1366,7 +1366,7 @@ bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
 
     if (!ai)
     {
-        if (p_ptr->wizard && mon->id == target_who) ai = mon_spell_ai_wizard;
+        if (0 && p_ptr->wizard && mon->id == target_who) ai = mon_spell_ai_wizard;
         else ai = _default_ai;
     }
 
@@ -2879,6 +2879,13 @@ static bool _projectable_splash(point_t src, point_t dest)
     return _projectable(src, dest)
         && cave_have_flag_bold(dest.y, dest.x, FF_PROJECT);
 }
+static bool _projectable_splash2(point_t src, point_t dest)
+{
+    return _projectable(src, dest)
+        && ( cave_have_flag_bold(dest.y, dest.x, FF_PROJECT)
+          || cave_have_flag_bold(dest.y, dest.x, FF_TREE)
+          || cave_have_flag_bold(dest.y, dest.x, FF_WEB) );
+}
 static bool _disintegrable(point_t src, point_t dest)
 {
     return in_disintegration_range(dest.y, dest.x, src.y, src.x);
@@ -3282,15 +3289,74 @@ static void _ai_direct(mon_spell_cast_ptr cast)
             spell->prob = 30;
     }
 }
+static bool _gf_can_uncover(int which) /* FF_TREE *and* FF_WEB */
+{
+    switch (which)
+    {
+    case GF_ACID:
+    case GF_ELEC:
+    case GF_FIRE:
+    case GF_COLD:
+    case GF_ICE:
+    case GF_PLASMA:
+    case GF_METEOR:
+    case GF_CHAOS:
+    case GF_MANA:
+    case GF_SHARDS:
+    case GF_ROCK:
+    case GF_ROCKET:
+    case GF_FORCE:
+    case GF_GRAVITY:
+    case GF_DISINTEGRATE:
+        return TRUE;
+    }
+    return FALSE;
+}
+static bool _has_uncover_spell_aux(mon_spell_group_ptr group)
+{
+    int i;
+    if (!group) return FALSE;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        if (_gf_can_uncover(spell->id.effect)) return TRUE;
+    }
+    return FALSE;
+}
+static bool _has_uncover_spell(mon_race_ptr race)
+{
+    return _has_uncover_spell_aux(race->spells->groups[MST_BALL])
+        || _has_uncover_spell_aux(race->spells->groups[MST_BREATH]);
+}
+static void _adjust_group_uncover(mon_spell_group_ptr group)
+{
+    int i;
+    if (!group) return;
+    for (i = 0; i < group->count; i++)
+    {
+        mon_spell_ptr spell = &group->spells[i];
+        if (_gf_can_uncover(spell->id.effect)) continue;
+        spell->prob = 0;
+    }
+}
+static bool _pt_is_valid(point_t pt)
+{
+    return pt.x || pt.y; /* XXX assume (0,0) out of bounds */
+}
 static void _ai_indirect(mon_spell_cast_ptr cast)
 {
     bool           stupid = BOOL(cast->race->flags2 & RF2_STUPID);
+    bool           smart = BOOL(cast->race->flags2 & RF2_SMART);
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
     point_t        new_dest = {0};
 
     if (!stupid)
+    {
         new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
+        if (!_pt_is_valid(new_dest) && smart && _has_uncover_spell(cast->race))
+            new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash2);
+    }
 
     _remove_group(spells->groups[MST_ANNOY], NULL);
     _remove_group(spells->groups[MST_BOLT], NULL);
@@ -3301,7 +3367,7 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
     _remove_group(spells->groups[MST_WEIRD], NULL);
     _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
 
-    if (new_dest.x || new_dest.y) /* XXX assume (0,0) out of bounds */
+    if (_pt_is_valid(new_dest))
     {
         cast->dest = new_dest;
         cast->flags |= MSC_SPLASH;
@@ -3310,12 +3376,25 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
             _smart_remove(cast);
         _ai_wounded(cast);
 
-        _adjust_group(spells->groups[MST_BREATH], NULL, 50);
-        _adjust_group(spells->groups[MST_BALL], NULL, 50);
-        _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
-        _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
-        /* Heal and Self Telportation OK */
-        _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
+        if ( cave_have_flag_bold(new_dest.y, new_dest.x, FF_TREE)
+          || cave_have_flag_bold(new_dest.y, new_dest.x, FF_WEB) )
+        {
+            _adjust_group_uncover(spells->groups[MST_BREATH]);
+            _adjust_group_uncover(spells->groups[MST_BALL]);
+            _remove_group(spells->groups[MST_SUMMON], NULL);
+            _remove_group(spells->groups[MST_HEAL], NULL);
+            _remove_group(spells->groups[MST_ESCAPE], NULL);
+            _remove_group(spells->groups[MST_TACTIC], NULL);
+        }
+        else
+        {
+            _adjust_group(spells->groups[MST_BREATH], NULL, 50);
+            _adjust_group(spells->groups[MST_BALL], NULL, 50);
+            _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
+            _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
+            /* Heal and Self Telportation OK */
+            _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
+        }
     }
     else
     {
