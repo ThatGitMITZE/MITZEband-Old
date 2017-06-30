@@ -416,8 +416,11 @@ int gf_affect_p(int who, int type, int dam, int flags)
         else if (fuzzy) msg_print("You are hit by nether forces!");
         dam = res_calc_dam(RES_NETHER, dam);
         unlife = dam*15/100;
-        gf_affect_p(who, GF_UNLIFE, unlife, flags);
-        dam -= unlife;
+        if (unlife)
+        {
+            gf_affect_p(who, GF_UNLIFE, unlife, flags);
+            dam -= unlife;
+        }
         result = take_hit(DAMAGE_ATTACK, dam, m_name);
         update_smart_learn(who, RES_NETHER);
         break; }
