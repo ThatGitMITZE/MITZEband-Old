@@ -1201,6 +1201,19 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     /* Prevents problems with chain reactions of exploding monsters */
     if (mon->hp < 0) return (FALSE);
 
+    /* Big hack here ... Jump Spiders are immune to the jumps of their kin
+     * (They come in packs, and it would be silly for them to destroy each other) */
+    if (mon_spell_current() && race->spells)
+    {
+        mon_spell_ptr spell = mon_spell_current();
+        mon_spell_group_ptr group = race->spells->groups[MST_TACTIC];
+        if (spell->id.type == MST_TACTIC && group && mon_spell_group_find(group, spell->id))
+        {
+            set_monster_csleep(mon->id, 0);
+            return FALSE;
+        }
+    }
+
     /* Get the monster name (BEFORE polymorphing) */
     if (flags & GF_AFFECT_SPELL)
     {

@@ -1312,12 +1312,15 @@ static void _wiz_inspect_objects(int level)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
-        if (1) _wiz_stats_log_books(level, o_ptr, 20, 20);
+        if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
         if (0) _wiz_stats_log_devices(level, o_ptr);
         if (0) _wiz_stats_log_arts(level, o_ptr);
         if (0) _wiz_stats_log_rand_arts(level, o_ptr);
 
         if (0 && o_ptr->name3)
+            _wiz_stats_log_obj(level, o_ptr);
+
+        if (1 && o_ptr->name2 == EGO_WEAPON_EXTRA_ATTACKS)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name2 && !object_is_device(o_ptr) && !object_is_ammo(o_ptr))
@@ -1865,8 +1868,8 @@ void do_cmd_debug(void)
     case '_':
     {
         int i;
-        for (i = 1; i < max_k_idx; i++)
-            if (!k_info[i].name)
+        for (i = 1; i < max_a_idx; i++)
+            if (!a_info[i].name)
                 msg_format("%d ", i);
         break;
     }

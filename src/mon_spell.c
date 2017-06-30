@@ -1364,7 +1364,11 @@ bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
     if (!_can_cast(mon)) return FALSE;
     if (mon->cdis > MAX_RANGE && !mon->target_y) return FALSE;
 
-    if (!ai) ai = _default_ai;
+    if (!ai)
+    {
+        if (p_ptr->wizard && mon->id == target_who) ai = mon_spell_ai_wizard;
+        else ai = _default_ai;
+    }
 
     _spell_cast_init(&cast, mon);
     if (ai(&cast))
@@ -1993,7 +1997,7 @@ static void _m_tactic(void)
     default: /* JMP_<type> */
         assert(_current.spell->parm.tag == MSP_DICE);
         project(_current.mon->id, 5, _current.src.y, _current.src.x,
-            _roll(_current.spell->parm.v.dice) * 2,
+            _roll(_current.spell->parm.v.dice)*5/4, /* XXX */
             _current.spell->id.effect,
             PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER);
         teleport_away(_current.mon->id, 10, 0); 

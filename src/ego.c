@@ -3200,10 +3200,13 @@ void ego_finalize(object_type *o_ptr, int level, int power, int mode)
             }
             else if (o_ptr->name2 == EGO_WEAPON_EXTRA_ATTACKS)
             {
+                int odds = 3 + o_ptr->dd * o_ptr->ds/3;
                 o_ptr->pval = randint1(e_ptr->max_pval*level/100+1);
-                if (o_ptr->pval > 6) o_ptr->pval = 6;
-                if (o_ptr->pval == 6 && !one_in_(o_ptr->dd * o_ptr->ds / 2)) o_ptr->pval = 5;
-                if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
+                if (o_ptr->pval > 4 && !one_in_(odds)) o_ptr->pval = 4;
+                else if (o_ptr->pval > 5 && !one_in_(odds)) o_ptr->pval = 5;
+                else if (o_ptr->pval > 6) o_ptr->pval = 6;
+
+                if (object_is_(o_ptr, TV_SWORD, SV_FALCON_SWORD))
                     o_ptr->pval += randint1(2);
 
                 if (o_ptr->dd*o_ptr->ds > 30)

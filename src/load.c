@@ -1078,14 +1078,14 @@ static errr rd_savefile_new_aux(savefile_ptr file)
         {
             byte b = savefile_read_byte(file);
             if (b == 0xFF) break;
-            assert(0 <= b && b < OF_ARRAY_SIZE);
+            assert(/*0 <= b &&*/ b < OF_ARRAY_SIZE);
             ego->known_flags[b] = savefile_read_u32b(file);
         }
         for (;;)
         {
             byte b = savefile_read_byte(file);
             if (b == 0xFF) break;
-            assert(0 <= b && b < OF_ARRAY_SIZE);
+            assert(/*0 <= b &&*/ b < OF_ARRAY_SIZE);
             ego->xtra_flags[b] = savefile_read_u32b(file);
         }
         ego->counts.generated = savefile_read_s16b(file);
@@ -1109,7 +1109,7 @@ static errr rd_savefile_new_aux(savefile_ptr file)
         {
             byte b = savefile_read_byte(file);
             if (b == 0xFF) break;
-            assert(0 <= b && b < OF_ARRAY_SIZE);
+            assert(/*0 <= b &&*/ b < OF_ARRAY_SIZE);
             art->known_flags[b] = savefile_read_u32b(file);
         }
     }
