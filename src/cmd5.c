@@ -1092,10 +1092,11 @@ void do_cmd_cast(void)
             {
                 int  old_level = spell_exp_level(cur_exp);
                 int  new_level = old_level;
+                int  max = increment ? SPELL_EXP_EXPERT : SPELL_EXP_MASTER;
 
                 p_ptr->spell_exp[index] += exp_gain;
-                if (p_ptr->spell_exp[index] > SPELL_EXP_MASTER)
-                    p_ptr->spell_exp[index] = SPELL_EXP_MASTER;
+                if (p_ptr->spell_exp[index] > max)
+                    p_ptr->spell_exp[index] = max;
                 new_level = spell_exp_level(p_ptr->spell_exp[index]);
                 if (new_level > old_level)
                 {
