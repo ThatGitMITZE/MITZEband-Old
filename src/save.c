@@ -139,7 +139,7 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
     savefile_write_byte(file, SAVE_MON_DONE);
 }
 
-static void wr_lore_aux(savefile_ptr file, mon_race_ptr race)
+static void wr_race_lore(savefile_ptr file, mon_race_ptr race)
 {
     int i, j, ct_blows = 0, ct_auras = 0;
     savefile_write_s16b(file, race->r_sights);
@@ -160,10 +160,6 @@ static void wr_lore_aux(savefile_ptr file, mon_race_ptr race)
     savefile_write_u32b(file, race->r_flags2);
     savefile_write_u32b(file, race->r_flags3);
     savefile_write_u32b(file, race->r_flagsr);
-    savefile_write_byte(file, race->max_num);
-    savefile_write_s16b(file, race->floor_id);
-    savefile_write_byte(file, race->stolen_ct);
-    savefile_write_u32b(file, race->flagsx);   /* 50 bytes */
     mon_spells_save(race->spells, file); /* 2 + 5S' bytes where S' is a seen spell */
     for (i = 0; i < MAX_MON_BLOWS; i++) /* was 40 bytes ... slightly optimized (cost 2 bytes) */
     {
@@ -203,18 +199,32 @@ static void wr_lore_aux(savefile_ptr file, mon_race_ptr race)
         savefile_write_s16b(file, aura->lore);
     }
 }
-static void wr_lore(savefile_ptr file)
+static bool _race_has_lore(mon_race_ptr race)
+{
+    return race->r_sights || race->r_tkills; /* XXX */
+}
+static void wr_r_info(savefile_ptr file)
 {
     int i;
+    savefile_write_u16b(file, max_r_idx);
     for (i = 0; i < max_r_idx; i++)
     {
         mon_race_ptr race = &r_info[i];
-        if (!race->name) continue;
-        if (!race->r_sights && !race->r_tkills) continue; /* XXX if (!_has_lore(race)) ... */
-        savefile_write_s16b(file, i);
-        wr_lore_aux(file, race);
+        byte         header = 0;
+
+        if (race->flagsx) header |= 0x01;
+        if (_race_has_lore(race)) header |= 0x02;
+
+        savefile_write_byte(file, header);
+        savefile_write_byte(file, race->max_num);
+        savefile_write_s16b(file, race->floor_id);
+        savefile_write_byte(file, race->stolen_ct);
+
+        if (race->flagsx)
+            savefile_write_u32b(file, race->flagsx);
+        if (_race_has_lore(race))
+            wr_race_lore(file, race);
     }
-    savefile_write_s16b(file, -1);
 }
 
 static bool _have_counts(counts_ptr counts)
@@ -1079,7 +1089,7 @@ static bool wr_savefile_new(savefile_ptr file)
 
     msg_on_save(file);
 
-    wr_lore(file);
+    wr_r_info(file);
 
     tmp16u = max_k_idx;
     savefile_write_u16b(file, tmp16u);

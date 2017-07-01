@@ -21049,7 +21049,7 @@ D:with barely constrained energy.
 
 N:1173:Ice spider
 G:S:w
-I:120:35d20:15:50:0:150
+I:120:30d20:15:50:0:150
 W:50:4:999:1500:0:0
 B:BITE:HURT(2d8):ICE(1d8)
 B:BITE:HURT(2d8):ICE(1d8)
@@ -21080,7 +21080,7 @@ D:A giant spider covered in putresence. It seems ready to leap for your throat.
 
 N:1175:Disintegrate spider
 G:S:s
-I:125:40d20:15:50:0:150
+I:125:30d20:15:50:0:150
 W:70:5:999:3000:0:0
 B:BITE:DISINTEGRATE(4d8)
 B:BITE:DISINTEGRATE(4d8)
