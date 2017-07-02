@@ -2486,13 +2486,15 @@ static void process_monster(int m_idx)
             switch (pack_ptr->ai)
             {
             case AI_SHOOT:
-            case AI_MAINTAIN_DISTANCE:
                 freq = MAX(30, freq + 15);
+                break;
+            case AI_MAINTAIN_DISTANCE:
+                freq += 15;
                 break;
             case AI_LURE:
             case AI_FEAR:
             case AI_GUARD_POS:
-                freq = MAX(30, freq + 10);
+                freq += 10;
                 break;
             }
         }

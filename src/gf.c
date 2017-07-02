@@ -2094,7 +2094,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
         note_dies = " collapses, a mindless husk.";
         break;
-    case GF_TELEKINESIS:
+    case GF_TELEKINESIS: {
+        int mult = 1;
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (one_in_(4))
@@ -2103,19 +2104,16 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             else do_dist = 7;
         }
 
-        /* 1. stun */
         do_stun = _stun_amount(dam);
+        if (race->flags1 & RF1_UNIQUE)
+            mult++;
 
-        /* Attempt a saving throw */
-        if ((race->flags1 & RF1_UNIQUE) ||
-            (race->level > 5 + randint1(dam)))
+        if (mult*race->level > 5 + randint1(dam))
         {
-            /* Resist */
             do_stun = 0;
-            /* No obvious effect */
             obvious = FALSE;
         }
-        break;
+        break; }
     case GF_PSY_SPEAR:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()

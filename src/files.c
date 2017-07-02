@@ -1469,6 +1469,8 @@ void tim_player_flags(u32b flgs[OF_ARRAY_SIZE])
         add_flag(flgs, OF_IM_FEAR);
     if (p_ptr->tim_invis)
         add_flag(flgs, OF_SEE_INVIS);
+    if (p_ptr->tim_infra)
+        add_flag(flgs, OF_INFRA);
     if (p_ptr->tim_regen)
         add_flag(flgs, OF_REGEN);
     if (IS_TIM_ESP())
