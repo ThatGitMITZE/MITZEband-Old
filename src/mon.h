@@ -13,4 +13,7 @@ extern mon_race_ptr mon_race(mon_ptr mon);
 extern mon_race_ptr mon_apparent_race(mon_ptr mon);
 extern mon_race_ptr mon_true_race(mon_ptr mon);
 
+extern void mon_anger(mon_ptr mon);
+extern void mon_anger_spell(mon_ptr mon, int dam);
+extern void mon_anger_shoot(mon_ptr mon, int dam);
 #endif

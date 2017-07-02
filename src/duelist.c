@@ -323,7 +323,7 @@ static void _darting_duel_spell(int cmd, variant *res)
                 if (r == _rush_succeeded && tmp == p_ptr->duelist_target_idx)
                 {
                     monster_type *m_ptr = &m_list[p_ptr->duelist_target_idx];
-                    m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
+                    mon_anger(m_ptr);
                     teleport_player(10, TELEPORT_LINE_OF_SIGHT);
                 }
             }

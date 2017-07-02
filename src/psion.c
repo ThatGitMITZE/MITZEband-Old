@@ -260,7 +260,7 @@ bool psion_process_monster(int m_idx)
             result = mon_take_hit(m_idx, spell_power(40*m_ptr->ego_whip_pow), &fear, NULL);
             m_ptr->ego_whip_ct--;
             if (!projectable(py, px, m_ptr->fy, m_ptr->fx))
-                m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
+                mon_anger(m_ptr);
             if (!m_ptr->ego_whip_ct)
             {
                 msg_format("Your ego whip on %s disappears.", m_name);

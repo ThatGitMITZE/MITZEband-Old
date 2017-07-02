@@ -3579,7 +3579,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                         if (anger && tdam > 0 && m_ptr->cdis > 1 && allow_ticked_off(r_ptr))
                         {
                             if (!mut_present(MUT_PEERLESS_SNIPER) && !p_ptr->tim_stealthy_snipe)
-                                m_ptr->anger = MIN(100, m_ptr->anger + 5 + m_ptr->anger / 3); 
+                                mon_anger_shoot(m_ptr, tdam);
                         }
 
                         if (anger && tdam > 0)

@@ -91,3 +91,30 @@ mon_race_ptr mon_true_race(mon_ptr mon)
     return race;
 }
 
+/* Monster Anger: Attacking a monster from a distance should make it more
+ * likely to respond with a distance attack (spell or breath). */
+void mon_anger(mon_ptr mon)
+{
+    mon->anger = MIN(100, mon->anger + 10 + mon->anger/2); 
+}
+
+void mon_anger_spell(mon_ptr mon, int dam)
+{
+    int inc = 10 + mon->anger/2;
+
+    if (dam < 250)
+        inc = inc*(dam + 50)/300;
+
+    mon->anger = MIN(100, mon->anger + inc);
+}
+
+void mon_anger_shoot(mon_ptr mon, int dam)
+{
+    int inc = 5 + mon->anger/4;
+
+    if (dam < 125)
+        inc = inc*(dam + 25)/150;
+
+    mon->anger = MIN(100, mon->anger + inc);
+}
+

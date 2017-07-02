@@ -3702,7 +3702,7 @@ void process_monsters(void)
             monster_desc(m_name, m_ptr, 0);
             msg_format("%^s gets back up and looks mad as hell.", m_name);
             m_ptr->mflag2 &= ~MFLAG2_TRIPPED;
-            m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
+            mon_anger(m_ptr);
             continue;
         }
 

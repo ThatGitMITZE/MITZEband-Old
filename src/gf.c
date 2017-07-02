@@ -4233,9 +4233,9 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 if (allow_ticked_off(race))
                 {
                     if (!mut_present(MUT_SUBTLE_CASTING))
-                        mon->anger = MIN(100, mon->anger + 10 + mon->anger / 2); 
+                        mon_anger_spell(mon, dam);
                     if (splashed)
-                        mon->anger = MIN(100, mon->anger + 10 + mon->anger / 2); 
+                        mon_anger(mon);
                     /* Attempt to deal with Dungeon Guardians splash exploit.
                        Dungeon guardians use AI_GUARD_POS, so cannot be lured
                        away from the dungeon entrance. Attempting this exploit
@@ -4247,7 +4247,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                         if (pack_ptr && pack_ptr->ai == AI_GUARD_POS)
                             mon->anger = 100;
                         else
-                            mon->anger = MIN(100, mon->anger + 10 + mon->anger / 2); 
+                            mon_anger(mon);
                     }
                 }
                 /* Splashing Uniques out of LOS makes them rethink their approach */

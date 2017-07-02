@@ -54,8 +54,7 @@ static void _kiss_spell(int cmd, variant *res)
                     }
 
                     if (allow_ticked_off(r_ptr))
-                        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
-
+                        mon_anger(m_ptr);
                 }
                 else
                     msg_format("%^s ignores you.", desc);

@@ -365,8 +365,8 @@ static void _monster_toss_imp(_monster_toss_info *info)
                     if (dam > 0)
                         anger_monster(m_ptr);
 
-                    if (dam > 0 && m_ptr2->cdis > 1 && allow_ticked_off(r_ptr))
-                        m_ptr->anger = MIN(100, m_ptr->anger + 10 + m_ptr->anger / 2); 
+                    if (dam > 0 && m_ptr2->cdis > 1)
+                        mon_anger_spell(m_ptr2, dam);
 
                     if (fear && visible)
                     {
