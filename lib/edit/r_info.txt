@@ -12833,8 +12833,8 @@ N:754:The Lernean Hydra
 G:M:B
 I:120:45d100:20:140:20:1000
 W:55:2:999:20000:0:0
-B:BITE:HURT(5d6):POISON(3d6)
-B:BITE:HURT(5d6):POISON(3d6)
+B:BITE:HURT(5d6):POISON(5d6)
+B:BITE:HURT(5d6):POISON(5d6)
 B:BITE:HURT(8d6):FIRE(4d6)
 B:BITE:HURT(8d6):FIRE(4d6)
 F:UNIQUE |
@@ -12846,11 +12846,8 @@ F:NO_CONF | NO_SLEEP | CAN_SWIM |
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Mauler
 P:Body:Hydra6
-S:FREQ_25 |
-S:SCARE |
-S:BO_FIRE(18d8+36) | BO_PLASMA(8d7+95) | BA_FIRE(1d385+20) | BA_POISON(12d4) |
-S:BR_FIRE | BR_POISON |
-S:S_HYDRA
+S:FREQ_25 | SCARE | S_HYDRA
+S:BO_PLASMA(8d7+95) | BA_FIRE(1d385+20) | BR_FIRE | BR_POISON
 D:A massive legendary hydra. It has twelve powerful heads. Its many eyes
 D:stare at you as clouds of smoke and poisonous vapour rise from its
 D:seething form.

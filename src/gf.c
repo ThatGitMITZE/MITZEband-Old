@@ -1087,7 +1087,22 @@ static int _stun_amount(int dam)
     static point_t tbl[4] = { {1, 1}, {10, 10}, {100, 25}, {500, 50} };
     return interpolate(dam, tbl, 4);
 }
-
+static bool _is_mental_attack(int type)
+{
+    switch (type)
+    {
+    case GF_PSI:
+    case GF_PSI_BRAIN_SMASH:
+    case GF_BRAIN_SMASH:
+    case GF_PSI_STORM:
+    case GF_ELDRITCH_STUN:
+    case GF_DOMINATION:
+    case GF_SUBJUGATION:
+    case GF_STUN: /* XXX */
+        return TRUE;
+    }
+    return FALSE;
+}
 #define _BABBLE_HACK() \
             if (race->flagsr & RFR_RES_ALL) \
             { \
@@ -3993,30 +4008,25 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     }
     else
     {
-        /* Sound and Impact resisters never stun */
-        if (do_stun &&
-            !(race->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
-            !(race->flags3 & RF3_NO_STUN))
+        /* Sound and Impact resisters never stun
+         * XXX Why should RES_SOUND protect from mental attacks?! */
+        if ( do_stun
+          && (_is_mental_attack(type) || !(race->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)))
+          && !(race->flags3 & RF3_NO_STUN) )
         {
-            /* Obvious */
-            if (seen) obvious = TRUE;
-
-            /* Get stunned */
-            if (MON_STUNNED(mon))
+            int cur_stun = MON_STUNNED(mon);
+            if (cur_stun)
             {
-                note = " is <color:B>more dazed</color>.";
-                tmp = MON_STUNNED(mon) + (do_stun / 2);
+                int div = 1 + cur_stun / 20;
+                do_stun = MAX(1, do_stun/div);
             }
-            else
-            {
+
+            if (set_monster_stunned(mon->id, cur_stun + do_stun))
                 note = " is <color:B>dazed</color>.";
-                tmp = do_stun;
-            }
+            else
+                note = " is <color:B>more dazed</color>.";
 
-            /* Apply stun */
-            (void)set_monster_stunned(mon->id, tmp);
-
-            /* Get angry */
+            if (seen) obvious = TRUE;
             get_angry = TRUE;
         }
 
@@ -4031,7 +4041,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 if (type == GF_BLIND)
                     note = " is more blinded.";
                 else
-                    note = " looks more confused.";
+                    note = " looks more <color:U>confused</color>.";
                 tmp = MON_CONFUSED(mon) + (do_conf / 2);
             }
 
@@ -4041,7 +4051,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 if (type == GF_BLIND)
                     note = " is blinded.";
                 else
-                    note = " looks confused.";
+                    note = " looks <color:U>confused</color>.";
                 tmp = do_conf;
             }
 

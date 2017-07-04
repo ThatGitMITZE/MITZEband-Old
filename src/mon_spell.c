@@ -3221,7 +3221,7 @@ static void _ai_direct(mon_spell_cast_ptr cast)
         spell->prob = 0;
 
     /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
-    if (spells->groups[MST_TACTIC] && (cast->flags & (MSC_DIRECT | MSC_SPLASH)) && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+    if (spells->groups[MST_TACTIC] && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
         _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
 
     if (_distance(cast->src, cast->dest) > 5)
@@ -3390,8 +3390,9 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
         {
             _adjust_group(spells->groups[MST_BREATH], NULL, 50);
             _adjust_group(spells->groups[MST_BALL], NULL, 50);
-            _adjust_group(spells->groups[MST_BALL], _ball0_p, 0);
+            _remove_group(spells->groups[MST_BALL], _ball0_p);
             _adjust_group(spells->groups[MST_SUMMON], NULL, 50);
+            _remove_group(spells->groups[MST_TACTIC], _jump_p);
             /* Heal and Self Telportation OK */
             _remove_spell(spells, _id(MST_ESCAPE, ESCAPE_TELE_OTHER));
         }

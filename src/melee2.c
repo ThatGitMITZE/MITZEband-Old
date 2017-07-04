@@ -2538,6 +2538,7 @@ static void process_monster(int m_idx)
         {
             bool counterattack = FALSE;
 
+            /*msg_format("<color:B>Freq=%d%% (%d%%)</color>", freq, r_ptr->spells->freq);*/
             /* Give priority to counter attack? */
             if (m_ptr->target_y)
             {
@@ -2555,7 +2556,6 @@ static void process_monster(int m_idx)
             if (!counterattack)
             {
                 /* Attempt to cast a spell */
-                /* Being Ticked Off will affect spell selection */
                 if (aware && mon_spell_cast(m_ptr, NULL))
                 {
                     m_ptr->anger = 0;

@@ -914,7 +914,7 @@ static bool _black_market_stock_p(int k_idx)
     case TV_CHEST: return FALSE;
     case TV_WAND:
     case TV_ROD:
-    case TV_STAFF: return TRUE;
+    case TV_STAFF: return one_in_(3);
     }
 
     return !(k_ptr->gen_flags & OFG_TOWN);
