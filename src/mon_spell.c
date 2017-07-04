@@ -3413,6 +3413,24 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
         {
             spell->prob = 150;
         }
+        /* Glass Castle */
+        spell = mon_spells_find(spells, _id(MST_BREATH, GF_LITE));
+        if ( spell
+          && cast->mon->cdis < MAX_RANGE/2
+          && _los(cast->src, cast->dest)
+          && one_in_(5) )
+        {
+            spell->prob = 150;
+        }
+        spell = mon_spells_find(spells, _id(MST_BREATH, GF_DARK));
+        if ( spell
+          && cast->mon->cdis < MAX_RANGE/2
+          && _los(cast->src, cast->dest)
+          && one_in_(5) )
+        {
+            spell->prob = 150;
+        }
+        /* XXX Splash BA_LITE and BA_DARK */
 
         /* XXX Bring back evil non-direct TELE_TO? */
     }
@@ -4072,6 +4090,7 @@ bool mon_race_can_teleport(mon_race_ptr race)
 }
 bool mon_race_has_lite_dark_spell(mon_race_ptr race) /* glass castle */
 {
+    if (!race->spells) return FALSE;
     return mon_spells_find(race->spells, _id(MST_BREATH, GF_LITE))
         || mon_spells_find(race->spells, _id(MST_BREATH, GF_DARK))
         || mon_spells_find(race->spells, _id(MST_BALL, GF_LITE))

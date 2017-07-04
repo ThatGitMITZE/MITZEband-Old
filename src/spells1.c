@@ -2728,6 +2728,7 @@ bool project(int who, int rad, int y, int x, int dam, int typ, int flg)
     {
     case GF_LITE:
     case GF_LITE_WEAK:
+    case GF_DARK:
         if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_LOS);
         break;
     case GF_DISINTEGRATE:

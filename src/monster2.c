@@ -1194,15 +1194,15 @@ static bool restrict_monster_to_dungeon(int r_idx)
         if (r_idx != MON_CHAMELEON && !mon_race_has_innate_spell(r_ptr))
             return FALSE;
     }                                                              /* v--- ...but prevent the Summon Mold exploit. Sigh ... */
-    if (dungeon_type == DUNGEON_GLASS)
-    {
-        if (r_idx == MON_CHAMELEON) return TRUE;
-        if (!mon_race_has_lite_dark_spell(r_ptr)) return FALSE;
-    }
     if (d_ptr->flags1 & DF1_NO_MELEE && (summon_specific_who != -1 || !allow_pets))
     {                                 /* ^---- Block players spamming the anti-melee cave for better summons... */
         if (r_idx == MON_CHAMELEON) return TRUE;
         if (!mon_race_has_attack_spell(r_ptr)) return FALSE;
+    }
+    if (dungeon_type == DUNGEON_GLASS)
+    {
+        if (r_idx == MON_CHAMELEON) return TRUE;
+        if (!mon_race_has_lite_dark_spell(r_ptr)) return FALSE;
     }
     if (d_ptr->flags1 & DF1_BEGINNER)
     {
