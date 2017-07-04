@@ -1199,11 +1199,6 @@ static bool restrict_monster_to_dungeon(int r_idx)
         if (r_idx == MON_CHAMELEON) return TRUE;
         if (!mon_race_has_attack_spell(r_ptr)) return FALSE;
     }
-    if (dungeon_type == DUNGEON_GLASS)
-    {
-        if (r_idx == MON_CHAMELEON) return TRUE;
-        if (!mon_race_has_lite_dark_spell(r_ptr)) return FALSE;
-    }
     if (d_ptr->flags1 & DF1_BEGINNER)
     {
         if (r_ptr->level > dun_level)
@@ -1309,6 +1304,15 @@ static bool restrict_monster_to_dungeon(int r_idx)
         {
             if (d_ptr->r_char[a] == r_ptr->d_char)
                 return TRUE;
+        }
+
+        /* Hack: Glass Castle uses MODE_OR and used to accept more monsters
+         * then just BR_LITE and BR_DARK (e.g. SELF_LITE, etc). Spells are
+         * no longer flags, so we need to hack things up ... */
+        if (dungeon_type == DUNGEON_GLASS)
+        {
+            if (r_idx == MON_CHAMELEON) return TRUE;
+            if (!mon_race_has_lite_dark_spell(r_ptr)) return FALSE;
         }
 
         return FALSE;
