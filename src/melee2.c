@@ -592,8 +592,15 @@ static bool get_moves_aux(int m_idx, int *yp, int *xp, bool no_flow)
     if (no_flow) return (FALSE);
 
     /* Monster can go through rocks */
-    if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) return (FALSE);
-    if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)) return (FALSE);
+    if ( dungeon_type != DUNGEON_ARENA 
+      && dungeon_type != DUNGEON_MOUNTAIN 
+      && dungeon_type != DUNGEON_GIANTS_HALL )
+    {
+        if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall))
+            return FALSE;
+        if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding))
+            return FALSE;
+    }
 
     /* Monster location */
     y1 = m_ptr->fy;

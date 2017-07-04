@@ -830,6 +830,8 @@ static bool _magic_will_buy(obj_ptr obj)
     case TV_HAFTED:
         if(obj->sval == SV_WIZSTAFF) break;
         else return FALSE;
+    case TV_LITE:
+        return obj->name1 == ART_STONE_OF_SORCERY;
     default:
         return FALSE;
     }
