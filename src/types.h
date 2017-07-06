@@ -729,7 +729,6 @@ struct monster_type
 
     byte drop_ct;
     byte stolen_ct;
-    u16b summon_ct;
 
     byte ego_whip_ct;
     byte ego_whip_pow;

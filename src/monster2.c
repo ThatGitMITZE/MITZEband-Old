@@ -112,19 +112,7 @@ monster_type *mon_get_parent(monster_type *m_ptr)
 
 void mon_set_parent(monster_type *m_ptr, int pm_idx)
 {
-    monster_type *pm_ptr;
-
-    if (pm_idx == m_ptr->parent_m_idx)
-        return;
-
-    pm_ptr = mon_get_parent(m_ptr);
-    if (pm_ptr && pm_ptr->summon_ct)
-        pm_ptr->summon_ct--;
-
     m_ptr->parent_m_idx = pm_idx;
-    pm_ptr = mon_get_parent(m_ptr);
-    if (pm_ptr && pm_ptr->summon_ct < MAX_SHORT)
-        pm_ptr->summon_ct++;
 }
 
 /*
@@ -2010,10 +1998,6 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         char buf[100];
         sprintf(buf, " (Anger = %d)", m_ptr->anger);
         strcat(desc, buf);
-    }
-    if (p_ptr->wizard && m_ptr->summon_ct)
-    {
-        strcat(desc, format(" (%d summons)", m_ptr->summon_ct));
     }
     #endif
     if (p_ptr->wizard && m_ptr->mpower != 1000)
@@ -4241,58 +4225,6 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
     if ((type == SUMMON_BIZARRE1 || type == SUMMON_THIEF) && who == -1)
         _ignore_depth_hack = TRUE;
 
-    /* Limit monster summons. But try to bring one back if possible */
-    if (who > 0 && m_list[who].summon_ct >= MAX_SUMMONS)
-    {
-        int i;
-        int monsters[MAX_SUMMONS];
-        int ct = 0;
-        monster_type *m_ptr;
-
-        /* Build a list of potential returnees */
-        for (i = 1; i < max_m_idx; i++)
-        {
-            m_ptr = &m_list[i];
-            if (!m_ptr->r_idx) continue;
-            if (m_ptr->parent_m_idx != who) continue;
-            if (!summon_specific_aux(m_ptr->r_idx)) continue;
-            if (los(m_ptr->fy, m_ptr->fx, y1, x1)) continue;
-            monsters[ct++] = i;
-            if (ct == MAX_SUMMONS) break;
-        }
-
-        /* Choose one randomly */
-        if (ct)
-        {
-            int oy, ox;
-
-            i = monsters[randint0(ct)];
-            m_ptr = &m_list[i];
-
-            oy = m_ptr->fy;
-            ox = m_ptr->fx;
-            cave[oy][ox].m_idx = 0;
-
-            cave[y][x].m_idx = i;
-            m_ptr->fy = y;
-            m_ptr->fx = x;
-
-            reset_target(m_ptr);
-            update_mon(i, TRUE);
-            lite_spot(oy, ox);
-            lite_spot(y, x);
-            if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-                p_ptr->update |= (PU_MON_LITE);
-
-            summon_specific_type = 0;
-            summon_specific_who = 0;
-            return TRUE;
-        }
-        summon_specific_type = 0;
-        summon_specific_who = 0;
-        return FALSE;
-    }
-
     summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
     summon_cloned_okay = (mode & PM_ALLOW_CLONED) ? TRUE : FALSE;
     summon_wall_scummer = (mode & PM_WALL_SCUMMER) && one_in_(2) ? TRUE : FALSE;
@@ -4384,18 +4316,11 @@ bool summon_named_creature (int who, int oy, int ox, int r_idx, u32b mode)
 
     r_ptr = &r_info[r_idx];
 
-    if (who > 0 && m_list[who].summon_ct >= MAX_SUMMONS)
-    {
-        do_return = TRUE;
-    }
-    else
-    {
-        if ((!(r_ptr->flags7 & RF7_GUARDIAN) || no_wilderness || p_ptr->wizard) && r_ptr->cur_num < r_ptr->max_num)
-            result = place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
+    if ((!(r_ptr->flags7 & RF7_GUARDIAN) || no_wilderness || p_ptr->wizard) && r_ptr->cur_num < r_ptr->max_num)
+        result = place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
 
-        if (!result && (r_ptr->flags1 & RF1_UNIQUE) && one_in_(2))
-            do_return = TRUE;
-    }
+    if (!result && (r_ptr->flags1 & RF1_UNIQUE) && one_in_(2))
+        do_return = TRUE;
 
     if (do_return)
     {

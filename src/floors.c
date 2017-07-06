@@ -572,16 +572,6 @@ static void place_pet(void)
             m_ptr->fx = cx;
             m_ptr->ml = TRUE;
             m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-            /* TODO: Leaving summons behind on a level is not fixing this up!
-               Here's my guess to the problem:
-               [1] preserve_pet copies monsters into party_mon (order undefined, but currently the mount is copied first)
-                   preserve_pet loops thru all monsters, and calls delete_monster_idx on anything left behind.
-               [2] delete_monster_idx, of course, patches up the parents summon count, but knows nothing
-                   about any memory copies that may or may not have been made (Copying may happen later
-                   depending on random monster order and order of processing. Only p_ptr-riding seems to
-                   have deterministic behavior).
-             */
-            m_ptr->summon_ct = 0; 
 
             /* Paranoia */
             m_ptr->hold_o_idx = 0;

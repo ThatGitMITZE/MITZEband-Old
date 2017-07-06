@@ -115,7 +115,7 @@ static void rd_monster(savefile_ptr file, monster_type *m_ptr)
             m_ptr->stolen_ct = savefile_read_byte(file);
             break;
         case SAVE_MON_SUMMON_CT:
-            m_ptr->summon_ct = savefile_read_u16b(file);
+            savefile_read_u16b(file);
             break;
         case SAVE_MON_EGO_WHIP:
             m_ptr->ego_whip_ct = savefile_read_byte(file);
