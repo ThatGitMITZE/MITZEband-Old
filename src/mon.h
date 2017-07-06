@@ -4,6 +4,7 @@
 /* XXX Refactor monster_type, monster_race, etc ... */
 typedef struct monster_type mon_t, *mon_ptr;
 typedef struct monster_race mon_race_t, *mon_race_ptr;
+typedef bool (*mon_race_p)(mon_race_ptr);
 
 extern int mon_ac(mon_ptr mon);
 

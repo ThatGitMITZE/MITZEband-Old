@@ -2131,6 +2131,7 @@ static void _stats_init(void)
         case CLASS_FORCETRAINER:
         case CLASS_TIME_LORD:
         case CLASS_ARCHAEOLOGIST:
+        case CLASS_SCOUT:
         {
             int stats[6] = { 16, 8, 17, 16, 11, 8 };
             _stats_init_aux(stats);
@@ -2143,7 +2144,6 @@ static void _stats_init(void)
         case CLASS_MAGIC_EATER:
         case CLASS_RED_MAGE:
         case CLASS_RUNE_KNIGHT:
-        case CLASS_SCOUT:
         case CLASS_DEVICEMASTER:
         {
             int stats[6] = { 16, 16, 9, 16, 14, 10 };

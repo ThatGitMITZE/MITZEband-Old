@@ -1563,18 +1563,6 @@ static void _ego_counts_imp(doc_ptr doc, int idx, cptr text)
 }
 
 typedef bool (*_mon_p)(int r_idx);
-static bool _mon_drops_good(int r_idx)
-{
-    if (r_info[r_idx].flags1 & RF1_DROP_GOOD)
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_drops_great(int r_idx)
-{
-    if (r_info[r_idx].flags1 & RF1_DROP_GREAT)
-        return TRUE;
-    return FALSE;
-}
 static bool _mon_is_animal(int r_idx)
 {
     if (r_info[r_idx].flags3 & RF3_ANIMAL)
@@ -1661,42 +1649,6 @@ static bool _mon_is_unique(int r_idx)
         return TRUE;
     return FALSE;
 }
-static bool _mon_res_acid(int r_idx)
-{
-    if (r_info[r_idx].flagsr & (RFR_RES_ACID | RFR_IM_ACID))
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_res_elec(int r_idx)
-{
-    if (r_info[r_idx].flagsr & (RFR_RES_ELEC | RFR_IM_ELEC))
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_res_fire(int r_idx)
-{
-    if (r_info[r_idx].flagsr & (RFR_RES_FIRE | RFR_IM_FIRE))
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_res_cold(int r_idx)
-{
-    if (r_info[r_idx].flagsr & (RFR_RES_COLD | RFR_IM_COLD))
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_res_pois(int r_idx)
-{
-    if (r_info[r_idx].flagsr & (RFR_RES_POIS | RFR_IM_POIS))
-        return TRUE;
-    return FALSE;
-}
-static bool _mon_res_conf(int r_idx)
-{
-    if (r_info[r_idx].flags3 & RF3_NO_CONF)
-        return TRUE;
-    return FALSE;
-}
 static bool _mon_is_pact(int r_idx)
 {
     return warlock_is_pact_monster(&r_info[r_idx]);
@@ -1732,9 +1684,111 @@ static void _kill_counts_imp(doc_ptr doc, _mon_p p, cptr text, int total)
     }
 }
 
+static void _build_mon_kill_stats(doc_ptr doc)
+{
+    int total_kills = ct_kills_all();
+    doc_printf(doc, "  <color:G>Monsters             Kills   Pct</color>\n");
+    _kill_counts_imp(doc, _mon_is_animal, "Animals", total_kills);
+    _kill_counts_imp(doc, _mon_is_breeder, "Breeders", total_kills);
+    _kill_counts_imp(doc, _mon_is_demon, "Demons", total_kills);
+    _kill_counts_imp(doc, _mon_is_dragon, "Dragons", total_kills);
+    _kill_counts_imp(doc, _mon_is_giant, "Giants", total_kills);
+    _kill_counts_imp(doc, _mon_is_hound, "Hounds", total_kills);
+    _kill_counts_imp(doc, _mon_is_human, "Humans", total_kills);
+    _kill_counts_imp(doc, _mon_is_orc, "Orcs", total_kills);
+    _kill_counts_imp(doc, _mon_is_troll, "Trolls", total_kills);
+    _kill_counts_imp(doc, _mon_is_undead, "Undead", total_kills);
+    _kill_counts_imp(doc, _mon_is_unique, "Uniques", total_kills);
+    if (p_ptr->pclass == CLASS_WARLOCK)
+        _kill_counts_imp(doc, _mon_is_pact, "Pact", total_kills);
+    doc_newline(doc);
+    _kill_counts_imp(doc, _mon_is_evil, "Evil Monsters", total_kills);
+    _kill_counts_imp(doc, _mon_is_good, "Good Monsters", total_kills);
+    _kill_counts_imp(doc, _mon_is_neutral, "Neutral Monsters", total_kills);
+    doc_printf(doc, "\n  %-20.20s %5d\n", "Totals", total_kills);
+}
+
+static void _spell_count_imp(doc_ptr doc, cptr heading, int ct, int total)
+{
+    if (!total) return;
+    doc_printf(doc, "  %-20.20s %5d %3d.%1d%%\n", heading, ct,
+        ct*100/total,
+        (ct*1000/total)%10);
+}
+static void _build_mon_spell_stats(doc_ptr doc, cptr heading, mon_race_p filter)
+{
+    int ct_total_moves = 0;
+    int ct_spell_moves = 0;
+    int ct_spells = 0;
+    int total_freq = 0;
+    double expected_freq;
+    int expected_spells;
+    int allocation[MST_COUNT] = {0};
+    int i, j, k;
+
+    for (i = 1; i < max_r_idx; i++)
+    {
+        mon_race_ptr race = &r_info[i];
+        int          moves;
+        if (!race->name) continue;
+        if (!race->spells) continue;
+        if (filter && !filter(race)) continue;
+        moves = race->r_move_turns + race->r_spell_turns;
+        ct_total_moves += moves;
+        ct_spell_moves += race->r_spell_turns;
+        total_freq += race->spells->freq * moves;
+        for (j = 0; j < MST_COUNT; j++)
+        {
+            mon_spell_group_ptr group = race->spells->groups[j];
+            if (!group) continue;
+            for (k = 0; k < group->count; k++)
+            {
+                mon_spell_ptr spell = &group->spells[k];
+                allocation[j] += spell->lore;
+                ct_spells += spell->lore; /* ct_spell_moves includes spell failures */
+            }
+        }
+    }
+    if (!ct_total_moves) return;
+    doc_printf(doc, "  <color:G>%-20.20s Count   Pct</color>\n", heading);
+    _spell_count_imp(doc, "Observed", ct_spell_moves, ct_total_moves);
+    expected_freq = (double)total_freq/(ct_total_moves * 100.0);
+    expected_spells = ct_total_moves * expected_freq; 
+    doc_printf(doc, "  %-20.20s %5d %5.1f%%\n", "Expected", expected_spells, expected_freq * 100.0);
+    _spell_count_imp(doc, "Failures", ct_spell_moves - ct_spells, ct_spell_moves);
+    _spell_count_imp(doc, "Summon", allocation[MST_SUMMON], ct_spell_moves);
+    _spell_count_imp(doc, "Heal", allocation[MST_HEAL], ct_spell_moves);
+    _spell_count_imp(doc, "Escape", allocation[MST_ESCAPE], ct_spell_moves);
+    _spell_count_imp(doc, "Offense",
+        allocation[MST_BREATH] + allocation[MST_BALL] + allocation[MST_BOLT]
+            + allocation[MST_BEAM] + allocation[MST_CURSE],
+        ct_spell_moves);
+    _spell_count_imp(doc, "Other",
+        allocation[MST_BUFF] + allocation[MST_BIFF] + allocation[MST_ANNOY]
+            + allocation[MST_TACTIC] + allocation[MST_WEIRD],
+        ct_spell_moves);
+}
+static bool _is_unique(mon_race_ptr race) { return BOOL(race->flags1 & RF1_UNIQUE); }
+/*static bool _is_deep(mon_race_ptr race) { return race->level >= 60; }*/
+static void _build_monster_stats(doc_ptr doc)
+{
+    doc_ptr cols[2];
+    cols[0] = doc_alloc(40);
+    cols[1] = doc_alloc(40);
+    _build_mon_kill_stats(cols[0]);
+    _build_mon_spell_stats(cols[1], "Spells", NULL);
+    doc_newline(cols[1]);
+    _build_mon_spell_stats(cols[1], "Unique Spells", _is_unique);
+    /*doc_newline(cols[1]);
+    _build_mon_spell_stats(cols[1], "Deep Spells", _is_deep);*/
+    doc_insert_cols(doc, cols, 2, 0);
+    doc_free(cols[0]);
+    doc_free(cols[1]);
+}
+
 static void _build_statistics(doc_ptr doc)
 {
-    int i, total_kills = ct_kills_all();
+    int i;
     counts_t totals = {0};
 
     doc_printf(doc, "<topic:Statistics>================================== <color:keypress>S</color>tatistics =================================\n\n");
@@ -1881,6 +1935,7 @@ static void _build_statistics(doc_ptr doc)
     {
         _device_counts_imp(doc, TV_STAFF, EFFECT_IDENTIFY);
         _device_counts_imp(doc, TV_STAFF, EFFECT_ENLIGHTENMENT);
+        _device_counts_imp(doc, TV_STAFF, EFFECT_CURING);
         _device_counts_imp(doc, TV_STAFF, EFFECT_HEAL);
         _device_counts_imp(doc, TV_STAFF, EFFECT_TELEPATHY);
         _device_counts_imp(doc, TV_STAFF, EFFECT_SPEED);
@@ -1955,41 +2010,8 @@ static void _build_statistics(doc_ptr doc)
     _ego_counts_imp(doc, EGO_BOOTS_SPEED, "Boots of Speed");
     _ego_counts_imp(doc, EGO_BOOTS_FEANOR, "Boots of Feanor");
 
-    /* Monsters */
-    doc_printf(doc, "\n  <color:G>Monsters             Kills   Pct</color>\n");
-    _kill_counts_imp(doc, _mon_is_animal, "Animals", total_kills);
-    _kill_counts_imp(doc, _mon_is_breeder, "Breeders", total_kills);
-    _kill_counts_imp(doc, _mon_is_demon, "Demons", total_kills);
-    _kill_counts_imp(doc, _mon_is_dragon, "Dragons", total_kills);
-    _kill_counts_imp(doc, _mon_is_giant, "Giants", total_kills);
-    _kill_counts_imp(doc, _mon_is_hound, "Hounds", total_kills);
-    _kill_counts_imp(doc, _mon_is_human, "Humans", total_kills);
-    _kill_counts_imp(doc, _mon_is_orc, "Orcs", total_kills);
-    _kill_counts_imp(doc, _mon_is_troll, "Trolls", total_kills);
-    _kill_counts_imp(doc, _mon_is_undead, "Undead", total_kills);
-    _kill_counts_imp(doc, _mon_is_unique, "Uniques", total_kills);
-    if (p_ptr->pclass == CLASS_WARLOCK)
-        _kill_counts_imp(doc, _mon_is_pact, "Pact", total_kills);
     doc_newline(doc);
-    _kill_counts_imp(doc, _mon_is_evil, "Evil Monsters", total_kills);
-    _kill_counts_imp(doc, _mon_is_good, "Good Monsters", total_kills);
-    _kill_counts_imp(doc, _mon_is_neutral, "Neutral Monsters", total_kills);
-    if (0)
-    {
-        doc_newline(doc);
-        _kill_counts_imp(doc, _mon_drops_good, "Good Droppers", total_kills);
-        _kill_counts_imp(doc, _mon_drops_great, "Great Droppers", total_kills);
-        doc_newline(doc);
-        _kill_counts_imp(doc, _mon_res_acid, "Resist Acid", total_kills);
-        _kill_counts_imp(doc, _mon_res_elec, "Resist Elec", total_kills);
-        _kill_counts_imp(doc, _mon_res_fire, "Resist Fire", total_kills);
-        _kill_counts_imp(doc, _mon_res_cold, "Resist Cold", total_kills);
-        _kill_counts_imp(doc, _mon_res_pois, "Resist Pois", total_kills);
-        _kill_counts_imp(doc, _mon_res_conf, "Resist Conf", total_kills);
-    }
-    doc_printf(doc, "\n  %-20.20s %5d\n", "Totals", total_kills);
-
-    doc_newline(doc);
+    _build_monster_stats(doc);
 }
 
 /****************************** Dungeons ************************************/
