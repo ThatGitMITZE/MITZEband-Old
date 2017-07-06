@@ -508,6 +508,7 @@ static void _hru_calc_bonuses(void) {
         p_ptr->to_a += 15;
         p_ptr->dis_to_a += 15;
     }
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 static void _hru_get_flags(u32b flgs[OF_ARRAY_SIZE]) {
     add_flag(flgs, OF_SUST_STR);
@@ -547,8 +548,8 @@ static race_t *_hru_get_race_t(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  55};
-    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  31};
+    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  30};
+    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  15};
 
         me.skills = bs;
         me.extra_skills = xs;
@@ -639,6 +640,7 @@ static void _fire_calc_bonuses(void) {
     }
     if (p_ptr->lev >= 40)
         res_add(RES_FIRE);
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 static void _fire_get_flags(u32b flgs[OF_ARRAY_SIZE]) {
     add_flag(flgs, OF_SUST_STR);
@@ -689,8 +691,8 @@ static race_t *_fire_get_race_t(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  55};
-    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  31};
+    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  30};
+    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  15};
 
         me.skills = bs;
         me.extra_skills = xs;
@@ -772,6 +774,7 @@ static void _frost_calc_bonuses(void) {
     }
     if (p_ptr->lev >= 40)
         res_add(RES_COLD);
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 static void _frost_get_flags(u32b flgs[OF_ARRAY_SIZE]) {
     add_flag(flgs, OF_SUST_STR);
@@ -822,8 +825,8 @@ static race_t *_frost_get_race_t(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  55};
-    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  31};
+    skills_t bs = { 25,  18,  30,   0,  13,   7,  75,  30};
+    skills_t xs = { 10,   7,  10,   0,   0,   0,  34,  15};
 
         me.skills = bs;
         me.extra_skills = xs;
@@ -941,6 +944,7 @@ static void _storm_calc_bonuses(void) {
         p_ptr->sh_elec = TRUE;
         res_add(RES_ELEC);
     }
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 static void _storm_get_flags(u32b flgs[OF_ARRAY_SIZE]) {
     add_flag(flgs, OF_SUST_STR);
@@ -998,8 +1002,8 @@ static race_t *_storm_get_race_t(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  18,  30,   0,  13,   7,  70,  55};
-    skills_t xs = { 10,   7,  10,   0,   0,   0,  30,  30};
+    skills_t bs = { 25,  18,  30,   0,  13,   7,  70,  30};
+    skills_t xs = { 10,   7,  10,   0,   0,   0,  30,  15};
 
         me.skills = bs;
         me.extra_skills = xs;
@@ -1054,6 +1058,7 @@ static void _titan_calc_bonuses(void) {
     }
     if (p_ptr->lev >= 40)
         p_ptr->pspeed += 3;
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 static void _titan_get_flags(u32b flgs[OF_ARRAY_SIZE]) {
     add_flag(flgs, OF_SUST_STR);
@@ -1096,8 +1101,8 @@ static race_t *_titan_get_race_t(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  20,  32,   0,  15,  10,  75,  50};
-    skills_t xs = { 11,   8,  10,   0,   0,   0,  35,  30};
+    skills_t bs = { 25,  20,  32,   0,  15,  10,  75,  30};
+    skills_t xs = { 11,   8,  10,   0,   0,   0,  35,  15};
 
         me.skills = bs;
         me.extra_skills = xs;
