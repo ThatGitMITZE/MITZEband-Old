@@ -1613,7 +1613,7 @@ race_t *dwarf_get_race(void)
  ****************************************************************/
 static power_info _ent_powers[] =
 {
-    { A_CHR, {10, 20, 70, summon_tree_spell}},
+    { A_WIS, {10, 20, 70, summon_tree_spell}},
     { -1, {-1, -1, -1, NULL} }
 };
 static int _ent_get_powers(spell_info* spells, int max)
