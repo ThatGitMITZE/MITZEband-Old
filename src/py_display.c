@@ -605,6 +605,26 @@ static void _build_flags1(doc_ptr doc, _flagzilla_ptr flagzilla)
     _build_flags(doc, "Throwing", OF_THROWING, OF_INVALID, flagzilla);
 }
 
+static void _display_known_count(doc_ptr doc, int total, int flg)
+{
+    int ct = total;
+    slot_t slot;
+    for (slot = 1; slot < equip_max(); slot++)
+    {
+        obj_ptr obj = equip_obj(slot);
+        u32b    flgs[OF_ARRAY_SIZE];
+        u32b    flgs_known[OF_ARRAY_SIZE];
+
+        if (!obj) continue;
+        obj_flags(obj, flgs);
+        obj_flags_known(obj, flgs_known);
+        if (have_flag(flgs, flg) && !have_flag(flgs_known, flg))
+            ct--;
+    }
+    if (ct)
+        doc_printf(doc, " %3dx", ct);
+    doc_newline(doc);
+}
 static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
 {
     _equippy_chars(doc, 14);
@@ -613,14 +633,10 @@ static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
     _build_flags(doc, "Speed", OF_SPEED, OF_DEC_SPEED, flagzilla);
 
     _build_flags_imp(doc, "Free Act", OF_FREE_ACT, OF_INVALID, flagzilla);
-    if (p_ptr->free_act)
-        doc_printf(doc, " %3dx", p_ptr->free_act);
-    doc_newline(doc);
+    _display_known_count(doc, p_ptr->free_act, OF_FREE_ACT);
 
     _build_flags_imp(doc, "See Invis", OF_SEE_INVIS, OF_INVALID, flagzilla);
-    if (p_ptr->see_inv)
-        doc_printf(doc, " %3dx", p_ptr->see_inv);
-    doc_newline(doc);
+    _display_known_count(doc, p_ptr->see_inv, OF_SEE_INVIS);
 
     _build_flags(doc, "Warning", OF_WARNING, OF_INVALID, flagzilla);
     _build_flags(doc, "Slow Digest", OF_SLOW_DIGEST, OF_INVALID, flagzilla);
@@ -633,9 +649,7 @@ static void _build_flags2(doc_ptr doc, _flagzilla_ptr flagzilla)
     _build_flags(doc, "Reflection", OF_REFLECT, OF_INVALID, flagzilla);
 
     _build_flags_imp(doc, "Hold Life", OF_HOLD_LIFE, OF_INVALID, flagzilla);
-    if (p_ptr->hold_life)
-        doc_printf(doc, " %3dx", p_ptr->hold_life);
-    doc_newline(doc);
+    _display_known_count(doc, p_ptr->hold_life, OF_HOLD_LIFE);
 
     _build_flags(doc, "Dec Mana", OF_DEC_MANA, OF_INVALID, flagzilla);
     _build_flags(doc, "Easy Spell", OF_EASY_SPELL, OF_INVALID, flagzilla);
