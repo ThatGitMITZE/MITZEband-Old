@@ -1452,6 +1452,7 @@ static _object_type_t _object_types[] =
     { "DEVICE",             OBJ_TYPE_DEVICE, EGO_TYPE_DEVICE },
     { "JEWELRY",            OBJ_TYPE_JEWELRY },
     { "BOOK",               OBJ_TYPE_BOOK },
+    { "HI_BOOK",            OBJ_TYPE_HI_BOOK },
     { "BODY_ARMOR",         OBJ_TYPE_BODY_ARMOR, EGO_TYPE_BODY_ARMOR },
     { "OTHER_ARMOR",        OBJ_TYPE_OTHER_ARMOR },
     { "WEAPON",             OBJ_TYPE_WEAPON, EGO_TYPE_WEAPON },
