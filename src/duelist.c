@@ -68,6 +68,7 @@ bool duelist_can_challenge(void)
         if (!mon->r_idx) continue;
         if (is_pet(mon)) continue;
         if (!mon->ml) continue;
+        if (mon->cdis > MAX_RANGE) continue; /* wizard mode */
         return TRUE;
     }
     return FALSE;

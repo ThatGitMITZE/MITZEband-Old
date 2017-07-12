@@ -1397,15 +1397,15 @@ void py_get_display_char_attr(char *c, byte *a)
         {
             switch(p_ptr->psubrace)
             {
-            case DRACONIAN_RED: r_ptr = &r_info[644]; /* Ancient red dragon */
-            case DRACONIAN_WHITE: r_ptr = &r_info[617]; /* etc... */
-            case DRACONIAN_BLUE: r_ptr = &r_info[601];
-            case DRACONIAN_BLACK: r_ptr = &r_info[624];
-            case DRACONIAN_GREEN: r_ptr = &r_info[618];
-            case DRACONIAN_BRONZE: r_ptr = &r_info[MON_ANCIENT_BRONZE_DRAGON];
-            case DRACONIAN_GOLD: r_ptr = &r_info[MON_ANCIENT_GOLD_DRAGON];
-            case DRACONIAN_SHADOW: r_ptr = &r_info[MON_DEATH_DRAKE];
-            case DRACONIAN_CRYSTAL: r_ptr = &r_info[MON_GREAT_CRYSTAL_DRAKE];
+            case DRACONIAN_RED: r_ptr = &r_info[644]; break; /* Ancient red dragon */
+            case DRACONIAN_WHITE: r_ptr = &r_info[617]; break; /* etc... */
+            case DRACONIAN_BLUE: r_ptr = &r_info[601]; break;
+            case DRACONIAN_BLACK: r_ptr = &r_info[624]; break;
+            case DRACONIAN_GREEN: r_ptr = &r_info[618]; break;
+            case DRACONIAN_BRONZE: r_ptr = &r_info[MON_ANCIENT_BRONZE_DRAGON]; break;
+            case DRACONIAN_GOLD: r_ptr = &r_info[MON_ANCIENT_GOLD_DRAGON]; break;
+            case DRACONIAN_SHADOW: r_ptr = &r_info[MON_DEATH_DRAKE]; break;
+            case DRACONIAN_CRYSTAL: r_ptr = &r_info[MON_GREAT_CRYSTAL_DRAKE]; break;
             }
         }
     }
