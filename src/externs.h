@@ -2322,6 +2322,7 @@ extern void dump_spells_aux(FILE *fff, spell_info *table, int ct);
 extern cptr duelist_current_challenge(void);
 extern class_t *duelist_get_class(void);
 extern bool duelist_issue_challenge(void);
+extern bool duelist_can_challenge(void);
 extern int duelist_skill_sav(int m_idx);
 extern void strafing_spell(int cmd, variant *res);
 extern bool nemesis_hack;    /* Actually, its in melee1.c */

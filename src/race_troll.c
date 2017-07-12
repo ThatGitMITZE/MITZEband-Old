@@ -1,12 +1,5 @@
 #include "angband.h"
 
-static cptr _mon_name(int r_idx)
-{
-    if (r_idx)
-        return r_name + r_info[r_idx].name;
-    return ""; /* Birth Menu */
-}
-
 /******************************************************************************
  * Troll Bite
  ******************************************************************************/
@@ -474,7 +467,7 @@ race_t *mon_troll_get_race(int psubrace)
         init = TRUE;
     }
 
-    me.subname = _mon_name(p_ptr->current_r_idx);
+    me.subname = mon_name(p_ptr->current_r_idx);
     me.stats[A_STR] =  3 + p_ptr->lev/12;
     me.stats[A_INT] = -5;
     me.stats[A_WIS] = -5;

@@ -59,6 +59,20 @@ int duelist_skill_sav(int m_idx)
     return result;
 }
 
+bool duelist_can_challenge(void)
+{
+    int i;
+    for (i = 1; i < max_m_idx; i++)
+    {
+        mon_ptr mon = & m_list[i];
+        if (!mon->r_idx) continue;
+        if (is_pet(mon)) continue;
+        if (!mon->ml) continue;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 bool duelist_issue_challenge(void)
 {
     bool result = FALSE;
@@ -585,6 +599,7 @@ static caster_info * _caster_info(void)
     {
         me.magic_desc = "challenge";
         me.options = CASTER_USE_HP;
+        me.which_stat = A_DEX;
         init = TRUE;
     }
     return &me;

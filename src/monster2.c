@@ -1948,6 +1948,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
     /* Hack for the Duelist */
     if ( p_ptr->pclass == CLASS_DUELIST
       && p_ptr->duelist_target_idx
+      && !(mode & MD_PRON_VISIBLE)
       && m_ptr == &m_list[p_ptr->duelist_target_idx] )
     {
         strcat(desc, " (Foe)");

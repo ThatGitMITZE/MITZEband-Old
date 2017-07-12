@@ -10589,7 +10589,7 @@ D:A huge draconic form wreathed in a nimbus of light.
 N:646:Great crystal drake
 G:D:B
 I:120:15d100:25:100:30:500
-W:40:2:999:3500:0:0
+W:40:2:999:7000:0:0
 B:CLAW:HURT(4d9):CUT(3d3, 50%)
 B:CLAW:HURT(4d9):CUT(3d3, 50%)
 B:BITE:HURT(5d12):CUT(5d5, 50%)

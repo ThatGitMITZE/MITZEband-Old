@@ -2754,7 +2754,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     bool            is_lowlevel;
     bool            zantetsu_mukou = FALSE, e_j_mukou = FALSE;
     int             knock_out = 0;
-    int             dd, ds;
+    int             dd, ds, old_hp;
     bool            hit_ct = 0;
     bool            poison_needle = FALSE;
 
@@ -2765,6 +2765,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     }
 
     m_ptr = &m_list[c_ptr->m_idx];
+    old_hp = m_ptr->hp;
     r_ptr = &r_info[m_ptr->r_idx];
     is_human = (r_ptr->d_char == 'p');
     is_lowlevel = (r_ptr->level < (p_ptr->lev - 15));
@@ -3386,9 +3387,8 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
             if (duelist_attack)
             {
                 int d = k;
-                /* Duelist: Careful Aim */
-                if (duelist_attack &&
-                    p_ptr->lev >= 10)
+                
+                if (p_ptr->lev >= 10) /* Careful Aim */
                 {
                     k += d;
                 }
@@ -3399,22 +3399,30 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     msg_format("You <color:y>hamstring</color> %s.", m_name_object);
                     set_monster_slow(c_ptr->m_idx, MON_SLOW(m_ptr) + 50);
                 }
-                if ( p_ptr->lev >= 20    /* Wounding Strike */
+                if ( p_ptr->lev >= 25    /* Stunning Blow */
+                    && !(r_ptr->flags3 & (RF3_NO_STUN))
                     && !mon_save_p(m_ptr->r_idx, A_DEX) )
+                {
+                    point_t tbl[4] = { {1, 1}, {10, 10}, {100, 25}, {500, 50} }; /* XXX cf gf.c:_stun_amount */
+                    int     add = interpolate(d, tbl, 4); /* use base damage only */
+                    int     stun = MON_STUNNED(m_ptr);
+                    if (stun)
+                    {
+                        int div = 1 + stun / 20;
+                        add = MAX(1, add/div);
+                    }
+                    msg_format("%^s is dealt a <color:B>stunning</color> blow (%d).", m_name_subject, k);
+                    set_monster_stunned(c_ptr->m_idx, stun + add);
+                }
+                if ( p_ptr->lev >= 20    /* Wounding Strike */
+                  && !mon_save_p(m_ptr->r_idx, A_DEX) )
                 {
                     msg_format("%^s is dealt a <color:r>wounding</color> strike.", m_name_subject);
                     k += MIN(m_ptr->hp / 5, randint1(3) * d);
                     drain_result = k;
                 }
-                if ( p_ptr->lev >= 25    /* Stunning Blow */
-                    && !(r_ptr->flags3 & (RF3_NO_STUN))
-                    && !mon_save_p(m_ptr->r_idx, A_DEX) )
-                {
-                    msg_format("%^s is dealt a <color:B>stunning</color> blow.", m_name_subject);
-                    set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 2));
-                }
                 if ( p_ptr->lev >= 40    /* Greater Wounding Strike */
-                    && !mon_save_p(m_ptr->r_idx, A_DEX) )
+                  && !mon_save_p(m_ptr->r_idx, A_DEX) )
                 {
                     msg_format("%^s is dealt a <color:v>*WOUNDING*</color> strike.", m_name_subject);
                     k += MIN(m_ptr->hp * 2 / 5, rand_range(2, 10) * d);
@@ -3703,12 +3711,13 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     p_ptr->duelist_target_idx = 0;
                     p_ptr->redraw |= PR_STATUS;
 
-                    if (p_ptr->lev >= 35)    /* Endless Duel */
+                    if (p_ptr->lev >= 35 && duelist_can_challenge())    /* Endless Duel */
                     {
                         /* Hacks so that get_fire_dir() actually allows user to select a new target */
                         target_who = 0;
                         command_dir = 0;
                         msg_print("Your chosen target is vanquished!  Select another.");
+                        msg_print(NULL);
                         duelist_issue_challenge();
                     }
                     else
@@ -4267,7 +4276,10 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     if (p_ptr->pclass == CLASS_DUELIST)
         c_put_str(TERM_WHITE, format("Duel:%5d", dam_tot), 24, 0);
 #endif
-
+    if (*mdeath)
+        wizard_report_damage(old_hp);
+    else
+        wizard_report_damage(old_hp - m_ptr->hp);
 
     return success_hit;
 }
