@@ -1060,7 +1060,7 @@ static cptr do_life_spell(int spell, int mode)
         {
             if (cast)
             {
-                set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(25, p_ptr->poisoned / 10), TRUE);
             }
         }
         break;
@@ -4963,7 +4963,7 @@ static cptr do_arcane_spell(int spell, int mode)
         {
             if (cast)
             {
-                set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(25, p_ptr->poisoned / 10), TRUE);
             }
         }
         break;
@@ -6615,7 +6615,7 @@ static cptr do_crusade_spell(int spell, int mode)
             if (cast)
             {
                 set_cut(0, TRUE);
-                set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
+                set_poisoned(p_ptr->poisoned - MAX(50, p_ptr->poisoned / 5), TRUE);
                 set_stun(0, TRUE);
             }
         }

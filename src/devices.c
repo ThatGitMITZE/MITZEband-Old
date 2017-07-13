@@ -527,7 +527,7 @@ static cptr _do_potion(int sval, int mode)
         if (desc) return "It cures poison when you quaff it.";
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(50, p_ptr->poisoned / 5), TRUE))
                 device_noticed = TRUE;
         }
         break;

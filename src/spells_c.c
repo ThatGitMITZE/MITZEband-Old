@@ -545,7 +545,7 @@ void cure_poison_spell(int cmd, variant *res)
         var_set_string(res, "Cure poison status.");
         break;
     case SPELL_CAST:
-        set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE);
+        set_poisoned(p_ptr->poisoned - MAX(25, p_ptr->poisoned / 10), TRUE);
         var_set_bool(res, TRUE);
         break;
     default:
