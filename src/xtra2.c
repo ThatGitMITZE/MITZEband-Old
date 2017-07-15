@@ -4519,8 +4519,10 @@ bool target_set(int mode)
     /* Window stuff */
     p_ptr->window |= (PW_OVERHEAD | PW_MONSTER_LIST);
 
-    /* Handle stuff */
+    /* Prevent losing visibility on newly acquired target (PU_MONSTERS above) */
+    redraw_hack = TRUE;
     handle_stuff();
+    redraw_hack = FALSE;
 
     /* Failure to set target */
     if (!target_who) return (FALSE);

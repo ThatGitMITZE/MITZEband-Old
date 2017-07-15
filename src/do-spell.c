@@ -1052,31 +1052,18 @@ static cptr do_life_spell(int spell, int mode)
             }
         }
         break;
-
     case 6:
         if (name) return "Cure Poison";
         if (desc) return "Cure poison status.";
-
-        {
-            if (cast)
-            {
-                set_poisoned(p_ptr->poisoned - MAX(25, p_ptr->poisoned / 10), TRUE);
-            }
-        }
+        if (cast)
+            set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE);
         break;
-
     case 7:
         if (name) return "Satisfy Hunger";
         if (desc) return "Satisfies hunger.";
-
-        {
-            if (cast)
-            {
-                set_food(PY_FOOD_MAX - 1);
-            }
-        }
+        if (cast)
+            set_food(PY_FOOD_MAX - 1);
         break;
-
     case 8:
         if (name) return "Remove Curse";
         if (desc) return "Removes normal curses from equipped items.";

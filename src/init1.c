@@ -4232,6 +4232,7 @@ errr parse_d_info(char *buf, header *head)
 
         /* Point at the "info" */
         d_ptr = &d_info[i];
+        d_ptr->id = i;
 
         /* Store the name */
         if (!add_name(&d_ptr->name, head, s)) return (7);

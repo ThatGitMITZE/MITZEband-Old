@@ -1742,7 +1742,7 @@ static void _sellout(shop_ptr shop)
     slot_t slot, max = inv_last(shop->inv, obj_exists);
     int    price, total_price = 0;
 
-    if (!get_check("Are you sure you want to buy the entire inventory of this store? "))
+    if (1 && !get_check("Are you sure you want to buy the entire inventory of this store? "))
         return;
 
     for (slot = 1; slot <= max; slot++)

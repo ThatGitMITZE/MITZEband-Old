@@ -1783,6 +1783,7 @@ static void _build_mon_spell_stats(doc_ptr doc, cptr heading, mon_race_p filter)
         ct_spell_moves);
 }
 static bool _is_unique(mon_race_ptr race) { return BOOL(race->flags1 & RF1_UNIQUE); }
+static bool _is_hound(mon_race_ptr race) { return race->d_char == 'Z'; }
 /*static bool _is_deep(mon_race_ptr race) { return race->level >= 60; }*/
 static void _build_monster_stats(doc_ptr doc)
 {
@@ -1793,6 +1794,8 @@ static void _build_monster_stats(doc_ptr doc)
     _build_mon_spell_stats(cols[1], "Spells", NULL);
     doc_newline(cols[1]);
     _build_mon_spell_stats(cols[1], "Unique Spells", _is_unique);
+    doc_newline(cols[1]);
+    _build_mon_spell_stats(cols[1], "Hound Spells", _is_hound);
     /*doc_newline(cols[1]);
     _build_mon_spell_stats(cols[1], "Deep Spells", _is_deep);*/
     doc_insert_cols(doc, cols, 2, 0);
@@ -2029,26 +2032,43 @@ static void _build_statistics(doc_ptr doc)
 }
 
 /****************************** Dungeons ************************************/
+typedef dungeon_info_type *dun_ptr;
+static int _cmp_d_lvl(dun_ptr l, dun_ptr r)
+{
+    if (l->maxdepth < r->maxdepth) return -1;
+    if (l->maxdepth > r->maxdepth) return 1;
+    if (l->id < r->id) return -1;
+    if (l->id > r->id) return 1;
+    return 0;
+}
 void py_display_dungeons(doc_ptr doc)
 {
-    int i;
+    int     i;
+    vec_ptr v = vec_alloc(NULL);
     for (i = 1; i < max_d_idx; i++)
     {
-        bool conquered = FALSE;
-
-        if (!d_info[i].maxdepth) continue;
+        dun_ptr d_ptr = &d_info[i];
+        if (!d_ptr->maxdepth) continue;
         if (!max_dlv[i]) continue;
-        if (d_info[i].final_guardian)
+        vec_add(v, d_ptr);
+    }
+    vec_sort(v, (vec_cmp_f)_cmp_d_lvl);
+    for (i = 0; i < vec_length(v); i++)
+    {
+        bool    conquered = FALSE;
+        dun_ptr d_ptr = vec_get(v, i);
+        if (d_ptr->final_guardian)
         {
-            if (!r_info[d_info[i].final_guardian].max_num) conquered = TRUE;
+            if (!r_info[d_ptr->final_guardian].max_num) conquered = TRUE;
         }
-        else if (max_dlv[i] == d_info[i].maxdepth) conquered = TRUE;
+        else if (max_dlv[d_ptr->id] == d_ptr->maxdepth) conquered = TRUE;
 
         if (conquered)
-            doc_printf(doc, "!<color:G>%-16s</color>: level %3d\n", d_name+d_info[i].name, max_dlv[i]);
+            doc_printf(doc, "!<color:G>%-16s</color>: level %3d\n", d_name+d_ptr->name, max_dlv[d_ptr->id]);
         else
-            doc_printf(doc, " %-16s: level %3d\n", d_name+d_info[i].name, max_dlv[i]);
+            doc_printf(doc, " %-16s: level %3d\n", d_name+d_ptr->name, max_dlv[d_ptr->id]);
     }
+    vec_free(v);
     doc_newline(doc);
 
     if (p_ptr->is_dead)
