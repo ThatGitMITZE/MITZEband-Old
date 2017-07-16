@@ -1863,7 +1863,9 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         else
 
         /* It could be a Unique */
-        if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & MD_IGNORE_HALLU)))
+        if ( (r_ptr->flags1 & RF1_UNIQUE)
+          && !(p_ptr->image && !(mode & MD_IGNORE_HALLU))
+          && !(m_ptr->mflag2 & MFLAG2_FUZZY) )
         {
             /* Start with the name (thus nominative and objective) */
             if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
@@ -2698,7 +2700,10 @@ void update_mon(int m_idx, bool full)
 
                     /* See invisible */
                     if (redraw_hack)
-                        easy = flag = m_ptr->ml;
+                    {
+                        easy = !old_fuzzy;
+                        flag = m_ptr->ml;
+                    }
                     else if (py_see_invis(r_ptr->level))
                     {
                         /* Easy to see */

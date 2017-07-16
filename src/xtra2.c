@@ -3008,9 +3008,11 @@ bool viewport_scroll(int dy, int dx)
         viewport_origin.y = y;
         viewport_origin.x = x;
 
-        p_ptr->update |= (PU_MONSTERS);
+        p_ptr->update |= (PU_MONSTERS); /* XXX Why? */
         p_ptr->redraw |= (PR_MAP);
+        redraw_hack = TRUE;
         handle_stuff();
+        redraw_hack = FALSE;
         return TRUE;
     }
 
@@ -4253,7 +4255,7 @@ bool target_set(int mode)
                         viewport_origin.x = x2;
 
                         /* Update stuff */
-                        p_ptr->update |= (PU_MONSTERS);
+                        p_ptr->update |= (PU_MONSTERS); /* XXX Why? */
 
                         /* Redraw map */
                         p_ptr->redraw |= (PR_MAP);
@@ -4262,7 +4264,9 @@ bool target_set(int mode)
                         p_ptr->window |= (PW_OVERHEAD);
 
                         /* Handle stuff */
+                        redraw_hack = TRUE;
                         handle_stuff();
+                        redraw_hack = FALSE;
 
                         /* Recalculate interesting grids */
                         target_set_prepare(mode);
