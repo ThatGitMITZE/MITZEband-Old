@@ -623,11 +623,11 @@ static string_ptr _effect_desc(mon_race_ptr race, mon_effect_ptr effect)
     if (_know_melee_damage(race, effect))
     {
         if (effect->pct && effect->dd && effect->ds)
-            string_printf(s, ":%dd%d,%d%%", effect->dd, effect->ds, effect->pct);
+            string_printf(s, " (%dd%d,%d%%)", effect->dd, effect->ds, effect->pct);
         else if (effect->dd && effect->ds)
-            string_printf(s, ":%dd%d", effect->dd, effect->ds);
+            string_printf(s, " (%dd%d)", effect->dd, effect->ds);
         else if (effect->pct)
-            string_printf(s, ":%d%%", effect->pct);
+            string_printf(s, " (%d%%)", effect->pct);
     }
     return s;
 }
@@ -672,7 +672,7 @@ static void _display_attacks(monster_race *r_ptr, doc_ptr doc)
             if (vec_length(v))
             {
                 doc_insert(doc, " <indent><style:indent>");
-                _print_list(v, doc, ';', '\0');
+                _print_list(v, doc, ',', '\0');
                 doc_insert(doc, "</style></indent>");
             }
             doc_newline(doc);
