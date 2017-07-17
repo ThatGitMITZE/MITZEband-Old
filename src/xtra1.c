@@ -3825,18 +3825,13 @@ void calc_bonuses(void)
         p_ptr->slow_digest = TRUE;
         p_ptr->regen += 100;
         p_ptr->levitation = TRUE;
-
-        if (p_ptr->special_defense & KATA_MUSOU)
-        {
-            p_ptr->hold_life++;
-            p_ptr->sustain_str = TRUE;
-            p_ptr->sustain_int = TRUE;
-            p_ptr->sustain_wis = TRUE;
-            p_ptr->sustain_con = TRUE;
-            p_ptr->sustain_dex = TRUE;
-            p_ptr->sustain_chr = TRUE;
-        }
-
+        p_ptr->hold_life++;
+        p_ptr->sustain_str = TRUE;
+        p_ptr->sustain_int = TRUE;
+        p_ptr->sustain_wis = TRUE;
+        p_ptr->sustain_con = TRUE;
+        p_ptr->sustain_dex = TRUE;
+        p_ptr->sustain_chr = TRUE;
         p_ptr->telepathy = TRUE;
         p_ptr->lite = TRUE;
         res_add_all();

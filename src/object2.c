@@ -2078,7 +2078,7 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
         power = 1;
 
         /* Roll for "great" */
-        if (no_egos)
+        if (no_egos && !object_is_jewelry(o_ptr))
         {
         }
         else if ((mode & AM_GREAT) || magik(f2))
@@ -2097,7 +2097,7 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
         power = -1;
 
         /* Roll for "broken" */
-        if (no_egos)
+        if (no_egos && !object_is_jewelry(o_ptr))
         {
         }
         else if (magik(f2))

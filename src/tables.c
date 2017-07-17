@@ -2460,7 +2460,7 @@ option_type option_info[] =
     "no_artifacts",                 "Never create artifacts" },
 
     { &no_egos,                     FALSE, OPT_PAGE_BIRTH, 6, 25,
-    "no_egos",                      "Never create ego items" },
+    "no_egos",                      "Never create non-jewelry ego items" },
 
     { &reduce_uniques,              FALSE, OPT_PAGE_BIRTH, 6, 26,
     "reduce_uniques",               "Reduce the number of uniques (randomly)" },
