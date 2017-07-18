@@ -1717,6 +1717,7 @@ static void _giant_calc_bonuses(void)
         res_add(RES_SHARDS);
     if (p_ptr->lev >= 50)
         res_add(RES_CHAOS);
+    p_ptr->skill_tht += 2*p_ptr->lev;
 }
 
 static void _giant_calc_weapon_bonuses(object_type *o_ptr, weapon_info_t *info_ptr)
@@ -1824,8 +1825,8 @@ static _pact_t _giants_pact = {
 /*  S   I   W   D   C   C */
   { 2, -4, -4, -3,  2,  2},
 /* Dsrm Dvce Save Stlh Srch Prcp Thn Thb*/
-  {  20,  20,  31,   0,  12,   2, 70, 40},
-  {   7,   8,  10,   0,   0,   0, 30, 20},
+  {  20,  20,  31,   0,  12,   2, 70, 30},
+  {   7,   8,  10,   0,   0,   0, 30, 15},
 /*Life  BaseHP     Exp */
    112,     25,    140,
   {
