@@ -5989,8 +5989,9 @@ void gain_exp_64(s32b amount, u32b amount_frac)
         p_ptr->max_exp += amount / 5;
     }
 
-    /* Check Experience */
-    check_experience();
+    /* Check Experience ... later. Definitely not during melee attacks.
+    check_experience(); */
+    p_ptr->update |= PU_EXP;
 }
 
 
