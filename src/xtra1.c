@@ -5084,6 +5084,12 @@ void notice_stuff(void)
     /* Notice stuff */
     if (!p_ptr->notice) return;
 
+    if (p_ptr->notice & PN_EXP)
+    {
+        p_ptr->notice &= ~PN_EXP;
+        check_experience();
+    }
+
     if (p_ptr->notice & PN_OPTIMIZE_PACK)
     {
         /* Clear the bit first ... */
@@ -5115,12 +5121,6 @@ void update_stuff(void)
 {
     /* Update stuff */
     if (!p_ptr->update) return;
-
-    if (p_ptr->update & PU_EXP)
-    {
-        p_ptr->update &= ~PU_EXP;
-        check_experience();
-    }
 
     if (p_ptr->update & (PU_BONUS))
     {

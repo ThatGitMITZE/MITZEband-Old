@@ -2213,6 +2213,7 @@ enum {
 #define PN_OPTIMIZE_PACK   0x0001
 #define PN_OPTIMIZE_QUIVER 0x0002
 #define PN_CARRY           0x0004
+#define PN_EXP             0x0008     /* check_experience() *after* melee, please! */
 /* xxx (many) */
 
 
@@ -2221,7 +2222,6 @@ enum {
  */
 #define PU_BONUS        0x00000001     /* Calculate bonuses */
 #define PU_TORCH        0x00000002     /* Calculate torch radius */
-#define PU_EXP          0x00000004     /* check_experience() *after* melee, please! */
 /* xxx (many) */
 #define PU_HP           0x00000010     /* Calculate chp and mhp */
 #define PU_MANA         0x00000020     /* Calculate csp and msp */

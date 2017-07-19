@@ -5991,7 +5991,7 @@ void gain_exp_64(s32b amount, u32b amount_frac)
 
     /* Check Experience ... later. Definitely not during melee attacks.
     check_experience(); */
-    p_ptr->update |= PU_EXP;
+    p_ptr->notice |= PN_EXP;
 }
 
 
