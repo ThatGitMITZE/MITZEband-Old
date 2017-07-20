@@ -1078,15 +1078,6 @@ static int _gf_distance_mod(int n)
     if (!gf_distance_hack) return n;
     return (n + gf_distance_hack) / (gf_distance_hack + 1);
 }
-static bool _stun_save(int rlev, int dam)
-{
-    return randint1((1 + rlev/12)*rlev) > dam;
-}
-static int _stun_amount(int dam)
-{
-    static point_t tbl[4] = { {1, 1}, {10, 10}, {100, 25}, {500, 50} };
-    return interpolate(dam, tbl, 4);
-}
 static bool _is_mental_attack(int type)
 {
     switch (type)
@@ -1487,11 +1478,11 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             }
             mon_lore_r(mon, RFR_RES_WATE);
         }
-        else if (who == GF_WHO_PLAYER && _stun_save(race->level, dam))
+        else if (who == GF_WHO_PLAYER && mon_stun_save(race->level, dam))
         {
             note = " resists stunning.";
         }
-        else do_stun = _stun_amount(dam);
+        else do_stun = mon_stun_amount(dam);
         break;
     case GF_CHAOS:
         if (touch && seen_msg) msg_format("%^s is <color:v>unmade</color>!", m_name);
@@ -1561,10 +1552,10 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         _BABBLE_HACK()
         if (!(race->flagsr & RFR_RES_SOUN))
         {
-            if (who == GF_WHO_PLAYER  && _stun_save(race->level, dam))
+            if (who == GF_WHO_PLAYER  && mon_stun_save(race->level, dam))
                 note = " resists stunning.";
             else
-                do_stun = _stun_amount(dam);
+                do_stun = mon_stun_amount(dam);
         }
         break;
     case GF_SOUND:
@@ -1576,10 +1567,10 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             dam *= 2; dam /= randint1(6) + 6;
             mon_lore_r(mon, RFR_RES_SOUN);
         }
-        else if (who == GF_WHO_PLAYER && _stun_save(race->level, dam))
+        else if (who == GF_WHO_PLAYER && mon_stun_save(race->level, dam))
             note = " resists stunning.";
         else
-            do_stun = _stun_amount(dam);
+            do_stun = mon_stun_amount(dam);
         break;
     case GF_ELDRITCH_DISPEL:
         if (seen) obvious = TRUE;
@@ -1671,7 +1662,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             mon_lore_r(mon, RFR_RES_WALL);
         }
         else
-            do_stun = _stun_amount(dam);
+            do_stun = mon_stun_amount(dam);
         break;
     case GF_INERT:
         if (seen) obvious = TRUE;
@@ -1859,7 +1850,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             }
 
             /* 2. stun */
-            do_stun = _stun_amount(dam);
+            do_stun = mon_stun_amount(dam);
 
             /* Attempt a saving throw */
             if ((race->flags1 & (RF1_UNIQUE)) ||
@@ -1917,7 +1908,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             int mult = 1;
 
-            do_stun = _stun_amount(dam);
+            do_stun = mon_stun_amount(dam);
             if (race->flags1 & RF1_UNIQUE)
                 mult++;
 
@@ -2119,7 +2110,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             else do_dist = 7;
         }
 
-        do_stun = _stun_amount(dam);
+        do_stun = mon_stun_amount(dam);
         if (race->flags1 & RF1_UNIQUE)
             mult++;
 
@@ -4014,14 +4005,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
           && (_is_mental_attack(type) || !(race->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)))
           && !(race->flags3 & RF3_NO_STUN) )
         {
-            int cur_stun = MON_STUNNED(mon);
-            if (cur_stun)
-            {
-                int div = 1 + cur_stun / 20;
-                do_stun = MAX(1, do_stun/div);
-            }
-
-            if (set_monster_stunned(mon->id, cur_stun + do_stun))
+            if (mon_stun(mon, do_stun))
                 note = " is <color:B>dazed</color>.";
             else
                 note = " is <color:B>more dazed</color>.";

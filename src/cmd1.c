@@ -3224,40 +3224,6 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 if (mode == MAULER_CRUSHING_BLOW)
                     k = k * NUM_BLOWS(hand) / 50;
 
-                if ( (have_flag(flgs, OF_IMPACT) && (k > 50 || one_in_(7)))
-                  || chaos_effect == 2
-                  || mode == HISSATSU_QUAKE
-                  || (mauler_get_toggle() == MAULER_TOGGLE_SHATTER && (k > 50 || one_in_(7))) )
-                {
-                    do_quake = TRUE;
-                    if ( k <= 50
-                      || (r_ptr->flagsr & RFR_RES_ALL)
-                      || (r_ptr->flags3 & RF3_NO_STUN)
-                      || ((r_ptr->flags1 & RF1_UNIQUE) && mon_save_p(m_ptr->r_idx, A_STR)) )
-                    {
-                    }
-                    else
-                    {
-                        msg_format("%^s is stunned.", m_name_subject);
-                        set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 3 + randint1(3)));
-                    }
-                }
-
-                if (have_flag(flgs, OF_STUN) && randint1(100) < k)
-                {
-                    if ( (r_ptr->flagsr & RFR_RES_ALL)
-                      || (r_ptr->flags3 & RF3_NO_STUN)
-                      || ((r_ptr->flags1 & RF1_UNIQUE) && mon_save_p(m_ptr->r_idx, A_STR)) )
-                    {
-                    }
-                    else
-                    {
-                        msg_format("%^s is stunned.", m_name_subject);
-                        set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 3 + randint1(3)));
-                        obj_learn_slay(o_ptr, OF_STUN, "<color:o>Stuns</color> your enemies");
-                    }
-                }
-
                 if (!poison_needle
                  && mode != HISSATSU_KYUSHO
                  && mode != MYSTIC_KILL
@@ -3271,6 +3237,38 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     {
                         k = k * crit.mul/100 + crit.to_d;
                         msg_print(crit.desc);
+                    }
+                }
+
+                if ( (have_flag(flgs, OF_IMPACT) && (k > 50 || one_in_(7)))
+                  || chaos_effect == 2
+                  || mode == HISSATSU_QUAKE
+                  || (mauler_get_toggle() == MAULER_TOGGLE_SHATTER && (k > 50 || one_in_(7))) )
+                {
+                    do_quake = TRUE;
+                    if ( k <= 50
+                      || (r_ptr->flagsr & RFR_RES_ALL)
+                      || (r_ptr->flags3 & RF3_NO_STUN) )
+                    {
+                    }
+                    else
+                    {
+                        msg_format("%^s is stunned.", m_name_subject);
+                        mon_stun(m_ptr, mon_stun_amount(k));
+                    }
+                }
+
+                if (have_flag(flgs, OF_STUN) && randint1(100) < k)
+                {
+                    if ( (r_ptr->flagsr & RFR_RES_ALL)
+                      || (r_ptr->flags3 & RF3_NO_STUN) )
+                    {
+                    }
+                    else
+                    {
+                        msg_format("%^s is stunned.", m_name_subject);
+                        mon_stun(m_ptr, mon_stun_amount(k));
+                        obj_learn_slay(o_ptr, OF_STUN, "<color:o>Stuns</color> your enemies");
                     }
                 }
 
@@ -3403,16 +3401,8 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     && !(r_ptr->flags3 & (RF3_NO_STUN))
                     && !mon_save_p(m_ptr->r_idx, A_DEX) )
                 {
-                    point_t tbl[4] = { {1, 1}, {10, 10}, {100, 25}, {500, 50} }; /* XXX cf gf.c:_stun_amount */
-                    int     add = interpolate(d, tbl, 4); /* use base damage only */
-                    int     stun = MON_STUNNED(m_ptr);
-                    if (stun)
-                    {
-                        int div = 1 + stun / 20;
-                        add = MAX(1, add/div);
-                    }
                     msg_format("%^s is dealt a <color:B>stunning</color> blow (%d).", m_name_subject, k);
-                    set_monster_stunned(c_ptr->m_idx, stun + add);
+                    mon_stun(m_ptr, mon_stun_amount(d));
                 }
                 if ( p_ptr->lev >= 20    /* Wounding Strike */
                   && !mon_save_p(m_ptr->r_idx, A_DEX) )

@@ -17,4 +17,9 @@ extern mon_race_ptr mon_true_race(mon_ptr mon);
 extern void mon_anger(mon_ptr mon);
 extern void mon_anger_spell(mon_ptr mon, int dam);
 extern void mon_anger_shoot(mon_ptr mon, int dam);
+
+extern bool mon_stun_save(int rlev, int dam);
+extern int  mon_stun_amount(int dam);
+extern bool mon_stun(mon_ptr mon, int amt);
+
 #endif
