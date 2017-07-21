@@ -5990,8 +5990,12 @@ void gain_exp_64(s32b amount, u32b amount_frac)
     }
 
     /* Check Experience ... later. Definitely not during melee attacks.
-    check_experience(); */
-    p_ptr->notice |= PN_EXP;
+     * However, stat runs can check now ... otherwise, they gain CL1 exp
+     * from all kills until the stat run is finished! */
+    if (statistics_hack)
+        check_experience();
+    else
+        p_ptr->notice |= PN_EXP;
 }
 
 
