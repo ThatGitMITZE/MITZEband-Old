@@ -3001,9 +3001,9 @@ E:BERSERK:8:100
 E:Your stone enrages you!
 
 N:292:of David
-I:16:0:0
+I:16:2:0
 W:5:10:2:2000
-P:0:2d3:20:12:0
+P:0:7d3:20:12:0
 F:KILL_GIANT
 
 N:293:Goblet 'Holy Grail'
