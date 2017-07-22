@@ -315,6 +315,7 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
 
         if (tdam < 0) tdam = 0;
         tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+        context->dam = tdam;
         if (mon_take_hit(m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
         {
             /* Dead monster */

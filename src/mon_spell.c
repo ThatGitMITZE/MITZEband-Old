@@ -1366,7 +1366,7 @@ bool mon_spell_cast(mon_ptr mon, mon_spell_ai ai)
 
     if (!ai)
     {
-        if (0 && p_ptr->wizard && mon->id == target_who) ai = mon_spell_ai_wizard;
+        if (1 && p_ptr->wizard && mon->id == target_who) ai = mon_spell_ai_wizard;
         else ai = _default_ai;
     }
 

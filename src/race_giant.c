@@ -420,13 +420,13 @@ static void _monster_toss_imp(_monster_toss_info *info)
             if ( !do_stun
               || (r_ptr->flagsr & RFR_RES_ALL)
               || (r_ptr->flags3 & RF3_NO_STUN)
-              || ((r_ptr->flags1 & RF1_UNIQUE) && mon_save_p(m_ptr->r_idx, A_STR)) )
+              || ((r_ptr->flags1 & RF1_UNIQUE) && mon_stun_save(r_ptr->level, dam)) )
             {
             }
             else
             {
                 msg_format("%^s is stunned.", m_name);
-                set_monster_stunned(info->m_idx, MAX(MON_STUNNED(m_ptr), 3 + randint1(3)));
+                mon_stun(m_ptr, mon_stun_amount(dam));
             }
 
             message_pain(info->m_idx, dam);

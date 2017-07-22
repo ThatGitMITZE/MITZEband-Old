@@ -3513,14 +3513,14 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                             mon_lore_3(m_ptr, RF3_NO_STUN);
                             msg_format("%^s is immune.", m_name_subject);
                         }
-                        else if (mon_save_p(m_ptr->r_idx, A_STR))
+                        else if (mon_stun_save(r_ptr->level, k))
                         {
                             msg_format("%^s resists.", m_name_subject);
                         }
                         else
                         {
                             msg_format("%^s is stunned.", m_name_subject);
-                            set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 2));
+                            mon_stun(m_ptr, mon_stun_amount(k));
                         }
                     }
                     break;
@@ -3610,10 +3610,10 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     {
                         if ( one_in_(5)
                           && !(r_ptr->flags3 & RF3_NO_STUN)
-                          && !mon_save_p(m_ptr->r_idx, A_STR) )
+                          && !mon_stun_save(r_ptr->level, k) )
                         {
                             msg_format("%^s is shocked convulsively.", m_name_subject);
-                            set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 4));
+                            mon_stun(m_ptr, mon_stun_amount(k));
                         }
                     }
                     break;
@@ -3756,14 +3756,14 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                         mon_lore_3(m_ptr, RF3_NO_STUN);
                         msg_format("%^s is immune.", m_name_subject);
                     }
-                    else if ((r_ptr->flags1 & RF1_UNIQUE) && mon_save_p(m_ptr->r_idx, A_STR))
+                    else if ((r_ptr->flags1 & RF1_UNIQUE) && mon_stun_save(r_ptr->level, k))
                     {
                         msg_format("%^s resists.", m_name_subject);
                     }
                     else
                     {
                         msg_format("%^s is stunned.", m_name_subject);
-                        set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 3 + randint1(3)));
+                        mon_stun(m_ptr, mon_stun_amount(k));
                     }
                 }
                 if (mode == MELEE_AWESOME_BLOW)
@@ -3867,7 +3867,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                         }
                         else
                         {
-                            msg_format("%^s appears confused.", m_name_subject);
+                            msg_format("%^s appears <color:U>confused</color>.", m_name_subject);
                             set_monster_confused(c_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(p_ptr->lev) / 5);
                         }
                     }
@@ -3890,7 +3890,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                         }
                         else
                         {
-                            msg_format("%^s is knocked out.", m_name_subject);
+                            msg_format("%^s is <color:b>knocked out</color>.", m_name_subject);
                             knock_out++;
                             /* No more retaliation this round! */
                             retaliation_count = 100; /* Any number >= 4 will do ... */
@@ -3916,7 +3916,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                         }
                         else
                         {
-                            msg_format("%^s is stunned.", m_name_subject);
+                            msg_format("%^s is <color:B>stunned</color>.", m_name_subject);
                             mon_stun(m_ptr, mon_stun_amount(k));
                         }
                     }

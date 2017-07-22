@@ -37,6 +37,7 @@ int     path_pos;
 int     break_chance;
 bool    come_back; /* BOOMERANG: if (back_chance > 30) ... */
 bool    fail_catch;/* BOOMERANG: if (back_chance <= 37) ... */
+int     dam;
 
 /* Hooks for Customization */
 int   (*mod_damage_f)(py_throw_ptr context, int dam);

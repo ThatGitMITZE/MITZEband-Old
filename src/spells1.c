@@ -12,7 +12,7 @@
 /* Purpose: Spell projection */
 
 #include "angband.h"
-
+#include <assert.h>
 
 int rakubadam_m;
 int rakubadam_p;
@@ -1902,6 +1902,12 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     if (!who) return (FALSE);
     if (who == p_ptr->riding) return (FALSE);
 
+    if (who > 0)
+    {
+        m_ptr = &m_list[who];
+        monster_desc(m_name, m_ptr, 0);
+    }
+
     if (p_ptr->tim_spell_reaction && !p_ptr->fast)
     {
         set_fast(4, FALSE);
@@ -2033,12 +2039,16 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
     /* Hex - revenge damage stored */
     revenge_store(get_damage);
     if (get_damage > 0)
+    {
+        assert(m_ptr);
         weaponmaster_do_readied_shot(m_ptr);
+    }
 
     if (IS_REVENGE()
         && (get_damage > 0) && !p_ptr->is_dead && (who > 0))
     {
         char m_name_self[80];
+        assert(m_ptr);
         monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
         project(0, 0, m_ptr->fy, m_ptr->fx, psion_backlash_dam(get_damage), GF_MISSILE, PROJECT_KILL);
@@ -2052,28 +2062,26 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
     if (who > 0 && get_damage && p_ptr->tim_armor_of_fury)
     {
-        if (!MON_SLOW(m_ptr) || !MON_STUNNED(m_ptr))
+        assert(m_ptr);
+        msg_format("%^s is hit by your fury!", m_name);
+        if ( mon_save_p(m_ptr->r_idx, A_STR)
+          && (!p_ptr->shero || mon_save_p(m_ptr->r_idx, A_STR)) )
         {
-            msg_format("%^s is hit by your fury!", m_name);
-            if (mon_save_p(m_ptr->r_idx, A_STR))
+            msg_format("%^s resists!", m_name);
+        }
+        else
+        {
+            int dur = 1;
+            if (p_ptr->shero) dur = 3;
+            if (!MON_SLOW(m_ptr))
             {
-                msg_format("%^s resists!", m_name);
+                msg_format("%^s is slowed.", m_name);
+                set_monster_slow(who, dur);
             }
+            if (mon_stun(m_ptr, mon_stun_amount(dur*get_damage)))
+                msg_format("%^s is stunned.", m_name);
             else
-            {
-                int dur = 1;
-                if (p_ptr->shero) dur = 3;
-                if (!MON_SLOW(m_ptr))
-                {
-                    msg_format("%^s is slowed.", m_name);
-                    set_monster_slow(who, dur);
-                }
-                if (!MON_STUNNED(m_ptr))
-                {
-                    msg_format("%^s is stunned.", m_name);
-                    set_monster_stunned(who, dur);
-                }
-            }
+                msg_format("%^s is more stunned.", m_name);
         }
     }
 
