@@ -3910,14 +3910,14 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                             mon_lore_3(m_ptr, RF3_NO_STUN);
                             msg_format("%^s is immune.", m_name_subject);
                         }
-                        else if (mon_save_p(m_ptr->r_idx, A_STR))
+                        else if (mon_stun_save(r_ptr->level, k))
                         {
                             msg_format("%^s resists.", m_name_subject);
                         }
                         else
                         {
                             msg_format("%^s is stunned.", m_name_subject);
-                            set_monster_stunned(c_ptr->m_idx, MAX(MON_STUNNED(m_ptr), 2));
+                            mon_stun(m_ptr, mon_stun_amount(k));
                         }
                     }
                 }
