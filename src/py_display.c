@@ -609,7 +609,7 @@ static void _display_known_count(doc_ptr doc, int total, int flg)
 {
     int ct = total;
     slot_t slot;
-    for (slot = 1; slot < equip_max(); slot++)
+    for (slot = 1; slot <= equip_max(); slot++)
     {
         obj_ptr obj = equip_obj(slot);
         u32b    flgs[OF_ARRAY_SIZE];
