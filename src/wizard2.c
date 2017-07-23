@@ -1323,13 +1323,13 @@ static void _wiz_inspect_objects(int level)
         if (0 && o_ptr->name2 && !object_is_device(o_ptr) && !object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_BOW)
+        if (0 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_BOW)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && !object_is_nameless(o_ptr) && o_ptr->tval == TV_QUIVER)
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (0 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
+        if (1 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && o_ptr->name2 && object_is_jewelry(o_ptr))

@@ -1741,25 +1741,36 @@ static void _ego_create_weapon_slaying(object_type *o_ptr, int level)
     if (one_in_(GREAT_OBJ))
         rolls *= 2;
 
+    if (obj_is_ammo(o_ptr))
+        rolls = (rolls + 1) / 2;
+
     for (i = 0; i < rolls; i++)
     {
         int               j = _choose_slaying_info(level);
         _slaying_info_ptr info;
+
         if (j == -1) continue;
         info = &_slaying_info[j];
 
-        if (info->kill_flag != OF_INVALID && one_in_(info->rarity*info->rarity*info->rarity))
+        /* Try to add the kill flag ... */
+        if (info->kill_flag != OF_INVALID)
         {
-            add_flag(o_ptr->flags, info->kill_flag);
-            if (info->esp_flag != OF_INVALID && !obj_is_ammo(o_ptr))
-                add_flag(o_ptr->flags, info->esp_flag);
+            int r = info->rarity;
+            int p = r * r * r;
+            if (obj_is_ammo(o_ptr))
+                 p *= r;
+            if (one_in_(p))
+            {
+                add_flag(o_ptr->flags, info->kill_flag);
+                if (info->esp_flag != OF_INVALID && !obj_is_ammo(o_ptr))
+                    add_flag(o_ptr->flags, info->esp_flag);
+                continue;
+            }
         }
-        else
-        {
-            add_flag(o_ptr->flags, info->slay_flag);
-            if (info->esp_flag != OF_INVALID && one_in_(6) && !obj_is_ammo(o_ptr))
-                add_flag(o_ptr->flags, info->esp_flag);
-        }
+        /* ... but if that fails, at least give it the slay */
+        add_flag(o_ptr->flags, info->slay_flag);
+        if (info->esp_flag != OF_INVALID && one_in_(6) && !obj_is_ammo(o_ptr))
+            add_flag(o_ptr->flags, info->esp_flag);
     }
 }
 static void _ego_create_weapon_armageddon(object_type *o_ptr, int level)
@@ -1842,6 +1853,9 @@ static void _ego_create_weapon_craft(object_type *o_ptr, int level)
 
     if (one_in_(GREAT_OBJ))
         rolls *= 2;
+
+    if (obj_is_ammo(o_ptr))
+        rolls = (rolls + 1) / 2;
 
     for (i = 0; i < rolls; i++)
     {
