@@ -1152,12 +1152,12 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
     }
 
     if (have_flag(flgs, OF_SLAY_LIVING))
-        _display_missile_slay(mult, 150, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Living", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 143, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Living", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_ANIMAL))
-        _display_missile_slay(mult, 250, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Animals", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 238, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Animals", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_ANIMAL))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Animals", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Animals", TERM_YELLOW, cols[0]);
 
     if (display_shooter_mode == SP_HOLYNESS)
     {
@@ -1165,9 +1165,9 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Evil", TERM_VIOLET, cols[0]);
     }
     else if (have_flag(flgs, OF_KILL_EVIL))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Evil", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Evil", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_EVIL))
-        _display_missile_slay(mult, 150, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Evil", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 143, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Evil", TERM_YELLOW, cols[0]);
 
     if (display_shooter_mode == SP_EVILNESS)
     {
@@ -1175,45 +1175,45 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Good", TERM_VIOLET, cols[0]);
     }
     else if (have_flag(flgs, OF_SLAY_GOOD))
-        _display_missile_slay(mult, 150, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Good", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 143, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Good", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_HUMAN))
-        _display_missile_slay(mult, 250, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Human", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 238, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Human", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_HUMAN))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Human", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Human", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_UNDEAD))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Undead", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Undead", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_UNDEAD))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Undead", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Undead", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_DEMON))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Demons", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Demons", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_DEMON))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Demons", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Demons", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_ORC))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Orcs", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Orcs", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_ORC))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Orcs", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Orcs", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_TROLL))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Trolls", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Trolls", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_TROLL))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Trolls", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Trolls", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_GIANT))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Giants", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Giants", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_GIANT))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Giants", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Giants", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_KILL_DRAGON))
-        _display_missile_slay(mult, 300, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Dragons", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 286, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Dragons", TERM_YELLOW, cols[0]);
     else if (have_flag(flgs, OF_SLAY_DRAGON))
-        _display_missile_slay(mult, 200, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Dragons", TERM_YELLOW, cols[0]);
+        _display_missile_slay(mult, 190, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Dragons", TERM_YELLOW, cols[0]);
 
     if (have_flag(flgs, OF_BRAND_ACID))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Acid", TERM_RED, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Acid", TERM_RED, cols[0]);
 
     if (display_shooter_mode == SP_ELEC)
     {
@@ -1221,7 +1221,7 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Elec", TERM_VIOLET, cols[0]);
     }
     else if (have_flag(flgs, OF_BRAND_ELEC))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Elec", TERM_RED, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Elec", TERM_RED, cols[0]);
 
     if (display_shooter_mode == SP_FIRE)
     {
@@ -1229,7 +1229,7 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Fire", TERM_VIOLET, cols[0]);
     }
     else if (have_flag(flgs, OF_BRAND_FIRE))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Fire", TERM_RED, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Fire", TERM_RED, cols[0]);
 
     if (display_shooter_mode == SP_COLD)
     {
@@ -1237,10 +1237,10 @@ static void _shooter_info_aux(doc_ptr doc, object_type *bow, object_type *arrow,
         _display_missile_slay(mult, snipe, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Cold", TERM_VIOLET, cols[0]);
     }
     else if (have_flag(flgs, OF_BRAND_COLD))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Cold", TERM_RED, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Cold", TERM_RED, cols[0]);
 
     if (have_flag(flgs, OF_BRAND_POIS))
-        _display_missile_slay(mult, 170, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Poison", TERM_RED, cols[0]);
+        _display_missile_slay(mult, 162, crit.mul, force, num_fire, dd, ds, to_d, to_d_xtra, "Poison", TERM_RED, cols[0]);
 
     if (display_shooter_mode == SP_KILL_WALL)
     {

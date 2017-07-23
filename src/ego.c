@@ -1610,7 +1610,7 @@ static void _ego_create_bow(object_type *o_ptr, int level)
             o_ptr->to_d += 5;
             break;
         case EGO_BOW_EXTRA_MIGHT:
-            _increase_bow_mult(o_ptr, 25 + m_bonus(75, level));
+            _increase_bow_mult(o_ptr, 25 + randint1(25) + m_bonus(50, level));
             break;
         case EGO_BOW_EXTRA_SHOTS:
             o_ptr->pval = 1 + m_bonus(4, level);
@@ -1625,7 +1625,7 @@ static void _ego_create_bow(object_type *o_ptr, int level)
                 done = FALSE;
             else
             {
-                _increase_bow_mult(o_ptr, 25 + m_bonus(85, level));
+                _increase_bow_mult(o_ptr, 25 + randint1(35) + m_bonus(50, level));
 
                 if (one_in_(3))
                     add_flag(o_ptr->flags, OF_XTRA_SHOTS);
@@ -1639,7 +1639,7 @@ static void _ego_create_bow(object_type *o_ptr, int level)
             else
             {
                 if (one_in_(3))
-                    _increase_bow_mult(o_ptr, 25 + m_bonus(75, level));
+                    _increase_bow_mult(o_ptr, 25 + randint1(25) + m_bonus(50, level));
                 else
                     one_high_resistance(o_ptr);
             }
@@ -1649,11 +1649,12 @@ static void _ego_create_bow(object_type *o_ptr, int level)
                 done = FALSE;
             else
             {
-                _increase_bow_mult(o_ptr, 25 + m_bonus(85, level));
-                if (one_in_(3))
+                _increase_bow_mult(o_ptr, 25 + randint1(35) + m_bonus(50, level));
+                if (one_in_(6))
                 {
                     add_flag(o_ptr->flags, OF_XTRA_SHOTS);
                     add_flag(o_ptr->flags, OF_DEC_SPEED);
+                    add_flag(o_ptr->flags, OF_DEC_STEALTH);
                 }
                 else
                     one_high_resistance(o_ptr);
@@ -2179,6 +2180,11 @@ void obj_create_weapon(object_type *o_ptr, int level, int power, int mode)
         if (!crafting && power >= 2 && !one_in_(7)) return;
     }
     if (object_is_(o_ptr, TV_SWORD, SV_POISON_NEEDLE)) return;
+    if (obj_is_ammo(o_ptr))
+    {
+        tohit2 = (tohit2 + 1)/2;
+        todam2 = (todam2 + 1)/2;
+    }
 
     if (!crafting && !object_is_(o_ptr, TV_BOW, SV_HARP))
     {
