@@ -455,20 +455,16 @@ critical_t critical_shot(int weight, int plus)
     if (randint1(5000) <= i)
     {
         k = weight * randint1(500);
-        result.mul = 150 + k * 200 / 2000;
+        result.mul = 150 + k * 100 / 2000;
 
-        if (result.mul < 200)
+        if (result.mul < 170)
             result.desc = "It was a <color:y>decent</color> shot!";
-        /* k >= 500 */
-        else if (result.mul < 240)
+        else if (result.mul < 190)
             result.desc = "It was a <color:R>good</color> shot!";
-        /* k >= 900 */
-        else if (result.mul < 270)
+        else if (result.mul < 205)
             result.desc = "It was a <color:r>great</color> shot!";
-        /* k >= 1200 */
-        else if (result.mul < 300)
+        else if (result.mul < 220)
             result.desc = "It was a <color:v>superb</color> shot!";
-        /* k >= 1500 */
         else
             result.desc = "It was a <color:v>*GREAT*</color> shot!";
     }
