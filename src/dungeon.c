@@ -5170,14 +5170,8 @@ void play_game(bool new_game)
 
     /* TODO: py_skills_init() or some such ... w_max needs to be reset each time you play, 
      * not just on player birth */
-    if (p_ptr->prace == RACE_TONBERRY)
-        s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_SABRE] = WEAPON_EXP_MASTER;
-
     if (p_ptr->pclass == CLASS_WEAPONMASTER && !new_game)
         weaponmaster_adjust_skills();
-
-    if (p_ptr->personality == PERS_SEXY)
-        s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
 
     /* Fill the arrays of floors and walls in the good proportions */
     set_floor_and_wall(dungeon_type);

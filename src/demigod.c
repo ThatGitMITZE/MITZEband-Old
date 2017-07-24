@@ -396,6 +396,14 @@ static void _hermes_get_flags(u32b flgs[OF_ARRAY_SIZE])
 /****************************************************************
  * Poseidon
  ****************************************************************/
+static void _poseidon_birth(void)
+{
+    py_birth_obj_aux(TV_POLEARM, SV_TRIDENT, 1);
+    skills_weapon_init(TV_POLEARM, SV_TRIDENT, WEAPON_EXP_BEGINNER);
+    py_birth_food();
+    py_birth_light();
+}
+
 static void _poseidon_calc_bonuses(void)
 {
     p_ptr->melt_armor = TRUE;
@@ -645,6 +653,7 @@ race_t *demigod_get_race(int psubrace)
             me.stats[A_DEX] += 1;
             me.skills.thn += 7;
             me.exp += 60;
+            me.birth = _poseidon_birth;
             me.calc_bonuses = _poseidon_calc_bonuses;
             me.get_flags = _poseidon_get_flags;
             break;

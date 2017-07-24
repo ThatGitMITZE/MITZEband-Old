@@ -254,6 +254,15 @@ int skills_weapon_max(int tval, int sval)
             return WEAPON_EXP_SKILLED;
     }
 
+    if (p_ptr->prace == RACE_TONBERRY && tval == TV_SWORD && sval == SV_SABRE)
+        return WEAPON_EXP_MASTER;
+
+    if (p_ptr->personality == PERS_SEXY && tval == TV_HAFTED && sval == SV_WHIP)
+        return WEAPON_EXP_MASTER;
+
+    if (demigod_is_(DEMIGOD_POSEIDON) && tval == TV_POLEARM && sval == SV_TRIDENT)
+        return WEAPON_EXP_MASTER;
+
     return s_info[_class_idx()].w_max[tval-TV_WEAPON_BEGIN][sval];
 }
 

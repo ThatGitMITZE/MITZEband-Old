@@ -618,6 +618,17 @@ static bool _weapon_stock_p(int k_idx)
     {
     case TV_POLEARM:
     case TV_SWORD:
+        return TRUE;
+    }
+    return FALSE;
+}
+static bool _weapon_book_p(int k_idx)
+{
+    if (!_stock_p(k_idx))
+        return FALSE;
+
+    switch (k_info[k_idx].tval)
+    {
     case TV_HISSATSU_BOOK:
     case TV_RAGE_BOOK:
         return TRUE;
@@ -640,7 +651,9 @@ static bool _weapon_create(obj_ptr obj, int mode)
     int k_idx;
     int l1 = _mod_lvl(20);
     int l2 = _mod_lvl(rand_range(1, 5));
-    if (one_in_(4))
+    if (one_in_(3))
+        k_idx = _get_k_idx(_weapon_book_p, l1);
+    else if (one_in_(4))
         k_idx = _get_k_idx(_weapon_stock_shooter_p, l1);
     else if (one_in_(3))
         k_idx = _get_k_idx(_stock_ammo_p, l1);
