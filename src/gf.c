@@ -1535,9 +1535,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     case GF_ELDRITCH_STUN:
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
-        if (race->flagsr & RFR_RES_SOUN)
-            mon_lore_r(mon, RFR_RES_SOUN);
-        else if (race->flags3 & RF3_NO_STUN)
+        if (race->flags3 & RF3_NO_STUN)
             mon_lore_3(mon, RF3_NO_STUN);
         else if (mon_save_p(mon->r_idx, A_CHR)
               || ((race->flags1 & RF1_UNIQUE) && mon_save_p(mon->r_idx, A_CHR)) )
@@ -1545,7 +1543,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             note = " resists stunning.";
         }
         else
-            do_stun = 3 + randint0(5);
+            do_stun = mon_stun_amount(dam);
         break;
     case GF_ROCK:
         if (seen) obvious = TRUE;
