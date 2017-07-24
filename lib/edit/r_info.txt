@@ -4089,7 +4089,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_LITE | DETECT_MONSTERS
+S:FREQ_8 | BR_LITE | DETECT_MONSTERS
 D:A brilliant canine form whose light hurts your eyes, even at this distance.
 
 N:272:Shadow hound
@@ -4107,7 +4107,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_DARK | DETECT_MONSTERS
+S:FREQ_8 | BR_DARK | DETECT_MONSTERS
 D:A hole in the air in the shape of a huge hound. No light falls upon its
 D:form.
 
@@ -4663,7 +4663,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_FIRE | DETECT_MONSTERS
+S:FREQ_5 | BR_FIRE | DETECT_MONSTERS
 D:Flames lick at its feet and its tongue is a blade of fire. You can feel a
 D:furnace heat radiating from the creature.
 
@@ -4684,7 +4684,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_COLD | DETECT_MONSTERS
+S:FREQ_5 | BR_COLD | DETECT_MONSTERS
 D:A hound as tall as a man, this creature appears to be composed of angular
 D:planes of ice. Cold radiates from it and freezes your breath in the air.
 
@@ -4705,7 +4705,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_ELEC | DETECT_MONSTERS
+S:FREQ_5 | BR_ELEC | DETECT_MONSTERS
 D:Saint Elmo's Fire forms a ghostly halo around this hound, and sparks sting
 D:your fingers as energy builds up in the air around you.
 
@@ -5159,7 +5159,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:1_IN_10 | BR_SHARDS | DETECT_MONSTERS
+S:FREQ_5 | BR_SHARDS | DETECT_MONSTERS
 D:A beautiful crystalline shape does not disguise the danger this hound
 D:clearly presents. Your flesh tingles as it approaches.
 
@@ -5181,7 +5181,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:1_IN_10 | BR_POISON | DETECT_MONSTERS
+S:FREQ_5 | BR_POISON | DETECT_MONSTERS
 D:Swirling vapours surround this beast as it floats towards you, seemingly
 D:walking on air. Noxious gases sting your throat.
 
@@ -5220,7 +5220,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:1_IN_10 | BR_ACID | DETECT_MONSTERS
+S:FREQ_5 | BR_ACID | DETECT_MONSTERS
 D:Liquid footprints follow this hound as it pads around the dungeon. An
 D:acrid smell of acid rises from the dog's pelt.
 
@@ -6658,7 +6658,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_SOUND | DETECT_MONSTERS
+S:FREQ_10 | BR_SOUND | DETECT_MONSTERS
 D:A blurry canine form which seems to be moving as fast as the eye can
 D:follow. You can feel the earth resonating beneath your feet.
 
@@ -6681,7 +6681,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_NEXUS | DETECT_MONSTERS
+S:FREQ_10 | BR_NEXUS | DETECT_MONSTERS
 D:A locus of conflicting points coalesce to form the vague shape of a huge
 D:hound. Or is it just your imagination?
 
@@ -8174,7 +8174,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_ACID | BR_POISON | BR_COLD | BR_FIRE | BR_ELEC
+S:FREQ_10 | BR_ACID | BR_POISON | BR_COLD | BR_FIRE | BR_ELEC
 S:DETECT_MONSTERS
 D:Shimmering in rainbow hues, this hound is beautiful and deadly.
 
@@ -8702,7 +8702,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_FORCE | DETECT_MONSTERS
+S:FREQ_8 | BR_FORCE | DETECT_MONSTERS
 D:A deep brown shape is visible before you, its canine form strikes you with
 D:an almost physical force. The dungeon floor buckles as if struck by a
 D:powerful blow as it stalks towards you.
@@ -12193,7 +12193,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_NETHER | DETECT_MONSTERS
+S:FREQ_10 | BR_NETHER | DETECT_MONSTERS
 D:You feel a soul-tearing chill upon viewing this beast, a ghostly form of
 D:darkness in the shape of a large dog.
 
@@ -12215,7 +12215,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_10 | BR_TIME | DETECT_MONSTERS
+S:FREQ_6 | BR_TIME | DETECT_MONSTERS
 D:You get a terrible sense of deja vu, or is it a premonition? All at once
 D:you see a little puppy and a toothless old dog. Perhaps you should give
 D:up and go to bed.
@@ -12238,7 +12238,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_PLASMA | DETECT_MONSTERS
+S:FREQ_10 | BR_PLASMA | DETECT_MONSTERS
 D:The very air warps as pure elemental energy stalks towards you in the
 D:shape of a giant hound. Your hair stands on end and your palms itch as
 D:you sense trouble.
@@ -12518,7 +12518,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 |
+S:FREQ_10 |
 S:BLINK | BLINK_OTHER | TELE_TO | BR_NETHER | BR_TIME | DETECT_MONSTERS 
 D:"They are lean and athirst!... All the evil in the universe
 D:was concentrated in their lean, hungry bodies. Or had they
@@ -13454,7 +13454,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_CHAOS | DETECT_MONSTERS
+S:FREQ_10 | BR_CHAOS | DETECT_MONSTERS
 D:A constantly changing canine form, this hound rushes towards you as if
 D:expecting mayhem and chaos ahead. It appears to have an almost kamikaze
 D:relish for combat. You suspect all may not be as it seems.
@@ -14194,7 +14194,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POISON |
+S:FREQ_10 | BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POISON |
 S:BR_LITE | BR_DARK | BR_SOUND | BR_CONFUSION | BR_CHAOS |
 S:BR_NETHER | BR_DISENCHANT | BR_FORCE | BR_INERTIA | BR_TIME |
 S:BR_GRAVITY | BR_PLASMA | BR_NEXUS | BR_SHARDS | BR_NUKE | DETECT_MONSTERS
@@ -15992,7 +15992,7 @@ P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
 P:SpellStat:Dex
 P:Body:Hound
-S:FREQ_15 | BR_MANA | DETECT_MONSTERS
+S:FREQ_8 | BR_MANA | DETECT_MONSTERS
 D:A powerful aura radiates from this canine creature. It feels
 D:like... magic?
 
