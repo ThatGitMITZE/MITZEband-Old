@@ -542,6 +542,8 @@ static void _calc_bonuses(void)
 {
     samurai_posture_calc_bonuses();
     monk_posture_calc_bonuses();
+    if (equip_find_art(ART_WEREWINDLE))
+        p_ptr->dec_mana = TRUE;
 }
 static void _calc_stats(s16b stats[MAX_STATS])
 {
