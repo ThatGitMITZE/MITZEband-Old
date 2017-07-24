@@ -5284,7 +5284,7 @@ bool do_dec_stat(int stat)
     if (dec_stat(stat, 10, (ironman_nightmare && !randint0(13))))
     {
         /* Message */
-        msg_format("You feel very %s.", desc_stat_neg[stat]);
+        msg_format("You feel very <color:r>%s</color>.", desc_stat_neg[stat]);
 
 
         /* Notice effect */
