@@ -484,6 +484,8 @@ bool cast_spit_acid(void) { return cast_spell(spit_acid_spell); }
 
 static int _starburst_I_dam(void)
 {
+    if (p_ptr->pclass == CLASS_WILD_TALENT) /* Wild-Talents gain both I and II versions ... */
+        return 100 + py_prorata_level_aux(100, 1, 1, 0);
     return 100 + py_prorata_level_aux(200, 1, 1, 2);
 }
 
