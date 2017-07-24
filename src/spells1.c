@@ -2038,14 +2038,13 @@ static bool project_p(int who, cptr who_name, int r, int y, int x, int dam, int 
 
     /* Hex - revenge damage stored */
     revenge_store(get_damage);
-    if (get_damage > 0)
+    if (get_damage > 0 && !p_ptr->is_dead && who > 0)
     {
         assert(m_ptr);
         weaponmaster_do_readied_shot(m_ptr);
     }
 
-    if (IS_REVENGE()
-        && (get_damage > 0) && !p_ptr->is_dead && (who > 0))
+    if (IS_REVENGE() && get_damage > 0 && !p_ptr->is_dead && who > 0)
     {
         char m_name_self[80];
         assert(m_ptr);
