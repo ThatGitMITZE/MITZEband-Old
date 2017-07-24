@@ -2496,12 +2496,12 @@ static void process_monster(int m_idx)
                 freq = MAX(30, freq + 15);
                 break;
             case AI_MAINTAIN_DISTANCE:
-                freq += 15;
+                freq += MIN(freq/2, 15);
                 break;
             case AI_LURE:
             case AI_FEAR:
             case AI_GUARD_POS:
-                freq += 10;
+                freq += MIN(freq/2, 10);
                 break;
             }
         }
