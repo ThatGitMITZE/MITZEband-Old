@@ -942,6 +942,7 @@ doc_pos_t doc_insert(doc_ptr doc, cptr text)
     int         qidx = 0;
     cptr        pos = text;
     int         i, j, cb;
+    bool        nowrap = FALSE;
     doc_style_ptr style = NULL;
 
     for (;;)
@@ -962,6 +963,7 @@ doc_pos_t doc_insert(doc_ptr doc, cptr text)
         if (token.type == DOC_TOKEN_NEWLINE)
         {
             doc_newline(doc);
+            nowrap = FALSE;
             continue;
         }
 
@@ -989,7 +991,7 @@ doc_pos_t doc_insert(doc_ptr doc, cptr text)
                    && (token.tag.type == DOC_TAG_COLOR || token.tag.type == DOC_TAG_CLOSE_COLOR) )
             {
             }
-            else
+            else /* whitespace or newline */
             {
                 break;
             }
@@ -1023,7 +1025,7 @@ doc_pos_t doc_insert(doc_ptr doc, cptr text)
                 assert(current->type == DOC_TOKEN_WORD);
                 assert(cell);
 
-                for (j = 0; j < current->size; j++)
+                for (j = 0; j < current->size && !nowrap; j++)
                 {
                     cell->a = style->color;
                     cell->c = current->pos[j];
@@ -1032,7 +1034,14 @@ doc_pos_t doc_insert(doc_ptr doc, cptr text)
                     if (doc->cursor.x == style->right - 1)
                     {
                         if (style->options & DOC_STYLE_NO_WORDWRAP)
+                        {
+                            /* nowrap is tricky ... we still need to process remaining tokens
+                             * since these may change the current style. however, we need to stop
+                             * trying to print, and we'll guard this for word tokens with the
+                             * following flag: */
+                            nowrap = TRUE;
                             break;
+                        }
                         doc_newline(doc);
                         if (style->indent)
                             doc_insert_space(doc, style->indent);
