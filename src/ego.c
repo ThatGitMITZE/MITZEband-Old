@@ -304,6 +304,7 @@ static bool _check_rand_art(int base, int level, int power, int mode)
     if (mode & AM_CRAFTING) return FALSE;
     if (power > 2) return TRUE;
     /*if (statistics_hack && one_in_(3)) return TRUE;  XXX Temp */
+    base -= base * level / 200;
     if (one_in_(base)) return TRUE;
     return FALSE;
 }
@@ -312,17 +313,11 @@ static void _art_create_random(object_type *o_ptr, int level, int power)
 {
     int     i;
     u32b    mode = CREATE_ART_NORMAL;
-    point_t min_tbl[4] = {            {30,     0}, {50, 15000}, {70, 40000},               {100,  50000} };
-    point_t max_tbl[6] = { {0, 5000}, {30, 20000}, {50, 40000}, {70, 80000}, {90, 130000}, {100, 300000} };
-    int     min = interpolate(level, min_tbl, 4);
-    int     max = interpolate(level, max_tbl, 6);
+    point_t min_tbl[2] = { {20, 0}, {70, 50000} };
+    point_t max_tbl[5] = { {0, 5000}, {10, 10000}, {30, 30000}, {70, 110000}, {100, 200000} };
+    int     min = interpolate(level, min_tbl, 2);
+    int     max = interpolate(level, max_tbl, 5);
     int     pct = get_slot_power(o_ptr);
-
-    if (one_in_(GREAT_OBJ))
-    {
-        min = MAX(5000, min);
-        max = MAX(20000, max*3/2);
-    }
 
     /* normalize based on the slot for this object (cf artifact.c)
      * weapons/armor are 100%; amulets/lights 50%; etc. */
@@ -2236,14 +2231,22 @@ void obj_create_weapon(object_type *o_ptr, int level, int power, int mode)
     {
     case TV_BOW:
         if (_check_rand_art(20, level, power, mode))
+        {
             _art_create_random(o_ptr, level, power);
+            /* XXX Rescaling the damage (below) massively changes the scoring for
+             * slow shooters, blowing our threshold limits. Instead, the same scaling
+             * has been copied to create_artifact() in artifact.c */
+            break;
+        }
         else if (o_ptr->sval == SV_HARP)
             _ego_create_harp(o_ptr, level);
         else
+        {
             _ego_create_bow(o_ptr, level);
-        /* rescale damage ... heavy crossbows shoot 0.75 while slings shoot 1.40x
-         * damage on the bow should reflect this! */
-        o_ptr->to_d = o_ptr->to_d * bow_energy(o_ptr->sval) / 7150;
+            /* rescale damage ... heavy crossbows shoot 0.75 while slings shoot 1.40x
+             * damage on the bow should reflect this! */
+            o_ptr->to_d = o_ptr->to_d * bow_energy(o_ptr->sval) / 7150;
+        }
         break;
 
     case TV_BOLT:

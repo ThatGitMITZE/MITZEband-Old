@@ -1393,7 +1393,7 @@ s32b ammo_cost(object_type *o_ptr, int options)
 static s32b _avg_dam_bow(object_type *o_ptr, int options) /* scaled by 10 */
 {
     s32b d = 0;
-    s32b m = o_ptr->mult;
+    s32b m = o_ptr->mult; /* scaled by 100 */
 
     if (!object_is_known(o_ptr) && !(options & COST_REAL))
         m = k_info[o_ptr->k_idx].mult;
@@ -1401,27 +1401,27 @@ static s32b _avg_dam_bow(object_type *o_ptr, int options) /* scaled by 10 */
     switch (o_ptr->sval)
     {
     case SV_SLING:
-        d = m*16 / 10;
+        d = m*22 / 10; /* 5d3+12 */
         break;
 
     case SV_SHORT_BOW:
-        d = m*17 / 10;
+        d = m*27 / 10; /* 6d4+12 */
         break;
 
     case SV_LONG_BOW:
-        d = m*20 / 10;
+        d = m*27 / 10;
         break;
 
     case SV_NAMAKE_BOW:
-        d = m*20 / 10;
+        d = m*27 / 10;
         break;
 
     case SV_LIGHT_XBOW:
-        d = m*25 / 10;
+        d = m*30 / 10; /* 6d5+12 */
         break;
 
     case SV_HEAVY_XBOW:
-        d = m*25 / 10;
+        d = m*30 / 10;
         break;
 
     default:
@@ -1465,7 +1465,7 @@ s32b bow_cost(object_type *o_ptr, int options)
        cf design/archer.ods. 32 is the base for a sling.
        Note: our damages are scaled by 10 */
     object_prep(&base_obj, o_ptr->k_idx);
-    base_dam = _avg_dam_bow(&base_obj, options);
+    base_dam = _avg_dam_bow(&base_obj, COST_REAL);
     if (!base_dam)
     {
         /* harps and guns are not really bows after all
@@ -1484,8 +1484,8 @@ s32b bow_cost(object_type *o_ptr, int options)
         dam = _avg_dam_bow(o_ptr, options);
         xtra_dam = MAX(0, dam - base_dam);
 
-        w = base_dam/10 + (base_dam - 320)*(base_dam - 320)/200;
-        w += 10*xtra_dam + xtra_dam*xtra_dam*xtra_dam/1000;
+        w = base_dam/20 + (base_dam - 440)*(base_dam - 440)/600;
+        w += 150*xtra_dam/10 + xtra_dam*xtra_dam*25/100;
 
         if (have_flag(flgs, OF_BRAND_POIS)) w = w * 5 / 4;
         if (have_flag(flgs, OF_BRAND_ACID)) w = w * 5 / 4;
@@ -1493,30 +1493,33 @@ s32b bow_cost(object_type *o_ptr, int options)
         if (have_flag(flgs, OF_BRAND_FIRE)) w = w * 5 / 4;
         if (have_flag(flgs, OF_BRAND_COLD)) w = w * 5 / 4;
 
-        /* ??? w = w * 10000 / bow_energy(o_ptr->sval);*/
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * Base Cost: w = %d", w);
             cost_calc_hook(dbg_msg);
         }
-
-        /* (+x,+y) */
-        if (to_h != 0 || to_d != 0)
+        /* Since we are scaling by bow_energy(), it is imperative
+         * to include the damage and extra shots scoring first. */
+        if (to_d > 10)
         {
-            int x = to_h * ABS(to_h);
-            int y = to_d * ABS(to_d);
-
-            w += 100 * to_h + 10 * x;
-            w += 25 * y;
-
+            w += 150 * to_d + (to_d - 10)*(to_d - 10)*15 * 10000/bow_energy(o_ptr->sval);
             if (cost_calc_hook)
             {
-                sprintf(dbg_msg, "  * (+x,+y): w = %d", w);
+                sprintf(dbg_msg, "  * (_,+y): w = %d", w);
+                cost_calc_hook(dbg_msg);
+            }
+        }
+        else if (to_d != 0)
+        {
+            w += 150 * to_d;
+            if (cost_calc_hook)
+            {
+                sprintf(dbg_msg, "  * (_,+y): w = %d", w);
                 cost_calc_hook(dbg_msg);
             }
         }
 
-        if (have_flag(flgs, OF_XTRA_SHOTS)) /* score xtra shots *after* scoring (+x,+y) */
+        if (have_flag(flgs, OF_XTRA_SHOTS))
         {
             w += w * pval * 15 / 100; /* +.15 shots per pval */
             if (cost_calc_hook)
@@ -1525,12 +1528,32 @@ s32b bow_cost(object_type *o_ptr, int options)
                 cost_calc_hook(dbg_msg);
             }
         }
+
+        /* XXX Scale base cost by shooting speed */
+        w = w * 10000 / bow_energy(o_ptr->sval);
+        if (cost_calc_hook)
+        {
+            sprintf(dbg_msg, "  * Scaled Base Cost: w = %d", w);
+            cost_calc_hook(dbg_msg);
+        }
+
+        if (to_h != 0)
+        {
+            int x = to_h * ABS(to_h);
+
+            w += 100 * to_h + 10 * x;
+
+            if (cost_calc_hook)
+            {
+                sprintf(dbg_msg, "  * (+x,_): w = %d", w);
+                cost_calc_hook(dbg_msg);
+            }
+        }
     }
 
     /* Resistances */
     q = _resistances_q(flgs);
-    p = w + q + (q/100)*w/200;
-    /*p = w + q*(1+w/20000);*/
+    p = w + q;
 
     if (cost_calc_hook)
     {
@@ -1540,8 +1563,7 @@ s32b bow_cost(object_type *o_ptr, int options)
 
     /* Abilities */
     q = _abilities_q(flgs);
-    p += q + (q/100)*w/400;
-    /*p += q*(1+w/20000);*/
+    p += q;
 
     if (cost_calc_hook)
     {
@@ -1566,7 +1588,6 @@ s32b bow_cost(object_type *o_ptr, int options)
     if (q != 0)
     {
         p += q;
-        /*p += q*(1 + w/10000);*/
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * Stats/Stealth: q = %d, p = %d", q, p);
@@ -1581,8 +1602,7 @@ s32b bow_cost(object_type *o_ptr, int options)
     if (y != 0)
     {
         q = y*pval;
-        p += q + (q/100)*w/300;
-        /*p += q*(1 + w/30000);*/
+        p += q;
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * Other Crap: y = %d, q = %d, p = %d", y, q, p);

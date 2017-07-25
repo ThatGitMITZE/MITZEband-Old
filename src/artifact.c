@@ -1911,6 +1911,12 @@ int get_slot_power(obj_ptr obj)
         if (d < 12)
             w = w * d / 12;
     }
+    else if (object_is_body_armour(obj))
+    {
+        int ac = k_info[obj->k_idx].ac;
+        if (ac < 16)
+            w = w * (ac + 20) / 36;
+    }
     return 100 * w / 80;
 }
 
@@ -2821,6 +2827,12 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
     {
         o_ptr->mult += (25 + m_bonus(75, object_level)) * bow_energy(o_ptr->sval) / 10000;
         remove_flag(o_ptr->flags, OF_XTRA_MIGHT);
+    }
+    if (o_ptr->tval == TV_BOW)
+    {
+        /* rescale damage ... heavy crossbows shoot 0.75 while slings shoot 1.40x
+         * damage on the bow should reflect this! */
+        o_ptr->to_d = o_ptr->to_d * bow_energy(o_ptr->sval) / 7150;
     }
 
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
