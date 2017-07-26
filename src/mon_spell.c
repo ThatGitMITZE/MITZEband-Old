@@ -3350,8 +3350,13 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
     point_t        new_dest = {0};
+    int            prob = 0;
 
-    if (!stupid && (smart || one_in_(2)))
+    if (smart) prob = 75;
+    else if (cast->race->d_char == 'Z') prob = 25;
+    else prob = 50;
+
+    if (!stupid && randint0(100) < prob)
     {
         new_dest = _choose_splash_point(cast->src, cast->dest, _projectable_splash);
         if (!_pt_is_valid(new_dest) && smart && _has_uncover_spell(cast->race))
