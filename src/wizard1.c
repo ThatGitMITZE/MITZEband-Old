@@ -1598,6 +1598,71 @@ static void spoil_mon_anger(void)
     doc_free(cols[1]);
     doc_free(doc);
 }
+typedef bool (*_cast_simulator)(int freq, int mana);
+static bool _baseline_caster(int freq, int mana) { return randint0(100) < freq; }
+static bool _adaptive_caster1(int freq, int mana) {
+    int f = freq;
+    f -= MAX(1, freq/5) * mana;
+    if (f < 1) f = 1;
+    return randint0(100) < f;
+}
+static bool _adaptive_caster2(int freq, int mana) { return randint0(100) < freq && one_in_(1+mana); }
+static void _spoil_mon_spell_freq_aux(doc_ptr doc, int freq, _cast_simulator caster)
+{
+    vec_ptr runs;
+    _stat_t stat;
+    int i, mana = 0, run = 0, total = 0, cast = 0;
+    runs = vec_alloc(NULL);
+    for (i = 0; i < 100 * 1000; i++)
+    {
+        total++;
+        if (caster(freq, mana))
+        {
+            cast++;
+            run++;
+            mana++;
+        }
+        else
+        {
+            if (mana) mana--;
+            if (run)
+            {
+                vec_add_int(runs, run);
+                run = 0;
+            }
+        }
+    }
+    stat = _calc_stats(runs);
+    doc_printf(doc, " %2d.%d%% %.2f %.2f %3d  ",
+        cast*100/total, (cast*1000/total)%10, stat.mean, stat.sigma, stat.max);
+    vec_free(runs);
+}
+static void spoil_mon_spell_freq(void)
+{
+    doc_ptr doc = doc_alloc(80);
+    int     freqs[] = { 10, 15, 20, 25, 30, 33, 35, 40, 50, -1 };
+    int     freq_idx;
+
+    doc_insert(doc, "<color:R>     ------Baseline------  ------Approach I----  ----Approach II-----</color>\n");
+    doc_insert(doc, "<color:G>Freq Actual Mean  Std Max  Actual Mean  Std Max  Actual Mean  Std Max</color>\n");
+    for (freq_idx = 0;; freq_idx++)
+    {
+        int freq = freqs[freq_idx];
+        if (freq < 0) break;
+        doc_printf(doc, "%4d ", freq);
+        _spoil_mon_spell_freq_aux(doc, freq, _baseline_caster);
+        doc_insert(doc, "<color:U>");
+        _spoil_mon_spell_freq_aux(doc, freq, _adaptive_caster1);
+        doc_insert(doc, "</color>");
+        _spoil_mon_spell_freq_aux(doc, freq, _adaptive_caster2);
+        doc_newline(doc);
+    }
+    doc_insert(doc, "\n\nThe stats are on the number of casts in a row. This if very important for "
+                    "melee characters where long runs of monster spell casting are to be avoided.\n");
+    doc_newline(doc);
+    doc_display(doc, "Dynamic Spell Frequencies in Melee", 0);
+    doc_free(doc);
+}
 
 /************************************************************************
  * Devices
@@ -2130,7 +2195,8 @@ void do_cmd_spoilers(void)
         prt("(e) Evolution", row++, col);
         prt("(d) Damage by Resistance", row++, col);
         prt("(D) Damage by Melee", row++, col);
-        prt("(f) Spell Frequency", row++, col);
+        prt("(f) Spell Frequency (Anger)", row++, col);
+        prt("(F) Spell Frequency (Melee)", row++, col);
         row++;
 
         c_prt(TERM_RED, "Class Spoilers", row++, col - 2);
@@ -2189,6 +2255,9 @@ void do_cmd_spoilers(void)
             break;
         case 'f':
             spoil_mon_anger();
+            break;
+        case 'F':
+            spoil_mon_spell_freq();
             break;
 
         /* Class Spoilers */

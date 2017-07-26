@@ -2482,8 +2482,16 @@ static void process_monster(int m_idx)
     {
         int freq = r_ptr->spells->freq;
         pack_info_t *pack_ptr = pack_info_ptr(m_idx);
-        bool blocked_magic = FALSE;
+        bool blocked = FALSE;
 
+        /* XXX Block spells occasionally if the monster just cast (EXPERIMENTAL)
+         * Here, were are attempting to prevent long runs of consecutive casts for
+         * melee characters (anger=0). Of course, Nodens should still spell every
+         * turn! See ^A"F for analysis ... This is approach II. */
+        if (!m_ptr->anger && m_ptr->mana > 0 && freq <= 50 && !one_in_(1 + m_ptr->mana))
+            blocked = TRUE;
+
+        /* Increase spell frequency for pack AI or player glyphs of warding */
         if (is_glyph_grid(&cave[py][px]))
         {
             freq = MAX(30, freq + 10);
@@ -2506,18 +2514,10 @@ static void process_monster(int m_idx)
             }
         }
 
-        /* But angry monsters will eventually spell if they get too pissed off */
+        /* Angry monsters will eventually spell if they get too pissed off.
+         * Monsters are angered by distance attacks (spell casters/archers) */
         freq += m_ptr->anger;
         if (freq > 100) freq = 100;
-
-        /* XXX Adapt spell frequency down if the monster just cast (EXPERIMENTAL) */
-        if (!m_ptr->anger && m_ptr->mana)
-        {
-            int d = MAX(1, freq/5);
-            int n = d * m_ptr->mana;
-            freq -= n;
-            if (freq < 1) freq = 1;
-        }
 
         /* XXX Adapt spell frequency down if monster is stunned (EXPERIMENTAL)
          * Sure, stunning effects fail rates, but not on innate spells (breaths).
@@ -2532,7 +2532,7 @@ static void process_monster(int m_idx)
         }
 
         /* Hack for Rage Mage Anti-magic Ray ... */
-        if (m_ptr->anti_magic_ct)
+        if (!blocked && m_ptr->anti_magic_ct)
         {
             char m_name[80];
             monster_desc(m_name, m_ptr, 0);
@@ -2558,7 +2558,7 @@ static void process_monster(int m_idx)
             /* Other monsters continue to take a move, but can't cast spells */
             else
             {
-                blocked_magic = TRUE;
+                blocked = TRUE;
                 m_ptr->anti_magic_ct--;
             }
         }
@@ -2568,7 +2568,7 @@ static void process_monster(int m_idx)
             msg_format("<color:B>Freq=%d%% (%d%%,%d,%d,%d)</color>", freq, r_ptr->spells->freq, m_ptr->anger, m_ptr->mana, MON_STUNNED(m_ptr));
         #endif
 
-        if (!blocked_magic && randint1(100) <= freq)
+        if (!blocked && randint1(100) <= freq)
         {
             bool counterattack = FALSE;
 
@@ -3472,7 +3472,17 @@ static void process_monster(int m_idx)
         m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
     #if 0
-    /* If we haven't done anything, try casting a spell again */
+    /* If we haven't done anything, try casting a spell again
+     * XXX Is this really necessary? There is a lot of code to implement dynamic
+     * spell frequencies that I'd rather not duplicate. Also, I'd rather not try
+     * to reason about what the actual effect this logic has in the real world. When
+     * spell frequencies seem to high, it is not obvious why. (Is it this rule, or
+     * is it pack AI? Or is it monster anger?) Packs of hounds may get artificial
+     * boosts due to weird correlations between pack layout (place_monster_group)
+     * and actual m_idx processing (process_monsters). That is, are we processing
+     * monster packs from innermost (placed first) to outermost? If not, it is not
+     * obvious how exactly this is being avoided, but teleport into a room with a 
+     * pack of hounds and you seem to get more breaths than you should. */
     if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
     {
         /* Try to cast spell again */
