@@ -3353,7 +3353,7 @@ static void _ai_indirect(mon_spell_cast_ptr cast)
     int            prob = 0;
 
     if (smart) prob = 75;
-    else if (cast->race->d_char == 'Z') prob = 25;
+    else if (cast->race->d_char == 'Z') prob = 33;
     else prob = 50;
 
     if (!stupid && randint0(100) < prob)
@@ -4401,7 +4401,7 @@ static vec_ptr _spells_plr(mon_race_ptr race, _spell_p filter)
     vec_sort(v, (vec_cmp_f)_cmp_spells);
     return v;
 }
-static void _list_spells(doc_ptr doc, vec_ptr spells, mon_race_ptr race)
+static void _list_spells(doc_ptr doc, vec_ptr spells, mon_spell_cast_ptr cast)
 {
     int i;
     doc_insert(doc, " <color:R>Cast which spell?</color>");
@@ -4409,10 +4409,16 @@ static void _list_spells(doc_ptr doc, vec_ptr spells, mon_race_ptr race)
     for (i = 0; i < vec_length(spells); i++)
     {
         mon_spell_ptr spell = vec_get(spells, i);
-        int           cost = _spell_cost(spell, race);
-        int           avail = p_ptr->csp;
-        if (spell->flags & MSF_INNATE)
-            avail += p_ptr->chp;
+        int           cost = 0;
+        int           avail = 0;
+
+        if (cast->flags & MSC_SRC_PLAYER)
+        {
+            cost = _spell_cost(spell, cast->race);
+            avail = p_ptr->csp;
+            if (spell->flags & MSF_INNATE)
+                avail += p_ptr->chp;
+        }
         doc_printf(doc, " <color:%c>%c</color>) ",
             cost > avail ? 'D' : 'y', I2A(i));
         mon_spell_doc(spell, doc);
@@ -4420,7 +4426,7 @@ static void _list_spells(doc_ptr doc, vec_ptr spells, mon_race_ptr race)
             doc_printf(doc, "<tab:30>%4d", cost);
         else
             doc_insert(doc, "<tab:30>    ");
-        _list_spell_info(doc, spell, race);
+        _list_spell_info(doc, spell, cast->race);
         doc_newline(doc);
     }
 }
@@ -4428,8 +4434,9 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
 {
     doc_ptr doc;
     int     cmd, i;
+    bool    monster = BOOL(cast->flags & MSC_SRC_MONSTER); /* wizard */
 
-    if (REPEAT_PULL(&cmd))
+    if (!monster && REPEAT_PULL(&cmd))
     {
         i = A2I(cmd);
         if (0 <= i && i < vec_length(spells))
@@ -4453,7 +4460,7 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
     for (;;)
     {
         doc_clear(doc);
-        _list_spells(doc, spells, cast->race);
+        _list_spells(doc, spells, cast);
         _sync_term(doc);
         cmd = _inkey();
         if (cmd == ESCAPE) break;
@@ -4467,7 +4474,7 @@ static void _prompt_plr_aux(mon_spell_cast_ptr cast, vec_ptr spells)
                 int           avail = p_ptr->csp;
                 if (spell->flags & MSF_INNATE)
                     avail += p_ptr->chp;
-                if (cost > avail) continue; /* already grayed out */
+                if (!monster && cost > avail) continue; /* already grayed out */
                 cast->spell = spell;
                 REPEAT_PUSH(cmd);
                 break;

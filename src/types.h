@@ -734,6 +734,7 @@ struct monster_type
     byte ego_whip_pow;
     byte anti_magic_ct;
     byte anger;
+    s16b mana;
 
     s32b pexp;    /* player experience gained (x100). kept <= r_ptr->mexp */
 };

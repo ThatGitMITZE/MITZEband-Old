@@ -2509,6 +2509,15 @@ static void process_monster(int m_idx)
         /* But angry monsters will eventually spell if they get too pissed off */
         freq += m_ptr->anger;
 
+        /* XXX Adapt spell frequency down if the monster just cast (EXPERIMENTAL) */
+        if (!m_ptr->anger && m_ptr->mana)
+        {
+            int d = MAX(1, freq/5);
+            int n = d * m_ptr->mana;
+            freq -= n;
+            if (freq < 1) freq = 1;
+        }
+
         /* Hack for Rage Mage Anti-magic Ray ... */
         if (m_ptr->anti_magic_ct)
         {
@@ -2541,11 +2550,13 @@ static void process_monster(int m_idx)
             }
         }
 
+        if (p_ptr->wizard && m_ptr->id == target_who)
+            msg_format("<color:B>Freq=%d%% (%d%%) Mana=%d</color>", freq, r_ptr->spells->freq, m_ptr->mana);
+
         if (!blocked_magic && randint1(100) <= freq)
         {
             bool counterattack = FALSE;
 
-            /*msg_format("<color:B>Freq=%d%% (%d%%)</color>", freq, r_ptr->spells->freq);*/
             /* Give priority to counter attack? */
             if (m_ptr->target_y)
             {
@@ -2566,6 +2577,7 @@ static void process_monster(int m_idx)
                 if (aware && mon_spell_cast(m_ptr, NULL))
                 {
                     m_ptr->anger = 0;
+                    m_ptr->mana++;
                     return;
                 }
                 /*
@@ -2586,6 +2598,10 @@ static void process_monster(int m_idx)
             }
         }
     }
+
+    /* XXX Regain mana (EXPERIMENTAL) */
+    if (m_ptr->mana)
+        m_ptr->mana--;
 
     /* Really, a non-spell turn. The monster may never move, or may be blocked, and we still
        want to track those turns for accurate reporting of spell frequency. Also, don't count
@@ -3440,6 +3456,7 @@ static void process_monster(int m_idx)
     if (p_ptr->no_flowed && i > 2 &&  m_ptr->target_y)
         m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
+    #if 0
     /* If we haven't done anything, try casting a spell again */
     if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
     {
@@ -3449,6 +3466,7 @@ static void process_monster(int m_idx)
             if (mon_spell_cast(m_ptr, NULL)) return;
         }
     }
+    #endif
 
 
     /* Notice changes in view */

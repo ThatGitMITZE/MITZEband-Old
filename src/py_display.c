@@ -1783,7 +1783,7 @@ static void _build_mon_spell_stats(doc_ptr doc, cptr heading, mon_race_p filter)
         ct_spell_moves);
 }
 static bool _is_unique(mon_race_ptr race) { return BOOL(race->flags1 & RF1_UNIQUE); }
-/*static bool _is_hound(mon_race_ptr race) { return race->d_char == 'Z'; }*/
+static bool _is_hound(mon_race_ptr race) { return race->d_char == 'Z'; }
 /*static bool _is_deep(mon_race_ptr race) { return race->level >= 60; }*/
 static void _build_monster_stats(doc_ptr doc)
 {
@@ -1794,9 +1794,9 @@ static void _build_monster_stats(doc_ptr doc)
     _build_mon_spell_stats(cols[1], "Spells", NULL);
     doc_newline(cols[1]);
     _build_mon_spell_stats(cols[1], "Unique Spells", _is_unique);
-    /*doc_newline(cols[1]);
-    _build_mon_spell_stats(cols[1], "Hound Spells", _is_hound);
     doc_newline(cols[1]);
+    _build_mon_spell_stats(cols[1], "Hound Spells", _is_hound);
+    /*doc_newline(cols[1]);
     _build_mon_spell_stats(cols[1], "Deep Spells", _is_deep);*/
     doc_insert_cols(doc, cols, 2, 0);
     doc_free(cols[0]);

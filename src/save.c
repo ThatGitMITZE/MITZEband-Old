@@ -130,6 +130,11 @@ static void wr_monster(savefile_ptr file, monster_type *m_ptr)
         savefile_write_byte(file, SAVE_MON_ANGER);
         savefile_write_byte(file, m_ptr->anger);
     }
+    if (m_ptr->mana)
+    {
+        savefile_write_byte(file, SAVE_MON_MANA);
+        savefile_write_s16b(file, m_ptr->mana);
+    }
 
     savefile_write_byte(file, SAVE_MON_DONE);
 }

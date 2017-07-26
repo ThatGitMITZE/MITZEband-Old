@@ -4863,6 +4863,7 @@ enum mon_save_fields_e {
     SAVE_MON_STOLEN_CT,
     SAVE_MON_PEXP,
     SAVE_MON_ANGER,
+    SAVE_MON_MANA,
 };
 
 /* Sub-alignment flags for neutral monsters */
