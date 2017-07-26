@@ -2564,7 +2564,7 @@ static void process_monster(int m_idx)
             }
         }
 
-        #if 1
+        #if 0
         if (/*p_ptr->wizard &&*/ m_ptr->id == target_who)
             msg_format("<color:B>Freq=%d%% (%d%%,%d,%d,%d)</color>", freq, r_ptr->spells->freq, m_ptr->anger, m_ptr->mana, MON_STUNNED(m_ptr));
         #endif

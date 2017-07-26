@@ -535,7 +535,7 @@ static bool _general_create(obj_ptr obj, int mode)
     else if (one_in_(3))
         k_idx = lookup_kind(TV_FLASK, SV_FLASK_OIL);
     else if (one_in_(3))
-        k_idx = lookup_kind(TV_LITE, SV_LITE_LANTERN);
+        k_idx = lookup_kind(TV_LITE, one_in_(2) ? SV_LITE_LANTERN : SV_LITE_TORCH);
     else if (one_in_(3))
         k_idx = _get_k_idx(_stock_ammo_p, _mod_lvl(10));
     else if (one_in_(3))
