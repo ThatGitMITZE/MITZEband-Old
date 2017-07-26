@@ -2508,7 +2508,11 @@ static void _spell_cast_aux(void)
             disturb(1, 0);
         reset_target(_current.mon);
         if (_spell_fail() || _spell_blocked()) return;
-        if (is_original_ap_and_seen(_current.mon))  /* Banor=Rupart may disappear ... */
+        /* Do lore now since Banor=Rupart may disappear ...
+         * Note: We only lore projectable monster moves, so we
+         * really should only lore projectable monster spells as
+         * well. In addition, include splashes against the player.*/
+        if ((_current.flags & MSC_DEST_PLAYER) || _projectable(point(px, py), _current.src))
             mon_lore_spell(_current.mon, _current.spell);
     }
     else if (_spell_fail())
@@ -4411,6 +4415,7 @@ static void _list_spells(doc_ptr doc, vec_ptr spells, mon_spell_cast_ptr cast)
         mon_spell_ptr spell = vec_get(spells, i);
         int           cost = 0;
         int           avail = 0;
+        int           color = 'y';
 
         if (cast->flags & MSC_SRC_PLAYER)
         {
@@ -4418,9 +4423,11 @@ static void _list_spells(doc_ptr doc, vec_ptr spells, mon_spell_cast_ptr cast)
             avail = p_ptr->csp;
             if (spell->flags & MSF_INNATE)
                 avail += p_ptr->chp;
+            if (cost > avail) color = 'D';
         }
-        doc_printf(doc, " <color:%c>%c</color>) ",
-            cost > avail ? 'D' : 'y', I2A(i));
+        else if (spell == cast->spell)
+            color = 'v';
+        doc_printf(doc, " <color:%c>%c</color>) ", color, I2A(i));
         mon_spell_doc(spell, doc);
         if (cost)
             doc_printf(doc, "<tab:30>%4d", cost);
@@ -4655,6 +4662,7 @@ bool mon_spell_ai_wizard(mon_spell_cast_ptr cast)
 {
     if (!cast->race->spells) return FALSE;
     if ((cast->flags & MSC_DEST_MONSTER) && !_choose_target(cast)) return FALSE;
+    if ((cast->flags & MSC_DEST_PLAYER) && !_default_ai(cast)) return FALSE;
     return _prompt_plr(cast);
 }
 

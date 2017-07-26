@@ -2070,6 +2070,7 @@ static void process_monster(int m_idx)
     bool            do_turn;
     bool            do_move;
     bool            do_view;
+    bool            asc_nerf = FALSE;
     bool            must_alter_to_move;
 
     bool            did_open_door;
@@ -2563,7 +2564,7 @@ static void process_monster(int m_idx)
             }
         }
 
-        #if 0
+        #if 1
         if (/*p_ptr->wizard &&*/ m_ptr->id == target_who)
             msg_format("<color:B>Freq=%d%% (%d%%,%d,%d,%d)</color>", freq, r_ptr->spells->freq, m_ptr->anger, m_ptr->mana, MON_STUNNED(m_ptr));
         #endif
@@ -2802,10 +2803,11 @@ static void process_monster(int m_idx)
                 else if (ct_open < 1 + randint1(4))
                 {
                     /* not enough summoning opportunities, so hold off unless angered */
-                    if (!m_ptr->anger)
+                    if (!m_ptr->anger || !one_in_(3))
+                    {
+                        asc_nerf = TRUE;
                         continue;
-                    if (!one_in_(3))
-                        continue;
+                    }
                 }
             }
         }
@@ -3470,6 +3472,12 @@ static void process_monster(int m_idx)
      */
     if (p_ptr->no_flowed && i > 2 &&  m_ptr->target_y)
         m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
+
+    /* Lore Issues wrt ASC: Monsters often hang back out of los until they choose
+     * a splash spell. We aren't counting the moves, but we are counting the spells,
+     * so the reported frequency is too high */
+    if (asc_nerf && !projectable(py, px, m_ptr->fy, m_ptr->fx))
+        mon_lore_move(m_ptr);
 
     #if 0
     /* If we haven't done anything, try casting a spell again
