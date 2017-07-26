@@ -2508,6 +2508,7 @@ static void process_monster(int m_idx)
 
         /* But angry monsters will eventually spell if they get too pissed off */
         freq += m_ptr->anger;
+        if (freq > 100) freq = 100;
 
         /* XXX Adapt spell frequency down if the monster just cast (EXPERIMENTAL) */
         if (!m_ptr->anger && m_ptr->mana)
@@ -2515,6 +2516,18 @@ static void process_monster(int m_idx)
             int d = MAX(1, freq/5);
             int n = d * m_ptr->mana;
             freq -= n;
+            if (freq < 1) freq = 1;
+        }
+
+        /* XXX Adapt spell frequency down if monster is stunned (EXPERIMENTAL)
+         * Sure, stunning effects fail rates, but not on innate spells (breaths).
+         * In fact, distance stunning gives no benefit against big breathers ...
+         * Try a sprite mindcrafter and you'll see what I mean. */
+        if (MON_STUNNED(m_ptr))
+        {
+            int s = MON_STUNNED(m_ptr);
+            int p = MAX(0, 100 - s);
+            freq = freq * p / 100;
             if (freq < 1) freq = 1;
         }
 
@@ -2550,8 +2563,10 @@ static void process_monster(int m_idx)
             }
         }
 
-        if (p_ptr->wizard && m_ptr->id == target_who)
-            msg_format("<color:B>Freq=%d%% (%d%%) Mana=%d</color>", freq, r_ptr->spells->freq, m_ptr->mana);
+        #if 0
+        if (/*p_ptr->wizard &&*/ m_ptr->id == target_who)
+            msg_format("<color:B>Freq=%d%% (%d%%,%d,%d,%d)</color>", freq, r_ptr->spells->freq, m_ptr->anger, m_ptr->mana, MON_STUNNED(m_ptr));
+        #endif
 
         if (!blocked_magic && randint1(100) <= freq)
         {
