@@ -990,7 +990,7 @@ bool make_attack_normal(int m_idx)
                     {
                         int dam = (subjugation_power()+1)/2;
                         msg_format("%^s feels the force of your presence!", m_name);
-                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_SUBJUGATION, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID);
+                        gf_affect_m(GF_WHO_PLAYER, m_ptr, GF_SUBJUGATION, dam, GF_AFFECT_AURA);
                         if (MON_CSLEEP(m_ptr) || !is_hostile(m_ptr) || MON_MONFEAR(m_ptr))
                             break;
                     }
@@ -1017,8 +1017,8 @@ bool make_attack_normal(int m_idx)
                             msg_format("%^s <color:B>withers</color>!", m_name);
                             break;
                         }
-                        project(0, 0, m_ptr->fy, m_ptr->fx, dam, GF_TIME, PROJECT_STOP | PROJECT_KILL | PROJECT_GRID);
-                        if (MON_PARALYZED(m_ptr))
+                        gf_affect_m(GF_WHO_PLAYER, m_ptr, GF_TIME, dam, GF_AFFECT_AURA);
+                        if (MON_PARALYZED(m_ptr)) /* frozen in time, so stop attacking me! */
                             break;
                     }
                     else
@@ -1132,7 +1132,6 @@ bool make_attack_normal(int m_idx)
                             {
                                 object_type *o_ptr = equip_obj(slot);
                                 int          effect = 0;
-                                int          flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
                                 switch (equip_slot_type(slot))
                                 {
@@ -1142,7 +1141,7 @@ bool make_attack_normal(int m_idx)
                                 default: if (object_is_shield(o_ptr)) effect = GF_OLD_SLEEP;
                                 }
                                 if (effect)
-                                    project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), effect, flg);
+                                    gf_affect_m(GF_WHO_PLAYER, m_ptr, effect, p_ptr->lev*2, GF_AFFECT_AURA);
                             }
                         }
                     }
