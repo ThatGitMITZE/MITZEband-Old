@@ -2970,26 +2970,28 @@ typedef struct {
     int     base;
     int     good;
     int     great;
+    int     slot_type;
 } _kind_alloc_entry;
 static _kind_alloc_entry _kind_alloc_table[] = {
     /* Equipment by Slot */
-    { kind_is_weapon,          195,    0,    0 },
-    { _kind_is_shield,          30,    0,    0 },
-    { _kind_is_bow_quiver,      60,    0,    0 },
-    { kind_is_jewelry,          40,    0,    0 },
-    { _kind_is_lite,            10,    0,    0 },
-    { kind_is_body_armor,      195,    0,    0 },
-    { _kind_is_cloak,           30,    0,    0 },
-    { kind_is_helm,             30,    0,    0 },
-    { _kind_is_gloves,          30,    0,    0 },
-    { _kind_is_boots,           30,    0,    0 },
+    { kind_is_weapon,          195,    0,    0, EQUIP_SLOT_WEAPON }, /* jellies */
+    { _kind_is_shield,          30,    0,    0, EQUIP_SLOT_WEAPON_SHIELD },
+    { _kind_is_bow_quiver,      60,    0,    0, EQUIP_SLOT_BOW },
+    { _kind_is_ring,            20,    0,    0, EQUIP_SLOT_RING },   /* beholders = rings only */
+    { _kind_is_amulet,          20,    0,    0, EQUIP_SLOT_AMULET }, /* hydras = amulets only */
+    { _kind_is_lite,            10,    0,    0, EQUIP_SLOT_LITE },
+    { kind_is_body_armor,      195,    0,    0, EQUIP_SLOT_BODY_ARMOR },
+    { _kind_is_cloak,           30,    0,    0, EQUIP_SLOT_CLOAK },
+    { kind_is_helm,             30,    0,    0, EQUIP_SLOT_HELMET },
+    { _kind_is_gloves,          30,    0,    0, EQUIP_SLOT_GLOVES },
+    { _kind_is_boots,           30,    0,    0, EQUIP_SLOT_BOOTS },
     /*                         650              */
 
-    { kind_is_wand_rod_staff,   95,  -40,  -60 },
-    { _kind_is_potion_scroll,  100,  -50,  -90 },
-    { _kind_is_ammo,            80,    0,    0 },
-    { kind_is_book,             25,   10,   15 }, /* R_DROP_MAGE is covering this ... */
-    { kind_is_misc,             50,  -50,  -50 },
+    { kind_is_wand_rod_staff,   95,  -40,  -60, EQUIP_SLOT_NONE },
+    { _kind_is_potion_scroll,  100,  -50,  -90, EQUIP_SLOT_NONE },
+    { _kind_is_ammo,            80,    0,    0, EQUIP_SLOT_BOW },
+    { kind_is_book,             25,   10,   15, EQUIP_SLOT_NONE }, /* R_DROP_MAGE is covering this ... */
+    { kind_is_misc,             50,  -50,  -50, EQUIP_SLOT_NONE },
     /*                         350              */
     { NULL, 0}
 };
@@ -3004,6 +3006,12 @@ static int _kind_alloc_weight(_kind_alloc_entry *entry, u32b mode)
 
     if (p_ptr->prace == RACE_MON_RING && entry->hook == kind_is_jewelry)
         w = w * 2;
+
+    /* EXPERIMENTAL: Adjust frequencies of unusable objects down. For example, hounds
+     * can neither wield weapons nor employ archery. Beholders are much worse, only using
+     * rings, lights and a helmet. The effect should be noticeable, but not too strong. */
+    if (entry->slot_type != EQUIP_SLOT_NONE && !equip_has_slot_type(entry->slot_type))
+        w /= 2;
 
     return MAX(0, w);
 }

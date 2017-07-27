@@ -282,6 +282,19 @@ bool equip_can_wield_kind(int tval, int sval)
     return FALSE;
 }
 
+bool equip_has_slot_type(int which)
+{
+    slot_t slot;
+    for (slot = 1; slot <= _template->max; slot++)
+    {
+        int type = _template->slots[slot].type;
+        if (which != EQUIP_SLOT_BOW && type == EQUIP_SLOT_ANY) return TRUE; /* XXX Jellies can't shoot */
+        if (which == EQUIP_SLOT_WEAPON && type == EQUIP_SLOT_WEAPON_SHIELD) return TRUE;
+        if (which == type) return TRUE;
+    }
+    return FALSE;
+}
+
 int equip_first_slot(obj_ptr obj)
 {
     return equip_next_slot(obj, 0);
