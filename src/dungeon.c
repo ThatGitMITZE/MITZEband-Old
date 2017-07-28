@@ -1261,13 +1261,15 @@ static void process_world_aux_timeout(void)
     /* Hack -- Hallucinating */
     if (p_ptr->image)
     {
-        (void)set_image(p_ptr->image - 1, TRUE);
+        do { set_image(p_ptr->image - 1, TRUE); }
+            while (p_ptr->image && res_save_default(RES_CHAOS));
     }
 
     /* Blindness */
     if (p_ptr->blind)
     {
-        (void)set_blind(p_ptr->blind - 1, TRUE);
+        do { set_blind(p_ptr->blind - 1, TRUE); }
+            while (p_ptr->blind && res_save_default(RES_BLIND));
     }
 
     /* Times see-invisible */
@@ -1412,7 +1414,8 @@ static void process_world_aux_timeout(void)
     /* Confusion */
     if (p_ptr->confused)
     {
-        (void)set_confused(p_ptr->confused - 1, TRUE);
+        do { set_confused(p_ptr->confused - 1, TRUE); }
+            while (p_ptr->confused && res_save_default(RES_CONF));
     }
 
     /* Fast */

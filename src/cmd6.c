@@ -109,7 +109,7 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
             {
                 if (!res_save_default(RES_BLIND))
                 {
-                    if (set_blind(p_ptr->blind + randint0(200) + 200, FALSE))
+                    if (set_blind(p_ptr->blind + randint0(25) + 25, FALSE))
                         ident = TRUE;
                 }
                 break;
