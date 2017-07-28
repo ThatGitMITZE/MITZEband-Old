@@ -1970,9 +1970,13 @@ static void a_m_aux_4(object_type *o_ptr, int level, int power, int mode)
 
             /* Hack -- pick a "difficulty" */
             o_ptr->pval = randint1(obj_level);
-            if (o_ptr->sval == SV_CHEST_KANDUME) o_ptr->pval = 6;
-
-            o_ptr->xtra3 = dun_level + 5;
+            if (o_ptr->sval == SV_CHEST_KANDUME)
+            {
+                o_ptr->pval = 6;
+                o_ptr->xtra3 = dun_level + 5;
+            }
+            else
+                o_ptr->xtra3 = level + 5;
 
             /* Never exceed "difficulty" of 55 to 59 */
             if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)randint0(5);

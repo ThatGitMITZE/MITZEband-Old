@@ -1492,7 +1492,8 @@ static bool _kind_is_other(int k_idx) {
       || _kind_is_spellbook(k_idx)
       || tval == TV_SHOT
       || tval == TV_ARROW
-      || tval == TV_BOLT )
+      || tval == TV_BOLT 
+      || tval == TV_CHEST )
     {
         return TRUE;
     }
@@ -1872,6 +1873,7 @@ static void _build_statistics(doc_ptr doc)
     _group_counts_tval_imp(doc, TV_FOOD, "Food");
     _group_counts_imp(doc, _kind_is_corpse, "Corpses");
     _group_counts_imp(doc, _kind_is_skeleton, "Skeletons");
+    _group_counts_tval_imp(doc, TV_CHEST, "Chests");
     _group_counts_imp(doc, _kind_is_other, "Totals");
 
     doc_printf(doc, "\n  <color:G>Potions              Found Bought  Used  Dest</color>\n");

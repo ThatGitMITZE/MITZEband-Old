@@ -330,7 +330,11 @@ static void chest_death(bool scatter, int y, int x, s16b o_idx)
     {        /* v~~~~~~~~~ You'll need to look a k_info.txt to understand this ... */
         int num = chest_ptr->sval % SV_CHEST_MIN_LARGE;
 
-        object_level = ABS(chest_ptr->pval) + 10;
+        /* object_level = ABS(chest_ptr->pval) + 10;
+         * i.e., 1dL+10. Finding an OL99 chest and getting L22 objects is just
+         * plain insulting. Chests should be like ?Acquirement, only AM_GOOD rather
+         * than AM_GREAT. */
+        object_level = chest_ptr->xtra3;
         if (chest_ptr->sval < SV_CHEST_MIN_LARGE)
         {
             ct_gold = damroll(2, num);
