@@ -2202,6 +2202,12 @@ option_type option_info[] =
     { &auto_get_objects,            FALSE, OPT_PAGE_INPUT, 6, 7,
     "auto_get_objects",             "Automatically get autopick objects with get cmd" },
 
+    { &auto_detect_traps,           FALSE, OPT_PAGE_INPUT, 6, 9,
+    "auto_detect_traps",            "Automatically detect traps while running" },
+
+    { &auto_map_area,               FALSE, OPT_PAGE_INPUT, 6, 10,
+    "auto_map_area",                "Automatically map area while running" },
+
     { &numpad_as_cursorkey,         TRUE, OPT_PAGE_INPUT, 2, 31,
     "numpad_as_cursorkey",          "Use numpad keys as cursor keys in editor mode" },
 

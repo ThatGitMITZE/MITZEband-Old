@@ -2174,11 +2174,14 @@ bool autopick_auto_id(object_type *o_ptr)
         if (slot && !p_ptr->blind && !(race->flags & RACE_IS_ILLITERATE))
         {
             obj_ptr scroll = pack_obj(slot);
-            identify_item(o_ptr);
-            stats_on_use(scroll, 1);
-            scroll->number--;
-            obj_release(scroll, OBJ_RELEASE_DELAYED_MSG);
-            return TRUE;
+            if (obj_is_known(scroll))
+            {
+                identify_item(o_ptr);
+                stats_on_use(scroll, 1);
+                scroll->number--;
+                obj_release(scroll, OBJ_RELEASE_DELAYED_MSG);
+                return TRUE;
+            }
         }
 
         slot = pack_find_device(EFFECT_IDENTIFY);

@@ -502,7 +502,7 @@ Dexterity    <color:w> +1</color>        Stealth     <color:y>Good         </col
 Constitution <color:w> +1</color>        Searching   <color:o>Fair         </color>
 Charisma     <color:w> +0</color>        Perception  <color:R>Poor         </color>
 Life Rating  106%       Melee       <color:y>Very Good    </color>
-Base HP        8        Bows        <color:g>Superb       </color>
+Base HP        8        Bows        <color:y>Good         </color>
 Experience   140%
 </style></indent>
 <topic:Red-Mage><color:o>Red-Mage</color>
@@ -884,7 +884,7 @@ Rogue         <color:y>Good         </color> <color:o>Fair         </color> <col
 Scout         <color:G>Excellent    </color> <color:o>Fair         </color> <color:y>Very Good    </color> <color:g>Superb       </color>
 Chaos-Warrior <color:R>Poor         </color> <color:R>Poor         </color> <color:G>Excellent    </color> <color:y>Good         </color>
 Paladin       <color:R>Poor         </color> <color:r>Bad          </color> <color:G>Excellent    </color> <color:y>Good         </color>
-Ranger        <color:o>Fair         </color> <color:R>Poor         </color> <color:y>Very Good    </color> <color:g>Superb       </color>
+Ranger        <color:o>Fair         </color> <color:R>Poor         </color> <color:y>Very Good    </color> <color:y>Good         </color>
 Red-Mage      <color:R>Poor         </color> <color:r>Bad          </color> <color:y>Very Good    </color> <color:r>Bad          </color>
 Warrior-Mage  <color:o>Fair         </color> <color:R>Poor         </color> <color:o>Fair         </color> <color:y>Good         </color>
 Beastmaster   <color:o>Fair         </color> <color:R>Poor         </color> <color:o>Fair         </color> <color:g>Superb       </color>

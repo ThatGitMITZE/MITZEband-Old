@@ -200,6 +200,8 @@ bool easy_disarm;    /* Automatically disarm traps */
 
 bool auto_get_ammo;
 bool auto_get_objects;
+bool auto_detect_traps;
+bool auto_map_area;
 
 bool numpad_as_cursorkey;    /* Use numpad keys as cursor key in editor mode */
 bool use_pack_slots;

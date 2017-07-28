@@ -218,6 +218,8 @@ extern bool easy_disarm;    /* Automatically disarm traps */
 
 extern bool auto_get_ammo;
 extern bool auto_get_objects;
+extern bool auto_detect_traps;
+extern bool auto_map_area;
 extern bool numpad_as_cursorkey;    /* Use numpad keys as cursor key in editor mode */
 extern bool use_pack_slots;
 

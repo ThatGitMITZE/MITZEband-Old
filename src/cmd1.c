@@ -4884,6 +4884,7 @@ bool player_can_enter(s16b feature, u16b mode)
 static bool _auto_detect_traps(void)
 {
     slot_t slot;
+    if (!auto_detect_traps) return FALSE;
     if (p_ptr->pclass == CLASS_BERSERKER) return FALSE;
     if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_detect_traps()) return TRUE;
 
@@ -4891,11 +4892,14 @@ static bool _auto_detect_traps(void)
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))
     {
         obj_ptr scroll = pack_obj(slot);
-        detect_traps(DETECT_RAD_DEFAULT, TRUE);
-        stats_on_use(scroll, 1);
-        scroll->number--;
-        obj_release(scroll, 0);
-        return TRUE;
+        if (obj_is_known(scroll))
+        {
+            detect_traps(DETECT_RAD_DEFAULT, TRUE);
+            stats_on_use(scroll, 1);
+            scroll->number--;
+            obj_release(scroll, 0);
+            return TRUE;
+        }
     }
     slot = pack_find_device(EFFECT_DETECT_TRAPS);
     if (slot)
@@ -4918,14 +4922,10 @@ static bool _auto_detect_traps(void)
     return FALSE;
 }
 
-static bool _obj_no_auto(obj_ptr obj)
-{
-    return obj->inscription && strchr(quark_str(obj->inscription), '$');
-}
-
 static bool _auto_mapping(void)
 {
     slot_t slot;
+    if (!auto_map_area) return FALSE;
     if (p_ptr->pclass == CLASS_BERSERKER) return FALSE;
     /*if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_mapping()) return TRUE;*/
 
@@ -4933,8 +4933,7 @@ static bool _auto_mapping(void)
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))
     {
         obj_ptr scroll = pack_obj(slot);
-
-        if (!_obj_no_auto(scroll))
+        if (obj_is_known(scroll))
         {
             map_area(DETECT_RAD_MAP);
             stats_on_use(scroll, 1);
@@ -4947,13 +4946,10 @@ static bool _auto_mapping(void)
     if (slot)
     {
         obj_ptr device = pack_obj(slot);
-        if (!_obj_no_auto(device)) /* XXX protect one staff in inventory but not another? */
-        {
-            map_area(DETECT_RAD_MAP);
-            stats_on_use(device, 1);
-            device_decrease_sp(device, device->activation.cost);
-            return TRUE;
-        }
+        map_area(DETECT_RAD_MAP);
+        stats_on_use(device, 1);
+        device_decrease_sp(device, device->activation.cost);
+        return TRUE;
     }
     return FALSE;
 }

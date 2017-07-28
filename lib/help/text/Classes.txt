@@ -840,7 +840,7 @@ Hybrid
     Constitution  +1        Searching   Fair         
     Charisma      +0        Perception  Poor         
     Life Rating  106%       Melee       Very Good    
-    Base HP        8        Bows        Superb       
+    Base HP        8        Bows        Good         
     Experience   140%
     
   Red-Mage
@@ -1383,7 +1383,7 @@ Rogue         Good          Fair          Excellent     Good
 Scout         Excellent     Fair          Very Good     Superb       
 Chaos-Warrior Poor          Poor          Excellent     Good         
 Paladin       Poor          Bad           Excellent     Good         
-Ranger        Fair          Poor          Very Good     Superb       
+Ranger        Fair          Poor          Very Good     Good         
 Red-Mage      Poor          Bad           Very Good     Bad          
 Warrior-Mage  Fair          Poor          Fair          Good         
 Beastmaster   Fair          Poor          Fair          Superb       
