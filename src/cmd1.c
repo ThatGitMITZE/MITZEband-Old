@@ -4918,6 +4918,11 @@ static bool _auto_detect_traps(void)
     return FALSE;
 }
 
+static bool _obj_no_auto(obj_ptr obj)
+{
+    return obj->inscription && strchr(quark_str(obj->inscription), '$');
+}
+
 static bool _auto_mapping(void)
 {
     slot_t slot;
@@ -4928,20 +4933,27 @@ static bool _auto_mapping(void)
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))
     {
         obj_ptr scroll = pack_obj(slot);
-        map_area(DETECT_RAD_MAP);
-        stats_on_use(scroll, 1);
-        scroll->number--;
-        obj_release(scroll, 0);
-        return TRUE;
+
+        if (!_obj_no_auto(scroll))
+        {
+            map_area(DETECT_RAD_MAP);
+            stats_on_use(scroll, 1);
+            scroll->number--;
+            obj_release(scroll, 0);
+            return TRUE;
+        }
     }
     slot = pack_find_device(EFFECT_ENLIGHTENMENT);
     if (slot)
     {
         obj_ptr device = pack_obj(slot);
-        map_area(DETECT_RAD_MAP);
-        stats_on_use(device, 1);
-        device_decrease_sp(device, device->activation.cost);
-        return TRUE;
+        if (!_obj_no_auto(device)) /* XXX protect one staff in inventory but not another? */
+        {
+            map_area(DETECT_RAD_MAP);
+            stats_on_use(device, 1);
+            device_decrease_sp(device, device->activation.cost);
+            return TRUE;
+        }
     }
     return FALSE;
 }
