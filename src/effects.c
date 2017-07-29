@@ -2123,7 +2123,7 @@ bool set_slow(int v, bool do_dec)
 
     if (p_ptr->is_dead) return FALSE;
 
-    if (prace_is_(RACE_DEMIGOD) && p_ptr->psubrace == DEMIGOD_HERMES) v = 0;
+    if (p_ptr->no_slow) v = 0;
 
     /* Open */
     if (v)

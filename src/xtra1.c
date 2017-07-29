@@ -3651,6 +3651,7 @@ void calc_bonuses(void)
     p_ptr->no_charge_drain = FALSE;
     p_ptr->no_stun = FALSE;
     p_ptr->no_cut = FALSE;
+    p_ptr->no_slow = FALSE;
     p_ptr->no_passwall_dam = FALSE;
     p_ptr->melt_armor = FALSE;
 

@@ -1468,6 +1468,7 @@ static bool _mon_dam_p(mon_race_ptr r)
     if (r->id == MON_HAGURE2) return FALSE;
     if (r->level < min || r->level > max) return FALSE;
 
+    return r->d_char == 'D';
     return TRUE;
     return r->d_char == 'Z';
     return r->d_char == 'J' && r->spells && r->spells->groups[MST_BREATH];

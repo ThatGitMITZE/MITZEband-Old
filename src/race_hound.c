@@ -481,6 +481,7 @@ static void _calc_bonuses(void) {
     case MON_INERTIA_HOUND:
         res_add(RES_CONF);
         p_ptr->free_act++;
+        p_ptr->no_slow = TRUE;
         break;
     case MON_IMPACT_HOUND:
         res_add(RES_CONF);

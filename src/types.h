@@ -1353,6 +1353,7 @@ struct player_type
     bool no_eldritch;
     bool no_stun;
     bool no_cut;
+    bool no_slow;
     bool no_passwall_dam;
     bool no_charge_drain;
     bool melt_armor;

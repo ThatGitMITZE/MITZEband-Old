@@ -386,6 +386,7 @@ static void _hera_get_flags(u32b flgs[OF_ARRAY_SIZE])
 static void _hermes_calc_bonuses(void)
 {
     p_ptr->pspeed += 5 * p_ptr->lev/50;
+    p_ptr->no_slow = TRUE;
 }
 static void _hermes_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
