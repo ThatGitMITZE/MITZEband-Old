@@ -9752,7 +9752,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_9 | BLIND | CONFUSE | SCARE | BR_ELEC(50%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_ELEC(50%) | DETECT_OBJECTS 
 D:A huge draconic form. Lightning crackles along its length.
 
 N:602:Ancient bronze dragon
@@ -9770,7 +9770,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_CONFUSION(30%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_CONFUSION(30%) | DETECT_OBJECTS 
 D:A huge draconic form enveloped in a cascade of colour.
 
 N:603:Beholder
@@ -10076,7 +10076,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_9 | BLIND | CONFUSE | SCARE | BR_COLD(50%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_COLD(50%) | DETECT_OBJECTS 
 D:A huge draconic form. Frost covers it from head to tail.
 
 N:618:Ancient green dragon
@@ -10094,7 +10094,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_9 | BLIND | CONFUSE | SCARE | BR_POISON(50%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_POISON(50%) | DETECT_OBJECTS 
 D:A huge draconic form enveloped in clouds of poisonous vapour.
 
 N:619:Chthonian
@@ -10209,7 +10209,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_9 | BLIND | CONFUSE | SCARE | BR_ACID(50%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_ACID(50%) | DETECT_OBJECTS 
 D:A huge draconic form. Pools of acid melt the floor around it.
 
 N:625:Weird fume
@@ -10545,7 +10545,7 @@ F:EVIL | DRAGON | RES_COLD | NO_CONF | NO_SLEEP | RIDING |
 F:POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Body:Dragon
-S:1_IN_6 | SLOW | CONFUSE | SCARE | BR_NETHER | DETECT_OBJECTS
+S:FREQ_10 | SLOW | CONFUSE | SCARE | BR_NETHER | DETECT_OBJECTS
 D:It is a dragon-like form wrapped in darkness. You cannot make out its
 D:true form but you sense its evil.
 
@@ -10564,7 +10564,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:115
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_FIRE(40%) | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_FIRE(40%) | DETECT_OBJECTS 
 D:A huge draconic form. Wisps of smoke steam from its nostrils and the
 D:extreme heat surrounding it makes you gasp for breath.
 
@@ -10583,7 +10583,7 @@ F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_SOUND | DETECT_OBJECTS 
+S:FREQ_10 | BLIND | CONFUSE | SCARE | BR_SOUND | DETECT_OBJECTS 
 D:A huge draconic form wreathed in a nimbus of light.
 
 N:646:Great crystal drake
@@ -10600,7 +10600,7 @@ F:EVIL | DRAGON | RES_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC | POS_SEE_INVIS
 P:Copy:Half-Titan:Beastmaster
 P:Body:Dragon
-S:1_IN_6 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS 
+S:FREQ_10 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS 
 D:A huge crystalline dragon. Its claws could cut you to shreds and its
 D:teeth are razor sharp. Strange colours ripple through it as it moves in
 D:the light.
@@ -11187,7 +11187,7 @@ F:DROP_CORPSE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_5 | BLIND | CONFUSE | SCARE | DETECT_OBJECTS
+S:FREQ_12 | BLIND | CONFUSE | SCARE | DETECT_OBJECTS
 S:BR_ACID(25%) | BR_FIRE(25%) | BR_COLD(25%) | BR_ELEC(25%) | BR_POISON(25%)
 D:A huge draconic form. Many colours ripple down its massive frame. Few
 D:live to see another.
@@ -11208,7 +11208,7 @@ F:POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_5 | BLIND | CONFUSE | DETECT_OBJECTS
+S:FREQ_12 | BLIND | CONFUSE | DETECT_OBJECTS
 S:BR_LITE | BR_DARK | BR_CONFUSION
 D:A huge dragon emanating from the elemental plains, the ethereal dragon is
 D:a master of light and dark. Its form disappears from sight as it cloaks
@@ -11553,7 +11553,7 @@ F:DROP_CORPSE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_3 | CONFUSE | CAUSE_3 | BR_COLD | DETECT_OBJECTS 
+S:FREQ_20 | CONFUSE | CAUSE_3 | BR_COLD | DETECT_OBJECTS 
 D:An ancient and wise Dragon. Scatha has grown clever over the long years.
 D:His scales are covered with frost, and his breath sends a shower of ice
 D:into the air.
@@ -12012,7 +12012,7 @@ F:DROP_CORPSE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_5 | CONFUSE | CAUSE_3 | BR_FIRE | S_DRAGON | DETECT_OBJECTS 
+S:FREQ_20 | CONFUSE | CAUSE_3 | BR_FIRE | S_DRAGON | DETECT_OBJECTS 
 D:Glaurung is the father of all dragons, and was for a long time the most
 D:powerful. Nevertheless, he still has full command over his brood and can
 D:command them to appear whenever he so wishes. He is the definition of
@@ -12278,7 +12278,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_ELEC | BR_STORM | DETECT_OBJECTS 
+S:FREQ_12 | BLIND | CONFUSE | SCARE | BR_ELEC | BR_STORM | DETECT_OBJECTS 
 D:A vast dragon of power. Storms and lightning crash around its titanic
 D:form. Deep blue scales reflect the flashes and highlight the creature's
 D:great muscles. It regards you with contempt.
@@ -12562,7 +12562,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_COLD | DETECT_OBJECTS 
+S:FREQ_12 | BLIND | CONFUSE | SCARE | BR_COLD | DETECT_OBJECTS 
 D:An immense dragon capable of awesome destruction. You have never felt
 D:such extreme cold, or witnessed such an icy stare. Begone quickly or feel
 D:its wrath!
@@ -12824,7 +12824,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:1_IN_5 | CAUSE_3 | BR_NETHER | BR_COLD | BR_ACID | BR_POISON |
+S:FREQ_15 | CAUSE_3 | BR_NETHER | BR_COLD | BR_ACID | BR_POISON |
 S:S_DRAGON | S_UNDEAD | DETECT_OBJECTS 
 D:In the bowels of Hel, the dread Nidhogg, a dragon blacker than the
 D:night, feasts on the essences of the dead.
@@ -12891,7 +12891,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_FIRE | DETECT_OBJECTS 
+S:FREQ_12 | BLIND | CONFUSE | SCARE | BR_FIRE | DETECT_OBJECTS 
 D:A vast dragon of immense power. Fire leaps continuously from its huge
 D:form. The air around it scalds you. Its slightest glance burns you, and
 D:you truly realize how insignificant you are.
@@ -13517,8 +13517,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:1_IN_9
-S:BR_FIRE | BR_ACID | BR_DARK |
+S:FREQ_5 | BR_FIRE | BR_ACID | BR_DARK |
 S:S_DRAGON | S_HYDRA | HEAL | CONFUSE | DARKNESS
 D:An enormous, evil sea-dragon.
 
@@ -13540,7 +13539,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 | BLIND | CONFUSE | SCARE | BR_CHAOS | BR_DISENCHANT | S_DRAGON | DETECT_OBJECTS 
+S:FREQ_20 | BLIND | CONFUSE | SCARE | BR_CHAOS | BR_DISENCHANT | S_DRAGON | DETECT_OBJECTS 
 D:A massive dragon of changing form. As you watch, it appears first fair
 D:and then foul. Its body is twisted by chaotic forces as it strives to
 D:stay real. Its very existence distorts the universe around it.
@@ -13562,7 +13561,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 | BLIND | CONFUSE | SCARE | BR_SOUND | BR_SHARDS | S_DRAGON | DETECT_OBJECTS 
+S:FREQ_20 | BLIND | CONFUSE | SCARE | BR_SOUND | BR_SHARDS | S_DRAGON | DETECT_OBJECTS 
 D:A massive dragon of powerful intellect. It seeks to dominate the universe
 D:and despises all other life. It sees all who do not obey it as mere
 D:insects to be crushed underfoot.
@@ -13585,8 +13584,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 |
-S:BLIND | CONFUSE | SCARE |
+S:FREQ_20 | BLIND | CONFUSE | SCARE |
 S:BR_SOUND | BR_CHAOS | BR_SHARDS | BR_DISENCHANT |
 S:S_DRAGON | S_HI_DRAGON | DETECT_OBJECTS 
 D:A massive dragon, it is thousands of
@@ -13706,7 +13704,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_25 | BR_POISON | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
+S:FREQ_20 | BR_POISON | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
 S:CONFUSE | SCARE | BLIND | DETECT_OBJECTS 
 D:A huge dragon whose scales shimmer in myriad hues.
 
@@ -13776,7 +13774,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 | BR_ELEC | BR_GRAVITY | BR_LITE |
+S:FREQ_20 | BR_ELEC | BR_GRAVITY | BR_LITE |
 S:S_DRAGON | S_HI_DRAGON | SCARE | BLIND | DETECT_OBJECTS 
 D:The mightiest elemental dragon of air, it can destroy you with ease.
 
@@ -15065,8 +15063,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:2:0:0:0:2:2
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 |
-S:S_HI_DRAGON | S_DRAGON | S_KIN |
+S:FREQ_20 | S_HI_DRAGON | S_DRAGON | S_KIN |
 S:BR_NUKE | BR_ACID | BR_ELEC | BR_FIRE |
 S:BR_COLD | BR_POISON | BR_NETHER | BR_LITE | BR_DARK |
 S:BR_CONFUSION | BR_SOUND | BR_CHAOS | BR_DISENCHANT | BR_NEXUS |
@@ -15747,7 +15744,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_25 | BR_NEXUS | BR_NETHER | BR_DISENCHANT | S_HI_DRAGON | SCARE | BLINK | SHRIEK
+S:FREQ_20 | BR_NEXUS | BR_NETHER | BR_DISENCHANT | S_HI_DRAGON | SCARE | BLINK | SHRIEK
 S:DETECT_OBJECTS
 D:The tortured soul of a once powerful wyrm.
 
@@ -16037,7 +16034,7 @@ F:DROP_CORPSE | POS_SEE_INVIS | POS_GAIN_AC
 P:Copy:Half-Titan:Beastmaster
 P:Life:110
 P:Body:Dragon
-S:1_IN_6 | BLIND | CONFUSE | SCARE | BR_POISON | DETECT_OBJECTS 
+S:FREQ_12 | BLIND | CONFUSE | SCARE | BR_POISON | DETECT_OBJECTS 
 D:A huge dragon of incredible destructive power. Noxious vapours
 D:fill the room near it, leaving you gasping for breath. Flee
 D:now while you still can!
@@ -16859,7 +16856,7 @@ F:DROP_3D2 | OPEN_DOOR | BASH_DOOR | EVIL | DRAGON | UNDEAD |
 F:RES_NETH | RES_PLAS | RES_NEXU | RES_DISE | NO_STUN |
 F:RES_COLD | RES_POIS |
 F:NO_CONF | NO_SLEEP | DROP_SKELETON | RIDING | POS_GAIN_AC
-S:1_IN_10 | BR_NETHER | DETECT_OBJECTS
+S:FREQ_5 | BR_NETHER | DETECT_OBJECTS
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
 D:An undead dragon skeleton.
@@ -18941,7 +18938,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_30 | BR_TIME | BR_NEXUS | BR_GRAVITY | BR_INERTIA
+S:FREQ_20 | BR_TIME | BR_NEXUS | BR_GRAVITY | BR_INERTIA
 S:TELE_SELF | BLINK | TELE_OTHER | TELE_LEVEL | HASTE | SLOW
 S:PARALYZE | S_DRAGON | DETECT_OBJECTS 
 
@@ -18978,7 +18975,7 @@ P:Copy:Half-Titan:Beastmaster
 P:Stats:1:0:0:0:1:1
 P:Life:110
 P:Body:Dragon
-S:FREQ_20 | BR_ACID | BLIND | CONFUSE | SCARE | DETECT_OBJECTS 
+S:FREQ_12 | BR_ACID | BLIND | CONFUSE | SCARE | DETECT_OBJECTS 
 D:A huge and very powerful dragon. Great steaming pools of acid drip from
 D:its form onto the ground. You shudder when you see the acid eating away
 D:the very stones of the dungeon - what could it do to you?
