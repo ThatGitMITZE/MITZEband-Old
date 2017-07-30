@@ -550,6 +550,17 @@ byte get_monster_drop_ct(monster_type *m_ptr)
     return number;
 }
 
+static int _mon_drop_lvl(int dl, int rl)
+{
+    /* return (dl + rl) / 2; */
+    /* Just some variability ... killing L50 monsters on DL90
+     * would give L70 drops ... always. Now, it gives L60-L80 drops */
+    int M = MAX(dl, rl);
+    int m = MIN(dl, rl);
+    int d = M - m;
+    return rand_range(m + d/4, m + 3*d/4);
+}
+
 bool get_monster_drop(int m_idx, object_type *o_ptr)
 {
     monster_type *m_ptr = &m_list[m_idx];
@@ -594,7 +605,7 @@ bool get_monster_drop(int m_idx, object_type *o_ptr)
     }
 
     coin_type = force_coin;
-    object_level = (MAX(base_level, dun_level) + r_ptr->level) / 2;
+    object_level = _mon_drop_lvl(MAX(base_level, dun_level), r_ptr->level);
     object_wipe(o_ptr);
 
     if (do_gold && (!do_item || (randint0(100) < 20)))

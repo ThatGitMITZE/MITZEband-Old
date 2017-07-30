@@ -1707,7 +1707,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             if (unique)
                 ml += 10;
 
-            if (p_ptr->lev > 40)
+            if (p_ptr->lev > 40 && p_ptr->current_r_idx != MON_HOUND_OF_TINDALOS)
                 pl += (p_ptr->lev - 40) * 2;
 
             if (randint1(pl) <= randint1(ml))
