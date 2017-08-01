@@ -2567,6 +2567,64 @@ static void _birth_options(void)
     }
 }
 
+static int _compare_rlvl(mon_race_ptr left, mon_race_ptr right)
+{
+    if (left->level < right->level)
+        return -1;
+    if (left->level > right->level)
+        return 1;
+    if (left->id < right->id)
+        return -1;
+    if (left->id > right->id)
+        return 1;
+    return 0;
+}
+
+static void _bounty_uniques(void)
+{
+    vec_ptr v = vec_alloc(NULL);
+    int     skip = 0, i;
+
+    get_mon_num_prep(NULL, NULL);
+    for (i = 0; i < MAX_KUBI; i++)
+    {
+        while (1)
+        {
+            int          id = get_mon_num(MAX_DEPTH - 1);
+            mon_race_ptr race = &r_info[id];
+
+            if (!(race->flags1 & RF1_UNIQUE)) continue;
+            if (race->flags1 & RF1_NO_QUEST) continue;
+            if (race->flagsx & RFX_WANTED) continue;
+            if (!(race->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) continue;
+            if (race->rarity > 100) continue;
+
+            race->flagsx |= RFX_WANTED;
+            vec_add(v, race);
+            break;
+        }
+    }
+    assert(vec_length(v) == MAX_KUBI);
+    vec_sort(v, (vec_cmp_f)_compare_rlvl);
+    /* skip the first N wanted uniques in a reduce uniques game. we keep the
+     * last and most difficult uniques only so that the player has a shot at
+     * the scroll of artifact creation. */
+    if (reduce_uniques_pct)
+        skip = MAX_KUBI * (100 - reduce_uniques_pct) / 100;
+    for (i = 0; i < MAX_KUBI; i++)
+    {
+        mon_race_ptr race = vec_get(v, i);
+        if (i < skip)
+        {
+            kubi_r_idx[i] = 0;
+            race->flagsx &= ~RFX_WANTED;
+        }
+        else
+            kubi_r_idx[i] = race->id;
+    }
+    vec_free(v);
+}
+
 static void _reduce_uniques(void)
 {
     vec_ptr buckets[10] = {0};
@@ -2677,7 +2735,7 @@ static void _birth_finalize(void)
     }
 
     quests_on_birth();
-    determine_bounty_uniques(); /* go before reducing uniques for speed ... (e.g. 10% uniques) */
+    _bounty_uniques(); /* go before reducing uniques for speed ... (e.g. 10% uniques) */
     _reduce_uniques(); /* quests go first, rolling up random quest uniques without restriction */
 
     p_ptr->au = randint1(600) + randint1(100) + 100;

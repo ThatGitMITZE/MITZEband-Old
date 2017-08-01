@@ -4919,51 +4919,6 @@ void extract_option_vars(void)
     }
 }
 
-
-/*
- * Determine bounty uniques
- */
-void determine_bounty_uniques(void)
-{
-    int          i, j, tmp;
-    monster_race *r_ptr;
-
-    get_mon_num_prep(NULL, NULL);
-    for (i = 0; i < MAX_KUBI; i++)
-    {
-        while (1)
-        {
-            int r_idx = get_mon_num(MAX_DEPTH - 1);
-            r_ptr = &r_info[r_idx];
-
-            if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-            if (r_ptr->flags1 & RF1_NO_QUEST) continue;
-            if (r_ptr->flagsx & RFX_WANTED) continue;
-            if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) continue;
-            if (r_ptr->rarity > 100) continue;
-
-            kubi_r_idx[i] = r_idx;
-            r_ptr->flagsx |= RFX_WANTED;
-            break;
-        }
-    }
-
-    /* Sort them */
-    for (i = 0; i < MAX_KUBI - 1; i++)
-    {
-        for (j = i; j < MAX_KUBI; j++)
-        {
-            if (r_info[kubi_r_idx[i]].level > r_info[kubi_r_idx[j]].level)
-            {
-                tmp = kubi_r_idx[i];
-                kubi_r_idx[i] = kubi_r_idx[j];
-                kubi_r_idx[j] = tmp;
-            }
-        }
-    }
-}
-
-
 /*
  * Determine today's bounty monster
  * Note: conv_old is used if loaded 0.0.3 or older save file

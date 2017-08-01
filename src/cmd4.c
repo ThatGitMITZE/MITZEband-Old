@@ -3553,7 +3553,7 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
 
 
     /* Check every race */
-    for (i = 0; i < max_r_idx; i++)
+    for (i = 1; i < max_r_idx; i++)
     {
         /* Access the race */
         monster_race *r_ptr = &r_info[i];
@@ -6854,10 +6854,10 @@ static void do_cmd_knowledge_kubi(void)
 
         for (i = 0; i < MAX_KUBI; i++)
         {
-            if (kubi_r_idx[i] <= 10000)
+            int id = kubi_r_idx[i];
+            if (0 < id && id < 10000)
             {
-                fprintf(fff,"%s\n", r_name + r_info[kubi_r_idx[i]].name);
-
+                fprintf(fff,"%s\n", r_name + r_info[id].name);
                 listed = TRUE;
             }
         }

@@ -1159,7 +1159,7 @@ static void _build_uniques(doc_ptr doc)
     {
         int     i;
         vec_ptr v = vec_alloc(NULL);
-        int     ctu;
+        int     ct_uniques_dead, ct_uniques_alive = 0;
 
         doc_printf(doc, "<topic:Kills>================================ Monster <color:keypress>K</color>ills ================================\n\n");
 
@@ -1170,20 +1170,35 @@ static void _build_uniques(doc_ptr doc)
             {
                 if (r_ptr->max_num == 0)
                     vec_add(v, r_ptr);
+                /* When playing with reduce_uniques, it is helpful to know just
+                 * how many you are dealing with. Skip the Arena uniques and any
+                 * uniques suppressed this game, but count up the rest. */
+                else if ( 0 < r_ptr->rarity && r_ptr->rarity <= 100
+                       && !(r_ptr->flagsx & RFX_SUPPRESS) )
+                {
+                    ct_uniques_alive++;
+                }
             }
         }
 
-        ctu = vec_length(v);
-        if (ctu)
+        ct_uniques_dead = vec_length(v);
+        if (ct_uniques_dead)
         {
-            doc_printf(doc, "You have defeated %d %s including %d unique monster%s in total.\n\n",
+            doc_printf(doc, "You have defeated %d %s including %d unique monster%s in total. ",
                 ct, ct == 1 ? "enemy" : "enemies",
-                ctu, ctu == 1 ? "" : "s");
+                ct_uniques_dead, ct_uniques_dead == 1 ? "" : "s");
+
+            if (ct_uniques_alive == 1)
+                doc_insert(doc, "There is 1 unique remaining.");
+            else
+                doc_printf(doc, "There are %d uniques remaining.", ct_uniques_alive);
+
+            doc_insert(doc, "\n\n");
 
             vec_sort(v, (vec_cmp_f)_compare_monsters);
 
             doc_printf(doc, "  <color:G>%-40.40s <color:R>%3s</color></color>\n", "Uniques", "Lvl");
-            for (i = ctu - 1; i >= 0 && i >= ctu - 20; i--)
+            for (i = ct_uniques_dead - 1; i >= 0 && i >= ct_uniques_dead - 20; i--)
             {
                 monster_race *r_ptr = vec_get(v, i);
                 doc_printf(doc, "  %-40.40s %3d\n", (r_name + r_ptr->name), r_ptr->level);

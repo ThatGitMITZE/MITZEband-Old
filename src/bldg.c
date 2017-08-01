@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "equip.h"
+#include <assert.h>
 
 /* hack as in leave_store in store.c */
 static bool leave_bldg = FALSE;
@@ -1643,26 +1644,32 @@ static void shoukinkubi(void)
     clear_bldg(4,18);
 
     prt("Offer a prize when you bring a wanted monster's corpse",4 ,10);
-c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
+    c_put_str(TERM_YELLOW, "Wanted monsters", 6, 10);
 
     for (i = 0; i < MAX_KUBI; i++)
     {
         byte color;
         cptr done_mark;
-        monster_race *r_ptr = &r_info[(kubi_r_idx[i] > 10000 ? kubi_r_idx[i] - 10000 : kubi_r_idx[i])];
+        int  id = kubi_r_idx[i];
+        mon_race_ptr race;
 
-        if (kubi_r_idx[i] > 10000)
+        if (!id) continue; /* SUPPRESSED by reduce_uniques options */
+
+        if (id > 10000)
         {
             color = TERM_RED;
             done_mark = "(done)";
+            id -= 10000;
         }
         else
         {
             color = TERM_WHITE;
             done_mark = "";
         }
+        assert(0 < id && id < max_r_idx);
+        race = &r_info[id];
 
-        c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y+7, 10);
+        c_prt(color, format("%s %s", r_name + race->name, done_mark), y+7, 10);
 
         y = (y+1) % 10;
         if (!y && (i < MAX_KUBI -1))

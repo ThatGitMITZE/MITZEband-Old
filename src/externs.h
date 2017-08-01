@@ -894,7 +894,6 @@ bool trump_summoning(int num, bool pet, int y, int x, int lev, int type, u32b mo
 
 /* dungeon.c */
 extern void extract_option_vars(void);
-extern void determine_bounty_uniques(void);
 extern void determine_today_mon(bool conv_old);
 extern void notice_lite_change(object_type *o_ptr);
 extern void play_game(bool new_game);
