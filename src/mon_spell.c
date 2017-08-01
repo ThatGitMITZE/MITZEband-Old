@@ -821,6 +821,13 @@ static mon_spell_parm_t _summon_parm(int which)
     case SUMMON_CYBER:
         parm.v.dice = _dice(1, 3, 0);
         break;
+    case SUMMON_UNIQUE:
+        parm.v.dice = _dice(1, 2, 0);
+        break;
+    case SUMMON_SPIDER:
+    case SUMMON_HOUND:
+        parm.v.dice = _dice(1, 2, 1);
+        break;
     default: /* XXX */
         parm.v.dice = _dice(1, 3, 1);
     }
@@ -3346,6 +3353,11 @@ static void _adjust_group_uncover(mon_spell_group_ptr group)
 static bool _pt_is_valid(point_t pt)
 {
     return pt.x || pt.y; /* XXX assume (0,0) out of bounds */
+}
+bool mon_could_splash(mon_ptr mon, point_t tgt)
+{
+    point_t pt = _choose_splash_point(point(mon->fx, mon->fy), tgt, _projectable_splash);
+    return _pt_is_valid(pt);
 }
 static void _ai_indirect(mon_spell_cast_ptr cast)
 {

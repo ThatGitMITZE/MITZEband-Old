@@ -172,6 +172,7 @@ extern bool           mon_spell_cast_possessor(mon_race_ptr race);
 extern mon_spell_ptr  mon_spell_current(void);
 extern mon_ptr        mon_current(void);
 
+extern bool mon_could_splash(mon_ptr mon, point_t tgt);
 extern bool mon_is_magical(mon_ptr mon);
 extern bool mon_race_is_magical(mon_race_ptr race);
 extern bool mon_has_attack_spell(mon_ptr mon);

@@ -2071,6 +2071,7 @@ static void process_monster(int m_idx)
     bool            do_move;
     bool            do_view;
     bool            asc_nerf = FALSE;
+    bool            could_splash = FALSE;
     bool            must_alter_to_move;
 
     bool            did_open_door;
@@ -2766,52 +2767,6 @@ static void process_monster(int m_idx)
         /* Ignore locations off of edge */
         if (!in_bounds2(ny, nx)) continue;
 
-        /* Nerf ASC a bit */
-        if (mon_has_summon_spell(m_ptr))
-        {
-            if ( p_ptr->chp > p_ptr->mhp * 4 / 5 /* If @ wounded, pursue! */
-              && !player_bold(ny, nx)            /* Moving from out of LOS into LOS */
-              && player_has_los_bold(ny, nx)
-              && projectable(py, px, ny, nx)
-              && !projectable(py, px, m_ptr->fy, m_ptr->fx) )
-            {
-                int ct_open = 0;
-                int ct_enemy = 0;
-                int y, x;
-
-                /* Inspect @'s surroundings */
-                for (y = py - 2; y <= py + 2; y++)
-                {
-                    for (x = px - 2; x <= px + 2; x++)
-                    {
-                        if (!in_bounds(y, x)) continue;
-                        if (distance(py, px, y, x) > 2) continue;
-                        if (pattern_tile(y, x)) continue;
-                        if (y == ny && x == nx) continue;
-                        if (y == m_ptr->fy && x == m_ptr->fx) continue;
-                        if (cave[y][x].m_idx && is_hostile(&m_list[cave[y][x].m_idx]))
-                            ct_enemy++;
-                        if (cave_empty_bold(y, x) && projectable(py, px, y, x) && projectable(y, x, py, px))
-                            ct_open++;
-                    }
-                }
-
-                if (ct_enemy)
-                {
-                    /* If @ is in battle, join the fray! */
-                }
-                else if (ct_open < 1 + randint1(4))
-                {
-                    /* not enough summoning opportunities, so hold off unless angered */
-                    if (!m_ptr->anger || !one_in_(3))
-                    {
-                        asc_nerf = TRUE;
-                        continue;
-                    }
-                }
-            }
-        }
-
         /* Access that cave grid */
         c_ptr = &cave[ny][nx];
         f_ptr = &f_info[c_ptr->feat];
@@ -2846,9 +2801,56 @@ static void process_monster(int m_idx)
             did_kill_wall = TRUE;
         }
 
-        /* Floor is open? */
+        /* Floor is open? (XXX Passwall monsters as well, right?) */
         else if (can_cross)
         {
+            /* Nerf ASC a bit */
+            if (mon_has_summon_spell(m_ptr))
+            {
+                if ( p_ptr->chp > p_ptr->mhp * 4 / 5 /* If @ wounded, pursue! */
+                  && !player_bold(ny, nx)            /* Moving from out of LOS into LOS */
+                  && player_has_los_bold(ny, nx)
+                  && projectable(py, px, ny, nx)
+                  && !projectable(py, px, m_ptr->fy, m_ptr->fx) )
+                {
+                    int ct_open = 0;
+                    int ct_enemy = 0;
+                    int y, x;
+
+                    /* Inspect @'s surroundings */
+                    for (y = py - 2; y <= py + 2; y++)
+                    {
+                        for (x = px - 2; x <= px + 2; x++)
+                        {
+                            if (!in_bounds(y, x)) continue;
+                            if (distance(py, px, y, x) > 2) continue;
+                            if (pattern_tile(y, x)) continue;
+                            if (y == ny && x == nx) continue;
+                            if (y == m_ptr->fy && x == m_ptr->fx) continue;
+                            if (cave[y][x].m_idx && is_hostile(&m_list[cave[y][x].m_idx]))
+                                ct_enemy++;
+                            if (cave_empty_bold(y, x) && projectable(py, px, y, x) && projectable(y, x, py, px))
+                                ct_open++;
+                        }
+                    }
+
+                    if (ct_enemy)
+                    {
+                        /* If @ is in battle, join the fray! */
+                    }
+                    else if (ct_open < 1 + randint1(4))
+                    {
+                        /* not enough summoning opportunities, so hold off unless angered */
+                        if (!m_ptr->anger || !one_in_(3))
+                        {
+                            asc_nerf = TRUE;
+                            could_splash = mon_could_splash(m_ptr, point(px, py));
+                            continue;
+                        }
+                    }
+                }
+            }
+
             /* Go ahead and move */
             do_move = TRUE;
 
@@ -3475,9 +3477,12 @@ static void process_monster(int m_idx)
 
     /* Lore Issues wrt ASC: Monsters often hang back out of los until they choose
      * a splash spell. We aren't counting the moves, but we are counting the spells,
-     * so the reported frequency is too high */
-    if (asc_nerf && !projectable(py, px, m_ptr->fy, m_ptr->fx))
+     * so the reported frequency is too high. */
+    if (asc_nerf && could_splash && do_turn && do_move && !projectable(py, px, m_ptr->fy, m_ptr->fx))
+    {
+        /*msg_print("<color:v>asc mon_lore_move</color>");*/
         mon_lore_move(m_ptr);
+    }
 
     #if 0
     /* If we haven't done anything, try casting a spell again
