@@ -14633,7 +14633,7 @@ F:BASH_DOOR | MOVE_BODY |
 F:ANIMAL | EVIL | IM_FIRE
 F:DROP_CORPSE | POS_GAIN_AC
 S:1_IN_5 |
-S:BR_FIRE
+S:BR_HELL_FIRE
 P:Copy:Barbarian:Warrior
 P:Body:Hound
 D:It is a giant dog that glows with heat. Flames pour from its nostrils.

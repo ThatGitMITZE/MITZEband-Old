@@ -1084,12 +1084,11 @@ race_t *zombie_get_race(void)
     if (!init)
     {
         me.name = "Zombie";
-        me.desc = "Much like Skeletons, Zombies too are undead horrors: they are resistant to life-draining "
-                    "attacks, and can learn to restore their life-force. Like skeletons, they become "
-                    "resistant to cold-based attacks (actually earlier than skeletons), resist poison "
-                    "and can see invisible. While still vulnerable to cuts (unlike skeletons), Zombies "
-                    "are resistant to Nether. Like Golems, they gain very little nutrition from the food "
-                    "of mortals, but can absorb mana from staves and wands as their energy source.";
+        me.desc = "Zombies are undead horrors, resistant to life draining and the forces "
+            "of the netherworld. The grave is cold but this does not bother the undead and "
+            "poison scarcely affects the unliving. Zombies gain little nutrition from "
+            "ordinary food. Instead, they must absorb mana from magical devices to maintain "
+            "their undead existence.";
 
         me.stats[A_STR] =  2;
         me.stats[A_INT] = -6;
