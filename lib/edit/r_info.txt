@@ -2432,7 +2432,7 @@ F:EVIL | DRAGON | RES_ELEC
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | BR_ELEC | DETECT_OBJECTS 
+S:FREQ_5 | BR_ELEC | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales a pale blue.
 
@@ -2450,7 +2450,7 @@ F:EVIL | DRAGON | RES_COLD
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | BR_COLD | DETECT_OBJECTS 
+S:FREQ_5 | BR_COLD | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales a pale white.
 
@@ -2468,7 +2468,7 @@ F:EVIL | DRAGON | RES_POIS
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | BR_POISON | DETECT_OBJECTS 
+S:FREQ_5 | BR_POISON | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales a sickly green.
 
@@ -2486,7 +2486,7 @@ F:EVIL | DRAGON | RES_ACID
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | BR_ACID | DETECT_OBJECTS 
+S:FREQ_5 | BR_ACID | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales a dull black.
 
@@ -2504,7 +2504,7 @@ F:EVIL | DRAGON | RES_FIRE
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | BR_FIRE | DETECT_OBJECTS 
+S:FREQ_5 | BR_FIRE | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales a pale red.
 
@@ -2891,7 +2891,7 @@ F:DROP_60 | BASH_DOOR | DRAGON | RES_LITE | RES_DARK
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 |
+S:FREQ_5 |
 S:CONFUSE | SCARE | BR_LITE | BR_DARK | DETECT_OBJECTS 
 D:A small relative of the dragon that inhabits dark caves.
 
@@ -3059,7 +3059,7 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Beastmaster
 P:Body:Dragon
-S:1_IN_11 |
+S:FREQ_5 |
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POISON | DETECT_OBJECTS 
 D:This hatchling dragon is still soft, its eyes unaccustomed to light and
 D:its scales shimmering with a hint of colour.
@@ -7218,7 +7218,7 @@ F:EVIL | DRAGON | RES_ELEC | RIDING | SELF_LITE_1 |
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | DETECT_OBJECTS | BR_ELEC
+S:FREQ_7 | SCARE | DETECT_OBJECTS | BR_ELEC
 D:It has a form that legends are made of. Its still-tender scales are a
 D:deep blue in hue. Sparks crackle along its length.
 
@@ -7236,7 +7236,7 @@ F:EVIL | DRAGON | RES_COLD | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_COLD | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_COLD | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:frosty white in hue. Icy blasts of cold air come from it as it breathes.
 
@@ -7254,7 +7254,7 @@ F:EVIL | DRAGON | RES_POIS | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_POISON | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_POISON | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:deep green in hue. Foul gas seeps through its scales.
 
@@ -7272,7 +7272,7 @@ F:DRAGON | NO_CONF | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_CONFUSION | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_CONFUSION | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:rich bronze hue, and its shape masks its true form.
 
@@ -8759,7 +8759,7 @@ F:EVIL | DRAGON | RES_ACID | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_ACID | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_ACID | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:darkest black hue. Acid drips from its body.
 
@@ -8804,7 +8804,7 @@ F:EVIL | DRAGON | RES_COLD | NO_CONF | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_10 | SCARE | BR_COLD | DETECT_OBJECTS 
+S:FREQ_9 | SCARE | BR_COLD | DETECT_OBJECTS 
 D:A large dragon, scales gleaming bright white.
 
 N:550:Xorn
@@ -8937,7 +8937,7 @@ F:RES_POIS | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_1 |
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_5 | SCARE | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | DETECT_OBJECTS 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POISON
 D:It has a form that legends are made of. Beautiful scales of shimmering
 D:and magical colours cover it.
@@ -8989,7 +8989,7 @@ F:DRAGON | RES_SOUN
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_SOUND | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_SOUND | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:tarnished gold hue, and light is reflected from its form.
 
@@ -9007,7 +9007,7 @@ F:EVIL | DRAGON | RES_ELEC | NO_CONF | NO_SLEEP | SELF_LITE_1
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | SCARE | BR_ELEC | DETECT_OBJECTS 
+S:FREQ_9 | SCARE | BR_ELEC | DETECT_OBJECTS 
 D:A large dragon, scales tinted deep blue.
 
 N:561:Mature green dragon
@@ -9024,7 +9024,7 @@ F:EVIL | DRAGON | RES_POIS | NO_CONF | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | SCARE | BR_POISON | DETECT_OBJECTS 
+S:FREQ_9 | SCARE | BR_POISON | DETECT_OBJECTS 
 D:A large dragon, scales tinted deep green.
 
 N:562:Mature bronze dragon
@@ -9041,7 +9041,7 @@ F:DRAGON | NO_CONF | NO_SLEEP
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | CONFUSE | SCARE | BR_CONFUSION | DETECT_OBJECTS 
+S:FREQ_9 | CONFUSE | SCARE | BR_CONFUSION | DETECT_OBJECTS 
 D:A large dragon with scales of rich bronze.
 
 N:563:Young red dragon
@@ -9058,7 +9058,7 @@ F:EVIL | DRAGON | RES_FIRE | SELF_LITE_1 |
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Demigod:Beastmaster
 P:Body:Dragon
-S:1_IN_11 | SCARE | BR_FIRE | DETECT_OBJECTS 
+S:FREQ_7 | SCARE | BR_FIRE | DETECT_OBJECTS 
 D:It has a form that legends are made of. Its still-tender scales are a
 D:deepest red hue. Heat radiates from its form.
 
@@ -9288,7 +9288,7 @@ F:DROP_4D2 | BASH_DOOR | RES_PLAS | CAN_FLY | RIDING | SELF_LITE_1
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | BR_PLASMA | DETECT_OBJECTS 
+S:FREQ_10 | BR_PLASMA | DETECT_OBJECTS 
 D:It is a fast, deadly dragonoid creature. It was bred and trained
 D:in the Courts of Chaos for assassination.
 
@@ -9529,7 +9529,7 @@ F:EVIL | DRAGON | RES_FIRE | NO_CONF | NO_SLEEP
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | CONFUSE | SCARE | BR_FIRE | DETECT_OBJECTS 
+S:FREQ_9 | CONFUSE | SCARE | BR_FIRE | DETECT_OBJECTS 
 D:A large dragon, scales tinted deep red.
 
 N:590:Mature gold dragon
@@ -9546,7 +9546,7 @@ F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | CONFUSE | SCARE | BR_SOUND | DETECT_OBJECTS 
+S:FREQ_9 | CONFUSE | SCARE | BR_SOUND | DETECT_OBJECTS 
 D:A large dragon with scales of gleaming gold.
 
 N:591:Crystal drake
@@ -9563,7 +9563,7 @@ F:EVIL | DRAGON | RES_COLD | NO_CONF | RES_SHAR | NO_SLEEP
 F:DROP_CORPSE | POS_GAIN_AC | POS_SEE_INVIS
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_6 | SLOW | CONFUSE | SCARE | BLIND | BR_SHARDS | DETECT_OBJECTS 
+S:FREQ_10 | SLOW | CONFUSE | SCARE | BLIND | BR_SHARDS | DETECT_OBJECTS 
 D:A dragon of strange crystalline form. Light shines through it, dazzling
 D:your eyes with spectrums of colour.
 
@@ -9581,7 +9581,7 @@ F:EVIL | DRAGON | RES_ACID | NO_CONF | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_9 | SCARE | BR_ACID | DETECT_OBJECTS 
+S:FREQ_9 | SCARE | BR_ACID | DETECT_OBJECTS 
 D:A large dragon, with scales of deepest black.
 
 N:593:Mature multi-hued dragon
@@ -9600,7 +9600,7 @@ F:RES_ELEC | RES_POIS | NO_CONF | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Barbarian:Beastmaster
 P:Body:Dragon
-S:1_IN_5 | BLIND | CONFUSE | SCARE | DETECT_OBJECTS
+S:FREQ_9 | BLIND | CONFUSE | SCARE | DETECT_OBJECTS
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POISON
 D:A large dragon, scales shimmering many colours.
 

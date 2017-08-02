@@ -1468,11 +1468,11 @@ static bool _mon_dam_p(mon_race_ptr r)
     if (r->id == MON_HAGURE2) return FALSE;
     if (r->level < min || r->level > max) return FALSE;
 
+    return r->d_char == 'd' || r->d_char == 'D';
     return TRUE;
     return r->d_char == 'Z';
     return r->d_char == 'J' && r->spells && r->spells->groups[MST_BREATH];
     return BOOL(r->flags3 & RF3_UNDEAD);
-    return r->d_char == 'd' || r->d_char == 'D';
     return !(r->flags9 & RF9_DEPRECATED);
     return _is_monk(r);
     return BOOL(r->flags2 & RF2_CAMELOT);
