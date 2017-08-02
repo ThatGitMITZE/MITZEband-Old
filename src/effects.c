@@ -17,6 +17,7 @@
 bool free_act_save_p(int ml)
 {
     int i;
+    if (p_ptr->pclass == CLASS_BERSERKER) return TRUE; /* negative skills */
     for (i = 0; i < p_ptr->free_act; i++)
     {
         if (randint0(100 + ml/2) < p_ptr->skills.sav)

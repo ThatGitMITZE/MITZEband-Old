@@ -40,7 +40,6 @@ static void _charge_spell(int cmd, variant *res)
             x += ddx[dir];
             if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
             {
-                msg_print(NULL);
                 move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }
         }

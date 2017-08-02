@@ -90,9 +90,12 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 bool py_see_invis(int rlev)
 {
     int i;
+    int skill = p_ptr->skills.srh;
+    if (p_ptr->pclass == CLASS_BERSERKER) /* negative skill */
+        skill = 10;
     for (i = 0; i < p_ptr->see_inv; i++)
     {
-        if (randint0(50 + rlev/2) < p_ptr->skills.srh)
+        if (randint0(50 + rlev/2) < skill)
             return TRUE;
     }
     return FALSE;
