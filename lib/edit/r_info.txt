@@ -3833,8 +3833,7 @@ F:OPEN_DOOR | BASH_DOOR | CAN_CLIMB
 F:EVIL | GIANT | MALE
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Warrior
-S:1_IN_8
-S:THROW
+S:FREQ_5 | THROW
 O:DROP_WARRIOR
 D:A ten foot tall humanoid with powerful muscles.
 
@@ -4202,8 +4201,7 @@ F:EVIL | GIANT | MALE | AURA_COLD
 F:RES_COLD
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Mauler
-S:1_IN_5 |
-S:BO_COLD | BA_COLD | THROW
+S:FREQ_10 | BO_COLD | BA_COLD | THROW
 D:A twelve foot tall giant covered in furs.
 
 N:279:Griffon
@@ -4373,8 +4371,7 @@ F:EVIL | GIANT | MALE | AURA_FIRE |
 F:RES_FIRE
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Mauler
-S:1_IN_5 |
-S:SCARE | BO_FIRE | BA_FIRE | THROW
+S:FREQ_10 | SCARE | BO_FIRE | BA_FIRE | THROW
 O:DROP_WARRIOR
 D:A glowing fourteen foot tall giant. Flames drip from its red skin.
 
@@ -4902,8 +4899,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | CAN_CLIMB
 F:EVIL | GIANT | MALE | WILD_MOUNTAIN
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Warrior
-S:1_IN_10
-S:THROW
+S:FREQ_5 | THROW
 O:DROP_WARRIOR
 D:It is eighteen feet tall and looking at you.
 
@@ -5357,8 +5353,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | RES_ELEC | MALE
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Mauler
-S:1_IN_5
-S:THROW | BO_ELEC | BA_ELEC
+S:FREQ_10 | THROW | BO_ELEC | BA_ELEC
 O:DROP_WARRIOR
 D:It is a twenty foot tall giant wreathed in clouds.
 
@@ -6953,7 +6948,7 @@ F:BASH_DOOR | OPEN_DOOR | MOVE_BODY | CAN_CLIMB
 F:EVIL | RES_POIS | RES_ACID | GIANT
 F:DROP_CORPSE | POS_SUST_STR
 P:Copy:Cyclops:Warrior
-S:FREQ_10 | THROW
+S:FREQ_7 | THROW
 O:DROP_WARRIOR
 D:A gigantic humanoid with but one eye.
 
@@ -7687,8 +7682,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | AURA_ELEC | CAN_CLIMB
 F:EVIL | GIANT | RES_COLD | RES_ELEC | MALE | SELF_LITE_1 |
 F:DROP_SKELETON | DROP_CORPSE | POS_SUST_STR
 P:Copy:Half-Giant:Mauler
-S:FREQ_20 |
-S:BLINK | TELE_TO | BO_ELEC | BA_ELEC | THROW
+S:FREQ_15 | BLINK | TELE_TO | BO_ELEC | BA_ELEC | THROW
 O:DROP_WARRIOR
 D:It is a twenty-five foot tall giant wreathed in lighting.
 
@@ -7742,8 +7736,7 @@ F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
 F:EVIL | RES_POIS | RES_ACID | GIANT |
 F:DROP_CORPSE | POS_SUST_STR
 P:Copy:Cyclops:Warrior
-S:1_IN_10 |
-S:THROW
+S:FREQ_7 | THROW
 O:DROP_WARRIOR
 D:Oh, no! Aaargh! It is the most unnatural, most disgusting
 D:creature imaginable: a two-eyed cyclops! This perversion
