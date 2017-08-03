@@ -4463,7 +4463,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_CURING:
     {
         if (name) return "Curing";
-        if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
+        if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination.";
         if (value) return format("%d", 1000);
         if (color) return format("%d", TERM_L_GREEN);
         if (cast)

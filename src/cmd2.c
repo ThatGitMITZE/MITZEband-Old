@@ -2582,6 +2582,7 @@ void do_cmd_rest(void)
  */
 int breakage_chance(object_type *o_ptr)
 {
+    if (obj_is_art(o_ptr)) return 0;
     if (shoot_hack == SP_KILL_WALL) return 100;
     if (shoot_hack == SP_EXPLODE) return 100;
     if (shoot_hack == SP_PIERCE) return 100;
