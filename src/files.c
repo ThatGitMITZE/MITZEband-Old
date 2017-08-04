@@ -3188,15 +3188,6 @@ static bool check_score(void)
     /* Clear screen */
     Term_clear();
 
-    /* No score file */
-    if (highscore_fd < 0)
-    {
-        msg_print("Score file unavailable.");
-
-        msg_print(NULL);
-        return FALSE;
-    }
-
 #ifndef SCORE_WIZARDS
     /* Wizard-mode pre-empts scoring */
     if (p_ptr->noscore & 0x000F)
@@ -3319,7 +3310,6 @@ void kingly(void)
  */
 void close_game(void)
 {
-    char buf[1024];
 
     /* Handle stuff */
     handle_stuff();
@@ -3338,18 +3328,6 @@ void close_game(void)
     /* Hack -- Character is now "icky" */
     character_icky = TRUE;
 
-
-    /* Build the filename */
-    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-
-    /* Grab permissions */
-    safe_setuid_grab();
-
-    /* Open the high score file, for reading/writing */
-    highscore_fd = fd_open(buf, O_RDWR);
-
-    /* Drop permissions */
-    safe_setuid_drop();
 
     /* Handle death */
     if (p_ptr->is_dead)

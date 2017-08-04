@@ -1461,7 +1461,6 @@ void display_news(void)
 void init_angband(void)
 {
     int fd = -1;
-    int mode = 0664;
     char buf[1024];
 
     /*** Verify the "news" file ***/
@@ -1484,49 +1483,6 @@ void init_angband(void)
 
         /* Crash and burn */
         init_angband_aux(why);
-    }
-
-    /* Close it */
-    (void)fd_close(fd);
-
-
-    /*** Display the "news" file ***/
-
-    /*** Verify (or create) the "high score" file ***/
-
-    /* Build the filename */
-    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-
-    /* Attempt to open the high score file */
-    fd = fd_open(buf, O_RDONLY);
-
-    /* Failure */
-    if (fd < 0)
-    {
-        /* File type is "DATA" */
-        FILE_TYPE(FILE_TYPE_DATA);
-
-        /* Grab permissions */
-        safe_setuid_grab();
-
-        /* Create a new high score file */
-        fd = fd_make(buf, mode);
-
-        /* Drop permissions */
-        safe_setuid_drop();
-
-        /* Failure */
-        if (fd < 0)
-        {
-            char why[1024];
-
-            /* Message */
-            sprintf(why, "Cannot create the '%s' file!", buf);
-
-
-            /* Crash and burn */
-            init_angband_aux(why);
-        }
     }
 
     /* Close it */

@@ -495,7 +495,6 @@ extern u16b max_m_idx;
 extern s32b max_wild_x;
 extern s32b max_wild_y;
 extern s16b gf_color[GF_COUNT];
-extern int highscore_fd;
 extern int mutant_regenerate_mod;
 extern bool can_save;
 extern s16b world_monster;

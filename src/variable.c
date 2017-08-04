@@ -1011,11 +1011,6 @@ s32b max_wild_y;
  */
 s16b gf_color[GF_COUNT];
 
-/*
- * The "highscore" file descriptor, if available.
- */
-int highscore_fd = -1;
-
 int mutant_regenerate_mod = 100;
 
 bool can_save = FALSE;        /* Game can be saved */
