@@ -1368,7 +1368,7 @@ static void _display_file(cptr name)
 
 void display_news(void)
 {
-    const int max_n = 18;
+    const int max_n = 19;
     int n;
     bool done = FALSE;
 
