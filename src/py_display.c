@@ -2276,8 +2276,75 @@ static void _build_quests(doc_ptr doc)
             p_ptr->arena_number > 1 ? "ies" : "y");
     }
 }
+
+static int _max_depth(void)
+{
+    int result = 0;
+    int i;
+
+    for(i = 1; i < max_d_idx; i++)
+    {
+        if (!d_info[i].maxdepth) continue;
+        if (d_info[i].flags1 & DF1_RANDOM) continue;
+        if (!max_dlv[i]) continue;
+        result = MAX(result, max_dlv[i]);
+    }
+
+    return result;
+}
+
+static bool _is_retired(void)
+{
+    if (p_ptr->total_winner && p_ptr->is_dead && strcmp(p_ptr->died_from, "Ripe Old Age") == 0)
+        return TRUE;
+    return FALSE;
+}
+
+static void _add_html_header(doc_ptr doc)
+{
+    string_ptr s = string_alloc_format("%s.html", player_base);
+    string_ptr header = string_alloc();
+
+    doc_change_name(doc, string_buffer(s));
+
+    string_append_s(header, "<head>\n");
+    string_append_s(header, " <meta name='filetype' value='character dump'>\n");
+    string_printf(header,  " <meta name='variant' value='%s'>\n", VERSION_NAME);
+    string_printf(header,  " <meta name='variant_version' value='%d.%d.%d'>\n", VER_MAJOR, VER_MINOR, VER_PATCH);
+    string_printf(header,  " <meta name='character_name' value='%s'>\n", player_name);
+    string_printf(header,  " <meta name='race' value='%s'>\n", get_race()->name);
+    string_printf(header,  " <meta name='class' value='%s'>\n", get_class()->name);
+    string_printf(header,  " <meta name='level' value='%d'>\n", p_ptr->lev);
+    string_printf(header,  " <meta name='experience' value='%d'>\n", p_ptr->exp);
+    string_printf(header,  " <meta name='turncount' value='%d'>\n", game_turn);
+    string_printf(header,  " <meta name='max_depth' value='%d'>\n", _max_depth());
+    string_printf(header,  " <meta name='score' value='%d'>\n", p_ptr->exp); /* ?? Does oook need this? */
+    string_printf(header,  " <meta name='fame' value='%d'>\n", p_ptr->fame);
+
+    /* For angband.oook.cz ... I'm not sure what is best for proper display of html dumps so I'll need to ask pav
+     * Note: A retired winning player is_dead, but has died_from set to 'Ripe Old Age'.
+     * Approach #1: Give oook a string status field */
+    string_printf(header,  " <meta name='status' value='%s'>\n",
+        p_ptr->total_winner ? "winner" : (p_ptr->is_dead ? "dead" : "alive"));
+    /* Approach #2: Give oook some boolean fields */
+    string_printf(header,  " <meta name='winner' value='%d'>\n", p_ptr->total_winner ? 1 : 0);
+    string_printf(header,  " <meta name='dead' value='%d'>\n", p_ptr->is_dead ? 1 : 0);
+    string_printf(header,  " <meta name='retired' value='%d'>\n", _is_retired() ? 1 : 0);
+
+    if (p_ptr->is_dead)
+        string_printf(header,  " <meta name='killer' value='%s'>\n", p_ptr->died_from);
+    string_append_s(header, "</head>");
+
+    doc_change_html_header(doc, string_buffer(header));
+
+    string_free(s);
+    string_free(header);
+}
+
 void py_display_character_sheet(doc_ptr doc)
 {
+    _add_html_header(doc);
+
     doc_insert(doc, "<style:wide>  [PosChengband <$:version> Character Dump]\n");
     if (p_ptr->total_winner)
         doc_insert(doc, "              <color:B>***WINNER***</color>\n");
@@ -2321,64 +2388,9 @@ void py_display_character_sheet(doc_ptr doc)
     doc_insert(doc, "</style>");
 }
 
-static int _max_depth(void)
-{
-    int result = 0;
-    int i;
-
-    for(i = 1; i < max_d_idx; i++)
-    {
-        if (!d_info[i].maxdepth) continue;
-        if (d_info[i].flags1 & DF1_RANDOM) continue;
-        if (!max_dlv[i]) continue;
-        result = MAX(result, max_dlv[i]);
-    }
-
-    return result;
-}
-
-static bool _is_retired(void)
-{
-    if (p_ptr->total_winner && p_ptr->is_dead && strcmp(p_ptr->died_from, "Ripe Old Age") == 0)
-        return TRUE;
-    return FALSE;
-}
 void py_display(void)
 {
-    doc_ptr    d = doc_alloc(80);
-    string_ptr s = string_alloc_format("%s.html", player_base);
-    string_ptr header = string_alloc();
-
-    doc_change_name(d, string_buffer(s));
-
-    string_append_s(header, "<head>\n");
-    string_append_s(header, " <meta name='filetype' value='character dump'>\n");
-    string_printf(header,  " <meta name='variant' value='%s'>\n", VERSION_NAME);
-    string_printf(header,  " <meta name='variant_version' value='%d.%d.%d'>\n", VER_MAJOR, VER_MINOR, VER_PATCH);
-    string_printf(header,  " <meta name='character_name' value='%s'>\n", player_name);
-    string_printf(header,  " <meta name='race' value='%s'>\n", get_race()->name);
-    string_printf(header,  " <meta name='class' value='%s'>\n", get_class()->name);
-    string_printf(header,  " <meta name='level' value='%d'>\n", p_ptr->lev);
-    string_printf(header,  " <meta name='experience' value='%d'>\n", p_ptr->exp);
-    string_printf(header,  " <meta name='turncount' value='%d'>\n", game_turn);
-    string_printf(header,  " <meta name='max_depth' value='%d'>\n", _max_depth());
-    string_printf(header,  " <meta name='score' value='%d'>\n", p_ptr->exp); /* ?? Does oook need this? */
-    string_printf(header,  " <meta name='fame' value='%d'>\n", p_ptr->fame);
-
-    /* For angband.oook.cz ... I'm not sure what is best for proper display of html dumps so I'll need to ask pav
-     * Note: A retired winning player is_dead, but has died_from set to 'Ripe Old Age'.
-     * Approach #1: Give oook a string status field */
-    string_printf(header,  " <meta name='status' value='%s'>\n",
-        p_ptr->total_winner ? "winner" : (p_ptr->is_dead ? "dead" : "alive"));
-    /* Approach #2: Give oook some boolean fields */
-    string_printf(header,  " <meta name='winner' value='%d'>\n", p_ptr->total_winner ? 1 : 0);
-    string_printf(header,  " <meta name='dead' value='%d'>\n", p_ptr->is_dead ? 1 : 0);
-    string_printf(header,  " <meta name='retired' value='%d'>\n", _is_retired() ? 1 : 0);
-
-    if (p_ptr->is_dead)
-        string_printf(header,  " <meta name='killer' value='%s'>\n", p_ptr->died_from);
-    string_append_s(header, "</head>");
-    doc_change_html_header(d, string_buffer(header));
+    doc_ptr d = doc_alloc(80);
 
     py_display_character_sheet(d);
 
@@ -2387,8 +2399,6 @@ void py_display(void)
     screen_load();
 
     doc_free(d);
-    string_free(s);
-    string_free(header);
 }
 
 /* This is used by the birth process ... Note that there

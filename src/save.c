@@ -424,6 +424,7 @@ static void wr_extra(savefile_ptr file)
     int i,j;
     byte tmp8u;
 
+    savefile_write_s32b(file, p_ptr->id);
     savefile_write_cptr(file, player_name);
     savefile_write_cptr(file, p_ptr->died_from);
     savefile_write_cptr(file, p_ptr->last_message ? p_ptr->last_message : "");

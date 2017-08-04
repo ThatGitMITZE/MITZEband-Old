@@ -908,6 +908,7 @@ extern void recharged_notice(object_type *o_ptr);
 extern byte value_check_aux1(object_type *o_ptr); /* pseudo-id */
 
 /* files.c */
+extern void kingly(void);
 extern cptr map_name(void);
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
@@ -1924,7 +1925,6 @@ extern int get_slot_power(obj_ptr obj);
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);
-extern void kingly(void);
 extern bool send_world_score(bool do_send);
 extern errr top_twenty(void);
 extern errr predict_score(void);

@@ -320,6 +320,10 @@ static void rd_extra(savefile_ptr file)
     int i,j;
     char buf[1024];
 
+    if (savefile_is_older_than(file, 7, 0, 0, 4))
+        p_ptr->id = scores_next_id();
+    else
+        p_ptr->id = savefile_read_s32b(file);
     savefile_read_cptr(file, player_name, sizeof(player_name));
     savefile_read_cptr(file, p_ptr->died_from, sizeof(p_ptr->died_from));
 

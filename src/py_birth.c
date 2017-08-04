@@ -2695,6 +2695,8 @@ static void _birth_finalize(void)
 {
     int i;
 
+    p_ptr->id = scores_next_id();
+
     /* Quick Start */
     previous_char.quick_ok = TRUE;
     previous_char.game_mode = game_mode;

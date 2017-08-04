@@ -19,7 +19,7 @@
 #define VER_MAJOR 7
 #define VER_MINOR 0
 #define VER_PATCH 0
-#define VER_EXTRA 3
+#define VER_EXTRA 4
 
 #define GAME_MODE_BEGINNER  0
 #define GAME_MODE_NORMAL    1
@@ -151,12 +151,6 @@
 #define FAKE_NAME_SIZE  40 * 1024
 #define FAKE_TEXT_SIZE 250 * 1024
 #define FAKE_TAG_SIZE   10 * 1024
-
-
-/*
- * Maximum number of high scores in the high score file
- */
-#define MAX_HISCORES    999
 
 
 /*

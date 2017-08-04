@@ -66,6 +66,7 @@
 #include "spells.h"
 #include "menu.h"
 #include "fear.h"
+#include "scores.h"
 
 /***** Some copyright messages follow below *****/
 

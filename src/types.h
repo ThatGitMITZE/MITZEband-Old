@@ -981,6 +981,7 @@ typedef struct {
 
 struct player_type
 {
+    s32b id;
     s16b oldpy;        /* Previous player location -KMW- */
     s16b oldpx;        /* Previous player location -KMW- */
 

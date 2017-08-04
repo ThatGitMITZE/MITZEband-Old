@@ -1465,12 +1465,50 @@ static void _doc_write_html_file(doc_ptr doc, FILE *fp)
    vec_free(links);
 }
 
+static void _doc_write_doc_file(doc_ptr doc, FILE *fp)
+{
+    doc_pos_t        pos;
+    doc_char_ptr     cell;
+    byte             old_a = _INVALID_COLOR;
+
+    for (pos.y = 0; pos.y <= doc->cursor.y; pos.y++)
+    {
+        int cx = doc->width;
+        pos.x = 0;
+        if (pos.y == doc->cursor.y)
+            cx = doc->cursor.x;
+        cell = doc_char(doc, pos);
+
+        for (; pos.x < cx; pos.x++)
+        {
+            char c = cell->c;
+            byte a = cell->a & 0x0F;
+
+            if (!c) break;
+
+            if (a != old_a && c != ' ')
+            {
+                if (old_a != _INVALID_COLOR)
+                    fprintf(fp, "</color>");
+                fprintf(fp, "<color:%c>", attr_to_attr_char(a));
+                old_a = a;
+            }
+            fputc(c, fp);
+            cell++;
+        }
+        fputc('\n', fp);
+   }
+}
+
 void doc_write_file(doc_ptr doc, FILE *fp, int format)
 {
     switch (format)
     {
     case DOC_FORMAT_HTML:
         _doc_write_html_file(doc, fp);
+        break;
+    case DOC_FORMAT_DOC:
+        _doc_write_doc_file(doc, fp);
         break;
     default:
         _doc_write_text_file(doc, fp);

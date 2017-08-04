@@ -780,9 +780,6 @@ int main(int argc, char *argv[])
 	if (!done) quit("Unable to prepare any 'display module'!");
 
 
-	/* Hack -- If requested, display scores and quit */
-	if (show_score > 0) display_scores(0, show_score);
-
 	/* Catch nasty signals */
 	signals_init();
 

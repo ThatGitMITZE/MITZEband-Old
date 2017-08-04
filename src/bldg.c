@@ -3367,7 +3367,7 @@ static void bldg_process_command(building_type *bldg, int i)
         town_history();
         break;
     case BACT_RACE_LEGENDS:
-        race_legends();
+        /*race_legends();*/
         break;
     case BACT_QUEST:
         castle_quest();
@@ -3375,7 +3375,7 @@ static void bldg_process_command(building_type *bldg, int i)
     case BACT_KING_LEGENDS:
     case BACT_ARENA_LEGENDS:
     case BACT_LEGENDS:
-        show_highclass();
+        /*show_highclass();*/
         break;
     case BACT_POSTER:
     case BACT_ARENA_RULES:

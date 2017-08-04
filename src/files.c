@@ -3253,6 +3253,66 @@ static bool check_score(void)
 }
 
 /*
+ * Change the player into a King!            -RAK-
+ */
+void kingly(void)
+{
+    int wid, hgt;
+    int cx, cy;
+    bool seppuku = streq(p_ptr->died_from, "Seppuku");
+
+    /* Hack -- retire in town */
+    dun_level = 0;
+
+    /* Fake death */
+    if (!seppuku)
+        (void)strcpy(p_ptr->died_from, "Ripe Old Age");
+
+
+    /* Restore the experience */
+    p_ptr->exp = p_ptr->max_exp;
+
+    /* Restore the level */
+    p_ptr->lev = p_ptr->max_plv;
+
+    Term_get_size(&wid, &hgt);
+    cy = hgt / 2;
+    cx = wid / 2;
+
+    /* Hack -- Instant Gold */
+    p_ptr->au += 10000000;
+    stats_on_gold_winnings(10000000);
+
+    /* Clear screen */
+    Term_clear();
+
+    /* Display a crown */
+    put_str("#", cy - 11, cx - 1);
+    put_str("#####", cy - 10, cx - 3);
+    put_str("#", cy - 9, cx - 1);
+    put_str(",,,  $$$  ,,,", cy - 8, cx - 7);
+    put_str(",,=$   \"$$$$$\"   $=,,", cy - 7, cx - 11);
+    put_str(",$$        $$$        $$,", cy - 6, cx - 13);
+    put_str("*>         <*>         <*", cy - 5, cx - 13);
+    put_str("$$         $$$         $$", cy - 4, cx - 13);
+    put_str("\"$$        $$$        $$\"", cy - 3, cx - 13);
+    put_str("\"$$       $$$       $$\"", cy - 2, cx - 12);
+    put_str("*#########*#########*", cy - 1, cx - 11);
+    put_str("*#########*#########*", cy, cx - 11);
+
+    /* Display a message */
+    put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+    put_str("I came, I saw, I conquered!", cy + 4, cx - 14);
+    put_str(format("All Hail the Mighty %s!", sex_info[p_ptr->psex].winner), cy + 5, cx - 13);
+
+
+    /* Flush input */
+    flush();
+
+    /* Wait for response */
+    pause_line(hgt - 1);
+}
+/*
  * Close up the current game (player may or may not be dead)
  *
  * This function is called only from "main.c" and "signals.c".
@@ -3260,7 +3320,6 @@ static bool check_score(void)
 void close_game(void)
 {
     char buf[1024];
-    bool do_send = TRUE;
 
     /* Handle stuff */
     handle_stuff();
@@ -3301,10 +3360,8 @@ void close_game(void)
         /* Save memories */
         if (!cheat_save || get_check("Save death? "))
         {
-
             if (!save_player()) msg_print("death save failed!");
         }
-        else do_send = FALSE;
 
         /* You are dead */
         print_tomb();
@@ -3317,24 +3374,6 @@ void close_game(void)
         /* Clear screen */
         Term_clear();
 
-        if (check_score())
-        {
-            if ((!send_world_score(do_send)))
-            {
-                if (get_check_strict("Stand by for later score registration? ", (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-                {
-                    p_ptr->wait_report_score = TRUE;
-                    p_ptr->is_dead = FALSE;
-                    if (!save_player()) msg_print("death save failed!");
-                }
-            }
-            if (!p_ptr->wait_report_score)
-                (void)top_twenty();
-        }
-        else if (highscore_fd >= 0)
-        {
-            display_scores_aux(0, 10, -1, NULL);
-        }
 #if 0
         /* Dump bones file */
         make_bones();
@@ -3346,21 +3385,10 @@ void close_game(void)
     {
         /* Save the game */
         do_cmd_save_game(FALSE);
-
-        /* Prompt for scores XXX XXX XXX */
-        prt("Press Return (or Escape).", 0, 40);
-
-
-        /* Predict score (or ESCAPE) */
-        if (inkey() != ESCAPE) predict_score();
     }
 
-
-    /* Shut the high score file */
-    (void)fd_close(highscore_fd);
-
-    /* Forget the high score fd */
-    highscore_fd = -1;
+    if (check_score())
+        scores_update();
 
     /* Kill all temporal files */
     clear_saved_floor_files();
