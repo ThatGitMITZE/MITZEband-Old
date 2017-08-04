@@ -13,7 +13,7 @@ char *_str_copy_aux(cptr s)
 }
 char *_str_copy(cptr s)
 {
-    if (!s) return _str_copy_aux("");
+    if (!s) return NULL;
     return _str_copy_aux(s);
 }
 char *_timestamp(void)
@@ -28,6 +28,18 @@ char *_version(void)
     char buf[20];
     sprintf(buf, "%d.%d.%d", VER_MAJOR, VER_MINOR, VER_PATCH);
     return _str_copy(buf);
+}
+static char *_status(void)
+{
+    cptr status = 
+        p_ptr->total_winner ? "Winner" : (p_ptr->is_dead ? "Dead" : "Alive");
+    return _str_copy(status);
+}
+static char *_killer(void)
+{
+    if (p_ptr->is_dead)
+        return _str_copy(p_ptr->died_from);
+    return NULL;
 }
 
 /************************************************************************
@@ -67,20 +79,31 @@ score_ptr score_current(void)
     score->clvl = p_ptr->lev;
     score->dlvl = dun_level;
     score->dungeon = _str_copy(map_name());
-    score->killer = _str_copy(p_ptr->died_from);
+    score->killer = _killer();
+    score->status = _status();
 
     return score;
 }
 
-static int _parse_int(string_ptr s)
+static int _parse_int(vec_ptr v, int i)
 {
-    return atoi(string_buffer(s));
+    if (i < vec_length(v))
+    {
+        string_ptr s = vec_get(v, i);
+        return atoi(string_buffer(s));
+    }
+    return 0;
 }
-static char *_parse_string(string_ptr s)
+static char *_parse_string(vec_ptr v, int i)
 {
-    return _str_copy(string_buffer(s));
+    if (i < vec_length(v))
+    {
+        string_ptr s = vec_get(v, i);
+        return _str_copy(string_buffer(s));
+    }
+    return NULL;
 }
-#define _FIELD_COUNT 18
+#define _FIELD_COUNT 19
 static score_ptr score_read(FILE *fp)
 {
     score_ptr  score = NULL;
@@ -90,35 +113,37 @@ static score_ptr score_read(FILE *fp)
     string_read_line(line, fp);
     fields = string_split(line, '|');
     string_free(line);
-    if (vec_length(fields) >= _FIELD_COUNT)
+    if (vec_length(fields))
     {
         score = score_alloc();
-        score->id = _parse_int(vec_get(fields, 0));
-        score->uid = _parse_int(vec_get(fields, 1));
-        score->date = _parse_string(vec_get(fields, 2));
-        score->version = _parse_string(vec_get(fields, 3));
-        score->score = _parse_int(vec_get(fields, 4));
+        score->id = _parse_int(fields, 0);
+        score->uid = _parse_int(fields, 1);
+        score->date = _parse_string(fields, 2);
+        score->version = _parse_string(fields, 3);
+        score->score = _parse_int(fields, 4);
 
-        score->name = _parse_string(vec_get(fields, 5));
-        score->race = _parse_string(vec_get(fields, 6));
-        score->subrace = _parse_string(vec_get(fields, 7));
-        score->class_ = _parse_string(vec_get(fields, 8));
-        score->subclass = _parse_string(vec_get(fields, 9));
+        score->name = _parse_string(fields, 5);
+        score->race = _parse_string(fields, 6);
+        score->subrace = _parse_string(fields, 7);
+        score->class_ = _parse_string(fields, 8);
+        score->subclass = _parse_string(fields, 9);
 
-        score->sex = _parse_string(vec_get(fields, 10));
-        score->personality = _parse_string(vec_get(fields, 11));
+        score->sex = _parse_string(fields, 10);
+        score->personality = _parse_string(fields, 11);
 
-        score->gold = _parse_int(vec_get(fields, 12));
-        score->turns = _parse_int(vec_get(fields, 13));
-        score->clvl = _parse_int(vec_get(fields, 14));
-        score->dlvl = _parse_int(vec_get(fields, 15));
-        score->dungeon = _parse_string(vec_get(fields, 16));
-        score->killer = _parse_string(vec_get(fields, 17));
+        score->gold = _parse_int(fields, 12);
+        score->turns = _parse_int(fields, 13);
+        score->clvl = _parse_int(fields, 14);
+        score->dlvl = _parse_int(fields, 15);
+        score->dungeon = _parse_string(fields, 16);
+        score->killer = _parse_string(fields, 17);
+        score->status = _parse_string(fields, 18);
     }
     vec_free(fields);
     return score;
 }
 
+static cptr _opt(cptr s) { return s ? s : ""; }
 static void score_write(score_ptr score, FILE* fp)
 {
     string_ptr line = string_alloc();
@@ -127,11 +152,12 @@ static void score_write(score_ptr score, FILE* fp)
         score->id, score->uid, score->date, score->version, score->score);
 
     string_printf(line, "%s|%s|%s|%s|%s|",
-        score->name, score->race, score->subrace, score->class_, score->subclass);
+        score->name, score->race, _opt(score->subrace), score->class_, _opt(score->subclass));
 
-    string_printf(line, "%s|%s|%d|%d|%d|%d|%s|%s\n",
+    string_printf(line, "%s|%s|%d|%d|%d|%d|%s|%s|%s\n",
         score->sex, score->personality, score->gold, score->turns,
-        score->clvl, score->dlvl, score->dungeon, score->killer);
+        score->clvl, score->dlvl, _opt(score->dungeon), _opt(score->killer),
+        _opt(score->status));
 
     fputs(string_buffer(line), fp);
     string_free(line);
@@ -152,6 +178,7 @@ void score_free(score_ptr score)
         if (score->personality) free(score->personality);
         if (score->dungeon) free(score->dungeon);
         if (score->killer) free(score->killer);
+        if (score->status) free(score->status);
         free(score);
     }
 }
@@ -163,6 +190,15 @@ static int score_cmp(score_ptr l, score_ptr r)
     if (l->id < r->id) return 1;
     if (l->id > r->id) return -1;
     return 0;
+}
+
+static bool score_is_winner(score_ptr score)
+{
+    return score->status && strcmp(score->status, "Winner") == 0;
+}
+static bool score_is_dead(score_ptr score)
+{
+    return score->status && strcmp(score->status, "Dead") == 0;
 }
 
 /************************************************************************
@@ -216,10 +252,6 @@ void scores_save(vec_ptr scores)
         score_write(score, fp);
     }
     fclose(fp);
-}
-
-void scores_display(vec_ptr scores)
-{
 }
 
 int scores_next_id(void)
@@ -280,5 +312,85 @@ void scores_update(void)
         doc_free(doc);
         fclose(fp);
     } 
+}
+
+/************************************************************************
+ * User Interface
+ ************************************************************************/
+void scores_display(vec_ptr scores)
+{
+    doc_ptr   doc = doc_alloc(80);
+    int       top = 0, i, j, cmd;
+    int       page_size = ui_screen_rect().cy - 5;
+    score_ptr score;
+
+    if (page_size > 26)
+        page_size = 26;
+
+    Term_clear();
+    for (;;)
+    {
+        doc_clear(doc);
+        doc_insert(doc, "<color:R>                High Score Listing</color>\n");
+        doc_printf(doc, "<color:G>    %-20.20s %8.8s Rank Status</color>\n", "Name", "Score");
+        for (i = 0; i < page_size; i++)
+        {
+            j = top + i;
+            if (j >= vec_length(scores)) break;
+            score = vec_get(scores, j);
+            doc_printf(doc, " <color:y>%c)</color> %-20.20s", I2A(i), score->name);
+            doc_printf(doc, " %8d %4d", score->score, j + 1);
+            if (score_is_winner(score))
+                doc_insert(doc, " <color:v>Winner</color>");
+            else if (score_is_dead(score))
+                doc_insert(doc, " <color:r>Dead</color>");
+            else
+                doc_insert(doc, " Alive");
+            doc_newline(doc);
+        }
+        doc_insert(doc, "\n <color:U>Press corresponding letter to view last character sheet.</color>\n");
+        if (page_size < vec_length(scores))
+            doc_insert(doc, " <color:U>Use <color:keypress>PageUp</color> and <color:keypress>PageDown</color> to scroll.</color>\n");
+        doc_sync_menu(doc);
+        cmd = inkey_special(TRUE);
+        if (cmd == ESCAPE || cmd == 'Q') break;
+        if (islower(cmd))
+        {
+            j = top + A2I(cmd);
+            if (0 <= j && j < vec_length(scores))
+            {
+                char name[30];
+                FILE *fp;
+                score = vec_get(scores, j);
+                sprintf(name, "dump%d.doc", score->id);
+                fp = _scores_fopen(name, "r");
+                if (fp)
+                {
+                    doc_ptr d2 = doc_alloc(80);
+                    doc_read_file(d2, fp);
+                    fclose(fp);
+                    doc_display(d2, name, 0);
+                    doc_free(d2);
+                    Term_clear();
+                }
+            }
+        }
+        else
+        {
+            switch (cmd)
+            {
+            case SKEY_PGDOWN: case '3': case ' ':
+                if (top + page_size < vec_length(scores))
+                    top += page_size;
+                break;
+            case SKEY_PGUP: case '9': case '-':
+                if (top >= page_size)
+                    top -= page_size;
+                break;
+            }
+        }
+    }
+    Term_clear();
+    doc_free(doc);
 }
 

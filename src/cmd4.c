@@ -7089,6 +7089,7 @@ void do_cmd_knowledge(void)
             prt("(v) Virtues", row++, col);
         if (class_ptr->character_dump || race_ptr->character_dump)
             prt("(x) Extra info", row++, col);
+        prt("(H) High Score List", row++, col);
         row++;
 
         c_prt(TERM_RED, "Skills", row++, col - 2);
@@ -7187,6 +7188,13 @@ void do_cmd_knowledge(void)
             else
                 bell();
             break;
+        case 'H': {
+            vec_ptr scores;
+            scores_update();
+            scores = scores_load(NULL);
+            scores_display(scores);
+            vec_free(scores);
+            break; }
 
         /* Skills */
         case 'P':

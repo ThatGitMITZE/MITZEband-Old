@@ -1471,6 +1471,7 @@ static void _doc_write_doc_file(doc_ptr doc, FILE *fp)
     doc_char_ptr     cell;
     byte             old_a = _INVALID_COLOR;
 
+    fputs("<style:wide>", fp);
     for (pos.y = 0; pos.y <= doc->cursor.y; pos.y++)
     {
         int cx = doc->width;
@@ -1489,7 +1490,7 @@ static void _doc_write_doc_file(doc_ptr doc, FILE *fp)
             if (a != old_a && c != ' ')
             {
                 if (old_a != _INVALID_COLOR)
-                    fprintf(fp, "</color>");
+                    fputs("</color>", fp);
                 fprintf(fp, "<color:%c>", attr_to_attr_char(a));
                 old_a = a;
             }
@@ -1498,6 +1499,7 @@ static void _doc_write_doc_file(doc_ptr doc, FILE *fp)
         }
         fputc('\n', fp);
    }
+    fputs("</style>", fp);
 }
 
 void doc_write_file(doc_ptr doc, FILE *fp, int format)

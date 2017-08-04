@@ -24,18 +24,19 @@ typedef struct {
     int   dlvl;
     char *dungeon;
     char *killer;
+    char *status;
 } score_t, *score_ptr;
 typedef bool (*score_p)(score_ptr score);
 
-extern vec_ptr      scores_load(score_p filter);
-extern void         scores_save(vec_ptr scores);
-extern void         scores_display(vec_ptr scores);
+extern vec_ptr   scores_load(score_p filter);
+extern void      scores_save(vec_ptr scores);
+extern void      scores_display(vec_ptr scores);
 
-extern int          scores_next_id(void);
-extern void         scores_update(void);
+extern int       scores_next_id(void);
+extern void      scores_update(void);
 
 extern score_ptr score_alloc(void);
 extern score_ptr score_current(void);
-extern void         score_free(score_ptr score);
+extern void      score_free(score_ptr score);
 
 #endif
