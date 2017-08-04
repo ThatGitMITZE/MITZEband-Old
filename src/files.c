@@ -3183,7 +3183,7 @@ static void show_info(void)
 }
 
 
-static bool check_score(void)
+bool check_score(void)
 {
     /* Clear screen */
     Term_clear();

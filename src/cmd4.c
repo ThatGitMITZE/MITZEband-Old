@@ -7190,7 +7190,8 @@ void do_cmd_knowledge(void)
             break;
         case 'H': {
             vec_ptr scores;
-            scores_update();
+            if (check_score())
+                scores_update();
             scores = scores_load(NULL);
             scores_display(scores);
             vec_free(scores);

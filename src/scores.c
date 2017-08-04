@@ -192,6 +192,43 @@ static int score_cmp(score_ptr l, score_ptr r)
     return 0;
 }
 
+static int score_cmp_score(score_ptr l, score_ptr r)
+{
+    return score_cmp(l, r);
+}
+
+static int score_cmp_date(score_ptr l, score_ptr r)
+{
+    int result = strcmp(l->date, r->date);
+    if (!result)
+        result = score_cmp_score(l, r);
+    return result;
+}
+
+static int score_cmp_race(score_ptr l, score_ptr r)
+{
+    int result = strcmp(l->race, r->race);
+    if (!result)
+        result = score_cmp_score(l, r);
+    return result;
+}
+
+static int score_cmp_class(score_ptr l, score_ptr r)
+{
+    int result = strcmp(l->class_, r->class_);
+    if (!result)
+        result = score_cmp_score(l, r);
+    return result;
+}
+
+static int score_cmp_name(score_ptr l, score_ptr r)
+{
+    int result = strcmp(l->name, r->name);
+    if (!result)
+        result = score_cmp_score(l, r);
+    return result;
+}
+
 static bool score_is_winner(score_ptr score)
 {
     return score->status && strcmp(score->status, "Winner") == 0;
@@ -317,76 +354,118 @@ void scores_update(void)
 /************************************************************************
  * User Interface
  ************************************************************************/
+static void _display(doc_ptr doc, vec_ptr scores, int top, int page_size)
+{
+    int i, j;
+    doc_clear(doc);
+    doc_insert(doc, "<style:table>");
+    doc_insert(doc, "<tab:32><color:R>High Score Listing</color>\n");
+    doc_insert(doc, "<color:G>    <color:keypress>N</color>ame            "
+        "CL <color:keypress>R</color>ace         "
+        "<color:keypress>C</color>lass            "
+        "<color:keypress>S</color>core Rank <color:keypress>D</color>ate       "
+        "Status</color>\n");
+    for (i = 0; i < page_size; i++)
+    {
+        score_ptr score;
+        j = top + i;
+        if (j >= vec_length(scores)) break;
+        score = vec_get(scores, j);
+        if (score->id == p_ptr->id)
+            doc_insert(doc, "<color:B>");
+        doc_printf(doc, " <color:y>%c</color>) %-15.15s", I2A(i), score->name);
+        doc_printf(doc, " %2d %-12.12s %-13.13s", score->clvl, score->race, score->class_);
+        doc_printf(doc, " %8d %4d", score->score, j + 1);
+        doc_printf(doc, " %s", score->date);
+        if (score_is_winner(score))
+            doc_insert(doc, " <color:v>Winner</color>");
+        else if (score_is_dead(score))
+            doc_insert(doc, " <color:r>Dead</color>");
+        else
+            doc_insert(doc, " Alive");
+        if (score->id == p_ptr->id)
+            doc_insert(doc, "</color>");
+        doc_newline(doc);
+    }
+    doc_insert(doc, "</style>");
+    doc_insert(doc, "\n <color:U>Press corresponding letter to view last character sheet.</color>\n");
+    doc_insert(doc, " <color:U>Press <color:keypress>^N</color> to sort by Name, <color:keypress>^R</color> to sort by Race, etc.</color>\n");
+    if (page_size < vec_length(scores))
+        doc_insert(doc, " <color:U>Use <color:keypress>PageUp</color> and <color:keypress>PageDown</color> to scroll.</color>\n");
+    doc_sync_menu(doc);
+}
+static void _show_dump(score_ptr score)
+{
+    char  name[30];
+    FILE *fp;
+
+    sprintf(name, "dump%d.doc", score->id);
+    fp = _scores_fopen(name, "r");
+    if (fp)
+    {
+        doc_ptr doc = doc_alloc(80);
+        doc_read_file(doc, fp);
+        fclose(fp);
+        doc_display(doc, name, 0);
+        doc_free(doc);
+        Term_clear();
+    }
+}
 void scores_display(vec_ptr scores)
 {
-    doc_ptr   doc = doc_alloc(80);
-    int       top = 0, i, j, cmd;
-    int       page_size = ui_screen_rect().cy - 5;
-    score_ptr score;
+    doc_ptr   doc = doc_alloc(100);
+    int       top = 0, cmd;
+    int       page_size = ui_screen_rect().cy - 6;
+    bool      done = FALSE;
 
     if (page_size > 26)
         page_size = 26;
 
     Term_clear();
-    for (;;)
+    while (!done)
     {
-        doc_clear(doc);
-        doc_insert(doc, "<color:R>                High Score Listing</color>\n");
-        doc_printf(doc, "<color:G>    %-20.20s %8.8s Rank Status</color>\n", "Name", "Score");
-        for (i = 0; i < page_size; i++)
-        {
-            j = top + i;
-            if (j >= vec_length(scores)) break;
-            score = vec_get(scores, j);
-            doc_printf(doc, " <color:y>%c)</color> %-20.20s", I2A(i), score->name);
-            doc_printf(doc, " %8d %4d", score->score, j + 1);
-            if (score_is_winner(score))
-                doc_insert(doc, " <color:v>Winner</color>");
-            else if (score_is_dead(score))
-                doc_insert(doc, " <color:r>Dead</color>");
-            else
-                doc_insert(doc, " Alive");
-            doc_newline(doc);
-        }
-        doc_insert(doc, "\n <color:U>Press corresponding letter to view last character sheet.</color>\n");
-        if (page_size < vec_length(scores))
-            doc_insert(doc, " <color:U>Use <color:keypress>PageUp</color> and <color:keypress>PageDown</color> to scroll.</color>\n");
-        doc_sync_menu(doc);
+        _display(doc, scores, top, page_size);
         cmd = inkey_special(TRUE);
         if (cmd == ESCAPE || cmd == 'Q') break;
-        if (islower(cmd))
+        switch (cmd)
         {
-            j = top + A2I(cmd);
-            if (0 <= j && j < vec_length(scores))
+        case ESCAPE: case 'Q':
+            done = TRUE;
+            break;
+        case SKEY_PGDOWN: case '3': case ' ':
+            if (top + page_size < vec_length(scores))
+                top += page_size;
+            break;
+        case SKEY_PGUP: case '9': case '-':
+            if (top >= page_size)
+                top -= page_size;
+            break;
+        case KTRL('S'):
+            vec_sort(scores, (vec_cmp_f)score_cmp_score);
+            top = 0;
+            break;
+        case KTRL('D'):
+            vec_sort(scores, (vec_cmp_f)score_cmp_date);
+            top = 0;
+            break;
+        case KTRL('R'):
+            vec_sort(scores, (vec_cmp_f)score_cmp_race);
+            top = 0;
+            break;
+        case KTRL('C'):
+            vec_sort(scores, (vec_cmp_f)score_cmp_class);
+            top = 0;
+            break;
+        case KTRL('N'):
+            vec_sort(scores, (vec_cmp_f)score_cmp_name);
+            top = 0;
+            break;
+        default:
+            if (islower(cmd))
             {
-                char name[30];
-                FILE *fp;
-                score = vec_get(scores, j);
-                sprintf(name, "dump%d.doc", score->id);
-                fp = _scores_fopen(name, "r");
-                if (fp)
-                {
-                    doc_ptr d2 = doc_alloc(80);
-                    doc_read_file(d2, fp);
-                    fclose(fp);
-                    doc_display(d2, name, 0);
-                    doc_free(d2);
-                    Term_clear();
-                }
-            }
-        }
-        else
-        {
-            switch (cmd)
-            {
-            case SKEY_PGDOWN: case '3': case ' ':
-                if (top + page_size < vec_length(scores))
-                    top += page_size;
-                break;
-            case SKEY_PGUP: case '9': case '-':
-                if (top >= page_size)
-                    top -= page_size;
-                break;
+                int j = top + A2I(cmd);
+                if (0 <= j && j < vec_length(scores))
+                    _show_dump(vec_get(scores, j));
             }
         }
     }

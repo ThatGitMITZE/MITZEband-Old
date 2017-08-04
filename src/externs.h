@@ -907,6 +907,7 @@ extern void recharged_notice(object_type *o_ptr);
 extern byte value_check_aux1(object_type *o_ptr); /* pseudo-id */
 
 /* files.c */
+extern bool check_score(void);
 extern void kingly(void);
 extern cptr map_name(void);
 extern void safe_setuid_drop(void);
