@@ -2345,9 +2345,11 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
                     int r_idx = _formation_monsters[idx];
 
                     if (r_idx)
-                    {
                         place_monster_aux(0, p.y, p.x, r_idx, PM_NO_KAGE);
-                    }
+                    /* cf Oval Crypt V: The '0' letter should get a good ego item! */
+                    grid = _find_room_grid(room, letter);
+                    if (grid)
+                        _apply_room_grid_obj(p, grid, room->flags);
                     continue;
                 }
             }
