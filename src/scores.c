@@ -199,7 +199,7 @@ static int score_cmp_score(score_ptr l, score_ptr r)
 
 static int score_cmp_date(score_ptr l, score_ptr r)
 {
-    int result = strcmp(l->date, r->date);
+    int result = -strcmp(l->date, r->date);
     if (!result)
         result = score_cmp_score(l, r);
     return result;
