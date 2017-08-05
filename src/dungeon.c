@@ -4296,7 +4296,7 @@ static void process_player(void)
         {
             energy_use = 100;
             do { set_paralyzed(p_ptr->paralyzed - 1, TRUE); }
-            while (p_ptr->paralyzed && free_act_save_p(0));
+            while (p_ptr->paralyzed && free_act_save_p(dun_level/2));
         }
         /* Knocked Out */
         else if (p_ptr->stun >= STUN_KNOCKED_OUT)
