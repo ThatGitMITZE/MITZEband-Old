@@ -3231,7 +3231,7 @@ bool check_score(void)
         return FALSE;
     }
 
-    /* Quitter */
+    /* Quitter 
     if (!p_ptr->total_winner && streq(p_ptr->died_from, "Quitting"))
 
     {
@@ -3239,7 +3239,7 @@ bool check_score(void)
 
         msg_print(NULL);
         return FALSE;
-    }
+    } */
     return TRUE;
 }
 
