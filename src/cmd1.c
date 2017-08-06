@@ -1786,7 +1786,8 @@ static void hit_trap(bool break_trap)
                 dam = damroll(1, 4);
                 take_hit(DAMAGE_ATTACK, dam, "a dart trap");
 
-                if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
+                if (!CHECK_MULTISHADOW() && !free_act_save_p(dun_level))
+                    (void)set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
             }
             else
             {

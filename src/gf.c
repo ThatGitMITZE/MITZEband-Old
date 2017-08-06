@@ -565,7 +565,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_INERT:
         if (!touch && fuzzy) msg_print("You are hit by something slow!");
         /*if (touch) ... */
-        if (!CHECK_MULTISHADOW())
+        if (!CHECK_MULTISHADOW() && !free_act_save_p(MAX(rlev, dam)))
             set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         result = take_hit(DAMAGE_ATTACK, dam, m_name);
         break;
@@ -719,7 +719,8 @@ int gf_affect_p(int who, int type, int dam, int flags)
         break;
     case GF_OLD_SLOW:
         if (fuzzy) msg_print("You are hit by something slow!");
-        set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+        if (!free_act_save_p(MAX(rlev, dam)))
+            set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
         break;
     case GF_OLD_SLEEP:
         if (!free_act_save_p(rlev))
