@@ -1558,7 +1558,14 @@ s16b get_mon_num(int level)
         r_ptr = &r_info[r_idx];
 
         /* Hack: Camelot monsters only appear in Camelot. Olympians in Mt Olympus. Southerings in the Stronghold */
-        if (!no_wilderness)
+        if (no_wilderness)
+        {
+            /* Camelot Knights are all rarity 1 and extremely OP for their depth.
+             * They are way too common in no_wilderness games ... */
+            if ((r_ptr->flags2 & RF2_CAMELOT) && !one_in_(3)) continue;
+            /* ... Olympians are rarity 3, which is OK, I think. */
+        }
+        else
         {
             if ((r_ptr->flags2 & RF2_CAMELOT) && dungeon_type != DUNGEON_CAMELOT) continue;
             if ((r_ptr->flags2 & RF2_SOUTHERING) && dungeon_type != DUNGEON_STRONGHOLD) continue;
