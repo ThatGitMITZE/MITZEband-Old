@@ -1180,8 +1180,11 @@ void mon_spell_group_add(mon_spell_group_ptr group, mon_spell_ptr spell)
     assert(group->count < group->allocated);
 /*  group->spells[group->count++] = *spell; */
     for (i = 0; i < group->count; i++)
+    {
+        if (group->spells[i].id.effect == spell->id.effect) return;
         if (group->spells[i].id.effect > spell->id.effect)
             break;
+    }
 
     if (i < group->count)
         memmove(group->spells + i + 1, group->spells + i, (group->count - i)*sizeof(mon_spell_t));
@@ -1245,8 +1248,11 @@ errr mon_spells_parse(mon_spells_ptr spells, int rlev, char *token)
     errr        rc = mon_spell_parse(&spell, rlev, token);
 
     if (rc == 0)
+    {
+        if (mon_spells_find(spells, spell.id)) /* duplicate flags were not a problem, but duplicate spells are */
+            return 1;
         mon_spells_add(spells, &spell);
-
+    }
     return rc;
 }
 
