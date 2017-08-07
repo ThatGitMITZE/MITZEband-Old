@@ -147,10 +147,16 @@
 
 /*
  * Size of memory reserved for initialization of some arrays
+ * This approach currently wastes a bit of memory (445474 bytes)
+ * by insisting on a single allocation size for all info files.
+ * r_info requires 116771 bytes of text info, but k_info, a_info
+ * and d_info only need about 11k, 27k and 1k respectively. Also,
+ * its a bit tedious to figure current memory requirements. Why
+ * not just malloc() string data and let the C library handle things?
  */
-#define FAKE_NAME_SIZE  40 * 1024
-#define FAKE_TEXT_SIZE 250 * 1024
-#define FAKE_TAG_SIZE   10 * 1024
+#define FAKE_NAME_SIZE  20 * 1024   /* max is 18532 (r_info) */
+#define FAKE_TEXT_SIZE  120 * 1024  /* max is 116771 (r_info) */
+#define FAKE_TAG_SIZE   3 * 1024    /* max is 2092 (f_info) */
 
 
 /*
