@@ -1515,10 +1515,12 @@ static void spoil_mon_melee_dam(void)
     vec_free(v);
 }
 
-static void _display_mon_resist(doc_ptr doc, mon_race_ptr race, u32b res_flag, u32b im_flag)
+static void _display_mon_resist(doc_ptr doc, mon_race_ptr race, u32b res_flag, u32b im_flag, u32b vuln_flag)
 {
     if (im_flag && (race->flagsr & im_flag))
         doc_insert(doc, " <color:v>*</color>");
+    else if (vuln_flag && (race->flags3 & vuln_flag)) /* XXX all HURT_* flags are in flags3 atm */
+        doc_insert(doc, " <color:y>v</color>");
     else if (race->flagsr & res_flag)
         doc_insert(doc, " <color:r>+</color>");
     else
@@ -1541,7 +1543,7 @@ static void _spoil_mon_resist_aux(doc_ptr doc, vec_ptr v)
 
         if (i%10 == 0)
         {
-            doc_printf(doc, "\n<color:G>%-20.20s Lvl    HP AcElFiCoPo LiDkCfNtNx SoShCaDi</color>\n", "Name");
+            doc_printf(doc, "\n<color:G>%-30.30s Lvl    HP AcElFiCoPo LiDkCfNtNx SoShCaDiTm</color>\n", "Name");
         }
 
         if (race->flags9 & RF9_DEPRECATED)
@@ -1550,26 +1552,27 @@ static void _spoil_mon_resist_aux(doc_ptr doc, vec_ptr v)
             color = 'U';
         else if (race->id > 1132)
             color = 'B';
-        doc_printf(doc, "<color:%c>%-20.20s</color> %3d %5d ", color, r_name + race->name, race->level, hp);
-        _display_mon_resist(doc, race, RFR_RES_ACID, RFR_IM_ACID);
-        _display_mon_resist(doc, race, RFR_RES_ELEC, RFR_IM_ELEC);
-        _display_mon_resist(doc, race, RFR_RES_FIRE, RFR_IM_FIRE);
-        _display_mon_resist(doc, race, RFR_RES_COLD, RFR_IM_COLD);
-        _display_mon_resist(doc, race, RFR_RES_POIS, RFR_IM_POIS);
+        doc_printf(doc, "<color:%c>%-30.30s</color> %3d %5d ", color, r_name + race->name, race->level, hp);
+        _display_mon_resist(doc, race, RFR_RES_ACID, RFR_IM_ACID, 0);
+        _display_mon_resist(doc, race, RFR_RES_ELEC, RFR_IM_ELEC, 0);
+        _display_mon_resist(doc, race, RFR_RES_FIRE, RFR_IM_FIRE, RF3_HURT_FIRE);
+        _display_mon_resist(doc, race, RFR_RES_COLD, RFR_IM_COLD, RF3_HURT_COLD);
+        _display_mon_resist(doc, race, RFR_RES_POIS, RFR_IM_POIS, 0);
         doc_insert(doc, " ");
-        _display_mon_resist(doc, race, RFR_RES_LITE, 0);
-        _display_mon_resist(doc, race, RFR_RES_DARK, 0);
+        _display_mon_resist(doc, race, RFR_RES_LITE, 0, RF3_HURT_LITE);
+        _display_mon_resist(doc, race, RFR_RES_DARK, 0, 0);
         if (race->flags3 & RF3_NO_CONF)
             doc_insert(doc, " <color:r>+</color>");
         else
             doc_insert(doc, " <color:D>-</color>");
-        _display_mon_resist(doc, race, RFR_RES_NETH, 0);
-        _display_mon_resist(doc, race, RFR_RES_NEXU, 0);
+        _display_mon_resist(doc, race, RFR_RES_NETH, 0, 0);
+        _display_mon_resist(doc, race, RFR_RES_NEXU, 0, 0);
         doc_insert(doc, " ");
-        _display_mon_resist(doc, race, RFR_RES_SOUN, 0);
-        _display_mon_resist(doc, race, RFR_RES_SHAR, 0);
-        _display_mon_resist(doc, race, RFR_RES_CHAO, 0);
-        _display_mon_resist(doc, race, RFR_RES_DISE, 0);
+        _display_mon_resist(doc, race, RFR_RES_SOUN, 0, 0);
+        _display_mon_resist(doc, race, RFR_RES_SHAR, 0, 0);
+        _display_mon_resist(doc, race, RFR_RES_CHAO, 0, 0);
+        _display_mon_resist(doc, race, RFR_RES_DISE, 0, 0);
+        _display_mon_resist(doc, race, RFR_RES_TIME, 0, 0);
         doc_newline(doc);
     }
 }
