@@ -42,6 +42,22 @@ static char *_killer(void)
     return NULL;
 }
 
+static int _max_depth(void)
+{
+    int result = 0;
+    int i;
+
+    for(i = 1; i < max_d_idx; i++)
+    {
+        if (!d_info[i].maxdepth) continue;
+        if (d_info[i].flags1 & DF1_RANDOM) continue;
+        if (!max_dlv[i]) continue;
+        result = MAX(result, max_dlv[i]);
+    }
+
+    return result;
+}
+
 /************************************************************************
  * Score Entries
  ************************************************************************/
@@ -82,6 +98,10 @@ score_ptr score_current(void)
     score->killer = _killer();
     score->status = _status();
 
+    score->exp = p_ptr->exp;
+    score->max_depth = _max_depth();
+    score->fame = p_ptr->fame;
+
     return score;
 }
 
@@ -103,7 +123,7 @@ static char *_parse_string(vec_ptr v, int i)
     }
     return NULL;
 }
-#define _FIELD_COUNT 19
+#define _FIELD_COUNT 22
 static score_ptr score_read(FILE *fp)
 {
     score_ptr  score = NULL;
@@ -138,6 +158,10 @@ static score_ptr score_read(FILE *fp)
         score->dungeon = _parse_string(fields, 16);
         score->killer = _parse_string(fields, 17);
         score->status = _parse_string(fields, 18);
+
+        score->exp = _parse_int(fields, 19);
+        score->max_depth = _parse_int(fields, 20);
+        score->fame = _parse_int(fields, 21);
     }
     vec_free(fields);
     return score;
@@ -154,10 +178,12 @@ static void score_write(score_ptr score, FILE* fp)
     string_printf(line, "%s|%s|%s|%s|%s|",
         score->name, score->race, _opt(score->subrace), score->class_, _opt(score->subclass));
 
-    string_printf(line, "%s|%s|%d|%d|%d|%d|%s|%s|%s\n",
+    string_printf(line, "%s|%s|%d|%d|%d|%d|%s|%s|%s|",
         score->sex, score->personality, score->gold, score->turns,
         score->clvl, score->dlvl, _opt(score->dungeon), _opt(score->killer),
         _opt(score->status));
+
+    string_printf(line, "%d|%d|%d\n", score->exp, score->max_depth, score->fame);
 
     fputs(string_buffer(line), fp);
     string_free(line);
@@ -394,6 +420,48 @@ static void _display(doc_ptr doc, vec_ptr scores, int top, int page_size)
         doc_insert(doc, " <color:U>Use <color:keypress>PageUp</color> and <color:keypress>PageDown</color> to scroll.</color>\n");
     doc_sync_menu(doc);
 }
+/* Generating html dumps from the scores directory will omit the html header
+ * attributes necessary for posting to angband.cz.oook. I don't want to store
+ * html dumps in scores for space considerations and I insist on being able to view
+ * the dumps from within the game (so we store .doc formats). Try to patch things
+ * up to keep oook happy, but this is untested. */
+static void _add_html_header(score_ptr score, doc_ptr doc)
+{
+    string_ptr header = string_alloc();
+
+    string_append_s(header, "<head>\n");
+    string_append_s(header, " <meta name='filetype' value='character dump'>\n");
+    string_printf(header,  " <meta name='variant' value='%s'>\n", VERSION_NAME); /* never changes */
+    string_printf(header,  " <meta name='variant_version' value='%s'>\n", score->version);
+    string_printf(header,  " <meta name='character_name' value='%s'>\n", score->name);
+    string_printf(header,  " <meta name='race' value='%s'>\n", score->race);
+    string_printf(header,  " <meta name='class' value='%s'>\n", score->class_);
+    string_printf(header,  " <meta name='level' value='%d'>\n", score->clvl);
+    string_printf(header,  " <meta name='experience' value='%d'>\n", score->exp);
+    string_printf(header,  " <meta name='turncount' value='%d'>\n", score->turns);
+    string_printf(header,  " <meta name='max_depth' value='%d'>\n", score->max_depth);
+    string_printf(header,  " <meta name='score' value='%d'>\n", score->score);
+    string_printf(header,  " <meta name='fame' value='%d'>\n", score->fame);
+
+    { /* XXX Is oook case sensitive? */
+        char status[100];
+        sprintf(status, "%s", score->status);
+        status[0] = tolower(status[0]);
+        string_printf(header,  " <meta name='status' value='%s'>\n", status);
+    }
+
+    /* XXX drop winner, dead and retired boolean fields. Hopefully oook relies on
+     * the status field instead */
+
+    if (score_is_dead(score))
+        string_printf(header,  " <meta name='killer' value='%s'>\n", score->killer);
+    string_append_s(header, "</head>");
+
+    doc_change_html_header(doc, string_buffer(header));
+
+    string_free(header);
+}
+
 static void _show_dump(score_ptr score)
 {
     char  name[30];
@@ -406,6 +474,7 @@ static void _show_dump(score_ptr score)
         doc_ptr doc = doc_alloc(80);
         doc_read_file(doc, fp);
         fclose(fp);
+        _add_html_header(score, doc); /* in case the user pipes to html then posts to oook */
         doc_display(doc, name, 0);
         doc_free(doc);
         Term_clear();

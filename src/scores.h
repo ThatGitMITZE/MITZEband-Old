@@ -25,6 +25,9 @@ typedef struct {
     char *dungeon;
     char *killer;
     char *status;
+    int   exp;   /* for oook html dumps */
+    int   max_depth;
+    int   fame;
 } score_t, *score_ptr;
 typedef bool (*score_p)(score_ptr score);
 
