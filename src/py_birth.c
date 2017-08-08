@@ -226,6 +226,7 @@ static int _welcome_ui(void)
         if (game_mode != GAME_MODE_BEGINNER)
             doc_insert(_doc, "  <color:y>=</color>) Options\n");
         doc_insert(_doc, "  <color:y>?</color>) Help\n");
+        doc_insert(_doc, "  <color:y>s</color>) View Scores\n");
         doc_insert(_doc, "<color:y>ESC</color>) <color:v>Quit</color>\n");
 
 
@@ -291,6 +292,12 @@ static int _welcome_ui(void)
         }
         else if (cmd == 'M')
             doc_display_help("birth.txt", "MonsterMode");
+        else if (cmd == 's')
+        {
+            vec_ptr scores = scores_load(NULL);
+            scores_display(scores);
+            vec_free(scores);
+        }
     }
 }
 
