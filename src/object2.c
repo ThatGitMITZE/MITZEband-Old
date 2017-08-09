@@ -3989,7 +3989,7 @@ s16b drop_near(object_type *j_ptr, int chance, int y, int x)
     if (!object_is_artifact(j_ptr) && (randint0(100) < chance))
     {
         /* Message */
-        cmsg_format(TERM_RED, "The %s disappear%s.",
+        cmsg_format(TERM_L_RED, "The %s disappear%s.",
                o_name, plural ? "" : "s");
 
 
