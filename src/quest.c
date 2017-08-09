@@ -778,6 +778,9 @@ void quests_on_kill_mon(mon_ptr mon)
     q = quests_get(_current);
     assert(q);
     assert(mon);
+    /* handle monsters summoned *after* the quest was completed ... */
+    if (q->status == QS_COMPLETED) return;
+
     if (q->goal == QG_KILL_MON && mon->r_idx == q->goal_idx)
     {
         q->goal_current++;
