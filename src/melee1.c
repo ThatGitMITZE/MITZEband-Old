@@ -1071,7 +1071,7 @@ bool make_attack_normal(int m_idx)
                         /* Modify the damage */
                         dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-                        msg_format("%^s is injured by the Force", m_name);
+                        msg_format("%^s is injured by the <color:B>Force</color>.", m_name);
 
                         if (mon_take_hit(m_idx, dam, &fear,
                             " is destroyed."))

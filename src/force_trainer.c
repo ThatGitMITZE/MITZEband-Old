@@ -217,7 +217,8 @@ static void _shock_power_spell(int cmd, variant *res)
     {
         int y, x, dam, dir;
         project_length = 1;
-        if (!get_fire_dir(&dir))
+        /*if (!get_fire_dir(&dir)) XXX blow away won't work if a target is chosen ... dir == 5 */
+        if (!get_rep_dir2(&dir))
         { 
             var_set_bool(res, FALSE);
             return;
