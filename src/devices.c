@@ -2331,9 +2331,9 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BALL_ACID,             29,  13,     1,   0,     0, 0},
     {EFFECT_BALL_FIRE,             30,  14,     1,   0,     0, 0},
     {EFFECT_BOLT_WATER,            30,  15,     1,   0,     0, 0},
-    {EFFECT_BOLT_ICE,              32,  16,     1,   0,     0, 0},
-    {EFFECT_BOLT_PLASMA,           35,  18,     1,   0,     0, 0},
-    {EFFECT_DRAIN_LIFE,            40,  19,     1,   0,     0, 0},
+    {EFFECT_DRAIN_LIFE,            32,  17,     1,   0,     0, 0},
+    {EFFECT_BOLT_PLASMA,           38,  19,     1,   0,     0, 0},
+    {EFFECT_BOLT_ICE,              40,  20,     1,   0,     0, 0},
     {EFFECT_ARROW,                 45,  20,     1,   0,     0, _EASY},
     {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD},
     {EFFECT_BREATHE_COLD,          50,  22,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
@@ -2344,7 +2344,7 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_GENOCIDE_ONE,          65,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BALL_WATER,            70,  28,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BALL_DISINTEGRATE,     75,  35,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_ROCKET,                85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _RARE | _HARD},
+    {EFFECT_ROCKET,                85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {0}
 };
@@ -3125,6 +3125,60 @@ static int _avg_damroll(int dd, int ds)
     return dd * (ds + 1) / 2;
 }
 
+/* Device casting is non-linear in difficulty (cf design/devices.ods)
+ * Yet device power (e.g. damage) is (or was?) linear. This is hardly fair! */
+typedef struct { int w1, w2, w3; } _weights_t;
+static _weights_t _weights(int w1, int w2, int w3)
+{
+    _weights_t w;
+    w.w1 = w1;
+    w.w2 = w2;
+    w.w3 = w3;
+    return w;
+}
+typedef struct { int lvl, max; } _level_t;
+static _level_t _level_aux(int lvl, int max)
+{
+    _level_t l;
+    l.lvl = lvl;
+    l.max = max;
+    return l;
+}
+/*static _level_t _level(int lvl)
+{
+    return _level_aux(lvl, 100);
+}*/
+static _level_t _level_offset(int lvl, int start)
+{
+    int l = MAX(0, lvl - start);
+    return _level_aux(l, 100 - start);
+}
+static int _power_curve_aux(int amt, _level_t l, _weights_t w)
+{
+    int result = 0;
+    int wt = w.w1 + w.w2 + w.w3;
+
+    if (l.lvl == l.max)
+        return amt;
+
+    result += amt * l.lvl * w.w1 / (l.max*wt);
+    result += amt * l.lvl * l.lvl * w.w2 / (l.max*l.max*wt);
+    result += (amt * l.lvl * l.lvl / l.max) * l.lvl * w.w3 / (l.max*l.max*wt);
+
+    return result;
+}
+/*static int _power_curve(int amt, int lvl)
+{
+    return _power_curve_aux(amt, _level(lvl), _weights(1, 1, 1));
+}*/
+static int _power_curve_offset(int amt, int lvl, int start)
+{
+    return _power_curve_aux(amt, _level_offset(lvl, start), _weights(1, 1, 1));
+}
+
+/************************************************************************
+ * The Effects
+ ***********************************************************************/
 #define _BOOST(n) (_boost((n), boost))
 cptr do_effect(effect_t *effect, int mode, int boost)
 {
@@ -5320,7 +5374,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_NEXUS:
     {
-        int dam = _extra(effect, 60 + effect->power);
+        int dam = _extra(effect, 100 + _power_curve_offset(200, effect->power, 40));
         if (name) return "Nexus Ball";
         if (desc) return "It fires a ball of nexus.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5416,7 +5470,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_WATER:
     {
-        int dam = _extra(effect, 100 + 2*effect->power);
+        int dam = _extra(effect, 150 + _power_curve_offset(200, effect->power, 50));
         if (name) return "Whirlpool";
         if (desc) return "It fires a huge ball of water.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5448,7 +5502,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_DISINTEGRATE:
     {
-        int dam = _extra(effect, 25 + effect->power*3);
+        int dam = _extra(effect, 150 + _power_curve_offset(200, effect->power, 50));
         if (name) return "Disintegrate";
         if (desc) return "It fires a powerful ball of disintegration.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -6013,7 +6067,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_ROCKET:
     {
-        int dam = _extra(effect, 25 + effect->power*4);
+        int dam = _extra(effect, 200 + _power_curve_offset(300, effect->power, 70));
         if (name) return "Rocket";
         if (desc) return "It fires a rocket.";
         if (info) return info_damage(0, 0, _BOOST(dam));

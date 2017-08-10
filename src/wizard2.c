@@ -1104,9 +1104,19 @@ static void _wiz_stats_log_books(int level, object_type *o_ptr, int max3, int ma
 }
 static void _wiz_stats_log_devices(int level, object_type *o_ptr)
 {
-    /*if (o_ptr->tval == TV_WAND && o_ptr->activation.type == EFFECT_ROCKET)*/
-    if (obj_is_device(o_ptr)/* && o_ptr->activation.difficulty >= 60*/)
-        _wiz_stats_log_obj(level, o_ptr);
+    if (o_ptr->tval == TV_WAND)
+    {
+        switch (o_ptr->activation.type)
+        {
+        case EFFECT_BALL_DISINTEGRATE:
+        case EFFECT_BALL_WATER:
+        case EFFECT_ROCKET:
+            _wiz_stats_log_obj(level, o_ptr);
+            break;
+        }
+    }
+    /*if (obj_is_device(o_ptr)
+        _wiz_stats_log_obj(level, o_ptr);*/
 }
 static void _wiz_stats_log_arts(int level, object_type *o_ptr)
 {
@@ -1274,6 +1284,12 @@ static void _wiz_improve_pack(obj_ptr obj)
     }
 }
 
+static bool _device_is_(obj_ptr obj, int tval, int effect)
+{
+    return obj->tval == tval
+        && obj->activation.type == effect;
+}
+
 static void _wiz_inspect_objects(int level)
 {
     race_t  *race_ptr = get_race();
@@ -1313,9 +1329,9 @@ static void _wiz_inspect_objects(int level)
 
         if (0) _wiz_stats_log_speed(level, o_ptr);
         if (0) _wiz_stats_log_books(level, o_ptr, 20, 20);
-        if (0) _wiz_stats_log_devices(level, o_ptr);
-        if (1) _wiz_stats_log_arts(level, o_ptr);
-        if (1) _wiz_stats_log_rand_arts(level, o_ptr);
+        if (1) _wiz_stats_log_devices(level, o_ptr);
+        if (0) _wiz_stats_log_arts(level, o_ptr);
+        if (0) _wiz_stats_log_rand_arts(level, o_ptr);
 
         if (0 && o_ptr->name3)
             _wiz_stats_log_obj(level, o_ptr);
@@ -1336,6 +1352,9 @@ static void _wiz_inspect_objects(int level)
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && object_is_dragon_armor(o_ptr))
+            _wiz_stats_log_obj(level, o_ptr);
+
+        if (0 && _device_is_(o_ptr, TV_WAND, EFFECT_BALL_WATER))
             _wiz_stats_log_obj(level, o_ptr);
 
         /* Use Resources: Quaff stat potions and improve equipment (mindlessly).

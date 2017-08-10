@@ -2078,6 +2078,18 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
     {
         int  fail = device_calc_fail_rate(o_ptr);
         strcat(tmp_val2, format("%d%%", (fail + 5)/10));
+        if (statistics_hack)
+        {
+            effect_t e = obj_get_effect(o_ptr);
+            cptr     info = do_effect(&e, SPELL_INFO, 0);
+
+            if (info)
+            {
+                char buf[255];
+                sprintf(buf, " %s", info);
+                strcat(tmp_val2, buf);
+            }
+        }
     }
 
     if (o_ptr->name3 && object_is_known(o_ptr) && abbrev_all)
