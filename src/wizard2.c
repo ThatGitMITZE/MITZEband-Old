@@ -1104,6 +1104,7 @@ static void _wiz_stats_log_books(int level, object_type *o_ptr, int max3, int ma
 }
 static void _wiz_stats_log_devices(int level, object_type *o_ptr)
 {
+    #if 0
     if (o_ptr->tval == TV_WAND)
     {
         switch (o_ptr->activation.type)
@@ -1115,8 +1116,27 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
             break;
         }
     }
-    /*if (obj_is_device(o_ptr)
-        _wiz_stats_log_obj(level, o_ptr);*/
+    #endif
+    #if 1
+    if (o_ptr->tval == TV_STAFF)
+    {
+        switch (o_ptr->activation.type)
+        {
+        case EFFECT_DISPEL_DEMON:
+        case EFFECT_DISPEL_UNDEAD:
+        case EFFECT_DISPEL_EVIL:
+        case EFFECT_DISPEL_LIFE:
+        case EFFECT_DISPEL_MONSTERS:
+            _wiz_stats_log_obj(level, o_ptr);
+            break;
+        }
+    }
+    #endif
+
+    #if 0
+    if (obj_is_device(o_ptr))
+        _wiz_stats_log_obj(level, o_ptr);
+    #endif
 }
 static void _wiz_stats_log_arts(int level, object_type *o_ptr)
 {

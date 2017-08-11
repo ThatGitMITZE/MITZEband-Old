@@ -66,9 +66,14 @@ int device_calc_fail_rate_aux(int skill, int difficulty)
     return fail;
 }
 
-int effect_calc_fail_rate(effect_t *effect)
+/* XXX design is sloppy atm ... I want devicemasters to have a skill
+ * boost with their speciality device type (e.g. wands), and less
+ * magic skills overall. But the "effect" api layer has no info about
+ * the obj->tval ... so we'll need to pass that along. The "effect" layer
+ * is public and is also used for equipment with activations. */
+static int effect_calc_fail_rate_aux(effect_t *effect, int skill_boost)
 {
-    int skill = p_ptr->skills.dev;
+    int skill = p_ptr->skills.dev + skill_boost;
     int fail;
 
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
@@ -84,6 +89,11 @@ int effect_calc_fail_rate(effect_t *effect)
     return fail;
 }
 
+int effect_calc_fail_rate(effect_t *effect)
+{
+    return effect_calc_fail_rate_aux(effect, 0);
+}
+
 int device_calc_fail_rate(object_type *o_ptr)
 {
     int lev, chance, fail;
@@ -92,6 +102,10 @@ int device_calc_fail_rate(object_type *o_ptr)
     {
         effect_t effect = o_ptr->activation;
         u32b     flgs[OF_ARRAY_SIZE];
+        int      skill_boost = 0;
+
+        if (devicemaster_is_speciality(o_ptr))
+            skill_boost = 5 + p_ptr->lev;
 
         obj_flags(o_ptr, flgs);
         if (have_flag(flgs, OF_EASY_SPELL))
@@ -100,7 +114,7 @@ int device_calc_fail_rate(object_type *o_ptr)
         if (o_ptr->curse_flags & OFC_CURSED)
             effect.difficulty += effect.difficulty / 5;
 
-        return effect_calc_fail_rate(&effect);
+        return effect_calc_fail_rate_aux(&effect, skill_boost);
     }
     if (p_ptr->pclass == CLASS_BERSERKER) return 1000;
 
@@ -2335,7 +2349,7 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BOLT_PLASMA,           38,  19,     1,   0,     0, 0},
     {EFFECT_BOLT_ICE,              40,  20,     1,   0,     0, 0},
     {EFFECT_ARROW,                 45,  20,     1,   0,     0, _EASY},
-    {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD},
+    {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_BREATHE_COLD,          50,  22,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BREATHE_FIRE,          50,  23,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BEAM_GRAVITY,          55,  25,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
@@ -2426,12 +2440,12 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_SPEED,                 40,  19,     1,   0,     0, _EASY | _COMMON},
     {EFFECT_IDENTIFY_FULL,         40,  20,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_REMOVE_CURSE,          40,  20,     2,   0,     0, _EASY},
-    {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _EASY},
-    {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _EASY},
-    {EFFECT_DISPEL_LIFE,           50,  22,     2,   0,     0, 0},
-    {EFFECT_DISPEL_EVIL,           55,  23,     2,   0,     0, 0},
-    {EFFECT_DISPEL_MONSTERS,       55,  24,     2,   0,     0, _HARD},
-    {EFFECT_HOLINESS,              45,  25,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_HOLINESS,              45,  21,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _HARD},
+    {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _HARD},
+    {EFFECT_DISPEL_LIFE,           50,  22,     3,   0,     0, _HARD},
+    {EFFECT_DISPEL_EVIL,           55,  23,     3,   0,     0, _HARD},
+    {EFFECT_DISPEL_MONSTERS,       55,  24,     5,   0,     0, _HARD},
     {EFFECT_DESTRUCTION,           50,  25,     2,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
@@ -5552,7 +5566,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BREATHE_FIRE:
     {
-        int dam = _extra(effect, 90 + effect->power*3);
+        int dam = _extra(effect, 160 + _power_curve_offset(300, effect->power, 40));
         if (name) return "Dragon's Flame";
         if (desc) return "It breathes fire.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5568,7 +5582,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BREATHE_COLD:
     {
-        int dam = _extra(effect, 80 + effect->power*3);
+        int dam = _extra(effect, 150 + _power_curve_offset(300, effect->power, 40));
         if (name) return "Dragon's Frost";
         if (desc) return "It breathes frost.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5760,7 +5774,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BREATHE_ONE_MULTIHUED:
     {
-        int dam = _extra(effect, 100 + effect->power*3);
+        int dam = _extra(effect, 170 + _power_curve_offset(300, effect->power, 40));
         if (name) return "Dragon's Breath";
         if (desc) return "It breathes acid, lightning, fire, frost or poison.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5898,7 +5912,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     /* Offense: Other */
     case EFFECT_DISPEL_EVIL:
     {
-        int dam = _extra(effect, 2*effect->power);
+        int dam = _extra(effect, 50 + _power_curve_offset(250, effect->power, 50));
         if (name) return "Dispel Evil";
         if (desc) return "It damages all evil monsters in sight.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5945,7 +5959,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_DISPEL_LIFE:
     {
-        int dam = _extra(effect, 2*effect->power);
+        int dam = _extra(effect, 50 + _power_curve_offset(250, effect->power, 50));
         if (name) return "Dispel Life";
         if (desc) return "It damages all living monsters in sight.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5960,7 +5974,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_DISPEL_DEMON:
     {
-        int dam = _extra(effect, 3*effect->power);
+        int dam = _extra(effect, 100 + _power_curve_offset(400, effect->power, 50));
         if (name) return "Dispel Demons";
         if (desc) return "It damages all demonic monsters in sight.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5975,7 +5989,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_DISPEL_UNDEAD:
     {
-        int dam = _extra(effect, 3*effect->power);
+        int dam = _extra(effect, 100 + _power_curve_offset(400, effect->power, 50));
         if (name) return "Dispel Undead";
         if (desc) return "It damages all undead monsters in sight.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5990,7 +6004,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_DISPEL_MONSTERS:
     {
-        int dam = _extra(effect, 2*effect->power);
+        int dam = _extra(effect, 50 + _power_curve_offset(200, effect->power, 50));
         if (name) return "Dispel Monsters";
         if (desc) return "It damages all monsters in sight.";
         if (info) return info_damage(0, 0, _BOOST(dam));
