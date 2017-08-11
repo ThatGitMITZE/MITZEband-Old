@@ -105,7 +105,7 @@ int device_calc_fail_rate(object_type *o_ptr)
         int      skill_boost = 0;
 
         if (devicemaster_is_speciality(o_ptr))
-            skill_boost = 5 + p_ptr->lev;
+            skill_boost = 5 + 3*p_ptr->lev/5; /* 40+15 base = 115 -> 150 */
 
         obj_flags(o_ptr, flgs);
         if (have_flag(flgs, OF_EASY_SPELL))
