@@ -109,7 +109,13 @@ int device_calc_fail_rate(object_type *o_ptr)
 
         obj_flags(o_ptr, flgs);
         if (have_flag(flgs, OF_EASY_SPELL))
-            effect.difficulty -= MAX(o_ptr->pval, effect.difficulty * 10 * o_ptr->pval / 300);
+        {
+            int d = effect.difficulty;
+
+            d -= MAX(o_ptr->pval, effect.difficulty * 10 * o_ptr->pval / 300);
+            if (d <= 1) d = 1;
+            effect.difficulty = d;
+        }
 
         if (o_ptr->curse_flags & OFC_CURSED)
             effect.difficulty += effect.difficulty / 5;
