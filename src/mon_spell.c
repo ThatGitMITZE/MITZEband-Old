@@ -804,7 +804,7 @@ static mon_spell_parm_t _heal_parm(int which, int rlev)
     switch (which)
     {
     case HEAL_SELF:
-        parm.v.dice = _dice(0, 0, rlev*6);
+        parm.v.dice = _dice(0, 0, rlev*5);
         break;
     default:
         assert(FALSE);

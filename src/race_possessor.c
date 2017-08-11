@@ -1032,16 +1032,6 @@ void possessor_calc_bonuses(void)
         p_ptr->no_cut = TRUE;
     if (strchr("sg", r_ptr->d_char))
         p_ptr->no_stun = TRUE;
-
-    switch (r_ptr->body.class_idx)
-    {
-    case CLASS_MAGE:
-        p_ptr->spell_cap += 2;
-        break;
-    case CLASS_HIGH_MAGE:
-        p_ptr->spell_cap += 3;
-        break;
-    }
 }
 
 void possessor_get_flags(u32b flgs[OF_ARRAY_SIZE]) 
