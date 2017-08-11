@@ -315,7 +315,7 @@ bool enable_virtues;
 bool enable_spell_prof;
 bool reduce_uniques;
 byte reduce_uniques_pct = 100; /* This is the pct of uniques to face */
-bool quickband;
+bool quickmode;
 
 /*** Easy Object Auto-Destroyer ***/
 

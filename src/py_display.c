@@ -2201,8 +2201,8 @@ static void _build_options(doc_ptr doc)
     if (easy_lore)
         doc_printf(doc, " Easy Lore:          On\n");
 
-    if (quickband)
-        doc_printf(doc, " <color:r>Quickband</color>:          On\n");
+    if (quickmode)
+        doc_printf(doc, " <color:r>Quickmode</color>:          On\n");
 
     if (no_wilderness)
         doc_printf(doc, " Wilderness:         Off\n");
