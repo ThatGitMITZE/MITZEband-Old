@@ -1427,7 +1427,8 @@ static void process_world_aux_timeout(void)
     /* Slow */
     if (p_ptr->slow)
     {
-        (void)set_slow(p_ptr->slow - 1, TRUE);
+        do { set_slow(p_ptr->slow - 1, TRUE); }
+            while (p_ptr->slow && free_act_save_p(dun_level/2));
     }
 
     /* Protection from evil */
