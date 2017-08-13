@@ -6120,7 +6120,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_MANA_STORM:
     {
-        int dam = _extra(effect, 5*effect->power);
+        int dam = _extra(effect, 375 + _power_curve_offset(200, effect->power, 80));
         if (name) return "Mana Storm";
         if (desc) return "It produces a huge mana ball centered on you.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -6193,7 +6193,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_STARBURST:
     {
-        int dam = _extra(effect, 5*effect->power);
+        int dam = _extra(effect, 375 + _power_curve_offset(200, effect->power, 80));
         if (name) return "Star Burst";
         if (desc) return "It produces a huge ball of light centered on you.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -6213,7 +6213,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_DARKNESS_STORM:
     {
-        int dam = _extra(effect, 5*effect->power);
+        int dam = _extra(effect, 375 + _power_curve_offset(200, effect->power, 80));
         if (name) return "Darkness Storm";
         if (desc) return "It produces a huge ball of darkness centered on you.";
         if (info) return info_damage(0, 0, _BOOST(dam));
