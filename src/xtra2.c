@@ -943,7 +943,7 @@ void monster_death(int m_idx, bool drop_item)
         }
     }
 
-    if (p_ptr->prace == RACE_MON_MIMIC)
+    if (p_ptr->prace == RACE_MON_MIMIC && !(m_ptr->smart & SM_CLONED))
         mimic_on_kill_monster(m_ptr->r_idx);
 
     if ( vampiric_drain_hack

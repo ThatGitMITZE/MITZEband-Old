@@ -1421,8 +1421,7 @@ bool mon_spell_cast_mon(mon_ptr mon, mon_spell_ai ai)
 static bool _projectable(point_t src, point_t dest);
 static bool _spell_fail(void)
 {
-    int fail;
-    int stun = 0;
+    int fail, stun;
 
     if (_current.spell->flags & MSF_INNATE)
         return FALSE;
@@ -1430,19 +1429,38 @@ static bool _spell_fail(void)
         return FALSE;
     if (py_in_dungeon() && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
         return TRUE;
-    if (_current.flags & MSC_SRC_PLAYER)
-        stun = p_ptr->stun;
-    else
-        stun = MON_STUNNED(_current.mon);
 
     fail = 25 - (_current.race->level + 3)/4;
-    if (stun)
+    if (_current.flags & MSC_SRC_PLAYER)
+    {
+        stun = p_ptr->stun;
+        /* XXX Possessors and mimics should not get a free ride wrt
+         * spell casting stats, but the mechanics should not be too 
+         * harsh either since early game stats are bound to be poor.
+         * Note that poor stats also means a poor mana pool. */
+        if (_current.race->body.spell_stat != A_NONE)
+        {
+            int     stat = p_ptr->stat_ind[_current.race->body.spell_stat] + 3;
+            point_t tbl[5] = { {3, 25}, {10, 10}, {15, 0}, {20, 0}, {40, -10} };
+            int     adj = interpolate(stat, tbl, 5);
+
+            fail += adj;
+        }
+    }
+    else
+        stun = MON_STUNNED(_current.mon);
+    if (stun > 0)
         fail += 50 * MIN(100, stun)/100;
 
     if (fail && randint0(100) < fail)
     {
         if (_current.flags & MSC_SRC_PLAYER)
-            msg_print("You try to cast a spell, but fail.");
+        {
+            if (1 || p_ptr->wizard)
+                msg_format("You try to cast a spell, but fail (%d%%).", fail);
+            else
+                msg_print("You try to cast a spell, but fail.");
+        }
         else if (mon_show_msg(_current.mon))
         {
             if (_projectable(point(px, py), _current.src))
