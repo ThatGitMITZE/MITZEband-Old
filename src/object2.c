@@ -3648,8 +3648,9 @@ static bool _make_object_aux(object_type *j_ptr, u32b mode)
     /* Chance of "special object" */
     prob = ((mode & AM_GOOD) ? 10 : 1000);
 
-    /* Base level for the object */
-    base = ((mode & AM_GOOD) ? (object_level + 10) : object_level);
+    /* Base level for the object
+    base = ((mode & AM_GOOD) ? (object_level + 10) : object_level); */
+    base = object_level;
 
     /* Generate a special object, or a normal object */
     if (!one_in_(prob) || !make_artifact_special(j_ptr))
