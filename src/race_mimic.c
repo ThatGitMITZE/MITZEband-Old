@@ -390,7 +390,7 @@ static bool _choose(_choice_array_t *choices)
 {
     int  key = 0, i;
     bool redraw = TRUE;
-    bool done = FALSE;
+    bool done = FALSE, result = FALSE;
 
     assert(choices->size);
 
@@ -402,10 +402,14 @@ static bool _choose(_choice_array_t *choices)
         choices->current = 1;
     }
 
+    screen_save();
     while (!done)
     {
         if (redraw)
         {
+            /* XXX Currently, the size of the menu is unchanging and _list() clears
+             * each menu row on each call. Otherwise, we should use Term_load() and
+             * Term_save() instead. See skillmaster.c for how to hack this up */
             _list(choices);
             redraw = FALSE;
         }
@@ -434,7 +438,9 @@ static bool _choose(_choice_array_t *choices)
                 int x = Term->scr->cx; /* No way to query this? */
                 int y = Term->scr->cy;
 
+                screen_load();
                 mon_display(&r_info[r_idx]);
+                screen_save();
 
                 Term_gotoxy(x, y);
                 redraw = TRUE; /* screen_save buggily misses row 0 */
@@ -491,7 +497,10 @@ static bool _choose(_choice_array_t *choices)
         }
         case ' ': case '\r': case '\n':
             if (_confirm(choices, choices->current))
-                return TRUE;
+            {
+                result = TRUE;
+                done = TRUE;
+            }
             redraw = TRUE;
             break;
         default:
@@ -501,7 +510,10 @@ static bool _choose(_choice_array_t *choices)
                 {
                     choices->current = i;
                     if (_confirm(choices, choices->current))
-                        return TRUE;
+                    {
+                        result = TRUE;
+                        done = TRUE;
+                    }
                     redraw = TRUE;
                     break;
                 }
@@ -509,7 +521,8 @@ static bool _choose(_choice_array_t *choices)
         }
     }
 
-    return FALSE;
+    screen_load();
+    return result;
 }
 
 static void _add_visible_form(_choice_array_t *choices, int r_idx)
@@ -597,7 +610,6 @@ static int _choose_mimic_form(void)
         choices.mode = _CHOOSE_MODE_MIMIC;
         if (_choose(&choices))
             r_idx = choices.choices[choices.current].r_idx;
-        do_cmd_redraw(); /* XXX Flicker ... */
     }
     else
         msg_print("You see nothing to mimic.");
@@ -641,7 +653,6 @@ static int _choose_new_slot(int new_r_idx)
     choices.mode = _CHOOSE_MODE_LEARN;
     if (_choose(&choices))
         slot = choices.choices[choices.current].slot;
-    do_cmd_redraw();
 
     return slot;
 }
