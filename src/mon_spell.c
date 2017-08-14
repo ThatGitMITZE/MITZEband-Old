@@ -292,32 +292,29 @@ static _parse_t _beam_tbl[] = {
     {0}
 };
 
-/* MST_CURSE */
+/* MST_CURSE: Note that gf_affect_m spams messages for GF_CAUSE_?,
+ * so we must omit the player casting messages. */
 static _parse_t _curse_tbl[] = {
     { "CAUSE_1", { MST_CURSE, GF_CAUSE_1 },
         { "Cause Light Wounds", TERM_RED,
           "$CASTER points at you and curses.",
           "$CASTER curses.",
-          "$CASTER points at $TARGET and curses.",
-          "You curse."}, MSF_TARGET },
+          "$CASTER points at $TARGET and curses." }, MSF_TARGET },
     { "CAUSE_2", { MST_CURSE, GF_CAUSE_2 },
         { "Cause Serious Wounds", TERM_RED,
           "$CASTER points at you and curses horribly.",
           "$CASTER curses horribly.",
-          "$CASTER points at $TARGET and curses horribly.",
-          "You curse horribly." }, MSF_TARGET },
+          "$CASTER points at $TARGET and curses horribly." }, MSF_TARGET },
     { "CAUSE_3", { MST_CURSE, GF_CAUSE_3 },
         { "Cause Critical Wounds", TERM_RED,
           "$CASTER points at you, incanting terribly!",
           "$CASTER incants terribly.",
-          "$CASTER points at $TARGET, incanting terribly!",
-          "You incant terribly." }, MSF_TARGET },
+          "$CASTER points at $TARGET, incanting terribly!" }, MSF_TARGET },
     { "CAUSE_4", { MST_CURSE, GF_CAUSE_4 },
         { "Cause Mortal Wounds", TERM_RED,
           "$CASTER points at you, screaming the word DIE!",
           "$CASTER screams the word DIE!", 
-          "$CASTER points at $TARGET, screaming the word DIE!",
-          "You scream the word DIE!" }, MSF_TARGET },
+          "$CASTER points at $TARGET, screaming the word DIE!" }, MSF_TARGET },
     { "HAND_DOOM", { MST_CURSE, GF_HAND_DOOM },
         { "Hand of Doom", TERM_RED,
           "$CASTER invokes the <color:r>Hand of Doom</color>!",
@@ -1651,34 +1648,39 @@ static bool _m_resist_tele(mon_ptr mon, cptr name)
 }
 static void _annoy_m(void)
 {
-    if (!_current.mon2) return;
     switch (_current.spell->id.effect)
     {
     case ANNOY_AMNESIA:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_AMNESIA, 0, GF_AFFECT_SPELL);
         break;
     case ANNOY_ANIMATE_DEAD:
         animate_dead(_who(), _current.src.y, _current.src.x);
         break;
     case ANNOY_BLIND:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_BLIND, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_CONFUSE:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_OLD_CONF, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_DARKNESS:
         unlite_room(_current.dest.y, _current.dest.x);
         break;
     case ANNOY_PARALYZE:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_PARALYSIS, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_SCARE:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_TURN_ALL, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_SHRIEK:
         aggravate_monsters(_who());
         break;
     case ANNOY_SLOW:
+        if (!_current.mon2) break; /* MSF_DIRECT */
         gf_affect_m(_who(), _current.mon2, GF_OLD_SLOW, _current.race->level, GF_AFFECT_SPELL);
         break;
     case ANNOY_TELE_LEVEL: {
@@ -4416,6 +4418,11 @@ static vec_ptr _spells_plr(mon_race_ptr race, _spell_p filter)
             mon_spell_ptr spell = &group->spells[j];
             if (no_magic && !(spell->flags & MSF_INNATE)) continue;
             if (filter && !filter(spell)) continue;
+
+            if ( _spell_is_(spell, MST_BUFF, BUFF_INVULN)
+              && p_ptr->prace == RACE_MON_MIMIC
+              && p_ptr->lev < 45 ) continue;
+
             vec_add(v, spell);
         }
     }

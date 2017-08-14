@@ -2032,6 +2032,7 @@ static void _stats_init(void)
         {
             int stats[6] = { 15, 15, 11, 15, 15, 15 };
             _stats_init_aux(stats);
+            break;
         }
         case RACE_MON_QUYLTHULG:
         {

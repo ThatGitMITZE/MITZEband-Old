@@ -20204,7 +20204,12 @@ G:@:w
 I:110:1d1:4:1:40:60
 W:50:0:0:0:0:0
 F:CAN_SWIM | DEPRECATED
-P:Copy:Human:Warrior
+#XXX Fix this when the imitator is recoded to the new monster system
+#P:Copy:Human:Imitator
+P:Stats:0:1:-1:2:0:-1
+P:Skills:25:30:36:2:18:16:60:50
+P:ExtraSkills:7:10:10:0:0:0:18:20
+P:Life:108
 P:SpellStat:Dex
 
 N:1132:The Multi-hued Centipede

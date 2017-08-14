@@ -1460,6 +1460,9 @@ static bool _is_monk(mon_race_ptr r)
 static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
+
+    return r->level <= mimic_max_lvl();
+
     if (dun_level)
     {
         min = dun_level - 20;
