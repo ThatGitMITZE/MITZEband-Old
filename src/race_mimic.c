@@ -1119,6 +1119,7 @@ void mimic_on_kill_monster(int r_idx)
 
     /* To learn a form, you must be mimicking it when you land the killing blow. */
     if (r_idx != p_ptr->current_r_idx) return;
+    if (_is_memorized(r_idx)) return;
 
     pct = _learn_chance(r_idx);
     if (1 || p_ptr->wizard)

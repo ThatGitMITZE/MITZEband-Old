@@ -1434,6 +1434,13 @@ static bool _spell_fail(void)
     if (_current.flags & MSC_SRC_PLAYER)
     {
         stun = p_ptr->stun;
+ 
+        /* Fail rates go down as player level exceeds base level.
+         * For example, a Novice Mage has a ridiculously un-useful
+         * Magic Missile (23% fail). But at CL15, this becomes just
+         * 13% (which still sucks, but high Int can help here) */
+        fail -= (p_ptr->lev - _current.race->level);
+
         /* XXX Possessors and mimics should not get a free ride wrt
          * spell casting stats, but the mechanics should not be too 
          * harsh either since early game stats are bound to be poor.
@@ -1447,6 +1454,10 @@ static bool _spell_fail(void)
             fail += adj;
             if (fail < 1) fail = 1;
         }
+
+        /* And finally, trying to learn a new form puts the player at
+         * a slight disadvantage. No fair taking down Loki with his own
+         * mana storms!! */
         if (p_ptr->prace == RACE_MON_MIMIC && !mimic_is_memorized(p_ptr->current_r_idx))
         {
             fail += 15;
@@ -4275,8 +4286,8 @@ static int _escape_cost(mon_spell_ptr spell)
 {
     switch (spell->id.effect)
     {
-    case ESCAPE_TELE_OTHER: return 20;
-    case ESCAPE_TELE_SELF: return 10;
+    case ESCAPE_TELE_OTHER: return 12;
+    case ESCAPE_TELE_SELF: return 7;
     }
     return 0;
 }
@@ -4286,12 +4297,12 @@ static int _annoy_cost(mon_spell_ptr spell)
     {
     case ANNOY_AMNESIA: return 10;
     case ANNOY_ANIMATE_DEAD: return 15;
-    case ANNOY_BLIND: return 10;
-    case ANNOY_CONFUSE: return 10;
-    case ANNOY_DARKNESS: return 5;
+    case ANNOY_BLIND: return 5;
+    case ANNOY_CONFUSE: return 5;
+    case ANNOY_DARKNESS: return 1;
     case ANNOY_PARALYZE: return 10;
-    case ANNOY_SCARE: return 10;
-    case ANNOY_SHRIEK: return 10;
+    case ANNOY_SCARE: return 5;
+    case ANNOY_SHRIEK: return 3;
     case ANNOY_SLOW: return 10;
     case ANNOY_TELE_LEVEL: return 20;
     case ANNOY_TELE_TO: return 15;
@@ -4310,7 +4321,7 @@ static int _tactic_cost(mon_spell_ptr spell)
 {
     switch (spell->id.effect)
     {
-    case TACTIC_BLINK: return 3;
+    case TACTIC_BLINK: return 2;
     case TACTIC_BLINK_OTHER: return 10;
     default: return 15;
     }
@@ -4329,15 +4340,15 @@ static int _possessor_cost(mon_spell_ptr spell, mon_race_ptr race)
 {
     switch (spell->id.effect)
     {
-    case POS_DETECT_TRAPS: return 2;
-    case POS_DETECT_EVIL: return 3;
-    case POS_DETECT_MONSTERS: return 3;
-    case POS_DETECT_OBJECTS: return 4;
+    case POS_DETECT_TRAPS: return 1;
+    case POS_DETECT_EVIL: return 2;
+    case POS_DETECT_MONSTERS: return 2;
+    case POS_DETECT_OBJECTS: return 3;
     case POS_IDENTIFY: return 5;
     case POS_MAPPING: return 8;
     case POS_CLAIRVOYANCE: return 30;
     case POS_MULTIPLY: return 1 + race->level/2;
-    case POS_BLESS: return 5;
+    case POS_BLESS: return 3;
     case POS_HEROISM: return 8;
     case POS_BERSERK: return 10;
     }
