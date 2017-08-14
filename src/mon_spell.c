@@ -1445,6 +1445,11 @@ static bool _spell_fail(void)
             int     adj = interpolate(stat, tbl, 5);
 
             fail += adj;
+            if (fail < 1) fail = 1;
+        }
+        if (p_ptr->prace == RACE_MON_MIMIC && !mimic_is_memorized(p_ptr->current_r_idx))
+        {
+            fail += 15;
         }
     }
     else

@@ -779,7 +779,7 @@ static int _learn_chance(int r_idx)
             pct += (max - race->level)/5;
     }
 
-    return MAX(0, MIN(50, pct));
+    return MAX(0, MIN(25, pct));
 }
 
 static int _mimic_chance(int r_idx)

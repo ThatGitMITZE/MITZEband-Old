@@ -18742,6 +18742,7 @@ S:1_IN_12 |
 S:BLIND | SLOW | CONFUSE | SCARE | DETECT_MONSTERS | MAPPING
 D:A novice in the arts of mind over matter.
 P:Copy:Human:Mindcrafter
+P:Life:85
 
 N:1054:Novice mindcrafter
 G:p:y
@@ -18756,6 +18757,7 @@ S:1_IN_12 |
 S:BLIND | SLOW | CONFUSE | SCARE | DETECT_MONSTERS | MAPPING
 D:A novice in the arts of mind over matter.
 P:Copy:Human:Mindcrafter
+P:Life:85
 
 N:1055:Mindcrafter
 G:p:y
