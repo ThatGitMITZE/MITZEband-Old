@@ -373,7 +373,7 @@ static _power_limit_t _get_jewelry_power_limit(int level, int mode)
         }
     }
 
-    if (mode & (AM_FORCE_EGO | AM_GREAT | AM_GUARDIAN)) /* Quest rewards and early dungeon guardians ... and Smeagol, Robin Hood, Wormy, etc. */
+    if (mode & (AM_FORCE_EGO | AM_GREAT | AM_QUEST)) /* Quest rewards and early dungeon guardians ... and Smeagol, Robin Hood, Wormy, etc. */
     {
         if (rng.min < 5000) rng.min = 5000;
         if (rng.max && rng.max < 10000) rng.max = 10000;

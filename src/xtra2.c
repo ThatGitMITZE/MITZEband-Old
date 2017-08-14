@@ -1964,7 +1964,7 @@ void monster_death(int m_idx, bool drop_item)
                 }
                 else
                 {
-                    apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | AM_GOOD | AM_GUARDIAN);
+                    apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | AM_GOOD | AM_QUEST);
                 }
                 /* Drop it in the dungeon */
                 (void)drop_near(q_ptr, -1, y, x);

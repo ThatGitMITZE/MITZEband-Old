@@ -2031,6 +2031,9 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
         maxf2 += 10;
     }
 
+    if (mode & AM_QUEST)
+        lev += 10;
+
     /* Maximum "level" for various things */
     if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
 
@@ -3648,9 +3651,8 @@ static bool _make_object_aux(object_type *j_ptr, u32b mode)
     /* Chance of "special object" */
     prob = ((mode & AM_GOOD) ? 10 : 1000);
 
-    /* Base level for the object
-    base = ((mode & AM_GOOD) ? (object_level + 10) : object_level); */
-    base = object_level;
+    /* Base level for the object */
+    base = ((mode & AM_GOOD) ? (object_level + 10) : object_level);
 
     /* Generate a special object, or a normal object */
     if (!one_in_(prob) || !make_artifact_special(j_ptr))

@@ -92,18 +92,15 @@ void quest_complete(quest_ptr q, point_t p)
     }
     if (!(q->flags & QF_TOWN)) /* non-town quest get rewarded immediately */
     {
-        int old_level = object_level;
         int i, ct = q->level/25 + 1;
-        object_level = q->level + 10;
         for (i = 0; i < ct; i++)
         {
             obj_t forge = {0};
-            if (make_object(&forge, AM_GOOD | AM_GREAT | AM_TAILORED))
+            if (make_object(&forge, AM_GOOD | AM_GREAT | AM_TAILORED | AM_QUEST))
                 drop_near(&forge, -1, p.y, p.x);
             else
                 msg_print("Software Bug ... you missed out on your reward!");
         }
-        object_level = old_level;
         if (no_wilderness)
             gain_chosen_stat();
 
@@ -1564,13 +1561,12 @@ static void _reward_cmd(_ui_context_ptr context)
             quest_ptr quest = vec_get(context->quests, idx);
             if (!(quest->flags & QF_TOWN))
             {
-                int old_level = object_level;
                 int i, ct = quest->level/25 + 1;
-                object_level = quest->level + 10;
+                object_level = quest->level;
                 for (i = 0; i < ct; i++)
                 {
                     obj_t forge = {0};
-                    if (make_object(&forge, AM_GOOD | AM_GREAT | AM_TAILORED))
+                    if (make_object(&forge, AM_GOOD | AM_GREAT | AM_TAILORED | AM_QUEST))
                     {
                         char name[MAX_NLEN];
                         obj_identify_fully(&forge);
@@ -1579,7 +1575,7 @@ static void _reward_cmd(_ui_context_ptr context)
                         msg_format("%s", name);
                     }
                 }
-                object_level = old_level;
+                object_level = base_level;
             }
             else
             {
