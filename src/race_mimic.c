@@ -188,7 +188,7 @@ static void _list(_choice_array_t *choices)
         c_put_str(TERM_WHITE, "===============================================================================", row++, start_col);
         break;
     case _DISPLAY_MODE_EXTRA:
-        c_put_str(TERM_WHITE, "Name                       Lvl  Max  Speed    AC  Pseudo-Class                 ", row++, start_col);
+        c_put_str(TERM_WHITE, "Name                       Lvl Max Mimic Learn Speed  AC Pseudo-Class          ", row++, start_col);
         c_put_str(TERM_WHITE, "===============================================================================", row++, start_col);
         break;
     }
@@ -311,7 +311,7 @@ static void _list(_choice_array_t *choices)
                             _prt_equippy(r, c, TV_HELM, SV_IRON_HELM);
                             break;
                         case EQUIP_SLOT_ANY:
-                            Term_putch(r, c, TERM_WHITE, '*');
+                            Term_putch(c, r, TERM_WHITE, '*');
                             break;
                         case EQUIP_SLOT_CAPTURE_BALL:
                             _prt_equippy(r, c, TV_CAPTURE, 0);
@@ -341,14 +341,17 @@ static void _list(_choice_array_t *choices)
                     int speed = possessor_r_speed(choice->r_idx);
                     int ac = possessor_r_ac(choice->r_idx);
 
-                    sprintf(buf, "%3d  %3d  %+5d  %+4d  %s",
-                        r_ptr->level, possessor_max_plr_lvl(choice->r_idx), speed, ac,
-                        get_class_aux(r_ptr->body.class_idx, 0)->name
-                    );
-                    if (1 || p_ptr->wizard)
-                        sprintf(buf + strlen(buf), " (%2d%% %2d%%)", _mimic_chance(choice->r_idx), _learn_chance(choice->r_idx));
+                    sprintf(buf, "%3d %3d %4d%% %4d%% %+5d %+3d %-20.20s",
+                        r_ptr->level, possessor_max_plr_lvl(choice->r_idx),
+                        _mimic_chance(choice->r_idx), _learn_chance(choice->r_idx),
+                        speed, ac, get_class_aux(r_ptr->body.class_idx, 0)->name);
                     c_put_str(TERM_WHITE, buf, row, extra_col);
                 }
+            }
+            else if (_display_mode == _DISPLAY_MODE_EXTRA)
+            {
+                sprintf(buf, "        %4d%% %4d%%", _mimic_chance(choice->r_idx), _learn_chance(choice->r_idx));
+                c_put_str(TERM_WHITE, buf, row, extra_col);
             }
         }
         row++;
