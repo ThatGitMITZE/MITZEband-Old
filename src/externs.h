@@ -2266,6 +2266,7 @@ extern void    possessor_do_auras(mon_ptr mon);
 extern void    mimic_dispel_player(void);
 extern void    mimic_on_kill_monster(int r_idx);
 extern int     mimic_max_lvl(void);
+extern bool    mimic_is_memorized(int r_idx);
 
 extern bool    giant_is_favorite(object_type *o_ptr);
 extern void    monster_toss_spell(int cmd, variant *res);

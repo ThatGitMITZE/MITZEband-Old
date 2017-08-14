@@ -19,6 +19,11 @@ static bool _is_memorized(int r_idx)
     return FALSE;
 }
 
+bool mimic_is_memorized(int r_idx)
+{
+    return _is_memorized(r_idx);
+}
+
 static int _count_memorized(void)
 {
     int ct = 0, i;
