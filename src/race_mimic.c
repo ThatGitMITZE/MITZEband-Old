@@ -771,7 +771,7 @@ static int _learn_chance(int r_idx)
     {
         pct = 300 / MAX(3, race->level);
         if (!(race->flags1 & RF1_UNIQUE))
-            pct += max - race->level;
+            pct += (max - race->level)/5;
     }
 
     return MAX(0, MIN(50, pct));
