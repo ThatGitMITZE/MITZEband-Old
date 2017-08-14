@@ -82,7 +82,8 @@ typedef struct _choice_s _choice_t;
 enum _choose_mode_e
 {
     _CHOOSE_MODE_MIMIC,
-    _CHOOSE_MODE_LEARN
+    _CHOOSE_MODE_LEARN,
+    _CHOOSE_MODE_BROWSE,
 };
 
 #define _MAX_CHOICES 50
@@ -151,6 +152,8 @@ static cptr _choose_prompt(_choice_array_t *choices)
         return "Mimic which form?";
     case _CHOOSE_MODE_LEARN:
         return "Replace which existing form?";
+    case _CHOOSE_MODE_BROWSE:
+        return "Available forms:";
     }
     return "";
 }
@@ -352,7 +355,10 @@ static void _list(_choice_array_t *choices)
     }
     _clear_row(row++);
     _clear_row(row);
-    c_put_str(TERM_WHITE, "['?' to recall, '=' for more info, ESC to cancel, ENTER to select]", row++, start_col);
+    if (choices->mode == _CHOOSE_MODE_BROWSE)
+        c_put_str(TERM_WHITE, "['?' to recall, '=' for more info, ESC to exit]", row++, start_col);
+    else
+        c_put_str(TERM_WHITE, "['?' to recall, '=' for more info, ESC to cancel, ENTER to select]", row++, start_col);
     _clear_row(row);
 
     if (current_row)
@@ -361,6 +367,9 @@ static void _list(_choice_array_t *choices)
 
 static bool _confirm(_choice_array_t *choices, int which)
 {
+    if (choices->mode == _CHOOSE_MODE_BROWSE)
+        return FALSE;
+
     if (choices->mode == _CHOOSE_MODE_LEARN)
     {
         _choice_t *choice = &choices->choices[which];
@@ -560,7 +569,7 @@ static void _add_visible_form(_choice_array_t *choices, int r_idx)
     }
 }
 
-static int _choose_mimic_form(void)
+static int _choose_mimic_form(bool browse)
 {
     int             r_idx = -1;
     int             i;
@@ -607,7 +616,7 @@ static int _choose_mimic_form(void)
 
     if (choices.size)
     {
-        choices.mode = _CHOOSE_MODE_MIMIC;
+        choices.mode = browse ? _CHOOSE_MODE_BROWSE : _CHOOSE_MODE_MIMIC;
         if (_choose(&choices))
             r_idx = choices.choices[choices.current].r_idx;
     }
@@ -906,6 +915,29 @@ static void _player_action(int energy_use)
 /**********************************************************************
  * Powers
  **********************************************************************/
+static void _browse_spell(int cmd, variant *res)
+{
+    switch (cmd)
+    {
+    case SPELL_NAME:
+        var_set_string(res, "Browse Forms");
+        break;
+    case SPELL_DESC:
+        var_set_string(res, "Browse available forms without leaving your current form.");
+        break;
+    case SPELL_CAST:
+        _choose_mimic_form(TRUE);
+        var_set_bool(res, TRUE);
+        break;
+    case SPELL_ENERGY:
+        var_set_int(res, 0);
+        break;
+    default:
+        default_spell(cmd, res);
+        break;
+    }
+}
+
 static void _mimic_spell(int cmd, variant *res)
 {
     switch (cmd)
@@ -935,7 +967,7 @@ static void _mimic_spell(int cmd, variant *res)
 
         if (p_ptr->current_r_idx == MON_MIMIC)
         {
-            int           r_idx = _choose_mimic_form(); /*_prompt();*/
+            int           r_idx = _choose_mimic_form(FALSE);
             monster_race *r_ptr = 0;
             int           pct;
 
@@ -982,6 +1014,9 @@ static int _get_powers(spell_info* spells, int max)
         _add_power(&spells[ct++], 1, 0, 0, _mimic_spell, p_ptr->stat_ind[A_DEX]);
 
     ct += possessor_get_powers(spells + ct, max - ct);
+
+    if (p_ptr->current_r_idx != MON_MIMIC)
+        _add_power(&spells[ct++], 1, 0, 0, _browse_spell, p_ptr->stat_ind[A_DEX]);
     return ct;
 }
 
