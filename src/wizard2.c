@@ -1122,11 +1122,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
     {
         switch (o_ptr->activation.type)
         {
-        case EFFECT_DISPEL_DEMON:
-        case EFFECT_DISPEL_UNDEAD:
-        case EFFECT_DISPEL_EVIL:
-        case EFFECT_DISPEL_LIFE:
-        case EFFECT_DISPEL_MONSTERS:
+        case EFFECT_HEAL_CURING:
             _wiz_stats_log_obj(level, o_ptr);
             break;
         }
