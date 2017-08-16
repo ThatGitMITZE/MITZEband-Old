@@ -2394,8 +2394,8 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_BALL_FIRE,             42,  27,     1,   0,     0, 0},
     {EFFECT_BALL_ACID,             44,  29,     1,   0,     0, 0},
     {EFFECT_BOLT_MANA,             45,  30,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_BALL_NETHER,           45,  31,     1,   0,     0, 0},
-    {EFFECT_BALL_DISEN,            47,  32,     2,   0,     0, _DROP_GOOD},
+    {EFFECT_BALL_NETHER,           45,  31,     1,   0,     0, _HARD},
+    {EFFECT_BALL_DISEN,            47,  32,     2,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_ENLIGHTENMENT,         50,  33,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_BALL_SOUND,            52,  35,     2,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,     0, _DROP_GOOD | _EASY},
@@ -2403,11 +2403,11 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
-    {EFFECT_BALL_MANA,             80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _RARE | _HARD},
-    {EFFECT_BALL_SHARDS,           80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _RARE | _HARD},
-    {EFFECT_BALL_CHAOS,            85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _RARE | _HARD},
+    {EFFECT_BALL_MANA,             80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_SHARDS,           80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_CHAOS,            85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
-    {EFFECT_BALL_LITE,             95,  50,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _RARE | _HARD},
+    {EFFECT_BALL_LITE,             95,  50,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {0}
 };
 
@@ -2432,20 +2432,20 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_TELEPORT,              20,  10,     1,   0,     0, _EASY},
     {EFFECT_ENLIGHTENMENT,         20,  10,     1,  70,     0, _STOCK_TOWN | _EASY},
     {EFFECT_STARLITE,              20,  10,     1,  50,     0, _EASY},
-    {EFFECT_EARTHQUAKE,            20,  10,     1,   0,     0, _EASY},
+    {EFFECT_EARTHQUAKE,            20,  10,     2,   0,     0, _EASY},
     {EFFECT_HEAL,                  20,  10,     2,  70,     0, _EASY | _COMMON}, /* Cure Wounds for ~50hp */
     {EFFECT_CURING,                25,  12,     1,  70,     0, _EASY}, /* Curing no longer heals */
     {EFFECT_SUMMON_HOUNDS,         27,  25,     2,   0,     0, _EASY},
     {EFFECT_SUMMON_HYDRAS,         27,  25,     3,   0,     0, _EASY},
     {EFFECT_SUMMON_ANTS,           27,  20,     2,   0,     0, _EASY},
-    {EFFECT_PROBING,               30,  15,     1,  70,     0, _EASY},
+    {EFFECT_PROBING,               30,  15,     3,  70,     0, _EASY},
     {EFFECT_TELEPATHY,             30,  16,     2,   0,     0, _EASY},
     {EFFECT_SUMMON_MONSTERS,       32,  30,     2,   0,     0, 0},
-    {EFFECT_ANIMATE_DEAD,          35,  17,     1,  70,     0, _EASY},
+    {EFFECT_ANIMATE_DEAD,          35,  17,     2,  70,     0, _EASY},
     {EFFECT_SLOWNESS,              40,  19,     3,  70,     0, 0},
-    {EFFECT_SPEED,                 40,  19,     1,   0,     0, _EASY | _COMMON},
-    {EFFECT_IDENTIFY_FULL,         40,  20,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_REMOVE_CURSE,          40,  20,     2,   0,     0, _EASY},
+    {EFFECT_SPEED,                 40,  19,     2,   0,     0, _EASY | _COMMON},
+    {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,     0, _EASY | _COMMON},
+    {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,     0, _EASY},
     {EFFECT_HOLINESS,              45,  21,     2,   0,     0, _DROP_GOOD | _HARD},
     {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _HARD},
     {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _HARD},
@@ -4592,7 +4592,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_HEAL_CURING_HERO:
     {
-        int amt = _extra(effect, 50 + 5*effect->power);
+        int amt = _extra(effect, 300 + _power_curve_offset(477, effect->power, 70));
         if (name) return "Angelic Healing";
         if (desc) return "It heals your hitpoints, cures what ails you, and makes you heroic.";
         if (info) return info_heal(0, 0, _BOOST(amt));
@@ -5330,7 +5330,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_LITE:
     {
-        int dam = _extra(effect, 100 + 7*effect->power/2);
+        int dam = _extra(effect, 200 + _power_curve_offset(350, effect->power, 80));
         if (name) return "Star Burst";
         if (desc) return "It fires a huge ball of powerful light.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5378,7 +5378,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_NETHER:
     {
-        int dam = _extra(effect, 75 + 2*effect->power);
+        int dam = _extra(effect, 125 + _power_curve_offset(250, effect->power, 30));
         if (name) return "Nether Ball";
         if (desc) return "It fires a ball of nether.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5410,7 +5410,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_SOUND:
     {
-        int dam = _extra(effect, 80 + 3*effect->power/2);
+        int dam = _extra(effect, 70 + _power_curve_offset(280, effect->power, 40));
         if (name) return "Sound Ball";
         if (desc) return "It fires a ball of sound.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5426,7 +5426,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_SHARDS:
     {
-        int dam = _extra(effect, 100 + 2*effect->power);
+        int dam = _extra(effect, 175 + _power_curve_offset(325, effect->power, 75));
         if (name) return "Shard Ball";
         if (desc) return "It fires a ball of shards.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5442,7 +5442,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_CHAOS:
     {
-        int dam = _extra(effect, 100 + 3*effect->power);
+        int dam = _extra(effect, 150 + _power_curve_offset(350, effect->power, 70));
         if (name) return "Invoke Logrus";
         if (desc) return "It fires a huge ball of chaos.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5458,7 +5458,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_DISEN:
     {
-        int dam = _extra(effect, 90 + effect->power);
+        int dam = _extra(effect, 90 + _power_curve_offset(250, effect->power, 40));
         if (name) return "Disenchantment Ball";
         if (desc) return "It fires a ball of disenchantment.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5506,7 +5506,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_MANA:
     {
-        int dam = _extra(effect, 100 + 5*effect->power/2);
+        int dam = _extra(effect, 150 + _power_curve_offset(300, effect->power, 60));
         if (name) return "Mana Ball";
         if (desc) return "It fires a powerful ball of mana.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -6087,7 +6087,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_ROCKET:
     {
-        int dam = _extra(effect, 200 + _power_curve_offset(300, effect->power, 70));
+        int dam = _extra(effect, 200 + _power_curve_offset(300, effect->power, 60));
         if (name) return "Rocket";
         if (desc) return "It fires a rocket.";
         if (info) return info_damage(0, 0, _BOOST(dam));
