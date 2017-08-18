@@ -2402,11 +2402,11 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_SPEED_HERO,            70,  40,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
     {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
+    {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
     {EFFECT_BALL_MANA,             80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_BALL_SHARDS,           80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_BALL_CHAOS,            85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
+    {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
     {EFFECT_BALL_LITE,             95,  50,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {0}
 };
@@ -2457,9 +2457,9 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_BANISH_EVIL,           60,  31,     2,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_BANISH_ALL,            70,  32,     3,   0,     0, _DROP_GOOD | _EASY},
-    {EFFECT_MANA_STORM,            85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
-    {EFFECT_STARBURST,             85,  41,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
-    {EFFECT_DARKNESS_STORM,        85,  42,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
+    {EFFECT_MANA_STORM,            85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_STARBURST,             85,  41,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_DARKNESS_STORM,        85,  42,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_GENOCIDE,              90,  50,     8,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD | _RARE},
     {EFFECT_RESTORE_MANA,         100, 100,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
     {0}
