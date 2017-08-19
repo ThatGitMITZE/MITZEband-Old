@@ -3164,10 +3164,10 @@ static _level_t _level_aux(int lvl, int max)
     l.max = max;
     return l;
 }
-/*static _level_t _level(int lvl)
+static _level_t _level(int lvl)
 {
     return _level_aux(lvl, 100);
-}*/
+}
 static _level_t _level_offset(int lvl, int start)
 {
     int l = MAX(0, lvl - start);
@@ -3187,10 +3187,10 @@ static int _power_curve_aux(int amt, _level_t l, _weights_t w)
 
     return result;
 }
-/*static int _power_curve(int amt, int lvl)
+static int _power_curve(int amt, int lvl)
 {
     return _power_curve_aux(amt, _level(lvl), _weights(1, 1, 1));
-}*/
+}
 static int _power_curve_offset(int amt, int lvl, int start)
 {
     return _power_curve_aux(amt, _level_offset(lvl, start), _weights(1, 1, 1));
@@ -5007,67 +5007,72 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BOLT_WATER:
     {
-        int dd = _extra(effect, 7 + effect->power/4);
-        int ds = 12;
+        int dd = 1;
+        int ds = _extra(effect, _power_curve(400, effect->power));
+        int base = 20;
         if (name) return "Water Bolt";
         if (desc) return "It fires a bolt of water.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 40*_avg_damroll(dd, ds));
+        if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
+        if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", TERM_BLUE);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
-            fire_bolt(GF_WATER, dir, _BOOST(damroll(dd, 8)));
+            fire_bolt(GF_WATER, dir, _BOOST(damroll(dd, ds) + base));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BOLT_MANA:
     {
-        int dam = _extra(effect, 100 + 2*effect->power);
+        int dd = 1;
+        int ds = _extra(effect, _power_curve(500, effect->power));
+        int base = 50;
         if (name) return "Mana Bolt";
         if (desc) return "It fires a powerful bolt of mana.";
-        if (info) return info_damage(0, 0, _BOOST(dam));
-        if (value) return format("%d", 45*dam);
+        if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
+        if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
-            fire_bolt(GF_MANA, dir, _BOOST(dam));
+            fire_bolt(GF_MANA, dir, _BOOST(damroll(dd, ds) + base));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BOLT_ICE:
     {
-        int dd = _extra(effect, 5 + effect->power / 4);
-        int ds = 15;
+        int dd = 1;
+        int ds = _extra(effect, _power_curve(400, effect->power));
+        int base = 30;
         if (name) return "Ice Bolt";
         if (desc) return "It fires a bolt of ice.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 40*_avg_damroll(dd, ds));
+        if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
+        if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", res_color(RES_COLD));
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
-            fire_bolt(GF_ICE, dir, _BOOST(damroll(dd, ds)));
+            fire_bolt(GF_ICE, dir, _BOOST(damroll(dd, ds) + base));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BOLT_PLASMA:
     {
-        int dd = _extra(effect, 5 + effect->power / 4);
-        int ds = 15;
+        int dd = 1;
+        int ds = _extra(effect, _power_curve(400, effect->power));
+        int base = 40;
         if (name) return "Plasma Bolt";
         if (desc) return "It fires a bolt of plasma.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 40*_avg_damroll(dd, ds));
+        if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
+        if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", res_color(RES_FIRE));
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
-            fire_bolt(GF_PLASMA, dir, _BOOST(damroll(dd, ds)));
+            fire_bolt(GF_PLASMA, dir, _BOOST(damroll(dd, ds) + base));
             device_noticed = TRUE;
         }
         break;
@@ -5095,7 +5100,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BEAM_LITE:
     {
-        int dam = _extra(effect, effect->power*2);
+        int dam = _extra(effect, 10 + _power_curve(275, effect->power));
         if (name) return "Beam of Light";
         if (desc) return "It fires a powerful beam of light.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5146,68 +5151,64 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BEAM_ACID:
     {
-        int dd = _extra(effect, 6 + effect->power/7);
-        int ds = 8;
+        int dam = _extra(effect, 5 + _power_curve(270, effect->power));
         if (name) return "Shoot Acid";
         if (desc) return "It fires a beam of acid.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 35*_avg_damroll(dd, ds));
+        if (info) return info_damage(0, 0, _BOOST(dam));
+        if (value) return format("%d", 35*dam);
         if (color) return format("%d", res_color(RES_ACID));
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
-            fire_beam(GF_ACID, dir, _BOOST(damroll(dd, ds)));
+            fire_beam(GF_ACID, dir, _BOOST(dam));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BEAM_ELEC:
     {
-        int dd = _extra(effect, 4 + effect->power/9);
-        int ds = 8;
+        int dam = _extra(effect, 5 + _power_curve(250, effect->power));
         if (name) return "Lightning Strike";
         if (desc) return "It fires a beam of lightning.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 30*_avg_damroll(dd, ds));
+        if (info) return info_damage(0, 0, _BOOST(dam));
+        if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_ELEC));
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
-            fire_beam(GF_ELEC, dir, _BOOST(damroll(dd, ds)));
+            fire_beam(GF_ELEC, dir, _BOOST(dam));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BEAM_FIRE:
     {
-        int dd = _extra(effect, 7 + effect->power/6);
-        int ds = 8;
+        int dam = _extra(effect, 5 + _power_curve(280, effect->power));
         if (name) return "Line of Fire";
         if (desc) return "It fires a beam of fire.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 30*_avg_damroll(dd, ds));
+        if (info) return info_damage(0, 0, _BOOST(dam));
+        if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_FIRE));
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
-            fire_beam(GF_FIRE, dir, _BOOST(damroll(dd, ds)));
+            fire_beam(GF_FIRE, dir, _BOOST(dam));
             device_noticed = TRUE;
         }
         break;
     }
     case EFFECT_BEAM_COLD:
     {
-        int dd = _extra(effect, 5 + effect->power/8);
-        int ds = 8;
+        int dam = _extra(effect, 5 + _power_curve(260, effect->power));
         if (name) return "Ray of Cold";
         if (desc) return "It fires a beam of frost.";
-        if (info) return info_damage(_BOOST(dd), ds, 0);
-        if (value) return format("%d", 30*_avg_damroll(dd, ds));
+        if (info) return info_damage(0, 0, _BOOST(dam));
+        if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_COLD));
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
-            fire_beam(GF_COLD, dir, _BOOST(damroll(dd, ds)));
+            fire_beam(GF_COLD, dir, _BOOST(dam));
             device_noticed = TRUE;
         }
         break;
@@ -5250,7 +5251,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     /* Offense: Balls */
     case EFFECT_BALL_ACID:
     {
-        int dam = _extra(effect, 60 + effect->power);
+        int dam = _extra(effect, 20 + _power_curve(300, effect->power));
         if (name) return "Acid Ball";
         if (desc) return "It fires a ball of acid.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5266,7 +5267,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_ELEC:
     {
-        int dam = _extra(effect, 40 + effect->power);
+        int dam = _extra(effect, 20 + _power_curve(250, effect->power));
         if (name) return "Lightning Ball";
         if (desc) return "It fires a ball of lightning.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5282,7 +5283,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_FIRE:
     {
-        int dam = _extra(effect, 70 + effect->power);
+        int dam = _extra(effect, 20 + _power_curve(350, effect->power));
         if (name) return "Fire Ball";
         if (desc) return "It fires a ball of fire.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -5298,7 +5299,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_BALL_COLD:
     {
-        int dam = _extra(effect, 50 + effect->power);
+        int dam = _extra(effect, 20 + _power_curve(275, effect->power));
         if (name) return "Frost Ball";
         if (desc) return "It fires a ball of frost.";
         if (info) return info_damage(0, 0, _BOOST(dam));
@@ -6159,7 +6160,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     }
     case EFFECT_ARROW:
     {
-        int dam = _extra(effect, 150);
+        int dam = _extra(effect, 70 + effect->power);
         if (name) return "Magic Arrow";
         if (desc) return "It fires a powerful magical arrow.";
         if (info) return info_damage(0, 0, _BOOST(dam));

@@ -1766,7 +1766,7 @@ static void spoil_device_fail()
     doc_ptr doc = doc_alloc(80);
     int     d, s;
 
-    doc_change_name(doc, "devices.html");
+    doc_change_name(doc, "device_fail.html");
     doc_insert(doc, "<style:table>");
     doc_insert(doc, "<topic:d_vs_s><color:r>Difficulty vs Skill</color>\n");
     for (d = 1; d <= 100; d++)
@@ -1811,7 +1811,86 @@ static void spoil_device_fail()
     doc_display(doc, "Device Faile Rates", 0);
     doc_free(doc);
 }
+static char _effect_color(int which)
+{
+    effect_t e = {0};
+    int      a;
+    e.type = which;
+    a = atoi(do_effect(&e, SPELL_COLOR, 0));
+    if (a)
+        return attr_to_attr_char(a);
+    return 'w';
+}
+static void _display_device_power(doc_ptr doc, effect_t *effect)
+{
+    cptr s = do_effect(effect, SPELL_INFO, 0);
+    int  dd, ds, base, amt;
 
+    if (!s || !strlen(s))
+    {
+        doc_insert(doc, "    ");
+        return;
+    }
+    if (sscanf(s, "dam %dd%d+%d", &dd, &ds, &base) == 3)
+        amt = dd*(ds+1)/2+base;
+    else if (sscanf(s, "dam %dd%d", &dd, &ds) == 2)
+        amt = dd*(ds+1)/2;
+    else if (sscanf(s, "dam %d", &base) == 1)
+        amt = base;
+    else if (sscanf(s, "heal %dd%d+%d", &dd, &ds, &base) == 3)
+        amt = dd*(ds+1)/2+base;
+    else if (sscanf(s, "heal %dd%d", &dd, &ds) == 2)
+        amt = dd*(ds+1)/2;
+    else if (sscanf(s, "heal %d", &base) == 1)
+        amt = base;
+    if (amt)
+        doc_printf(doc, " %3d", amt);
+    else
+        doc_insert(doc, "    ");
+}
+static void _spoil_device_table_aux(doc_ptr doc, device_effect_info_ptr table, cptr heading)
+{
+    int lvl, row;
+    doc_printf(doc, "<topic:%s>", heading);
+    for (row = 0; table->type; table++, row++)
+    {
+        effect_t e = {0};
+        int      max_depth = table->max_depth ? table->max_depth : 100;
+        e.type = table->type;
+        if (row % 25 == 0)
+            doc_printf(doc, "\n<style:heading>%-15.15s</style><color:G> Min Max   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80  85  90  95 100</color>\n", heading);
+        doc_printf(doc, "<color:%c>", _effect_color(table->type));
+        doc_printf(doc, "%-15.15s", do_effect(&e, SPELL_NAME, 0));
+        doc_printf(doc, " %3d %3d", table->level, max_depth);
+        for (lvl = 5; lvl <= 100; lvl += 5)
+        {
+            e.power = lvl;
+            e.difficulty = e.power;
+            if (table->level <= lvl && lvl <= max_depth)
+                _display_device_power(doc, &e);
+            else
+                doc_insert(doc, "    ");
+        }
+        doc_insert(doc, "</color>\n");
+    }
+}
+static void spoil_device_tables()
+{
+    doc_ptr doc = doc_alloc(120);
+
+    doc_change_name(doc, "devices.html");
+    doc_insert(doc, "<style:table>");
+
+    _spoil_device_table_aux(doc, wand_effect_table, "Wands");
+    _spoil_device_table_aux(doc, staff_effect_table, "Staves");
+    _spoil_device_table_aux(doc, rod_effect_table, "Rods");
+
+    doc_insert(doc, "</style>");
+    doc_printf(doc, "\n<color:D>Generated for PosChengband %d.%d.%d</color>\n",
+                     VER_MAJOR, VER_MINOR, VER_PATCH);
+    doc_display(doc, "Device Faile Rates", 0);
+    doc_free(doc);
+}
 /************************************************************************
  * Monster Lore
  ************************************************************************/
@@ -2294,6 +2373,7 @@ void do_cmd_spoilers(void)
         c_prt(TERM_RED, "Miscellaneous", row++, col - 2);
         prt("(1) Option Bits", row++, col);
         prt("(2) Device Fail Rates", row++, col);
+        prt("(3) Device Tables", row++, col);
         row++;
 
         /* Prompt */
@@ -2361,6 +2441,9 @@ void do_cmd_spoilers(void)
             break;
         case '2':
             spoil_device_fail();
+            break;
+        case '3':
+            spoil_device_tables();
             break;
 
         /* Oops */
