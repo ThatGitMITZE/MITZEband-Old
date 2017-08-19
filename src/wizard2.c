@@ -1117,7 +1117,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
         }
     }
     #endif
-    #if 1
+    #if 0
     if (o_ptr->tval == TV_STAFF)
     {
         switch (o_ptr->activation.type)
@@ -1129,7 +1129,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
     }
     #endif
 
-    #if 0
+    #if 1
     if (obj_is_device(o_ptr))
         _wiz_stats_log_obj(level, o_ptr);
     #endif

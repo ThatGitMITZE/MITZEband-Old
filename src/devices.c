@@ -2918,14 +2918,21 @@ int device_value(object_type *o_ptr, int options)
                     base_level = MAX(10, entry->level);
                 }
 
-                base_charges = 3 * base_level / MAX(1, base_cost);
-                charges = device_max_sp(o_ptr) / o_ptr->activation.cost;
+                /* scale by 10 for rods */
+                base_charges = 30 * base_level / MAX(1, base_cost);
+                charges = device_max_sp(o_ptr) * 10 / o_ptr->activation.cost;
 
                 if (o_ptr->tval == TV_ROD)
-                    base_charges /= 3; /* s/b 2, but rods should value slightly higher than wands/staves */
+                {
+                    base_charges /= 2;
+                    result = result * 150 / 100; /* rods should value more than wands (durable+fast recharge) */
+                }
 
-                /* More charges than base gives more value */
-                result = result * charges / MAX(1, base_charges);
+                /* More charges than base gives more value. Double the charges
+                 * adds 20% to cost. Note that most effects scale damage dramatically
+                 * with level, so effect_value already has most of the boost built in.
+                 * XXX This needs work ... */
+                result += result * (charges - base_charges) / (5 * MAX(1, base_charges));
             }
         }
     }
@@ -4596,6 +4603,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (name) return "Angelic Healing";
         if (desc) return "It heals your hitpoints, cures what ails you, and makes you heroic.";
         if (info) return info_heal(0, 0, _BOOST(amt));
+        /* XXX The following is too low for -AngelicHealing, but avoids over-valuing Lohengrin */
         if (value) return format("%d", 750 + 15*amt);
         if (color) return format("%d", TERM_YELLOW);
         if (cast)
