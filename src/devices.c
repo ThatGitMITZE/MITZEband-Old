@@ -2636,8 +2636,11 @@ bool device_init(object_type *o_ptr, int level, int mode)
     if (level > 100)
         level = 100;
 
-    /* device_level */
-    o_ptr->xtra3 = _bounds_check(_rand_normal(level*90/100, 10), 1, 100);
+    /* device_level
+     * 90%+-10% means 84.13% <= level (modulo rounding, of course)
+     * 95%+-10% means ~70% <= level. So ~30% at or *above* level.
+     * See how generous I've become ;) */
+    o_ptr->xtra3 = _bounds_check(_rand_normal(level*95/100, 10), 1, 100);
 
     switch (o_ptr->tval)
     {

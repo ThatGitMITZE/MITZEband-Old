@@ -1066,6 +1066,15 @@ static void _wiz_stats_log_android(int level, object_type *o_ptr)
 }
 #endif
 
+static void _wiz_stats_log_device(int level, object_type *o_ptr)
+{
+    char buf[MAX_NLEN];
+    if (!_wiz_doc) return;
+    object_desc(buf, o_ptr, OD_COLOR_CODED);
+    _wiz_obj_count++;
+    doc_printf(_wiz_doc, "C%2d D%2d O%2d P%2d D%2d: <indent><style:indent>%s</style></indent>\n",
+        p_ptr->lev, level, o_ptr->level, o_ptr->activation.power, o_ptr->activation.difficulty, buf);
+}
 static void _wiz_stats_log_obj(int level, object_type *o_ptr)
 {
     char buf[MAX_NLEN];
@@ -1112,7 +1121,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
         case EFFECT_BALL_DISINTEGRATE:
         case EFFECT_BALL_WATER:
         case EFFECT_ROCKET:
-            _wiz_stats_log_obj(level, o_ptr);
+            _wiz_stats_log_device(level, o_ptr);
             break;
         }
     }
@@ -1123,7 +1132,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
         switch (o_ptr->activation.type)
         {
         case EFFECT_HEAL_CURING:
-            _wiz_stats_log_obj(level, o_ptr);
+            _wiz_stats_log_device(level, o_ptr);
             break;
         }
     }
@@ -1131,7 +1140,7 @@ static void _wiz_stats_log_devices(int level, object_type *o_ptr)
 
     #if 1
     if (obj_is_device(o_ptr))
-        _wiz_stats_log_obj(level, o_ptr);
+        _wiz_stats_log_device(level, o_ptr);
     #endif
 }
 static void _wiz_stats_log_arts(int level, object_type *o_ptr)
@@ -1781,8 +1790,8 @@ void do_cmd_debug(void)
         int lev;
         int max_depth = get_quantity("Max Depth? ", 100);
 
-        _wiz_doc_init(doc_alloc(80));
-        doc_insert(_wiz_doc, "<style:wide>");
+        _wiz_doc_init(doc_alloc(120));
+        doc_insert(_wiz_doc, "<style:table>");
 
         _stats_reset_monster_levels();
         _stats_reset_object_levels();
@@ -1881,13 +1890,15 @@ void do_cmd_debug(void)
            current dungeon. You still want to start with a fresh character. */
         int reps = get_quantity("How many reps? ", 100);
 
-        _wiz_doc_init(doc_alloc(80));
+        _wiz_doc_init(doc_alloc(120));
+        doc_insert(_wiz_doc, "<style:table>");
 
         statistics_hack = TRUE;
         _wiz_gather_stats(dungeon_type, dun_level, reps);
         _wiz_doc_obj_summary();
         statistics_hack = FALSE;
 
+        doc_insert(_wiz_doc, "</style>");
         if (doc_line_count(_wiz_doc))
             doc_display(_wiz_doc, "Statistics", 0);
         doc_free(_wiz_doc);
