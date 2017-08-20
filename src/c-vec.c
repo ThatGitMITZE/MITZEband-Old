@@ -405,7 +405,15 @@ void vec_sort(vec_ptr vec, vec_cmp_f f)
     vec_quick_sort(vec, f);
 }
 
-/* XXX This doesn't belong here ... */
+/* XXX This doesn't belong here ...
+ * Variance (sigma squared) is defined as 
+ * SUM((x-<x>)^2)/N = SUM(x^2-2x<x>+<x>^2)/N
+ *   = [SUM(x^2) - 2<x>SUM(x) + <x>^2 SUM(1)]/N
+ *   = <x^2> - 2<x><x> + <x>^2
+ *   = <x^2> - <x>^2.
+ * Of course, <x> is just SUM(x)/N. We may
+ * compute <x^2> and <x>^2 in a single pass.
+ * */
 int_stat_t int_calc_stats(vec_ptr v)
 {
     int_stat_t r;
@@ -420,7 +428,7 @@ int_stat_t int_calc_stats(vec_ptr v)
         if (x > max) max = x;
     }
     r.mean = tx/(double)n;
-    r.variance = tx2/(double)n - r.mean;  /* XXX check this ... */
+    r.variance = tx2/(double)n - (r.mean)*(r.mean);
     r.sigma = sqrt(r.variance);
     r.max = max;
     return r;
