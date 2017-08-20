@@ -2324,6 +2324,7 @@ bool effect_add(object_type *o_ptr, int type)
 #define _HARD            0x0020
 #define _COMMON          0x0040
 #define _RARE            0x0080
+#define _LESS_HARD       0x0100
 
 device_effect_info_t wand_effect_table[] =
 {
@@ -2355,11 +2356,11 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BOLT_PLASMA,           38,  19,     1,   0,     0, 0},
     {EFFECT_BOLT_ICE,              40,  20,     1,   0,     0, 0},
     {EFFECT_ARROW,                 45,  20,     1,   0,     0, _EASY},
-    {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_BREATHE_COLD,          50,  22,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BREATHE_FIRE,          50,  23,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BEAM_GRAVITY,          55,  25,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
-    {EFFECT_METEOR,                55,  26,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_METEOR,                55,  26,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _LESS_HARD},
     {EFFECT_BREATHE_ONE_MULTIHUED, 60,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_GENOCIDE_ONE,          65,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BALL_WATER,            70,  28,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
@@ -2394,10 +2395,10 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_BALL_FIRE,             42,  27,     1,   0,     0, 0},
     {EFFECT_BALL_ACID,             44,  29,     1,   0,     0, 0},
     {EFFECT_BOLT_MANA,             45,  30,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_BALL_NETHER,           45,  31,     1,   0,     0, _HARD},
-    {EFFECT_BALL_DISEN,            47,  32,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_BALL_NETHER,           45,  31,     1,   0,     0, _LESS_HARD},
+    {EFFECT_BALL_DISEN,            47,  32,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_ENLIGHTENMENT,         50,  33,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_BALL_SOUND,            52,  35,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_BALL_SOUND,            52,  35,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_SPEED_HERO,            70,  40,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
     {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
@@ -2446,15 +2447,15 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_SPEED,                 40,  19,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,     0, _EASY | _COMMON},
     {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,     0, _EASY},
-    {EFFECT_HOLINESS,              45,  21,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_HOLINESS,              45,  21,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _HARD},
     {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _HARD},
     {EFFECT_DISPEL_LIFE,           50,  22,     3,   0,     0, _HARD},
     {EFFECT_DISPEL_EVIL,           55,  23,     3,   0,     0, _HARD},
     {EFFECT_DISPEL_MONSTERS,       55,  24,     5,   0,     0, _HARD},
-    {EFFECT_DESTRUCTION,           50,  25,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_DESTRUCTION,           50,  25,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _LESS_HARD},
     {EFFECT_BANISH_EVIL,           60,  31,     2,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_BANISH_ALL,            70,  32,     3,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_MANA_STORM,            85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
@@ -2578,6 +2579,11 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
                 if (entry->flags & _EASY)
                 {
                     o_ptr->activation.difficulty += d/3;
+                }
+                else if (entry->flags & _LESS_HARD)
+                {
+                    o_ptr->activation.difficulty += d/2;
+                    o_ptr->activation.difficulty += randint0(d/2);
                 }
                 else if (entry->flags & _HARD)
                 {

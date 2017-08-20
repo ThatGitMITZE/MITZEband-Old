@@ -1,6 +1,7 @@
 #include "c-vec.h"
 
 #include <assert.h>
+#include <math.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
@@ -403,3 +404,25 @@ void vec_sort(vec_ptr vec, vec_cmp_f f)
 {
     vec_quick_sort(vec, f);
 }
+
+/* XXX This doesn't belong here ... */
+int_stat_t int_calc_stats(vec_ptr v)
+{
+    int_stat_t r;
+    int n = vec_length(v);
+    int i, max = 0;
+    double tx2 = 0.0, tx = 0.0;
+    for (i = 0; i < n; i++)
+    {
+        int x = vec_get_int(v, i);
+        tx += (double)x;
+        tx2 += (double)x*(double)x;
+        if (x > max) max = x;
+    }
+    r.mean = tx/(double)n;
+    r.variance = tx2/(double)n - r.mean;  /* XXX check this ... */
+    r.sigma = sqrt(r.variance);
+    r.max = max;
+    return r;
+}
+

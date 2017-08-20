@@ -1597,31 +1597,6 @@ static void spoil_mon_resist(void)
     vec_free(v);
 }
 
-typedef struct {
-    double mean;
-    double variance;
-    double sigma;
-    int    max;
-} _stat_t, *_stat_ptr;
-_stat_t _calc_stats(vec_ptr v)
-{
-    _stat_t r;
-    int n = vec_length(v);
-    int i, max = 0;
-    double tx2 = 0.0, tx = 0.0;
-    for (i = 0; i < n; i++)
-    {
-        int x = vec_get_int(v, i);
-        tx += (double)x;
-        tx2 += (double)x*(double)x;
-        if (x > max) max = x;
-    }
-    r.mean = tx/(double)n;
-    r.variance = tx2/(double)n - r.mean;  /* XXX check this ... */
-    r.sigma = sqrt(r.variance);
-    r.max = max;
-    return r;
-}
 static void spoil_mon_anger(void)
 {
     /* I tried to spreadsheet this, but I must be too dumb to get accurate results! */
@@ -1642,7 +1617,7 @@ static void spoil_mon_anger(void)
         for (freq_idx = 0;; freq_idx++)
         {
             vec_ptr runs;
-            _stat_t stat;
+            int_stat_t stat;
             int i, j, cast = 0, total = 0;
             int freq = freqs[freq_idx];
             if (freq < 0) break;
@@ -1665,7 +1640,7 @@ static void spoil_mon_anger(void)
                     a += boost + a/2;
                 }
             }
-            stat = _calc_stats(runs);
+            stat = int_calc_stats(runs);
             doc_printf(cols[doc_idx], "%4d  %2d.%d%% %.2f %.2f %3d\n",
                 freq, cast*100/total, (cast*1000/total)%10, stat.mean, stat.sigma, stat.max);
             vec_free(runs);
@@ -1693,7 +1668,7 @@ static bool _adaptive_caster2(int freq, int mana) { return randint0(100) < freq 
 static void _spoil_mon_spell_freq_aux(doc_ptr doc, int freq, _cast_simulator caster)
 {
     vec_ptr runs;
-    _stat_t stat;
+    int_stat_t stat;
     int i, mana = 0, run = 0, total = 0, cast = 0;
     runs = vec_alloc(NULL);
     for (i = 0; i < 100 * 1000; i++)
@@ -1715,7 +1690,7 @@ static void _spoil_mon_spell_freq_aux(doc_ptr doc, int freq, _cast_simulator cas
             }
         }
     }
-    stat = _calc_stats(runs);
+    stat = int_calc_stats(runs);
     doc_printf(doc, " %2d.%d%% %.2f %.2f %3d  ",
         cast*100/total, (cast*1000/total)%10, stat.mean, stat.sigma, stat.max);
     vec_free(runs);

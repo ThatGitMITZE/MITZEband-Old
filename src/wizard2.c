@@ -999,20 +999,26 @@ static void do_cmd_wiz_create_feature(void)
     prev_mimic = tmp_mimic;
 }
 
+/*************************************************************************
+ * Wizard Stats
+ ************************************************************************/
 static doc_ptr _wiz_doc = NULL;
 static bool    _wiz_show_scores = TRUE;
 static int     _wiz_obj_count = 0;
 static int     _wiz_obj_score = 0;
 
-static void _wiz_doc_init(doc_ptr doc)
+static void _wiz_stats_begin(void)
 {
-    _wiz_doc = doc;
+    _wiz_doc = doc_alloc(120);
+    doc_insert(_wiz_doc, "<style:table>");
     _wiz_obj_count = 0;
     _wiz_obj_score = 0;
+    statistics_hack = TRUE;
 }
 
-static void _wiz_doc_obj_summary(void)
+static void _wiz_stats_end(void)
 {
+    doc_insert(_wiz_doc, "</style>");
     if (_wiz_obj_count)
     {
         doc_printf(_wiz_doc, "\n\n<color:R>%d</color> objects. <color:R>%d</color> average score.\n",
@@ -1020,6 +1026,22 @@ static void _wiz_doc_obj_summary(void)
     }
     if (original_score)
         doc_printf(_wiz_doc, "<color:R>%d%%</color> replacement power.\n", replacement_score * 100 / original_score);
+    statistics_hack = FALSE;
+}
+
+static void _wiz_stats_free(void)
+{
+    doc_free(_wiz_doc);
+    _wiz_doc = NULL;
+}
+
+static void _wiz_stats_display(void)
+{
+    if (doc_line_count(_wiz_doc))
+        doc_display(_wiz_doc, "Statistics", 0);
+
+    viewport_verify();
+    do_cmd_redraw();
 }
 
 static char _score_color(int score)
@@ -1153,7 +1175,7 @@ static void _wiz_stats_log_rand_arts(int level, object_type *o_ptr)
     if (o_ptr->art_name)
         _wiz_stats_log_obj(level, o_ptr);
 }
-static void _wiz_kill_monsters(int level)
+static void _wiz_stats_kill(int level)
 {
     int i;
 
@@ -1315,7 +1337,7 @@ static bool _device_is_(obj_ptr obj, int tval, int effect)
         && obj->activation.type == effect;
 }
 
-static void _wiz_inspect_objects(int level)
+static void _wiz_stats_inspect(int level)
 {
     race_t  *race_ptr = get_race();
     class_t *class_ptr = get_class();
@@ -1422,7 +1444,7 @@ static void _wiz_inspect_objects(int level)
     home_optimize();
     if (p_ptr->cursed) remove_all_curse();
 }
-static void _wiz_gather_stats(int which_dungeon, int level, int reps)
+static void _wiz_stats_gather(int which_dungeon, int level, int reps)
 {
     int i;
     dungeon_type = which_dungeon;
@@ -1436,15 +1458,14 @@ static void _wiz_gather_stats(int which_dungeon, int level, int reps)
         p_ptr->energy_need = 0;
         change_floor();
 
-        _wiz_kill_monsters(level);
-        _wiz_inspect_objects(level);
+        _wiz_stats_kill(level);
+        _wiz_stats_inspect(level);
     }
 }
 
-/*
- * Ask for and parse a "debug command"
- * The "command_arg" may have been set.
- */
+/*************************************************************************
+ * Handle the ^A wizard commands. Perhaps there should be a UI for this?
+ ************************************************************************/
 extern void do_cmd_debug(void);
 void do_cmd_debug(void)
 {
@@ -1790,13 +1811,9 @@ void do_cmd_debug(void)
         int lev;
         int max_depth = get_quantity("Max Depth? ", 100);
 
-        _wiz_doc_init(doc_alloc(120));
-        doc_insert(_wiz_doc, "<style:table>");
-
+        _wiz_stats_begin();
         _stats_reset_monster_levels();
         _stats_reset_object_levels();
-        statistics_hack = TRUE; /* No messages, no damage, no prompts for stat gains, no AFC */
-
         for (lev = MAX(1, dun_level); lev <= max_depth; lev += 1)
         {
             int reps = 1;
@@ -1805,12 +1822,9 @@ void do_cmd_debug(void)
             if (lev % 20 == 0) reps += 1;
             if (lev % 30 == 0) reps += 2;
 
-            _wiz_gather_stats(DUNGEON_ANGBAND, lev, reps);
+            _wiz_stats_gather(DUNGEON_ANGBAND, lev, reps);
         }
-        _wiz_doc_obj_summary();
-        statistics_hack = FALSE;
-
-#if 0
+#if 1
         {
             _tally_t mon_total_tally = {0};
             _tally_t obj_total_tally = {0};
@@ -1873,15 +1887,10 @@ void do_cmd_debug(void)
             doc_newline(_wiz_doc);
         }
 #endif
+        _wiz_stats_end();
+        _wiz_stats_display();
+        _wiz_stats_free();
 
-        doc_insert(_wiz_doc, "</style>");
-        if (doc_line_count(_wiz_doc))
-            doc_display(_wiz_doc, "Statistics", 0);
-        doc_free(_wiz_doc);
-        _wiz_doc = NULL;
-
-        viewport_verify();
-        do_cmd_redraw();
         break;
     }
     case '=':
@@ -1890,22 +1899,12 @@ void do_cmd_debug(void)
            current dungeon. You still want to start with a fresh character. */
         int reps = get_quantity("How many reps? ", 100);
 
-        _wiz_doc_init(doc_alloc(120));
-        doc_insert(_wiz_doc, "<style:table>");
+        _wiz_stats_begin();
+        _wiz_stats_gather(dungeon_type, dun_level, reps);
+        _wiz_stats_end();
+        _wiz_stats_display();
+        _wiz_stats_free();
 
-        statistics_hack = TRUE;
-        _wiz_gather_stats(dungeon_type, dun_level, reps);
-        _wiz_doc_obj_summary();
-        statistics_hack = FALSE;
-
-        doc_insert(_wiz_doc, "</style>");
-        if (doc_line_count(_wiz_doc))
-            doc_display(_wiz_doc, "Statistics", 0);
-        doc_free(_wiz_doc);
-        _wiz_doc = NULL;
-
-        viewport_verify();
-        do_cmd_redraw();
         break;
     }
     case '_':
