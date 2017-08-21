@@ -15493,7 +15493,7 @@ D:of Order fought with Serpent and stole one of its eyes, known as the
 D:Jewel of Judgement. With the Jewel, Dworkin drew the Pattern and thus
 D:gave birth to the infinite worlds of shadow. Now the balance has been
 D:disrupted, the Pattern damaged, and all the shadow is being absorbed by
-D:the Serpent. Unless it is stopped, the word as we know it will come to
+D:the Serpent. Unless it is stopped, the world as we know it will come to
 D:an end, all order reverting to Primal Chaos.
 
 N:863:Quantum dot
@@ -20713,8 +20713,8 @@ N:1155:Chitauli
 G:R:W
 I:130:107d65:60:120:1:300
 W:89:12:999:18000:0:0
-B:GAZE:DAM(12d12):PARALYZE
-B:GAZE:DISENCHANT(10d8)
+B:GAZE(30):DAM(12d12):PARALYZE
+B:GAZE(30):DISENCHANT(10d8)
 F:FORCE_SLEEP | FORCE_MAXHP | REGENERATE | CAN_SPEAK |
 F:ONLY_ITEM | DROP_GOOD | DROP_3D2 | SMART | DROP_4D2 |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY |
@@ -20731,9 +20731,9 @@ N:1156:Umbaba-Samahongo
 G:R:s
 I:130:120d100:70:160:1:500
 W:92:6:999:50000:0:0
-B:GAZE:DAM(13d13):PARALYZE
-B:GAZE:DISENCHANT(10d8)
-B:GAZE:DISENCHANT(10d8)
+B:GAZE(60):DAM(13d13):PARALYZE
+B:GAZE(60):DISENCHANT(10d8)
+B:GAZE(60):DISENCHANT(10d8)
 F:UNIQUE | MALE | FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_GREAT |
 F:SMART | OPEN_DOOR | BASH_DOOR | MOVE_BODY | REGENERATE |
