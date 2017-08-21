@@ -937,8 +937,9 @@ static bool _black_market_stock_p(int k_idx)
 
 static bool _black_market_create(obj_ptr obj, int mode)
 {
-    int l1 = 25 + randint0(25);
-    int l2 = 25 + randint0(25);
+    int spread = py_prorata_level(50);
+    int l1 = 20 + spread/4 + randint0(3*spread/4);
+    int l2 = 20 + spread/4 + randint0(3*spread/4);
     int k_idx;
 
     if (one_in_(9))
@@ -1045,8 +1046,11 @@ static bool _jeweler_stock_p(int k_idx)
 
 static bool _jeweler_create(obj_ptr obj, int mode)
 {
-    int k_idx = _get_k_idx(_jeweler_stock_p, _mod_lvl(25 + randint0(25)));
-    return _create(obj, k_idx, _mod_lvl(25 + randint0(25)), mode);
+    int spread = py_prorata_level(50);
+    int l1 = 20 + spread/4 + randint0(3*spread/4);
+    int l2 = 20 + spread/4 + randint0(3*spread/4);
+    int k_idx = _get_k_idx(_jeweler_stock_p, _mod_lvl(l1));
+    return _create(obj, k_idx, _mod_lvl(l2), mode);
 }
 
 /************************************************************************
