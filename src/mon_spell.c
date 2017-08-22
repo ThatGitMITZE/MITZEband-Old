@@ -3268,6 +3268,12 @@ static void _ai_direct(mon_spell_cast_ptr cast)
         else
             spell->prob += cast->mon->anger;
     }
+    if (cast->mon->anger)
+    {
+        spell = mon_spells_find(spells, _id(MST_BALL, GF_BRAIN_SMASH));
+        if (spell)
+            spell->prob += cast->mon->anger;
+    }
 
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_WORLD));
     if (spell && world_monster) /* prohibit if already cast */
