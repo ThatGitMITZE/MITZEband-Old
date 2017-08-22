@@ -923,7 +923,7 @@ void quests_on_leave(void)
     if (q->status == QS_IN_PROGRESS)
     {
         bool fail = TRUE;
-        if (q->flags & QF_RETAKE)
+        if (!statistics_hack && (q->flags & QF_RETAKE))
         {
             fail = FALSE;
             if (q->flags & QF_RANDOM)

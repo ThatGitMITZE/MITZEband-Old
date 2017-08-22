@@ -1175,6 +1175,11 @@ static void _wiz_stats_log_rand_arts(int level, object_type *o_ptr)
     if (o_ptr->art_name)
         _wiz_stats_log_obj(level, o_ptr);
 }
+static bool _wiz_stats_skip(point_t pt)
+{
+    if (0 && (cave[pt.y][pt.x].info & CAVE_ICKY)) return TRUE;
+    return FALSE;
+}
 static void _wiz_stats_kill(int level)
 {
     int i;
@@ -1189,10 +1194,11 @@ static void _wiz_stats_kill(int level)
         if (!m_ptr->r_idx) continue;
         if (i == p_ptr->riding) continue;
 
-        /* Skip out of depth monsters */
         r_ptr = &r_info[m_ptr->r_idx];
         if (0 && r_ptr->level > level) continue;
         if (r_ptr->id == MON_DAWN) continue; /* inflates pct of humans */
+        if (0 && (r_ptr->flags1 & RF1_UNIQUE) && r_ptr->level > level - 4) continue;
+        if (_wiz_stats_skip(point(m_ptr->fx, m_ptr->fy))) continue;
 
         r_ptr->r_sights++;
         _stats_note_monster_level(level, r_ptr->level);
@@ -1355,9 +1361,7 @@ static void _wiz_stats_inspect(int level)
         }
         if (o_ptr->held_m_idx) continue;
         if (o_ptr->marked & OM_COUNTED) continue; /* skip player drops */
-
-        /* Skip Vaults ...
-        if (cave[o_ptr->iy][o_ptr->ix].info & CAVE_ICKY) continue;*/
+        if (_wiz_stats_skip(point(o_ptr->loc.x, o_ptr->loc.y))) continue;
 
         obj_identify_fully(o_ptr);
         stats_on_identify(o_ptr);
