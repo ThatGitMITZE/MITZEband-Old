@@ -2459,7 +2459,6 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_SPEED,                 40,  19,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,     0, _EASY | _COMMON},
     {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,     0, _EASY},
-    {EFFECT_HOLINESS,              45,  21,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _HARD},
     {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _HARD},
     {EFFECT_DISPEL_LIFE,           50,  22,     3,   0,     0, _HARD},

@@ -1973,7 +1973,6 @@ static void _build_statistics(doc_ptr doc)
         _device_counts_imp(doc, TV_STAFF, EFFECT_HEAL);
         _device_counts_imp(doc, TV_STAFF, EFFECT_TELEPATHY);
         _device_counts_imp(doc, TV_STAFF, EFFECT_SPEED);
-        _device_counts_imp(doc, TV_STAFF, EFFECT_HOLINESS);
         _device_counts_imp(doc, TV_STAFF, EFFECT_IDENTIFY_FULL);
         _device_counts_imp(doc, TV_STAFF, EFFECT_DESTRUCTION);
         _device_counts_imp(doc, TV_STAFF, EFFECT_HEAL_CURING);
