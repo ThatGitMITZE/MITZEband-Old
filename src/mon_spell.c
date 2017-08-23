@@ -3261,7 +3261,7 @@ static void _ai_direct(mon_spell_cast_ptr cast)
             spell->prob = anti_magic_check();
     }
     spell = mon_spells_find(spells, _id(MST_ANNOY, ANNOY_TELE_TO));
-    if (spell)
+    if (spell && spell->prob) /* XXX _smart_remove may notice RES_TELEPORT! */
     {
         if (_distance(cast->src, cast->dest) < 2)
             spell->prob = 0;
