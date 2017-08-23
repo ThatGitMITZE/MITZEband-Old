@@ -2394,8 +2394,8 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_BEAM_COLD,             19,   9,     1,  50,     0, 0},
     {EFFECT_BEAM_FIRE,             21,  10,     1,  60,     0, 0},
     {EFFECT_BEAM_ACID,             23,  12,     1,  60,     0, 0},
-    {EFFECT_BEAM_LITE,             25,  15,     1,   0,     0, 0},
-    {EFFECT_RECALL,                27,  15,     1,   0,     0, _EASY | _COMMON},
+    {EFFECT_BEAM_LITE,             25,  15,     2,   0,     0, 0},
+    {EFFECT_RECALL,                27,  15,     1,   0,     0, _EASY},
     {EFFECT_DETECT_ALL,            30,  17,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_ESCAPE,                30,  20,     1,   0,     0, _EASY},
     {EFFECT_BEAM_CHAOS,            32,  21,     2,  60,     0, 0},
@@ -2522,10 +2522,11 @@ static int _effect_rarity(device_effect_info_ptr entry, int level)
         while (n--)
             r *= 2;
     }
-    if (level > entry->level)
+    else if (level > entry->level)
     {
         int d = level - entry->level;
-        int n = (entry->flags & _COMMON) ? 25 : 10;
+        int spread = entry->max_depth ? entry->max_depth - entry->level : 100 - entry->level;
+        int n = (entry->flags & _COMMON) ? spread/2 : spread*2/7;
         while (d >= n)
         {
             r *= 2;
