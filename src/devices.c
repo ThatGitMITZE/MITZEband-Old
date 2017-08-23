@@ -2367,15 +2367,15 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_DRAIN_LIFE,            32,  17,     1,   0,     0, 0},
     {EFFECT_BOLT_PLASMA,           38,  19,     1,   0,     0, 0},
     {EFFECT_BOLT_ICE,              40,  20,     1,   0,     0, 0},
-    {EFFECT_ARROW,                 45,  20,     1,   0,     0, _EASY},
-    {EFFECT_BALL_NEXUS,            47,  21,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_BREATHE_COLD,          50,  22,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BREATHE_FIRE,          50,  23,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BEAM_GRAVITY,          55,  25,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
-    {EFFECT_METEOR,                55,  26,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _LESS_HARD},
-    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_GENOCIDE_ONE,          65,  27,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BALL_WATER,            70,  28,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_ARROW,                 45,  25,     1,   0,     0, _EASY},
+    {EFFECT_BALL_NEXUS,            47,  27,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_BREATHE_COLD,          50,  30,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BREATHE_FIRE,          50,  32,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BEAM_GRAVITY,          55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
+    {EFFECT_METEOR,                55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _LESS_HARD},
+    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_GENOCIDE_ONE,          65,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BALL_WATER,            70,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BALL_DISINTEGRATE,     75,  35,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_ROCKET,                85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
@@ -2509,6 +2509,13 @@ static int _rand_normal(int mean, int pct)
 
     return result;
 }
+static int _rand_normal_hi(int mean, int pct)
+{
+    int result = _rand_normal(mean, pct);
+    if (result < mean)
+        result = mean + (mean - result);
+    return result;
+}
 
 static int _effect_rarity(device_effect_info_ptr entry, int level)
 {
@@ -2609,7 +2616,17 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
                 }
             }
 
-            o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 5), 1, 1000);
+            if (entry->flags & _EASY)
+                o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 5), 1, 1000);
+            else
+            {
+                /* We assume non _EASY devices scale utility with level. Sometimes, they
+                 * do so rather strongly. See ^A"3 for device tables and note the damage
+                 * ranges for, say, -Beam of Light (38-285 damage). */
+                int cost = entry->cost;
+                cost += cost*(o_ptr->activation.power - entry->level)/100;
+                o_ptr->activation.cost = _bounds_check(_rand_normal_hi(cost, 5), 1, 1000);
+            }
             o_ptr->activation.extra = entry->extra;
 
             if (entry->flags & _NO_DESTROY)
