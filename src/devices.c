@@ -43,13 +43,25 @@ int _difficulty(int d)
      * devices from inappropriate usage. -Rockets are now much
      * harder to use (and _Healing only marginally more difficult).
      * Formerly, OF_MAGIC_MASTERY was useless to device classes
-     * like the mage. No longer! 100 -> 130, but with cubic weighting. */
-    return d + 30 * d * d / 100 * d / 10000;
+     * like the mage. No longer! 100 -> 130, but with cubic weighting.
+     * Two versions: The first is more punishing than the second, depending
+     * on the chosen cutoff. As usual, see design/devices.ods or ^A"2.
+    return d + 30 * d * d / 100 * d / 10000; */
+    int cutoff = 40;
+    int xtra   = 30;
+    if (d > cutoff)
+    {
+        int l = d - cutoff;
+        int m = 100 - cutoff;
+        assert(cutoff < 100);
+        return d + xtra * l * l / m * l / (m * m);
+    }
+    return d;
 }
 /* in progress: I find this calculation hard to grok ... let's
  * rephrase in terms of skill vs. difficulty and expose a simple
  * api so I can view fail(s,d) (a function of 2 variables).
- * cf ^A"d for online spoiler tables (wizard1.c) */
+ * cf ^A"2 for online spoiler tables (wizard1.c) */
 int device_calc_fail_rate_aux(int skill, int difficulty)
 {
     int min = USE_DEVICE;

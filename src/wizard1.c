@@ -1980,6 +1980,124 @@ static void spoil_mon_evol(void)
 }
 
 /************************************************************************
+ * Skills
+ ************************************************************************/
+static int _pers_cmp(personality_ptr l, personality_ptr r)
+{
+    return strcmp(l->name, r->name);
+}
+static vec_ptr _get_personalities(void)
+{
+    vec_ptr v = vec_alloc(NULL);
+    int     i;
+
+    for (i = 0; i < MAX_PERSONALITIES; i++)
+    {
+        personality_ptr p = get_personality_aux(i);
+        if (p->flags & DEPRECATED) continue;
+        vec_add(v, p);
+    }
+    vec_sort(v, (vec_cmp_f)_pers_cmp);
+    return v;
+}
+static int _race_cmp(race_ptr l, race_ptr r)
+{
+    return strcmp(l->name, r->name);
+}
+static vec_ptr _get_races(void)
+{
+    vec_ptr v = vec_alloc(NULL);
+    int     i;
+
+    for (i = 0; i < MAX_RACES; i++)
+    {
+        race_ptr r = get_race_aux(i, 0);
+        if (r->flags & DEPRECATED) continue;
+        if (r->flags & RACE_IS_MONSTER) continue;
+        vec_add(v, r);
+    }
+    vec_sort(v, (vec_cmp_f)_race_cmp);
+    return v;
+}
+static void _print_skills1(doc_ptr doc, skills_ptr skills)
+{
+    doc_printf(doc, " %4d %4d %4d %4d %4d %4d %4d %4d",
+        skills->dis, skills->dev, skills->sav, skills->stl,
+        skills->srh, skills->fos, skills->thn, skills->thb);
+}
+static void _print_race_skills(doc_ptr doc, race_ptr race)
+{
+    if (race->id == RACE_DEMIGOD || race->id == RACE_DRACONIAN)
+    {
+        char buf[100];
+        sprintf(buf, "%s: %s", race->name, race->subname);
+        doc_printf(doc, "%-20.20s", buf);
+    }
+    else
+        doc_printf(doc, "%-20.20s", race->name);
+    _print_skills1(doc, &race->skills);
+    doc_newline(doc);
+}
+static void spoil_skills()
+{
+    doc_ptr doc = doc_alloc(120);
+    vec_ptr v;
+    int     i, j;
+
+    doc_change_name(doc, "skills.html");
+    doc_insert(doc, "<style:table>");
+
+    /* Personalities */
+    v = _get_personalities();
+    doc_insert(doc, "<topic:Personalities><style:heading>Personalities</style>\n");
+    doc_printf(doc, "<color:G>%-20.20s  Dis  Dev  Sav  Stl  Srh  Fos  Thn  Thb</color>\n", "Name");
+    for (i = 0; i < vec_length(v); i++)
+    {
+        personality_ptr p = vec_get(v, i);
+        doc_printf(doc, "%-20.20s", p->name);
+        _print_skills1(doc, &p->skills);
+        doc_newline(doc);
+    }
+    doc_newline(doc);
+    vec_free(v);
+
+    /* Races */
+    v = _get_races();
+    doc_insert(doc, "<topic:Races><style:heading>Races</style>\n");
+    doc_printf(doc, "<color:G>%-20.20s  Dis  Dev  Sav  Stl  Srh  Fos  Thn  Thb</color>\n", "Name");
+    for (i = 0; i < vec_length(v); i++)
+    {
+        race_ptr r = vec_get(v, i);
+        if (r->id == RACE_DEMIGOD)
+        {
+            for (j = 0; j < DEMIGOD_MAX; j++)
+            {
+                r = get_race_aux(RACE_DEMIGOD, j);
+                _print_race_skills(doc, r);
+            }
+        }
+        else if (r->id == RACE_DRACONIAN)
+        {
+            for (j = 0; j < DRACONIAN_MAX; j++)
+            {
+                r = get_race_aux(RACE_DRACONIAN, j);
+                _print_race_skills(doc, r);
+            }
+        }
+        else
+            _print_race_skills(doc, r);
+    }
+    doc_newline(doc);
+    vec_free(v);
+
+    doc_insert(doc, "</style>");
+    doc_printf(doc, "\n<color:D>Generated for PosChengband %d.%d.%d</color>\n",
+                     VER_MAJOR, VER_MINOR, VER_PATCH);
+    doc_display(doc, "Skills", 0);
+    doc_free(doc);
+}
+
+/************************************************************************
  * Magic Realms
  ************************************************************************/
 static bool _check_realm(int class_idx, int realm_idx)
@@ -2341,6 +2459,7 @@ void do_cmd_spoilers(void)
         c_prt(TERM_RED, "Class Spoilers", row++, col - 2);
         prt("(s) Spells by Class", row++, col);
         prt("(r) Spells by Realm", row++, col);
+        prt("(S) Skills", row++, col);
         row++;
 
         row = 4;
@@ -2409,6 +2528,9 @@ void do_cmd_spoilers(void)
             break;
         case 'r':
             spoil_spells_by_realm();
+            break;
+        case 'S':
+            spoil_skills();
             break;
 
         /* Miscellaneous */
