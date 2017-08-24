@@ -1936,20 +1936,28 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         {
             if (o_ptr->activation.cost)
             {
-                int  charges = device_sp(o_ptr) / o_ptr->activation.cost;
-                int  max_charges = device_max_sp(o_ptr) / o_ptr->activation.cost;
-
                 t = object_desc_chr(t, ' ');
                 t = object_desc_chr(t, p1);
-                if ((mode & OD_COLOR_CODED) && charges < max_charges)
+                if (statistics_hack)
                 {
-                    if (!charges)
-                        t = object_desc_str(t, format("<color:r>%d/%d charges</color>", charges, max_charges));
-                    else
-                        t = object_desc_str(t, format("<color:y>%d/%d charges</color>", charges, max_charges));
+                    double charges = (double)device_max_sp(o_ptr)/o_ptr->activation.cost;
+                    t = object_desc_str(t, format("%.2f charges", charges));
                 }
                 else
-                    t = object_desc_str(t, format("%d/%d charges", charges, max_charges));
+                {
+                    int  charges = device_sp(o_ptr) / o_ptr->activation.cost;
+                    int  max_charges = device_max_sp(o_ptr) / o_ptr->activation.cost;
+
+                    if ((mode & OD_COLOR_CODED) && charges < max_charges)
+                    {
+                        if (!charges)
+                            t = object_desc_str(t, format("<color:r>%d/%d charges</color>", charges, max_charges));
+                        else
+                            t = object_desc_str(t, format("<color:y>%d/%d charges</color>", charges, max_charges));
+                    }
+                    else
+                        t = object_desc_str(t, format("%d/%d charges", charges, max_charges));
+                }
                 t = object_desc_chr(t, p2);
             }
         }
@@ -2082,13 +2090,15 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         {
             effect_t e = obj_get_effect(o_ptr);
             cptr     info = do_effect(&e, SPELL_INFO, 0);
+            char     buf[255];
 
             if (info)
             {
-                char buf[255];
                 sprintf(buf, " %s", info);
                 strcat(tmp_val2, buf);
             }
+            sprintf(buf, " %dsp", o_ptr->activation.cost);
+            strcat(tmp_val2, buf);
         }
     }
 

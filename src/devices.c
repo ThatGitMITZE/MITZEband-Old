@@ -1847,6 +1847,15 @@ int effect_value(effect_t *effect)
     return result;
 }
 
+int effect_cost_extra(effect_t *effect)
+{
+    int  result = 0;
+    cptr hack = do_effect(effect, SPELL_COST_EXTRA, 0);
+    if (hack)
+        result = atoi(hack);
+    return result;
+}
+
 byte effect_color(effect_t *effect)
 {
     byte result = TERM_WHITE;
@@ -2359,25 +2368,25 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_TELEPORT_AWAY,         20,  10,     1,   0,     0, _EASY | _COMMON},
     {EFFECT_DESTROY_TRAPS,         20,  10,     1,   0,     0, _EASY},
     {EFFECT_CHARM_MONSTER,         25,  11,     1,  50,     0, 0},
-    {EFFECT_BALL_COLD,             26,  12,     1,   0,     0, 0},
-    {EFFECT_BALL_ELEC,             28,  12,     1,   0,     0, 0},
-    {EFFECT_BALL_ACID,             29,  13,     1,   0,     0, 0},
-    {EFFECT_BALL_FIRE,             30,  14,     1,   0,     0, 0},
-    {EFFECT_BOLT_WATER,            30,  15,     1,   0,     0, 0},
-    {EFFECT_DRAIN_LIFE,            32,  17,     1,   0,     0, 0},
-    {EFFECT_BOLT_PLASMA,           38,  19,     1,   0,     0, 0},
-    {EFFECT_BOLT_ICE,              40,  20,     1,   0,     0, 0},
+    {EFFECT_BALL_COLD,             26,   5,     1,   0,     0, 0},
+    {EFFECT_BALL_ELEC,             28,   5,     1,   0,     0, 0},
+    {EFFECT_BALL_ACID,             29,   7,     1,   0,     0, 0},
+    {EFFECT_BALL_FIRE,             30,   8,     1,   0,     0, 0},
+    {EFFECT_BOLT_WATER,            30,   9,     1,   0,     0, 0},
+    {EFFECT_DRAIN_LIFE,            32,  20,     1,   0,     0, 0},
+    {EFFECT_BOLT_PLASMA,           38,  10,     1,   0,     0, 0},
+    {EFFECT_BOLT_ICE,              40,  11,     1,   0,     0, 0},
     {EFFECT_ARROW,                 45,  25,     1,   0,     0, _EASY},
-    {EFFECT_BALL_NEXUS,            47,  27,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_BREATHE_COLD,          50,  30,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BREATHE_FIRE,          50,  32,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BALL_NEXUS,            47,  14,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_BREATHE_COLD,          50,  15,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BREATHE_FIRE,          50,  16,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BEAM_GRAVITY,          55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
     {EFFECT_METEOR,                55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _LESS_HARD},
-    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  17,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_GENOCIDE_ONE,          65,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BALL_WATER,            70,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BALL_DISINTEGRATE,     75,  35,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_ROCKET,                85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_BALL_WATER,            70,  20,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
+    {EFFECT_BALL_DISINTEGRATE,     75,  20,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_ROCKET,                85,  20,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {0}
 };
@@ -2385,42 +2394,42 @@ device_effect_info_t wand_effect_table[] =
 device_effect_info_t rod_effect_table[] =
 {
     /*                            Lvl Cost Rarity  Max  Extra  Flags */
-    {EFFECT_PESTICIDE,              1,   3,     1,  20,     0, 0},
-    {EFFECT_DETECT_TRAPS,           5,   4,     1,  30,     0, 0},
-    {EFFECT_LITE_AREA,             10,   5,     1,  40,     0, 0},
-    {EFFECT_DETECT_DOOR_STAIRS,    12,   6,     1,  40,     0, 0},
-    {EFFECT_DETECT_MONSTERS,       15,   6,     1,  40,     0, 0},
+    {EFFECT_PESTICIDE,              1,   7,     1,  30,     0, 0},
+    {EFFECT_DETECT_TRAPS,           5,   9,     1,  30,     0, 0},
+    {EFFECT_LITE_AREA,             10,  10,     1,  40,     0, 0},
+    {EFFECT_DETECT_DOOR_STAIRS,    12,  10,     1,  40,     0, 0},
+    {EFFECT_DETECT_MONSTERS,       15,  10,     1,  40,     0, 0},
     {EFFECT_BEAM_ELEC,             17,   8,     1,  50,     0, 0},
-    {EFFECT_BEAM_COLD,             19,   9,     1,  50,     0, 0},
-    {EFFECT_BEAM_FIRE,             21,  10,     1,  60,     0, 0},
-    {EFFECT_BEAM_ACID,             23,  12,     1,  60,     0, 0},
-    {EFFECT_BEAM_LITE,             25,  15,     2,   0,     0, 0},
+    {EFFECT_BEAM_COLD,             19,   8,     1,  50,     0, 0},
+    {EFFECT_BEAM_FIRE,             21,   9,     1,  60,     0, 0},
+    {EFFECT_BEAM_ACID,             23,   9,     1,  60,     0, 0},
+    {EFFECT_BEAM_LITE,             25,  12,     2,   0,     0, 0},
     {EFFECT_RECALL,                27,  15,     1,   0,     0, _EASY},
     {EFFECT_DETECT_ALL,            30,  17,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_ESCAPE,                30,  20,     1,   0,     0, _EASY},
-    {EFFECT_BEAM_CHAOS,            32,  21,     2,  60,     0, 0},
-    {EFFECT_BEAM_SOUND,            32,  22,     2,  70,     0, 0},
+    {EFFECT_BEAM_CHAOS,            32,  12,     2,  60,     0, 0},
+    {EFFECT_BEAM_SOUND,            32,  12,     2,  70,     0, 0},
     {EFFECT_CLARITY,               35,  15,     3,  80,     0, _DROP_GOOD},
     {EFFECT_TELEKINESIS,           40,  25,     3,   0,     0, 0},
-    {EFFECT_BALL_ELEC,             40,  25,     1,   0,     0, 0},
-    {EFFECT_BALL_COLD,             40,  25,     1,   0,     0, 0},
-    {EFFECT_BALL_FIRE,             42,  27,     1,   0,     0, 0},
-    {EFFECT_BALL_ACID,             44,  29,     1,   0,     0, 0},
-    {EFFECT_BOLT_MANA,             45,  30,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_BALL_NETHER,           45,  31,     1,   0,     0, _LESS_HARD},
-    {EFFECT_BALL_DISEN,            47,  32,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_BALL_ELEC,             40,  13,     1,   0,     0, 0},
+    {EFFECT_BALL_COLD,             40,  14,     1,   0,     0, 0},
+    {EFFECT_BALL_FIRE,             42,  15,     1,   0,     0, 0},
+    {EFFECT_BALL_ACID,             44,  16,     1,   0,     0, 0},
+    {EFFECT_BOLT_MANA,             45,  17,     2,   0,     0, _DROP_GOOD | _HARD},
+    {EFFECT_BALL_NETHER,           45,  18,     1,   0,     0, _LESS_HARD},
+    {EFFECT_BALL_DISEN,            47,  19,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_ENLIGHTENMENT,         50,  33,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_BALL_SOUND,            52,  35,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_BALL_SOUND,            52,  22,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_SPEED_HERO,            70,  40,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
     {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
     {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
-    {EFFECT_BALL_MANA,             80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_BALL_SHARDS,           80,  45,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_BALL_CHAOS,            85,  45,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_MANA,             80,  24,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_SHARDS,           80,  25,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_CHAOS,            85,  27,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
-    {EFFECT_BALL_LITE,             95,  50,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    {EFFECT_BALL_LITE,             95,  27,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
     {0}
 };
 
@@ -2459,19 +2468,19 @@ device_effect_info_t staff_effect_table[] =
     {EFFECT_SPEED,                 40,  19,     2,   0,     0, _EASY | _COMMON},
     {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,     0, _EASY | _COMMON},
     {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,     0, _EASY},
-    {EFFECT_DISPEL_DEMON,          45,  21,     2,   0,     0, _HARD},
-    {EFFECT_DISPEL_UNDEAD,         45,  21,     2,   0,     0, _HARD},
-    {EFFECT_DISPEL_LIFE,           50,  22,     3,   0,     0, _HARD},
-    {EFFECT_DISPEL_EVIL,           55,  23,     3,   0,     0, _HARD},
-    {EFFECT_DISPEL_MONSTERS,       55,  24,     5,   0,     0, _HARD},
-    {EFFECT_DESTRUCTION,           50,  25,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
+    {EFFECT_DISPEL_DEMON,          45,  10,     2,   0,     0, _HARD},
+    {EFFECT_DISPEL_UNDEAD,         45,  10,     2,   0,     0, _HARD},
+    {EFFECT_DISPEL_LIFE,           50,  12,     3,   0,     0, _HARD},
+    {EFFECT_DISPEL_EVIL,           55,  13,     3,   0,     0, _HARD},
+    {EFFECT_DISPEL_MONSTERS,       55,  15,     5,   0,     0, _HARD},
+    {EFFECT_DESTRUCTION,           50,  15,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_HEAL_CURING,           55,  30,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _LESS_HARD},
+    {EFFECT_HEAL_CURING,           55,  10,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _LESS_HARD},
     {EFFECT_BANISH_EVIL,           60,  31,     2,   0,     0, _DROP_GOOD | _EASY},
     {EFFECT_BANISH_ALL,            70,  32,     3,   0,     0, _DROP_GOOD | _EASY},
-    {EFFECT_MANA_STORM,            85,  40,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_STARBURST,             85,  41,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_DARKNESS_STORM,        85,  42,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_MANA_STORM,            85,  10,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_STARBURST,             85,  12,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    {EFFECT_DARKNESS_STORM,        85,  12,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
     {EFFECT_GENOCIDE,              90,  50,     8,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD | _RARE},
     {EFFECT_RESTORE_MANA,         100, 100,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
     {0}
@@ -2509,13 +2518,13 @@ static int _rand_normal(int mean, int pct)
 
     return result;
 }
-static int _rand_normal_hi(int mean, int pct)
+/*static int _rand_normal_hi(int mean, int pct)
 {
     int result = _rand_normal(mean, pct);
     if (result < mean)
         result = mean + (mean - result);
     return result;
-}
+}*/
 
 static int _effect_rarity(device_effect_info_ptr entry, int level)
 {
@@ -2583,6 +2592,8 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
         n -= entry->prob;
         if (n <= 0)
         {
+            int cost;
+
             o_ptr->activation.type = entry->type;
 
             /* Power is the casting level of the device and determines damage or power of the effect.
@@ -2616,18 +2627,10 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
                 }
             }
 
-            if (entry->flags & _EASY)
-                o_ptr->activation.cost = _bounds_check(_rand_normal(entry->cost, 5), 1, 1000);
-            else
-            {
-                /* We assume non _EASY devices scale utility with level. Sometimes, they
-                 * do so rather strongly. See ^A"3 for device tables and note the damage
-                 * ranges for, say, -Beam of Light (38-285 damage). */
-                int cost = entry->cost;
-                cost += cost*(o_ptr->activation.power - entry->level)/100;
-                o_ptr->activation.cost = _bounds_check(_rand_normal_hi(cost, 5), 1, 1000);
-            }
             o_ptr->activation.extra = entry->extra;
+            cost = entry->cost;
+            cost += effect_cost_extra(&o_ptr->activation);
+            o_ptr->activation.cost = _bounds_check(_rand_normal(cost, 5), 1, 1000);
 
             if (entry->flags & _NO_DESTROY)
             {
@@ -2937,41 +2940,22 @@ int device_value(object_type *o_ptr, int options)
         pval = o_ptr->pval;
         if (o_ptr->activation.type)
         {
-            result += effect_value(&o_ptr->activation);
+            int value = effect_value(&o_ptr->activation);
 
             if (o_ptr->activation.cost)
             {
-                device_effect_info_ptr entry = device_get_effect_info(o_ptr->tval, o_ptr->activation.type);
-                int                    base_cost = o_ptr->activation.cost;
-                int                    base_level = o_ptr->activation.difficulty;
-                int                    base_charges;
-                int                    charges;
-
-                /* Use info from the effect table (if available), but note that low level
-                   effects would quickly grow too costly when we scale by charges below.
-                   For example, a L1 magic missile was overpriced at power L10. */
-                if (entry)
-                {
-                    base_cost = entry->cost;
-                    base_level = MAX(10, entry->level);
-                }
-
-                /* scale by 10 for rods */
-                base_charges = 30 * base_level / MAX(1, base_cost);
-                charges = device_max_sp(o_ptr) * 10 / o_ptr->activation.cost;
+                int base_charges = 40; /* scaled by 10 */
+                int charges = device_max_sp(o_ptr) * 10 / o_ptr->activation.cost;
 
                 if (o_ptr->tval == TV_ROD)
                 {
                     base_charges /= 2;
-                    result = result * 150 / 100; /* rods should value more than wands (durable+fast recharge) */
+                    value = value * 150 / 100; /* rods should value more than wands (durable+fast recharge) */
                 }
 
-                /* More charges than base gives more value. Double the charges
-                 * adds 20% to cost. Note that most effects scale damage dramatically
-                 * with level, so effect_value already has most of the boost built in.
-                 * XXX This needs work ... */
-                result += result * (charges - base_charges) / (5 * MAX(1, base_charges));
+                value = value * charges / base_charges;
             }
+            result += value;
         }
     }
 
@@ -3247,12 +3231,13 @@ static int _power_curve_offset(int amt, int lvl, int start)
 #define _BOOST(n) (_boost((n), boost))
 cptr do_effect(effect_t *effect, int mode, int boost)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-    bool value = (mode == SPELL_VALUE) ? TRUE : FALSE;
-    bool color = (mode == SPELL_COLOR) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME);
+    bool desc = (mode == SPELL_DESC);
+    bool info = (mode == SPELL_INFO);
+    bool cast = (mode == SPELL_CAST);
+    bool value = (mode == SPELL_VALUE);
+    bool color = (mode == SPELL_COLOR);
+    bool cost = (mode == SPELL_COST_EXTRA);
     int  dir = 0;
 
     switch (effect->type)
@@ -3536,12 +3521,13 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         break;
     case EFFECT_DESTRUCTION:
     {
-        int power = _extra(effect, 50 + effect->power*5/2);
+        int power = _extra(effect, 150 + _power_curve_offset(400, effect->power, 50));
         if (name) return "Destruction";
         if (desc) return "It destroys everything nearby.";
         if (info) return format("Power %d", _BOOST(power));
         if (value) return format("%d", power*20);
         if (color) return format("%d", TERM_RED);
+        if (cost) return format("%d", power/15);
         if (cast)
         {
             if (destroy_area(py, px, 13 + randint0(5), _BOOST(power)))
@@ -4615,6 +4601,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_heal(0, 0, _BOOST(amt));
         if (value) return format("%d", 500 + 15*amt);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", amt/10);
         if (cast)
         {
             amt = _BOOST(amt);
@@ -5061,6 +5048,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
         if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", TERM_BLUE);
+        if (cost) return format("%d", (_avg_damroll(dd, ds) + base)/7);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5079,6 +5067,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
         if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", TERM_L_BLUE);
+        if (cost) return format("%d", (_avg_damroll(dd, ds) + base)/8);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
@@ -5097,6 +5086,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
         if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", res_color(RES_COLD));
+        if (cost) return format("%d", (_avg_damroll(dd, ds) + base)/7);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
@@ -5115,6 +5105,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(dd, _BOOST(ds), _BOOST(base));
         if (value) return format("%d", 40*(_avg_damroll(dd, ds) + base));
         if (color) return format("%d", res_color(RES_FIRE));
+        if (cost) return format("%d", (_avg_damroll(dd, ds) + base)/7);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
@@ -5152,6 +5143,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", res_color(RES_LITE));
+        if (cost) return format("%d", dam/7);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5203,6 +5195,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 35*dam);
         if (color) return format("%d", res_color(RES_ACID));
+        if (cost) return format("%d", dam/6);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5219,6 +5212,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_ELEC));
+        if (cost) return format("%d", dam/6);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5235,6 +5229,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_FIRE));
+        if (cost) return format("%d", dam/6);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5251,6 +5246,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_COLD));
+        if (cost) return format("%d", dam/6);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5268,6 +5264,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(_BOOST(dd), ds, 0);
         if (value) return format("%d", 50*_avg_damroll(dd, ds));
         if (color) return format("%d", res_color(RES_SOUND));
+        if (cost) return format("%d", _avg_damroll(dd, ds)/5);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5285,6 +5282,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(_BOOST(dd), ds, 0);
         if (value) return format("%d", 40*_avg_damroll(dd, ds));
         if (color) return format("%d", res_color(RES_CHAOS));
+        if (cost) return format("%d", _avg_damroll(dd, ds)/5);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5303,6 +5301,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 35*dam);
         if (color) return format("%d", res_color(RES_ACID));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5319,6 +5318,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_ELEC));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5335,6 +5335,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_FIRE));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5351,6 +5352,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", res_color(RES_COLD));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5383,6 +5385,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", res_color(RES_LITE));
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5399,6 +5402,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", res_color(RES_DARK));
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5431,6 +5435,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 25*dam);
         if (color) return format("%d", res_color(RES_NETHER));
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5447,6 +5452,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", res_color(RES_NEXUS));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5463,6 +5469,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", res_color(RES_SOUND));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5479,6 +5486,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", res_color(RES_SHARDS));
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5495,6 +5503,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", res_color(RES_CHAOS));
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5511,6 +5520,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", res_color(RES_DISEN));
+        if (cost) return format("%d", dam/9);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5543,6 +5553,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 45*dam);
         if (color) return format("%d", TERM_BLUE);
+        if (cost) return format("%d", dam/9);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5559,6 +5570,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", TERM_L_BLUE);
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
@@ -5575,6 +5587,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 45*dam);
         if (color) return format("%d", TERM_SLATE);
+        if (cost) return format("%d", dam/9);
         if (cast)
         {
             if (device_known && !get_fire_dir(&dir)) return NULL;
@@ -5625,6 +5638,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 35*dam);
         if (color) return format("%d", res_color(RES_FIRE));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5641,6 +5655,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 35*dam);
         if (color) return format("%d", res_color(RES_COLD));
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -5833,6 +5848,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", TERM_ORANGE);
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             struct { int  type; cptr desc; } _choices[5] = {
@@ -5971,6 +5987,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (dispel_evil(_BOOST(dam)))
@@ -5986,6 +6003,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 500 + 30*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (dispel_evil(_BOOST(dam)))
@@ -6003,6 +6021,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 20*dam);
         if (color) return format("%d", TERM_L_DARK);
+        if (cost) return format("%d", dam/12);
         if (cast)
         {
             if (dispel_good(_BOOST(dam)))
@@ -6018,6 +6037,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", TERM_L_DARK);
+        if (cost) return format("%d", dam/9);
         if (cast)
         {
             if (dispel_living(_BOOST(dam)))
@@ -6033,6 +6053,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 20*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/15);
         if (cast)
         {
             if (dispel_demons(_BOOST(dam)))
@@ -6048,6 +6069,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 20*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/15);
         if (cast)
         {
             if (dispel_undead(_BOOST(dam)))
@@ -6063,6 +6085,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 40*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (dispel_monsters(_BOOST(dam)))
@@ -6140,6 +6163,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 50*dam);
         if (color) return format("%d", TERM_UMBER);
+        if (cost) return format("%d", dam/11);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -6173,6 +6197,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 45*dam);
         if (color) return format("%d", TERM_RED);
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             msg_print("Mighty magics rend your enemies!");
@@ -6212,6 +6237,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 30*dam);
         if (color) return format("%d", TERM_SLATE);
+        if (cost) return format("%d", dam/8);
         if (cast)
         {
             if (!get_fire_dir(&dir)) return NULL;
@@ -6246,6 +6272,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 45*dam);
         if (color) return format("%d", TERM_YELLOW);
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!res_save_default(RES_BLIND) && !res_save_default(RES_LITE))
@@ -6266,6 +6293,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (info) return info_damage(0, 0, _BOOST(dam));
         if (value) return format("%d", 45*dam);
         if (color) return format("%d", TERM_L_DARK);
+        if (cost) return format("%d", dam/10);
         if (cast)
         {
             if (!res_save_default(RES_BLIND) && !res_save_default(RES_DARK))

@@ -1819,6 +1819,8 @@ static void _display_device_power(doc_ptr doc, effect_t *effect)
         amt = dd*(ds+1)/2;
     else if (sscanf(s, "heal %d", &base) == 1)
         amt = base;
+    else if (sscanf(s, "Power %d", &base) == 1)
+        amt = base;
     if (amt)
         doc_printf(doc, " %3d", amt);
     else
