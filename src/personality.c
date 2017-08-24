@@ -64,7 +64,7 @@ static personality_ptr _get_craven_personality(void)
         me.stats[A_WIS] =  1;
         me.stats[A_DEX] = -1;
         me.stats[A_CON] = -1;
-        me.stats[A_CHR] = -3;
+        me.stats[A_CHR] = -2;
 
         me.skills.dis =  5;
         me.skills.dev =  5;
