@@ -1366,6 +1366,7 @@ static void _spoil_mon_melee_dam_aux_aux(doc_ptr doc, vec_ptr v)
         _mon_dam_info_ptr info = vec_get(v, i);
         int               hp = _mon_hp(info->mon);
         char              color = 'w';
+        int               xp, nasty;
 
         if (i%25 == 0)
             doc_printf(doc, "\n<color:G>%-30.30s Lvl    HP Speed  AC   Exp Damage   Damage   Auras Nastiness</color>\n", "Name");
@@ -1385,10 +1386,10 @@ static void _spoil_mon_melee_dam_aux_aux(doc_ptr doc, vec_ptr v)
         else
             doc_insert(doc, " <color:y>***</color>"); /* metal babble */
         {
-            int plev = spoiler_hack ? 50 : p_ptr->max_plv;
-            int xp = info->mon->mexp * info->mon->level / (plev + 2);
+            /*int  plev = spoiler_hack ? 50 : p_ptr->lev;*/
             char buf[10];
 
+            xp = info->mon->mexp; /* * info->mon->level / (plev + 2);*/
             if (quickmode) xp *= 2;
             big_num_display(xp, buf);
             doc_printf(doc, " %5.5s", buf);
@@ -1402,7 +1403,10 @@ static void _spoil_mon_melee_dam_aux_aux(doc_ptr doc, vec_ptr v)
 
         _display_dam(doc, info->nasty1);
         _display_dam(doc, info->nasty2);
-        doc_printf(doc, " %d", info->hits);
+        /*doc_printf(doc, " %d", info->hits);*/
+        nasty = MAX(info->nasty1, info->nasty2);
+        if (nasty && hp > 10) /* skip babbles */
+            doc_printf(doc, "<tab:91>%9.2f", (double)xp * 1000.0 / (nasty * hp));
         doc_newline(doc);
     }
 }
