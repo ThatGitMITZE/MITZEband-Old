@@ -862,16 +862,9 @@ int choose_dungeon(cptr note, int y, int x)
  */
 bool recall_player(int turns)
 {
-    /*
-     * TODO: Recall the player to the last
-     * visited town when in the wilderness
-     */
-
-    /* Ironman option */
-    if (p_ptr->inside_arena || ironman_downward)
+    if (!py_can_recall())
     {
         msg_print("Nothing happens.");
-
         return TRUE;
     }
 

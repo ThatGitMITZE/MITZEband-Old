@@ -2055,6 +2055,7 @@ extern bool object_allow_two_hands_wielding(object_type *o_ptr);
 extern bool py_on_surface(void);
 extern bool py_in_town(void);
 extern bool py_in_dungeon(void);
+extern bool py_can_recall(void);
 extern void set_floor_and_wall(byte type);
 extern void wilderness_gen(void);
 extern monster_hook_type wilderness_mon_hook;
