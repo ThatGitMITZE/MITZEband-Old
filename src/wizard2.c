@@ -1912,13 +1912,8 @@ void do_cmd_debug(void)
         break;
     }
     case '_':
-    {
-        int i;
-        for (i = 1; i < max_a_idx; i++)
-            if (!a_info[i].name)
-                msg_format("%d ", i);
+        apply_nexus(NULL);
         break;
-    }
     default:
         msg_print("That is not a valid debug command.");
         break;

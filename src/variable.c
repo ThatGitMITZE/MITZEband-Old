@@ -986,7 +986,7 @@ u16b max_a_idx;
 u16b max_e_idx;
 
 /*
- * Maximum number of dungeon in e_info.txt
+ * Maximum number of dungeon in d_info.txt
  */
 u16b max_d_idx;
 
