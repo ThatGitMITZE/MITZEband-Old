@@ -1461,6 +1461,8 @@ static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
 
+    return TRUE;
+    return r->d_char == 'd' || r->d_char == 'D';
     return !r->blows[0].method;
     return r->level <= mimic_max_lvl();
 
@@ -1473,8 +1475,6 @@ static bool _mon_dam_p(mon_race_ptr r)
     if (r->level < min || r->level > max) return FALSE;
 
     return BOOL(r->flags1 & RF1_UNIQUE);
-    return TRUE;
-    return r->d_char == 'd' || r->d_char == 'D';
     return r->d_char == 'P';
     return r->d_char == 'J' && r->spells && r->spells->groups[MST_BREATH];
     return BOOL(r->flags3 & RF3_UNDEAD);

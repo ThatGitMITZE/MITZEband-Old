@@ -2376,7 +2376,7 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_DRAIN_LIFE,            32,  20,     1,   0,     0, 0},
     {EFFECT_BOLT_PLASMA,           38,  10,     1,   0,     0, 0},
     {EFFECT_BOLT_ICE,              40,  11,     1,   0,     0, 0},
-    {EFFECT_ARROW,                 45,  25,     1,   0,     0, _EASY},
+    {EFFECT_ARROW,                 45,  13,     1,   0,     0, _EASY},
     {EFFECT_BALL_NEXUS,            47,  14,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
     {EFFECT_BREATHE_COLD,          50,  15,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
     {EFFECT_BREATHE_FIRE,          50,  16,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
@@ -2663,7 +2663,7 @@ bool device_init(object_type *o_ptr, int level, int mode)
     if (!_is_valid_device(o_ptr))
         return FALSE;
 
-    if (!(mode & (AM_STOCK_TOWN | AM_STOCK_BM)) && one_in_(30))
+    if (!(mode & (AM_STOCK_TOWN | AM_STOCK_BM)) && one_in_(GREAT_OBJ))
     {
         int boost = level;
         if (boost < 20)
