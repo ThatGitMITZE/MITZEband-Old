@@ -1818,7 +1818,49 @@ static void _build_monster_stats(doc_ptr doc)
     doc_free(cols[0]);
     doc_free(cols[1]);
 }
+static void _build_monster_histogram(doc_ptr doc)
+{
+    int histogram[20] = {0};
+    int i, total = 0, running = 0;
 
+    for (i = 0; i < max_r_idx; i++)
+    {
+        mon_race_ptr race = &r_info[i];
+        int          bucket = MIN(19, race->level/5);
+        if (!race->name) continue;
+        if (race->flags1 & RF1_UNIQUE)
+        {
+            if (race->max_num == 0)
+            {
+                histogram[bucket]++;
+                total++;
+            }
+        }
+        else
+        {
+            histogram[bucket] += race->r_pkills;
+            total += race->r_pkills;
+        }
+    }
+
+    doc_insert(doc, "  <color:G>Level   Count</color>\n");
+    for (i = 0; i < 20; i++)
+    {
+        int min = i*5;
+        int max = min + 4;
+        int ct = histogram[i];
+        running += ct;
+        doc_printf(doc, "  %2d - ", min);
+        if (i < 19)
+            doc_printf(doc, "%2d", max);
+        else
+            doc_insert(doc, "**");
+        doc_printf(doc, " %5d %2d.%02d%% %3d.%02d%%\n", ct,
+            ct * 100 / total, (ct * 10000 / total) % 100,
+            running * 100 / total, (running * 10000 / total) % 100);
+    }
+    doc_newline(doc);
+}
 static void _build_statistics(doc_ptr doc)
 {
     int i;
@@ -2045,6 +2087,8 @@ static void _build_statistics(doc_ptr doc)
 
     doc_newline(doc);
     _build_monster_stats(doc);
+    if (1 || p_ptr->wizard)
+        _build_monster_histogram(doc);
 }
 
 /****************************** Dungeons ************************************/

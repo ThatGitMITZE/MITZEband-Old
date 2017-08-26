@@ -1825,6 +1825,7 @@ void do_cmd_debug(void)
             if (lev % 10 == 0) reps += 1;
             if (lev % 20 == 0) reps += 1;
             if (lev % 30 == 0) reps += 2;
+            reps = 3; /* XXX Hi level stat gathering ... remove this! */
 
             _wiz_stats_gather(DUNGEON_ANGBAND, lev, reps);
         }
