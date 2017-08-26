@@ -2784,8 +2784,8 @@ bool device_init_fixed(object_type *o_ptr, int effect)
     o_ptr->activation.type = e_ptr->type;
     o_ptr->activation.power = o_ptr->xtra3;
     o_ptr->activation.difficulty = e_ptr->level;
-    o_ptr->activation.cost = e_ptr->cost;
     o_ptr->activation.extra = e_ptr->extra;
+    o_ptr->activation.cost = e_ptr->cost + effect_cost_extra(&o_ptr->activation);
 
     if (e_ptr->flags & _NO_DESTROY)
     {
