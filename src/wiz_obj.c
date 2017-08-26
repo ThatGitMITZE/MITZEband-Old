@@ -615,21 +615,22 @@ static char _score_color(int score)  /* XXX duplicated in wizard2.c */
     return 'v';
 }
 
-static void _reroll_stats_aux(object_type *o_ptr, int flags)
+void wiz_create_objects(obj_create_f creator, u32b mode)
 {
     doc_ptr doc = doc_alloc(120);
     inv_ptr inv = inv_alloc("Temp", INV_PACK, 0);
     int     i;
 
     statistics_hack = TRUE;
-    for (i = 1; i < 1000; i++)
+    for (i = 1; i < 1000;)
     {
         object_type forge;
-
-        object_prep(&forge, o_ptr->k_idx);
-        apply_magic(&forge, dun_level, AM_NO_FIXED_ART | flags);
-        obj_identify_fully(&forge);
-        inv_add(inv, &forge);
+        if (creator(&forge, mode))
+        {
+            obj_identify_fully(&forge);
+            inv_add(inv, &forge);
+            i++;
+        }
     }
     inv_optimize(inv);
     doc_insert(doc, "<style:table>");
@@ -652,6 +653,19 @@ static void _reroll_stats_aux(object_type *o_ptr, int flags)
     doc_display(doc, "Objects", 0);
     inv_free(inv);
     doc_free(doc);
+}
+
+static obj_ptr _reroll_obj = NULL;
+static bool _reroll_creator(obj_ptr obj, u32b mode)
+{
+    object_prep(obj, _reroll_obj->k_idx);
+    return apply_magic(obj, dun_level, mode);
+}
+static void _reroll_stats_aux(object_type *o_ptr, int flags)
+{
+    _reroll_obj = o_ptr;
+    wiz_create_objects(_reroll_creator, AM_NO_FIXED_ART | flags);
+    _reroll_obj = NULL;
 }
 
 static int _smith_reroll(object_type *o_ptr)

@@ -2090,6 +2090,7 @@ extern void do_cmd_spoilers(void);
 /* wiz_obj.c */
 extern void wiz_obj_create(void);
 extern void wiz_obj_smith(void);
+extern void wiz_create_objects(obj_create_f creator, u32b mode);
 
 /* virtue.c */
 extern cptr virtue_name(int which);
