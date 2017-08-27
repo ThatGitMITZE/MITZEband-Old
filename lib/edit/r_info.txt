@@ -18014,8 +18014,8 @@ P:Copy:Archon:Rogue
 P:Speed:+15
 S:1_IN_3 |
 S:TELE_SELF | HASTE | TELE_OTHER | TELE_LEVEL | BLINK
-D:Collect 5 marks of Silver Angel or 1 mark of Gold Angel!
-D:And you will win The Can of Toys!
+D:Collect 5 marks of Silver Angel or 1 mark of Gold Angel
+D:and you will win The Can of Toys!
 
 N:1011:Silver Angel
 G:A:w
@@ -18031,8 +18031,8 @@ P:Copy:Archon:Rogue
 P:Speed:+10
 S:1_IN_3 |
 S:TELE_SELF | HASTE | TELE_OTHER | TELE_LEVEL | BLINK
-D:Collect 5 marks of Silver Angel or 1 mark of Gold Angel!
-D:And you will win The Can of Toys!
+D:Collect 5 marks of Silver Angel or 1 mark of Gold Angel
+D:and you will win The Can of Toys!
 
 N:1012:Jibaku ghost
 G:G:W
