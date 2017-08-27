@@ -1821,30 +1821,33 @@ static void _build_monster_stats(doc_ptr doc)
 static void _build_monster_histogram(doc_ptr doc)
 {
     int histogram[20] = {0};
-    int i, total = 0, running = 0;
+    int i, max_bucket = 0, total = 0, running = 0;
 
     for (i = 0; i < max_r_idx; i++)
     {
         mon_race_ptr race = &r_info[i];
         int          bucket = MIN(19, race->level/5);
+        int          amt = 0;
         if (!race->name) continue;
-        if (race->flags1 & RF1_UNIQUE)
+
+        if (race->flags1 & RF1_UNIQUE) /* XXX problem with r_pkills and uniques */
         {
             if (race->max_num == 0)
-            {
-                histogram[bucket]++;
-                total++;
-            }
+                amt = 1;
         }
         else
+            amt = race->r_pkills;
+
+        if (amt)
         {
-            histogram[bucket] += race->r_pkills;
-            total += race->r_pkills;
+            histogram[bucket] += amt;
+            total += amt;
+            max_bucket = MAX(bucket, max_bucket);
         }
     }
 
     doc_insert(doc, "  <color:G>Level   Count</color>\n");
-    for (i = 0; i < 20; i++)
+    for (i = 0; i <= max_bucket; i++)
     {
         int min = i*5;
         int max = min + 4;
