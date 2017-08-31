@@ -556,7 +556,7 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_CURE_POISON:
-        if (desc) return "It cures poison when you quaff it.";
+        if (desc) return "It cures poison a bit when you quaff it.";
         if (cast)
         {
             if (set_poisoned(p_ptr->poisoned - MAX(50, p_ptr->poisoned / 5), TRUE))
@@ -657,7 +657,7 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_CURE_CRITICAL:
-        if (desc) return "It heals you a bit and cures blindness, confusion, poison, stunned, cuts and berserk when you quaff it.";
+        if (desc) return "It heals you a bit and cures blindness, confusion, stunned, cuts and berserk when you quaff it.";
         if (info) return info_heal(6, _potion_power(8), 0);
         if (cast)
         {
@@ -670,7 +670,7 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_BLOOD:
-        if (desc) return "A much needed infusion! It heals you a bit and cures blindness, confusion, poison, and stunned when you quaff it.";
+        if (desc) return "A much needed infusion! It heals you a bit and cures blindness, confusion, and stunned when you quaff it.";
         if (info) return info_heal(0, 0, _potion_power(200));
         if (cast)
         {
@@ -682,7 +682,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_HEALING: {
         int amt = quickmode ? 500 : 300;
-        if (desc) return "It heals you and cures blindness, confusion, poison, stunned, cuts and berserk when you quaff it.";
+        if (desc) return "It heals you and cures blindness, confusion, stunned, cuts and berserk when you quaff it.";
         if (info) return info_heal(0, 0, _potion_power(amt));
         if (cast)
         {
