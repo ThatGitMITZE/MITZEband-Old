@@ -988,7 +988,7 @@ static void _mimic_spell(int cmd, variant *res)
             else if (randint1(100) > pct)
             {
                 msg_print("<color:v>Failed!</color>");
-                if (1 || p_ptr->wizard)
+                if (0 || p_ptr->wizard)
                     msg_format("<color:B>You have a <color:R>%d%%</color> chance to mimic this form.</color>", pct);
             }
             else
@@ -1122,7 +1122,7 @@ void mimic_on_kill_monster(int r_idx)
     if (_is_memorized(r_idx)) return;
 
     pct = _learn_chance(r_idx);
-    if (1 || p_ptr->wizard)
+    if (0 || p_ptr->wizard)
         msg_format("<color:B>You have a <color:R>%d%%</color> chance to learn this form.</color>", pct);
     if (randint0(100) < pct)
         _memorize_form(r_idx);

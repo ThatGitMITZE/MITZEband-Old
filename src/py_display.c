@@ -2090,7 +2090,7 @@ static void _build_statistics(doc_ptr doc)
 
     doc_newline(doc);
     _build_monster_stats(doc);
-    if (1 || p_ptr->wizard)
+    if (0 || p_ptr->wizard)
         _build_monster_histogram(doc);
 }
 

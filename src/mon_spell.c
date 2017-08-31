@@ -1472,7 +1472,7 @@ static bool _spell_fail(void)
     {
         if (_current.flags & MSC_SRC_PLAYER)
         {
-            if (1 || p_ptr->wizard)
+            if (0 || p_ptr->wizard)
                 msg_format("You try to cast a spell, but fail (%d%%).", fail);
             else
                 msg_print("You try to cast a spell, but fail.");
