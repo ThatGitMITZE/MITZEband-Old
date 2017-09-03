@@ -302,31 +302,31 @@ int gf_affect_p(int who, int type, int dam, int flags)
     switch (type)
     {
     case GF_ACID:
-        if (touch) msg_print("You are <color:G>dissolved</color>!");
+        if (touch && res_pct(RES_ACID) < 100) msg_print("You are <color:G>dissolved</color>!");
         else if (fuzzy) msg_print("You are hit by acid!");
         result = acid_dam(dam, m_name);
         update_smart_learn(who, RES_ACID);
         break;
     case GF_FIRE:
-        if (touch) msg_print("You are <color:r>burned</color>!");
+        if (touch && res_pct(RES_FIRE) < 100) msg_print("You are <color:r>burned</color>!");
         else if (fuzzy) msg_print("You are hit by fire!");
         result = fire_dam(dam, m_name);
         update_smart_learn(who, RES_FIRE);
         break;
     case GF_COLD:
-        if (touch) msg_print("You are <color:W>frozen</color>!");
+        if (touch && res_pct(RES_COLD) < 100) msg_print("You are <color:W>frozen</color>!");
         else if (fuzzy) msg_print("You are hit by cold!");
         result = cold_dam(dam, m_name);
         update_smart_learn(who, RES_COLD);
         break;
     case GF_ELEC:
-        if (touch) msg_print("You are <color:b>shocked</color>!");
+        if (touch && res_pct(RES_ELEC) < 100) msg_print("You are <color:b>shocked</color>!");
         else if (fuzzy) msg_print("You are hit by lightning!");
         result = elec_dam(dam, m_name);
         update_smart_learn(who, RES_ELEC);
         break;
     case GF_POIS:
-        if (touch) msg_print("You are <color:G>poisoned</color>!");
+        if (touch && res_pct(RES_POIS) < 100) msg_print("You are <color:G>poisoned</color>!");
         else if (fuzzy) msg_print("You are hit by poison!");
         if (CHECK_MULTISHADOW()) break;
         dam = res_calc_dam(RES_POIS, dam);
