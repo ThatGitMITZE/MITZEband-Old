@@ -586,13 +586,7 @@ void do_cmd_study(void)
 
 static void wild_magic(int spell)
 {
-    int counter = 0;
-    int type = SUMMON_BIZARRE1 + randint0(6);
-
-    if (type < SUMMON_BIZARRE1) type = SUMMON_BIZARRE1;
-    else if (type > SUMMON_BIZARRE6) type = SUMMON_BIZARRE6;
-
-    switch (randint1(spell) + randint1(8) + 1)
+    switch (randint1(spell) + randint0(8))
     {
     case 1:
     case 2:
@@ -657,28 +651,23 @@ static void wild_magic(int spell)
         fire_ball(GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
         break;
     case 33:
+    case 34:
         wall_stone();
         break;
-    case 34:
     case 35:
+    case 36: {
+        int counter = 0;
+        int type = rand_range(SUMMON_BIZARRE1, SUMMON_BIZARRE6);
+        int dl = dun_level*3/2;
         while (counter++ < 8)
-        {
-            (void)summon_specific(0, py, px, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
-        }
-        break;
-    case 36:
+            summon_specific(0, py, px, dl, type, PM_ALLOW_GROUP | PM_NO_PET);
+        break; }
     case 37:
+    case 38:
+    case 39: /* current max */
+    default: /* paranoia */
         activate_hi_summon(py, px, FALSE);
         break;
-    case 38:
-        (void)summon_cyber(-1, py, px);
-        break;
-    default:
-        {
-            int count = 0;
-            (void)activate_ty_curse(FALSE, &count);
-            break;
-        }
     }
 
     return;
