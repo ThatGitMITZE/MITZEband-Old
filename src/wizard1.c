@@ -1442,6 +1442,16 @@ static bool _martial_arts(mon_blow_ptr blow)
 {
     return blow->method == RBM_KICK || blow->method == RBM_PUNCH;
 }
+static bool _paralysis(mon_blow_ptr blow)
+{
+    int i;
+    for (i = 0; i < MAX_MON_BLOW_EFFECTS; i++)
+    {
+        if (blow->effects[i].effect == GF_PARALYSIS)
+            return TRUE;
+    }
+    return FALSE;
+}
 
 static bool _has_blow(mon_race_ptr r, _blow_p p)
 {
@@ -1465,6 +1475,7 @@ static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
 
+    return _has_blow(r, _paralysis);
     return TRUE;
     return r->d_char == 'd' || r->d_char == 'D';
     return !r->blows[0].method;

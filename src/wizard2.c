@@ -1912,9 +1912,15 @@ void do_cmd_debug(void)
 
         break;
     }
-    case '_':
-        apply_nexus(NULL);
-        break;
+    case '_': {
+        int i;
+        for (i = 0; i < 1000 * 1000; i++)
+        {
+            int roll = damroll(11,6);
+            if (roll < 66*19/20) continue;
+            msg_format("%d ", roll);
+        }
+        break; }
     default:
         msg_print("That is not a valid debug command.");
         break;
