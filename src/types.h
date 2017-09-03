@@ -339,11 +339,11 @@ struct object_type
     s16b name2;            /* Ego-Item type, if any */
     s16b name3;         /* Random replacement for a fixed art */
 
-    byte xtra1;            /* Extra info type (now unused) */
+    byte xtra1;            /* Extra info: Weaponsmith */
     byte xtra2;            /* Extra info index */
-    byte xtra3;            /* Extra info: Chests and Weaponsmith */
-    s16b xtra4;            /* Extra info: Lights, Capture, Quiver Capacity ... */
-    s32b xtra5;            /* Extra info */
+    byte xtra3;            /* Extra info: Chests and Weaponsmith. Device Power. */
+    s16b xtra4;            /* Extra info: Lights, Capture, Quiver Capacity, Device MaxSP. */
+    s32b xtra5;            /* Extra info: Device CSP */
 
     s16b to_h;            /* Plusses to hit */
     s16b to_d;            /* Plusses to damage */
