@@ -1845,6 +1845,7 @@ static void _build_monster_histogram(doc_ptr doc)
             max_bucket = MAX(bucket, max_bucket);
         }
     }
+    if (!total) return;
 
     doc_insert(doc, "  <color:G>Level   Count</color>\n");
     for (i = 0; i <= max_bucket; i++)
