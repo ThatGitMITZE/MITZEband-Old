@@ -16,6 +16,7 @@ CONFIG = a_info.txt \
 	q_dark_elves.txt \
 	q_doom1.txt \
 	q_doom2.txt \
+	q_dragons.txt \
 	q_eric.txt \
 	q_haunted_house.txt \
 	q_info.txt \
@@ -31,13 +32,16 @@ CONFIG = a_info.txt \
 	q_orcs.txt \
 	q_serpent_of_chaos.txt \
 	q_sewer.txt \
+	q_shrine.txt \
 	q_sorcery.txt \
 	q_spawning_pits.txt \
 	q_tengu_death_swords.txt \
 	q_thieves.txt \
+	q_vapor2.txt \
 	q_vapor.txt \
 	q_vault.txt \
 	q_wargs.txt \
+	q_worms.txt \
 	r_info.txt \
 	s_info.txt \
 	t_angwil.txt \
