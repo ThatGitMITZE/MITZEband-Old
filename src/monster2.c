@@ -1496,14 +1496,14 @@ s16b get_mon_num(int level)
 
     /* Restrict uniques ... except for summoning, of course ;) */
     if ( unique_count
-      && !summon_specific_who
+      && summon_specific_who == SUMMON_WHO_NOBODY
       && !one_in_(unique_count) )
     {
         allow_unique = FALSE;
     }
 
     /* Boost the level */
-    if ((level > 0) && !p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+    if (level > 0 && !p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
     {
         /* Nightmare mode allows more out-of depth monsters */
         if (ironman_nightmare && !randint0(pls_kakuritu))
@@ -4255,6 +4255,15 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
     /* Prepare allocation table */
     get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
 
+    /* XXX Trying something out ... One way to nerf monster summoning
+     * is to disregard max_depth specifications in r_info. As things currently
+     * are, monster quality is so high (end game) that summoning forces all
+     * but truly insane players to instantly bail. If monsters get this, then
+     * so do players. Look below for code that needs to be added back if this
+     * is removed. */
+    if (summon_specific_who != SUMMON_WHO_NOBODY)
+        _ignore_depth_hack = TRUE;
+
     /* Pick a monster, using the level calculation */
     r_idx = get_mon_num((dun_level + lev) / 2 + 5);
 
@@ -4275,14 +4284,14 @@ bool summon_specific(int who, int y1, int x1, int lev, int type, u32b mode)
              should always work when cast. And for fairness,
              monsters gain the same consideration.
              Note, we only do this on failure so that spells
-             like Summon Animal will get beefier results! */
-    if (!r_idx && summon_specific_who)
+             like Summon Animal will get beefier results!
+    if (!r_idx && summon_specific_who != SUMMON_WHO_NOBODY)
     {
         _ignore_depth_hack = TRUE;
         r_idx = get_mon_num((dun_level + lev) / 2 + 5);
-        _ignore_depth_hack = FALSE;
-    }
+    } XXX cf above for why this is commented out. */
 
+    _ignore_depth_hack = FALSE;
     summon_cloned_okay = FALSE; /* This is a hack for RF6_S_UNIQUE ... get_mon_num() is much more widely used, however! */
                                 /* place_monster_aux() will now handle setting the unique as "cloned" if appropriate */
     /* Handle failure */

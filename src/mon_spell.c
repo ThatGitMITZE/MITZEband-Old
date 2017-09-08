@@ -816,16 +816,23 @@ static mon_spell_parm_t _summon_parm(int which)
     switch (which)
     {
     case SUMMON_CYBER:
+    case SUMMON_HI_UNDEAD:
+    case SUMMON_HI_DRAGON:
+    case SUMMON_HI_DEMON:
         parm.v.dice = _dice(1, 3, 0);
         break;
     case SUMMON_UNIQUE:
+    case SUMMON_GUARDIAN:
+    case SUMMON_AMBERITE:
+    case SUMMON_OLYMPIAN: /* Zeus, Hermes, Aprhrodite */
         parm.v.dice = _dice(1, 2, 0);
         break;
     case SUMMON_SPIDER:
     case SUMMON_HOUND:
+    case SUMMON_KIN:
         parm.v.dice = _dice(1, 2, 1);
         break;
-    default: /* XXX */
+    default:
         parm.v.dice = _dice(1, 3, 1);
     }
     return parm;
