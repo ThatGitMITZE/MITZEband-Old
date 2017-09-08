@@ -87,6 +87,11 @@ cptr funny_comments[MAX_SAN_COMMENT] =
 
 };
 
+/* cf design/see_invisible.ods. One can greatly improve the
+ * odds of perceiving invisible foes with a something like an
+ * elven cloak +4 and more than one source of SI. Pay attention
+ * to searching skills when choosing race/class/personality as 
+ * this skill does not increase with level or stats. */
 bool py_see_invis(int rlev)
 {
     int i;
