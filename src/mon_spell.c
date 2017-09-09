@@ -3287,7 +3287,7 @@ static void _ai_direct(mon_spell_cast_ptr cast)
         spell->prob = 0;
 
     /* XXX Currently, tactical spells involve making space for spellcasting monsters. */
-    if (spells->groups[MST_TACTIC] && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p))
+    if (spells->groups[MST_TACTIC] && _distance(cast->src, cast->dest) < 4 && _find_spell(spells, _blink_check_p) && !world_monster)
         _adjust_group(spells->groups[MST_TACTIC], NULL, 700);
 
     if (_distance(cast->src, cast->dest) > 5)
