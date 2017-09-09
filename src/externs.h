@@ -103,8 +103,6 @@ extern kamae kamae_shurui[MAX_KAMAE];
 extern kamae kata_shurui[MAX_KATA];
 extern cptr exp_level_str[5];
 extern cptr silly_attacks[MAX_SILLY_ATTACK];
-extern monster_power monster_powers[MAX_MONSPELLS];
-extern cptr monster_powers_short[MAX_MONSPELLS];
 extern cptr ident_info[];
 extern byte feature_action_flags[FF_FLAG_MAX];
 
