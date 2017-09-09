@@ -15418,7 +15418,11 @@ P:Stats:2:0:0:2:2:2
 P:Life:110
 
 # Morgoth, mr normal monster!
-
+# XXX Morgoth can no longer be summoned by the J. Was it really
+# the intent in Heng that players must fight J and P side-by-side?
+# Being a FORCE_DEPTH monster, you can't kill him before the battle
+# and leaving him around rewards players that don't kill many uniques
+# while punishing those that do.
 N:861:Morgoth, Lord of Darkness
 G:P:D
 I:140:200d100:100:150:0:2000
@@ -15428,7 +15432,7 @@ B:HIT:SHATTER(18d10)
 B:HIT:HURT(18d10):LOSE_ALL
 B:TOUCH:DRAIN_CHARGES
 A:DARK(4d6):ICE(3d6, 25%)
-F:UNIQUE | MALE |
+F:UNIQUE | NO_SUMMON | MALE |
 F:FORCE_SLEEP | FORCE_MAXHP | FORCE_DEPTH | SELF_DARK_1 | SELF_DARK_2 |
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 |
 F:DROP_GOOD | DROP_GREAT |
