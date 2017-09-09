@@ -62,7 +62,7 @@ extern byte adj_exp_gain[];
 extern s16b adj_fear_m[];
 extern s16b adj_stat_save_fear[];
 extern s16b adj_stat_save[];
-extern byte adj_int_dev[];
+extern s16b adj_int_dev[];
 extern byte adj_wis_sav[];
 extern byte adj_dex_dis[];
 extern byte adj_int_dis[];

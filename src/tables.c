@@ -536,7 +536,7 @@ byte adj_gold[] =
 /*
  * Stat Table (INT) -- Magic devices
  */
-byte adj_int_dev[] =
+s16b adj_int_dev[] =
 {
    -5       /* 3 */,
    -3       /* 4 */,
