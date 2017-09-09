@@ -15514,6 +15514,10 @@ P:Copy:Yeek:Tourist
 P:Life:60
 P:Body:Mold
 
+# XXX This monster is deprecated since it needs to be reviewed, and that takes time.
+# I could live with something like this if it couldn't be summoned in the last battle.
+# Hence, the new NO_SUMMON attribute (Serpent summons at L105 so needs slight out of
+# depth boost)
 N:864:a Plain Gold Ring
 G:=:y
 I:140:160d100:100:200:10:2
@@ -15522,7 +15526,7 @@ B:TOUCH:DAM(5d5):BLIND
 B:TOUCH:DISENCHANT(10d10)
 B:TOUCH:HURT(10d10):LOSE_ALL
 B:TOUCH:HURT(10d10):DRAIN_EXP(80d6)
-F:UNIQUE | DEPRECATED | FORCE_SLEEP | NEVER_MOVE | ONLY_ITEM |
+F:UNIQUE | DEPRECATED | NO_SUMMON | FORCE_SLEEP | NEVER_MOVE | ONLY_ITEM |
 F:DROP_90 | FORCE_MAXHP | DROP_GOOD | DROP_GREAT |
 F:REFLECTING | INVISIBLE | COLD_BLOOD | KILL_EXP |
 F:SMART | EMPTY_MIND | REGENERATE | AURA_FIRE |

@@ -1577,8 +1577,10 @@ s16b get_mon_num(int level)
             if ((r_ptr->flags2 & RF2_SOUTHERING) && dungeon_type != DUNGEON_STRONGHOLD) continue;
             if ((r_ptr->flags3 & RF3_OLYMPIAN) && dungeon_type != DUNGEON_OLYMPUS) continue;
         }
-        /* Hack: Some monsters are restricted from quests (e.g. Zeus in no_wilderness mode) */
+
+        /* Hack: Some monsters are restricted from quests and summons */
         if (quests_get_current() && (r_ptr->flags1 & RF1_NO_QUEST)) continue;
+        if (summon_specific_who != SUMMON_WHO_NOBODY && (r_ptr->flags1 & RF1_NO_SUMMON)) continue;
 
         if (!p_ptr->inside_battle && !chameleon_change_m_idx)
         {

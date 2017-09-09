@@ -3030,7 +3030,7 @@ enum {
 #define RF1_ATTR_SEMIRAND       0x00001000  /* Color is determined semi-randomly */
 #define RF1_FRIENDS             0x00002000  /* Arrive with some friends */
 #define RF1_ESCORT              0x00004000  /* Arrive with an escort */
-#define RF1_XXX16               0x00008000
+#define RF1_NO_SUMMON           0x00008000  /* Monster never answers summons */
 #define RF1_NEVER_BLOW          0x00010000  /* Never make physical blow */
 #define RF1_NEVER_MOVE          0x00020000  /* Never make physical move */
 #define RF1_RAND_25             0x00040000  /* Moves randomly (25%) */
