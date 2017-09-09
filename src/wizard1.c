@@ -1475,8 +1475,8 @@ static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
 
-    return _has_blow(r, _paralysis);
     return TRUE;
+    return _has_blow(r, _paralysis);
     return r->d_char == 'd' || r->d_char == 'D';
     return !r->blows[0].method;
     return r->level <= mimic_max_lvl();

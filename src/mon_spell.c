@@ -613,7 +613,7 @@ static mon_spell_parm_t _breath_parm(int which)
         parm.v.hp_pct = _hp_pct(33, 250);
         break;
     case GF_STORM:
-        parm.v.hp_pct = _hp_pct(13, 300);
+        parm.v.hp_pct = _hp_pct(13, 250);
         break;
     case GF_INERT:
     case GF_PLASMA:
