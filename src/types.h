@@ -664,6 +664,7 @@ enum {
     SM_CLONED,
     SM_PET,
     SM_FRIENDLY,
+    SM_SUMMONED,
     SM_MAX
 };
 

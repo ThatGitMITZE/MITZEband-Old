@@ -2332,7 +2332,15 @@ bool destroy_area(int y1, int x1, int r, int power)
                 {
                     bool resist = FALSE;
 
-                    if (m_ptr->mflag2 & MFLAG2_NODESTRUCT) resist = TRUE;
+                    if (m_ptr->smart & (1U << SM_SUMMONED))
+                    {
+                        /* XXX Redress the game balance wrt to summoning. We might consider
+                         * some sort of odds here, but let's revert Destruction completely
+                         * to the way it worked in Hengband. Note that Genocide always had
+                         * a save in heng ... I copied this mechanic for Destruction. */
+                        resist = FALSE;
+                    }
+                    else if (m_ptr->mflag2 & MFLAG2_NODESTRUCT) resist = TRUE;
                     else if (r_ptr->level > randint0(power)) resist = TRUE;
 
                     if (resist)

@@ -3325,6 +3325,8 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
 
     if (cloned)
         m_ptr->smart |= (1U << SM_CLONED);
+    if (who > 0)
+        m_ptr->smart |= (1U << SM_SUMMONED);
 
     /* Place the monster at the location */
     m_ptr->fy = y;
