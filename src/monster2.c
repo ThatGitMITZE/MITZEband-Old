@@ -3995,7 +3995,10 @@ bool alloc_horde(int y, int x)
     {
         scatter(&cy, &cx, y, x, 5, 0);
 
-        (void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+        summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, 0);
+        /* Hordes of hounds are too much. 15 packs can be literally hundreds upon hundreds
+         * of monsters if space allows ... 
+        summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);*/
 
         y = cy;
         x = cx;
@@ -4096,7 +4099,19 @@ bool alloc_monster(int dis, u32b mode)
 
 
 #ifdef MONSTER_HORDES
-    if (randint1(5000) <= dun_level && dungeon_type != DUNGEON_ARENA)
+    /* XXX This mechanic is very fragile. On balance it is good, but occasionally it
+     * finds some accidental oddity in r_info. Examples include hordes of Flying Polyps (l)
+     * on DL30, hordes of Lesser Hell Beasts (U) in the Labyrinth, and hordes of deep
+     * dragons (D) in the early DL30's. A pack of wide awake Dracoliches, AMHDs, Great Crystal
+     * Drakes and Ethereal Dragons is not welcome the first time a player stretches towards
+     * stat gain depths. I would suggest that get_mon_num() have an option to disallow
+     * OoD monsters so that the inital choice for the horde is reasonable. Also, the kin
+     * monsters should either disable the +5 level boost, the random OoD stuff in get_mon_num(),
+     * or both. Pending these, I'm disabling this mechanic below DL40. XXX */
+    if ( dun_level >= 40
+      && randint1(5000) <= dun_level
+      && dungeon_type != DUNGEON_ARENA
+      && dungeon_type != DUNGEON_MAZE ) /* redundant */
     {
         if (alloc_horde(y, x))
         {
