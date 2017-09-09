@@ -967,7 +967,7 @@ static cptr _do_potion(int sval, int mode)
         {
             if (hp_player(_potion_power(amt))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(150, p_ptr->poisoned / 3), TRUE))
                 device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
@@ -4637,7 +4637,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
             if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(300, p_ptr->poisoned / 2), TRUE))
                 device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;

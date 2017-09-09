@@ -4190,7 +4190,7 @@ static void process_player(void)
         int amt = MAX(MAX(1, p_ptr->mhp/60), p_ptr->poisoned/10);
         if (amt > p_ptr->poisoned)
             amt = p_ptr->poisoned;
-        if (p_ptr->wizard)
+        if (1 || p_ptr->wizard)
             msg_format("<color:G> %d Poison Damage</color>", amt);
         if (!IS_INVULN())
             take_hit(DAMAGE_NOESCAPE, amt, "poison");
