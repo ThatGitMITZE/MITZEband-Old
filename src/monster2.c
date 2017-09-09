@@ -3661,40 +3661,51 @@ static bool place_monster_group(int who, int y, int x, int r_idx, int pack_idx, 
     monster_race *r_ptr = &r_info[r_idx];
 
     int n, i;
-    int total = 0, extra = 0;
+    int total = 0;
 
     int hack_n = 0;
 
     byte hack_y[GROUP_MAX];
     byte hack_x[GROUP_MAX];
 
+    /* XXX You can now control the probability and size of packs in r_info */
+    if (0 < r_ptr->pack_pct && r_ptr->pack_pct < 100 && randint1(100) > r_ptr->pack_pct)
+        return FALSE;
 
-    /* Pick a group size */
-    total = randint1(10);
-
-    /* Hard monsters, small groups */
-    if (base_level)
+    if (r_ptr->pack_dice)
     {
-        if (r_ptr->level > base_level)
-        {
-            extra = r_ptr->level - base_level;
-            extra = 0 - randint1(extra);
-        }
-
-        /* Easy monsters, large groups */
-        else if (r_ptr->level < base_level)
-        {
-            extra = base_level - r_ptr->level;
-            extra = randint1(extra);
-        }
+        total = damroll(r_ptr->pack_dice, r_ptr->pack_sides);
     }
+    else
+    {
+        int extra = 0;
 
-    /* Hack -- limit group reduction */
-    if (extra > 9) extra = 9;
+        /* Pick a group size */
+        total = randint1(10);
 
-    /* Modify the group size */
-    total += extra;
+        if (base_level)
+        {
+            /* Hard monsters, small groups */
+            if (r_ptr->level > base_level)
+            {
+                extra = r_ptr->level - base_level;
+                extra = 0 - randint1(extra);
+            }
 
+            /* Easy monsters, large groups */
+            else if (r_ptr->level < base_level)
+            {
+                extra = base_level - r_ptr->level;
+                extra = randint1(extra);
+            }
+        }
+
+        /* Hack -- limit group reduction */
+        if (extra > 9) extra = 9;
+
+        /* Modify the group size */
+        total += extra;
+    }
     total = total * (625 - virtue_current(VIRTUE_INDIVIDUALISM)) / 625;
 
     /* Minimum size */

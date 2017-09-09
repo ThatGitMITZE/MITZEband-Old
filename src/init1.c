@@ -3739,6 +3739,51 @@ static errr parse_mon_auras(char *buf, mon_race_ptr r_ptr)
 
     return rc;
 }
+static errr parse_mon_flags(char *buf, mon_race_ptr race)
+{
+    errr  rc = 0;
+    char *tokens[20];
+    int   token_ct = z_string_split(buf, tokens, 20, "|");
+    int   i, j;
+
+    for (i = 0; i < token_ct; i++)
+    {
+        char *token = tokens[i];
+
+        if (!strlen(token)) continue;
+        if (prefix(token, "FRIENDS"))
+        {
+            char *name;
+            char *args[10];
+            int   arg_ct = parse_args(token, &name, args, 10);
+            race->flags1 |= RF1_FRIENDS;
+            if (!streq(name, "FRIENDS")) return 5; /* eg FRIENDS_I_LIKE s/b an error */
+            if (arg_ct > 2)
+                return PARSE_ERROR_TOO_FEW_ARGUMENTS; /* s/FEW/MANY */
+            for (j = 0; j < arg_ct; j++)  /* XXX parsing logic duplicated above ... */
+            {
+                char arg[100], sentinel = '~', check;
+                int  dd, ds, pct;
+                sprintf(arg, "%s%c", args[j], sentinel);
+                
+                if (2 == sscanf(arg, "%d%%%c", &pct, &check) && check == sentinel)
+                    race->pack_pct = MAX(0, MIN(100, pct));
+                else if (3 == sscanf(arg, "%dd%d%c", &dd, &ds, &check) && check == sentinel)
+                {
+                    race->pack_dice = MAX(0, MIN(100, dd)); /* 100d100 max */
+                    race->pack_sides = MAX(0, MIN(100, ds));
+                }
+                else
+                {
+                    msg_format("Error: Unknown argument %s.", args[j]);
+                    return PARSE_ERROR_GENERIC;
+                }
+            }
+        }
+        else if (0 != grab_one_basic_flag(race, token)) return 5;
+    }
+    return rc;
+}
 static errr parse_mon_spells(char *buf, mon_race_ptr race)
 {
     errr  rc = 0;
@@ -3774,7 +3819,7 @@ errr parse_r_info(char *buf, header *head)
 {
     int i;
 
-    char *s, *t;
+    char *s;
 
     /* Current entry */
     static monster_race *r_ptr = NULL;
@@ -4085,25 +4130,7 @@ errr parse_r_info(char *buf, header *head)
     /* Process 'F' for "Basic Flags" (multiple lines) */
     else if (buf[0] == 'F')
     {
-        /* Parse every entry */
-        for (s = buf + 2; *s; )
-        {
-                /* Find the end of this entry */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t) /* loop */;
-
-                /* Nuke and skip any dividers */
-            if (*t)
-            {
-                *t++ = '\0';
-                while (*t == ' ' || *t == '|') t++;
-            }
-
-                /* Parse this entry */
-            if (0 != grab_one_basic_flag(r_ptr, s)) return (5);
-
-                /* Start the next entry */
-            s = t;
-        }
+        return parse_mon_flags(buf + 2, r_ptr);
     }
 
     /* Process 'S' for "Spell Flags" (multiple lines) */

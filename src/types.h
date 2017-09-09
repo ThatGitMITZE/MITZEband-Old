@@ -510,8 +510,12 @@ struct monster_race
     mon_blow_t blows[MAX_MON_BLOWS];
     mon_effect_t auras[MAX_MON_AURAS];
 
-    s16b next_r_idx;
+    s16b next_r_idx;          /* Evolution */
     u32b next_exp;
+
+    byte pack_pct;           /* FRIENDS has become FRIENDS(XdY[,Z%]) if desired */
+    byte pack_dice;
+    byte pack_sides;
 
     byte level;               /* Level of creature */
     byte melee_level;
