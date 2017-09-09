@@ -951,19 +951,6 @@ static void process_world_aux_hp_and_sp(void)
 
     /*** Damage over Time ***/
 
-    /* Take damage from poison.
-     * Note: Poison is now a delayed damage pool. No longer is there
-     * any immediate damage. It's also much harder to 'cure'. */
-    if (p_ptr->poisoned && !IS_INVULN())
-    {   /*                   v--- make waiting for poison to clear less tedious */
-        int amt = MAX(MAX(1, p_ptr->mhp/150), p_ptr->poisoned/15);
-        /* Take 15 "game turns" for the entire effect ------^ */
-        if (amt > p_ptr->poisoned) amt = p_ptr->poisoned;
-        /*msg_format("<color:G> %d Poison Damage</color>", amt);*/
-        take_hit(DAMAGE_NOESCAPE, amt, "poison");
-        set_poisoned(p_ptr->poisoned - amt, TRUE);
-    }
-
     /* Take damage from cuts */
     if (p_ptr->cut && !IS_INVULN())
     {
@@ -4185,7 +4172,31 @@ static void process_player(void)
 
     load = FALSE;
 
-    /* Fast */
+    /* XXX While many timed effects are processed every 10 game turns, some
+     * game mechanics work better if they are indexed to player actions.
+     * cf process_world_aux_hp_and_sp. */
+
+    /* Take damage from poison.
+     * Note: Poison is now a delayed damage pool. No longer is there
+     * any immediate damage. It's also much harder to 'cure'. This mechanic
+     * works better if the player is hurt on every move they make. */
+    if (p_ptr->poisoned)
+    {
+        /* XXX This mechanic might need some work ... as poisoned goes
+         * down, so too does the damage you take per move. So, in practice,
+         * you get waaaay more than 10 moves to deal with things. On the other
+         * hand, poisoned=2000+ is not uncommon, and taking damage amounts of
+         * 200, 180, 162, 145, 131, 118, 106, ... might be OK. */
+        int amt = MAX(MAX(1, p_ptr->mhp/60), p_ptr->poisoned/10);
+        if (amt > p_ptr->poisoned)
+            amt = p_ptr->poisoned;
+        if (p_ptr->wizard)
+            msg_format("<color:G> %d Poison Damage</color>", amt);
+        if (!IS_INVULN())
+            take_hit(DAMAGE_NOESCAPE, amt, "poison");
+        set_poisoned(p_ptr->poisoned - amt, TRUE);
+    }
+
     if (p_ptr->lightspeed)
     {
         (void)set_lightspeed(p_ptr->lightspeed - 1, TRUE);
