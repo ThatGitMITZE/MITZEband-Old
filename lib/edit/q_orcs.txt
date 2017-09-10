@@ -4,7 +4,7 @@
 D:The marauding orcs approach ever closer to our quiet town, as
 D:is happening all over in these troubled times. To the south
 D:lies a valley where our scouts have found an orc raiding party,
-D:preparing to overrun Angwil once and for all. Our forces are
+D:preparing to overrun us once and for all. Our forces are
 D:committed elsewhere; please repel this threat before they reach
 D:our borders.
 ?:1
