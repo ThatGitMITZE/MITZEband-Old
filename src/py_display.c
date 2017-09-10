@@ -1166,6 +1166,7 @@ static void _build_uniques(doc_ptr doc)
         for (i = 0; i < max_r_idx; i++)
         {
             monster_race *r_ptr = &r_info[i];
+            if (!r_ptr->name) continue;
             if (r_ptr->flags1 & RF1_UNIQUE)
             {
                 if (r_ptr->max_num == 0)
@@ -1214,6 +1215,7 @@ static void _build_uniques(doc_ptr doc)
         for (i = 0; i < max_r_idx; i++)
         {
             monster_race *r_ptr = &r_info[i];
+            if (!r_ptr->name) continue;
             if (!(r_ptr->flags1 & RF1_UNIQUE))
             {
                 if (r_ptr->r_pkills)
