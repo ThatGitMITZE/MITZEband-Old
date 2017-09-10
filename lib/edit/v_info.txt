@@ -212,14 +212,21 @@
 #    - - secret glass door
 #    ' - curtain
 #    ^ - trap
-#    & - monster up to 5 levels out of depth (OOD)
-#    @ - monster up to 11 levels OOD
-#    9 - monster up to 9 levels OOD and treasure up to 7 levels OOD
-#    8 - monster up to 40 levels OOD and treasure up to 20 levels OOD
-#    , - monster up to 3 levels OOD and/or treasure up to 7 levels OOD
+#    @ - monster up to 11 levels OOD (XXX Change this ... @ is the player)
 #
 ######################################################################
-
+# OK ... let's try remove the hardcoding. There is much voodoo going on
+# in the source that I don't yet understand.
+# I'm having trouble with the tunneler ...
+#L:%:GRANITE(OUTER)
+#L:#:GRANITE(INNER)
+# ... but at least we can control the OoD levels for vault monsters/objects
+L:*:TRAP(*, 25):OBJ(*)
+L:^:TRAP(*)
+L:&:MON(*, DEPTH+5)
+L:9:MON(*, DEPTH+9):OBJ(*, DEPTH+7)
+L:8:MON(*, DEPTH+40):OBJ(*, DEPTH+20)
+L:,:MON(*, DEPTH+3 | 50%):OBJ(*, DEPTH+7 | 50%)
 
 ######################################################################
 # PosChengband Wilderness Encounters
@@ -4399,23 +4406,6 @@ M:%%...##,,,,##,,,,##%
 M: %%...##,,,,##,,,,#%
 M:  %%...##,,,,##,,,,%
 M:   %%%%%%%%%%%%%%%%%
-
-
-N:Lesser vault (diagonal)
-T:VAULT:LESSER
-W:30:*:1
-M:   %%%%%%%%%%%%%%%%%
-M:  %%....##,,,,##,,,%
-M: %%....##,,,,##,,,,%
-M:%%....##,,,,##,,,,#%
-M:%....##,,,,##,,,,##%
-M:%...+#,,,,,,,,,,##.%
-M:%..##,,,,,,,,,,+#..%
-M:%.##,,,,##,,,,##...%
-M:%##,,,,##,,,,##...%%
-M:%#,,,,##,,,,##...%% 
-M:%,,,,##,,,,##...%%  
-M:%%%%%%%%%%%%%%%%%   
 
 
 N:Lesser vault (square)

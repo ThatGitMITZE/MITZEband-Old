@@ -729,7 +729,8 @@ birther previous_char;
 /*
  * Room Templates (Vaults, Special Rooms, Wilderness Encounters)
  */
-vec_ptr room_info = NULL;
+vec_ptr     room_info = NULL;
+int_map_ptr room_letters = NULL;
 
 /*
  * The magic info

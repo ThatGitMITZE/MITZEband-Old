@@ -1624,6 +1624,8 @@ static room_grid_ptr _find_room_grid(room_ptr room, char letter)
         room_grid_ptr grid2 = int_map_find(room->letters, grid1->scramble);
         if (grid2) return grid2;
     }
+    if (!grid1)
+        grid1 = int_map_find(room_letters, letter);
     return grid1;
 }
 
@@ -1752,6 +1754,9 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
 {
     int mode = 0;
 
+    if (0 < grid->mon_pct && randint1(100) > grid->mon_pct)
+        return;
+
     if (!(grid->flags & ROOM_GRID_MON_NO_GROUP))
         mode |= PM_ALLOW_GROUP;
     if (!(grid->flags & ROOM_GRID_MON_NO_SLEEP))
@@ -1769,7 +1774,6 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
     /* Monsters are allocated on pass 2 to handle group placement, 
        which requires the terrain to be properly laid out. Note that 
        quest files (process_dungeon_file) are broken in this respect. */
-
 
     if (!(grid->flags & ROOM_GRID_MON_RANDOM) && !grid->monster)
         return;
@@ -1969,6 +1973,9 @@ static void _apply_room_grid_obj(point_t p, room_grid_ptr grid, u16b room_flags)
 
     /* see if tile was trapped in _apply_room_grid_feat */
     if (!cave_drop_bold(p.y, p.x)) return;
+
+    if (0 < grid->obj_pct && randint1(100) > grid->obj_pct)
+        return;
 
     obj = room_grid_make_obj(grid, object_level);
     if (obj)
@@ -2226,18 +2233,6 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
                 c_ptr->feat = feat_permanent_glass_wall;
                 break;
 
-                /* Treasure/trap */
-            case '*':
-                if (randint0(100) < 75)
-                {
-                    place_object(p.y, p.x, 0L);
-                }
-                else
-                {
-                    place_trap(p.y, p.x);
-                }
-                break;
-
                 /* Secret doors */
             case '+':
                 if (room->type == ROOM_WILDERNESS)
@@ -2255,11 +2250,6 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
                 /* Curtains */
             case '\'':
                 place_secret_door(p.y, p.x, DOOR_CURTAIN);
-                break;
-
-                /* Trap */
-            case '^':
-                place_trap(p.y, p.x);
                 break;
 
                 /* The Pattern */
@@ -2387,12 +2377,6 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
             /* These letters are historical from v_info.txt and are hard-coded and unchangeable */
             switch (letter)
             {
-                /* Monster */
-                case '&':
-                    monster_level = base_level + 5;
-                    place_monster(p.y, p.x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-                    monster_level = base_level;
-                    break;
                 /* Meaner monster */
                 case '@':
                     if (room->type == ROOM_AMBUSH)
@@ -2405,39 +2389,6 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
                         monster_level = base_level + 11;
                         place_monster(p.y, p.x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
                         monster_level = base_level;
-                    }
-                    break;
-                /* Meaner monster, plus treasure */
-                case '9':
-                    monster_level = base_level + 9;
-                    place_monster(p.y, p.x, PM_ALLOW_SLEEP);
-                    monster_level = base_level;
-                    object_level = base_level + 9;
-                    place_object(p.y, p.x, AM_GOOD);
-                    object_level = base_level;
-                    break;
-                /* Nasty monster and treasure */
-                case '8':
-                    monster_level = base_level + 40;
-                    place_monster(p.y, p.x, PM_ALLOW_SLEEP);
-                    monster_level = base_level;
-                    object_level = base_level + 40;
-                    place_object(p.y, p.x, AM_GOOD | AM_GREAT);
-                    object_level = base_level;
-                    break;
-                /* Monster and/or object */
-                case ',':
-                    if (randint0(100) < 50)
-                    {
-                        monster_level = base_level + 3;
-                        place_monster(p.y, p.x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-                        monster_level = base_level;
-                    }
-                    if (randint0(100) < 50)
-                    {
-                        object_level = base_level + 7;
-                        place_object(p.y, p.x, 0L);
-                        object_level = base_level;
                     }
                     break;
                 case 'A':

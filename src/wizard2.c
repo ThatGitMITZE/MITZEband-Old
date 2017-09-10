@@ -1758,10 +1758,11 @@ void do_cmd_debug(void)
             }
         }
         wiz_lite(FALSE);
-        if (1) detect_treasure(255);
+        if (0) detect_treasure(255);
+        if (1)
         {
             int i, ct = 0;
-            char buf[MAX_NLEN];
+            /*char buf[MAX_NLEN];*/
             for (i = 0; i < max_o_idx; i++)
             {
                 if (!o_list[i].k_idx) continue;
@@ -1769,13 +1770,15 @@ void do_cmd_debug(void)
                 ct += o_list[i].number;
                 identify_item(&o_list[i]);
                 obj_identify_fully(&o_list[i]);
+                #if 0
                 if (o_list[i].name1 || o_list[i].name2)
                 {
                     object_desc(buf, &o_list[i], 0);
                     msg_print(buf);
                 }
+                #endif
             }
-            msg_format("Objects=%d", ct);
+            if (0) msg_format("Objects=%d", ct);
         }
         break;
 

@@ -1344,7 +1344,7 @@ static errr _parse_room_grid_monster(char **args, int arg_ct, room_grid_ptr grid
     {
         char *flags[10];
         int   flag_ct = z_string_split(args[1], flags, 10, "|");
-        int   i;
+        int   i, n;
 
         for (i = 0; i < flag_ct; i++)
         {
@@ -1373,9 +1373,13 @@ static errr _parse_room_grid_monster(char **args, int arg_ct, room_grid_ptr grid
             {
                 grid->flags |= ROOM_GRID_MON_CLONED;
             }
-            else if (strstr(flag, "DEPTH+") == flag)
+            else if (sscanf(flag, "DEPTH+%d", &n) == 1)
             {
-                grid->monster_level = atoi(flag + strlen("DEPTH+"));
+                grid->monster_level = n;
+            }
+            else if (sscanf(flag, "%d%%", &n) == 1)
+            {
+                grid->mon_pct = n;
             }
             else
             {
@@ -1548,14 +1552,18 @@ static errr _parse_room_grid_object(char **args, int arg_ct, room_grid_ptr grid,
     {
         char *flags[10];
         int   flag_ct = z_string_split(args[1], flags, 10, "|");
-        int   i;
+        int   i, n;
 
         for (i = 0; i < flag_ct; i++)
         {
             char* flag = flags[i];
-            if (strstr(flag, "DEPTH+") == flag)
+            if (sscanf(flag, "DEPTH+%d", &n) == 1)
             {
-                grid->object_level = atoi(flag + strlen("DEPTH+"));
+                grid->object_level = n;
+            }
+            else if (sscanf(flag, "%d%%", &n) == 1)
+            {
+                grid->obj_pct = n;
             }
             else
             {
@@ -1815,6 +1823,10 @@ static errr _parse_room_grid_feature(char* name, char **args, int arg_ct, room_g
                 grid->cave_info |= CAVE_GLOW;
             else if (streq(flag, "MARK"))
                 grid->cave_info |= CAVE_MARK | CAVE_AWARE;
+            else if (streq(flag, "INNER"))
+                grid->cave_info |= CAVE_INNER | CAVE_VAULT;
+            else if (streq(flag, "OUTER"))
+                grid->cave_info |= CAVE_OUTER | CAVE_VAULT;
             else if (_is_numeric(flag)) /* QUEST_ENTER(1) or QUEST_ENTER(GLOW, 1) */
             {
                 grid->flags |= ROOM_GRID_SPECIAL;
@@ -2027,8 +2039,20 @@ static errr parse_v_info(char *buf, int options)
     /* Current entry */
     static room_ptr room = NULL;
 
+    /* Default letters for all rooms and vaults */
+    if (buf[0] == 'L' && buf[1] == ':' && !room)
+    {
+        int rc;
+        room_grid_ptr letter = malloc(sizeof(room_grid_t));
+        memset(letter, 0, sizeof(room_grid_t));
+        letter->letter = buf[2];
+        rc = parse_room_grid(buf + 4, letter, options);
+        if (!rc) int_map_add(room_letters, letter->letter, letter);
+        else free(letter);
+        if (rc) return rc;
+    }
     /* N:Name */
-    if (buf[0] == 'N')
+    else if (buf[0] == 'N')
     {
         char *zz[10];
         int   num = tokenize(buf + 2, 10, zz, 0);
@@ -2069,6 +2093,8 @@ errr init_v_info(int options)
 {
     if (room_info) vec_free(room_info); /* double initialization?? */
     room_info = vec_alloc((vec_free_f)room_free);
+    if (room_letters) int_map_free(room_letters);
+    room_letters = int_map_alloc(free);
     return parse_edit_file("v_info.txt", parse_v_info, options);
 }
 

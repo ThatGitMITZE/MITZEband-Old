@@ -429,6 +429,7 @@ extern player_type *p_ptr;
 extern player_magic *mp_ptr;
 extern birther previous_char;
 extern vec_ptr room_info;
+extern int_map_ptr room_letters;
 extern player_magic *m_info;
 extern feature_type *f_info;
 extern char *f_name;
