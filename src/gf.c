@@ -1429,7 +1429,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         if (monster_living(race) /* && some sort of save */)
         {
             mon->mpower -= dam;
-            msg_format("%^s grows less powerful.", m_name);
+            if (seen_msg) msg_format("%^s grows less powerful.", m_name);
             if (!(flags & GF_AFFECT_SPELL) && who == GF_WHO_PLAYER)
                 lp_player(dam);
             return TRUE; /* using note causes messages out of order */
