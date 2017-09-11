@@ -140,9 +140,12 @@ N:33:45:The Cloning Pits
 T:TOWN | GENERATE
 F:q_cloning_pits.txt
 
-N:34:50:The Mountain Shrine
+#XXX Don't reuse this id until version 8
+#The removed quest was designed as a Killing Fields
+#replacement and I've restored the Telmora quest sequence.
+N:34:200:Removed Quest
 T:TOWN | GENERATE
-F:q_shrine.txt
+F:q_removed.txt
 
 N:35:42:Dragon Quest
 T:TOWN | GENERATE

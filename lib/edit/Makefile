@@ -30,9 +30,9 @@ CONFIG = a_info.txt \
 	q_old_castle.txt \
 	q_old_man_willow.txt \
 	q_orcs.txt \
+	q_removed.txt \
 	q_serpent_of_chaos.txt \
 	q_sewer.txt \
-	q_shrine.txt \
 	q_sorcery.txt \
 	q_spawning_pits.txt \
 	q_tengu_death_swords.txt \
