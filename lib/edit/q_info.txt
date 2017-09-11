@@ -140,20 +140,19 @@ N:33:45:The Cloning Pits
 T:TOWN | GENERATE
 F:q_cloning_pits.txt
 
-#XXX Don't reuse this id until version 8
-#The removed quest was designed as a Killing Fields
-#replacement and I've restored the Telmora quest sequence.
+#vvv Don't reuse these ids until version 8 vvv
 N:34:200:Removed Quest
 T:TOWN | GENERATE
 F:q_removed.txt
 
-N:35:42:Dragon Quest
+N:35:200:Removed Quest
 T:TOWN | GENERATE
-F:q_dragons.txt
+F:q_removed.txt
+#^^^ Don't reuse these ids until version 8 ^^^
 
-N:36:38:The Sand Pit
+N:36:45:The Renegade Sorcerer
 T:TOWN | GENERATE
-F:q_worms.txt
+F:q_sorcerer.txt
 
 ########################################################################
 # Random Quests ... assigned in quests_on_birth()
