@@ -3670,10 +3670,6 @@ static bool place_monster_group(int who, int y, int x, int r_idx, int pack_idx, 
     byte hack_y[GROUP_MAX];
     byte hack_x[GROUP_MAX];
 
-    /* XXX You can now control the probability and size of packs in r_info */
-    if (0 < r_ptr->pack_pct && r_ptr->pack_pct < 100 && randint1(100) > r_ptr->pack_pct)
-        return FALSE;
-
     if (r_ptr->pack_dice)
     {
         total = damroll(r_ptr->pack_dice, r_ptr->pack_sides);
@@ -3845,13 +3841,19 @@ bool place_monster_aux(int who, int y, int x, int r_idx, u32b mode)
 
         if (r_ptr->flags1 & RF1_FRIENDS)
         {
-            int pack_idx = pack_info_pop();
+            if (0 < r_ptr->pack_pct && randint1(100) > r_ptr->pack_pct)
+            {
+            }
+            else
+            {
+                int pack_idx = pack_info_pop();
 
-            pack_ptr = &pack_info_list[pack_idx];
-            m_list[m_idx].pack_idx = pack_idx;
-            pack_ptr->count++;
-            (void)place_monster_group(who, y, x, r_idx, pack_idx, mode);
-            pack_choose_ai(m_idx);
+                pack_ptr = &pack_info_list[pack_idx];
+                m_list[m_idx].pack_idx = pack_idx;
+                pack_ptr->count++;
+                (void)place_monster_group(who, y, x, r_idx, pack_idx, mode);
+                pack_choose_ai(m_idx);
+            }
         }
         else if (r_ptr->flags1 & RF1_ESCORT)
         {
