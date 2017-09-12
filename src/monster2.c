@@ -1459,16 +1459,10 @@ static bool _ignore_depth_hack = FALSE;
 
 s16b get_mon_num(int level)
 {
-    int            i, j, p;
-
-    int            r_idx;
-
-    long        value, total;
-
-    monster_race    *r_ptr;
-
-    alloc_entry        *table = alloc_race_table;
-    bool         allow_unique = TRUE;
+    int            i, r_idx, value, total;
+    monster_race  *r_ptr;
+    alloc_entry   *table = alloc_race_table;
+    bool           allow_unique = TRUE;
 
     int pls_kakuritu, pls_level;
     int hoge=mysqrt(level*10000L);
@@ -1630,7 +1624,6 @@ s16b get_mon_num(int level)
     /* No legal monsters */
     if (total <= 0) return (0);
 
-
     /* Pick a monster */
     value = randint0(total);
 
@@ -1639,50 +1632,6 @@ s16b get_mon_num(int level)
     {
         if (value < table[i].prob3) break;
         value = value - table[i].prob3;
-    }
-
-
-    /* Power boost */
-    p = randint0(100);
-
-    /* Try for a "harder" monster once (50%) or twice (10%) */
-    if (p < (60 >> (level/10)))
-    {
-        /* Save old */
-        j = i;
-
-        /* Pick a monster */
-        value = randint0(total);
-
-        /* Find the monster */
-        for (i = 0; i < alloc_race_size; i++)
-        {
-            if (value < table[i].prob3) break;
-            value = value - table[i].prob3;
-        }
-
-        /* Keep the "best" one */
-        if (table[i].level < table[j].level) i = j;
-    }
-
-    /* Try for a "harder" monster twice (10%) */
-    if (p < (10 >> (level/10)))
-    {
-        /* Save old */
-        j = i;
-
-        /* Pick a monster */
-        value = randint0(total);
-
-        /* Find the monster */
-        for (i = 0; i < alloc_race_size; i++)
-        {
-            if (value < table[i].prob3) break;
-            value = value - table[i].prob3;
-        }
-
-        /* Keep the "best" one */
-        if (table[i].level < table[j].level) i = j;
     }
 
     if (r_info[table[i].index].flags1 & RF1_UNIQUE)
