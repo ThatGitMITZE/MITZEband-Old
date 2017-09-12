@@ -158,40 +158,20 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
     /*  0  10  20  30  40  50  60  70  80  90 100  min limit */
 
     {{900,800,700,600,500,400,300,200,100,100,100},  0}, /*NORMAL   */
-    {{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  1}, /*OVERLAP  */
-    {{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  3}, /*CROSS    */
-    {{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100},  3}, /*INNER_F  */
-    {{  0,  1,  1,  1,  3,  4,  6,  8,  8,  8,  8}, 10}, /*NEST     */
-    {{  0,  1,  1,  2,  3,  4,  6,  8,  8,  8,  8}, 10}, /*PIT      */
     {{  0,  0,  1,  1,  2,  2,  3,  5,  6,  8, 10}, 30}, /*LESSER_V */
     {{  0,  0,  0,  0,  1,  2,  2,  2,  3,  3,  4}, 40}, /*GREATER_V*/
     {{  0,200,300,400,500,600,700,800,900,900,900}, 10}, /*FRACAVE  */
-    {{  0,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2}, 10}, /*RANDOM_V */
-    {{  0,  4,  8, 12, 16, 20, 24, 28, 32, 36, 40},  3}, /*OVAL     */
     {{  1,  6, 12, 18, 24, 30, 36, 42, 48, 54, 60}, 10}, /*CRYPT    */
-    {{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP_PIT */
     {{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
-    {{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
-  /*{{  1, 10, 20, 30, 40, 50, 60, 70, 80, 90,100}, 10},   TEMPLATE */
-    {{100,100,150,200,250,300,350,400,450,450,450},  0}, /*TEMPLATE */
+    {{100,110,150,200,250,300,350,400,450,450,450},  0}, /*TEMPLATE */
 };
-
 /* Build rooms in descending order of difficulty. */
 static byte room_build_order[ROOM_T_MAX] = {
     ROOM_T_GREATER_VAULT,
-    ROOM_T_RANDOM_VAULT,
     ROOM_T_LESSER_VAULT,
     ROOM_T_TEMPLATE,
-    ROOM_T_TRAP_PIT,
-    ROOM_T_PIT,
-    ROOM_T_NEST,
     ROOM_T_TRAP,
-    ROOM_T_GLASS,
-    ROOM_T_INNER_FEAT,
-    ROOM_T_OVAL,
     ROOM_T_CRYPT,
-    ROOM_T_OVERLAP,
-    ROOM_T_CROSS,
     ROOM_T_FRACAVE,
     ROOM_T_NORMAL,
 };
@@ -4129,19 +4109,8 @@ static bool room_build(int typ)
     case ROOM_T_TRAP:          return build_type14();
     case ROOM_T_CRYPT:         return build_type12();
 
-    /* I think rooms should be specified with templates where possible ... */
-    case ROOM_T_TRAP_PIT:      /*return build_type13(); cf N:509*/
-    case ROOM_T_GLASS:         /*return build_type15(); I never liked these ... */
-    case ROOM_T_OVERLAP:       /*return build_type2();*/
-    case ROOM_T_CROSS:         /*return build_type3();*/
-    case ROOM_T_INNER_FEAT:    /*return build_type4();*/
-    case ROOM_T_NEST:          /*return build_type5(); ROOM_THEME_FORMATION*/
-    case ROOM_T_PIT:           /*return build_type6(); ROOM_THEME_FORMATION*/
-    case ROOM_T_OVAL:          /*return build_type11();*/
     case ROOM_T_TEMPLATE:      return build_room_template(ROOM_NORMAL, 0);
 
-    /* Of course, vaults have always been templates! */
-    case ROOM_T_RANDOM_VAULT:  /*return build_type10();*/
     case ROOM_T_LESSER_VAULT:  return build_room_template(ROOM_VAULT, VAULT_LESSER);
     case ROOM_T_GREATER_VAULT: return build_room_template(ROOM_VAULT, VAULT_GREATER);
     }
@@ -4162,7 +4131,6 @@ bool generate_rooms(void)
 {
     int i;
     bool remain;
-    int crowded = 0;
     int total_prob;
     int prob_list[ROOM_T_MAX];
     int rooms_built = 0;
@@ -4218,7 +4186,6 @@ bool generate_rooms(void)
     {
         prob_list[ROOM_T_LESSER_VAULT] = 0;
         prob_list[ROOM_T_GREATER_VAULT] = 0;
-        prob_list[ROOM_T_RANDOM_VAULT] = 0;
     }
 
 
@@ -4226,8 +4193,7 @@ bool generate_rooms(void)
     if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
     {
         MOVE_PLIST(ROOM_T_NORMAL, ROOM_T_FRACAVE);
-        MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_CRYPT);
-        MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
+        MOVE_PLIST(ROOM_T_TEMPLATE, ROOM_T_CRYPT);
     }
 
     /* CAVE dungeon (Orc cave etc.) */
@@ -4245,7 +4211,6 @@ bool generate_rooms(void)
     /* Forbidden glass rooms */
     if (!(d_info[dungeon_type].flags1 & DF1_GLASS_ROOM))
     {
-        prob_list[ROOM_T_GLASS] = 0;
     }
 
     /*
@@ -4309,21 +4274,6 @@ bool generate_rooms(void)
 
                 /* Mark as there was some remaining rooms */
                 remain = TRUE;
-
-                switch (room_type)
-                {
-                case ROOM_T_PIT:
-                case ROOM_T_NEST:
-                case ROOM_T_TRAP_PIT:
-
-                    /* Avoid too many monsters */
-                    if (++crowded >= 2)
-                    {
-                        room_num[ROOM_T_PIT] = 0;
-                        room_num[ROOM_T_NEST] = 0;
-                        room_num[ROOM_T_TRAP_PIT] = 0;
-                    }
-                }
             }
         }
 

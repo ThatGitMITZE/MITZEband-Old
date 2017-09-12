@@ -29,24 +29,16 @@
 
 
 /* Room types for room_build() */
-#define ROOM_T_NORMAL         0     /* Simple (33x11) */
-#define ROOM_T_OVERLAP        1     /* Overlapping (33x11) */
-#define ROOM_T_CROSS          2     /* Crossed (33x11) */
-#define ROOM_T_INNER_FEAT     3     /* Large (33x11) */
-#define ROOM_T_NEST           4     /* Monster nest (33x11) */
-#define ROOM_T_PIT            5     /* Monster pit (33x11) */
-#define ROOM_T_LESSER_VAULT   6     /* Lesser vault (33x22) */
-#define ROOM_T_GREATER_VAULT  7     /* Greater vault (66x44) */
-#define ROOM_T_FRACAVE        8     /* Fractal cave (42x24) */
-#define ROOM_T_RANDOM_VAULT   9     /* Random vault (44x22) */
-#define ROOM_T_OVAL          10     /* Circular rooms (22x22) */
-#define ROOM_T_CRYPT         11     /* Crypts (22x22) */
-#define ROOM_T_TRAP_PIT      12     /* Trapped monster pit */
-#define ROOM_T_TRAP          13     /* Piranha/Armageddon trap room */
-#define ROOM_T_GLASS         14     /* Glass room */
-#define ROOM_T_TEMPLATE      15
-
-#define ROOM_T_MAX 16
+enum {
+    ROOM_T_NORMAL,            /* Simple (33x11) */
+    ROOM_T_LESSER_VAULT,      /* Lesser vault (33x22) */
+    ROOM_T_GREATER_VAULT,     /* Greater vault (66x44) */
+    ROOM_T_FRACAVE,           /* Fractal cave (42x24) */
+    ROOM_T_CRYPT,             /* Crypts (22x22) */
+    ROOM_T_TRAP,              /* Piranha/Armageddon trap room */
+    ROOM_T_TEMPLATE,          /* ../lib/edit/rooms.txt */
+    ROOM_T_MAX
+};
 
 /* Constants for room_template_t types and subtypes. I would use
    ROOM_T_* above except the code is unable to handle addition of subtypes.
@@ -78,7 +70,7 @@ typedef struct room_info_type room_info_type;
 struct room_info_type
 {
         /* Allocation information. */
-        s16b prob[ROOM_T_MAX];
+        s16b prob[11];
 
         /* Minimum level on which room can appear. */
         int min_level;
