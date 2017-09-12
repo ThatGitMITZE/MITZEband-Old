@@ -1115,6 +1115,13 @@ extern void mon_set_parent(monster_type *m_ptr, int pm_idx);
 extern s16b m_pop(void);
 extern errr get_mon_num_prep(monster_hook_type monster_hook, monster_hook_type monster_hook2);
 extern s16b get_mon_num(int level);
+/* GMN = Get Monster Num */
+#define GMN_FORCE_DEPTH 0x01 /* useful for vaults ... force ML >= MIN(50, DL) */
+#define GMN_POWER_BOOST 0x02 /* pick best roll out of several */
+#define GMN_NO_UNIQUES  0x04 /* prohibit unique monsters */
+#define GMN_ALLOW_OOD   0x08 /* allow level param to be mysteriously boosted */
+#define GMN_DEFAULT     (GMN_ALLOW_OOD)
+extern s16b get_mon_num_aux(int level, u32b options);
 extern void monster_desc(char *desc, monster_type *m_ptr, int mode);
 extern int lore_do_probe(int r_idx);
 extern void lore_treasure(int m_idx, int num_item, int num_gold);

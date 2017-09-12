@@ -5,4 +5,25 @@
 # Subtype: LESSER | GREATER
 #
 
+N:Winding Excellence
+T:VAULT:GREATER
+W:1:*:1
+M:%%%%%%%%%%%%%
+M:%XXXXXXXXXXX%
+M:%#9#9#9#9#9X%
+M:%XXXXXXXXX#X%
+M:%X8#8#8#8#8X%
+M:%X#XXXXXXXXX%
+M:%X9#9#9#9#9#%
+M:%XXXXXXXXXXX%
+M:%%%%%%%%%%%%%
+
+N:Four Square
+T:VAULT:GREATER
+W:1:*:1
+M: XXX 
+M:XX8XX
+M:#888X
+M:XX8XX
+M: XXX 
 # vim: filetype=q :

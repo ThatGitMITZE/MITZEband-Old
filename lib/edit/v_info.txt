@@ -224,9 +224,13 @@
 L:*:TRAP(*, 25%):OBJ(*)
 L:^:TRAP(*)
 L:&:MON(*, DEPTH+5)
-L:9:MON(*, DEPTH+9):OBJ(*, DEPTH+7)
-L:8:MON(*, DEPTH+40):OBJ(*, DEPTH+20):EGO(*)
+L:9:MON(*, DEPTH+10):OBJ(*, DEPTH+7)
+L:8:MON(*, DEPTH+15):OBJ(*, DEPTH+20):EGO(*)
 L:,:MON(*, DEPTH+3 | 50%):OBJ(*, DEPTH+7 | 50%)
+
+%:rooms.txt
+#%:vaults_old.txt
+%:vaults.txt
 
 ######################################################################
 # PosChengband Wilderness Encounters
@@ -1110,9 +1114,5 @@ M:~_~_~~_~_
 M:_~~~>~~__
 M:~__~~~__~
 M:_~~___~~_
-
-%:rooms.txt
-%:vaults_old.txt
-
 
 # vim: filetype=q :

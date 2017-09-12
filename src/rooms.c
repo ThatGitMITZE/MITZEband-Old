@@ -1744,7 +1744,7 @@ static bool _room_grid_mon_hook(int r_idx)
     return TRUE;
 }
 
-static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
+static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
 {
     int mode = 0;
 
@@ -1755,14 +1755,12 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
         mode |= PM_ALLOW_GROUP;
     if (!(grid->flags & ROOM_GRID_MON_NO_SLEEP))
         mode |= PM_ALLOW_SLEEP;
-    /*if (!(grid->flags & ROOM_GRID_MON_NO_UNIQUE))
-        mode |= PM_ALLOW_UNIQUE;  Note: This flag does not work! */
     if (grid->flags & ROOM_GRID_MON_HASTE)
         mode |= PM_HASTE;
 
     if (grid->flags & ROOM_GRID_MON_FRIENDLY)
         mode |= PM_FORCE_FRIENDLY;
-    if (room_flags & ROOM_THEME_FRIENDLY)
+    if (room->flags & ROOM_THEME_FRIENDLY)
         mode |= PM_FORCE_FRIENDLY;
 
     /* Monsters are allocated on pass 2 to handle group placement, 
@@ -1775,7 +1773,7 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
     /* The NIGHT theme is designed for wilderness cemeteries and 
        such, which should be populated with foul undead, but only
        in the deep, dark hours of night! */
-    if ((room_flags & ROOM_THEME_NIGHT) && py_on_surface())
+    if ((room->flags & ROOM_THEME_NIGHT) && py_on_surface())
     {
         int day, hour, min;
         extract_day_hour_min(&day, &hour, &min);
@@ -1784,7 +1782,7 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
     }
 
     /* Added for symmetry with ROOM_THEME_NIGHT ... any ideas? */
-    if ((room_flags & ROOM_THEME_DAY) && py_on_surface())
+    if ((room->flags & ROOM_THEME_DAY) && py_on_surface())
     {
         int day, hour, min;
         extract_day_hour_min(&day, &hour, &min);
@@ -1795,11 +1793,23 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, u16b room_flags)
     if (grid->flags & (ROOM_GRID_MON_TYPE | ROOM_GRID_MON_RANDOM | ROOM_GRID_MON_CHAR))
     {
         int r_idx;
+        u32b options = 0;
+
+        if (grid->flags & ROOM_GRID_MON_NO_UNIQUE)
+            options |= GMN_NO_UNIQUES;
+
+        if (room->type == ROOM_VAULT)
+        {
+            options |= GMN_POWER_BOOST;
+            if (room->subtype == VAULT_GREATER)
+                options |= GMN_FORCE_DEPTH;
+        }
+
         monster_level = base_level + grid->monster_level;
         _room_grid_hack = grid;
-        _room_flags_hack = room_flags;
+        _room_flags_hack = room->flags;
         get_mon_num_prep(_room_grid_mon_hook, get_monster_hook2(p.y, p.x));
-        r_idx = get_mon_num(monster_level);
+        r_idx = get_mon_num_aux(monster_level, options);
         place_monster_aux(0, p.y, p.x, r_idx, mode);
         monster_level = base_level;
     }
@@ -2434,7 +2444,7 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
             grid = _find_room_grid(room, letter);
             if (grid)
             {
-                _apply_room_grid_mon(p, grid, room->flags);
+                _apply_room_grid_mon(p, grid, room);
                 _apply_room_grid_obj(p, grid, room->flags);
                 /* Remove need for tedious P:px:py line in quest files ... normally, we
                  * can just use the '<' tile for the player's starting location. That worked
@@ -4097,6 +4107,8 @@ static bool build_type16(void)
  */
 static bool room_build(int typ)
 {
+    if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_GREATER);
+
     if (dungeon_type == DUNGEON_ARENA)
         return build_type16();
 

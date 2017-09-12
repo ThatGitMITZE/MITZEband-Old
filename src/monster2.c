@@ -1459,76 +1459,84 @@ static bool _ignore_depth_hack = FALSE;
 
 s16b get_mon_num(int level)
 {
-    int            i, r_idx, value, total;
-    monster_race  *r_ptr;
-    alloc_entry   *table = alloc_race_table;
-    bool           allow_unique = TRUE;
-
-    int pls_kakuritu, pls_level;
-    int hoge=mysqrt(level*10000L);
-
-    if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
-
-    if ((dungeon_turn > hoge*(TURNS_PER_TICK*500L)) && !level)
-    {
-        pls_kakuritu = MAX(2, NASTY_MON-((dungeon_turn/(TURNS_PER_TICK*2500L)-hoge/10)));
-        pls_level = MIN(8,3 + dungeon_turn/(TURNS_PER_TICK*20000L)-hoge/40);
-    }
-    else
-    {
-        pls_kakuritu = NASTY_MON;
-        pls_level = 2;
-    }
-
-    if (d_info[dungeon_type].flags1 & DF1_MAZE)
-    {
-        pls_kakuritu = MIN(pls_kakuritu/2, pls_kakuritu-10);
-        if (pls_kakuritu < 2) pls_kakuritu = 2;
-        pls_level += 2;
-        level += 3;
-    }
-
+    u32b options = GMN_DEFAULT;
+    if (summon_specific_who == SUMMON_WHO_NOBODY && dungeon_type == DUNGEON_ARENA)
+        options |= GMN_FORCE_DEPTH;
     /* Restrict uniques ... except for summoning, of course ;) */
     if ( unique_count
       && summon_specific_who == SUMMON_WHO_NOBODY
       && !one_in_(unique_count) )
     {
-        allow_unique = FALSE;
+        options |= GMN_NO_UNIQUES;
     }
+    return get_mon_num_aux(level, options);
+}
 
-    /* Boost the level */
-    if (level > 0 && !p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+s16b get_mon_num_aux(int level, u32b options)
+{
+    int            i, r_idx, value, total;
+    monster_race  *r_ptr;
+    alloc_entry   *table = alloc_race_table;
+
+    if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
+
+    if (options & GMN_ALLOW_OOD)
     {
-        /* Nightmare mode allows more out-of depth monsters */
-        if (ironman_nightmare && !randint0(pls_kakuritu))
+        int pls_kakuritu, pls_level;
+        int hoge=mysqrt(level*10000L);
+
+        if ((dungeon_turn > hoge*(TURNS_PER_TICK*500L)) && !level)
         {
-            /* What a bizarre calculation */
-            level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
+            pls_kakuritu = MAX(2, NASTY_MON-((dungeon_turn/(TURNS_PER_TICK*2500L)-hoge/10)));
+            pls_level = MIN(8,3 + dungeon_turn/(TURNS_PER_TICK*20000L)-hoge/40);
         }
         else
         {
-            /* Occasional "nasty" monster */
-            if (!randint0(pls_kakuritu))
-            {
-                /* Pick a level bonus */
-                int d = MIN(5, level/10) + pls_level;
+            pls_kakuritu = NASTY_MON;
+            pls_level = 2;
+        }
 
-                /* Boost the level */
-                level += d;
+        if (d_info[dungeon_type].flags1 & DF1_MAZE)
+        {
+            pls_kakuritu = MIN(pls_kakuritu/2, pls_kakuritu-10);
+            if (pls_kakuritu < 2) pls_kakuritu = 2;
+            pls_level += 2;
+            level += 3;
+        }
+
+        /* Boost the level */
+        if (level > 0 && !p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+        {
+            /* Nightmare mode allows more out-of depth monsters */
+            if (ironman_nightmare && !randint0(pls_kakuritu))
+            {
+                /* What a bizarre calculation */
+                level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
             }
-
-            /* Occasional "nasty" monster */
-            if (!randint0(pls_kakuritu))
+            else
             {
-                /* Pick a level bonus */
-                int d = MIN(5, level/10) + pls_level;
+                /* Occasional "nasty" monster */
+                if (!randint0(pls_kakuritu))
+                {
+                    /* Pick a level bonus */
+                    int d = MIN(5, level/10) + pls_level;
 
-                /* Boost the level */
-                level += d;
+                    /* Boost the level */
+                    level += d;
+                }
+
+                /* Occasional "nasty" monster */
+                if (!randint0(pls_kakuritu))
+                {
+                    /* Pick a level bonus */
+                    int d = MIN(5, level/10) + pls_level;
+
+                    /* Boost the level */
+                    level += d;
+                }
             }
         }
     }
-
 
     /* Reset total */
     total = 0L;
@@ -1540,7 +1548,7 @@ s16b get_mon_num(int level)
         table[i].prob3 = 0;
 
         if (!_ignore_depth_hack && table[i].max_level < level) continue;
-        if (!summon_specific_who && dungeon_type == DUNGEON_ARENA && table[i].level < MIN(50, dun_level-5)) continue;
+        if ((options & GMN_FORCE_DEPTH) && table[i].level < MIN(50, level-5)) continue;
 
         /* Hack: Sparing early unique monsters is no longer a viable end game strategy */
         if (summon_specific_who > 0 && summon_specific_type == SUMMON_UNIQUE)
@@ -1586,7 +1594,7 @@ s16b get_mon_num(int level)
                 if (!summon_cloned_okay || r_ptr->level < 70) continue;
             }
 
-            if ((r_ptr->flags1 & RF1_UNIQUE) && !allow_unique)
+            if ((r_ptr->flags1 & RF1_UNIQUE) && (options & GMN_NO_UNIQUES))
                 continue;
 
             if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
@@ -1632,6 +1640,49 @@ s16b get_mon_num(int level)
     {
         if (value < table[i].prob3) break;
         value = value - table[i].prob3;
+    }
+
+    if (options & GMN_POWER_BOOST)
+    {
+        int j, p = randint0(100);
+
+        if (p < 101) /* XXX Tweak ... */
+        {
+            /* Save old */
+            j = i;
+
+            /* Pick a monster */
+            value = randint0(total);
+
+            /* Find the monster */
+            for (i = 0; i < alloc_race_size; i++)
+            {
+                if (value < table[i].prob3) break;
+                value = value - table[i].prob3;
+            }
+
+            /* Keep the "best" one */
+            if (table[i].level < table[j].level) i = j;
+        }
+
+        if (p < 101) /* XXX Tweak ... */
+        {
+            /* Save old */
+            j = i;
+
+            /* Pick a monster */
+            value = randint0(total);
+
+            /* Find the monster */
+            for (i = 0; i < alloc_race_size; i++)
+            {
+                if (value < table[i].prob3) break;
+                value = value - table[i].prob3;
+            }
+
+            /* Keep the "best" one */
+            if (table[i].level < table[j].level) i = j;
+        }
     }
 
     if (r_info[table[i].index].flags1 & RF1_UNIQUE)
