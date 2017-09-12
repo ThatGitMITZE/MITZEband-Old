@@ -1399,7 +1399,7 @@ static void _wiz_stats_inspect(int level)
         if (0 && !object_is_nameless(o_ptr) && object_is_ammo(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
-        if (1 && o_ptr->name2 == EGO_RING_COMBAT && object_is_jewelry(o_ptr))
+        if (1 && o_ptr->name2 == EGO_RING_ARCHERY && object_is_jewelry(o_ptr))
             _wiz_stats_log_obj(level, o_ptr);
 
         if (0 && object_is_dragon_armor(o_ptr))
