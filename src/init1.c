@@ -1938,6 +1938,8 @@ static errr _parse_room_flags(char* buf, room_ptr room)
             room->flags |= ROOM_NO_ROTATE;
         else if (streq(flag, "FORMATION"))
             room->flags |= ROOM_THEME_FORMATION;
+        else if (streq(flag, "THEME_OBJECT"))
+            room->flags |= ROOM_THEME_OBJECT;
         else
         {
             msg_format("Error: Invalid room flag %s.", flag);
@@ -4595,7 +4597,7 @@ errr parse_room_line(room_ptr room, char *line, int options)
         else
             room->max_level = atoi(zz[1]);
         tmp = atoi(zz[2]);
-        if (tmp < 0 || tmp > 255)
+        if (tmp < 0 || tmp > 255) /* room_t.rarity is a byte */
         {
             msg_format("Error: Invalid rarity %d. Enter a value between 1 and 255.", tmp);
             return PARSE_ERROR_OUT_OF_BOUNDS;

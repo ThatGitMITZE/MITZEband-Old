@@ -2672,6 +2672,7 @@ bool kind_is_good(int k_idx)
         /* Ammo -- Arrows/Bolts are good */
         case TV_BOLT:
         case TV_ARROW:
+        case TV_SHOT:  /* XXX needed for ROOM_THEME_OBJECT in rooms.txt */
         {
             return (TRUE);
         }

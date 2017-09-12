@@ -1981,6 +1981,91 @@ obj_ptr room_grid_make_obj(room_grid_ptr grid, int level)
     return NULL;
 }
 
+typedef struct { int id; int prob; bool good; } _obj_theme_t, *_obj_theme_ptr;
+static _obj_theme_t _obj_theme_tbl[] = {
+    { TV_GOLD,              5, FALSE },
+    { TV_POTION,           10, FALSE },
+    { TV_SCROLL,           10, FALSE },
+    { TV_SHOT,              3, TRUE  },
+    { TV_ARROW,             3, TRUE  },
+    { TV_BOLT,              3, TRUE  },
+    { TV_WAND,              3, FALSE },
+    { TV_ROD,               3, FALSE },
+    { TV_STAFF,             3, FALSE },
+    { TV_RING,              1, TRUE  },
+    { TV_AMULET,            1, TRUE  },
+    { TV_FOOD,              5, FALSE },
+    { OBJ_TYPE_BOOK,        5, FALSE },
+    { OBJ_TYPE_BODY_ARMOR,  2, TRUE  },
+    { OBJ_TYPE_WEAPON,      2, TRUE  },
+    { 0 }
+};
+void _init_obj_theme(void)
+{
+    int i, total = 0, roll;
+    for (i = 0;; i++)
+    {
+        _obj_theme_ptr p = &_obj_theme_tbl[i];
+        if (!p->id) break;
+        total += p->prob;
+    }
+    assert(total > 0);
+    roll = randint1(total);
+    for (i = 0;; i++)
+    {
+        _obj_theme_ptr p = &_obj_theme_tbl[i];
+        assert(p->id);
+        roll -= p->prob;
+        if (roll <= 0)
+        {
+            _obj_kind_hack = p->id;
+            _obj_kind_is_good = p->good;
+            return;
+        }
+    }
+    assert(FALSE);
+}
+
+static obj_ptr _make_obj_theme(room_grid_ptr grid, int level)
+{
+    obj_t forge = {0};
+    int   k_idx;
+    u32b  mode = 0;
+
+    assert(_obj_kind_hack); /* call init_obj_theme */
+
+    object_level = level;
+    if (grid->object_level)
+        object_level += grid->object_level;
+    if (_obj_kind_is_good)
+        mode |= AM_GOOD;
+
+    if (_obj_kind_hack == TV_GOLD)
+        make_gold(&forge, FALSE);
+    else
+    {
+        get_obj_num_hook = _obj_kind_hook;
+        get_obj_num_prep();
+        k_idx = get_obj_num(object_level);
+        get_obj_num_hook = NULL;
+        get_obj_num_prep();
+
+        if (k_idx)
+        {
+            object_prep(&forge, k_idx);
+            apply_magic(&forge, object_level, mode);
+            obj_make_pile(&forge);
+        }
+        else if (p_ptr->wizard)
+        {
+            msg_format("Unable to _make_obj_theme(%d)", _obj_kind_hack);
+        }
+    }
+    object_level = base_level;
+    if (forge.k_idx) return obj_copy(&forge);
+    return NULL;
+}
+
 static void _apply_room_grid_obj(point_t p, room_grid_ptr grid, u16b room_flags)
 {
     obj_ptr obj;
@@ -1991,7 +2076,12 @@ static void _apply_room_grid_obj(point_t p, room_grid_ptr grid, u16b room_flags)
     if (0 < grid->obj_pct && randint1(100) > grid->obj_pct)
         return;
 
-    obj = room_grid_make_obj(grid, object_level);
+    /* themed objects make all OBJ(*) directives use the theme. I suppose there
+     * could be other OBJ() directives and we should probably support that */
+    if ((room_flags & ROOM_THEME_OBJECT) && (grid->flags & ROOM_GRID_OBJ_RANDOM))
+        obj = _make_obj_theme(grid, object_level);
+    else
+        obj = room_grid_make_obj(grid, object_level);
     if (obj)
     {
        drop_here(obj, p.y, p.x);
@@ -2304,6 +2394,9 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
         return;
 
     /* Pass2: Place monsters and objects */
+    if (room->flags & ROOM_THEME_OBJECT)
+        _init_obj_theme();
+
     for (y = 0; y < room->height; y++)
     {
         cptr line = vec_get(room->map, y);
