@@ -1624,7 +1624,21 @@ static room_grid_ptr _find_room_grid(room_ptr room, char letter)
         room_grid_ptr grid2 = int_map_find(room->letters, grid1->scramble);
         if (grid2) return grid2;
     }
-    if (!grid1)
+    if ( (room->flags & ROOM_THEME_FORMATION)
+      && '0' <= letter && letter <= '9' )
+    {
+        /* XXX It is very important that FORMATION rooms *not* use
+         * global letters. 8 and 9 mean something very different wrt
+         * vaults! See 'Spiral Formation' for an example. */
+    }
+    else if (room->type != ROOM_VAULT && letter == '@')
+    {
+        /* Ditto with @ ... This is a 'Meaner Monster' letter for
+         * vaults, but is player placement for ambushes and quests.
+         * Currently, @ is not defined in room_letters, so this check
+         * is simply paranoia. */
+    }
+    else if (!grid1)
         grid1 = int_map_find(room_letters, letter);
     return grid1;
 }
