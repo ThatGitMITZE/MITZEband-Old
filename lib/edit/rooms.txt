@@ -1675,7 +1675,7 @@ N:Prison
 T:ROOM:NORMAL
 W:20:*:32
 L:M:MON(*)
-L:^:TRAP(TRAP_OPEN, 25)
+L:^:TRAP(TRAP_OPEN, 25%)
 M:%%%%%%%%%%%%%%%%%%%%%
 M:%...................%
 M:%.#################.%
@@ -2096,8 +2096,8 @@ N:Wall Opening Trap
 T:ROOM:NORMAL:FORMATION
 W:25:*:32
 L:0:MON(*, DEPTH+10)
-L:^:TRAP(TRAP_OPEN, 75)
-L:*:TRAP(TRAP_OPEN, 25)
+L:^:TRAP(TRAP_OPEN, 75%)
+L:*:TRAP(TRAP_OPEN, 25%)
 M:%%%%%%%%%%%%%%%%%%%%%%%%%
 M:%...........*...........%
 M:%######################.%

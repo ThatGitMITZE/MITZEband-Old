@@ -23,7 +23,7 @@ L:%:GRANITE
 L:.:FLOOR
 L:+:CLOSED_DOOR
 L:<:UP_STAIR
-L:^:TRAP(*, 25)
+L:^:TRAP(*, 25%)
 L:y:MON(dweller on the threshold)
 L:P:MON(stone giant)
 L:g:MON(stone golem)

@@ -22,7 +22,7 @@ L:%:GRANITE
 L:+:CLOSED_DOOR
 L:.:FLOOR
 L:~:DEEP_WATER
-L:!:TRAP(*, 25):OBJ(*, DEPTH+10)
+L:!:TRAP(*, 25%):OBJ(*, DEPTH+10)
 L:^:TRAP(*)
 L:<:UP_STAIR
 L:Z:MON(hound of tindalos)

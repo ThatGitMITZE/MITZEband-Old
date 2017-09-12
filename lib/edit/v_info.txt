@@ -173,9 +173,9 @@
 #          examples. The syntax is TRAP(<name> [,<prob>]) where name is the trap name as given in the
 #          name field of the f_info record and prob is an optional probability for this trap (default 100).
 #     Sample TRAP directives are:
-#       [1] TRAP(TRAP_OPEN, 25) for a wall opening trap that is generated 25% of the time.
+#       [1] TRAP(TRAP_OPEN, 25%) for a wall opening trap that is generated 25% of the time.
 #       [2] TRAP(*) for a random trap that is always generated.
-#       [3] TRAP(TRAP_ARMAGEDDON, 50) for an armageddon trap generated 50% of the time.
+#       [3] TRAP(TRAP_ARMAGEDDON, 50%) for an armageddon trap generated 50% of the time.
 #
 #  Here are some sample L: lines in their entirety:
 #    [1] L:M:SHALLOW_LAVA(ROOM | GLOW):MON(HI_DEMON, NO_GROUP | NO_SLEEP | DEPTH+50):OBJ(*, DEPTH+20):EGO(*)
@@ -221,11 +221,11 @@
 #L:%:GRANITE(OUTER)
 #L:#:GRANITE(INNER)
 # ... but at least we can control the OoD levels for vault monsters/objects
-L:*:TRAP(*, 25):OBJ(*)
+L:*:TRAP(*, 25%):OBJ(*)
 L:^:TRAP(*)
 L:&:MON(*, DEPTH+5)
 L:9:MON(*, DEPTH+9):OBJ(*, DEPTH+7)
-L:8:MON(*, DEPTH+40):OBJ(*, DEPTH+20)
+L:8:MON(*, DEPTH+40):OBJ(*, DEPTH+20):EGO(*)
 L:,:MON(*, DEPTH+3 | 50%):OBJ(*, DEPTH+7 | 50%)
 
 ######################################################################

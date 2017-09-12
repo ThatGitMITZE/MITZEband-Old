@@ -1752,10 +1752,12 @@ static errr _parse_room_grid_artifact(char **args, int arg_ct, room_grid_ptr gri
 
 static errr _parse_room_grid_trap(char **args, int arg_ct, room_grid_ptr grid)
 {
+    int n;
     switch (arg_ct)
     {
     case 2:
-        grid->trap_pct = atoi(args[1]);
+        if (sscanf(args[1], "%d%%", &n) == 1)
+            grid->trap_pct = n;
         /* vvvvvvvvv Fall Through vvvvvvvvvvvv */
     case 1:
         if (streq(args[0], "*"))
