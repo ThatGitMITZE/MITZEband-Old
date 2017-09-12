@@ -53,6 +53,7 @@ CONFIG = a_info.txt \
 	t_telmora.txt \
 	t_zul.txt \
 	v_info.txt \
+	rooms.txt \
 	w_info.txt
 
 PACKAGE = edit
