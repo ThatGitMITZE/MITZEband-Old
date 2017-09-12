@@ -1043,7 +1043,7 @@ M:%.................%
 M:%%%%%%%%%%%%%%%%%%%
 
 N:Fortress II
-T:ROOM:NORMAL:NO_ROTATE
+T:ROOM:NORMAL:NO_ROTATE | THEME_OBJECT
 W:15:*:8
 L:M:MON(*, DEPTH+3)
 L:$:OBJ(*)
@@ -1264,7 +1264,7 @@ M:%.....................................%
 M:%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 N:Excluded Middle II
-T:ROOM:NORMAL
+T:ROOM:NORMAL:THEME_OBJECT
 W:10:*:16
 L:M:MON(*, DEPTH+5)
 L:$:OBJ(*)
