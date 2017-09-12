@@ -1,0 +1,8 @@
+######################################################################
+# Vaults
+#
+# Type:    VAULT
+# Subtype: LESSER | GREATER
+#
+
+# vim: filetype=q :
