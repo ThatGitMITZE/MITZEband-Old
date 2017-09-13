@@ -158,8 +158,8 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
     /*  0  10  20  30  40  50  60  70  80  90 100  min limit */
 
     {{900,800,700,600,500,400,300,200,100,100,100},  0}, /*NORMAL   */
-    {{  0,  0,  1,  1,  2,  2,  3,  5,  6,  8, 10}, 30}, /*LESSER_V */
-    {{  0,  0,  0,  0,  1,  2,  2,  2,  3,  3,  4}, 40}, /*GREATER_V*/
+    {{  0,  0,  0,  1,  6, 14, 17, 12,  8,  5,  5}, 30}, /*LESSER_V */
+    {{  0,  0,  0,  0,  0,  1,  3,  8, 12, 15, 15}, 40}, /*GREATER_V*/
     {{  0,200,300,400,500,600,700,800,900,900,900}, 10}, /*FRACAVE  */
     {{  1,  6, 12, 18, 24, 30, 36, 42, 48, 54, 60}, 10}, /*CRYPT    */
     {{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
@@ -1748,8 +1748,19 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
 {
     int mode = 0;
 
+    if (!(grid->flags & ROOM_GRID_MON_RANDOM) && !grid->monster)
+        return;
+
     if (0 < grid->mon_pct && randint1(100) > grid->mon_pct)
         return;
+
+    /* XXX Handle monster group sequencing issues ... hard squares should get hard monsters! */
+    if (grid->flags & (ROOM_GRID_OBJ_EGO | ROOM_GRID_EGO_RANDOM | ROOM_GRID_ART_RANDOM))
+    {
+        cave_type *c_ptr = &cave[p.y][p.x];
+        if (c_ptr->m_idx)
+            delete_monster_idx(c_ptr->m_idx);
+    }
 
     if (!(grid->flags & ROOM_GRID_MON_NO_GROUP))
         mode |= PM_ALLOW_GROUP;
@@ -1762,13 +1773,6 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
         mode |= PM_FORCE_FRIENDLY;
     if (room->flags & ROOM_THEME_FRIENDLY)
         mode |= PM_FORCE_FRIENDLY;
-
-    /* Monsters are allocated on pass 2 to handle group placement, 
-       which requires the terrain to be properly laid out. Note that 
-       quest files (process_dungeon_file) are broken in this respect. */
-
-    if (!(grid->flags & ROOM_GRID_MON_RANDOM) && !grid->monster)
-        return;
 
     /* The NIGHT theme is designed for wilderness cemeteries and 
        such, which should be populated with foul undead, but only
@@ -1810,6 +1814,8 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
                 if (grid->flags & ROOM_GRID_EGO_RANDOM)
                     min_level = MIN(55, monster_level - 5);
             }
+            else if (grid->flags & ROOM_GRID_EGO_RANDOM)
+                min_level = MIN(37, monster_level - 7);
         }
 
         _room_grid_hack = grid;
@@ -4118,7 +4124,7 @@ static bool build_type16(void)
  */
 static bool room_build(int typ)
 {
-    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_GREATER);*/
+    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_LESSER);*/
 
     if (dungeon_type == DUNGEON_ARENA)
         return build_type16();

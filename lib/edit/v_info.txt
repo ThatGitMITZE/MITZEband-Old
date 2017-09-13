@@ -221,15 +221,17 @@
 #L:%:GRANITE(OUTER)
 #L:#:GRANITE(INNER)
 # ... but at least we can control the OoD levels for vault monsters/objects
-L:*:TRAP(*, 25%):OBJ(*)
+L:*:TRAP(*, 25%):OBJ(*, DEPTH+1)
 L:^:TRAP(*)
 L:&:MON(*, DEPTH+5)
-L:9:MON(*, DEPTH+9):OBJ(*, DEPTH+7)
-L:8:MON(*, DEPTH+15):OBJ(*, DEPTH+20):EGO(*)
 L:,:MON(*, DEPTH+3 | 50%):OBJ(*, DEPTH+7 | 50%)
+L:5:MON(*):OBJ(*, DEPTH+1)
+L:6:MON(*, NO_GROUP | DEPTH+5):OBJ(*, DEPTH+5)
+L:7:MON(*, NO_GROUP | DEPTH+9):OBJ(*, DEPTH+7)
+L:8:MON(*, NO_GROUP | DEPTH+10):OBJ(*, DEPTH+5):EGO(*)
+L:9:MON(*, NO_GROUP | DEPTH+15):OBJ(*, DEPTH+20):EGO(*)
 
 %:rooms.txt
-#%:vaults_old.txt
 %:vaults.txt
 
 ######################################################################
