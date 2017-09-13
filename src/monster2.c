@@ -1548,7 +1548,7 @@ s16b get_mon_num_aux(int level, u32b options)
         table[i].prob3 = 0;
 
         if (!_ignore_depth_hack && table[i].max_level < level) continue;
-        if ((options & GMN_FORCE_DEPTH) && table[i].level < MIN(50, level-5)) continue;
+        if ((options & GMN_FORCE_DEPTH) && table[i].level < MIN(54, level-5)) continue;
 
         /* Hack: Sparing early unique monsters is no longer a viable end game strategy */
         if (summon_specific_who > 0 && summon_specific_type == SUMMON_UNIQUE)

@@ -5,6 +5,22 @@
 # Subtype: LESSER | GREATER
 #
 
+N:Squares
+T:VAULT:LESSER:DEBUG
+W:1:*:1
+L:8:MON(*, DEPTH+10):OBJ(*, DEPTH+5):EGO(*)
+M:%%%%%%%%%%%%%%%
+M:%.............%
+M:%.....#######.%
+M:%.....#***,,#^%
+M:%.#######*,,+^%
+M:%^#,,*#8#*,,#^%
+M:%^+,,*#######.%
+M:%^#,,***#.....%
+M:%.#######.....%
+M:%.............%
+M:%%%%%%%%%%%%%%%
+
 N:Winding Excellence
 T:VAULT:GREATER
 W:1:*:1

@@ -3033,7 +3033,8 @@ static void _dispatch_command(int old_now_turn)
 
 #ifdef ALLOW_SPOILERS
         case KTRL('Z'):
-            if (allow_spoilers)
+            /*  v~~~ ^Z(d|D) is useful info for game design ... */
+            if (0 || allow_spoilers)
                 do_cmd_spoilers();
             break;
 #endif /* ALLOW_SPOILERS */

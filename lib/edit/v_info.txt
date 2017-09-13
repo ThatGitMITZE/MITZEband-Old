@@ -224,7 +224,7 @@
 L:*:TRAP(*, 25%):OBJ(*)
 L:^:TRAP(*)
 L:&:MON(*, DEPTH+5)
-L:9:MON(*, DEPTH+10):OBJ(*, DEPTH+7)
+L:9:MON(*, DEPTH+9):OBJ(*, DEPTH+7)
 L:8:MON(*, DEPTH+15):OBJ(*, DEPTH+20):EGO(*)
 L:,:MON(*, DEPTH+3 | 50%):OBJ(*, DEPTH+7 | 50%)
 

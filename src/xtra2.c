@@ -733,7 +733,7 @@ static bool _kind_is_utility(int k_idx)
         case SV_SCROLL_REMOVE_CURSE:
         case SV_SCROLL_STAR_REMOVE_CURSE:
         case SV_SCROLL_MAPPING:
-        case SV_SCROLL_PROTECTION_FROM_EVIL:
+        /* case SV_SCROLL_PROTECTION_FROM_EVIL: XXX This was a bad idea! */
         case SV_SCROLL_DETECT_MONSTERS:
             return TRUE;
         case SV_SCROLL_STAR_IDENTIFY:

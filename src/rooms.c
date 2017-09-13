@@ -1891,7 +1891,8 @@ obj_ptr room_grid_make_obj(room_grid_ptr grid, int level)
     }
     else if ((grid->flags & ROOM_GRID_OBJ_TYPE) && grid->object == TV_GOLD)
     {
-        make_gold(&forge, FALSE);
+        /* boost gold drops for "bank" rooms */
+        make_gold(&forge, TRUE);
     }
     else if (grid->object)
     {
@@ -2542,6 +2543,10 @@ room_ptr choose_room_template(int type, int subtype)
 
     if (!total)
         return NULL;
+
+    /* XXX I need a rooms_wizard analagous to quests_wizard ...*/
+    if (0 && p_ptr->wizard)
+        msg_format("<color:B>Total of (%d,%d) is <color:R>%d</color>.</color>", type, subtype, total);
 
     n = randint1(total);
     for (i = 0; i < vec_length(room_info); i++)
@@ -4107,7 +4112,7 @@ static bool build_type16(void)
  */
 static bool room_build(int typ)
 {
-    if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_GREATER);
+    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_LESSER);*/
 
     if (dungeon_type == DUNGEON_ARENA)
         return build_type16();

@@ -1497,6 +1497,7 @@ void tim_player_flags(u32b flgs[OF_ARRAY_SIZE])
     if (p_ptr->tim_sustain_chr) add_flag(flgs, OF_SUST_CHR);
     if (p_ptr->tim_hold_life) add_flag(flgs, OF_HOLD_LIFE);
     if (p_ptr->tim_dark_stalker) add_flag(flgs, OF_STEALTH);
+    if (p_ptr->tim_levitation) add_flag(flgs, OF_LEVITATION);
 
     if (p_ptr->special_attack & ATTACK_ACID)
         add_flag(flgs, OF_BRAND_ACID);
