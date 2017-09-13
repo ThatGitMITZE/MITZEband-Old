@@ -1460,8 +1460,9 @@ static bool _ignore_depth_hack = FALSE;
 s16b get_mon_num(int level)
 {
     u32b options = GMN_DEFAULT;
+    int  min_level = 0;
     if (summon_specific_who == SUMMON_WHO_NOBODY && dungeon_type == DUNGEON_ARENA)
-        options |= GMN_FORCE_DEPTH;
+        min_level = MIN(50, level - 5);
     /* Restrict uniques ... except for summoning, of course ;) */
     if ( unique_count
       && summon_specific_who == SUMMON_WHO_NOBODY
@@ -1469,16 +1470,14 @@ s16b get_mon_num(int level)
     {
         options |= GMN_NO_UNIQUES;
     }
-    return get_mon_num_aux(level, options);
+    return get_mon_num_aux(level, min_level, options);
 }
 
-s16b get_mon_num_aux(int level, u32b options)
+s16b get_mon_num_aux(int level, int min_level, u32b options)
 {
     int            i, r_idx, value, total;
     monster_race  *r_ptr;
     alloc_entry   *table = alloc_race_table;
-
-    if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
     if (options & GMN_ALLOW_OOD)
     {
@@ -1537,6 +1536,7 @@ s16b get_mon_num_aux(int level, u32b options)
             }
         }
     }
+    if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
     /* Reset total */
     total = 0L;
@@ -1548,7 +1548,7 @@ s16b get_mon_num_aux(int level, u32b options)
         table[i].prob3 = 0;
 
         if (!_ignore_depth_hack && table[i].max_level < level) continue;
-        if ((options & GMN_FORCE_DEPTH) && table[i].level < MIN(54, level-5)) continue;
+        if (table[i].level < min_level) continue;
 
         /* Hack: Sparing early unique monsters is no longer a viable end game strategy */
         if (summon_specific_who > 0 && summon_specific_type == SUMMON_UNIQUE)
@@ -1644,45 +1644,27 @@ s16b get_mon_num_aux(int level, u32b options)
 
     if (options & GMN_POWER_BOOST)
     {
-        int j, p = randint0(100);
+        int j;
 
-        if (p < 101) /* XXX Tweak ... */
+        /* try for better monster */
+        j = i;
+        value = randint0(total);
+        for (i = 0; i < alloc_race_size; i++)
         {
-            /* Save old */
-            j = i;
-
-            /* Pick a monster */
-            value = randint0(total);
-
-            /* Find the monster */
-            for (i = 0; i < alloc_race_size; i++)
-            {
-                if (value < table[i].prob3) break;
-                value = value - table[i].prob3;
-            }
-
-            /* Keep the "best" one */
-            if (table[i].level < table[j].level) i = j;
+            if (value < table[i].prob3) break;
+            value = value - table[i].prob3;
         }
+        if (table[i].level < table[j].level) i = j;
 
-        if (p < 101) /* XXX Tweak ... */
+        /* best of 3 */
+        j = i;
+        value = randint0(total);
+        for (i = 0; i < alloc_race_size; i++)
         {
-            /* Save old */
-            j = i;
-
-            /* Pick a monster */
-            value = randint0(total);
-
-            /* Find the monster */
-            for (i = 0; i < alloc_race_size; i++)
-            {
-                if (value < table[i].prob3) break;
-                value = value - table[i].prob3;
-            }
-
-            /* Keep the "best" one */
-            if (table[i].level < table[j].level) i = j;
+            if (value < table[i].prob3) break;
+            value = value - table[i].prob3;
         }
+        if (table[i].level < table[j].level) i = j;
     }
 
     if (r_info[table[i].index].flags1 & RF1_UNIQUE)

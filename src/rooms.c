@@ -1794,6 +1794,9 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
     {
         int r_idx;
         u32b options = 0;
+        int  min_level = 0;
+
+        monster_level = base_level + grid->monster_level;
 
         if (grid->flags & ROOM_GRID_MON_NO_UNIQUE)
             options |= GMN_NO_UNIQUES;
@@ -1802,14 +1805,17 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
         {
             options |= GMN_POWER_BOOST;
             if (room->subtype == VAULT_GREATER)
-                options |= GMN_FORCE_DEPTH;
+            {
+                min_level = MIN(40, monster_level - 10);
+                if (grid->flags & ROOM_GRID_EGO_RANDOM)
+                    min_level = MIN(55, monster_level - 5);
+            }
         }
 
-        monster_level = base_level + grid->monster_level;
         _room_grid_hack = grid;
         _room_flags_hack = room->flags;
         get_mon_num_prep(_room_grid_mon_hook, get_monster_hook2(p.y, p.x));
-        r_idx = get_mon_num_aux(monster_level, options);
+        r_idx = get_mon_num_aux(monster_level, min_level, options);
         place_monster_aux(0, p.y, p.x, r_idx, mode);
         monster_level = base_level;
     }
@@ -4112,7 +4118,7 @@ static bool build_type16(void)
  */
 static bool room_build(int typ)
 {
-    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_LESSER);*/
+    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_GREATER);*/
 
     if (dungeon_type == DUNGEON_ARENA)
         return build_type16();

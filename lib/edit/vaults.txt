@@ -6,7 +6,7 @@
 #
 
 N:Squares
-T:VAULT:LESSER:DEBUG
+T:VAULT:LESSER
 W:1:*:1
 L:8:MON(*, DEPTH+10):OBJ(*, DEPTH+5):EGO(*)
 M:%%%%%%%%%%%%%%%
