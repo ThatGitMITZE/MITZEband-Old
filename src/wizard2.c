@@ -765,7 +765,7 @@ static void do_cmd_wiz_jump(void)
     if (command_arg > d_info[dungeon_type].maxdepth) command_arg = d_info[dungeon_type].maxdepth;
 
     /* Accept request */
-    msg_format("You jump to dungeon level %d.", command_arg);
+    msg_format("<color:U>You jump to dungeon level %d:</color>", command_arg);
 
     if (autosave_l) do_cmd_save_game(TRUE);
 

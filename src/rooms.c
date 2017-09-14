@@ -616,8 +616,19 @@ static bool build_room_template(int type, int subtype)
         xform->dest = r;
     }
 
-    /* Message */
-    if (cheat_room) msg_format("%s", room->name);
+    if (cheat_room)
+    {
+        char color = 'w';
+        if (room->type == ROOM_VAULT)
+            color = room->subtype == VAULT_GREATER ? 'v' : 'R';
+        else if (room->flags & ROOM_THEME_FORMATION)
+            color = 'y';
+        else if (room->flags & ROOM_THEME_OBJECT)
+            color = 'B';
+        else if (room->flags & ROOM_SHOP)
+            color = 'G';
+        msg_format("<color:%c>%s</color>.", color, room->name);
+    }
 
     build_room_template_aux(room, xform, NULL);
     transform_free(xform);
