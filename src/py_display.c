@@ -2296,33 +2296,36 @@ static void _build_quests(doc_ptr doc)
 {
     doc_printf(doc, "<topic:uQuests>==================================== Q<color:keypress>u</color>ests ===================================\n\n");
     quests_doc(doc);
-    doc_newline(doc);
-    if (p_ptr->arena_number < 0)
+    if (!no_wilderness)
     {
-        if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+        doc_newline(doc);
+        if (p_ptr->arena_number < 0)
         {
-            doc_printf(doc, "  <color:G>Arena</color>: <color:v>Defeated</color>\n");
+            if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+            {
+                doc_printf(doc, "  <color:G>Arena</color>: <color:v>Defeated</color>\n");
+            }
+            else
+            {
+                doc_printf(doc, "  <color:G>Arena</color>: <color:v>Defeated</color> by %s in the %d%s fight\n",
+                    r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
+                    -p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+            }
+        }
+        else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
+        {
+            doc_printf(doc, "  <color:G>Arena</color>: <color:B>True Champion</color>\n");
+        }
+        else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
+        {
+            doc_printf(doc, "  <color:G>Arena</color>: <color:R>Champion</color>\n");
         }
         else
         {
-            doc_printf(doc, "  <color:G>Arena</color>: <color:v>Defeated</color> by %s in the %d%s fight\n",
-                r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
-                -p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+            doc_printf(doc, "  <color:G>Arena</color>: %2d Victor%s\n",
+                p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number,
+                p_ptr->arena_number > 1 ? "ies" : "y");
         }
-    }
-    else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
-    {
-        doc_printf(doc, "  <color:G>Arena</color>: <color:B>True Champion</color>\n");
-    }
-    else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
-    {
-        doc_printf(doc, "  <color:G>Arena</color>: <color:R>Champion</color>\n");
-    }
-    else
-    {
-        doc_printf(doc, "  <color:G>Arena</color>: %2d Victor%s\n",
-            p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number,
-            p_ptr->arena_number > 1 ? "ies" : "y");
     }
 }
 
