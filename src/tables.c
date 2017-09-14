@@ -2311,9 +2311,6 @@ option_type option_info[] =
     { &ironman_empty_levels,        FALSE, OPT_PAGE_BIRTH, 6, 8,
     "ironman_empty_levels",         "Always create empty 'arena' levels (*)" },
 
-    { &ironman_rooms,               FALSE, OPT_PAGE_BIRTH, 6, 12,
-    "ironman_rooms",                "Always generate very unusual rooms (*)" },
-
     { &ironman_nightmare,           FALSE, OPT_PAGE_BIRTH, 6, 18,
     "ironman_nightmare",            "Nightmare mode(it isn't even remotely fair!)(*)" },
 

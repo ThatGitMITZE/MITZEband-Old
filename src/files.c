@@ -2867,7 +2867,6 @@ long total_points(void)
     if (ironman_shops) mult += 50;
     if (ironman_small_levels) mult += 10;
     if (ironman_empty_levels) mult += 20;
-    if (ironman_rooms) mult += 100;
     if (ironman_nightmare) mult += 100;
 
     if (mult < 5) mult = 5;

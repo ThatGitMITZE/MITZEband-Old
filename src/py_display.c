@@ -2262,9 +2262,6 @@ static void _build_options(doc_ptr doc)
     if (ironman_downward)
         doc_printf(doc, " Diving Only:        On\n");
 
-    if (ironman_rooms)
-        doc_printf(doc, " <color:r>Unusual Rooms</color>:      On\n");
-
     if (ironman_nightmare)
         doc_printf(doc, " <color:v>Nightmare Mode</color>:     On\n");
 

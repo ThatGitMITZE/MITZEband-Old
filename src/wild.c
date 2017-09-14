@@ -1136,7 +1136,7 @@ static void _generate_area(int x, int y, int dx, int dy, rect_t exclude)
         if ( dun_idx
          && !wilderness[y][x].town
          && (p_ptr->total_winner || !(d_info[dun_idx].flags1 & DF1_WINNER))
-         && (ironman_rooms || !(dungeon_flags[dun_idx] & DUNGEON_NO_ENTRANCE) ) )
+         && !(dungeon_flags[dun_idx] & DUNGEON_NO_ENTRANCE) )
         {
             _generate_entrance(x, y, dx, dy);
         }

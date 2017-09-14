@@ -2514,7 +2514,7 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
 
 static bool _room_is_allowed(room_ptr room, int type, int subtype)
 {
-    if (!ironman_rooms && base_level < room->level) return FALSE;  /* Note: dun_level is 0 for wilderness encounters! */
+    if (base_level < room->level) return FALSE;  /* Note: dun_level is 0 for wilderness encounters! */
     if (room->max_level && room->max_level < base_level) return FALSE;
     if (room->type != type) return FALSE;
     if (subtype && room->subtype != subtype) return FALSE;
@@ -4200,18 +4200,8 @@ bool generate_rooms(void)
      * XXX -- Various dungeon types and options.
      */
 
-    /* Ironman sees only Greater Vaults */
-    if (ironman_rooms && !((d_info[dungeon_type].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
-    {
-        for (i = 0; i < ROOM_T_MAX; i++)
-        {
-            if (i == ROOM_T_GREATER_VAULT) prob_list[i] = 1;
-            else prob_list[i] = 0;
-        }
-    }
-
     /* Forbidden vaults */
-    else if (d_info[dungeon_type].flags1 & DF1_NO_VAULT)
+    if (d_info[dungeon_type].flags1 & DF1_NO_VAULT)
     {
         prob_list[ROOM_T_LESSER_VAULT] = 0;
         prob_list[ROOM_T_GREATER_VAULT] = 0;

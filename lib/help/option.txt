@@ -41,9 +41,6 @@ You are not allowed to climb upwards, or recall to town. All stairs are downstai
 <topic:ironman_empty_levels><color:U>Always create empty 'arena' levels</color> <color:D>(ironman_empty_levels)</color>
 If this option is enabled, then every level will be empty 'arena' level. See the "Allow empty 'arena' levels" option below.
 
-<topic:ironman_rooms><color:U>Always generate very unusual rooms</color> <color:D>(ironman_rooms)</color>
-If this option is enabled, every room becomes a vault. It is unclear whether this makes the game harder or easier.
-
 <topic:ironman_nightmare><color:U>Nightmare mode(it isn't even remotely fair!)</color> <color:D>(ironman_nightmare)</color>
 If this option is enabled, all monsters become unusually powerful, and fast. And there will be various unbelievable things happening in various situations. Furthermore, at 12:00 every night, you will have a real nightmare. You need to be crazy to turn this option on!
 
