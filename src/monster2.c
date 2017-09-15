@@ -3988,15 +3988,10 @@ bool alloc_horde(int y, int x)
     if (m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[m_list[m_idx].r_idx];
     summon_kin_type = r_ptr->d_char;
 
-    for (attempts = randint1(10) + 5; attempts; attempts--)
+    for (attempts = damroll(3, 3); attempts; attempts--)
     {
         scatter(&cy, &cx, y, x, 5, 0);
-
-        summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, 0);
-        /* Hordes of hounds are too much. 15 packs can be literally hundreds upon hundreds
-         * of monsters if space allows ... 
-        summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);*/
-
+        summon_specific(m_idx, cy, cx, dun_level, SUMMON_KIN, 0);
         y = cy;
         x = cx;
     }
