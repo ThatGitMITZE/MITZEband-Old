@@ -5580,8 +5580,15 @@ void move_player(int dir, bool do_pickup, bool break_trap)
             energy_use *= 2;
         }
     }
-    else if (have_flag(f_ptr->flags, FF_WEB) && !prace_is_(RACE_MON_SPIDER) && !warlock_is_(WARLOCK_SPIDERS))
-        energy_use *= 2;
+    else if (have_flag(f_ptr->flags, FF_WEB))
+    {
+        if (prace_is_(RACE_MON_SPIDER))
+            energy_use = energy_use * (90 - p_ptr->lev) / 100;
+        else if (warlock_is_(WARLOCK_SPIDERS))
+            energy_use = energy_use * (150 - p_ptr->lev) / 150;
+        else
+            energy_use *= 2;
+    }
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
 

@@ -336,7 +336,10 @@ void do_cmd_locate(void)
     p_ptr->update |= PU_MONSTERS;
     p_ptr->redraw |= PR_MAP;
     p_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+
+    redraw_hack = TRUE;
     handle_stuff();
+    redraw_hack = FALSE;
 }
 
 

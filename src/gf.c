@@ -1343,12 +1343,14 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         }
         break;
     case GF_POIS:
-        if (touch && seen_msg) msg_format("%^s is <color:G>poisoned</color>!", m_name);
+        if (touch && seen_msg && !(race->flagsr & RFR_IM_POIS))
+            msg_format("%^s is <color:G>poisoned</color>!", m_name);
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         if (race->flagsr & RFR_IM_POIS)
         {
-            note = " is immune.";
+            if (!touch)
+                note = " is immune.";
             dam = 0;
             mon_lore_r(mon, RFR_IM_POIS);
         }
