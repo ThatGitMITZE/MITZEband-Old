@@ -3635,7 +3635,7 @@ static int _default_blow_power(int effect)
 }
 
 /*   V------------------- buf
- * B:BITE:SUPERHURT:15d10   <===== The old syntax, supported for *sanity*
+ * B:BITE:SUPERHURT:15d10   <===== The old syntax (no longer supported)
  * B:BITE(60):HURT(15d10):HURT(15d10, 20%):STUN(5d5, 10%)  <=== New syntax, multiple effects
  *   ^------------------- buf
  */

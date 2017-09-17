@@ -2410,7 +2410,6 @@ device_effect_info_t rod_effect_table[] =
     {EFFECT_BEAM_CHAOS,            32,  12,     2,  60,     0, 0},
     {EFFECT_BEAM_SOUND,            32,  12,     2,  70,     0, 0},
     {EFFECT_CLARITY,               35,  15,     3,  80,     0, _DROP_GOOD},
-    {EFFECT_TELEKINESIS,           40,  25,     3,   0,     0, 0},
     {EFFECT_BALL_ELEC,             40,  13,     1,   0,     0, 0},
     {EFFECT_BALL_COLD,             40,  14,     1,   0,     0, 0},
     {EFFECT_BALL_FIRE,             42,  15,     1,   0,     0, 0},
