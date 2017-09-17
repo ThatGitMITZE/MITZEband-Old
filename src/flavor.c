@@ -2099,6 +2099,8 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
             }
             sprintf(buf, " %dsp", o_ptr->activation.cost);
             strcat(tmp_val2, buf);
+            sprintf(buf, " P%d D%d", o_ptr->activation.power, o_ptr->activation.difficulty);
+            strcat(tmp_val2, buf);
         }
     }
 

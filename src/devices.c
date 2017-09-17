@@ -2341,147 +2341,144 @@ bool effect_add(object_type *o_ptr, int type)
 #define _DROP_GREAT      0x0002
 #define _NO_DESTROY      0x0004
 #define _STOCK_TOWN      0x0008
-#define _EASY            0x0010
-#define _HARD            0x0020
-#define _COMMON          0x0040
-#define _RARE            0x0080
-#define _LESS_HARD       0x0100
+#define _COMMON          0x0010
+#define _RARE            0x0020
 
 device_effect_info_t wand_effect_table[] =
 {
-    /*                            Lvl Cost Rarity  Max  Extra  Flags */
-    {EFFECT_BOLT_MISSILE,           1,   3,     1,  20,     0, _STOCK_TOWN},
-    {EFFECT_HEAL_MONSTER,           2,   3,     1,  20,     0, 0},
-    {EFFECT_BEAM_LITE_WEAK,         2,   3,     1,  20,     0, _STOCK_TOWN},
-    {EFFECT_BALL_POIS,              5,   4,     1,  20,     0, _STOCK_TOWN},
-    {EFFECT_SLEEP_MONSTER,          5,   5,     1,  20,     0, _STOCK_TOWN},
-    {EFFECT_SLOW_MONSTER,           5,   5,     1,  20,     0, _STOCK_TOWN},
-    {EFFECT_CONFUSE_MONSTER,        5,   5,     1,  20,     0, 0},
-    {EFFECT_SCARE_MONSTER,          7,   5,     1,  20,     0, 0},
-    {EFFECT_STONE_TO_MUD,          10,   5,     1,   0,     0, _EASY | _COMMON},
-    {EFFECT_POLYMORPH,             12,   6,     1,  30,     0, 0},
-    {EFFECT_BOLT_COLD,             12,   7,     1,  30,     0, 0},
-    {EFFECT_BOLT_ELEC,             15,   7,     1,  30,     0, 0},
-    {EFFECT_BOLT_ACID,             17,   8,     1,  35,     0, 0},
-    {EFFECT_BOLT_FIRE,             19,   9,     1,  35,     0, 0},
-    {EFFECT_HASTE_MONSTER,         20,   3,     1,  40,     0, 0},
-    {EFFECT_TELEPORT_AWAY,         20,  10,     1,   0,     0, _EASY | _COMMON},
-    {EFFECT_DESTROY_TRAPS,         20,  10,     1,   0,     0, _EASY},
-    {EFFECT_CHARM_MONSTER,         25,  11,     1,  50,     0, 0},
-    {EFFECT_BALL_COLD,             26,   5,     1,   0,     0, 0},
-    {EFFECT_BALL_ELEC,             28,   5,     1,   0,     0, 0},
-    {EFFECT_BALL_ACID,             29,   7,     1,   0,     0, 0},
-    {EFFECT_BALL_FIRE,             30,   8,     1,   0,     0, 0},
-    {EFFECT_BOLT_WATER,            30,   9,     1,   0,     0, 0},
-    {EFFECT_DRAIN_LIFE,            32,  20,     1,   0,     0, 0},
-    {EFFECT_BOLT_PLASMA,           38,  10,     1,   0,     0, 0},
-    {EFFECT_BOLT_ICE,              40,  11,     1,   0,     0, 0},
-    {EFFECT_ARROW,                 45,  13,     1,   0,     0, _EASY},
-    {EFFECT_BALL_NEXUS,            47,  14,     1,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_BREATHE_COLD,          50,  15,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BREATHE_FIRE,          50,  16,     1,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BEAM_GRAVITY,          55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _EASY},
-    {EFFECT_METEOR,                55,  32,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _LESS_HARD},
-    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  17,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_GENOCIDE_ONE,          65,  35,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BALL_WATER,            70,  20,     2,   0,     0, _DROP_GOOD | _NO_DESTROY | _HARD},
-    {EFFECT_BALL_DISINTEGRATE,     75,  20,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_ROCKET,                85,  20,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
+    /*                            Lvl Cost Rarity  Max  Difficulty Flags */
+    {EFFECT_BOLT_MISSILE,           1,   3,     1,  20,    10,  0, _STOCK_TOWN},
+    {EFFECT_HEAL_MONSTER,           2,   3,     1,  20,     0,  0, 0},
+    {EFFECT_BEAM_LITE_WEAK,         2,   3,     1,  20,    10,  0, _STOCK_TOWN},
+    {EFFECT_BALL_POIS,              5,   4,     1,  20,    33,  0, _STOCK_TOWN},
+    {EFFECT_SLEEP_MONSTER,          5,   5,     1,  20,    33,  0, _STOCK_TOWN},
+    {EFFECT_SLOW_MONSTER,           5,   5,     1,  20,    33,  0, _STOCK_TOWN},
+    {EFFECT_CONFUSE_MONSTER,        5,   5,     1,  20,    33,  0, 0},
+    {EFFECT_SCARE_MONSTER,          7,   5,     1,  20,    33,  0, 0},
+    {EFFECT_STONE_TO_MUD,          10,   5,     1,   0,    10,  0, _COMMON},
+    {EFFECT_POLYMORPH,             12,   6,     1,  30,     0,  0, 0},
+    {EFFECT_BOLT_COLD,             12,   7,     1,  30,    33,  0, 0},
+    {EFFECT_BOLT_ELEC,             15,   7,     1,  30,    33,  0, 0},
+    {EFFECT_BOLT_ACID,             17,   8,     1,  35,    33,  0, 0},
+    {EFFECT_BOLT_FIRE,             19,   9,     1,  35,    33,  0, 0},
+    {EFFECT_HASTE_MONSTER,         20,   3,     1,  40,     0,  0, 0},
+    {EFFECT_TELEPORT_AWAY,         20,  10,     1,   0,    10,  0, _COMMON},
+    {EFFECT_DESTROY_TRAPS,         20,  10,     1,   0,    10,  0, 0},
+    {EFFECT_CHARM_MONSTER,         25,  11,     1,  50,    33,  0, 0},
+    {EFFECT_BALL_COLD,             26,   5,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_ELEC,             28,   5,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_ACID,             29,   7,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_FIRE,             30,   8,     1,   0,    50, 10, 0},
+    {EFFECT_BOLT_WATER,            30,   9,     1,   0,    50, 10, 0},
+    {EFFECT_DRAIN_LIFE,            32,  20,     1,   0,    50, 10, 0},
+    {EFFECT_BOLT_PLASMA,           38,  10,     1,   0,    50, 10, 0},
+    {EFFECT_BOLT_ICE,              40,  11,     1,   0,    50, 10, 0},
+    {EFFECT_ARROW,                 45,  13,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_NEXUS,            47,  14,     1,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_BREATHE_COLD,          50,  15,     1,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BREATHE_FIRE,          50,  16,     1,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BEAM_GRAVITY,          55,  32,     2,   0,    33,  0, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_METEOR,                55,  32,     2,   0,    50, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BREATHE_ONE_MULTIHUED, 60,  17,     2,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_GENOCIDE_ONE,          65,  35,     2,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BALL_WATER,            70,  20,     2,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+    {EFFECT_BALL_DISINTEGRATE,     75,  20,     2,   0,    60, 10, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_ROCKET,                85,  20,     3,   0,    70, 20, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_WALL_BUILDING,        100,  50,    16,   0,     0,  0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
     {0}
 };
 
 device_effect_info_t rod_effect_table[] =
 {
-    /*                            Lvl Cost Rarity  Max  Extra  Flags */
-    {EFFECT_PESTICIDE,              1,   7,     1,  30,     0, 0},
-    {EFFECT_DETECT_TRAPS,           5,   9,     1,  30,     0, 0},
-    {EFFECT_LITE_AREA,             10,  10,     1,  40,     0, 0},
-    {EFFECT_DETECT_DOOR_STAIRS,    12,  10,     1,  40,     0, 0},
-    {EFFECT_DETECT_MONSTERS,       15,  10,     1,  40,     0, 0},
-    {EFFECT_BEAM_ELEC,             17,   8,     1,  50,     0, 0},
-    {EFFECT_BEAM_COLD,             19,   8,     1,  50,     0, 0},
-    {EFFECT_BEAM_FIRE,             21,   9,     1,  60,     0, 0},
-    {EFFECT_BEAM_ACID,             23,   9,     1,  60,     0, 0},
-    {EFFECT_BEAM_LITE,             25,  12,     2,   0,     0, 0},
-    {EFFECT_RECALL,                27,  15,     1,   0,     0, _EASY},
-    {EFFECT_DETECT_ALL,            30,  17,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_ESCAPE,                30,  20,     1,   0,     0, _EASY},
-    {EFFECT_BEAM_CHAOS,            32,  12,     2,  60,     0, 0},
-    {EFFECT_BEAM_SOUND,            32,  12,     2,  70,     0, 0},
-    {EFFECT_CLARITY,               35,  15,     3,  80,     0, _DROP_GOOD},
-    {EFFECT_BALL_ELEC,             40,  13,     1,   0,     0, 0},
-    {EFFECT_BALL_COLD,             40,  14,     1,   0,     0, 0},
-    {EFFECT_BALL_FIRE,             42,  15,     1,   0,     0, 0},
-    {EFFECT_BALL_ACID,             44,  16,     1,   0,     0, 0},
-    {EFFECT_BOLT_MANA,             45,  17,     2,   0,     0, _DROP_GOOD | _HARD},
-    {EFFECT_BALL_NETHER,           45,  18,     1,   0,     0, _LESS_HARD},
-    {EFFECT_BALL_DISEN,            47,  19,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_ENLIGHTENMENT,         50,  33,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_BALL_SOUND,            52,  22,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,     0, _DROP_GOOD | _EASY},
-    {EFFECT_SPEED_HERO,            70,  40,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY},
-    {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,     0, _DROP_GOOD | _DROP_GREAT},
-    {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_RESTORING,             80,  60,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
-    {EFFECT_BALL_MANA,             80,  24,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_BALL_SHARDS,           80,  25,     2,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_BALL_CHAOS,            85,  27,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
-    {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _EASY | _RARE},
-    {EFFECT_BALL_LITE,             95,  27,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD},
+    /*                            Lvl Cost Rarity  Max  Difficulty Flags */
+    {EFFECT_PESTICIDE,              1,   7,     1,  30,    10,  0, 0},
+    {EFFECT_DETECT_TRAPS,           5,   9,     1,  30,    10,  0, 0},
+    {EFFECT_LITE_AREA,             10,  10,     1,  40,    10,  0, 0},
+    {EFFECT_DETECT_DOOR_STAIRS,    12,  10,     1,  40,    10,  0, 0},
+    {EFFECT_DETECT_MONSTERS,       15,  10,     1,  40,    10,  0, 0},
+    {EFFECT_BEAM_ELEC,             17,   8,     1,  50,    33,  0, 0},
+    {EFFECT_BEAM_COLD,             19,   8,     1,  50,    33,  0, 0},
+    {EFFECT_BEAM_FIRE,             21,   9,     1,  60,    33,  0, 0},
+    {EFFECT_BEAM_ACID,             23,   9,     1,  60,    33,  0, 0},
+    {EFFECT_BEAM_LITE,             25,  12,     2,   0,    50, 10, 0},
+    {EFFECT_RECALL,                27,  15,     1,   0,    10,  0, 0},
+    {EFFECT_DETECT_ALL,            30,  17,     2,   0,    10,  0, _COMMON},
+    {EFFECT_ESCAPE,                30,  20,     1,   0,    10,  0, 0},
+    {EFFECT_BEAM_CHAOS,            32,  12,     2,  60,    33,  0, 0},
+    {EFFECT_BEAM_SOUND,            32,  12,     2,  70,    33,  0, 0},
+    {EFFECT_CLARITY,               35,  15,     3,  80,    33,  0, _DROP_GOOD},
+    {EFFECT_BALL_ELEC,             40,  13,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_COLD,             40,  14,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_FIRE,             42,  15,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_ACID,             44,  16,     1,   0,    50, 10, 0},
+    {EFFECT_BOLT_MANA,             45,  17,     2,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_BALL_NETHER,           45,  18,     1,   0,    50, 10, 0},
+    {EFFECT_BALL_DISEN,            47,  19,     2,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_ENLIGHTENMENT,         50,  33,     2,   0,    10,  0, _COMMON},
+    {EFFECT_BALL_SOUND,            52,  22,     2,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_BEAM_DISINTEGRATE,     60,  37,     2,   0,    33,  0, _DROP_GOOD},
+    {EFFECT_SPEED_HERO,            70,  40,     2,   0,    10,  0, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_GREAT_CLARITY,         75,  60,     4,   0,    50, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_HEAL_CURING_HERO,      80,  60,     3,   0,    60, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_RESTORING,             80,  60,     3,   0,     0,  0, _DROP_GOOD | _DROP_GREAT | _RARE},
+    {EFFECT_BALL_MANA,             80,  24,     2,   0,    60, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_BALL_SHARDS,           80,  25,     2,   0,    60, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_BALL_CHAOS,            85,  27,     3,   0,    70, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_CLAIRVOYANCE,          90, 100,     3,   0,     0,  0, _DROP_GOOD | _DROP_GREAT | _RARE},
+    {EFFECT_BALL_LITE,             95,  27,     3,   0,    70, 10, _DROP_GOOD | _DROP_GREAT},
     {0}
 };
 
 device_effect_info_t staff_effect_table[] =
 {
-    /*                            Lvl Cost Rarity  Max  Extra */
-    {EFFECT_NOTHING,                1,   1,     0,   0,     0, 0},
-    {EFFECT_DARKNESS,               1,   3,     1,  15,     0, 0},
-    {EFFECT_LITE_AREA,              1,   3,     1,  30,     0, _STOCK_TOWN},
-    {EFFECT_DETECT_GOLD,            5,   4,     1,  30,     0, _STOCK_TOWN},
-    {EFFECT_DETECT_OBJECTS,         5,   4,     1,  30,     0, _STOCK_TOWN},
-    {EFFECT_DETECT_INVISIBLE,       5,   4,     1,  30,     0, 0},
-    {EFFECT_DETECT_TRAPS,           5,   5,     1,  30,     0, _STOCK_TOWN},
-    {EFFECT_DETECT_DOOR_STAIRS,     5,   5,     1,  30,     0, _STOCK_TOWN},
-    {EFFECT_DETECT_EVIL,            7,   5,     1,  30,     0, 0},
-    {EFFECT_HASTE_MONSTERS,        10,   5,     1,  30,     0, 0},
-    {EFFECT_SUMMON_ANGRY_MONSTERS, 10,   5,     1,  30,     0, 0},
-    {EFFECT_IDENTIFY,              10,   4,     1,   0,     0, _STOCK_TOWN | _EASY | _COMMON},
-    {EFFECT_SLEEP_MONSTERS,        10,   6,     1,  40,     0, 0},
-    {EFFECT_SLOW_MONSTERS,         10,   6,     1,  40,     0, 0},
-    {EFFECT_CONFUSE_MONSTERS,      15,   8,     1,  40,     0, 0},
-    {EFFECT_TELEPORT,              20,  10,     1,   0,     0, _EASY},
-    {EFFECT_ENLIGHTENMENT,         20,  10,     1,  70,     0, _STOCK_TOWN | _EASY},
-    {EFFECT_STARLITE,              20,  10,     1,  50,     0, _EASY},
-    {EFFECT_EARTHQUAKE,            20,  10,     2,   0,     0, _EASY},
-    {EFFECT_HEAL,                  20,  10,     2,  70,     0, _EASY | _COMMON}, /* Cure Wounds for ~50hp */
-    {EFFECT_CURING,                25,  12,     1,  70,     0, _EASY}, /* Curing no longer heals */
-    {EFFECT_SUMMON_HOUNDS,         27,  25,     2,   0,     0, _EASY},
-    {EFFECT_SUMMON_HYDRAS,         27,  25,     3,   0,     0, _EASY},
-    {EFFECT_SUMMON_ANTS,           27,  20,     2,   0,     0, _EASY},
-    {EFFECT_PROBING,               30,  15,     3,  70,     0, _EASY},
-    {EFFECT_TELEPATHY,             30,  16,     2,   0,     0, _EASY},
-    {EFFECT_SUMMON_MONSTERS,       32,  30,     2,   0,     0, 0},
-    {EFFECT_ANIMATE_DEAD,          35,  17,     2,  70,     0, _EASY},
-    {EFFECT_SLOWNESS,              40,  19,     3,  70,     0, 0},
-    {EFFECT_SPEED,                 40,  19,     2,   0,     0, _EASY | _COMMON},
-    {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,     0, _EASY | _COMMON},
-    {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,     0, _EASY},
-    {EFFECT_DISPEL_DEMON,          45,  10,     2,   0,     0, _HARD},
-    {EFFECT_DISPEL_UNDEAD,         45,  10,     2,   0,     0, _HARD},
-    {EFFECT_DISPEL_LIFE,           50,  12,     3,   0,     0, _HARD},
-    {EFFECT_DISPEL_EVIL,           55,  13,     3,   0,     0, _HARD},
-    {EFFECT_DISPEL_MONSTERS,       55,  15,     5,   0,     0, _HARD},
-    {EFFECT_DESTRUCTION,           50,  15,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,     0, _DROP_GOOD | _LESS_HARD},
-    {EFFECT_HEAL_CURING,           55,  10,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _LESS_HARD},
-    {EFFECT_BANISH_EVIL,           60,  31,     2,   0,     0, _DROP_GOOD | _EASY},
-    {EFFECT_BANISH_ALL,            70,  32,     3,   0,     0, _DROP_GOOD | _EASY},
-    {EFFECT_MANA_STORM,            85,  10,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_STARBURST,             85,  12,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_DARKNESS_STORM,        85,  12,     3,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD},
-    {EFFECT_GENOCIDE,              90,  50,     8,   0,     0, _DROP_GOOD | _DROP_GREAT | _HARD | _RARE},
-    {EFFECT_RESTORE_MANA,         100, 100,    16,   0,     0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _HARD | _RARE},
+    /*                            Lvl Cost Rarity  Max  Difficulty Flags */
+    {EFFECT_NOTHING,                1,   1,     0,   0,     0,  0, 0},
+    {EFFECT_DARKNESS,               1,   3,     1,  15,     0,  0, 0},
+    {EFFECT_LITE_AREA,              1,   3,     1,  30,    10,  0, _STOCK_TOWN},
+    {EFFECT_DETECT_GOLD,            5,   4,     1,  30,    10,  0, _STOCK_TOWN},
+    {EFFECT_DETECT_OBJECTS,         5,   4,     1,  30,    10,  0, _STOCK_TOWN},
+    {EFFECT_DETECT_INVISIBLE,       5,   4,     1,  30,    10,  0, 0},
+    {EFFECT_DETECT_TRAPS,           5,   5,     1,  30,    10,  0, _STOCK_TOWN},
+    {EFFECT_DETECT_DOOR_STAIRS,     5,   5,     1,  30,    10,  0, _STOCK_TOWN},
+    {EFFECT_DETECT_EVIL,            7,   5,     1,  30,    10,  0, 0},
+    {EFFECT_HASTE_MONSTERS,        10,   5,     1,  30,    50, 10, 0},
+    {EFFECT_SUMMON_ANGRY_MONSTERS, 10,   5,     1,  30,    50, 10, 0},
+    {EFFECT_IDENTIFY,              10,   4,     1,   0,    10,  0, _STOCK_TOWN | _COMMON},
+    {EFFECT_SLEEP_MONSTERS,        10,   6,     1,  40,    33,  0, 0},
+    {EFFECT_SLOW_MONSTERS,         10,   6,     1,  40,    33,  0, 0},
+    {EFFECT_CONFUSE_MONSTERS,      15,   8,     1,  40,    33,  0, 0},
+    {EFFECT_TELEPORT,              20,  10,     1,   0,    10,  0, 0},
+    {EFFECT_ENLIGHTENMENT,         20,  10,     1,  70,    10,  0, _STOCK_TOWN},
+    {EFFECT_STARLITE,              20,  10,     1,  50,    33,  0, 0},
+    {EFFECT_EARTHQUAKE,            20,  10,     2,   0,    10,  0, 0},
+    {EFFECT_HEAL,                  20,  10,     2,  70,    33,  0,  _COMMON}, /* Cure Wounds for ~50hp */
+    {EFFECT_CURING,                25,  12,     1,  70,    10,  0, 0}, /* Curing no longer heals */
+    {EFFECT_SUMMON_HOUNDS,         27,  25,     2,   0,    10,  0, 0},
+    {EFFECT_SUMMON_HYDRAS,         27,  25,     3,   0,    10,  0, 0},
+    {EFFECT_SUMMON_ANTS,           27,  20,     2,   0,    10,  0, 0},
+    {EFFECT_PROBING,               30,  15,     3,  70,    10,  0, 0},
+    {EFFECT_TELEPATHY,             30,  16,     2,   0,    10,  0, 0},
+    {EFFECT_SUMMON_MONSTERS,       32,  30,     2,   0,    33,  0, 0},
+    {EFFECT_ANIMATE_DEAD,          35,  17,     2,  70,    33,  0, 0},
+    {EFFECT_SLOWNESS,              40,  19,     3,  70,    50, 10, 0},
+    {EFFECT_SPEED,                 40,  19,     2,   0,    10,  0, _COMMON},
+    {EFFECT_IDENTIFY_FULL,         40,  20,     3,   0,    10,  0, _COMMON},
+    {EFFECT_REMOVE_CURSE,          40,  20,     4,   0,    10,  0, 0},
+    {EFFECT_DISPEL_DEMON,          45,  10,     2,   0,    50, 10, 0},
+    {EFFECT_DISPEL_UNDEAD,         45,  10,     2,   0,    50, 10, 0},
+    {EFFECT_DISPEL_LIFE,           50,  12,     3,   0,    50, 10, 0},
+    {EFFECT_DISPEL_EVIL,           55,  13,     3,   0,    50, 10, 0},
+    {EFFECT_DISPEL_MONSTERS,       55,  15,     5,   0,    50, 10, 0},
+    {EFFECT_DESTRUCTION,           50,  15,     2,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_CONFUSING_LITE,        55,  26,     2,   0,    50, 10, _DROP_GOOD},
+    {EFFECT_HEAL_CURING,           55,  10,     3,   0,    60, 10, _DROP_GOOD | _DROP_GREAT},
+    {EFFECT_BANISH_EVIL,           60,  31,     2,   0,    33,  0, _DROP_GOOD},
+    {EFFECT_BANISH_ALL,            70,  32,     3,   0,    33,  0, _DROP_GOOD},
+    {EFFECT_MANA_STORM,            85,  10,     3,   0,    60, 10, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_STARBURST,             85,  12,     3,   0,    60, 10, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_DARKNESS_STORM,        85,  12,     3,   0,    60, 10, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY},
+    {EFFECT_GENOCIDE,              90,  50,     8,   0,    60, 10, _DROP_GOOD | _DROP_GREAT | _RARE},
+    {EFFECT_RESTORE_MANA,         100, 100,    16,   0,     0,  0, _DROP_GOOD | _DROP_GREAT | _NO_DESTROY | _RARE},
     {0}
 };
 
@@ -2597,36 +2594,23 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
 
             /* Power is the casting level of the device and determines damage or power of the effect.
                Difficulty is the level of the effect, and determines the fail rate of the effect.
-               We scale up the difficulty a bit depending on the level of the device. However, some
-               devices (Identify) don't gain much by increasing power, so the fail rates should not
-               scale so strongly.*/
+               Difficulty is set to the base level of the effect, and then scaled based on the
+               power of the effect using the difficulty_base and xtra percentages. */
             o_ptr->activation.power = device_level(o_ptr);
-            o_ptr->activation.difficulty = _bounds_check(_rand_normal(entry->level, 5), 1, o_ptr->activation.power);
-            if (o_ptr->activation.power > o_ptr->activation.difficulty + 3)
+            o_ptr->activation.difficulty = entry->level;
+            if (o_ptr->activation.power > o_ptr->activation.difficulty)
             {
-                int d = o_ptr->activation.power - o_ptr->activation.difficulty;
-                if (entry->flags & _EASY)
-                {
-                    o_ptr->activation.difficulty += d/3;
-                }
-                else if (entry->flags & _LESS_HARD)
-                {
-                    o_ptr->activation.difficulty += d/2;
-                    o_ptr->activation.difficulty += randint0(d/2);
-                }
-                else if (entry->flags & _HARD)
-                {
-                    o_ptr->activation.difficulty += 3*d/4;
-                    o_ptr->activation.difficulty += randint0(d/4);
-                }
-                else
-                {
-                    o_ptr->activation.difficulty += d/3;
-                    o_ptr->activation.difficulty += randint0(d/3);
-                }
+                int d = 10*(o_ptr->activation.power - o_ptr->activation.difficulty);
+                int b = entry->difficulty_base * d / 100;
+
+                b += randint0(entry->difficulty_xtra * d / 100);
+                o_ptr->activation.difficulty += b/10;
+                if (randint0(10) < b%10)
+                    o_ptr->activation.difficulty++;
+                if (o_ptr->activation.difficulty > o_ptr->activation.power) /* paranoia */
+                    o_ptr->activation.difficulty = o_ptr->activation.power;
             }
 
-            o_ptr->activation.extra = entry->extra;
             cost = entry->cost;
             cost += effect_cost_extra(&o_ptr->activation);
             o_ptr->activation.cost = _bounds_check(_rand_normal(cost, 5), 1, 1000);
@@ -2783,7 +2767,6 @@ bool device_init_fixed(object_type *o_ptr, int effect)
     o_ptr->activation.type = e_ptr->type;
     o_ptr->activation.power = o_ptr->xtra3;
     o_ptr->activation.difficulty = e_ptr->level;
-    o_ptr->activation.extra = e_ptr->extra;
     o_ptr->activation.cost = e_ptr->cost + effect_cost_extra(&o_ptr->activation);
 
     if (e_ptr->flags & _NO_DESTROY)

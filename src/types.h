@@ -2040,7 +2040,8 @@ struct device_effect_info_s
     int      cost;
     int      rarity;
     int      max_depth;
-    int      extra;
+    int      difficulty_base;
+    int      difficulty_xtra;
     int      flags;
     counts_t counts;
     int      prob;
