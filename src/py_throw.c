@@ -388,6 +388,8 @@ void _throw(py_throw_ptr context)
          * so we can drop the object if needed */
         if (context->path_pos == context->path_ct - 1) break;
     }
+    if (p_ptr->pclass == CLASS_NINJA && context->obj->tval == TV_SPIKE)
+        stats_on_use(context->obj, 1);
 }
 
 void _return(py_throw_ptr context)
