@@ -1444,6 +1444,7 @@ extern bool rush_attack(int rng, bool *mdeath);
 
 
 /* spells3.c */
+extern int minus_ac(void);
 extern bool dimension_door_aux(int x, int y, int rng);
 extern bool teleport_away(int m_idx, int dis, u32b mode);
 extern void teleport_monster_to(int m_idx, int ty, int tx, int power, u32b mode);

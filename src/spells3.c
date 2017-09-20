@@ -3742,7 +3742,7 @@ void inven_damage(inven_func typ, int p1, int which)
  *
  * If any armor is damaged (or resists), the player takes less damage.
  */
-static int minus_ac(void)
+int minus_ac(void)
 {
     int slot = equip_random_slot(object_is_armour);
 

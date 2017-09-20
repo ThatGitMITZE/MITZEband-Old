@@ -5742,9 +5742,10 @@ int take_hit(int damage_type, int damage, cptr hit_from)
     }
 
     /* Mega-Hack -- Apply "invulnerability" */
-    if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))
+    if ( damage_type != DAMAGE_USELIFE
+      && damage_type != DAMAGE_LOSELIFE )
     {
-        if (IS_INVULN() && (damage < 9000))
+        if (IS_INVULN() && damage < 9000)
         {
             if (damage_type == DAMAGE_FORCE)
             {
@@ -5760,7 +5761,7 @@ int take_hit(int damage_type, int damage, cptr hit_from)
             }
         }
 
-        if (CHECK_MULTISHADOW())
+        if (damage_type != DAMAGE_NOESCAPE && CHECK_MULTISHADOW())
         {
             if (damage_type == DAMAGE_FORCE)
             {
