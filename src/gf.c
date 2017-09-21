@@ -270,7 +270,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     char         m_name[MAX_NLEN], m_name_subject[MAX_NLEN];
     bool         aura = BOOL(flags & GF_AFFECT_AURA);
     bool         touch = BOOL(flags & (GF_AFFECT_AURA | GF_AFFECT_ATTACK));
-    bool         fuzzy = BOOL(p_ptr->blind);
+    bool         fuzzy = p_ptr->blind && (flags & GF_AFFECT_SPELL);
     int          damage_type = aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK;
     int          stat_drain_odds = aura ? 3 * HURT_CHANCE : HURT_CHANCE;
 
@@ -295,6 +295,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             strcpy(m_name, "shards of glass");
             break;
 
+        case GF_WHO_TRAP:
         default:
             strcpy(m_name, "a trap");
             break;
@@ -846,7 +847,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_ICE:
         if (touch) msg_print("You are <color:W>frozen</color>!");
         else if (fuzzy) msg_print("You are hit by something sharp and cold!");
-        result = cold_dam(dam, m_name);
+        result = gf_affect_p(who, GF_COLD, dam, 0);
         if (!CHECK_MULTISHADOW())
         {
             if (!res_save_default(RES_SHARDS))

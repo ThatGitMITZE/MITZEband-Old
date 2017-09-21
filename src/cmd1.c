@@ -1762,8 +1762,7 @@ static void hit_trap(bool break_trap)
             msg_print("You are enveloped in flames!");
 
             dam = damroll(4, 6);
-            (void)fire_dam(dam, "a fire trap");
-
+            gf_affect_p(GF_WHO_TRAP, GF_FIRE, dam, GF_AFFECT_TRAP);
             break;
         }
 
@@ -1772,8 +1771,7 @@ static void hit_trap(bool break_trap)
             msg_print("You are splashed with acid!");
 
             dam = damroll(4, 6);
-            (void)acid_dam(dam, "an acid trap");
-
+            gf_affect_p(GF_WHO_TRAP, GF_ACID, dam, GF_AFFECT_TRAP);
             break;
         }
 
