@@ -184,7 +184,7 @@ bool make_attack_normal(int m_idx)
     for (ap_cnt = 0; ap_cnt < MAX_MON_BLOWS; ap_cnt++)
     {
         bool         obvious = FALSE;
-        mon_blow_ptr blow = &r_ptr->blows[ap_cnt];
+        mon_blow_ptr blow;
         int          blow_dam = 0; /* total physical damage for this blow */
         cptr         act = NULL;
 
@@ -201,6 +201,7 @@ bool make_attack_normal(int m_idx)
             ap_cnt = retaliation_count;
             if (ap_cnt >= MAX_MON_BLOWS) return FALSE;
         }
+        blow = &r_ptr->blows[ap_cnt];
 
         if (!m_ptr->r_idx) break;
 
