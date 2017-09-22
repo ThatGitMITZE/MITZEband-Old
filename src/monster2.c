@@ -1463,13 +1463,6 @@ s16b get_mon_num(int level)
     int  min_level = 0;
     if (summon_specific_who == SUMMON_WHO_NOBODY && dungeon_type == DUNGEON_ARENA)
         min_level = MIN(50, level - 5);
-    /* Restrict uniques ... except for summoning, of course ;) */
-    if ( unique_count
-      && summon_specific_who == SUMMON_WHO_NOBODY
-      && !one_in_(unique_count) )
-    {
-        options |= GMN_NO_UNIQUES;
-    }
     return get_mon_num_aux(level, min_level, options);
 }
 
@@ -1478,6 +1471,18 @@ s16b get_mon_num_aux(int level, int min_level, u32b options)
     int            i, r_idx, value, total;
     monster_race  *r_ptr;
     alloc_entry   *table = alloc_race_table;
+
+    /* Restrict uniques in _aux() so that _apply_room_grid_mon() need not know
+     * about this hack. Without some sort of unique limitation, end game levels
+     * will have far too many uniques per level ... at least until the player
+     * kills most of them! Odds are 1 in N^2 for allowing allocation of unique #N. */
+    if (summon_specific_who == SUMMON_WHO_NOBODY && unique_count)
+    {
+        int odds = unique_count + 1;
+        odds *= odds;
+        if (!one_in_(odds))
+            options |= GMN_NO_UNIQUES;
+    }
 
     if (options & GMN_ALLOW_OOD)
     {
