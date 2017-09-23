@@ -210,7 +210,6 @@ static bool alloc_stairs(int feat, int num, int walls)
         /*&& quests_allow_downshaft()*/)
         {
             shaft_num = (randint1(num)+1)/2;
-            if (quickmode) shaft_num *= 2;
         }
     }
 

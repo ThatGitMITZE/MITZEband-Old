@@ -2338,9 +2338,6 @@ option_type option_info[] =
     { &reduce_uniques,              FALSE, OPT_PAGE_BIRTH, 6, 26,
     "reduce_uniques",               "Reduce the number of uniques (randomly)" },
 
-    { &quickmode,                   FALSE, OPT_PAGE_BIRTH, 6, 27,
-    "quickmode",                    "Makes the game much shorter and easier" },
-
     { &no_selling,                  FALSE, OPT_PAGE_BIRTH, 6, 28,
     "no_selling",                   "Prohibit selling to shops" },
 

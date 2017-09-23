@@ -1390,7 +1390,6 @@ static void _spoil_mon_melee_dam_aux_aux(doc_ptr doc, vec_ptr v)
             char buf[10];
 
             xp = info->mon->mexp * info->mon->level / (plev + 2);
-            if (quickmode) xp *= 2;
             big_num_display(xp, buf);
             doc_printf(doc, " %5.5s", buf);
         }
