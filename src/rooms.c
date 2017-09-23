@@ -1818,15 +1818,19 @@ static void _apply_room_grid_mon(point_t p, room_grid_ptr grid, room_ptr room)
 
         if (room->type == ROOM_VAULT)
         {
-            options |= GMN_POWER_BOOST;
             if (room->subtype == VAULT_GREATER)
             {
+                options |= GMN_POWER_BOOST;
                 min_level = MIN(40, monster_level - 10);
                 if (grid->flags & ROOM_GRID_EGO_RANDOM)
                     min_level = MIN(55, monster_level - 5);
             }
+            /* Lesser Vaults only "Power Boost" excellent tiles */
             else if (grid->flags & ROOM_GRID_EGO_RANDOM)
+            {
+                options |= GMN_POWER_BOOST;
                 min_level = MIN(37, monster_level - 7);
+            }
         }
 
         _room_grid_hack = grid;
@@ -2080,26 +2084,73 @@ static obj_ptr _make_obj_theme(room_grid_ptr grid, int level)
     return NULL;
 }
 
-static void _apply_room_grid_obj(point_t p, room_grid_ptr grid, u16b room_flags)
+static int _obj_cmp_score(obj_ptr left, obj_ptr right)
 {
-    obj_ptr obj;
+    /* Empty slots sort to the end */
+    if (!left && !right) return 0;
+    if (!left && right) return 1;
+    if (left && !right) return -1;
+    if (left == right) return 0;
 
+    assert(left && right);
+
+    /* sort by true score ... objects are not identified yet */
+    if (!left->scratch) left->scratch = obj_value_real(left);
+    if (!right->scratch) right->scratch = obj_value_real(right);
+
+    if (left->scratch < right->scratch) return 1;
+    if (left->scratch > right->scratch) return -1;
+
+    return 0;
+}
+static void _apply_room_grid_obj(point_t p, room_grid_ptr grid, room_ptr room)
+{
     /* see if tile was trapped in _apply_room_grid_feat */
     if (!cave_drop_bold(p.y, p.x)) return;
 
     if (0 < grid->obj_pct && randint1(100) > grid->obj_pct)
         return;
 
-    /* themed objects make all OBJ(*) directives use the theme. I suppose there
-     * could be other OBJ() directives and we should probably support that */
-    if ((room_flags & ROOM_THEME_OBJECT) && (grid->flags & ROOM_GRID_OBJ_RANDOM))
-        obj = _make_obj_theme(grid, object_level);
-    else
-        obj = room_grid_make_obj(grid, object_level);
-    if (obj)
+    /* Experimental: Excellent vault tiles roll best of X objects */
+    if (room->type == ROOM_VAULT && grid->flags & ROOM_GRID_EGO_RANDOM)
     {
-       drop_here(obj, p.y, p.x);
-       obj_free(obj);
+        int     tries = room->subtype == VAULT_GREATER ? 4 : 2;
+        inv_ptr inv = inv_alloc("Temp", INV_PACK, 0);
+        obj_ptr obj;
+        int     i;
+
+        for (i = 0; i < tries; )
+        {
+            obj_ptr obj = room_grid_make_obj(grid, object_level);
+            if (obj)
+            {
+                inv_add(inv, obj);
+                obj_free(obj);
+                i++;
+            }
+        }
+        inv_sort_aux(inv, _obj_cmp_score);
+        obj = inv_obj(inv, 1);
+        if (obj)
+           drop_here(obj, p.y, p.x);
+
+        inv_free(inv);
+    }
+    else
+    {
+        obj_ptr obj;
+
+        /* themed objects make all OBJ(*) directives use the theme. I suppose there
+         * could be other OBJ() directives and we should probably support that */
+        if ((room->flags & ROOM_THEME_OBJECT) && (grid->flags & ROOM_GRID_OBJ_RANDOM))
+            obj = _make_obj_theme(grid, object_level);
+        else
+            obj = room_grid_make_obj(grid, object_level);
+        if (obj)
+        {
+           drop_here(obj, p.y, p.x);
+           obj_free(obj);
+        }
     }
 }
 
@@ -2460,7 +2511,7 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
                     /* cf Oval Crypt V: The '0' letter should get a good ego item! */
                     grid = _find_room_grid(room, letter);
                     if (grid)
-                        _apply_room_grid_obj(p, grid, room->flags);
+                        _apply_room_grid_obj(p, grid, room);
                     continue;
                 }
             }
@@ -2469,7 +2520,7 @@ void build_room_template_aux(room_ptr room, transform_ptr xform, wild_scroll_ptr
             if (grid)
             {
                 _apply_room_grid_mon(p, grid, room);
-                _apply_room_grid_obj(p, grid, room->flags);
+                _apply_room_grid_obj(p, grid, room);
                 /* Remove need for tedious P:px:py line in quest files ... normally, we
                  * can just use the '<' tile for the player's starting location. That worked
                  * fine for me until the Royal Crypt ... So a '@' will take precedence. */
@@ -4135,7 +4186,7 @@ static bool build_type16(void)
  */
 static bool room_build(int typ)
 {
-    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_LESSER);*/
+    /*if (one_in_(5)) return build_room_template(ROOM_VAULT, VAULT_GREATER);*/
 
     if (dungeon_type == DUNGEON_ARENA)
         return build_type16();
