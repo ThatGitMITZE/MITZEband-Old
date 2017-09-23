@@ -2206,12 +2206,6 @@ option_type option_info[] =
     { &expand_list,                 TRUE,  OPT_PAGE_GAMEPLAY, 1, 5,
     "expand_list",                  "Expand the power of the list commands" },
 
-    { &small_levels,                TRUE,  OPT_PAGE_GAMEPLAY, 0, 30,
-    "small_levels",                 "Allow unusually small dungeon levels" },
-
-    { &always_small_levels,         FALSE, OPT_PAGE_GAMEPLAY, 2, 3,
-    "always_small_levels",          "Always create unusually small dungeon levels" },
-
     { &empty_levels,                TRUE,  OPT_PAGE_GAMEPLAY, 0, 31,
     "empty_levels",                 "Allow empty 'arena' levels" },
 
@@ -2301,9 +2295,6 @@ option_type option_info[] =
 
     { &ironman_shops,               FALSE, OPT_PAGE_BIRTH, 6, 2,
     "ironman_shops",                "Stores are permanently closed (*)" },
-
-    { &ironman_small_levels,        FALSE, OPT_PAGE_BIRTH, 6, 3,
-    "ironman_small_levels",         "Always create unusually small dungeon levels (*)" },
 
     { &ironman_downward,            FALSE, OPT_PAGE_BIRTH, 6, 4,
     "ironman_downward",             "Disable recall and use of up stairs (*)" },

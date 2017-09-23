@@ -592,7 +592,7 @@ static void set_bound_perm_wall(cave_type *c_ptr)
 static void gen_caverns_and_lakes(void)
 {
     /* Possible "destroyed" level */
-    if ((dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (d_info[dungeon_type].flags1 & DF1_DESTROY))
+    if ((dun_level > 30) && one_in_(DUN_DEST*2) && (d_info[dungeon_type].flags1 & DF1_DESTROY))
     {
         dun->destroyed = TRUE;
 
@@ -1330,46 +1330,55 @@ static void battle_gen(void)
     }
 }
 
-
 /* Make a real level */
 static bool level_gen(cptr *why)
 {
-    int level_height, level_width;
+    bool small = FALSE;
 
-    if ((always_small_levels || ironman_small_levels ||
-        (one_in_(SMALL_LEVEL) && small_levels) ||
-         (d_info[dungeon_type].flags1 & DF1_BEGINNER) ||
-        (d_info[dungeon_type].flags1 & DF1_SMALLEST)) &&
-        !(d_info[dungeon_type].flags1 & DF1_BIG))
+    /* XXX Roll for a small level. Users should not be able to control
+     * the level size at runtime. For example, I personally used to force
+     * levels small to fight Oberon since this made him much easier to deal
+     * with! Small levels also give an inordinate advantage against thieving
+     * monsters (like most Amberites and Bull Gates). They are no longer harder
+     * than normal sized levels since all aspects of dungeon generation scale
+     * with dungeon size (including monster density). */
+    if (d_info[dungeon_type].flags1 & DF1_BIG)
+        small = FALSE;
+    else if (d_info[dungeon_type].flags1 & DF1_SMALLEST)
+        small = TRUE;
+    else if (one_in_(SMALL_LEVEL))
+        small = TRUE;
+
+    if (small)
     {
-        if (cheat_room)
-            msg_print("A 'small' dungeon level.");
+        int hgt, wid;
 
-        if (d_info[dungeon_type].flags1 & DF1_SMALLEST)
+        if (d_info[dungeon_type].flags1 & DF1_SMALLEST) /* Labyrinth and Mine */
         {
-            level_height = 1;
-            level_width = 1;
-        }
-        else if (d_info[dungeon_type].flags1 & DF1_BEGINNER)
-        {
-            level_height = 2;
-            level_width = 2;
+            hgt = 1;
+            wid = 1;
         }
         else
         {
-            do
+            int max_hgt = MAX_HGT/SCREEN_HGT;
+            int max_wid = MAX_WID/SCREEN_WID;
+
+            for (;;)
             {
-                level_height = randint1(MAX_HGT/SCREEN_HGT);
-                level_width = randint1(MAX_WID/SCREEN_WID);
+                hgt = randint1(max_hgt);
+                wid = randint1(max_wid);
+                if (hgt == max_hgt && wid == max_wid) continue;
+                /* exclude 1x1, 1x2 and 2x1 */
+                if (hgt * wid <= 2) continue;
+                break;
             }
-            while (level_height + level_width > MAX_HGT/SCREEN_HGT + MAX_WID/SCREEN_WID - 2);
         }
 
-        cur_hgt = level_height * SCREEN_HGT;
-        cur_wid = level_width * SCREEN_WID;
+        cur_hgt = hgt * SCREEN_HGT;
+        cur_wid = wid * SCREEN_WID;
 
         if (cheat_room)
-          msg_format("X:%d, Y:%d.", cur_wid, cur_hgt);
+          msg_format("<color:B>A 'small' dungeon level: (<color:R>%d,%d</color>).</color>", cur_wid, cur_hgt);
     }
     else
     {

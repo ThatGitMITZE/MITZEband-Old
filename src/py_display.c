@@ -2240,10 +2240,6 @@ static void _build_options(doc_ptr doc)
 
     doc_printf(doc, " Preserve Mode:      %s\n", preserve_mode ? "On" : "Off");
 
-    doc_printf(doc, " Small Levels:       %s\n", ironman_small_levels ? "*Always*" :
-                                                    always_small_levels ? "Always" :
-                                                    small_levels ? "Sometimes" : "Never");
-
     if (easy_id)
         doc_printf(doc, " Easy Identify:      On\n");
 

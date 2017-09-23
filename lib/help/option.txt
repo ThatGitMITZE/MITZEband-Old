@@ -32,9 +32,6 @@ This option disables the wilderness, forcing you to play with a single special t
 <topic:ironman_shops><color:U>Stores are permanently closed</color> <color:D>(ironman_shops)</color>
 This option closes all shops. Try to survive in the deeps of the dungeon without supplies from town. Your Home still functions normally, and various town services are still available.
 
-<topic:ironman_small_levels><color:U>Always create unusually small dungeon levels</color> <color:D>(ironman_small_levels)</color>
-If this option is enabled, then every level will be smaller than usual. See the 'Allow unusually small dungeon levels' option below.
-
 <topic:ironman_downward><color:U>Disable recall and use of up stairs</color> <color:D>(ironman_downward)</color>
 You are not allowed to climb upwards, or recall to town. All stairs are downstairs and every time you teleport level, you'll teleport to a deeper level.
 
@@ -234,12 +231,6 @@ Force otherwise identical objects to merge, even if they have different discount
 
 <topic:expand_list><color:U>Expand the power of the list commands</color> <color:D>(expand_list)</color>
 Expand the "listing" commands so that they "wrap" at the "edges" of the appropriate list. This allows the "look" and "target" commands to "cycle" through all appropriate grids forever, and the "identify symbol" to browse through all of the monsters of a given type.
-
-<topic:small_levels><color:U>Allow unusually small dungeon levels</color> <color:D>(small_levels)</color>
-This option enables the creation of levels of varying sizes. Levels that are as small as the town level (i.e. 1 'screen') are possible, yet they can be dangerous, especially for a low level character. Note that this option has the side effect of enabling / disabling 'destroyed' levels (they are enabled if small levels are).
-
-<topic:always_small_levels><color:U>Always create unusually small dungeon levels</color> <color:D>(always_small_levels)</color>
-If this option is enabled, then every level will be smaller than usual. See the 'Allow unusually small dungeon levels' option above.
 
 <topic:empty_levels><color:U>Allow empty 'arena' levels</color> <color:D>(empty_levels)</color>
 Normal dungeon levels consist mostly of rock. If this option is in use, levels which have empty floor instead of solid rock may also be created (somewhat reminiscent of Nethack's "big-room" levels). These levels can be extremely deadly, especially with breathing monsters (since there are few obstructions to shield). Arena levels may have vaults, nests and pits in them like normal levels. Some arena levels are dark when they are created, but most are lit.
