@@ -180,36 +180,31 @@ static void sense_inventory1(void)
 {
     int  plev = p_ptr->lev + 10;
     bool strong = FALSE;
+    int  flags = _get_pseudo_id_flags();
 
     if (p_ptr->confused) return;
 
-    if (easy_id)
+    if (flags & CLASS_SENSE1_STRONG)
         strong = TRUE;
-    else
+    else if (!(flags & CLASS_SENSE1_WEAK))
+        return;
+    if (flags & CLASS_SENSE1_FAST)
     {
-        int flags = _get_pseudo_id_flags();
-        if (flags & CLASS_SENSE1_STRONG)
-            strong = TRUE;
-        else if (!(flags & CLASS_SENSE1_WEAK))
+        if (0 != randint0(_adj_pseudo_id(9000) / (plev * plev + 40)))
             return;
-        if (flags & CLASS_SENSE1_FAST)
-        {
-            if (0 != randint0(_adj_pseudo_id(9000) / (plev * plev + 40)))
-                return;
-        }
-        else if (flags & CLASS_SENSE1_MED)
-        {
-            if (0 != randint0(_adj_pseudo_id(20000) / (plev * plev + 40)))
-                return;
-        }
-        else if (flags & CLASS_SENSE1_SLOW)
-        {
-            if (0 != randint0(_adj_pseudo_id(80000) / (plev * plev + 40)))
-                return;
-        }
-        if (virtue_current(VIRTUE_KNOWLEDGE) >= 100)
-            strong = TRUE;
     }
+    else if (flags & CLASS_SENSE1_MED)
+    {
+        if (0 != randint0(_adj_pseudo_id(20000) / (plev * plev + 40)))
+            return;
+    }
+    else if (flags & CLASS_SENSE1_SLOW)
+    {
+        if (0 != randint0(_adj_pseudo_id(80000) / (plev * plev + 40)))
+            return;
+    }
+    if (virtue_current(VIRTUE_KNOWLEDGE) >= 100)
+        strong = TRUE;
 
     /*** Sense everything ***/
     _sense_strong = strong;
@@ -223,40 +218,33 @@ static void sense_inventory2(void)
 {
     int  plev = p_ptr->lev + 10;
     bool strong = FALSE;
+    int  flags = _get_pseudo_id_flags();
 
     if (p_ptr->confused) return;
 
-    if (easy_id)
-    {
+    if (flags & CLASS_SENSE2_STRONG)
         strong = TRUE;
-    }
-    else
+    else if (!(flags & CLASS_SENSE2_WEAK))
+        return;
+    if (flags & CLASS_SENSE2_FAST)
     {
-        int flags = _get_pseudo_id_flags();
-        if (flags & CLASS_SENSE2_STRONG)
-            strong = TRUE;
-        else if (!(flags & CLASS_SENSE2_WEAK))
+        if (0 != randint0(_adj_pseudo_id(9000) / (plev * plev + 40)))
             return;
-        if (flags & CLASS_SENSE2_FAST)
-        {
-            if (0 != randint0(_adj_pseudo_id(9000) / (plev * plev + 40)))
-                return;
-        }
-        else if (flags & CLASS_SENSE2_MED)
-        {
-            if (0 != randint0(_adj_pseudo_id(20000) / (plev * plev + 40)))
-                return;
-        }
-        else if (flags & CLASS_SENSE2_SLOW)
-        {
-            if (0 != randint0(_adj_pseudo_id(80000) / (plev * plev + 40)))
-                return;
-        }
-        else /* Super duper slow */
-        {
-            if (0 != randint0(_adj_pseudo_id(240000) / (plev + 5)))
-                return;
-        }
+    }
+    else if (flags & CLASS_SENSE2_MED)
+    {
+        if (0 != randint0(_adj_pseudo_id(20000) / (plev * plev + 40)))
+            return;
+    }
+    else if (flags & CLASS_SENSE2_SLOW)
+    {
+        if (0 != randint0(_adj_pseudo_id(80000) / (plev * plev + 40)))
+            return;
+    }
+    else /* Super duper slow */
+    {
+        if (0 != randint0(_adj_pseudo_id(240000) / (plev + 5)))
+            return;
     }
 
     /*** Sense everything ***/
@@ -3030,14 +3018,6 @@ static void _dispatch_command(int old_now_turn)
 
 #endif /* ALLOW_WIZARD */
 
-
-#ifdef ALLOW_SPOILERS
-        case KTRL('Z'):
-            /*  v~~~ ^Z(d|D) is useful info for game design ... */
-            if (0 || allow_spoilers)
-                do_cmd_spoilers();
-            break;
-#endif /* ALLOW_SPOILERS */
 
         /*** Inventory Commands ***/
 

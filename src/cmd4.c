@@ -3563,7 +3563,7 @@ static int collect_monsters(int grp_cur, s16b mon_idx[], byte mode)
         if (!p_ptr->wizard && (r_ptr->flagsx & RFX_SUPPRESS)) continue;
 
         /* Require known monsters */
-        if (!(mode & 0x02) && !easy_lore && !r_ptr->r_sights) continue;
+        if (!(mode & 0x02) && !p_ptr->wizard && !r_ptr->r_sights) continue;
 
         if (grp_corpses)
         {
@@ -4279,7 +4279,7 @@ static void do_cmd_knowledge_uniques(void)
         if (r_ptr->flagsx & RFX_SUPPRESS) continue;
 
         /* Only display "known" uniques */
-        if (!easy_lore && !r_ptr->r_sights) continue;
+        if (!r_ptr->r_sights) continue;
 
         /* Only print rarity <= 100 uniques */
         if (!r_ptr->rarity || ((r_ptr->rarity > 100) && !(r_ptr->flagsx & RFX_QUESTOR))) continue;
