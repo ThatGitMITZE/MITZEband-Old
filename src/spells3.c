@@ -4106,6 +4106,7 @@ bool eat_magic(int power)
     {
         device_decrease_sp(prompt.obj, amt);
         sp_player(amt);
+        obj_release(prompt.obj, OBJ_RELEASE_DELAYED_MSG);
     }
 
     p_ptr->window |= PW_INVEN;
