@@ -2337,6 +2337,7 @@ extern bool magic_eater_can_regen(void);
 extern int  magic_eater_regen_amt(int tval);
 extern bool magic_eater_auto_id(object_type *o_ptr);
 extern bool magic_eater_auto_detect_traps(void);
+extern bool magic_eater_auto_mapping(void);
 
 extern void magic_eater_browse(void);
 extern void magic_eater_cast(int tval);

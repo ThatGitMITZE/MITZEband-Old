@@ -4930,7 +4930,7 @@ static bool _auto_mapping(void)
     slot_t slot;
     if (!auto_map_area) return FALSE;
     if (p_ptr->pclass == CLASS_BERSERKER) return FALSE;
-    /*if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_mapping()) return TRUE;*/
+    if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_mapping()) return TRUE;
 
     slot = pack_find_obj(TV_SCROLL, SV_SCROLL_MAPPING);
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))

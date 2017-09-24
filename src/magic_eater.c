@@ -595,6 +595,24 @@ bool magic_eater_auto_detect_traps(void)
     return FALSE;
 }
 
+bool magic_eater_auto_mapping(void)
+{
+    int i;
+    if (p_ptr->pclass != CLASS_MAGIC_EATER) return FALSE;
+    for (i = 0; i < _MAX_SLOTS; i++)
+    {
+        object_type *device_ptr = _which_obj(TV_STAFF, i);
+        if (device_ptr->activation.type == EFFECT_ENLIGHTENMENT && device_sp(device_ptr) > device_ptr->activation.cost)
+        {
+            map_area(DETECT_RAD_MAP);
+            stats_on_use(device_ptr, 1);
+            device_decrease_sp(device_ptr, device_ptr->activation.cost);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 /* Character Dump */
 static void _dump_list(doc_ptr doc, object_type *which_list)
 {
