@@ -1840,6 +1840,26 @@ void equip_learn_flag(int obj_flag)
     }
 }
 
+void equip_learn_slay(int slay_flag, cptr msg)
+{
+    slot_t slot;
+    for (slot = 1; slot <= _template->max; slot++)
+    {
+        obj_ptr obj = inv_obj(_inv, slot);
+        if ( obj 
+          && !object_is_melee_weapon(obj) /* Hack for Jellies ... */
+          && !object_is_bow(obj)
+          && obj_learn_flag(obj, slay_flag) )
+        {
+            char buf[MAX_NLEN];
+            object_desc(buf, obj, OD_LORE);
+            msg_format("<color:B>You learn that your %s %s.</color>", buf, msg);
+            /* We need to update p_ptr->weapon_info[].known_flags (cf equip_calc_bonuses()) */
+            p_ptr->update |= PU_BONUS;
+        }
+    }
+}
+
 void equip_load(savefile_ptr file)
 {
     inv_load(_inv, file);
