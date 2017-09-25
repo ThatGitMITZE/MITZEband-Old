@@ -367,6 +367,17 @@ static void _obj_identify_aux(object_type *o_ptr)
             a_ptr->known_flags[i] |= (o_ptr->known_flags[i] & a_ptr->flags[i]);
             o_ptr->known_flags[i] &= ~a_ptr->flags[i];
         }
+        add_flag(a_ptr->known_flags, OF_IGNORE_ACID);
+        add_flag(a_ptr->known_flags, OF_IGNORE_ELEC);
+        add_flag(a_ptr->known_flags, OF_IGNORE_FIRE);
+        add_flag(a_ptr->known_flags, OF_IGNORE_COLD);
+    }
+    else if (o_ptr->art_name)
+    {
+        add_flag(o_ptr->known_flags, OF_IGNORE_ACID);
+        add_flag(o_ptr->known_flags, OF_IGNORE_ELEC);
+        add_flag(o_ptr->known_flags, OF_IGNORE_FIRE);
+        add_flag(o_ptr->known_flags, OF_IGNORE_COLD);
     }
     else if (o_ptr->name2)
     {
