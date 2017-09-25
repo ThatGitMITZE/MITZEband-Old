@@ -820,7 +820,7 @@ static bool summon_specific_okay(int r_idx);
 /*
  * Hack -- the index of the summoning monster
  */
-static int summon_specific_who = 0;
+int summon_specific_who = 0;
 
 
 static bool summon_unique_okay = FALSE;

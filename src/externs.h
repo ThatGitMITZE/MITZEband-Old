@@ -1078,6 +1078,7 @@ extern bool monster_magical(monster_race *r_ptr);
 
 
 /* monster2.c */
+extern int summon_specific_who;
 extern cptr horror_desc[MAX_SAN_HORROR];
 extern cptr funny_desc[MAX_SAN_FUNNY];
 extern cptr funny_comments[MAX_SAN_COMMENT];

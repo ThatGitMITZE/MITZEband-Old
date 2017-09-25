@@ -2151,8 +2151,9 @@ enum {
 #define PROJECT_WHO_TRAP         -3
 #define PROJECT_WHO_MIRROR       -4
 
-#define SUMMON_WHO_PLAYER -1  /* gotta love inconsistency! */
-#define SUMMON_WHO_NOBODY  0
+#define SUMMON_WHO_BIRTHER -2
+#define SUMMON_WHO_PLAYER  -1  /* gotta love inconsistency! */
+#define SUMMON_WHO_NOBODY   0
 
 
 /*
