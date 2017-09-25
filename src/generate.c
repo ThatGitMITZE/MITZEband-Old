@@ -749,7 +749,6 @@ static void _cave_gen_objects(void)
         _mon_give_extra_drop(MFLAG2_DROP_UTILITY, randint0(4));
         if (dun_level > max_dlv[dungeon_type])
             _mon_give_extra_drop(MFLAG2_DROP_PRIZE, 1);
-
     }
 
     object_level = base_level;

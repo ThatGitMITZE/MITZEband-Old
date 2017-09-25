@@ -858,35 +858,42 @@ void _unwield_after(void)
    affect the hand in question, unless the other hand on that set
    of arms is wielding a weapon two handed.
  */
-static void _weapon_info_flag(slot_t slot, u32b flgs[OF_ARRAY_SIZE], int flg)
+static void _add_weapon_info_flag(int hand, int flg, bool known)
+{
+    add_flag(p_ptr->weapon_info[hand].flags, flg);
+    if (known)
+        add_flag(p_ptr->weapon_info[hand].known_flags, flg);
+}
+static void _weapon_info_flag(slot_t slot, u32b flgs[OF_ARRAY_SIZE], u32b known_flgs[OF_ARRAY_SIZE], int flg)
 {
     if (have_flag(flgs, flg))
     {
-        int hand = _template->slots[slot].hand;
-        int arm = hand / 2;
-        int rhand = arm*2;
-        int lhand = arm*2 + 1;
-        int other_hand = (hand == rhand) ? lhand : rhand;
+        int  hand = _template->slots[slot].hand;
+        int  arm = hand / 2;
+        int  rhand = arm*2;
+        int  lhand = arm*2 + 1;
+        int  other_hand = (hand == rhand) ? lhand : rhand;
+        bool known = have_flag(known_flgs, flg);
 
         switch (_template->slots[slot].type)
         {
         case EQUIP_SLOT_GLOVES:
             if (p_ptr->weapon_info[rhand].wield_how != WIELD_NONE)
-                add_flag(p_ptr->weapon_info[rhand].flags, flg);
+                _add_weapon_info_flag(rhand, flg, known);
             if (p_ptr->weapon_info[lhand].wield_how != WIELD_NONE)
-                add_flag(p_ptr->weapon_info[lhand].flags, flg);
+                _add_weapon_info_flag(lhand, flg, known);
             break;
         case EQUIP_SLOT_RING:
             if (p_ptr->weapon_info[hand].wield_how != WIELD_NONE)
-                add_flag(p_ptr->weapon_info[hand].flags, flg);
+                _add_weapon_info_flag(hand, flg, known);
             else if (p_ptr->weapon_info[other_hand].wield_how == WIELD_TWO_HANDS)
-                add_flag(p_ptr->weapon_info[other_hand].flags, flg);
+                _add_weapon_info_flag(other_hand, flg, known);
             break;
         default:
             for (hand = 0; hand < MAX_HANDS; hand++)
             {
                 if (p_ptr->weapon_info[hand].wield_how != WIELD_NONE)
-                    add_flag(p_ptr->weapon_info[hand].flags, flg);
+                    _add_weapon_info_flag(hand, flg, known);
             }
             break;
         }
@@ -1184,11 +1191,13 @@ void equip_calc_bonuses(void)
     {
         obj_ptr obj = inv_obj(_inv, slot);
         u32b    flgs[OF_ARRAY_SIZE];
+        u32b    known_flgs[OF_ARRAY_SIZE];
         int     bonus_to_h, bonus_to_d;
 
         if (!obj) continue;
 
         obj_flags(obj, flgs);
+        obj_flags_known(obj, known_flgs);
 
         p_ptr->cursed |= obj->curse_flags;
         if (p_ptr->cursed)
@@ -1342,15 +1351,15 @@ void equip_calc_bonuses(void)
         if ( !object_is_melee_weapon(obj) /* Hack for Jellies ... */
           && !object_is_bow(obj) )
         {
-            _weapon_info_flag(slot, flgs, OF_BRAND_FIRE);
-            _weapon_info_flag(slot, flgs, OF_BRAND_COLD);
-            _weapon_info_flag(slot, flgs, OF_BRAND_ELEC);
-            _weapon_info_flag(slot, flgs, OF_BRAND_ACID);
-            _weapon_info_flag(slot, flgs, OF_BRAND_POIS);
-            _weapon_info_flag(slot, flgs, OF_IMPACT);     /* Quaker */
-            _weapon_info_flag(slot, flgs, OF_SLAY_GOOD);  /* Thanos, Nazgul */
-            _weapon_info_flag(slot, flgs, OF_SLAY_HUMAN); /* Nazgul */
-            _weapon_info_flag(slot, flgs, OF_BRAND_VAMP); /* Dragon Armor (Death), Helm of the Vampire */
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_FIRE);
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_COLD);
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_ELEC);
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_ACID);
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_POIS);
+            _weapon_info_flag(slot, flgs, known_flgs, OF_IMPACT);     /* Quaker */
+            _weapon_info_flag(slot, flgs, known_flgs, OF_SLAY_GOOD);  /* Thanos, Nazgul */
+            _weapon_info_flag(slot, flgs, known_flgs, OF_SLAY_HUMAN); /* Nazgul */
+            _weapon_info_flag(slot, flgs, known_flgs, OF_BRAND_VAMP); /* Dragon Armor (Death), Helm of the Vampire */
         }
 
         if (have_flag(flgs, OF_XTRA_SHOTS))

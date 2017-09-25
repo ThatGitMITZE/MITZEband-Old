@@ -123,9 +123,8 @@ void weapon_flags_known(int hand, u32b flgs[OF_ARRAY_SIZE])
     {
         int i;
         obj_flags_known(o_ptr, flgs);
-        /* TODO: Some of the following flags might not be known ... */
         for (i = 0; i < OF_ARRAY_SIZE; i++)
-            flgs[i] |= p_ptr->weapon_info[hand].flags[i];
+            flgs[i] |= p_ptr->weapon_info[hand].known_flags[i];
     }
 }
 
