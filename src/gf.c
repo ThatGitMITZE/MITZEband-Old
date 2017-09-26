@@ -1486,6 +1486,11 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             dam *= 3; dam /= randint1(6) + 6;
             mon_lore_r(mon, RFR_RES_PLAS);
         }
+        else if (who == GF_WHO_PLAYER && mon_stun_save(race->level, dam))
+        {
+            note = " resists stunning.";
+        }
+        else do_stun = mon_stun_amount(dam);
         break;
     case GF_UNLIFE:
         if (monster_living(race) /* && some sort of save */)
