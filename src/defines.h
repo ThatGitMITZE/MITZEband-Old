@@ -2338,6 +2338,7 @@ enum {
 #define OD_COLOR_CODED      0x00000200  /* For msg_print only */
 #define OD_THROWING         0x00000400  /* buggy otherwise for throwing weapon info */
 #define OD_SINGULAR         0x00000800  /* pretend obj->number = 1 */
+#define OD_SHOW_DEVICE_INFO 0x00001000
 
 #define OD_LORE (OD_NAME_ONLY | OD_OMIT_PREFIX | OD_COLOR_CODED)
 

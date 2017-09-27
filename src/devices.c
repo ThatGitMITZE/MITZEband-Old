@@ -4019,7 +4019,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Speed";
         if (desc) return "It grants a temporary speed boost.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 2500 + 25*power);
         if (color) return format("%d", TERM_L_RED);
         if (cast)

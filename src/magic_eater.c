@@ -623,7 +623,7 @@ static void _dump_list(doc_ptr doc, object_type *which_list)
         object_type *o_ptr = which_list + i;
         if (o_ptr->k_idx)
         {
-            object_desc(o_name, o_ptr, OD_COLOR_CODED);
+            object_desc(o_name, o_ptr, OD_COLOR_CODED | OD_SHOW_DEVICE_INFO);
             doc_printf(doc, "%c) %s\n", I2A(i), o_name);
         }
         else
