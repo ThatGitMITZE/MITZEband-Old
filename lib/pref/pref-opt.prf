@@ -20,7 +20,6 @@ X:auto_target
 Y:always_repeat
 X:confirm_destroy
 Y:confirm_wear
-Y:confirm_quest
 X:target_pet
 Y:easy_open
 Y:easy_disarm
@@ -103,8 +102,6 @@ X:ironman_shops
 X:ironman_downward
 X:ironman_empty_levels
 X:ironman_nightmare
-Y:enable_virtues
-Y:enable_spell_prof
 Y:preserve_mode
 
 ##### Easy Object Auto-Destroyer #####

@@ -203,7 +203,6 @@ extern bool auto_target;       /* Automatically target nearest monster */
 extern bool always_repeat;    /* Repeat obvious commands */
 extern bool confirm_destroy;    /* Prompt for destruction of known worthless items */
 extern bool confirm_wear;    /* Confirm to wear/wield known cursed items */
-extern bool confirm_quest;    /* Prompt before exiting a quest level */
 extern bool target_pet;    /* Allow targetting pets */
 
 #ifdef ALLOW_EASY_OPEN
@@ -319,8 +318,6 @@ extern byte random_artifact_pct;
 extern bool no_artifacts;
 extern bool no_egos;
 extern bool no_selling;
-extern bool enable_virtues;
-extern bool enable_spell_prof;
 extern bool reduce_uniques;
 extern byte reduce_uniques_pct;
 

@@ -4921,43 +4921,40 @@ void calc_bonuses(void)
 
     if ((p_ptr->ult_res || IS_RESIST_MAGIC() || p_ptr->magicdef) && (p_ptr->skills.sav < (95 + p_ptr->lev))) p_ptr->skills.sav = 95 + p_ptr->lev;
 
-    if (enable_virtues)
+    for (i = 0, j = 0; i < 8; i++)
     {
-        for (i = 0, j = 0; i < 8; i++)
+        switch (p_ptr->vir_types[i])
         {
-            switch (p_ptr->vir_types[i])
-            {
-            case VIRTUE_JUSTICE:
-                p_ptr->align += p_ptr->virtues[i] * 2;
-                break;
-            case VIRTUE_CHANCE:
-                /* Do nothing */
-                break;
-            case VIRTUE_NATURE:
-            case VIRTUE_HARMONY:
-                neutral[j++] = i;
-                break;
-            case VIRTUE_UNLIFE:
-                p_ptr->align -= p_ptr->virtues[i];
-                break;
-            default:
-                p_ptr->align += p_ptr->virtues[i];
-                break;
-            }
+        case VIRTUE_JUSTICE:
+            p_ptr->align += p_ptr->virtues[i] * 2;
+            break;
+        case VIRTUE_CHANCE:
+            /* Do nothing */
+            break;
+        case VIRTUE_NATURE:
+        case VIRTUE_HARMONY:
+            neutral[j++] = i;
+            break;
+        case VIRTUE_UNLIFE:
+            p_ptr->align -= p_ptr->virtues[i];
+            break;
+        default:
+            p_ptr->align += p_ptr->virtues[i];
+            break;
         }
+    }
 
-        for (i = 0; i < j; i++)
+    for (i = 0; i < j; i++)
+    {
+        if (p_ptr->align > 0)
         {
-            if (p_ptr->align > 0)
-            {
-                p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
-                if (p_ptr->align < 0) p_ptr->align = 0;
-            }
-            else if (p_ptr->align < 0)
-            {
-                p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
-                if (p_ptr->align > 0) p_ptr->align = 0;
-            }
+            p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
+            if (p_ptr->align < 0) p_ptr->align = 0;
+        }
+        else if (p_ptr->align < 0)
+        {
+            p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
+            if (p_ptr->align > 0) p_ptr->align = 0;
         }
     }
 

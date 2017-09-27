@@ -7085,8 +7085,7 @@ void do_cmd_knowledge(void)
             prt("(S) Shooter Damage", row++, col);
         if (mut_count(NULL))
             prt("(M) Mutations", row++, col);
-        if (enable_virtues)
-            prt("(v) Virtues", row++, col);
+        prt("(v) Virtues", row++, col);
         if (class_ptr->character_dump || race_ptr->character_dump)
             prt("(x) Extra info", row++, col);
         prt("(H) High Score List", row++, col);
@@ -7177,10 +7176,7 @@ void do_cmd_knowledge(void)
                 bell();
             break;
         case 'v':
-            if (enable_virtues)
-                do_cmd_knowledge_virtues();
-            else
-                bell();
+            do_cmd_knowledge_virtues();
             break;
         case 'x':
             if (class_ptr->character_dump || race_ptr->character_dump)

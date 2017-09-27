@@ -2059,9 +2059,6 @@ option_type option_info[] =
     { &confirm_wear,                TRUE,  OPT_PAGE_INPUT, 5, 4,
     "confirm_wear",                 "Confirm to wear/wield known cursed items" },
 
-    { &confirm_quest,               TRUE,  OPT_PAGE_INPUT, 1, 9,
-    "confirm_quest",                "Prompt before exiting a quest level" },
-
     { &target_pet,                  FALSE, OPT_PAGE_INPUT, 2, 5,
     "target_pet",                   "Allow targetting pets" },
 
@@ -2295,12 +2292,6 @@ option_type option_info[] =
 
     { &ironman_nightmare,           FALSE, OPT_PAGE_BIRTH, 6, 18,
     "ironman_nightmare",            "Nightmare mode(it isn't even remotely fair!)(*)" },
-
-    { &enable_virtues,              FALSE, OPT_PAGE_BIRTH, 6, 13,
-    "enable_virtues",               "Enable the Virtue System" },
-
-    { &enable_spell_prof,           FALSE, OPT_PAGE_BIRTH, 6, 15,
-    "enable_spell_prof",            "Enable the Spell Proficiency System" },
 
     { &preserve_mode,               TRUE,  OPT_PAGE_BIRTH, 6, 14,
     "preserve_mode",                "Preserve artifacts (*)" },

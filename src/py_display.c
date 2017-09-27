@@ -1260,12 +1260,9 @@ static void _build_uniques(doc_ptr doc)
 
 static void _build_virtues(doc_ptr doc)
 {
-    if (enable_virtues)
-    {
-        doc_printf(doc, "<topic:Virtues>=================================== <color:keypress>V</color>irtues ===================================\n\n");
-        virtue_display(doc);
-        doc_newline(doc);
-    }
+    doc_printf(doc, "<topic:Virtues>=================================== <color:keypress>V</color>irtues ===================================\n\n");
+    virtue_display(doc);
+    doc_newline(doc);
 }
 
 static void _build_mutations(doc_ptr doc)

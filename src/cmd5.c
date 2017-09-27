@@ -494,7 +494,7 @@ void do_cmd_study(void)
         int new_rank = EXP_LEVEL_UNSKILLED;
         cptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32, SPELL_NAME);
 
-        if (old_exp >= max_exp || !enable_spell_prof)
+        if (old_exp >= max_exp)
         {
             msg_format("You don't need to study this %s anymore.", p);
             return;
@@ -1030,13 +1030,7 @@ void do_cmd_cast(void)
 
         virtue_on_cast_spell(use_realm, need_mana, chance);
 
-        /* Casting spells for no purpose other than gaining proficiency is considered
-         * a scum ... You should not do this! If you cannot restrain yourself, then
-         * disable spell proficiency by turning off the enable_spell_prof birth option.
-         * But for those players who like an interesting game, I tweaked the progression
-         * and depth limits quite a bit. I'll publish my design spreadsheet once I have
-         * time to clean it up ...*/
-        if (enable_spell_prof && (mp_ptr->spell_xtra & MAGIC_GAIN_EXP))
+        if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
         {
             int  index = (increment ? 32 : 0)+spell;
             s16b cur_exp = p_ptr->spell_exp[index];

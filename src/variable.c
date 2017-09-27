@@ -187,7 +187,6 @@ bool auto_target;    /* Automatically target nearest monster */
 bool always_repeat;    /* Repeat obvious commands */
 bool confirm_destroy;    /* Prompt for destruction of known worthless items */
 bool confirm_wear;    /* Confirm to wear/wield known cursed items */
-bool confirm_quest;    /* Prompt before exiting a quest level */
 bool target_pet;    /* Allow targetting pets */
 
 #ifdef ALLOW_EASY_OPEN
@@ -304,8 +303,6 @@ byte random_artifact_pct = 100;
 bool no_artifacts;
 bool no_egos;
 bool no_selling;
-bool enable_virtues;
-bool enable_spell_prof;
 bool reduce_uniques;
 byte reduce_uniques_pct = 100; /* This is the pct of uniques to face */
 

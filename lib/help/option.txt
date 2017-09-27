@@ -77,9 +77,6 @@ Normally, no confirmation will be asked if you attempt to destroy an object whic
 <topic:confirm_wear><color:U>Confirm to wear/wield known cursed items</color> <color:D>(confirm_wear)</color>
 Some players may occasionally, due to a typing mistake, find themselves wearing an item which they knew was cursed. If this option is set, you should be safe from such typing mistakes: you will be prompted if you attempt to wear or wield an item if your character knows it is cursed.
 
-<topic:confirm_quest><color:U>Prompt before exiting a quest level</color> <color:D>(confirm_quest)</color>
-In the dungeon, you can freely climb up/down stairs and can return to former floors normally. But in some quest level, including the random quest, you can not return once you escaped from the level. If this option is set, the program asks for confirmation before you go up the stairs from such quest levels.
-
 <topic:target_pet><color:U>Allow targetting pets</color> <color:D>(target_pet)</color>
 Normally, the program doesn't automatically choose pets as target in the targeting mode of attack spells. If this option is set, the program always chooses every monster in sight as target.
 
