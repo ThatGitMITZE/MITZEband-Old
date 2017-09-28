@@ -2320,9 +2320,6 @@ option_type option_info[] =
     { &reduce_uniques,              FALSE, OPT_PAGE_BIRTH, 6, 26,
     "reduce_uniques",               "Reduce the number of uniques (randomly)" },
 
-    { &no_selling,                  FALSE, OPT_PAGE_BIRTH, 6, 28,
-    "no_selling",                   "Prohibit selling to shops" },
-
     /*** Easy Object Auto-Destroyer ***/
 
     { &destroy_items,               FALSE, OPT_PAGE_AUTODESTROY, 7, 0,

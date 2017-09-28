@@ -317,7 +317,6 @@ extern bool random_artifacts;
 extern byte random_artifact_pct;
 extern bool no_artifacts;
 extern bool no_egos;
-extern bool no_selling;
 extern bool reduce_uniques;
 extern byte reduce_uniques_pct;
 
