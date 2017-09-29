@@ -2088,9 +2088,7 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         strcat(tmp_val2, format("%d%%", (fail + 5)/10));
         if (statistics_hack || (mode & OD_SHOW_DEVICE_INFO))
         {
-            effect_t e = obj_get_effect(o_ptr);
-            cptr     info = do_effect(&e, SPELL_INFO, 0);
-
+            cptr info = do_device(o_ptr, SPELL_INFO, 0);
             if (info && strlen(info))
             {
                 char buf[255];
