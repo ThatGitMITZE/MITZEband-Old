@@ -609,6 +609,14 @@ bool magic_eater_auto_mapping(void)
             device_decrease_sp(device_ptr, device_ptr->activation.cost);
             return TRUE;
         }
+        device_ptr = _which_obj(TV_ROD, i);
+        if (device_ptr->activation.type == EFFECT_ENLIGHTENMENT && device_sp(device_ptr) > device_ptr->activation.cost)
+        {
+            map_area(DETECT_RAD_MAP);
+            stats_on_use(device_ptr, 1);
+            device_decrease_sp(device_ptr, device_ptr->activation.cost);
+            return TRUE;
+        }
     }
     return FALSE;
 }
