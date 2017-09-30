@@ -576,7 +576,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_SPEED:
         if (desc) return "It hastes you temporarily when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(25), _potion_power(15));
+        if (info) return format("Dur d%d+%d", _potion_power(25), _potion_power(15));
         if (cast)
         {
             if (!p_ptr->fast)
@@ -592,7 +592,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_RESIST_HEAT:
         if (desc) return "You get temporary resistance to fire when you quaff it. This resistance is cumulative with equipment.";
-        if (info) return format("Dur d%d + %d", _potion_power(10), _potion_power(10));
+        if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
             int dur = _potion_power(10 + randint1(10));
@@ -604,7 +604,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_RESIST_COLD:
         if (desc) return "You get temporary resistance to cold when you quaff it. This resistance is cumulative with equipment.";
-        if (info) return format("Dur d%d + %d", _potion_power(10), _potion_power(10));
+        if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
             int dur = _potion_power(10 + randint1(10));
@@ -616,7 +616,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_HEROISM:
         if (desc) return "It removes fear and causes you temporary heroism when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(25), _potion_power(25));
+        if (info) return format("Dur d%d+%d", _potion_power(25), _potion_power(25));
         if (cast)
         {
             int dur = _potion_power(25 + randint1(25));
@@ -625,7 +625,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_BERSERK_STRENGTH:
         if (desc) return "It removes fear and causes you to go berserk when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(25), _potion_power(25));
+        if (info) return format("Dur d%d+%d", _potion_power(25), _potion_power(25));
         if (cast)
         {
             int dur = _potion_power(25 + randint1(25));
@@ -947,7 +947,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_RESISTANCE:
         if (desc) return "You get temporary resistance to the elements and poison when you quaff it. ";
-        if (info) return format("Dur d%d + %d", _potion_power(20), _potion_power(20));
+        if (info) return format("Dur d%d+%d", _potion_power(20), _potion_power(20));
         if (cast)
         {
             int dur = _potion_power(20 + randint1(20));
@@ -978,7 +978,7 @@ static cptr _do_potion(int sval, int mode)
         break; }
     case SV_POTION_INVULNERABILITY:
         if (desc) return "You become invulnerable temporarily when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(4), _potion_power(4));
+        if (info) return format("Dur d%d+%d", _potion_power(4), _potion_power(4));
         if (cast)
         {
             int dur = _potion_power(4 + randint1(4));
@@ -1033,7 +1033,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_GIANT_STRENGTH:
         if (desc) return "It greatly increases your stature temporarily when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(20), _potion_power(20));
+        if (info) return format("Dur d%d+%d", _potion_power(20), _potion_power(20));
         if (cast)
         {
             if (set_tim_building_up(_potion_power(20 + randint1(20)), FALSE)) device_noticed = TRUE;
@@ -1079,7 +1079,7 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_STONE_SKIN:
         if (desc) return "It temporarily turns your skin to stone, granting enhanced armor class, when you quaff it.";
-        if (info) return format("Dur d%d + %d", _potion_power(20), _potion_power(20));
+        if (info) return format("Dur d%d+%d", _potion_power(20), _potion_power(20));
         if (cast)
         {
             if (set_shield(_potion_power(20 + randint1(20)), FALSE)) device_noticed = TRUE;
@@ -3834,7 +3834,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Stone Skin";
         if (desc) return "It temporarily turns your skin to stone, granting enhanced armor class.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 4000 + 50*power);
         if (color) return format("%d", TERM_L_UMBER);
         if (cast)
@@ -3849,7 +3849,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resist Acid";
         if (desc) return "It grants temporary acid resistance.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1000 + 25*power);
         if (color) return format("%d", res_color(RES_ACID));
         if (cast)
@@ -3864,7 +3864,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resist Lightning";
         if (desc) return "It grants temporary lightning resistance.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1000 + 25*power);
         if (color) return format("%d", res_color(RES_ELEC));
         if (cast)
@@ -3879,7 +3879,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resist Fire";
         if (desc) return "It grants temporary fire resistance.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1000 + 25*power);
         if (color) return format("%d", res_color(RES_FIRE));
         if (cast)
@@ -3894,7 +3894,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resist Cold";
         if (desc) return "It grants temporary cold resistance.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1000 + 25*power);
         if (color) return format("%d", res_color(RES_COLD));
         if (cast)
@@ -3909,7 +3909,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resist Poison";
         if (desc) return "It grants temporary poison resistance.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 2500 + 25*power);
         if (color) return format("%d", res_color(RES_POIS));
         if (cast)
@@ -3924,7 +3924,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 20);
         if (name) return "Resistance";
         if (desc) return "It grants temporary resistance to the elements and poison.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 5000 + 25*power);
         if (color) return format("%d", TERM_ORANGE);
         if (cast)
@@ -3943,7 +3943,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 100);
         if (name) return "Protection from Evil";
         if (desc) return "It gives temporary melee protection from evil creatures.";
-        if (info) return format("Dur d%d + %d", 25, _BOOST(power));
+        if (info) return format("Dur d%d+%d", 25, _BOOST(power));
         if (value) return format("%d", 2000 + 10*power);
         if (color) return format("%d", TERM_L_DARK);
         if (cast)
@@ -3956,7 +3956,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_HOLY_GRAIL:
         if (name) return "Healing and Magic Resistance";
         if (desc) return "It heals you and gives temporary resistance to magic.";
-        if (info) return format("Dur d%d + %d", 10, _BOOST(10));
+        if (info) return format("Dur d%d+%d", 10, _BOOST(10));
         if (value) return format("%d", 5000);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
@@ -3972,7 +3972,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 24);
         if (name) return "Holy Prayer";
         if (desc) return "It blesses you temporarily when you read it.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), 6);
+        if (info) return format("Dur d%d+%d", _BOOST(power), 6);
         if (value) return format("%d", 1000 + 25*power);
         if (color) return format("%d", TERM_WHITE);
         if (cast)
@@ -3987,7 +3987,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 25);
         if (name) return "Heroism";
         if (desc) return "It grants temporary heroism.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1500 + 25*power);
         if (color) return format("%d", TERM_L_RED);
         if (cast)
@@ -4002,7 +4002,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 25);
         if (name) return "Berserk";
         if (desc) return "It causes you to enter a berserk rage, granting enhanced combat prowess but diminished stealth and skills.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 1500 + 25*power);
         if (color) return format("%d", TERM_RED);
         if (cast)
@@ -4034,7 +4034,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, effect->power/2);
         if (name) return "Heroic Speed";
         if (desc) return "It grants temporary speed and heroism.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 5000 + 25*power);
         if (color) return format("%d", TERM_L_RED);
         if (cast)
@@ -4050,7 +4050,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 15);
         if (name) return "Heroic Song";
         if (desc) return "It grants temporary speed, blessing and heroism.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 5000 + 30*power);
         if (color) return format("%d", TERM_L_RED);
         if (cast)
@@ -4097,7 +4097,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 30);
         if (name) return "Telepathy";
         if (desc) return "It grants you the power of telepathy temporarily.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(25));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(25));
         if (value) return format("%d", 2000 + 50*power);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
@@ -4112,7 +4112,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 25);
         if (name) return "Wraithform";
         if (desc) return "It turns you int a wraith, giving the ability to pass through walls as well as reducing the amount of physical damage sustained from attacks.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 10000 + 100*power);
         if (color) return format("%d", TERM_L_DARK);
         if (cast)
@@ -4127,7 +4127,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 8);
         if (name) return "Globe of Invulnerability";
         if (desc) return "It generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.";
-        if (info) return format("Dur d%d + %d", _BOOST(power), _BOOST(power));
+        if (info) return format("Dur d%d+%d", _BOOST(power), _BOOST(power));
         if (value) return format("%d", 10000 + 500*power);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
