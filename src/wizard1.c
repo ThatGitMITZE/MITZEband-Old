@@ -1470,10 +1470,25 @@ static bool _is_monk(mon_race_ptr r)
     return _has_blow(r, _martial_arts);
 }
 
+static bool _summon_spell_only(mon_race_ptr r)
+{
+    int i;
+    if (!r->spells) return FALSE;
+    if (!r->spells->groups[MST_SUMMON]) return FALSE;
+
+    for (i = 0; i < MST_COUNT; i++)
+    {
+        if (i == MST_SUMMON) continue;
+        if (r->spells->groups[i]) return FALSE;
+    }
+    return TRUE;
+}
+
 static bool _mon_dam_p(mon_race_ptr r)
 {
     int min = 0, max = 200;
 
+    return _summon_spell_only(r);
     return TRUE;
     return _has_blow(r, _paralysis);
     return r->d_char == 'd' || r->d_char == 'D';
