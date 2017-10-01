@@ -740,7 +740,7 @@ static void _cave_gen_objects(void)
             alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_FOOD, 1);
         if (dun_level <= 15 && one_in_(2))
             alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_LIGHT, 1);
-        if (dun_level >= 10 && one_in_(2))
+        if (dun_level >= 10  && dun_level < 50 && one_in_(2))
             alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_RECALL, 1);
         if (dun_level >= 10 && one_in_(20))
             alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_SKELETON, damroll(3, 5));
