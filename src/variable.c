@@ -163,6 +163,7 @@ s16b m_cnt = 0;            /* Number of live monsters */
 
 s16b hack_m_idx = 0;    /* Hack -- see "process_monsters()" */
 s16b hack_m_idx_ii = 0;
+int  hack_max_m_dam = 0;
 char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 
 int total_friends = 0;

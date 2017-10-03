@@ -4266,6 +4266,14 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             hp_player(heal);
         }
 
+        /* Hack for device lore: Keep track of max damage experienced by any single
+         * monster for this effect. */
+        if (dam)
+        {
+            int lore_dam = MIN(dam, mon->hp);
+            hack_max_m_dam = MAX(hack_max_m_dam, lore_dam);
+        }
+
         /* Hurt the monster, check for fear and death
               v---- Revert 525c2ace: Warlocks: Playtesting Dragon Pact. Massive problems with project()
                     The problem here is that many attacks, like Slow Monster, do no physical damage, but

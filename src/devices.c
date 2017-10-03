@@ -159,6 +159,11 @@ int device_calc_fail_rate(object_type *o_ptr)
    Trap Location should not spoil with the view_unsafe_grids option. */
 bool device_known = FALSE;
 
+/* Hack: Allow player to learn device power thru actual use. They can
+ * also learn the fail rate (i.e. difficulty) by failing enough times,
+ * but that is handled elsewhere. We deal solely with OFL_DEVICE_POWER. */
+bool device_lore = FALSE;
+
 /* Hack: When using an unkown device, was there an observable effect?
    If so, identify the device. */
 bool device_noticed = FALSE;
@@ -1741,6 +1746,7 @@ cptr do_device(object_type *o_ptr, int mode, int boost)
 
     device_noticed = FALSE;
     device_used_charges = 0;
+    device_lore = FALSE;
 
     if (o_ptr->activation.type)
     {

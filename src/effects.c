@@ -5122,6 +5122,12 @@ bool hp_player_aux(int num)
     {
         if ((num > 0) && (p_ptr->chp < (p_ptr->mhp/3)))
             virtue_add(VIRTUE_TEMPERANCE, 1);
+
+        /* XXX Handle device lore ... of course, we don't know if a device
+         * is actually being used atm, but it won't hurt to set the variable anyway. */
+        if (p_ptr->chp + num <= p_ptr->mhp)
+            device_lore = TRUE;
+
         /* Gain hitpoints */
         p_ptr->chp += num;
 

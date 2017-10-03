@@ -371,6 +371,7 @@ struct object_type
 
     u32b known_flags[OF_ARRAY_SIZE];
     u32b known_curse_flags;
+    u32b known_xtra;
 
     u32b rune;
 

@@ -2870,6 +2870,12 @@ enum obj_flags_e {
 /* u32b flgs[OF_ARRAY_SIZE];
    assert((OF_COUNT + 31)/32 == OF_ARRAY_SIZE); is checked during initialization */
 
+/* Extra flags for object lore (OFL_*)
+ * cf object_type.known_flags and .known_curse_flags for normal stuff.
+ * cf .known_xtra for the following: */
+#define OFL_DEVICE_POWER 0x01
+#define OFL_DEVICE_FAIL  0x02
+
 /* Object Flags for Generation (OFG_*) */
 #define OFG_INSTA_ART           0x00000001     /* Item must be an artifact */
 #define OFG_QUESTITEM           0x00000002     /* quest level item -KMW- */

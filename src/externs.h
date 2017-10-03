@@ -182,6 +182,7 @@ extern s16b m_max;
 extern s16b m_cnt;
 extern s16b hack_m_idx;
 extern s16b hack_m_idx_ii;
+extern int hack_max_m_dam;
 extern int total_friends;
 extern s32b friend_align;
 extern bool reinit_wilderness;
@@ -800,6 +801,7 @@ extern bool device_try(object_type *o_ptr);
 extern bool device_use(object_type *o_ptr, int boost);
 extern bool device_known;
 extern bool device_noticed;
+extern bool device_lore; /* OFL_DEVICE_POWER */
 extern int  device_extra_power;
 extern int  device_available_charges;
 extern int  device_used_charges;
