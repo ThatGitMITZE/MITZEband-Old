@@ -4405,7 +4405,7 @@ static void process_player(void)
 
                 if (amt > p_ptr->poisoned)
                     amt = p_ptr->poisoned;
-                if (1 || p_ptr->wizard)
+                if (0 || p_ptr->wizard)
                     msg_format("<color:G> %d Poison Damage</color>", amt);
                 if (!IS_INVULN())
                     take_hit(DAMAGE_NOESCAPE, amt, "poison");
