@@ -2543,7 +2543,9 @@ extern void skills_desc_aux(skills_t *base, skills_t *xtra, skills_desc_t *skill
 
 extern int skills_bow_current(int sval);
 extern int skills_bow_max(int sval);
-extern void skills_bow_gain(int sval);
+extern void skills_bow_gain(int sval, int rlvl);
+extern int skills_bow_calc_bonus(int sval);
+extern cptr skills_bow_describe_current(int sval);
 
 extern int skills_weapon_current(int tval, int sval);
 extern int skills_weapon_max(int tval, int sval);

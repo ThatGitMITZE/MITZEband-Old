@@ -3132,10 +3132,8 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
             num_shots++;
     }
 
-    if (bow->sval == SV_LIGHT_XBOW || bow->sval == SV_HEAVY_XBOW)
-        chance = p_ptr->skills.thb + (skills_bow_current(bow->sval) / 400 + bonus) * BTH_PLUS_ADJ;
-    else
-        chance = p_ptr->skills.thb + ((skills_bow_current(bow->sval) - WEAPON_EXP_MASTER/2) / 200 + bonus) * BTH_PLUS_ADJ;
+    chance = p_ptr->skills.thb + bonus * BTH_PLUS_ADJ;
+    chance += skills_bow_calc_bonus(bow->sval) * BTH_PLUS_ADJ;
 
     if (p_ptr->stun)
         chance -= chance * MIN(100, p_ptr->stun) / 150;
@@ -3332,9 +3330,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                     if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) virtue_add(VIRTUE_HONOUR, -1);
                 }
 
-                if ((r_ptr->level + 10) > p_ptr->lev)
-                    skills_bow_gain(bow->sval);
-
+                skills_bow_gain(bow->sval, r_ptr->level);
                 if (p_ptr->riding)
                     skills_riding_gain_archery(r_ptr);
 
