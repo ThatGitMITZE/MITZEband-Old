@@ -738,6 +738,11 @@ void equip_drop(obj_ptr obj)
     assert(obj->loc.where == INV_EQUIP);
     assert(obj->number == 1);
 
+    if (obj->tval == TV_QUIVER && quiver_count(NULL))
+    {
+        msg_print("Your quiver still holds ammo. Remove all the ammo from your quiver first.");
+        return;
+    }
     if (!_unwield_verify(obj)) return;
 
     _unwield(obj, TRUE);
