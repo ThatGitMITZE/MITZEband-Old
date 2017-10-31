@@ -17,3 +17,6 @@
 ?:[EQU $TOWN 5]
 %:t_zul.txt
 
+?:[EQU $TOWN 6]
+%:t_thalos.txt
+

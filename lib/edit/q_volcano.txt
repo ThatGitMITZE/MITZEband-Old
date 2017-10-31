@@ -1,0 +1,47 @@
+?:[EQU $QUEST6 Taken InProgress]
+D:A volcano has been rumbling in the eastern part of our
+D:territory. But, we do not think it is natural.
+D:Now, it is time to eliminate all creatures that are
+D:making their home at the volcano. You must exterminate
+D:them all if we are to avoid having lava ruin our crops!
+?:1
+
+?:[EQU $QUEST6 Completed]
+D:Here is a reward for your good work.
+?:1
+
+?:[EQU $QUEST6 Failed]
+D:You have failed me, beware you do not do so again!
+?:1
+
+L:X:PERMANENT
+L:L:DEEP_LAVA
+L:K:SHALLOW_LAVA
+L:a:MON(fire spirit)
+L:b:MON(fire vortex)
+L:c:MON(fire elemental)
+L:d:MON(magma elemental)
+L:e:MON(imp)
+
+# Dungeon
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+M:XXXXX..XX..XXXXX<.XX....XXXXXXXXXXX.........eKKKKKKKLLKKKKKKK......XXX
+M:XX...........X.............XXXXX........KKLLLLLKKKKLLLKKKKKKKK......XX
+M:XX...a......................X...a....KKKKKKKKLLLKKKLLLKKKKKKKKKK....XX
+M:XXX.................................KKKKKKKKKKLLLKLLLLKKKKKKKKKKKK...X
+M:XX................................KKKKKKKKKKKLLLLLLLLLLKKKKKKKKKKK...X
+M:XX...............a..................dKKKKLLLLLLLLLLLLLKKKKKKKKKKK....X
+M:XX..................................KKKKKKKKKKLLLLLLLLKKKKKKKKKK.....X
+M:X......c.................b..........KKKKKKKKKLLLKKKLLLKKKKKKKKK.....XX
+M:X.....................................KKKKKKLLLKKKKLLLKKKKKKKKKK.....X
+M:XX....................................KKKKKLKKKKKKKLLLKKKKKKK.b......X
+M:XX......................................KKKKKKKKKKLLLKKKKKKK........XX
+M:XX.................................c.......KKKKKKKLLLKKKKKK.........XX
+M:XXX..b.........................................KKLLKKKKKKK...........X
+M:XX.................X..............................KKKKKKK............X
+M:X...............XXXXX....XXX........................................XX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXX...XXXXX....XXXXXXXXXX.......XXXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+R:OBJ(light crossbow):EGO(*)
+
+

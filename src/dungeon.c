@@ -4398,7 +4398,7 @@ static void process_player(void)
                  * you get waaaay more than 10 moves to deal with things. On the other
                  * hand, poisoned=2000+ is not uncommon, and taking damage amounts of
                  * 200, 180, 162, 145, 131, 118, 106, ... might be OK. */
-                int amt = MAX(MAX(1, p_ptr->mhp/60), p_ptr->poisoned/10);
+                int amt = MAX(MAX(1, p_ptr->mhp/60), p_ptr->poisoned/4);
 
                 /* quickwalking ninjas should not be overly poisoned! */
                 amt = amt * energy_use / 100;

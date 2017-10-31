@@ -2140,7 +2140,7 @@ void shop_display_inv(doc_ptr doc, inv_ptr inv, slot_t top, int page_size)
 /************************************************************************
  * Town
  ***********************************************************************/
-static cptr _names[] = { "Wilderness", "Outpost", "Telmora", "Morivant", "Angwil", "Zul", "Dungeon" };
+static cptr _names[] = { "Wilderness", "Outpost", "Telmora", "Morivant", "Angwil", "Thalos", "Zul", "Dungeon" };
 
 struct town_s
 {

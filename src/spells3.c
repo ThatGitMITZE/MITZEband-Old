@@ -4131,6 +4131,7 @@ bool summon_kin_player(int level, int y, int x, u32b mode)
                 summon_kin_type = 'h';
                 break;
             case RACE_SNOTLING:
+			case RACE_HALF_ORC:
                 summon_kin_type = 'o';
                 break;
             case RACE_HALF_TROLL:

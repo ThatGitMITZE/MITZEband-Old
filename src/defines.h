@@ -13,13 +13,13 @@
 /*
  * Name of the version/variant
  */
-#define VERSION_NAME "PosChengband"
+#define VERSION_NAME "ComPosband"
 
 
-#define VER_MAJOR 7
+#define VER_MAJOR 1
 #define VER_MINOR 0
-#define VER_PATCH 2
-#define VER_EXTRA 0
+#define VER_PATCH 0
+#define VER_EXTRA 2
 
 #define GAME_MODE_BEGINNER  0
 #define GAME_MODE_NORMAL    1
@@ -622,7 +622,8 @@
 #define RACE_WOOD_ELF           60
 #define RACE_MON_CENTIPEDE      61
 #define RACE_MON_VORTEX         62
-#define MAX_RACES               63
+#define RACE_HALF_ORC           63
+#define MAX_RACES               64
 
 #define DEMIGOD_MINOR           0
 #define DEMIGOD_ZEUS            1
@@ -4121,6 +4122,7 @@ extern int PlayerUID;
 #define MON_BEGGAR              12
 #define MON_LEPER               13
 #define MON_BLACK_MARKET        14
+#define MON_GHB                 39
 #define MON_NOV_PRIEST          45
 #define MON_GRIP                53
 #define MON_WOLF                54

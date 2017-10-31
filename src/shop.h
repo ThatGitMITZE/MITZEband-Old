@@ -51,11 +51,12 @@ enum
     TOWN_TELMORA,
     TOWN_MORIVANT,
     TOWN_ANGWIL,
+	TOWN_THALOS,
     TOWN_ZUL,
     TOWN_RANDOM,
     TOWN_MIN = TOWN_OUTPOST,
     TOWN_MAX = TOWN_RANDOM,
-    TOWN_MAX_STD = TOWN_ANGWIL,
+    TOWN_MAX_STD = TOWN_THALOS,
     /* XXX This may get redone at some point. See the q_info.txt changes
      * for my thoughts ... */
 };

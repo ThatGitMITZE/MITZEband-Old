@@ -296,6 +296,7 @@ void death_scythe_miss(object_type *o_ptr, int hand, int mode)
                 case RACE_SNOTLING:
                 case RACE_HALF_TROLL:
                 case RACE_HALF_OGRE:
+				case RACE_HALF_ORC:
                 case RACE_HALF_GIANT:
                 case RACE_HALF_TITAN:
                 case RACE_CYCLOPS:

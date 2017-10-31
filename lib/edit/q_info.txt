@@ -24,10 +24,10 @@ N:2:15:The Sewer
 T:TOWN | GENERATE
 F:q_sewer.txt
 
-N:3:25:The Logrus Master
+N:3:22:The Stranger
 T:TOWN | GENERATE
-G:KILL(logrus master)
-F:q_logrus_master.txt
+G:KILL(anti-paladin)
+F:q_antipaladin.txt
 
 N:4:30:The Vault
 T:TOWN | GENERATE
@@ -37,6 +37,10 @@ F:q_vault.txt
 N:5:35:The Barrow Downs
 T:TOWN | GENERATE
 F:q_barrow_downs.txt
+
+N:6:30:The Volcano
+T:TOWN | GENERATE
+F:q_volcano.txt
 
 N:8:99:Oberon
 T:RETAKE
@@ -62,7 +66,7 @@ N:12:65:The Node of Nature
 T:TOWN | GENERATE
 F:q_nature.txt
 
-N:14:5:The Warg Problem
+N:14:5:Pest Control
 T:TOWN
 W:stronghold
 G:KILL(^warg$, 16)
@@ -83,7 +87,8 @@ F:q_doom1.txt
 
 N:20:25:Vapor Quest
 T:TOWN | GENERATE
-F:q_vapor.txt
+#F:q_vapor.txt
+F:q_vapor2.txt
 
 N:21:55:Doom Quest II
 T:TOWN | GENERATE
@@ -102,7 +107,7 @@ T:TOWN | GENERATE
 G:KILL(bull gates)
 F:q_microsoft.txt
 
-N:25:45:The Haunted House
+N:25:30:The Haunted House
 T:TOWN | GENERATE
 F:q_haunted_house.txt
 
@@ -140,19 +145,17 @@ N:33:45:The Cloning Pits
 T:TOWN | GENERATE
 F:q_cloning_pits.txt
 
-#vvv Don't reuse these ids until version 8 vvv
-N:34:200:Removed Quest
+N:34:50:The Mountain Shrine
 T:TOWN | GENERATE
-F:q_removed.txt
+F:q_shrine.txt
 
-N:35:200:Removed Quest
+N:35:42:Dragon Quest
 T:TOWN | GENERATE
-F:q_removed.txt
-#^^^ Don't reuse these ids until version 8 ^^^
+F:q_dragons.txt
 
-N:36:45:The Renegade Sorcerer
+N:36:38:The Sand Pit
 T:TOWN | GENERATE
-F:q_sorcerer.txt
+F:q_worms.txt
 
 ########################################################################
 # Random Quests ... assigned in quests_on_birth()
@@ -206,5 +209,21 @@ N:49:82:Random 10
 T:RANDOM | RETAKE
 W:angband
 G:KILL(*)
+
+#####################################################################
+# New Quests adapted from Kangband
+#####################################################################
+
+N:50:2:Trouble at Home
+T:TOWN | GENERATE
+F:q_inntrouble.txt
+
+N:51:24:I Hate Snakes!
+T:TOWN | GENERATE
+F:q_snakes.txt
+
+N:52:25:The Old Barracks
+T:TOWN | GENERATE
+F:q_barracks.txt
 
 # vim: filetype=qi :

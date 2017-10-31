@@ -1888,10 +1888,9 @@ race_t *half_giant_get_race(void)
     if (!init)
     {
         me.name = "Half-Giant";
-        me.desc = "Half-Giants limited intelligence makes it difficult for them to become full spellcasters, "
-                    "but with their huge strength they make excellent warriors. Their thick skin makes "
-                    "them resistant to shards, and like Half-Ogres and Half-Trolls, they have their strength "
-                    "sustained.";
+		me.desc = "Half-Giants limited intelligence makes it difficult for them to become full spellcasters, "
+					"but with their huge strength they make excellent warriors. Their thick skin makes "
+					"them resistant to shards, and like Half-Trolls, they have their strength sustained.";
 
         me.stats[A_STR] =  4;
         me.stats[A_INT] = -2;
@@ -1907,7 +1906,7 @@ race_t *half_giant_get_race(void)
         me.skills.srh = -1;
         me.skills.fos =  5;
         me.skills.thn = 25;
-        me.skills.thb =  3;
+        me.skills.thb =  0;
 
         me.life = 108;
         me.base_hp = 26;
@@ -1938,13 +1937,11 @@ static int _half_ogre_get_powers(spell_info* spells, int max)
 }
 static void _half_ogre_calc_bonuses(void)
 {
-    res_add(RES_DARK);
-    p_ptr->sustain_str = TRUE;
+    p_ptr->sustain_int = TRUE;
 }
 static void _half_ogre_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
-    add_flag(flgs, OF_SUST_STR);
-    add_flag(flgs, OF_RES_DARK);
+    add_flag(flgs, OF_SUST_INT);
 }
 race_t *half_ogre_get_race(void)
 {
@@ -1954,19 +1951,18 @@ race_t *half_ogre_get_race(void)
     if (!init)
     {
         me.name = "Half-Ogre";
-        me.desc = "Half-Ogres are like Half-Orcs, only more so. They are big, bad, and stupid. "
+        me.desc = "Half-Ogres are big and ugly but possessed of a low cunning and great strength. "
                     "For warriors, they have all the necessary attributes, and they can even "
                     "become wizards: after all, they are related to Ogre Magi, from whom they "
                     "have learned the skill of setting trapped runes once their level is high "
-                    "enough. Like Half-Orcs, they resist darkness, and like Half-Trolls, they "
-                    "have their strength sustained.";
+                    "enough. Being simple minded they have their intelligence sustained";
 
         me.stats[A_STR] =  3;
-        me.stats[A_INT] = -2;
-        me.stats[A_WIS] =  0;
+        me.stats[A_INT] =  0;
+        me.stats[A_WIS] = -1;
         me.stats[A_DEX] = -1;
         me.stats[A_CON] =  3;
-        me.stats[A_CHR] =  1;
+        me.stats[A_CHR] =  0;
 
         me.skills.dis = -3;
         me.skills.dev = -3;
@@ -1975,12 +1971,12 @@ race_t *half_ogre_get_race(void)
         me.skills.srh = -1;
         me.skills.fos =  5;
         me.skills.thn = 20;
-        me.skills.thb =  0;
+        me.skills.thb =  -5;
 
         me.life = 106;
         me.base_hp = 23;
         me.exp = 140;
-        me.infra = 3;
+        me.infra = 0;
         me.shop_adjust = 125;
 
         me.calc_bonuses = _half_ogre_calc_bonuses;
@@ -1990,6 +1986,62 @@ race_t *half_ogre_get_race(void)
     }
 
     return &me;
+}
+
+/****************************************************************
+* Half-Orc
+****************************************************************/
+
+static void _half_orc_calc_bonuses(void)
+{
+	p_ptr->sustain_int = TRUE;
+}
+static void _half_orc_get_flags(u32b flgs[OF_ARRAY_SIZE])
+{
+	add_flag(flgs, OF_RES_DARK);
+}
+race_t *half_orc_get_race(void)
+{
+	static race_t me = { 0 };
+	static bool init = FALSE;
+
+	if (!init)
+	{
+		me.name = "Half-Orc";
+		me.desc = "Half - orcs make excellent warriors, but are terrible at magic. "
+			"They are as bad as dwarves at stealth, and horrible at searching, "
+			"disarming, and perception. Half - orcs are quite ugly, and tend to "
+			"pay more for goods in town. Because of their preference to living "
+			"underground to on the surface, half - orcs resist darkness attacks. ";
+
+		me.stats[A_STR] = 2;
+		me.stats[A_INT] = -1;
+		me.stats[A_WIS] = 0;
+		me.stats[A_DEX] = 0;
+		me.stats[A_CON] = 1;
+		me.stats[A_CHR] = -1;
+
+		me.skills.dis = -3;
+		me.skills.dev = -3;
+		me.skills.sav = -1;
+		me.skills.stl = -2;
+		me.skills.srh = -1;
+		me.skills.fos = 5;
+		me.skills.thn = 20;
+		me.skills.thb = -5;
+
+		me.life = 103;
+		me.base_hp = 20;
+		me.exp = 110;
+		me.infra = 5;
+		me.shop_adjust = 120;
+
+		me.calc_bonuses = _half_orc_calc_bonuses;
+		me.get_flags = _half_orc_get_flags;
+		init = TRUE;
+	}
+
+	return &me;
 }
 
 /****************************************************************
@@ -2072,14 +2124,12 @@ static int _half_troll_get_powers(spell_info* spells, int max)
 static void _half_troll_calc_bonuses(void)
 {
     p_ptr->sustain_str = TRUE;
-    if (p_ptr->lev >= 15)
-        p_ptr->regen += 100;
+    p_ptr->regen += 100;
 }
 static void _half_troll_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
     add_flag(flgs, OF_SUST_STR);
-    if (p_ptr->lev >= 15)
-        add_flag(flgs, OF_REGEN);
+    add_flag(flgs, OF_REGEN);
 }
 race_t *half_troll_get_race(void)
 {
@@ -2093,7 +2143,7 @@ race_t *half_troll_get_race(void)
                     "They are also very stupid and slow. They are bad at searching, disarming, perception, "
                     "and stealth. They are so ugly that a Half-Orc grimaces in their presence. "
                     "They also happen to be fun to run... Half-trolls always have their strength sustained. "
-                    "At higher levels, Half-Trolls regenerate wounds automatically.";
+                    "Half-Trolls regenerate wounds automatically.";
 
         me.stats[A_STR] =  4;
         me.stats[A_INT] = -4;

@@ -1,0 +1,49 @@
+?:[EQU $QUEST52 Taken InProgress]
+D:The next building will be the barracks. As you have noticed, there are
+D:a lot of lost souls wandering the ruined buildings. Therefore, this could
+D:be very dangerous as a lot of soldiers were quartered here.
+?:1
+
+?:[EQU $QUEST52 Completed]
+D:I hear there were some valuable items in the barracks. You can
+D:keep anything you found as your reward.
+?:1
+
+?:[EQU $QUEST52 Failed]
+D:You have failed me, beware you do not do so again!
+?:1
+
+T:QUEST:NORMAL
+L:X:PERMANENT
+L:#:GRANITE
+L:+:CLOSED_DOOR
+L:.:FLOOR
+L:<:UP_STAIR
+L:M:MON(moaning spirit)
+L:G:MON(^ghost$)
+L:S:MON(spectre)
+L:a:MON(mummified orc)
+L:b:MON(giant tarantula)
+L:c:MON(flying skull)
+L:d:MON(ghast)
+L:e:MON(ghoul)
+L:k:OBJ(leather scale mail):EGO(*)
+L:l:OBJ(hard leather boots):EGO(levitation)
+L:$:OBJ(*)
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+M:X.................#..d....Xl..b...kXXX
+M:X.#######+#########...c...X......S..XX
+M:X.#..M......a#....+...c...X..........X
+M:X.#....a.....#....#.......X...M...G..X
+M:X.##+#########....########XXXXXX+XXXXX
+M:X.#..........#..a.#.......a..........X
+M:X.#...a..G...+....#....a.............X
+M:X.#..........#....#.........c...c....X
+M:X.############....#..................X
+M:X............#.G..#.....d...e........X
+M:X..a...M.....#....#..................X
+M:X............#....+....c...c.....a...X
+M:XXXXXXXXX+XXXX....#...........M.....$X
+M:X............X....#.......d.........XX
+M:X<...........X....#...............$XXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
