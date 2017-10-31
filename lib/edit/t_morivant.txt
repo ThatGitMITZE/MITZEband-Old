@@ -47,17 +47,17 @@ L:u:GRASS
 ?:[EQU $QUEST51 Taken]
 L:p:QUEST_ENTER(51)
 ?:[EQU $QUEST51 Untaken Taken Completed Failed]
-L:b:BUILDING_10(51)
+L:b:BUILDING_1(51)
 ?:[EQU $QUEST51 Finished FailedDone]
-L:b:BUILDING_10(52)
+L:b:BUILDING_1(52)
 ?:1
 ############### Quest 52 - The Old Barracks (from Kangband)
 ?:[EQU $QUEST51 Taken]
 L:w:QUEST_ENTER(52)
 ?:[EQU $QUEST51 Taken Completed Failed]
-L:b:BUILDING_10(52)
+L:b:BUILDING_1(52)
 ?:[EQU $QUEST51 Finished FailedDone]
-L:b:BUILDING_10(0)
+L:b:BUILDING_1(0)
 ?:1
 
 ############### Quest Sequence #2

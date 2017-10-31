@@ -16,10 +16,10 @@
 #define VERSION_NAME "ComPosband"
 
 
-#define VER_MAJOR 1
+#define VER_MAJOR 7
 #define VER_MINOR 0
-#define VER_PATCH 0
-#define VER_EXTRA 2
+#define VER_PATCH 2
+#define VER_EXTRA 0
 
 #define GAME_MODE_BEGINNER  0
 #define GAME_MODE_NORMAL    1
