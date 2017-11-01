@@ -57,10 +57,10 @@ W:E:3:6:0:3:1:Morivant
 W:E:4:7:4:4:1:Angwil
 
 # Town 5 (11 is mountain)
-W:E:5:11:20:5:0:Zul
+W:E:5:11:20:6:0:Zul
 
 # Town 6
-W:E:6:6:0:6:1:New Thalos
+W:E:6:6:0:5:1:Thalos
 
 # Grassland with road 
 W:F:*:6:3:0:1
