@@ -39,11 +39,11 @@ L:b:BUILDING_1(3)
 L:b:BUILDING_1(6)
 ?:1
 ############### Quest 6 - The Volcano ###############
-?:[EQU $QUEST4 Taken]
+?:[EQU $QUEST6 Taken]
 L:r:QUEST_ENTER(6)
-?:[EQU $QUEST4 Taken Completed Failed]
+?:[EQU $QUEST6 Taken Completed Failed]
 L:b:BUILDING_1(6)
-?:[EQU $QUEST4 Finished FailedDone]
+?:[EQU $QUEST6 Finished FailedDone]
 L:b:BUILDING_1(4)
 ?:1
 ############### Quest 4 - The Vault ###############
