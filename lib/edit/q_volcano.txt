@@ -17,7 +17,6 @@ D:You have failed me, beware you do not do so again!
 L:X:PERMANENT
 L:L:DEEP_LAVA
 L:K:SHALLOW_LAVA
-L:a:MON(fire spirit)
 L:b:MON(fire vortex)
 L:c:MON(fire elemental)
 L:d:MON(magma elemental)
@@ -27,10 +26,10 @@ L:e:MON(imp)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 M:XXXXX..XX..XXXXX<.XX....XXXXXXXXXXX.........eKKKKKKKLLKKKKKKK......XXX
 M:XX...........X.............XXXXX........KKLLLLLKKKKLLLKKKKKKKK......XX
-M:XX...a......................X...a....KKKKKKKKLLLKKKLLLKKKKKKKKKK....XX
+M:XX..........................X........KKKKKKKKLLLKKKLLLKKKKKKKKKK....XX
 M:XXX.................................KKKKKKKKKKLLLKLLLLKKKKKKKKKKKK...X
 M:XX................................KKKKKKKKKKKLLLLLLLLLLKKKKKKKKKKK...X
-M:XX...............a..................dKKKKLLLLLLLLLLLLLKKKKKKKKKKK....X
+M:XX..................................dKKKKLLLLLLLLLLLLLKKKKKKKKKKK....X
 M:XX..................................KKKKKKKKKKLLLLLLLLKKKKKKKKKK.....X
 M:X......c.................b..........KKKKKKKKKLLLKKKLLLKKKKKKKKK.....XX
 M:X.....................................KKKKKKLLLKKKKLLLKKKKKKKKKK.....X
@@ -42,6 +41,6 @@ M:XX.................X..............................KKKKKKK............X
 M:X...............XXXXX....XXX........................................XX
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXX...XXXXX....XXXXXXXXXX.......XXXX
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-R:OBJ(light crossbow):EGO(*)
+R:OBJ(light crossbow)
 
 

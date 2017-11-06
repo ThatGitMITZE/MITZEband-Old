@@ -25,7 +25,7 @@ L:d:MON(black mamba)
 
 
 # Floor with Whip
-L:k:OBJ(whip):EGO(*)
+L:k:OBJ(whip,DEPTH+15)
 
 # Dungeon layout
 M:################################
