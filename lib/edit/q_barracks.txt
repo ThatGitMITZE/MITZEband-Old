@@ -27,7 +27,7 @@ L:b:MON(giant tarantula)
 L:c:MON(flying skull)
 L:d:MON(ghast)
 L:e:MON(ghoul)
-L:k:OBJ(leather scale mail):EGO(*)
+L:k:OBJ(leather scale mail,DEPTH+15)
 L:l:OBJ(hard leather boots):EGO(levitation)
 L:$:OBJ(*)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

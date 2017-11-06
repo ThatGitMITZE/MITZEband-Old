@@ -1713,11 +1713,12 @@ bool add_esp_strong(object_type *o_ptr)
 {
     bool nonliv = FALSE;
 
-    switch (randint1(3))
+    switch (randint1(4))
     {
     case 1: add_flag(o_ptr->flags, OF_ESP_EVIL); break;
     case 2: add_flag(o_ptr->flags, OF_TELEPATHY); break;
-    case 3: add_flag(o_ptr->flags, OF_ESP_NONLIVING); nonliv = TRUE; break;
+	case 3: add_flag(o_ptr->flags, OF_ESP_LIVING); break;
+    case 4: add_flag(o_ptr->flags, OF_ESP_NONLIVING); nonliv = TRUE; break;
     }
 
     return nonliv;

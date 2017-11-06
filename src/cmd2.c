@@ -2701,6 +2701,15 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
                 if (mult < 143) mult = 143;
             }
 
+			/* Kill Good */
+			if ((have_flag(flgs, OF_KILL_GOOD)) &&
+				(r_ptr->flags3 & RF3_GOOD))
+			{
+				mon_lore_3(m_ptr, RF3_GOOD);
+				obj_learn_slay(o_ptr, OF_KILL_GOOD, "slays <color:W>*Good*</color>");
+				if (mult < 186) mult = 186;
+			}
+
             /* Slay Human */
             if ((have_flag(flgs, OF_SLAY_HUMAN)) &&
                 (r_ptr->flags2 & RF2_HUMAN))

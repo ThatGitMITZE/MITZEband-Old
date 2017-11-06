@@ -154,8 +154,8 @@ static _essence_group_t _essence_groups[ESSENCE_TYPE_MAX] = {
 
     { ESSENCE_TYPE_SLAYS, "Slays", {
         { OF_SLAY_EVIL,   "Slay Evil",  100, _ALLOW_MELEE | _ALLOW_AMMO },
-        { OF_SLAY_GOOD,   "Slay Good",   90, _ALLOW_MELEE },
-        { OF_SLAY_LIVING, "Slay Living", 80, _ALLOW_MELEE },
+        { OF_SLAY_GOOD,   "Slay Good",   90, _ALLOW_MELEE | _ALLOW_AMMO },
+        { OF_SLAY_LIVING, "Slay Living", 80, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_SLAY_UNDEAD, "Slay Undead", 20, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_SLAY_DEMON,  "Slay Demon",  20, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_SLAY_DRAGON, "Slay Dragon", 20, _ALLOW_MELEE | _ALLOW_AMMO },
@@ -165,6 +165,8 @@ static _essence_group_t _essence_groups[ESSENCE_TYPE_MAX] = {
         { OF_SLAY_TROLL,  "Slay Troll",  15, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_SLAY_GIANT,  "Slay Giant",  20, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_KILL_EVIL,   "Kill Evil",  100, _ALLOW_MELEE | _ALLOW_AMMO },
+		{ OF_KILL_GOOD,   "Kill Good",   90, _ALLOW_MELEE | _ALLOW_AMMO },
+		{ OF_KILL_LIVING, "Kill Living", 80, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_KILL_UNDEAD, "Kill Undead", 30, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_KILL_DEMON,  "Kill Demon",  30, _ALLOW_MELEE | _ALLOW_AMMO },
         { OF_KILL_DRAGON, "Kill Dragon", 30, _ALLOW_MELEE | _ALLOW_AMMO },
@@ -261,6 +263,7 @@ static _essence_group_t _essence_groups[ESSENCE_TYPE_MAX] = {
         { OF_ESP_EVIL,      "Sense Evil",      40, _ALLOW_ALL },
         { OF_ESP_GOOD,      "Sense Good",      20, _ALLOW_ALL },
         { OF_ESP_NONLIVING, "Sense Nonliving", 40, _ALLOW_ALL },
+		{ OF_ESP_LIVING,    "Sense Living",    40, _ALLOW_ALL },
         { OF_ESP_UNIQUE,    "Sense Unique",    20, _ALLOW_ALL },
         { _ESSENCE_NONE } } },
 };
@@ -1210,8 +1213,6 @@ static int _smith_add_slaying(object_type *o_ptr)
                 break;
             if (cost_h == 0 && cost_d == 0)
                 break;
-            to_h = to_h/2 + randint0((to_h+1)/2 + 1);
-            to_d = to_d/2 + randint0((to_d+1)/2 + 1);
             o_ptr->to_h += to_h;
             o_ptr->to_d += to_d;
             o_ptr->xtra3 = _ESSENCE_SPECIAL;

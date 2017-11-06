@@ -214,9 +214,10 @@ G:KILL(*)
 # New Quests adapted from Kangband
 #####################################################################
 
-N:50:2:Trouble at Home
+N:50:5:Trouble at Home
 T:TOWN | GENERATE
 F:q_inntrouble.txt
+G:KILL(mean looking mercenary, 5)
 
 N:51:24:I Hate Snakes!
 T:TOWN | GENERATE
@@ -225,5 +226,17 @@ F:q_snakes.txt
 N:52:25:The Old Barracks
 T:TOWN | GENERATE
 F:q_barracks.txt
+
+N:53:35:The Elven Embassy
+T:TOWN | GENERATE
+F:q_embassy.txt
+
+N:54:40:The Shopkeeper's Secret
+T:TOWN | GENERATE
+F:q_shopkeeper.txt
+
+N:55:55:The Underground City
+T:TOWN | GENERATE
+F:q_underground.txt
 
 # vim: filetype=qi :

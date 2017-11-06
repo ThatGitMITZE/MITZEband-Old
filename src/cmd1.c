@@ -801,7 +801,12 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, i
                 if (mult < 20) mult = 20;
             }
 
-            if (monster_living(r_ptr) && have_flag(flgs, OF_SLAY_LIVING))
+			if (monster_living(r_ptr) && have_flag(flgs, OF_KILL_LIVING))
+			{
+				if (mult < 20) mult = 20;
+				obj_learn_slay(o_ptr, OF_KILL_LIVING, "slays <color:o>*Living*</color>");
+			}
+            else if (monster_living(r_ptr) && have_flag(flgs, OF_SLAY_LIVING))
             {
                 if (mult < 20) mult = 20;
                 obj_learn_slay(o_ptr, OF_SLAY_LIVING, "slays <color:o>Living</color>");
@@ -893,7 +898,12 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, i
                     msg_format("Your %s slays good.", o_name);
                     obj_learn_slay(o_ptr, OF_BRAND_CHAOS, "has the <color:v>Mark of Chaos</color>");
                     mon_lore_3(m_ptr, RF3_GOOD);
-                    if (have_flag(flgs, OF_SLAY_GOOD))
+					if (have_flag(flgs, OF_KILL_EVIL))
+					{
+						if (mult < 45) mult = 45;
+						obj_learn_slay(o_ptr, OF_KILL_GOOD, "slays <color:W>*Good*</color>");
+					}
+                    else if (have_flag(flgs, OF_SLAY_GOOD))
                     {
                         if (mult < 30) mult = 30;
                         obj_learn_slay(o_ptr, OF_SLAY_GOOD, "slays <color:W>Good</color>");
@@ -906,7 +916,13 @@ s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, i
                 }
                 else
                 {
-                    if (have_flag(flgs, OF_SLAY_GOOD))
+					if (have_flag(flgs, OF_KILL_GOOD))
+					{
+						mon_lore_3(m_ptr, RF3_GOOD);
+						obj_learn_slay(o_ptr, OF_KILL_EVIL, "slays <color:y>*Good*</color>");
+						if (mult < 35) mult = 35;
+					}
+					else if (have_flag(flgs, OF_SLAY_GOOD))
                     {
                         mon_lore_3(m_ptr, RF3_GOOD);
                         obj_learn_slay(o_ptr, OF_SLAY_GOOD, "slays <color:W>Good</color>");

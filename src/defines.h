@@ -366,14 +366,14 @@
  * during the creation of an object (see "get_obj_num()" in "object.c").
  * Lower values yield better objects more often.
  */
-#define GREAT_OBJ       10
+#define GREAT_OBJ        8
 
 /*
  * There is a 1/50 (2%) chance of inflating the requested monster_level
  * during the creation of a monsters (see "get_mon_num()" in "monster.c").
  * Lower values yield harder monsters more often.
  */
-#define NASTY_MON       50              /* 1/chance of inflated monster level */
+#define NASTY_MON       40              /* 1/chance of inflated monster level */
 
 /* 1/x chance of hurting even if invulnerable! */
 #define PENETRATE_INVULNERABILITY 13
@@ -1772,7 +1772,7 @@ enum {
 #define SV_SET_OF_GAUNTLETS              2
 #define SV_SET_OF_DRAGON_GLOVES          3
 #define SV_SET_OF_CESTI                  5
-#define SV_HAND                             6
+#define SV_HAND                          6
 
 /* The "sval" codes for TV_SOFT_ARMOR */
 #define SV_T_SHIRT                       0
@@ -2797,6 +2797,7 @@ enum obj_flags_e {
     OF_ESP_EVIL,
     OF_ESP_GOOD,
     OF_ESP_NONLIVING,
+	OF_ESP_LIVING,
     OF_ESP_UNIQUE,
     OF_ESP_DRAGON,
     OF_ESP_DEMON,
@@ -2821,6 +2822,8 @@ enum obj_flags_e {
     OF_SLAY_GIANT,
 
     OF_KILL_EVIL,
+	OF_KILL_GOOD,
+	OF_KILL_LIVING,
     OF_KILL_DRAGON,
     OF_KILL_DEMON,
     OF_KILL_UNDEAD,
@@ -3961,8 +3964,8 @@ extern int PlayerUID;
 #define SPELL_EXP_EXPERT      1400
 #define SPELL_EXP_MASTER      1600
 
-#define NO_TOWN 6
-#define SECRET_TOWN 5
+#define NO_TOWN 7
+#define SECRET_TOWN 6
 
 #define NIKKI_HIGAWARI     0
 #define NIKKI_BUNSHOU      1
