@@ -2169,6 +2169,7 @@ extern race_t *gnome_get_race(void);
 extern race_t *golem_get_race(void);
 extern race_t *half_giant_get_race(void);
 extern race_t *half_ogre_get_race(void);
+extern race_t *half_orc_get_race(void);
 extern race_t *half_titan_get_race(void);
 extern race_t *half_troll_get_race(void);
 extern race_t *high_elf_get_race(void);
