@@ -4743,7 +4743,7 @@ static errr process_dungeon_file_aux(char *buf, int options)
 
 
 static char tmp[255];
-static cptr variant_name = "POSCHENGBAND";
+static cptr variant_name = "COMPOSBAND";
 
 /*
  * Helper function for "process_dungeon_file()"

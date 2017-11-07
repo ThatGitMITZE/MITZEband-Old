@@ -20,14 +20,15 @@ L:%:GRANITE
 L:W:DEEP_WATER
 L:-:GRASS
 L:*:TRAP(*, 25%):OBJ(*)
-L:a:MON(giant tarantula)
-L:b:MON(drider)
-L:c:OBJ(*, DEPTH+7):MON(master mystic)
-L:d:MON(mystic)
+L:a:MON(venom spider)
+L:b:MON(nexus spider)
+L:c:OBJ(*, DEPTH+7):MON(^master mystic$)
+L:d:MON(^mystic$)
 L:k:OBJ(shadow cloak):EGO(protection)
-L:l:OBJ(mithril shield):EGO(elemental resistance)
+L:l:OBJ(mirror shield)
 L:m:OBJ(RING):EGO(defender)
-L:n:OBJ(POTION, DEPTH+15)
+L:n:OBJ(wizardstaff)
+!:SCRAMBLE(k,l,m,n)
 
 # Dungeon layout
 M:#####################################################################

@@ -1,6 +1,6 @@
 # File: e_info.txt
 
-# Redone for PosChengband 3.0.0 with ideas liberally borrowed from
+# Redone for ComPosband 3.0.0 with ideas liberally borrowed from
 # great variants everywhere! Many thanks!!
 
 # This file is used to initialize the "lib/raw/e_info.raw" file, which is

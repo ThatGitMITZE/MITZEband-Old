@@ -4601,6 +4601,8 @@ extern int PlayerUID;
 #define MAX_CAMELOT_KNIGHT_NUM 10
 #define MON_GRAND_FEARLORD 1121
 
+/*Rescued Monsters could go here, but where are the new spiders?*/
+
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
 

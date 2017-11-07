@@ -1227,7 +1227,7 @@ void do_cmd_options(void)
         Term_clear();
 
         /* Why are we here */
-        prt("PosChengband Options", 1, 0);
+        prt("ComPosband Options", 1, 0);
 
         while(1)
         {
@@ -3218,7 +3218,7 @@ void do_cmd_version(void)
         if (VER_PATCH == 0) xtra = " (Alpha)";
         else xtra = " (Beta)";
     }
-    msg_format("You are playing <color:B>PosChengband</color> <color:r>%d.%d.%d%s</color>.",
+    msg_format("You are playing <color:B>ComPosband</color> <color:r>%d.%d.%d%s</color>.",
         VER_MAJOR, VER_MINOR, VER_PATCH, xtra);
     if (1)
     {

@@ -5,7 +5,7 @@
 #
 
 ########################################################################
-# PosChengband Quests (cf quest.h and quest.c)
+# ComPosband Quests (cf quest.h and quest.c)
 #
 # N:id:lvl:name
 # T:type flags
@@ -227,11 +227,11 @@ N:52:25:The Old Barracks
 T:TOWN | GENERATE
 F:q_barracks.txt
 
-N:53:35:The Elven Embassy
+N:53:40:The Elven Embassy
 T:TOWN | GENERATE
 F:q_embassy.txt
 
-N:54:40:The Shopkeeper's Secret
+N:54:45:The Shopkeeper's Secret
 T:TOWN | GENERATE
 F:q_shopkeeper.txt
 
