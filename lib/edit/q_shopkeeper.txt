@@ -1,0 +1,44 @@
+?:[EQU $QUEST54 Taken InProgress]
+D:While you were gone, I had a visit from
+D:an old friend and we were reminiscing about the infamous store
+D:keeper from the ancient city. My Dwarven friend always got the better
+D:end of the bargan when it came to haggling, but he met his match
+D:whenever he encountered this storekeeper. My advisor believes that
+D:the storekeeper used magic to charm his clients. Why don't you search
+D:the ruins and see if you can shed some light on the matter.
+?:1
+
+?:[EQU $QUEST54 Completed]
+D:Once again, we are in your debt.
+?:1
+
+?:[EQU $QUEST54 Failed]
+D:You have failed me, beware you do not do so again!
+?:1
+
+L:^:TRAP(*, 25%)
+L:a:MON(gargoyle)
+L:b:MON(mithril golem)
+L:c:OBJ(*, DEPTH+7):MON(eog golem)
+L:d:MON(colossus)
+L:e:OBJ(*, DEPTH+20):MON(drolem)
+L:k:OBJ(WAND, DEPTH+10)
+L:l:OBJ(WAND_CHARM_MONSTER, DEPTH+20)
+L:m:OBJ(STAFF, DEPTH+10)
+L:n:OBJ(SCROLL, DEPTH+15)
+
+M:######################################################################
+M:#..............################################################.d.####
+M:#..............#################################################+#####
+M:#......b.......+..................................................+d.#
+M:#..............#.####################+################################
+M:#..............#.##.................................##################
+M:################.##.......c.......c......c..........##############kkl#
+M:#..............#.##.................................##############..m#
+M:#.<............+.##...###########################...##########......m#
+M:#..............#.##...###########################...##########.e.##nn#
+M:################.##.................................+...^..^.+..######
+M:########......##.##^^^^^##^^^^^##^^^^^##^^^^^##^^^^^##################
+M:########..b....+.##..a..##..a..##..a..##..a..##..a..##################
+M:########......##.#####################################################
+M:######################################################################
