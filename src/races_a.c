@@ -446,6 +446,23 @@ race_t *balrog_get_race(void)
 /****************************************************************
  * Barbarian
  ****************************************************************/
+static void _barbarian_gain_level(int new_level)
+{
+	if (new_level >= 30)
+	{
+		if (p_ptr->demigod_power[0] < 0)
+		{
+			int idx = mut_gain_choice(mut_demigod_pred/*mut_human_pred*/);
+			mut_lock(idx);
+			p_ptr->demigod_power[0] = idx;
+		}
+		else if (!mut_present(p_ptr->demigod_power[0]))
+		{
+			mut_gain(p_ptr->demigod_power[0]);
+			mut_lock(p_ptr->demigod_power[0]);
+		}
+	}
+}
 static power_info _barbarian_powers[] =
 {
     { A_STR, {8, 10, 30, berserk_spell}},
@@ -501,6 +518,7 @@ race_t *barbarian_get_race(void)
         me.calc_bonuses = _barbarian_calc_bonuses;
         me.get_powers = _barbarian_get_powers;
         me.get_flags = _barbarian_get_flags;
+		me.gain_level = _barbarian_gain_level;
         init = TRUE;
     }
 
@@ -1490,6 +1508,23 @@ race_t *draconian_get_race(int psubrace)
 /****************************************************************
  * Dunadan
  ****************************************************************/
+static void _dunadan_gain_level(int new_level)
+{
+	if (new_level >= 30)
+	{
+		if (p_ptr->demigod_power[0] < 0)
+		{
+			int idx = mut_gain_choice(mut_demigod_pred/*mut_human_pred*/);
+			mut_lock(idx);
+			p_ptr->demigod_power[0] = idx;
+		}
+		else if (!mut_present(p_ptr->demigod_power[0]))
+		{
+			mut_gain(p_ptr->demigod_power[0]);
+			mut_lock(p_ptr->demigod_power[0]);
+		}
+	}
+}
 static void _dunadan_calc_bonuses(void)
 {
     p_ptr->sustain_con = TRUE;
@@ -1535,6 +1570,8 @@ race_t *dunadan_get_race(void)
 
         me.calc_bonuses = _dunadan_calc_bonuses;
         me.get_flags = _dunadan_get_flags;
+
+		me.gain_level = _dunadan_gain_level;
         init = TRUE;
     }
 
@@ -1992,6 +2029,23 @@ race_t *half_ogre_get_race(void)
 * Half-Orc
 ****************************************************************/
 
+static void _half_orc_gain_level(int new_level)
+{
+	if (new_level >= 30)
+	{
+		if (p_ptr->demigod_power[0] < 0)
+		{
+			int idx = mut_gain_choice(mut_demigod_pred/*mut_human_pred*/);
+			mut_lock(idx);
+			p_ptr->demigod_power[0] = idx;
+		}
+		else if (!mut_present(p_ptr->demigod_power[0]))
+		{
+			mut_gain(p_ptr->demigod_power[0]);
+			mut_lock(p_ptr->demigod_power[0]);
+		}
+	}
+}
 static void _half_orc_calc_bonuses(void)
 {
 	p_ptr->sustain_int = TRUE;
@@ -2038,6 +2092,8 @@ race_t *half_orc_get_race(void)
 
 		me.calc_bonuses = _half_orc_calc_bonuses;
 		me.get_flags = _half_orc_get_flags;
+
+		me.gain_level = _half_orc_gain_level;
 		init = TRUE;
 	}
 
@@ -2292,22 +2348,26 @@ race_t *hobbit_get_race(void)
 /****************************************************************
  * Human
  ****************************************************************/
- static void _human_gain_level(int new_level)
+static void _human_gain_power(int which)
 {
-    if (new_level >= 30)
-    {
-        if (p_ptr->demigod_power[0] < 0)
-        {
-            int idx = mut_gain_choice(mut_demigod_pred/*mut_human_pred*/);
-            mut_lock(idx);
-            p_ptr->demigod_power[0] = idx;
-        }
-        else if (!mut_present(p_ptr->demigod_power[0]))
-        {
-            mut_gain(p_ptr->demigod_power[0]);
-            mut_lock(p_ptr->demigod_power[0]);
-        }
-    }
+	 if (p_ptr->demigod_power[which] < 0)
+	 {
+		 int idx = mut_gain_choice(mut_demigod_pred);
+		 mut_lock(idx);
+		 p_ptr->demigod_power[which] = idx;
+	 }
+	 else if (!mut_present(p_ptr->demigod_power[which]))
+	 {
+		 mut_gain(p_ptr->demigod_power[which]);
+		 mut_lock(p_ptr->demigod_power[which]);
+	 }
+}
+static void _human_gain_level(int new_level)
+{
+	 if (new_level >= 20)
+		 _human_gain_power(0);
+	 if (new_level >= 40)
+		 _human_gain_power(1);
 }
 
 race_t *human_get_race(void)
@@ -2322,8 +2382,8 @@ race_t *human_get_race(void)
                     "Humans are average at everything and also tend to go up levels faster "
                     "than most other races because of their shorter life spans. No racial "
                     "adjustments or intrinsics occur to characters choosing human. However, "
-                    "humans may choose a special talent at L30 that more than makes up for "
-                    "their overall mediocrity.";
+                    "humans may choose special talents at L20 & 40 that more than make up "
+                    "for their overall mediocrity.";
 
         me.stats[A_STR] =  0;
         me.stats[A_INT] =  0;
