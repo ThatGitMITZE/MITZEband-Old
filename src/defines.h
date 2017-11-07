@@ -1735,6 +1735,7 @@ enum {
 #define SV_LARGE_METAL_SHIELD            5
 #define SV_DRAGON_SHIELD                 6
 #define SV_KNIGHT_SHIELD                 7
+#define SV_MITHRIL_SHIELD                8
 #define SV_MIRROR_SHIELD                10
 #define SV_YATA_MIRROR                  50
 
@@ -1757,7 +1758,8 @@ enum {
 #define SV_PAIR_OF_SOFT_LEATHER_BOOTS    2
 #define SV_PAIR_OF_HARD_LEATHER_BOOTS    3
 #define SV_PAIR_OF_DRAGON_GREAVE         4
-#define SV_PAIR_OF_METAL_SHOD_BOOTS      6
+#define SV_PAIR_OF_METAL_SHOD_BOOTS      5
+#define SV_PAIR_OF_MITHRIL_SHOD_BOOTS    5
 
 /* The "sval" codes for TV_CLOAK */
 #define SV_CLOAK                         1
@@ -1769,9 +1771,12 @@ enum {
 
 /* The "sval" codes for TV_GLOVES */
 #define SV_SET_OF_LEATHER_GLOVES         1
-#define SV_SET_OF_GAUNTLETS              2
-#define SV_SET_OF_DRAGON_GLOVES          3
-#define SV_SET_OF_CESTI                  5
+#define SV_SET_OF_STUDDED_GLOVES         2
+#define SV_SET_OF_GAUNTLETS              3
+#define SV_SET_OF_SPIKED_GAUNTLETS       4
+#define SV_SET_OF_MITHRIL_GAUNTLETS       5
+#define SV_SET_OF_DRAGON_GLOVES          6
+#define SV_SET_OF_CESTI                  7
 #define SV_HAND                          6
 
 /* The "sval" codes for TV_SOFT_ARMOR */

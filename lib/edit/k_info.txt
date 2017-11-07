@@ -574,7 +574,7 @@ G:|:v
 I:23:30:0
 W:70:0:0:180:4000
 A:70/8
-P:0:3d11:0:0:0
+P:0:5d6:0:0:0
 F:RES_CHAOS | SHOW_MODS
 D:This inconstant weapon revels in disorder, hacking and slashing your foes
 D:with bloodthirsty glee.
@@ -1421,7 +1421,7 @@ F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 N:*:& Pair~ of Metal Shod Boots
 G:]:s
-I:30:6:0
+I:30:5:0
 W:20:0:0:80:50
 A:20/1
 P:4:1d2:0:2:0
@@ -1485,7 +1485,7 @@ D:curtain of mail.
 
 N:*:& Mithril Helm~
 G:]:B
-I:32:6:0
+I:32:7:0
 W:50:0:0:50:1000
 A:50/2
 P:8:1d3:0:0:0
@@ -1494,7 +1494,7 @@ D:A mighty helmet of pure mithril, completely enclosing the head.
 
 N:*:& Dragon Helm~
 G:]:G
-I:32:7:0
+I:32:8:0
 W:60:0:0:50:10000
 A:60/5
 P:8:1d3:0:0:10
@@ -1504,7 +1504,7 @@ D:It grants resistance to the elements.
 
 N:*:& Kabuto~
 G:]:D
-I:32:8:0
+I:32:9:0
 W:50:0:0:80:300
 A:50/3
 P:7:1d2:0:0:0
@@ -1563,7 +1563,7 @@ D:Leather hand protection, with an open palm for gripping weapons.
 
 N:*:& Set~ of Studded Leather Gloves
 G:]:U
-I:31:1:0
+I:31:2:0
 W:5:0:0:5:3
 A:5/1
 F:TOWN
@@ -1573,7 +1573,7 @@ D:The knuckles are weighted with studs to allow for heavier blows.
 
 N:*:& Set~ of Gauntlets
 G:]:U
-I:31:4:0
+I:31:3:0
 W:10:0:0:20:35
 A:10/1
 F:TOWN
@@ -1589,14 +1589,6 @@ P:4:2d2:1:3:0
 D:A set of gloves that completely covers the hand and wrist in steel plating.
 D:Sharp spikes extend from the knuckles.
 
-N:*:& Set~ of Dragon Gloves
-G:]:G
-I:31:5:0
-W:60:0:0:30:10000
-A:60/5
-P:4:1d3:0:0:10
-F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
-
 N:*:& Set~ of Mithril Gauntlets
 G:]:B
 I:31:5:0
@@ -1605,9 +1597,17 @@ A:50/2
 P:5:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
+N:*:& Set~ of Dragon Gloves
+G:]:G
+I:31:6:0
+W:60:0:0:30:10000
+A:60/5
+P:4:1d3:0:0:10
+F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
+
 N:*:& Set~ of Caestus
 G:]:W
-I:31:2:0
+I:31:7:0
 W:55:0:0:10:1100
 A:55/3
 P:2:1d5:3:5:0
@@ -1616,7 +1616,7 @@ D: leather thongs are enhanced for combat by bloody-looking spikes.
 
 N:*:& Hand~:Decrepit
 G:]:W
-I:31:6:0
+I:31:8:0
 W:66:0:0:5:66666
 P:0:1d1:0:0:0
 F:INSTA_ART | FIXED_FLAVOR
@@ -1677,8 +1677,8 @@ A:40/2
 P:10:1d6:0:0:0
 
 N:*:& Mithril Shield~
-G:):W
-I:34:7:0
+G:):B
+I:34:8:0
 W:50:0:0:80:1000
 A:50/2
 P:9:1d5:0:0:0
