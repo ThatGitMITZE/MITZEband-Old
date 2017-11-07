@@ -20281,8 +20281,8 @@ F:NO_CONF | NO_SLEEP |
 F:RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | RES_TELE |
 F:HAS_LITE_2
 S:1_IN_4 |
-S:TELE_SELF | SCARE | BLIND | CONF |
-S:BO_COLD | BO_MANA | BO_ICEE | BA_COLD | BR_COLD |
+S:TELE_SELF | SCARE | BLIND | CONFUSE |
+S:BO_COLD | BO_MANA | BO_ICE | BA_COLD | BR_COLD |
 S:S_KIN
 P:Copy:Amberite:Chaos-Warrior
 D:He is the son of the lord of Ashihara and resists Amaterasu's conquest.
@@ -20325,7 +20325,7 @@ F:RES_FIRE | RES_ELEC | RES_POIS | RES_TELE |
 F:REGENERATE | HAS_LITE_2
 S:1_IN_3 |
 S:TELE_SELF | TELE_AWAY | TELE_TO | TRAPS |
-S:SCARE | CONF | BLIND |
+S:SCARE | CONFUSE | BLIND |
 S:BO_FIRE | BA_FIRE | BA_ELEC | BA_WATE |
 S:S_MONSTERS
 P:Copy:Amberite:Chaos-Warrior
@@ -20347,7 +20347,7 @@ F:RES_POIS | RES_ELEC | RES_COLD | RES_TELE |
 F:NO_CONF | NO_SLEEP | | REGENERATE | HAS_LITE_2
 F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_2 |
-S:BLINK | TELE_SELF | TELE_AWAY | SCARE | CONF | BLIND |
+S:BLINK | TELE_SELF | TELE_AWAY | SCARE | CONFUSE | BLIND |
 S:DRAIN_MANA | BRAIN_SMASH | CAUSE_3 | CAUSE_4 |
 S:BO_MANA | BA_WATE | BA_CHAO |
 S:HEAL | S_ANT | S_SPIDER | S_HOUND | S_KIN |
@@ -20371,7 +20371,7 @@ F:RES_POIS | RES_ELEC | RES_FIRE | RES_TELE |
 F:AURA_ELEC | NO_CONF | NO_SLEEP | | REGENERATE | HAS_LITE_2
 F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_5 |
-S:TELE_SELF | SCARE | CONF | BLIND |
+S:TELE_SELF | SCARE | CONFUSE | BLIND |
 S:BO_ELEC | BO_MANA | BA_ELEC | BR_ELEC | BR_MANA |
 P:Copy:Amberite:Chaos-Warrior
 D:He is the spirit of a thunder or swords.
@@ -20394,7 +20394,7 @@ F:REGENERATE | ELDRITCH_HORROR
 F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_4 |
 S:BLINK | TELE_SELF | TELE_TO | TRAPS | FORGET | DARKNESS |
-S:SCARE | BLIND | CONF | MIND_BLAST |
+S:SCARE | BLIND | CONFUSE | MIND_BLAST |
 S:CAUSE_3 | CAUSE_4 | BO_ACID | BO_NETH |
 S:BA_ELEC | BA_POIS | BA_NETH | BA_DARK |
 S:S_UNDEAD | S_HI_UNDEAD | S_SPIDER
@@ -20465,8 +20465,8 @@ F:AURA_COLD | REGENERATE | SELF_LITE_1
 F:DROP_CORPSE | DROP_SKELETON
 S:1_IN_3 |
 S:BLINK | TELE_SELF | TELE_TO | TELE_AWAY | FORGET | TRAPS | DARKNESS |
-S:SCARE | CONF | HOLD | BRAIN_SMASH | DRAIN_MANA |
-S:CAUSE_3 | CAUSE_4 | BO_COLD | BO_ICEE |
+S:SCARE | CONFUSE | HOLD | BRAIN_SMASH | DRAIN_MANA |
+S:CAUSE_3 | CAUSE_4 | BO_COLD | BO_ICE |
 S:BA_COLD | BA_NETH | BA_DARK |
 S:S_ANGEL | S_HI_UNDEAD | S_KIN
 P:Copy:Amberite:Chaos-Warrior
@@ -20515,7 +20515,7 @@ F:EVIL | DEMON | NO_CONF | NO_SLEEP | INVISIBLE |
 F:RES_ACID | RES_ELEC | RES_POIS | RES_COLD | RES_FIRE
 P:Copy:Balrog:Mauler
 S:1_IN_6 |
-S:BA_ELEC | BA_COLD | BO_ICEE | SCARE | S_DEMON | S_KIN |
+S:BA_ELEC | BA_COLD | BO_ICE | SCARE | S_DEMON | S_KIN |
 D:It is a demon made almost entirely out of bones. It is humanoid, but with
 D:a large tail similar to that of a giant scorpion, and emits a foul smell
 D:of decay and rot. They are despised even in the hells.
@@ -20534,7 +20534,7 @@ F:OPEN_DOOR | BASH_DOOR | POWERFUL | REGENERATE | CAN_SWIM |
 F:EVIL | DEMON | IM_COLD | NO_CONF | NO_SLEEP |
 P:Copy:Balrog:Mauler
 S:1_IN_6
-S:BR_COLD | BR_SHAR | BA_COLD | BO_ICEE | S_DEMON |
+S:BR_COLD | BR_SHAR | BA_COLD | BO_ICE | S_DEMON |
 S:SLOW | SCARE | HOLD | S_KIN |
 D:This demon from the ice planes is a truly terrifying sight. It has an
 D:extremely large, insect-like body towering a full twelve feet tall, with
@@ -20626,7 +20626,7 @@ F:DROP_CORPSE | DROP_SKELETON
 P:Copy:Amberite:Priest
 S:1_IN_3 |
 S:WORLD | S_MONSTERS | S_UNIQUE | S_AMBERITES |
-S:SCARE | HOLD | BLIND | CONF | TELE_SELF | HEAL | HASTE |
+S:SCARE | HOLD | BLIND | CONFUSE | TELE_SELF | HEAL | HASTE |
 D:Atropos is the eldest of the sisters of fate and cuts the threads of
 D:life with her shears. She has decided that your time is up.
 
@@ -20663,7 +20663,7 @@ P:Copy:Half-Ogre:Warrior-Mage
 P:Body:Naga
 S:1_IN_3
 S:BR_POIS | S_HYDRA | BA_ACID | BA_FIRE | BO_MANA |
-S:SCARE | CONF | HOLD | SLOW | BLIND
+S:SCARE | CONFUSE | HOLD | SLOW | BLIND
 D:A king of the naga.
 
 N:1164:Vasuki, the Serpent King
