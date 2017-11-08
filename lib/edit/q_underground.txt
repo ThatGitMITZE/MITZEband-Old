@@ -19,6 +19,7 @@ L:%:GRANITE
 L:;:RUBBLE
 L:W:DEEP_WATER
 L:V:SHALLOW_WATER
+L:.:FLOOR
 L:<:UP_STAIR
 L:a:MON(undead spider)
 L:b:OBJ(*, DEPTH+7):MON(skull druj)

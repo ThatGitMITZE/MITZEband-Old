@@ -14,6 +14,8 @@ D:Here is a reward for your good work.
 D:You have failed me, beware you do not do so again!
 ?:1
 
+T:QUEST:NORMAL
+L:<:UP_STAIR
 L:#:PERMANENT
 L:.:FLOOR
 L:L:DEEP_LAVA
