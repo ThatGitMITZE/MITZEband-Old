@@ -77,12 +77,12 @@ L:b:BUILDING_1(54)
 ?:[EQU $QUEST54 Finished FailedDone]
 L:b:BUILDING_1(55)
 ?:1
-############### Quest 54 - The Undergound City (from Kangband)
-?:[EQU $QUEST54 Taken]
+############### Quest 55 - The Undergound City (from Kangband)
+?:[EQU $QUEST55 Taken]
 L:Z:QUEST_ENTER(55)
-?:[EQU $QUEST54 Taken Completed Failed]
+?:[EQU $QUEST55 Taken Completed Failed]
 L:b:BUILDING_1(55)
-?:[EQU $QUEST54 Finished FailedDone]
+?:[EQU $QUEST55 Finished FailedDone]
 L:b:BUILDING_1(0)
 ?:1
 

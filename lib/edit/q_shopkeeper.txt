@@ -16,6 +16,11 @@ D:Once again, we are in your debt.
 D:You have failed me, beware you do not do so again!
 ?:1
 
+T:QUEST:NORMAL
+L:#:PERMANENT
+L:+:CLOSED_DOOR
+L:.:FLOOR
+L:<:UP_STAIR
 L:^:TRAP(*, 25%)
 L:a:MON(gargoyle)
 L:b:MON(mithril golem)
