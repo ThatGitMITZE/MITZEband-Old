@@ -15,11 +15,13 @@ D:remember I'm not charging you any taxes.
 D:You have failed me, beware you do not do so again!
 ?:1
 
+T:QUEST:NORMAL
 L:#:PERMANENT
 L:%:GRANITE
 L:W:DEEP_WATER
 L:-:GRASS
 L:*:TRAP(*, 25%):OBJ(*)
+L:<:UP_STAIR
 L:a:MON(venom spider)
 L:b:MON(nexus spider)
 L:c:OBJ(*, DEPTH+7):MON(^master mystic$)

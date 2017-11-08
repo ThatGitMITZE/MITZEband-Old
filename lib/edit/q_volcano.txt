@@ -14,33 +14,34 @@ D:Here is a reward for your good work.
 D:You have failed me, beware you do not do so again!
 ?:1
 
-L:X:PERMANENT
+L:#:PERMANENT
+L:.:FLOOR
 L:L:DEEP_LAVA
 L:K:SHALLOW_LAVA
+L:a:MON(lava golem)
 L:b:MON(fire vortex)
 L:c:MON(fire elemental)
 L:d:MON(magma elemental)
-L:e:MON(imp)
+L:e:MON(^imp$)
 
-# Dungeon
-M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-M:XXXXX..XX..XXXXX<.XX....XXXXXXXXXXX.........eKKKKKKKLLKKKKKKK......XXX
-M:XX...........X.............XXXXX........KKLLLLLKKKKLLLKKKKKKKK......XX
-M:XX..........................X........KKKKKKKKLLLKKKLLLKKKKKKKKKK....XX
-M:XXX.................................KKKKKKKKKKLLLKLLLLKKKKKKKKKKKK...X
-M:XX................................KKKKKKKKKKKLLLLLLLLLLKKKKKKKKKKK...X
-M:XX..................................dKKKKLLLLLLLLLLLLLKKKKKKKKKKK....X
-M:XX..................................KKKKKKKKKKLLLLLLLLKKKKKKKKKK.....X
-M:X......c.................b..........KKKKKKKKKLLLKKKLLLKKKKKKKKK.....XX
-M:X.....................................KKKKKKLLLKKKKLLLKKKKKKKKKK.....X
-M:XX....................................KKKKKLKKKKKKKLLLKKKKKKK.b......X
-M:XX......................................KKKKKKKKKKLLLKKKKKKK........XX
-M:XX.................................c.......KKKKKKKLLLKKKKKK.........XX
-M:XXX..b.........................................KKLLKKKKKKK...........X
-M:XX.................X..............................KKKKKKK............X
-M:X...............XXXXX....XXX........................................XX
-M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...XXXX...XXXXX....XXXXXXXXXX.......XXXX
-M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-R:OBJ(light crossbow)
+M:######################################################################
+M:#####..##..#####<.##....###########.........eKKKKKKKLLKKKKKKK....d.###
+M:##...........#.............#####........KKLLLLLKKKKLLLKKKKKKKK......##
+M:##..........................#........KKKKKKKKLLLKKKLLLKKKKKKKKKK....##
+M:###.......a............c............KKKKKKKKKKLLLKLLLLKKKKKKKKKKKK...#
+M:##................................KKKKKKKKKKKLLLLLLLLLLKKKKKKKKKKK...#
+M:##..................................aKKKKLLLLLLLLLLLLLKKKKKKKKKKK....#
+M:##..................................KKKKKKKKKKLLLLLLLLKKKKKKKKKK.....#
+M:#......c.................b..........KKKKKKKKKLLLKKKLLLKKKKKKKKK.....##
+M:#.....................................KKKKKKLLLKKKKLLLKKKKKKKKKK.....#
+M:##....................................KKKKKLKKKKKKKLLLKKKKKKK.b......#
+M:##......................................KKKKKKKKKKLLLKKKKKKK........##
+M:##.................................a.......KKKKKKKLLLKKKKKK.........##
+M:###..b.........................................KKLLKKKKKKK...........#
+M:##.................#..............................KKKKKKK.c..........#
+M:#.......a.......#####....###.....b..................................##
+M:##############################...####...#####....##########.......####
+M:######################################################################
+R:OBJ(crossbow)
 
 

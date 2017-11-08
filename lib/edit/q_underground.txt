@@ -13,11 +13,13 @@ D:You have our undying gratitude for your heroic efforts.
 D:You have failed me, beware you do not do so again!
 ?:1
 
+T:QUEST:NORMAL
 L:#:PERMANENT
 L:%:GRANITE
 L:;:RUBBLE
 L:W:DEEP_WATER
 L:V:SHALLOW_WATER
+L:<:UP_STAIR
 L:a:MON(undead spider)
 L:b:OBJ(*, DEPTH+7):MON(skull druj)
 L:*:TRAP(*, 25%):OBJ(*)

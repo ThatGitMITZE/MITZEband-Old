@@ -20679,7 +20679,7 @@ F:OPEN_DOOR | BASH_DOOR | DROP_3D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT |
 F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | COLD_BLOOD | RIDING
 P:Copy:Half-Ogre:Warrior
 P:Body:Naga
-S:1_IN_2)
+S:1_IN_2
 S:BR_POIS | S_KIN
 D:A grand nagaraja. The gods and demons used him to churn the ocean and
 D:create amrita, causing poison to envelop the world.
@@ -20700,7 +20700,7 @@ F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | COLD_BLOOD | RIDING
 P:Copy:Half-Titan:Mauler
 P:Body:Jormungand
 P:Life:120
-S:1_IN_4)
+S:1_IN_4
 S:BR_TIME | BR_DISINTEGRATE | S_KIN
 D:A serpent with 1000 heads, upon which Vishnu rests.
 
