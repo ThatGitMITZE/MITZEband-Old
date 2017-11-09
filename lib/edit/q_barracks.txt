@@ -23,27 +23,28 @@ L:M:MON(moaning spirit)
 L:G:MON(^ghost$)
 L:S:MON(spectre)
 L:a:MON(mummified orc)
-L:b:MON(giant tarantula)
+L:b:MON(banshee)
 L:c:MON(flying skull)
 L:d:MON(ghast)
 L:e:MON(ghoul)
+L:f:MON(ghoulking)
 L:k:OBJ(leather scale mail,DEPTH+15)
 L:l:OBJ(hard leather boots):EGO(levitation)
 L:$:OBJ(*)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-M:X.................#..d....Xl..b...kXXX
-M:X.#######+#########...c...X......S..XX
-M:X.#..M......a#....+...c...X..........X
-M:X.#....a.....#....#.......X...M...G..X
-M:X.##+#########....########XXXXXX+XXXXX
-M:X.#..........#..a.#.......a..........X
+M:X.................#..e....#l..b...kXXX
+M:X.#######+#########...d...#......S..XX
+M:X.#..M......a#....+...d...#..........X
+M:X.#....c.....#....#.M.....#...M...G..X
+M:X.##+#########....##############+####X
+M:X.#..........#..d.#.......a..........X
 M:X.#...a..G...+....#....a.............X
-M:X.#..........#....#.........c...c....X
+M:X.#..........#....#.........e...c....X
 M:X.############....#..................X
-M:X............#.G..#.....d...e........X
-M:X..a...M.....#....#..................X
-M:X............#....+....c...c.....a...X
-M:XXXXXXXXX+XXXX....#...........M.....$X
-M:X............X....#.......d.........XX
-M:X<...........X....#...............$XXX
+M:X............#.G..#.....e...f........X
+M:X..c...M.....#....#..................X
+M:X............#....+....e...c.....d...X
+M:X########+####....#...........M.....$X
+M:X............#..M.#.......d.........XX
+M:X<...........#....#...............$XXX
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

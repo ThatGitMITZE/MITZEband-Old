@@ -6114,8 +6114,8 @@ F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | CAN_FLY |
 F:EVIL | UNDEAD | RES_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 F:POS_SEE_INVIS | POS_HOLD_LIFE
 P:Copy:Spectre:Rogue
-S:1_IN_15 |
-S:TELE_SELF | DRAIN_MANA
+S:1_IN_5 |
+S:TELE_SELF | DRAIN_MANA | SHRIEK
 D:It is a ghostly woman's form that wails mournfully.
 
 N:395:Carrion crawler
