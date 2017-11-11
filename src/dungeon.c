@@ -150,7 +150,7 @@ static void _sense_obj(obj_ptr obj)
  */
 static int _adj_pseudo_id(int num)
 {
-    int result = num * adj_pseudo_id[p_ptr->stat_ind[A_WIS]] / 100;
+	int result = num * adj_pseudo_id[p_ptr->stat_ind[A_WIS]] / 100;
     int lev = p_ptr->lev;
 
     result = result * (625 - virtue_current(VIRTUE_KNOWLEDGE)) / 625;

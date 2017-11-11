@@ -1521,12 +1521,6 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             }
             mon_lore_r(mon, RFR_RES_NETH);
         }
-        else if (race->flags3 & RF3_EVIL)
-        {
-            dam /= 2;
-            note = " resists somewhat.";
-            mon_lore_3(mon, RF3_EVIL);
-        }
         break;
     case GF_WATER:
     case GF_WATER2:
