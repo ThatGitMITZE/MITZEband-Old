@@ -1567,7 +1567,7 @@ I:31:2:0
 W:5:0:0:5:3
 A:5/1
 F:TOWN
-P:1:1d1:1:2:0
+P:1:1d1:0:1:0
 D:Leather hand protection, with an open palm for gripping weapons.
 D:The knuckles are weighted with studs to allow for heavier blows.
 
