@@ -30,18 +30,10 @@ L:v:TREE
 # Default for Quest 36 = entrance is tree
 L:s:TREE
 
-############### Quest 22 - Orc Camp
-?:[EQU $QUEST22 Taken]
-L:y:QUEST_ENTER(22)
-?:[EQU $QUEST22 Untaken Taken Completed Failed]
-L:b:BUILDING_1(22)
-?:[EQU $QUEST22 Finished FailedDone]
-L:b:BUILDING_1(19)
-?:1
 ############### Quest 19 - Doom Quest 1
 ?:[EQU $QUEST19 Taken]
 L:z:QUEST_ENTER(19)
-?:[EQU $QUEST19 Taken Completed Failed]
+?:[EQU $QUEST19 Untaken Taken Completed Failed]
 L:b:BUILDING_1(19)
 ?:[EQU $QUEST19 Finished FailedDone]
 L:b:BUILDING_1(36)
@@ -233,7 +225,7 @@ M:                                       T-k###
 M:   s                                   T-####                      v                                            
 M:                                       TT####                                                                   
 M:                                                                                                                
-M:                                   y    x                                                                       
+M:                                        x                                                                       
 M:                                                                                                                
 
 # vim: filetype=q :
