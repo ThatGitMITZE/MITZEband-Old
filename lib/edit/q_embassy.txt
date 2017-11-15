@@ -22,9 +22,9 @@ L:W:DEEP_WATER
 L:-:GRASS
 L:*:TRAP(*, 25%):OBJ(*)
 L:<:UP_STAIR
-L:a:MON(venom spider)
+L:a:MON(phase spider)
 L:b:MON(nexus spider)
-L:c:OBJ(*, DEPTH+7):MON(^master mystic$)
+L:c:OBJ(*, DEPTH+7):MON(^mystic$)
 L:d:MON(^mystic$)
 L:k:OBJ(shadow cloak):EGO(protection)
 L:l:OBJ(mirror shield)

@@ -227,7 +227,7 @@ N:52:25:The Old Barracks
 T:TOWN | GENERATE
 F:q_barracks.txt
 
-N:53:35:The Elven Embassy
+N:53:40:The Elven Embassy
 T:TOWN | GENERATE
 F:q_embassy.txt
 
