@@ -2048,7 +2048,7 @@ static void _half_orc_gain_level(int new_level)
 }
 static void _half_orc_calc_bonuses(void)
 {
-	p_ptr->sustain_int = TRUE;
+	res_add(RES_DARK);
 }
 static void _half_orc_get_flags(u32b flgs[OF_ARRAY_SIZE])
 {
