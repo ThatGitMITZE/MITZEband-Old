@@ -26,7 +26,7 @@ L:b:OBJ(*, DEPTH+7):MON(skull druj)
 L:*:TRAP(*, 25%):OBJ(*)
 L:k:OBJ(iron crown):EGO(might)
 L:l:OBJ(RING):EGO(speed)
-L:m:OBJ(leather gloves):EGO(wizard)
+L:m:OBJ(leather gloves):EGO(thief)
 !SCRAMBLE(k,l,m)
 
 # Dungeon layout

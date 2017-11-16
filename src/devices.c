@@ -3967,14 +3967,14 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_HOLY_GRAIL:
         if (name) return "Healing and Magic Resistance";
         if (desc) return "It heals you and gives temporary resistance to magic.";
-        if (info) return format("Dur d%d+%d", 10, _BOOST(10));
+        if (info) return format("Dur d%d+%d", 50, _BOOST(50));
         if (value) return format("%d", 5000);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
         {
-            if (hp_player(50))
+            if (hp_player(250))
                 device_noticed = TRUE;
-            if (set_resist_magic(_BOOST(10 + randint1(10)), FALSE))
+            if (set_resist_magic(_BOOST(50 + randint1(50)), FALSE))
                 device_noticed = TRUE;
         }
         break;
