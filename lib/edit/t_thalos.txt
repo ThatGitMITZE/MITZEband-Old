@@ -49,7 +49,7 @@ B:5:A:3:Receive prize:0:0:c:40:0
 B:6:N:Weaponmaster:Torvald:Human
 B:6:A:0:Evaluate AC:1000:1000:a:46:0
 
-B:7:N:Fighters Hall:Arrashaw:Human
+B:7:N:Fighters Hall:Arrashaw:Beastman
 B:7:A:0:Enchant weapon:0:0:w:23:0
 B:7:A:1:Enchant armor:0:0:a:24:0
 B:7:C:*:None
@@ -73,7 +73,7 @@ B:8:C:Gray-Mage:Owner
 B:8:C:Ranger:Member
 B:8:C:Warrior-Mage:Member
 
-B:9:N:Temple of Life:Rydell:Elf
+B:9:N:Temple of Life:Rydell Feanathiel:Elf
 B:9:A:0:Healing prayer:0:150:h:28:0
 B:9:A:1:Restoration:400:1500:r:29:0
 B:9:M:*:None
@@ -85,7 +85,7 @@ B:10:A:2:Identify possessions:100:2000:i:26:0
 B:10:C:*:None
 B:10:C:Rogue:Owner
 
-B:11:N:Archers Guild:Ikhlan:Half-elf
+B:11:N:Archers Guild:Ikhlan:Wood-elf
 B:11:A:0:Enchant missiles:20:40:a:30:0
 B:11:A:1:Enchant bow:0:0:b:31:0
 B:11:C:*:None

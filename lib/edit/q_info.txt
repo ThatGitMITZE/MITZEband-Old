@@ -69,7 +69,7 @@ F:q_nature.txt
 N:14:5:Pest Control
 T:TOWN
 W:stronghold
-G:KILL(^warg$, 16)
+G:KILL(^warg$, 8)
 F:q_wargs.txt
 
 N:15:70:Eric's Stronghold
@@ -238,5 +238,34 @@ F:q_shopkeeper.txt
 N:55:50:The Underground City
 T:TOWN | GENERATE
 F:q_underground.txt
+
+#####################################################################
+# Fighters guild quests
+#####################################################################
+
+N:56:30:Troll slayer
+T:TOWN
+W:giant
+G:KILL(olog, 10)
+F:q_trollslayer.txt
+
+N:56:36:Giant slayer
+T:TOWN
+W:giant
+G:KILL(rock giant, 10)
+F:q_giantslayer.txt
+
+N:57:38:Dragon slayer
+T:TOWN
+W:lonely
+G:KILL(ancient multi-hued dragon, 10)
+F:q_dragonslayer.txt
+N:14:5:Pest Control
+
+N:58:50:Demon slayer
+T:TOWN
+W:angband
+G:KILL(greater balrog, 10)
+F:q_demonslayer.txt
 
 # vim: filetype=qi :
