@@ -245,24 +245,24 @@ F:q_underground.txt
 
 N:56:30:Troll slayer
 T:TOWN
-W:giant
+W:orc
 G:KILL(olog, 10)
 F:q_trollslayer.txt
 
-N:56:36:Giant slayer
+N:57:35:Giant slayer
 T:TOWN
 W:giant
 G:KILL(rock giant, 10)
 F:q_giantslayer.txt
 
-N:57:38:Dragon slayer
+N:58:38:Dragon slayer
 T:TOWN
 W:lonely
-G:KILL(ancient multi-hued dragon, 10)
+G:KILL(ancient gold dragon, 10)
 F:q_dragonslayer.txt
 N:14:5:Pest Control
 
-N:58:50:Demon slayer
+N:59:45:Demon slayer
 T:TOWN
 W:angband
 G:KILL(greater balrog, 10)
