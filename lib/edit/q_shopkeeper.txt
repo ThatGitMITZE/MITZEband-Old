@@ -27,9 +27,9 @@ L:b:MON(mithril golem)
 L:c:OBJ(*, DEPTH+7):MON(eog golem)
 L:d:MON(colossus)
 L:e:OBJ(*, DEPTH+20):MON(drolem)
-L:k:OBJ(WAND, DEPTH+10)
+L:k:OBJ(POTION, DEPTH+10)
 L:l:OBJ(WAND_CHARM_MONSTER, DEPTH+20)
-L:m:OBJ(STAFF, DEPTH+10)
+L:m:OBJ(*, DEPTH+10)
 L:n:OBJ(SCROLL, DEPTH+15)
 
 M:######################################################################

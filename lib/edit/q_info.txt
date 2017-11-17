@@ -260,7 +260,6 @@ T:TOWN
 W:lonely
 G:KILL(ancient gold dragon, 10)
 F:q_dragonslayer.txt
-N:14:5:Pest Control
 
 N:59:45:Demon slayer
 T:TOWN
