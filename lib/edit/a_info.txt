@@ -3011,7 +3011,7 @@ I:40:0:3
 W:30:125:3:60000
 F:HIDE_TYPE | FULL_NAME
 F:WIS | CHR | RES_NETHER
-E:HOLY_GRAIL:30:12
+E:HOLY_GRAIL:30:24
 E:You drink from the holy grail.
 
 N:294:'Eternal Blade'
