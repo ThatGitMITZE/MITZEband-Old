@@ -68,7 +68,7 @@ F:q_nature.txt
 
 N:14:5:Pest Control
 T:TOWN
-W:stronghold
+W:warren
 G:KILL(^warg$, 8)
 F:q_wargs.txt
 

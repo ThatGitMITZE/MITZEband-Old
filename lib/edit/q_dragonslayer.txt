@@ -1,7 +1,7 @@
 ?:[EQU $QUEST58 Taken InProgress]
 D:You're pretty strong, so how about something to really 
 D:test you. Go to the lonely mountain and kill ten
-D:ancient multi-hued dragons. That'll show us if you're
+D:ancient gold dragons. That'll show us if you're
 D:really great.
 ?:1
 

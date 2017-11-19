@@ -604,7 +604,7 @@ static bool _generate_special_encounter(room_ptr room, rect_t r, rect_t exclude)
     return FALSE;
 }
 
-#define _WILD_ENCOUNTER_CHANCE 15
+#define _WILD_ENCOUNTER_CHANCE 10
 
 static void _generate_encounters(int x, int y, rect_t r, rect_t exclude)
 {
