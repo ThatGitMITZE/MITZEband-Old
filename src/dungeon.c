@@ -3969,7 +3969,8 @@ static void process_player(void)
                 || p_ptr->pclass == CLASS_RUNE_KNIGHT
                 || p_ptr->pclass == CLASS_RAGE_MAGE
                 || mimic_no_regen() )
-              && !magic_eater_can_regen() )
+              && !magic_eater_can_regen() 
+			  && !samurai_can_concentrate())
             {
                 set_action(ACTION_NONE);
             }
@@ -3985,6 +3986,7 @@ static void process_player(void)
                 || p_ptr->pclass == CLASS_RAGE_MAGE
                 || mimic_no_regen() )
               && !magic_eater_can_regen()
+			  && !samurai_can_concentrate()
               && !p_ptr->blind
               && !p_ptr->confused
               && !p_ptr->poisoned
@@ -4281,7 +4283,8 @@ static void process_player(void)
         /* Resting */
         else if (p_ptr->action == ACTION_REST)
         {
-            /* Timed rest */
+			caster_info *caster_ptr = get_caster_info();
+			/* Timed rest */
             if (resting > 0)
             {
                 /* Reduce rest count */
@@ -4296,19 +4299,15 @@ static void process_player(void)
             /* Take a turn */
             energy_use = 100;
 
-            if (p_ptr->csp < p_ptr->msp)
+            if (caster_ptr && (caster_ptr->options & CASTER_SUPERCHARGE_MANA))
             {
-                caster_info *caster_ptr = get_caster_info();
-                if (caster_ptr && (caster_ptr->options & CASTER_SUPERCHARGE_MANA))
-                {
-                    msg_boundary();
-                    cast_concentration();
-                }
-                else if (p_ptr->clear_mind)
-                {
-                    msg_boundary();
-                    cast_clear_mind();
-                }
+                msg_boundary();
+                cast_concentration();
+            }
+            else if (p_ptr->clear_mind)
+            {
+                msg_boundary();
+                cast_clear_mind();
             }
         }
 
