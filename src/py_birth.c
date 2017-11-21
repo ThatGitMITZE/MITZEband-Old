@@ -2783,7 +2783,7 @@ static void _birth_finalize(void)
     _bounty_uniques(); /* go before reducing uniques for speed ... (e.g. 10% uniques) */
     _reduce_uniques(); /* quests go first, rolling up random quest uniques without restriction */
 
-    p_ptr->au = randint1(600) + randint1(100) + 100;
+    p_ptr->au = randint1(300) + randint1(300) + 200;
 
     /* Everybody gets a chaos patron. The chaos warrior is obvious,
      * but anybody else can acquire MUT_CHAOS_GIFT during the game */
