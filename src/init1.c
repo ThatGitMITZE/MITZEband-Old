@@ -695,6 +695,7 @@ static cptr k_info_flags[OF_COUNT] =
     "ESP_EVIL",
     "ESP_GOOD",
     "ESP_NONLIVING",
+	"ESP_LIVING",
     "ESP_UNIQUE",
     "ESP_DRAGON",
     "ESP_DEMON",
