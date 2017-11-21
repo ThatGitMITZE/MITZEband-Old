@@ -2268,7 +2268,7 @@ void do_cmd_walk(bool pickup)
         int tmp = MAX(1, 120 + p_ptr->lev*10 - lvl + 5);
 
         if (wilderness[py][px].road)
-            tmp *= 3;
+            tmp *= 8;
 
         if (!is_daytime())
             tmp /= 2;
