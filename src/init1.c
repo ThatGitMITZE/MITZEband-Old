@@ -705,7 +705,6 @@ static cptr k_info_flags[OF_COUNT] =
     "ESP_ORC",
     "ESP_TROLL",
     "ESP_GIANT",
-	"ESP_LIVING",
 
     /* Weapons */
     "SLAY_EVIL",
