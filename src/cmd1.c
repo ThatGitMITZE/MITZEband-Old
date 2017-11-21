@@ -6595,15 +6595,6 @@ static bool travel_abort(void)
                 return TRUE;
             }
         }
-
-        /* Visible monsters abort running */
-        if (c_ptr->m_idx)
-        {
-            monster_type *m_ptr = &m_list[c_ptr->m_idx];
-
-            /* Visible monster */
-            if (m_ptr->ml) return TRUE;
-        }
     }
 
     return FALSE;
@@ -6621,6 +6612,7 @@ void travel_step(void)
     int old_run = travel.run;
     int dirs[8] = { 2, 4, 6, 8, 1, 7, 9, 3 };
     point_t pt_best = {0};
+	cave_type *c_ptr;
 
     find_prevdir = travel.dir;
 
@@ -6671,6 +6663,14 @@ void travel_step(void)
 
     travel.dir = dir;
     move_player(dir, always_pickup, easy_disarm);
+	/* Visible monsters abort running after the first step */
+	if (c_ptr->m_idx)
+	{
+		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+
+		/* Visible monster */
+		if (m_ptr->ml) disturb(0, 0);
+	}
     Term_xtra(TERM_XTRA_DELAY, delay_factor * delay_factor * delay_factor);
     Term_fresh();
     travel.run = old_run;
