@@ -3528,7 +3528,7 @@ static void target_set_prepare(int mode)
     }
 
     /* Set the sort hooks */
-    if ((mode & TARGET_KILL) || (mode & TARGET_MARK) || (mode & TARGET_DISI))
+    if ((mode & TARGET_KILL) || (mode & TARGET_MARK) || (mode & TARGET_DISI) || (mode & TARGET_XTRA))
     {
         /* Target the nearest monster for shooting */
         ang_sort_comp = ang_sort_comp_distance;
@@ -4081,7 +4081,7 @@ bool target_set(int mode)
 
             /* Allow target */
             if ( target_able(c_ptr->m_idx)
-             || ((mode & (TARGET_MARK|TARGET_DISI)) && m_list[c_ptr->m_idx].ml))
+             || ((mode & (TARGET_MARK|TARGET_DISI|TARGET_XTRA)) && m_list[c_ptr->m_idx].ml))
             {
                 strcpy(info, "q,t,p,o,+,-,?,<dir>");
 
@@ -4129,7 +4129,7 @@ bool target_set(int mode)
                 case '0':
                 {
                     if ( target_able(c_ptr->m_idx)
-                     || ((mode & (TARGET_MARK|TARGET_DISI)) && m_list[c_ptr->m_idx].ml))
+                     || ((mode & (TARGET_MARK | TARGET_DISI | TARGET_XTRA)) && m_list[c_ptr->m_idx].ml))
                     {
                         health_track(c_ptr->m_idx);
                         target_who = c_ptr->m_idx;
@@ -5036,7 +5036,7 @@ bool tgt_pt(int *x_ptr, int *y_ptr, int rng)
         n = 0;
     }
 
-    msg_print("Select a point and press <color:y>space</color>.");
+    msg_print("Select a point and press <color:y>space</color>. < and > cycle through stairs, * cycles through monsters");
 
     while ((ch != ESCAPE) && !success)
     {
@@ -5062,6 +5062,7 @@ bool tgt_pt(int *x_ptr, int *y_ptr, int rng)
             break;
 
         /* XAngband: Move cursor to stairs */
+		/* Composband: Move cursor to monsters */
         case '>':
         case '<':
             if (expand_list && temp_n)
@@ -5072,7 +5073,7 @@ bool tgt_pt(int *x_ptr, int *y_ptr, int rng)
 
                 n++;
 
-                while(n < temp_n)    /* Skip stairs which have defferent distance */
+                while(n < temp_n)    /* Skip stairs which have different distance */
                 {
                     cave_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
 
@@ -5084,7 +5085,7 @@ bool tgt_pt(int *x_ptr, int *y_ptr, int rng)
                         else
                             break;
                     }
-                    else /* if (ch == '<') */
+                    else if (ch == '<')
                     {
                         if (cave_have_flag_grid(c_ptr, FF_MORE))
                             n++;

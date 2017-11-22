@@ -6595,6 +6595,15 @@ static bool travel_abort(void)
                 return TRUE;
             }
         }
+
+        /* Visible monsters abort running after the first step */
+        if (c_ptr->m_idx && travel.run!=255)
+        {
+            monster_type *m_ptr = &m_list[c_ptr->m_idx];
+
+            /* Visible monster */
+            if (m_ptr->ml) return TRUE;
+        }
     }
 
     return FALSE;
@@ -6663,14 +6672,6 @@ void travel_step(void)
 
     travel.dir = dir;
     move_player(dir, always_pickup, easy_disarm);
-	/* Visible monsters abort running after the first step */
-	if (c_ptr->m_idx)
-	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
-
-		/* Visible monster */
-		if (m_ptr->ml) disturb(0, 0);
-	}
     Term_xtra(TERM_XTRA_DELAY, delay_factor * delay_factor * delay_factor);
     Term_fresh();
     travel.run = old_run;
