@@ -2256,14 +2256,24 @@ void do_cmd_walk(bool pickup)
 
     /* Get a "repeated" direction (hacked to allow targeting) */
 	get_fire_dir(&dir);
-    if (dir>0 && dir!=5)
-    {
-        do_cmd_walk_aux(dir, pickup);
-        more = TRUE;
-	}
-	else if (dir == 5)
+    if (dir == 5)
 	{
-		travel_begin(TRAVEL_MODE_NORMAL, target_col, target_row);
+		int i;
+		int dx, dy, sx, sy;
+		dx = abs(px - target_col);
+		dy = abs(py - target_row);
+		sx = ((target_col == px) || (dx < dy)) ? 0 : ((target_col > px) ? 1 : -1);
+		sy = ((target_row == py) || (dy < dx)) ? 0 : ((target_row > py) ? 1 : -1);
+		for (i = 1; i <= 9; i++)
+		{
+			if ((sx == ddx[i]) && (sy == ddy[i])) dir = i;
+		}
+		do_cmd_walk_aux(dir, pickup);
+	}
+	else if (dir>0 && dir != 5)
+	{
+		do_cmd_walk_aux(dir, pickup);
+		more = TRUE;
 	}
 
     /* Hack again -- Is there a special encounter ??? */
@@ -4010,8 +4020,8 @@ void travel_begin(int mode, int x, int y)
         /* Shut up already ... perhaps we are being called from wilderness_move_player, rather
         than from the top level. It turns out that the Museum in Outpost is located on a scroll
         boundary, and the scroll fires on the last move of the travel flow, but is processed
-        before travel_step checks that we are finished.
-        msg_print("You are already there!!"); */
+        before travel_step checks that we are finished. */
+        msg_print("You are already there!!");
         travel_cancel();
         return;
     }
