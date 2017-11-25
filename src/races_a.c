@@ -2066,7 +2066,9 @@ race_t *half_orc_get_race(void)
 			"They are as bad as dwarves at stealth, and horrible at searching, "
 			"disarming, and perception. Half - orcs are quite ugly, and tend to "
 			"pay more for goods in town. Because of their preference to living "
-			"underground to on the surface, half - orcs resist darkness attacks. ";
+			"underground to on the surface, half - orcs resist darkness attacks. "
+			"The human part of their heritage allows them to select a talent at "
+			"Level 30.";
 
 		me.stats[A_STR] = 2;
 		me.stats[A_INT] = -1;
@@ -2087,7 +2089,7 @@ race_t *half_orc_get_race(void)
 		me.life = 103;
 		me.base_hp = 20;
 		me.exp = 110;
-		me.infra = 5;
+		me.infra = 3;
 		me.shop_adjust = 120;
 
 		me.calc_bonuses = _half_orc_calc_bonuses;
