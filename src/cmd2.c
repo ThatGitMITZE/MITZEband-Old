@@ -2254,12 +2254,17 @@ void do_cmd_walk(bool pickup)
         command_arg = 0;
     }
 
-    /* Get a "repeated" direction */
-    if (get_rep_dir(&dir,FALSE))
+    /* Get a "repeated" direction (hacked to allow targeting) */
+	get_fire_dir(&dir);
+    if (dir>0 && dir!=5)
     {
         do_cmd_walk_aux(dir, pickup);
         more = TRUE;
-    }
+	}
+	else if (dir == 5)
+	{
+		travel_begin(TRAVEL_MODE_NORMAL, target_col, target_row);
+	}
 
     /* Hack again -- Is there a special encounter ??? */
     if (p_ptr->wild_mode && !cave_have_flag_bold(py, px, FF_TOWN))

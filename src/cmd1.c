@@ -6597,13 +6597,14 @@ static bool travel_abort(void)
         }
 
         /* Visible monsters abort running after the first step */
-        if (c_ptr->m_idx && travel.run!=255)
-        {
-            monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		if (c_ptr->m_idx && travel.run != 255)
+		{
+			monster_type *m_ptr = &m_list[c_ptr->m_idx];
 
-            /* Visible monster */
-            if (m_ptr->ml) return TRUE;
-        }
+			/* Visible monster */
+			if (m_ptr->ml)
+				return TRUE;
+		}
     }
 
     return FALSE;
@@ -6622,6 +6623,8 @@ void travel_step(void)
     int dirs[8] = { 2, 4, 6, 8, 1, 7, 9, 3 };
     point_t pt_best = {0};
 	cave_type *c_ptr;
+	int py_old=py;
+	int px_old=px;
 
     find_prevdir = travel.dir;
 
@@ -6676,7 +6679,7 @@ void travel_step(void)
     Term_fresh();
     travel.run = old_run;
 
-    if ((py == travel.y) && (px == travel.x))
+    if (((py == travel.y) && (px == travel.x)) || ((py == py_old)&&(px == px_old)))
     {
         travel_end();
     }
