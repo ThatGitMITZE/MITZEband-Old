@@ -2579,6 +2579,8 @@ static void _device_pick_effect(object_type *o_ptr, device_effect_info_ptr table
         if ((mode & AM_GOOD) && !(entry->flags & _DROP_GOOD)) continue;
         if ((mode & AM_GREAT) && !(entry->flags & _DROP_GREAT)) continue;
         if ((mode & AM_STOCK_TOWN) && !(entry->flags & _STOCK_TOWN)) continue;
+		if (easy_id && entry->type == EFFECT_IDENTIFY_FULL) continue;
+		if (easy_lore && entry->type == EFFECT_PROBING) continue;
 
         entry->prob = 64 / rarity;
         tot += entry->prob;
