@@ -83,11 +83,6 @@ void home_display(doc_ptr doc, obj_p p, int flags)
     slot_t  max = inv_count_slots(inv, obj_exists);
 
     inv_sort_aux(inv, _obj_cmp_score);
-    if (max > 50)
-    {
-        doc_printf(doc, "You have %d items in your home. Here are the top 50:\n", max);
-        max = 50;
-    }
 
     for (slot = 1; slot <= max; slot++)
     {
