@@ -2255,7 +2255,7 @@ void do_cmd_walk(bool pickup)
     }
 
     /* Get a "repeated" direction (hacked to allow targeting) */
-	get_fire_dir(&dir);
+	get_aim_dir(&dir);
     if (dir == 5)
 	{
 		int i;

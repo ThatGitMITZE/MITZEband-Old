@@ -4550,11 +4550,13 @@ bool target_set(int mode)
 bool get_fire_dir(int *dp) { return get_fire_dir_aux(dp, TARGET_KILL); }
 bool get_fire_dir_aux(int *dp, int target_mode)
 {
-    bool valid_target = FALSE;
-    if (use_old_target && target_okay_aux(target_mode))
-        valid_target = TRUE;
+	if (use_old_target && target_okay_aux(target_mode)) {
+		*dp = 5;
+		p_ptr->redraw |= PR_HEALTH_BARS;
+		return TRUE;
+	}
     /* auto_target the closest monster if no valid target is selected up front */
-    if (!valid_target && auto_target && !p_ptr->confused && !p_ptr->image)
+    if (auto_target && !p_ptr->confused && !p_ptr->image)
     {
         int i, best_m_idx = 0, best_dis = 9999;
 
@@ -4600,8 +4602,7 @@ bool get_aim_dir_aux(int *dp, int target_mode)
     /* Global direction */
     dir = command_dir;
 
-    /* Hack -- auto-target if requested */
-    if (use_old_target && target_okay_aux(target_mode)) dir = 5;
+
 
 #ifdef ALLOW_REPEAT /* TNB */
 

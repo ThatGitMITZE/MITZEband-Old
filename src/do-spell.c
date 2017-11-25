@@ -2880,7 +2880,7 @@ static cptr do_chaos_spell(int spell, int mode)
 
             if (cast)
             {
-                if (!get_aim_dir(&dir)) return NULL;
+                if (!get_fire_dir(&dir)) return NULL;
 
                 fire_ball(
                     GF_DISINTEGRATE,
