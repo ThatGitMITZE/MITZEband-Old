@@ -840,12 +840,13 @@ N:51:White harpy
 G:H:w
 I:110:2d5:16:17:10:100
 W:2:1:20:7:30:157
-B:CLAW:HURT(1d2)
-B:CLAW:HURT(1d2)
-B:BITE:HURT(1d3)
+B:CLAW:HURT(1d3)
+B:CLAW:HURT(1d3)
+B:BITE:HURT(1d4):CUT(1d1)
 F:FEMALE | CAN_FLY | WILD_MOUNTAIN
 F:RAND_50 | DROP_CORPSE | POS_GAIN_AC
 F:ANIMAL | EVIL
+S:1_IN_6 | SHRIEK
 P:Copy:Hobbit:Tourist
 P:Life:50
 P:Body:Harpy
@@ -2356,13 +2357,14 @@ D:It is a rodent of unusual size.
 N:157:Black harpy
 G:H:D
 I:120:3d8:16:22:10:100
-W:9:1:40:19:0:0
+W:9:1:60:19:0:0
 B:CLAW:HURT(1d3)
 B:CLAW:HURT(1d3)
-B:BITE:HURT(1d3)
+B:BITE:HURT(1d6):CUT(1d2)
 F:FEMALE | CAN_FLY | WILD_MOUNTAIN | DROP_CORPSE | POS_GAIN_AC
 F:RAND_25 |
 F:ANIMAL | EVIL
+S:1_IN_8 | BR_SOUND
 P:Copy:Hobbit:Tourist
 P:Life:50
 P:Body:Harpy
@@ -21055,6 +21057,8 @@ F:EVIL | ORC | RES_FIRE | RES_COLD | RES_POIS | RES_DARK | NO_CONF | NO_SLEEP
 P:Copy:Kobold:Mauler
 P:Stats:1:0:0:1:1:1
 P:Speed:+5
+S:1_IN_5 |
+S:S_KIN
 O:DROP_WARRIOR
 D:The cruelty in the eyes of this massive orc belies
 D: the intelligence that has kept him a favourite

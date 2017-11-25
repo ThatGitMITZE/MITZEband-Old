@@ -11,6 +11,15 @@ L:b:BUILDING_1(22)
 L:b:BUILDING_1(0)
 ?:1
 
+############### Quest 33 - The Cloning Pits ###############
+?:[EQU $QUEST33 Taken]
+L:y:QUEST_ENTER(33)
+?:[EQU $QUEST33 Taken Completed Failed]
+L:c:BUILDING_2(33)
+?:[EQU $QUEST33 Finished FailedDone]
+L:c:BUILDING_2(0)
+?:1
+
 B:0:N:Library:Ibn Khaldun:Human?
 B:0:A:0:Research item:2000:2000:a:1:0
 B:0:A:1:Town Overview:0:0:h:2:0
@@ -20,8 +29,7 @@ B:1:N:Palace:Sultan Idris:Human
 B:1:A:0:Request quest:0:0:q:6:0
 
 B:2:N:Arena:Tariq:Human
-B:2:A:0:Enter in arena:0:0:e:10:0
-B:2:A:1:Look at poster:0:0:p:8:0
+B:1:A:0:Request quest:0:0:q:6:0
 
 B:3:N:Casino:Aziz:Human
 B:3:A:0:In-Between:0:0:b:12:0
@@ -111,16 +119,16 @@ B:14:C:*:None
 
 ############### Town Layout ###############
 
-M:WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW-
-M:---WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW---
-M:-----WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW--------
-M:--------WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW----------
-M:---------------WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW-------------
-M:------------------WWWWWWWWWW-------WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW--------------
-M:-----------------------------------------------------------------WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW-------------------------------------
-M:--------------------------------------------------------------------------------------WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW---------------------------------------------------^^^^^------------------
-M:--------------------------------------------------------------------------------------------WWWWWWWWWWWWWWWWWWWWWWWWWW-------------------------------------------------------^^^^^^^^-----------------
-M:---------------------------------------------------------------------------------------------WWWWWWWWWWWWWWWWWWWWW------------------------------------------------------------z^^^^^^-----------------
+M:VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-
+M:---VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV---
+M:-----VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV--------
+M:--------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV----------
+M:---------------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-------------
+M:------------------VVVVVVVVVV-------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV--------------
+M:-----------------------------------------------------------------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-------------------------------------
+M:--------------------------------------------------------------------------------------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV---------------------------------------------------^^^^^------------------
+M:--------------------------------------------------------------------------------------------VVVVVVVVVVVVVVVVVVVVVVVVVV-------------------------------------------------------^^^^^^^^-----------------
+M:---------------------------------------------------------------------------------------------VVVVVVVVVVVVVVVVVVVVV------------------------------------------------------------z^^^^^^-----------------
 M:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------^^^^------------------
 M:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 M:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -150,8 +158,8 @@ M:-----#......############.............................###########........######
 M:-----#......############........T-####-T...........###############......#########.#########.#########...#########.......#--------------------------------------------...........----------------------
 M:-----#......############.......-##VVVV##-.........####..........###.....####2####.####3####.####5####...####8####.......#------------------------------...............--------------------------------
 M:-----#......#########b.........#VVVVVVVV#.........c##............##......................................................------------------.............----------------------------------------------
-M:-----#......#########b!........#VVVVVVVV#.........c##............##.........................................................................----------------------------------------------------------
-M:-----#......#########b.........#VVVVVVVV#.........c##............##......................................................--.--------------------------------------------------------------------------
+M:-----#......#########b!........#VVVVVVVV#.........y##............##.........................................................................----------------------------------------------------------
+M:-----#......#########b.........#VVVVVVVV#..........##............##......................................................--.--------------------------------------------------------------------------
 M:-----#......#########b.........#VVVVVVVV#.........c##............##...............................######.......####.....#--.--------------------------------------------------------------------------
 M:-----#......############.......-##VVVV##-.........####..........###.....####1####..###4###..####6##----#.......#######..#--.--------------------------------------------------------------------------
 M:-----#......############........T-####-T...........###############......#########.#########.############........9#####..#--.--------------------------------------------------------------------------

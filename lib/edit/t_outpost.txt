@@ -95,19 +95,11 @@ L:a:BUILDING_0(20)
 ?:1
 ############### Quest 20 - Vapor Quest ################
 ?:[EQU $QUEST20 Taken]
-L:v:QUEST_ENTER(20)
+L:o:QUEST_ENTER(20)
 ?:[EQU $QUEST20 Taken Completed Failed]
 L:a:BUILDING_0(20)
 ?:[EQU $QUEST20 Finished FailedDone]
 L:a:BUILDING_0(33)
-?:1
-############### Quest 33 - The Cloning Pits ###############
-?:[EQU $QUEST33 Taken]
-L:q:QUEST_ENTER(33)
-?:[EQU $QUEST33 Taken Completed Failed]
-L:a:BUILDING_0(33)
-?:[EQU $QUEST33 Finished FailedDone]
-L:a:BUILDING_0(27)
 ?:1
 ############### Quest 27 - The Old Castle ###############
 ?:[EQU $QUEST27 Taken]
