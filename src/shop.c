@@ -805,7 +805,7 @@ static bool _alchemist_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_IDENTIFY);
     else if (one_in_(10))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_TELEPORT);
-    else if (one_in_(20))
+	else if (!easy_id && one_in_(20))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_IDENTIFY);
     else
         k_idx = _get_k_idx(_alchemist_stock_p, _mod_lvl(20));

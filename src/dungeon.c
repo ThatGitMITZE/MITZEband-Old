@@ -4940,6 +4940,7 @@ void determine_today_mon(bool conv_old)
     int max_dl = 3, i;
     bool old_inside_battle = p_ptr->inside_battle;
     monster_race *r_ptr;
+	int loopcounter = 0, old_today_mon = today_mon;
 
     if (!conv_old)
     {
@@ -4954,10 +4955,11 @@ void determine_today_mon(bool conv_old)
     p_ptr->inside_battle = TRUE;
     get_mon_num_prep(NULL, NULL);
 
-    while (1)
+    while (loopcounter < 2000)
     {
         today_mon = get_mon_num(max_dl);
         r_ptr = &r_info[today_mon];
+		loopcounter++;
 
         if (r_ptr->flags1 & RF1_UNIQUE) continue;
         if (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)) continue;
@@ -4968,6 +4970,7 @@ void determine_today_mon(bool conv_old)
         break;
     }
 
+	if (loopcounter >= 2000) today_mon = old_today_mon;
     p_ptr->today_mon = 0;
     p_ptr->inside_battle = old_inside_battle;
 }
