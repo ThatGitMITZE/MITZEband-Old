@@ -735,7 +735,7 @@ static bool _kind_is_utility(int k_idx)
         case SV_SCROLL_DETECT_MONSTERS:
             return TRUE;
         case SV_SCROLL_STAR_IDENTIFY:
-            return TRUE;
+			return easy_id ? FALSE : TRUE;
         }
         break;
 
@@ -1110,7 +1110,7 @@ void monster_death(int m_idx, bool drop_item)
          */
         if (!p_ptr->inside_arena && !p_ptr->inside_battle)
         {
-            if (!one_in_(7))
+            if (!one_in_(5))
             {
                 int wy = y, wx = x;
                 int attempts = 100;

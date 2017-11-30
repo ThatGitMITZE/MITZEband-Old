@@ -3080,7 +3080,7 @@ enum {
 #define RF2_REGENERATE      0x00000200  /* Monster regenerates */
 #define RF2_CHAR_MULTI      0x00000400  /* (Not implemented) */
 #define RF2_ATTR_ANY        0x00000800  /* TY: Attr_any */
-#define RF2_XXX             0x00001000
+#define RF2_FOREST          0x00001000  /* Forest creatures */
 #define RF2_ELDRITCH_HORROR 0x00002000  /* Sanity-blasting horror    */
 #define RF2_AURA_FIRE       0x00004000  /* Burns in melee */
 #define RF2_AURA_ELEC       0x00008000  /* Shocks in melee */
@@ -4577,6 +4577,10 @@ extern int PlayerUID;
 #define MON_DEMETER             1106
 #define MON_APHRODITE           1107
 #define MON_THE_METAL_BABBLE    1110
+#define MON_ARTHUR              1111
+#define MON_GALAHAD             1114
+#define MON_CAMELOT_KNIGHT      1117
+#define MON_GRAND_FEARLORD      1121
 #define MON_GREATER_DEMONIC_QUYLTHULG   1123
 #define MON_ROCK_GIANT          1124
 #define MON_ICE_GIANT           1125
@@ -4587,6 +4591,7 @@ extern int PlayerUID;
 #define MON_MARILITH            1130
 #define MON_MIMIC               1131
 #define MON_MULTIHUED_CENTIPEDE 1132
+#define MON_GERTRUDE            1150
 
 /* The Metal Babble guards the Arena dungeon, but this requires the guardian to be a unique
    monster or the dungeon never gets flagged as completed. Note, this messes up the needle
@@ -4595,16 +4600,9 @@ extern int PlayerUID;
 */
 #define MON_HAGURE2        1110
 
-#define MON_ARTHUR        1111
-#define MON_GALAHAD     1114
-#define MON_CAMELOT_KNIGHT 1117
-#define MAX_CAMELOT_KNIGHT_NUM 10
-#define MON_GRAND_FEARLORD 1121
-
-/*Rescued Monsters could go here, but where are the new spiders?*/
-
-/* Maximum "Nazguls" number */
+/* Maximum limited foes number */
 #define MAX_NAZGUL_NUM 5
+#define MAX_CAMELOT_KNIGHT_NUM 10
 
 #define DO_AUTOPICK       0x01
 #define DO_AUTODESTROY    0x02

@@ -1355,18 +1355,19 @@ P:Body:Scrawny
 S:MULTIPLY
 D:It is a very vicious rodent.
 
-N:87:Snotling
-G:o:G
-I:110:5d5:20:32:30:60
-W:4:1:40:15:30:118
+N:87:Goblin
+G:h:G
+I:110:6d5:20:35:30:60
+W:5:1:40:15:30:118
 B:HIT:HURT(1d9)
 F:MALE |
 F:FRIENDS(3d3) | DROP_60 | RAND_50 | DROP_SKELETON | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | WILD_WOOD | RES_DARK |
-F:EVIL | ORC | HURT_LITE
+F:EVIL | HURT_LITE
 P:Copy:Snotling:Tourist
+S:1_IN_5 | SHOOT(1d8)
 O:DROP_WARRIOR
-D:A pathetic breed of tiny snaga-like creatures. They are running
+D:A pathetic breed of tiny orc-like creatures. They are running
 D:wild and screaming all the time!
 
 N:88:Swordfish
@@ -1803,6 +1804,7 @@ F:FRIENDS(3d3) | DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR |
 F:EVIL | ORC | HURT_LITE | RES_DARK
 P:Copy:Snotling:Warrior
+S:1_IN_12 | SHOOT(1d7)
 O:DROP_WARRIOR
 D:He is one of the many weaker 'slave' orcs, often mistakenly known as a
 D:goblin.
@@ -1920,6 +1922,7 @@ F:FRIENDS(3d3) | DROP_60 | DROP_SKELETON | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR |
 F:EVIL | ORC | HURT_LITE | RES_DARK
 P:Copy:Human:Warrior
+S:1_IN_10 | SHOOT(1d7)
 O:DROP_WARRIOR
 D:He is often found in huge numbers in deep caves.
 
@@ -3692,7 +3695,7 @@ F:FRIENDS(3d3) | DROP_60
 F:OPEN_DOOR | BASH_DOOR |
 F:EVIL | ORC | HURT_LITE | RES_DARK
 P:Copy:Kobold:Warrior
-S:1_IN_15 | SHOOT(2d7)
+S:1_IN_10 | SHOOT(2d7)
 O:DROP_WARRIOR_SHOOT
 D:He is a large orc with powerful arms and deep black skin.
 
@@ -20263,9 +20266,6 @@ P:Copy:Human:Mauler
 P:Body:Centipede6
 D:Oh my god, it's changing colors! Run!!
 
-## Huge sequence gap ... Wait until 8.0 before refilling
-## Don't wait, this is ComPosband
-
 # NEW MONSTERS ->
 # From XAngband
 N:1133:Takeminakata, Drastic Measures
@@ -20500,6 +20500,151 @@ P:Copy:Amberite:Chaos-Warrior
 D:She is the spirit of the sun that lords Takamagahara that is the country
 D:of heaven. Her brightness lights up the world.
 D:She and her children plot to conquest of countries of the ground.
+
+# Forest critters
+
+N:1143:Nixie
+G:h:B
+I:117:20d10:30:60:10:70
+W:25:1:999:600:0:0
+B:HIT:HURT(2d7)
+B:HIT:HURT(2d7)
+F:ONLY_ITEM | DROP_60 | CAN_SWIM |
+F:SMART | TAKE_ITEM | OPEN_DOOR | FRIENDS(1d3)
+F:EVIL | REGENERATE | DROP_CORPSE |
+F:RES_FIRE | RES_ACID | RES_WATE | RES_COLD | RES_POIS | RES_NETH
+F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST
+S:FREQ_25 |
+S:BO_WATER | TELE_TO | BLINK | TELE_SELF | HEAL | BO_ICE
+D:This malevolent water sprite babbles and shifts in the shadows of the
+D:forest, luring you toward a watery doom.
+
+N:1144:Shadow fairy
+G:h:d
+I:117:20d10:30:60:10:70
+W:25:1:999:600:0:0
+B:HIT:HURT(2d7)
+B:HIT:HURT(2d7)
+F:ONLY_ITEM | DROP_60 | CAN_FLY | INVISIBLE
+F:SMART | TAKE_ITEM | OPEN_DOOR |
+F:EVIL | REGENERATE | DROP_CORPSE |
+F:RES_DARK | FRIENDS(2d2) | HURT_LITE
+F:FOREST | NO_QUEST | SELF_DARK_1
+S:FREQ_25 | CONFUSE | BLIND | SLOW | CAUSE_1 |
+S:DARKNESS | TELE_TO | BLINK | TELE_SELF | HEAL | BLINDNESS | BO_MANA
+D:This mysterious creature makes its home in this forest and uses its
+D:magic to drive out intruders like you.
+
+N:1145:Spriggan
+G:h:G
+I:117:25d10:30:70:10:70
+W:25:1:999:600:0:0
+B:HIT:HURT(2d7):EAT_ITEM
+B:HIT:HURT(2d7):EAT_GOLD
+F:DROP_1D2 | CAN_SWIM | FRIENDS(1d4)
+F:SMART | TAKE_ITEM | OPEN_DOOR | INVISIBLE
+F:REGENERATE | DROP_CORPSE | DROP_SKELETON
+F:EVIL | RES_NETH | RES_POIS
+F:FOREST | NO_QUEST
+S:FREQ_25 | MAKE_TRAP
+S:SHOOT(2d8) | BA_POISON | TELE_TO | BLINK | TELE_SELF | DARKNESS
+D:A twisted fairy full of trouble and mischief, it is here to harrass and
+D:torment you.
+
+N:1146:Fiendish donkey
+G:q:g
+I:112:30d12:30:50:15:170
+W:26:1:999:700:0:0
+B:CRUSH:HURT(2d8)
+B:HIT:HURT(2d6)
+B:HIT:HURT(2d6)
+F:OPEN_DOOR | DROP_CORPSE |
+F:RES_ACID | RES_NETH | RES_POIS
+F:FOREST | NO_QUEST | ANIMAL
+S:FREQ_10 |
+S:BR_POIS | SHRIEK
+D:A hellish donkey with glowing red eyes, snorting acrid fumes and honking
+D:with the fury of the damned.
+
+N:1147:Pumpkin man
+G:g:o
+I:112:30d10:30:50:15:170
+W:28:1:999:800:0:0
+B:HIT:HURT(2d8)
+B:HIT:HURT(2d6)
+B:HIT:HURT(2d6)
+F:EVIL | HURT_FIRE |
+F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST
+S:FREQ_15 |
+S:CONFUSE | PARALYZE | BLINDNESS | CAUSE_1 | DARKNESS | SCARE
+D:A bundle of sticks with a pumpkin for a head is grinning madly as it
+D:dances gracelessly toward you.
+
+N:1148:Devil's Huntsman
+G:p:g
+I:115:40d15:30:80:3:170
+W:38:1:999:1600:0:0
+B:HIT:HURT(2d8):CUT(2d8)
+B:HIT:HURT(2d6):BURN(1d6)
+B:HIT:HURT(2d6):TERRIFY
+F:MOVE_BODY |
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | CAN_SWIM |
+F:SMART | TAKE_ITEM | OPEN_DOOR | INVISIBLE
+F:EVIL | REGENERATE | DROP_CORPSE | DROP_SKELETON
+F:RES_FIRE | RES_ACID | RES_COLD | RES_ELEC | RES_DARK | RES_NETH
+F:NO_SLEEP | RES_POIS | FOREST | NO_QUEST | SELF_DARK_1 | AURA_FEAR
+S:FREQ_15 |
+S:SHOOT(6d8) | BR_DARKNESS | TELE_TO | TELE_SELF | S_HOUNDS | HEAL |
+S:HELL_LANCE | AURA_FEAR | HASTE
+D:A shadowed figure moving silently through the wood seeking your blood.
+
+N:1149:Aude
+G:p:o
+I:118:28d20:30:75:5:110
+W:40:1:999:1800:0:0
+B:GAZE:HURT(2d6):CONFUSE(50%)
+B:HIT:HURT(1d12):DISENCHANT
+B:TOUCH:HURT(1d10):PARALYZE(50%)
+F:UNIQUE | FEMALE |
+F:FORCE_MAXHP | MOVE_BODY |
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT | CAN_SWIM |
+F:SMART | TAKE_ITEM | OPEN_DOOR |
+F:EVIL | HUMAN | REGENERATE | DROP_CORPSE |
+F:RES_FIRE | RES_POIS | RES_ELEC | RES_ACID | RES_COLD |
+F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST
+S:1_IN_3 |
+S:BO_FIRE | TELE_SELF | HEAL | HASTE | BA_FIRE | BO_ELEC | BA_ELEC
+S:BO_COLD | BA_COLD | BO_PLASMA | BO_ICE | BRAIN_SMASH | BO_ACID
+S:BA_ACID | BO_POISON | BA_POISON | AURA_FIRE | AURA_COLD | AURA_ELEC
+O:DROP_MAGE
+D:Her shimmering long hair, the color of corn-silk shimmers as it catches
+D:the sparks from the fire. Aude looks at you with moistened lips and half
+D:closed eyes issuing an invitation you somehow cannot resist.
+
+N:1150:Gertrude
+G:p:r
+I:120:33d20:30:80:15:110
+W:40:1:999:2500:0:0
+B:HIT:HURT(1d6):VAMP(1d6)
+B:HIT:HURT(1d6):VAMP(1d6)
+B:HIT:HURT(2d6):DRAIN_EXP(30d6)
+B:TOUCH:TIME(1d8):TERRIFY
+F:UNIQUE | FEMALE |
+F:FORCE_SLEEP | FORCE_MAXHP | MOVE_BODY |
+F:ONLY_ITEM | DROP_3D2 | DROP_GOOD | DROP_GREAT | CAN_SWIM |
+F:SMART | TAKE_ITEM | OPEN_DOOR |
+F:EVIL | HUMAN | REGENERATE | DROP_CORPSE |
+F:RES_FIRE | RES_POIS | RES_ELEC | RES_ACID | RES_COLD |
+F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST | SELF_DARK_1
+A:TIME(1d3)
+S:1_IN_3 |
+S:BA_POIS | TELE_SELF | HEAL | HASTE | BA_NETHER | CAUSE_3 | RAISE_DEAD
+S:BRAIN_SMASH | BA_DARKNESS | BO_ICE | DISPEL | DRAIN_MANA | BO_MANA
+O:DROP_MAGE
+D:This battered old soul has wandered far and long from her coven Dulritch.
+D:The years have not been good to her, her eyes filled with weary hatred,
+D:her mottled cheeks and her gnarled skin testify to her long suffering and
+D:an intense abhorrence for all beauty and youth.
 
 # Demons from Vanilla
 N:1151:Osyluth
@@ -20882,7 +21027,7 @@ D:eternal damnation.
 N:1178:Star Blade
 G:A:R
 I:130:90d100:100:155:255:250
-W:90:6:999:40000:0:0
+W:90:10:999:40000:0:0
 B:GAZE:HURT(7d4):TERRIFY
 B:HIT:HURT(50d5):CUT(10d5)
 B:HIT:HURT(50d5):CUT(10d5)
@@ -21057,7 +21202,7 @@ F:EVIL | ORC | RES_FIRE | RES_COLD | RES_POIS | RES_DARK | NO_CONF | NO_SLEEP
 P:Copy:Kobold:Mauler
 P:Stats:1:0:0:1:1:1
 P:Speed:+5
-S:1_IN_5 |
+S:1_IN_6 |
 S:S_KIN
 O:DROP_WARRIOR
 D:The cruelty in the eyes of this massive orc belies
@@ -21104,6 +21249,73 @@ O:DROP_WARRIOR
 S:BERSERK
 D:He is the champion fighter of the expeditionary orc forces of Angband.  He 
 D:leers and swaggers as he approaches you.
+
+# more kinds of orc
+
+N:1188:Orc berserker
+G:o:u
+I:113:22d10:20:68:20:190
+W:16:3:80:50:0:0
+B:HIT:HURT(4d4):HURT(4d4, 20%)
+B:HIT:HURT(4d4):HURT(4d4, 20%)
+B:HIT:HURT(4d4):HURT(4d4, 20%)
+F:DROP_60 | DROP_SKELETON | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR |
+F:EVIL | ORC | HURT_LITE | RES_DARK 
+P:Copy:Dunadan:Berserker
+P:Life:75
+P:Speed:+3
+S:BERSERK
+O:DROP_WARRIOR
+D:An orcish warrior in a battle-frenzy; he'll stop only when he drops.
+
+N:1189:Orc warlock
+G:h:v
+I:118:7d10:20:16:20:150
+W:23:1:999:75:20000:657
+B:HIT:HURT(1d6)
+B:HIT:HURT(1d6)
+F:DROP_60 | DROP_SKELETON | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR |
+F:EVIL | ORC | HURT_LITE | RES_DARK 
+P:Copy:Dark-Elf:Mage
+S:1_IN_5 |
+S:CONFUSE | MISSILE | DARKNESS | BO_NETHER | DETECT_MONSTERS |
+S:DETECT_TRAPS | CAUSE_1 | CAUSE_2 | MIND_BLAST | RAISE_DEAD
+O:DROP_MAGE
+D:An orc who has made a pact with evil forces for fell power.
+
+N:1190:Orc warlord
+G:o:g
+I:113:25d10:20:75:20:190
+W:20:4:50:40:0:0
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+F:DROP_90 |
+F:OPEN_DOOR | BASH_DOOR | ESCORT | DROP_SKELETON | DROP_CORPSE
+F:EVIL | ORC | RES_DARK | CAN_SPEAK
+P:Copy:Kobold:Warrior
+S:1_IN_10 | SHOOT(3d8)
+O:DROP_WARRIOR_SHOOT
+D:An armoured orc of great size who has won respect and power among
+D:his fellow orcs.
+
+N:1191:Orc thief
+G:o:D
+I:120:15d9:20:30:40:150
+W:23:2:60:110:2500:516
+B:HIT:HURT(2d8)
+B:HIT:HURT(2d8)
+B:HIT:HURT(4d4):EAT_GOLD
+F:DROP_SKELETON | DROP_CORPSE |
+F:OPEN_DOOR | BASH_DOOR | THIEF
+F:EVIL | ORC | HURT_LITE | RES_DARK 
+F:DROP_2D2 | TAKE_ITEM |
+P:Copy:High-Elf:Rogue
+P:Speed:+5
+O:DROP_ROGUE
+D:A sneaky orc who steals things.
 
 # new
 N:1191:The Maw of Hell
