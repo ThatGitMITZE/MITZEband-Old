@@ -20596,7 +20596,9 @@ F:NO_SLEEP | RES_POIS | FOREST | NO_QUEST | SELF_DARK_1 | AURA_FEAR
 S:FREQ_15 |
 S:SHOOT(6d8) | BR_DARKNESS | TELE_TO | TELE_SELF | S_HOUNDS | HEAL |
 S:HELL_LANCE | AURA_FEAR | HASTE
-D:A shadowed figure moving silently through the wood seeking your blood.
+D:The Devil's Huntsman serves the witches and their master. He wears a
+D:rotting cape about his body and draws his weapon slowly. He has been
+D:preparing for the Great Hunt and in a low voice he intones your name.
 
 N:1149:Aude
 G:p:o
