@@ -8,6 +8,14 @@ L:z:QUEST_ENTER(22)
 ?:[EQU $QUEST22 Untaken Taken Completed Failed]
 L:b:BUILDING_1(22)
 ?:[EQU $QUEST22 Finished FailedDone]
+L:b:BUILDING_1(60)
+?:1
+############### Quest 60 - Tunnels
+?:[EQU $QUEST60 Taken]
+L:z:QUEST_ENTER(60)
+?:[EQU $QUEST60 Taken Completed Failed]
+L:b:BUILDING_1(60)
+?:[EQU $QUEST60 Finished FailedDone]
 L:b:BUILDING_1(0)
 ?:1
 
