@@ -1,0 +1,224 @@
+<style:wide>  <color:w>[ComPosband 7.0.2 </color><color:r>(Beta) </color><color:w>Character Dump]
+
+
+ Name       : </color><color:B>PLAYER                       </color><color:w>========== Stats ==========
+ Sex        : </color><color:B>Female                             </color><color:w>STR  :     </color><color:G>18/20
+ </color><color:w>Personality: </color><color:B>Ordinary                           </color><color:w>INT  :         </color><color:G>3
+ </color><color:w>Race       : </color><color:B>Troll                              </color><color:w>WIS  :         </color><color:G>3
+ </color><color:w>Subrace    : </color><color:B>Forest troll                       </color><color:w>DEX  :        </color><color:G>15
+ </color><color:w>Class      : </color><color:B>Monster                            </color><color:w>CON  :        </color><color:G>18
+                                                 </color><color:w>CHR  :         </color><color:G>9
+                                        
+ </color><color:w>Level      :        </color><color:G>1                           </color><color:w>HP   :     </color><color:G>66/66
+ </color><color:w>Cur Exp    :        </color><color:G>0                           </color><color:w>SP   :       </color><color:G>0/0
+ </color><color:w>Max Exp    :        </color><color:G>0                           </color><color:w>AC   :        </color><color:G>15
+ </color><color:w>Adv Exp    :       </color><color:G>15                           </color><color:w>Speed:        </color><color:U>+0
+                                        
+                                           </color><color:w>========== Skills =========
+ Gold       :      </color><color:G>391                     </color><color:w>Melee      : </color><color:y>Good
+ </color><color:w>Kills      :        </color><color:G>0                     </color><color:w>Archery    : </color><color:R>Poor
+ </color><color:w>Uniques    :        </color><color:G>0                     </color><color:w>SavingThrow: </color><color:o>Fair
+ </color><color:w>Artifacts  :      </color><color:G>0+0                     </color><color:w>Stealth    : </color><color:R>Poor
+                                           </color><color:w>Perception : </color><color:r>Bad
+ </color><color:w>Game Day   :        </color><color:G>1                     </color><color:w>Searching  : </color><color:R>Poor
+ </color><color:w>Game Time  :     </color><color:G>6:11                     </color><color:w>Disarming  : </color><color:o>Fair
+ </color><color:w>Play Time  :    </color><color:G>00:00                     </color><color:w>Device     : </color><color:R>Poor
+                                        
+</color><color:w>============================= Character </color><color:o>E</color><color:w>quipment =============================
+
+ a) a Club (3d4) (+0,+7)
+ e) </color><color:r>a Ring of Combat (+0,+7)
+ </color><color:w>i) </color><color:s>Chain Mail (-2) [14,+0]
+
+              </color><color:u>\   </color><color:g>=   </color><color:s>[                               </color><color:u>\   </color><color:g>=   </color><color:s>[    
+ </color><color:G>Resistances  </color><color:w>abcdefghijklm@             </color><color:G>Abilities    </color><color:w>abcdefghijklm@
+ Acid       : </color><color:D>..............   </color><color:w>0%        Speed      : </color><color:D>..............
+ </color><color:w>Electricity: </color><color:D>..............   </color><color:w>0%        Free Act   : </color><color:D>..............
+ </color><color:w>Fire       : </color><color:D>..............   </color><color:w>0%        See Invis  : </color><color:D>..............
+ </color><color:w>Cold       : </color><color:D>..............   </color><color:w>0%        Warning    : </color><color:D>..............
+ </color><color:w>Poison     : </color><color:D>..............   </color><color:w>0%        Slow Digest: </color><color:D>..............
+ </color><color:w>Light      : </color><color:D>.............</color><color:r>v </color><color:D>-30%        </color><color:w>Regenerate : </color><color:D>.............</color><color:w>+ 208%
+ Dark       : </color><color:D>..............   </color><color:w>0%        Levitation : </color><color:D>..............
+ </color><color:w>Confusion  : </color><color:D>..............   </color><color:w>0%        Perm Lite  : </color><color:D>..............
+ </color><color:w>Nether     : </color><color:D>..............   </color><color:w>0%        Reflection : </color><color:D>..............
+ </color><color:w>Nexus      : </color><color:D>..............   </color><color:w>0%        Hold Life  : </color><color:D>..............
+ </color><color:w>Sound      : </color><color:D>..............   </color><color:w>0%        Dec Mana   : </color><color:D>..............
+ </color><color:w>Shards     : </color><color:D>..............   </color><color:w>0%        Easy Spell : </color><color:D>..............
+ </color><color:w>Chaos      : </color><color:D>..............   </color><color:w>0%        Anti Magic : </color><color:D>..............
+ </color><color:w>Disenchantm: </color><color:D>..............   </color><color:w>0%        Magic Skill: </color><color:D>..............
+ </color><color:w>Time       : </color><color:D>..............   </color><color:w>0%        Spell Power: </color><color:D>..............
+ </color><color:w>Blindness  : </color><color:D>..............   </color><color:w>0%        Spell Cap  : </color><color:D>..............
+ </color><color:w>Fear       : </color><color:D>..............   </color><color:w>0x        Magic Res  : </color><color:D>..............
+                                         </color><color:w>Infravision: </color><color:D>.............</color><color:w>+  50'
+              </color><color:u>\   </color><color:g>=   </color><color:s>[                  </color><color:w>Stealth    : </color><color:D>..............
+ </color><color:G>Auras        </color><color:w>abcdefghijklm@             Searching  : </color><color:D>..............
+ </color><color:w>Aura Elec  : </color><color:D>..............            
+ </color><color:w>Aura Fire  : </color><color:D>..............                          </color><color:u>\   </color><color:g>=   </color><color:s>[    
+ </color><color:w>Aura Cold  : </color><color:D>..............             </color><color:G>Sustains     </color><color:w>abcdefghijklm@
+ Aura Shards: </color><color:D>..............             </color><color:w>Sust Str   : </color><color:D>..............
+ </color><color:w>Revenge    : </color><color:D>..............             </color><color:w>Sust Int   : </color><color:D>..............
+                                         </color><color:w>Sust Wis   : </color><color:D>..............
+              </color><color:u>\   </color><color:g>=   </color><color:s>[                  </color><color:w>Sust Dex   : </color><color:D>..............
+ </color><color:G>Slays        </color><color:w>abcdefghijklm@             Sust Con   : </color><color:D>..............
+ </color><color:w>Slay Evil  : </color><color:D>..............             </color><color:w>Sust Chr   : </color><color:D>..............
+ </color><color:w>Slay Undead: </color><color:D>..............            
+ </color><color:w>Slay Demon : </color><color:D>..............                          </color><color:u>\   </color><color:g>=   </color><color:s>[    
+ </color><color:w>Slay Dragon: </color><color:D>..............             </color><color:G>Detection    </color><color:w>abcdefghijklm@
+ Slay Human : </color><color:D>..............             </color><color:w>Telepathy  : </color><color:D>..............
+ </color><color:w>Slay Animal: </color><color:D>..............             </color><color:w>ESP Evil   : </color><color:D>..............
+ </color><color:w>Slay Orc   : </color><color:D>..............             </color><color:w>ESP Nonliv : </color><color:D>..............
+ </color><color:w>Slay Troll : </color><color:D>..............             </color><color:w>ESP Living : </color><color:D>..............
+ </color><color:w>Slay Giant : </color><color:D>..............             </color><color:w>ESP Good   : </color><color:D>..............
+ </color><color:w>Slay Good  : </color><color:D>..............             </color><color:w>ESP Undead : </color><color:D>..............
+ </color><color:w>Slay Living: </color><color:D>..............             </color><color:w>ESP Demon  : </color><color:D>..............
+ </color><color:w>Acid Brand : </color><color:D>..............             </color><color:w>ESP Dragon : </color><color:D>..............
+ </color><color:w>Elec Brand : </color><color:D>..............             </color><color:w>ESP Human  : </color><color:D>..............
+ </color><color:w>Fire Brand : </color><color:D>..............             </color><color:w>ESP Animal : </color><color:D>..............
+ </color><color:w>Cold Brand : </color><color:D>..............             </color><color:w>ESP Orc    : </color><color:D>..............
+ </color><color:w>Pois Brand : </color><color:D>..............             </color><color:w>ESP Troll  : </color><color:D>..............
+ </color><color:w>Mana Brand : </color><color:D>..............             </color><color:w>ESP Giant  : </color><color:D>..............
+ </color><color:w>Sharpness  : </color><color:D>..............            
+ </color><color:w>Quake      : </color><color:D>..............                          </color><color:u>\   </color><color:g>=   </color><color:s>[    
+ </color><color:w>Vampiric   : </color><color:D>..............             </color><color:G>Curses       </color><color:w>abcdefghijklm@
+ Chaotic    : </color><color:D>..............             </color><color:w>Cursed     : </color><color:D>..............
+ </color><color:w>Add Blows  : </color><color:D>..............             </color><color:w>Rnd Tele   : </color><color:D>..............
+ </color><color:w>Blessed    : </color><color:D>..............             </color><color:w>No Tele    : </color><color:D>..............
+ </color><color:w>Riding     : </color><color:D>..............             </color><color:w>Drain Exp  : </color><color:D>..............
+ </color><color:w>Tunnel     : </color><color:D>..............             </color><color:w>Aggravate  : </color><color:D>..............
+ </color><color:w>Throwing   : </color><color:D>..............             </color><color:w>TY Curse   : </color><color:D>..............
+                                        
+              </color><color:u>\   </color><color:g>=   </color><color:s>[    
+              </color><color:w>abcdefghijklm@   Base  R  C  P  E  Total
+       STR  : </color><color:D>..............     </color><color:B>17  3  0  0  0  </color><color:G>18/20
+       </color><color:w>INT  : </color><color:D>..............      </color><color:B>8 -5  0  0  0      </color><color:G>3
+       </color><color:w>WIS  : </color><color:D>..............      </color><color:B>8 -5  0  0  0      </color><color:G>3
+       </color><color:w>DEX  : </color><color:D>..............     </color><color:B>17 -2  0  0  0     </color><color:G>15
+       </color><color:w>CON  : </color><color:D>..............     </color><color:B>15  3  0  0  0     </color><color:G>18
+       </color><color:w>CHR  : </color><color:D>..............      </color><color:B>9  0  0  0  0      </color><color:G>9
+
+</color><color:w>==================================== </color><color:o>M</color><color:w>elee ====================================
+
+ </color><color:y>Hand #1: </color><color:w>a Club (3d4) (+0,+7)                               </color><color:G>Accuracy
+ </color><color:w>Weight : 10.0 lbs                                            AC Hit
+ Profic : Beginner (+0 To Hit)                                25 69%
+ To Hit : 0 + 0 = 0                                           50 43%
+ To Dam : 7 + 12 = 19                                         75 16%
+ Blows  : 1.61                                               100  5%
+ </color><color:G>Damage                                                      </color><color:w>125  5%
+ Crits  : 1.03x (2.6%)                                       150  5%
+ Normal : 42 [1.03x]                                         175  5%
+                                                             200  5%
+
+ </color><color:y>Attack </color><color:w>: Your Bite (1d5)                                    </color><color:G>Accuracy
+ </color><color:w>Weight : 25.2 lbs                                            AC Hit
+ Profic : Beginner (+0 To Hit)                                25 68%
+ To Hit : 0 + -1 = -1                                         50 40%
+ To Dam : 0 + 10 = 10                                         75 12%
+ Blows  : 0.51                                               100  5%
+ </color><color:G>Damage                                                      </color><color:w>125  5%
+ Crits  : 1.08x                                              150  5%
+ Normal : 6                                                  175  5%
+                                                             200  5%
+
+=================================== </color><color:o>D</color><color:w>ungeons ==================================
+
+
+Now, you are in Outpost.
+
+==================================== Q</color><color:o>u</color><color:w>ests ===================================
+
+
+
+
+  </color><color:G>Arena</color><color:w>:  0 Victory
+=================================== </color><color:o>V</color><color:w>irtues ===================================
+
+</color><color:G>Your alignment: </color><color:w>Neutral
+
+You are neutral to Vitality.
+You are neutral to Compassion.
+You are neutral to Valour.
+You are neutral to Honour.
+You are neutral to Harmony.
+You are neutral to Justice.
+You are neutral to Sacrifice.
+You are neutral to Patience.
+
+============================= Character </color><color:o>I</color><color:w>nventory =============================
+
+</color><color:U>8 Rations of Food
+</color><color:y>7 Wooden Torches (with 1500 turns of light)
+
+</color><color:w>================================== </color><color:o>S</color><color:w>tatistics =================================
+
+                 </color><color:y>Gold
+  </color><color:w>Found    :      391
+  Selling  :        0
+  Winnings :        0      391
+  Purchases:        0
+  Services :        0
+  Stolen   :        0        0
+                           </color><color:y>391
+
+  </color><color:R>Objects Found    :     </color><color:w>18
+  </color><color:R>Objects Bought   :      </color><color:w>0
+  </color><color:R>Objects Destroyed:      </color><color:w>0
+
+  </color><color:G>Equipment            Found Bought  Used  Dest
+  </color><color:w>Weapons                  1      0     1     0
+  Rings                    1      0     1     0
+  Lights                   7      0     0     0
+  Body Armor               1      0     1     0
+  Totals                  10      0     3     0
+
+  </color><color:G>Devices              Found Bought  Used  Dest
+
+  Other                Found Bought  Used  Dest
+  </color><color:w>Food                     8      0     0     0
+  Totals                   8      0     0     0
+
+  </color><color:G>Potions              Found Bought  Used  Dest
+
+  Scrolls              Found Bought  Used  Dest
+
+  Wands                Found Bought  Used  Dest
+
+  Staves               Found Bought  Used  Dest
+
+  Rods                 Found Bought  Used  Dest
+
+  Spellbooks           Found Bought  Used  Dest
+
+  </color><color:R>Egos Found    :      </color><color:w>1
+  </color><color:R>Egos Bought   :      </color><color:w>0
+  </color><color:R>Egos Destroyed:      </color><color:w>0
+
+  </color><color:G>Egos                 Found Bought  Dest
+
+  Monsters             Kills   Pct      
+                                        
+                                        
+  </color><color:w>Totals                   0            
+                                        
+================================ </color><color:o>L</color><color:w>ast Messages ================================
+</color><color:B>Welcome! </color><color:w>You begin life in the town where you may purchase supplies for 
+the dangers that await you.
+This is the message line where important information is communicated to 
+you while you play the game. Press </color><color:y>SPACE </color><color:w>every time you see a </color><color:B>-more- 
+</color><color:w>prompt and you are finished reading the current messages. Press </color><color:y>CTRL+P 
+</color><color:w>to review recent messages. You may press </color><color:y>? </color><color:w>at any time for help.
+
+
+You are wearing </color><color:s>Chain Mail (-2) [14,+0] </color><color:w>(i). You are wearing </color><color:r>a Ring of 
+Combat (+0,+7) </color><color:w>(e). You are wearing a Club (3d4) (+0,+7) (a).
+You have </color><color:U>8 Rations of Food</color><color:w>. You have </color><color:y>7 Wooden Torches (with 1500 turns 
+of light)</color><color:w>.
+
+=================================== </color><color:o>O</color><color:w>ptions ===================================
+
+ Game Mode:          </color><color:r>Monster
+ </color><color:w>Preserve Mode:      On
+ Arena Levels:       Sometimes
+
+
+</style>
