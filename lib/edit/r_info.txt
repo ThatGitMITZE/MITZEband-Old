@@ -8539,26 +8539,22 @@ S:1_IN_15 |
 S:BLIND | DRAIN_MANA | SCARE | BO_COLD | AMNESIA
 D:A phantasmal apparition with no head
 
-#Dup with N:667
-N:534:Dread
-G:G:o
-I:120:25d20:20:30:10:100
-W:35:2:999:600:6000:690
-B:HIT:HURT(6d6)
-B:HIT:HURT(6d6)
-B:HIT:HURT(3d4):LOSE_STR(50%)
-F:FORCE_SLEEP | RAND_25 | DEPRECATED
+N:534:Dread knight
+G:p:D
+I:120:35d20:20:50:10:100
+W:35:2:999:600:0:0
+B:HIT:HURT(6d6):TERRIFY
+B:HIT:HURT(6d6):TERRIFY
+B:HIT:HURT(6d6):TERRIFY
 F:ONLY_ITEM | DROP_60 | DROP_2D2 |
-F:TAKE_ITEM | INVISIBLE | COLD_BLOOD | PASS_WALL |
-F:EVIL | UNDEAD | RES_COLD | IM_POIS | RES_NETH | CAN_FLY |
-F:NO_CONF | NO_SLEEP
+F:TAKE_ITEM | RES_NETH |
 F:POS_SEE_INVIS | POS_HOLD_LIFE
 P:Copy:High-Elf:Rogue
-S:1_IN_15 |
-S:BLIND | PARALYZE | CONFUSE | DRAIN_MANA | BO_NETHER
-D:It is a form that screams its presence against the eye. Death incarnate,
-D:its hideous black body seems to struggle against reality as the universe
-D:itself struggles to banish it.
+S:1_IN_8 |
+S:BLIND | PARALYZE | CONFUSE | SCARE | BO_NETHER
+D:A towering figure clad in gruesome spiked armour, you
+D:feel a chill in the air as he advances silently through
+D:the dungeon.
 
 N:535:Leng spider
 G:S:v
@@ -8785,21 +8781,20 @@ S:FREQ_7 | SCARE | BR_ACID(40%) | DETECT_OBJECTS
 D:It has a form that legends are made of. Its still-tender scales are a
 D:darkest black hue. Acid drips from its body.
 
-#Dup with N:673
-N:547:Mumak
-G:q:s
-I:110:90d10:20:55:100:700
-W:35:3:90:1000:50000:716
+N:547:Wooly rhinoceros
+G:q:u
+I:110:80d10:20:55:100:700
+W:35:3:90:1000:0:0
 B:BUTT:HURT(4d6)
 B:BUTT:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
-F:BASH_DOOR | DEPRECATED
+F:BASH_DOOR | FRIENDS(3d3)
 F:ANIMAL | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
 P:Copy:Human:Mauler
 P:Body:Elephant
 S:BERSERK
-D:A massive elephantine form with eyes twisted by madness.
+D:A great heap of muscle and fur with a long sharp horn.
 
 N:548:Giant fire ant
 G:a:r
@@ -11163,7 +11158,7 @@ W:40:2:90:1000:50000:716
 B:BUTT:HURT(4d6)
 B:BUTT:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
-F:FRIENDS(3d3, 25%) |
+F:FRIENDS(3d3) |
 F:BASH_DOOR |
 F:ANIMAL | RIDING
 F:DROP_CORPSE | POS_GAIN_AC
@@ -14713,19 +14708,19 @@ D:A duke of hell, in the flesh.
 
 N:832:Godzilla
 G:R:g
-I:130:85d100:50:185:20:5000
+I:130:100d100:50:215:20:5000
 W:84:2:999:50000:0:0
 B:CLAW:HURT(3d10):POISON(2d10)
 B:CLAW:HURT(3d10):POISON(2d10)
-B:BITE:HURT(20d10)
+B:BITE:HURT(20d10):CUT(5d10)
 B:CRUSH:DISENCHANT(5d12)
 F:UNIQUE | CAN_SWIM | RIDING |
 F:FORCE_SLEEP | FORCE_MAXHP | RES_PLAS | RES_DISE | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD |
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY |
-F:EVIL | RES_FIRE | RES_COLD | NO_CONF | NO_SLEEP | RES_POIS
-F:DROP_CORPSE | POS_GAIN_AC
-S:FREQ_40 | BR_DISENCHANT | BR_PLASMA | BR_NUKE | BR_POISON | BR_ACID
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY |  ANIMAL
+F:RES_FIRE | RES_COLD | NO_CONF | NO_SLEEP | RES_POIS
+F:DROP_CORPSE | POS_GAIN_AC |
+S:FREQ_40 | BR_DISENCHANT | BR_PLASMA | BR_NUKE
 P:Copy:Barbarian:Warrior
 P:Life:120
 P:Body:Giant Reptile
@@ -14859,7 +14854,7 @@ D:accursed sword of doom on the day of Ragnarok.
 
 N:838:The Tarrasque
 G:R:v
-I:130:85d100:50:185:20:2000
+I:130:85d100:50:222:20:2000
 W:84:2:999:50000:0:0
 B:HIT:HURT(10d10)
 B:HIT:HURT(10d10)
@@ -15548,10 +15543,6 @@ P:Copy:Yeek:Tourist
 P:Life:60
 P:Body:Mold
 
-# XXX This monster is deprecated since it needs to be reviewed, and that takes time.
-# I could live with something like this if it couldn't be summoned in the last battle.
-# Hence, the new NO_SUMMON attribute (Serpent summons at L105 so needs slight out of
-# depth boost)
 N:864:a Plain Gold Ring
 G:=:y
 I:140:160d100:100:200:10:2
@@ -15560,7 +15551,7 @@ B:TOUCH:DAM(5d5):BLIND
 B:TOUCH:DISENCHANT(10d10)
 B:TOUCH:HURT(10d10):LOSE_ALL
 B:TOUCH:HURT(10d10):DRAIN_EXP(80d6)
-F:UNIQUE | DEPRECATED | NO_SUMMON | FORCE_SLEEP | NEVER_MOVE | ONLY_ITEM |
+F:UNIQUE | NO_SUMMON | FORCE_SLEEP | NEVER_MOVE | ONLY_ITEM |
 F:DROP_90 | FORCE_MAXHP | DROP_GOOD | DROP_GREAT |
 F:REFLECTING | INVISIBLE | COLD_BLOOD | KILL_EXP |
 F:SMART | EMPTY_MIND | REGENERATE | AURA_FIRE |
@@ -16661,7 +16652,21 @@ S:FREQ_20 | BR_FIRE | SCARE | DETECT_OBJECTS
 D:He is a huge fire spitting turtle of disreputable character.
 D:He is plotting to conquer the Mushroom Kingdom.
 
-### Gap
+N:929:Aboleth
+G:l:v
+I:120:100d50:20:150:10:150
+W:75:3:80:200:0:0
+B:GAZE:DAM(3d12):LOSE_INT(50%)
+B:GAZE:DAM(3d12):LOSE_INT(50%)
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:ONLY_ITEM | DROP_60 | DROP_1D2 |
+F:EVIL | NO_CONF | NO_SLEEP | AQUATIC |
+F:DROP_CORPSE | POS_TELEPATHY | POS_SEE_INVIS
+P:Copy:Mindflayer:Mage
+S:1_IN_6 |
+S:BLIND | PARALYZE | SCARE | MIND_BLAST | BRAIN_SMASH | AMNESIA
+D:A fishlike form with a gruesome head, tentacular mouth, and piercing
+D:eyes. You feel a presence invade your mind.
 
 N:930:Clone of Locke the Superman
 G:p:G
@@ -20503,7 +20508,7 @@ D:She and her children plot to conquest of countries of the ground.
 
 # Forest critters
 
-N:1143:Nixie
+N:1143:Rusulka
 G:h:B
 I:117:20d10:30:60:10:70
 W:25:1:999:600:0:0
@@ -20515,7 +20520,7 @@ F:EVIL | REGENERATE | DROP_CORPSE |
 F:RES_FIRE | RES_ACID | RES_WATE | RES_COLD | RES_POIS | RES_NETH
 F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST
 S:FREQ_25 |
-S:BO_WATER | TELE_TO | BLINK | TELE_SELF | HEAL | BO_ICE
+S:BO_WATER | TELE_TO | BLINK | TELE_SELF | HEAL | BO_ICE | BO_COLD
 D:This malevolent water sprite babbles and shifts in the shadows of the
 D:forest, luring you toward a watery doom.
 
@@ -20582,7 +20587,7 @@ D:dances gracelessly toward you.
 
 N:1148:Devil's Huntsman
 G:p:g
-I:115:40d15:30:80:3:170
+I:115:40d20:30:80:3:170
 W:38:1:999:1600:0:0
 B:HIT:HURT(2d8):CUT(2d8)
 B:HIT:HURT(2d6):FIRE(2d6)
@@ -20595,7 +20600,7 @@ F:RES_FIRE | RES_ACID | RES_COLD | RES_ELEC | RES_DARK | RES_NETH
 F:NO_SLEEP | RES_POIS | FOREST | NO_QUEST | SELF_DARK_1 | AURA_FEAR
 S:FREQ_15 |
 S:DARKNESS | TELE_TO | TELE_SELF | S_HOUND | HEAL |
-S:HELL_LANCE | HASTE
+S:HELL_LANCE | HASTE | SHRIEK |
 D:The Devil's Huntsman serves the witches and their master. He wears a
 D:rotting cape about his body and draws his weapon slowly. He has been
 D:preparing for the Great Hunt and in a low voice he intones your name.
@@ -20691,7 +20696,29 @@ D:great claws on its hands and pincers on its mouth, and its head bulges
 D:with great multi-faceted eyes. Its tail is covered with razor-sharp
 D:spikes.
 
-# 1153 Horned Reaper
+N:1153:Lungorthin, the Balrog of White Fire
+G:U:v
+I:130:70d100:20:187:10:300
+W:88:2:999:37000:0:0
+B:HIT:HURT(4d12):HELL_FIRE(4d12)
+B:HIT:HURT(4d12):HELL_FIRE(4d12)
+B:HIT:HURT(4d12):HELL_FIRE(4d12)
+B:CRUSH:HURT(8d12):DRAIN_CHARGES
+A:HELL_FIRE(3d6)
+F:UNIQUE | MALE | CAN_SPEAK | CAN_FLY |
+F:FORCE_SLEEP | FORCE_MAXHP | KILL_WALL
+F:DROP_4 | DROP_GOOD | FORCE_MAXHP |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | ESCORT
+F:EVIL | DEMON | AURA_FEAR
+F:IM_FIRE | IM_PLASMA | NO_CONF | NO_SLEEP
+F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
+S:1_IN_4
+S:BLIND | CONF | SCARE
+S:BR_FIRE | BR_PLASMA |
+S:S_HI_DEMON | S_UNDEAD
+D:A massive form cloaked in flame.  Lungorthin stares balefully at you with
+D: eyes that smoulder red.  The dungeon floor where he stands is scorched by
+D: the heat of his body.
 
 N:1154:Pit Fiend
 G:U:o
@@ -20815,43 +20842,46 @@ S:BR_POIS | S_HYDRA | BA_ACID | BA_FIRE | BO_MANA |
 S:SCARE | CONFUSE | PARALYZE | SLOW | BLIND
 D:A king of the naga.
 
-N:1164:Vasuki, the Serpent King
-G:n:o
-I:130:79d79:50:150:7:1500
-W:70:3:999:42000:0:0
-B:CRUSH:HURT(25d2)
-B:BITE:HURT(25d2)
-B:SPIT:POISON(50d1)
-F:FORCE_MAXHP | FORCE_SLEEP | UNIQUE | CAN_SWIM | MALE |
-F:MOVE_BODY | IM_POIS | NO_CONF | NO_SLEEP |
-F:OPEN_DOOR | BASH_DOOR | DROP_3D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT |
-F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | COLD_BLOOD | RIDING
-P:Copy:Half-Ogre:Warrior
-P:Body:Naga
-S:1_IN_2
-S:BR_POIS | S_KIN
-D:A grand nagaraja. The gods and demons used him to churn the ocean and
-D:create amrita, causing poison to envelop the world.
-
-N:1165:Shesha, the Infinite
-G:n:W
-I:130:99d99:50:160:12:3000
-W:80:3:999:55000:0:0
-B:BITE:HURT(14d10)
-B:BITE:HURT(14d10)
-B:BITE:BLIND(14d10)
-B:BITE:CONFUSE(14d10)
-F:FORCE_MAXHP | FORCE_SLEEP | UNIQUE | CAN_SWIM | MALE |
-F:MOVE_BODY | RES_POIS | NO_CONF | NO_SLEEP |
-F:OPEN_DOOR | BASH_DOOR | DROP_4D2 | DROP_3D2 | DROP_GOOD |
-F:RES_TIME | DROP_GREAT |
-F:DROP_CORPSE | DROP_SKELETON | POS_GAIN_AC | COLD_BLOOD | RIDING
-P:Copy:Half-Titan:Mauler
-P:Body:Jormungand
+N:1164:Mothra
+G:I:U
+I:130:65d100:50:160:20:5000
+W:80:2:999:50000:0:0
+B:CRUSH:HURT(20d10)
+B:GAZE:HURT(5d12):CONFUSE
+F:UNIQUE | CAN_FLY | RIDING |
+F:FORCE_SLEEP | FORCE_MAXHP | RES_PLAS | RES_DISE | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | ANIMAL
+F:GOOD | RES_FIRE | RES_COLD | NO_CONF | NO_SLEEP | RES_POIS
+F:DROP_CORPSE | POS_GAIN_AC
+S:FREQ_40 | BR_SOUND | BLINK | TELE_TO | BR_POISON | TELE_SELF |
+S:CONFUSE | SCARE |
+P:Copy:Barbarian:Warrior
 P:Life:120
-S:1_IN_4
-S:BR_TIME | BR_DISINTEGRATE | S_KIN
-D:A serpent with 1000 heads, upon which Vishnu rests.
+P:Body:Giant Reptile
+D:The giant moth from Mothra island is here to face the threat to her
+D:home.
+
+N:1165:King Ghidora
+G:D:y
+I:130:85d100:50:185:20:5000
+W:85:2:999:50000:0:0
+B:CLAW:HURT(3d10):CHAOS(2d10)
+B:CLAW:HURT(5d10)
+B:BITE:HURT(20d10):CUT(5d10)
+B:CRUSH:DISENCHANT(5d12)
+F:UNIQUE | CAN_FLY | RIDING |
+F:FORCE_SLEEP | FORCE_MAXHP | RES_PLAS | RES_DISE | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | DRAGON
+F:EVIL | RES_FIRE | RES_COLD | NO_CONF | NO_SLEEP | RES_POIS
+F:DROP_CORPSE | POS_GAIN_AC
+S:FREQ_40 | BR_DISENCHANT | BR_PLASMA | BR_CHAOS | TELE_SELF | BR_ELEC
+P:Copy:Barbarian:Warrior
+P:Life:120
+P:Body:Giant Reptile
+D:An ancient dragon from outer space with three heads. If he is not
+D:stopped he will destroy the world.
 
 N:1166:Thanatos, God of Death
 G:P:D
@@ -20914,7 +20944,6 @@ D:"The lord king, the great father of the terrible eyes. And this god is
 D:waiting for the day when the surface of the Earth will be cleared of
 D:human beings so that he, and his children, the Chitauli, can come out
 D:and enjoy the heat of the Sun."
-
 
 N:1171:Flame spider
 G:S:r
@@ -21272,7 +21301,7 @@ O:DROP_WARRIOR
 D:An orcish warrior in a battle-frenzy; he'll stop only when he drops.
 
 N:1189:Orc warlock
-G:h:v
+G:o:v
 I:118:7d10:20:16:20:150
 W:23:1:999:75:20000:657
 B:HIT:HURT(1d6)
@@ -21298,26 +21327,10 @@ F:DROP_90 |
 F:OPEN_DOOR | BASH_DOOR | ESCORT | DROP_SKELETON | DROP_CORPSE
 F:EVIL | ORC | RES_DARK | CAN_SPEAK
 P:Copy:Kobold:Warrior
-S:1_IN_10 | SHOOT(3d8)
+S:1_IN_10 | SHOOT(3d8) | S_KIN | BERSERK
 O:DROP_WARRIOR_SHOOT
 D:An armoured orc of great size who has won respect and power among
 D:his fellow orcs.
-
-N:1191:Orc thief
-G:o:D
-I:120:15d9:20:30:40:150
-W:23:2:60:110:2500:516
-B:HIT:HURT(2d8)
-B:HIT:HURT(2d8)
-B:HIT:HURT(4d4):EAT_GOLD
-F:DROP_SKELETON | DROP_CORPSE |
-F:OPEN_DOOR | BASH_DOOR | THIEF
-F:EVIL | ORC | HURT_LITE | RES_DARK 
-F:DROP_2D2 | TAKE_ITEM |
-P:Copy:High-Elf:Rogue
-P:Speed:+5
-O:DROP_ROGUE
-D:A sneaky orc who steals things.
 
 # new
 N:1191:The Maw of Hell
