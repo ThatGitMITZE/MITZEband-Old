@@ -3308,6 +3308,35 @@ F:FULL_NAME | WIS | INSTA_ART
 E:RESTORE_MANA:50:777
 E:You focus your thoughts as your stone thrums with power.
 
+# Composband additions (various sources)
+
+N:329:of Thrain
+I:39:23:2
+W:50:5:20:100000
+P:0:1d1:0:0:0
+F:SEE_INVIS | HOLD_LIFE | RES_LITE | RES_DARK
+E:CLAIRVOYANCE:50:150
+D:A great globe seemingly filled with moonlight, the famed Heart of the 
+D:Mountain.  It splinters the light that falls upon it into ten thousand 
+D:sparks of white radiance shot with glints of the rainbow.
+
+N:330:The Sword of the Winds
+I:23:17:2
+W:30:35:130:40000
+P:0:3d6:12:16:0
+F:VORPAL | RIDING | FULL_NAME | BLOWS
+F:SPEED | DEX | SHOW_MODS
+D:This sword is light as a feather. The air howls as you swing it.
+
+N:331:'VainGlory'
+I:21:12:5
+W:30:30:150:30000
+P:0:3d7:8:15:0
+F:DEC_WIS |
+F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_DEMON | SLAY_EVIL
+F:SHOW_MODS
+D:You swell with pride as you wield this spiked mace.
+
 # N: serial number : item name
 # I: tval : sval : pval
 # W: depth : rarity : weight : cost

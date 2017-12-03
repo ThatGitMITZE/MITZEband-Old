@@ -1689,7 +1689,7 @@ static struct {
     s16b sval;
 } prize_list[MAX_KUBI] = 
 {
-    {TV_POTION, SV_POTION_CURING},
+    {TV_POTION, SV_POTION_SPEED},
     {TV_POTION, SV_POTION_SPEED},
     {TV_POTION, SV_POTION_SPEED},
     {TV_POTION, SV_POTION_RESISTANCE},
