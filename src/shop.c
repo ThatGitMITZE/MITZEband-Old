@@ -439,10 +439,6 @@ static bool _create(obj_ptr obj, int k_idx, int lvl, u32b mode)
     object_prep(obj, k_idx);
     apply_magic(obj, lvl, mode);
     if (obj->tval == TV_LITE)
-    {
-        if (obj->sval == SV_LITE_TORCH) obj->xtra4 = FUEL_TORCH / 2;
-        if (obj->sval == SV_LITE_LANTERN) obj->xtra4 = FUEL_LAMP / 2;
-    }
 
     if (object_is_cursed(obj)) return FALSE;
 
@@ -545,7 +541,7 @@ static bool _general_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_DIGGING, SV_PICK);
     else
         k_idx = _get_k_idx(_general_stock_p, _mod_lvl(20));
-    return _create(obj, k_idx, _mod_lvl(rand_range(1, 5)), mode);
+    return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 
 /************************************************************************
@@ -578,7 +574,7 @@ static bool _armory_stock_p(int k_idx)
 static bool _armory_create(obj_ptr obj, u32b mode)
 {
     int k_idx = _get_k_idx(_armory_stock_p, _mod_lvl(20));
-    return _create(obj, k_idx, _mod_lvl(rand_range(1, 5)), mode);
+    return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 
 /************************************************************************
@@ -649,7 +645,7 @@ static bool _weapon_create(obj_ptr obj, u32b mode)
 {
     int k_idx;
     int l1 = _mod_lvl(20);
-    int l2 = _mod_lvl(rand_range(1, 5));
+    int l2 = _mod_lvl(rand_range(1, 15));
     if (one_in_(3))
         k_idx = _get_k_idx(_weapon_book_p, l1);
     else if (one_in_(4))
@@ -758,7 +754,7 @@ static bool _temple_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE);
     else
         k_idx = _get_k_idx(_temple_stock_p, _mod_lvl(20));
-    return _create(obj, k_idx, _mod_lvl(rand_range(1, 5)), mode);
+    return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 
 /************************************************************************
@@ -809,7 +805,7 @@ static bool _alchemist_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_IDENTIFY);
     else
         k_idx = _get_k_idx(_alchemist_stock_p, _mod_lvl(20));
-    return _create(obj, k_idx, _mod_lvl(rand_range(1, 5)), mode);
+    return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 
 /************************************************************************
@@ -1018,7 +1014,7 @@ static bool _book_stock_p(int k_idx)
 static bool _book_create(obj_ptr obj, u32b mode)
 {
     int k_idx = _get_k_idx(_book_stock_p, _mod_lvl(20));
-    return _create(obj, k_idx, _mod_lvl(rand_range(1, 5)), mode);
+    return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 
 /************************************************************************

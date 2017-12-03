@@ -966,7 +966,6 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_CURING: {
         if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
-        if (info) return info_heal(0, 0, _potion_power(amt));
         if (cast)
         {
             if (set_blind(0, TRUE)) device_noticed = TRUE;
