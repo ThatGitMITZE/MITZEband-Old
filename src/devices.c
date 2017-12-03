@@ -639,36 +639,31 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_CURE_LIGHT:
-        if (desc) return "It heals you trivially, cures blindness and berserk and reduces cuts when you quaff it.";
+        if (desc) return "It heals you slightly, cures berserk and reduces cuts when you quaff it.";
         if (info) return info_heal(4, _potion_power(8), 0);
         if (cast)
         {
             if (hp_player(_potion_power(damroll(4, 8)))) device_noticed = TRUE;
-            if (set_blind(0, TRUE)) device_noticed = TRUE;
             if (set_cut(p_ptr->cut - 15, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;
         }
         break;
     case SV_POTION_CURE_SERIOUS:
-        if (desc) return "It heals you a bit, cures blindness, confusion and berserk and reduces cuts when you quaff it.";
+        if (desc) return "It heals you a bit, cures berserk and reduces cuts when you quaff it.";
         if (info) return info_heal(8, _potion_power(8), 0);
         if (cast)
         {
             if (hp_player(_potion_power(damroll(8, 8)))) device_noticed = TRUE;
-            if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_cut((p_ptr->cut / 2) - 50, TRUE)) device_noticed = TRUE;
             if (set_shero(0,TRUE)) device_noticed = TRUE;
         }
         break;
     case SV_POTION_CURE_CRITICAL:
-        if (desc) return "It heals you and curse poison a bit and cures blindness, confusion, stunned, cuts and berserk when you quaff it.";
+        if (desc) return "It heals you and cures stunned, cuts and berserk when you quaff it.";
         if (info) return info_heal(12, _potion_power(8), 0);
         if (cast)
         {
             if (hp_player(_potion_power(damroll(12, 8)))) device_noticed = TRUE;
-            if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
             if (set_cut(0, TRUE)) device_noticed = TRUE;
 			if (set_poisoned(p_ptr->poisoned - MAX(150, p_ptr->poisoned / 3), TRUE))
@@ -970,14 +965,12 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_CURING: {
-        int amt = 50;
-        if (desc) return "It heals you a bit and cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
+        if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
         if (info) return info_heal(0, 0, _potion_power(amt));
         if (cast)
         {
-            if (hp_player(_potion_power(amt))) device_noticed = TRUE;
             if (set_blind(0, TRUE)) device_noticed = TRUE;
-            if (set_poisoned(p_ptr->poisoned - MAX(150, p_ptr->poisoned / 3), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(200, p_ptr->poisoned / 2), TRUE))
                 device_noticed = TRUE;
             if (set_confused(0, TRUE)) device_noticed = TRUE;
             if (set_stun(0, TRUE)) device_noticed = TRUE;
