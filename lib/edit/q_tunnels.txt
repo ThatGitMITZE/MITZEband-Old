@@ -16,6 +16,7 @@ D:Thankyou for your service to the city.
 D:You have failed me, beware you do not do so again!
 ?:1
 
+T:QUEST:NORMAL
 L:k:OBJ(POTION, DEPTH+10)
 L:l:OBJ(flail):EGO(morgul)
 L:a:MON(orc berserker)
