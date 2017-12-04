@@ -6129,7 +6129,7 @@ I:110:20d12:15:40:10:50
 W:25:2:60:60:0:0
 B:STING:HURT(2d6):PARALYZE(50%)
 B:STING:HURT(2d6):PARALYZE(50%)
-F:RAND_25 |
+F:RAND_25 | FRIENDS(1d3)
 F:WEIRD_MIND | BASH_DOOR | DROP_SKELETON
 F:ANIMAL | RES_POIS
 F:POS_GAIN_AC
@@ -8214,20 +8214,18 @@ F:POS_GAIN_AC | POS_HOLD_LIFE
 P:Copy:Zombie:Rage-Mage
 D:It is impossible to define its form but its violence is legendary.
 
-N:515:Carrion crawler
-G:c:g
-I:110:20d12:15:40:10:50
-W:34:2:60:100:0:0
-B:STING:HURT(2d6):PARALYZE(50%)
-B:STING:HURT(2d6):PARALYZE(50%)
-F:RAND_25 | FRIENDS(1d7) | DROP_SKELETON
-F:WEIRD_MIND | BASH_DOOR |
-F:ANIMAL | RES_POIS
-F:POS_GAIN_AC
-P:Copy:Human:Warrior
-P:Body:Centipede4
-D:A hideous centipede covered in slime and with glowing tentacles around its
-D:head.
+N:515:Velociraptor
+G:R:U
+I:130:40d5:20:60:5:500
+W:34:2:70:150:0:0
+B:CLAW:HURT(1d6):CUT(2d6)
+B:CLAW:HURT(1d6):CUT(2d6)
+B:BITE:HURT(2d6)
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | ANIMAL | RIDING
+F:DROP_CORPSE | POS_GAIN_AC | FRIENDS(2d6)
+P:Copy:Barbarian:Warrior
+P:Body:Reptile
+D:Speedy little creatures with sharp claws and teeth.
 
 N:516:Master thief
 G:p:D
