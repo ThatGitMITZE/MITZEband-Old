@@ -439,6 +439,10 @@ static bool _create(obj_ptr obj, int k_idx, int lvl, u32b mode)
     object_prep(obj, k_idx);
     apply_magic(obj, lvl, mode);
     if (obj->tval == TV_LITE)
+	{
+		if (obj->sval == SV_LITE_TORCH) obj->xtra4 = FUEL_TORCH;
+		if (obj->sval == SV_LITE_LANTERN) obj->xtra4 = FUEL_LAMP;
+	}
 
     if (object_is_cursed(obj)) return FALSE;
 
