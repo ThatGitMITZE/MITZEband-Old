@@ -20755,7 +20755,7 @@ F:DROP_90
 F:IM_FIRE
 F:EVIL | DEMON |
 S:1_IN_9
-S:BLIND | CONF
+S:BLIND | CONFUSE
 S:BR_FIRE
 S:S_DEMON
 D:It is a large demon with the head of a giant boar.  Flames run up and down
@@ -20790,7 +20790,7 @@ F:DROP_40
 F:IM_FIRE | FRIENDS(4d4)
 F:EVIL | DEMON |
 S:1_IN_8
-S:BLIND | CONF
+S:BLIND | CONFUSE
 D:It is a demon with a long neck and raking claws.
 
 # Tomenet
