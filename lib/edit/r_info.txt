@@ -20694,29 +20694,19 @@ D:great claws on its hands and pincers on its mouth, and its head bulges
 D:with great multi-faceted eyes. Its tail is covered with razor-sharp
 D:spikes.
 
-N:1153:Lungorthin, the Balrog of White Fire
-G:U:v
-I:130:70d100:20:187:10:300
-W:88:2:999:37000:0:0
-B:HIT:HURT(4d12):PLASMA(4d12)
-B:HIT:HURT(4d12):PLASMA(4d12)
-B:HIT:HURT(4d12):PLASMA(4d12)
-B:CRUSH:HURT(8d12):DRAIN_CHARGES
-A:PLASMA(3d4)
-F:UNIQUE | MALE | CAN_SPEAK | CAN_FLY |
-F:FORCE_SLEEP | FORCE_MAXHP | KILL_WALL
-F:DROP_3D2 | DROP_GOOD | FORCE_MAXHP |
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | ESCORT
-F:EVIL | DEMON | AURA_FEAR
-F:IM_FIRE | RES_PLAS | NO_CONF | NO_SLEEP
-F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC
-S:1_IN_4
-S:BLIND | CONFUSE | SCARE
-S:BR_FIRE | BR_PLASMA |
-S:S_HI_DEMON | S_UNDEAD
-D:A massive form cloaked in flame.  Lungorthin stares balefully at you with
-D: eyes that smoulder red.  The dungeon floor where he stands is scorched by
-D: the heat of his body.
+N:1153:Hezrou
+G:U:g
+I:110:45d20:20:60:70:250
+W:41:3:999:8200:0:0
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+F:DROP_90
+F:IM_FIRE | FRIENDS(4d4)
+F:EVIL | DEMON |
+S:1_IN_9
+S:BO_FIRE
+S:S_DEMON
+D:It is a demon of lizard form with cruel-looking jaws.
 
 N:1154:Pit Fiend
 G:U:o
@@ -20738,6 +20728,70 @@ D:Appearing as a giant, clawed and winged humanoid with a scaly red body
 D:and massive fangs dripping a foul green liquid, the Pit Fiend is a
 D:dreadful enemy from the lowest depths of the hells. They are often the
 D:commanders of vast demon armies.
+
+N:1155:Glabrezu
+G:U:U
+I:110:60d20:20:60:70:250
+W:43:2:999:8600:0:0
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+F:DROP_60
+F:IM_FIRE
+F:EVIL | DEMON |
+S:1_IN_9
+S:BO_FIRE
+S:S_DEMON
+D:It is demon with arms and pincers, its form a true mockery of life.
+
+N:1156:Nalfeshnee
+G:U:r
+I:110:80d20:20:60:80:250
+W:45:2:999:9000:0:0
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+B:HIT:HURT(3d4)
+F:HAS_LIGHT
+F:DROP_90
+F:IM_FIRE
+F:EVIL | DEMON |
+S:1_IN_9
+S:BLIND | CONF
+S:BR_FIRE
+S:S_DEMON
+D:It is a large demon with the head of a giant boar.  Flames run up and down
+D: its length.
+
+N:1157:Barbazu
+G:U:G
+I:120:70d20:25:90:70:250
+W:55:4:999:11000:0:0
+B:HIT:HURT(4d10)
+B:HIT:HURT(4d10)
+B:HIT:HURT(10d2):LOSE_CON
+B:STING:POISON(5d5)
+F:DROP_1
+F:IM_POIS | FRIENDS(4d4)
+F:EVIL | DEMON |
+S:1_IN_10
+S:SCARE
+S:S_DEMON
+D:A foul, humanoid creature with a long tail, clawed hands and feet, and a
+D: disgusting, wiry, snaky beard.  They are the elite shock troops of the
+D: hells, capable of a terrifying berserk fury.
+
+N:1158:Vrock
+G:U:s
+I:110:35d20:20:75:70:250
+W:40:2:999:8000:0:0
+B:HIT:HURT(3d4)
+B:CRUSH:HURT(8d12)
+B:CRUSH:HURT(8d12)
+F:DROP_40
+F:IM_FIRE | FRIENDS(4d4)
+F:EVIL | DEMON |
+S:1_IN_8
+S:BLIND | CONF
+D:It is a demon with a long neck and raking claws.
 
 # Tomenet
 N:1159:Cave Gorm
