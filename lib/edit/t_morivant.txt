@@ -104,7 +104,7 @@ L:k:BUILDING_10(0)
 ?:1
 
 ############### Quest Sequence #3
-############### Quest 56 - Rock Giants ###############
+############### Quest 56 - Ologs ###############
 ?:[EQU $QUEST56 Untaken Taken Completed Failed]
 L:h:BUILDING_7(56)
 ?:[EQU $QUEST56 Finished FailedDone]
@@ -116,7 +116,7 @@ L:h:BUILDING_7(57)
 ?:[EQU $QUEST57 Finished FailedDone]
 L:h:BUILDING_7(58)
 ?:1
-############### Quest 58 - Ancient Multi Hued Dragons ###############
+############### Quest 58 - Ancient Gold Dragons ###############
 ?:[EQU $QUEST58 Taken Completed Failed]
 L:h:BUILDING_7(58)
 ?:[EQU $QUEST58 Finished FailedDone]
