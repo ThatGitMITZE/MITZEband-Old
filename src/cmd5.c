@@ -1547,7 +1547,7 @@ bool rakuba(int dam, bool force)
             skills_riding_gain_rakuba(dam);
 
             /* see design/riding.ods */
-            if (randint0(dam / 2 + rakubalevel * (rakubalevel + 1)/80) < cur / 33 + 25)
+            if (randint0(dam / 2 + rakubalevel * 2) < cur / 33 + 25)
             {
                 if (max == RIDING_EXP_MASTER && !p_ptr->riding_ryoute)
                     return FALSE;
