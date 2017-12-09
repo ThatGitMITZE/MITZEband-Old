@@ -287,7 +287,7 @@
 /*
  * Random energy
  */
-#define ENERGY_NEED() (randnor(100, 10))
+#define ENERGY_NEED() (randnor(100, 18))
 
 
 /*
@@ -4591,6 +4591,8 @@ extern int PlayerUID;
 #define MON_MARILITH            1130
 #define MON_MIMIC               1131
 #define MON_MULTIHUED_CENTIPEDE 1132
+#define MON_AUDE				1148
+#define MON_HELGA				1149
 #define MON_GERTRUDE            1150
 
 /* The Metal Babble guards the Arena dungeon, but this requires the guardian to be a unique
@@ -5614,6 +5616,7 @@ enum effect_e
     EFFECT_BREATHE_SHARDS,
     EFFECT_BREATHE_CHAOS,
     EFFECT_BREATHE_DISEN,
+	EFFECT_BREATHE_INERTIA,
     EFFECT_BREATHE_TIME,
     EFFECT_BREATHE_ONE_MULTIHUED, /* DSM with random breath types ... */
     EFFECT_BREATHE_ONE_CHAOS,

@@ -588,7 +588,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         dam = res_calc_dam(RES_DISEN, dam);
         if (!(flags & GF_AFFECT_SPELL) && !one_in_(5) && !CHECK_MULTISHADOW())
         {
-            if (!res_save_default(RES_DISEN) || one_in_(5))
+            if (!res_save_default(RES_DISEN))
                 disenchant_player();
         }
         else if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())

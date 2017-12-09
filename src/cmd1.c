@@ -2496,6 +2496,13 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                                 e = 0;
                             }
                             break;
+						case GF_INERT:
+							if (r_ptr->flags3 & RFR_RES_INER)
+							{
+								mon_lore_3(m_ptr, RFR_RES_INER);
+								e = 0;
+							}
+							break;
                         }
                     }
 
@@ -2759,6 +2766,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     bool            fuiuchi = FALSE;
     bool            monk_attack = FALSE;
     bool            duelist_attack = FALSE;
+	bool            duelist_challenge = FALSE;
     bool            perfect_strike = FALSE;
     bool            do_quake = FALSE;
     bool            weak = FALSE;
@@ -2830,11 +2838,17 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
         p_ptr->painted_target_ct = 0;
     }
 
-    switch (p_ptr->pclass)
-    {
-    case CLASS_DUELIST:
-        if (c_ptr->m_idx == p_ptr->duelist_target_idx)
-            duelist_attack = TRUE;
+	switch (p_ptr->pclass)
+	{
+	case CLASS_DUELIST:
+		if (c_ptr->m_idx == p_ptr->duelist_target_idx)
+		{
+			duelist_attack = TRUE;
+		}
+		else if (!duelist_equip_error())
+		{
+			duelist_challenge = TRUE;
+		}
         break;
 
     case CLASS_WEAPONMASTER:
@@ -2976,6 +2990,18 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 break;
             }
         }
+
+		/* If we just challenged we don't attack */
+		if (duelist_challenge)
+		{
+			int m_idx = c_ptr->m_idx;
+			p_ptr->duelist_target_idx = c_ptr->m_idx;
+			msg_format("You challenge %s to a duel!", duelist_current_challenge());
+			set_monster_csleep(m_idx, 0);
+			set_hostile(&m_list[m_idx]);
+			p_ptr->redraw |= PR_STATUS;
+			break;
+		}
 
         if (p_ptr->stun >= STUN_KNOCKED_OUT) /* Grand Master Mystic retaliation knocked the player out! */
             break;
@@ -3434,11 +3460,6 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     k += MIN(m_ptr->hp * 2 / 5, rand_range(2, 10) * d);
                     drain_result = k;
                 }
-            }
-            else if (p_ptr->pclass == CLASS_DUELIST && p_ptr->lev >= 30)
-            {
-                /* Duelist: Careful Aim vs a non-target */
-                k = k * 3 / 2;
             }
 
             if (poison_needle || mode == HISSATSU_KYUSHO || mode == MYSTIC_KILL)

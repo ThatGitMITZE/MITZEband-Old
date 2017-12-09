@@ -22,10 +22,10 @@ L:V:SHALLOW_WATER
 L:.:FLOOR
 L:<:UP_STAIR
 L:a:MON(undead spider)
-L:b:OBJ(*, DEPTH+7):MON(skull druj)
+L:b:OBJ(*, DEPTH+15):MON(skull druj)
 L:*:TRAP(*, 25%):OBJ(*)
 L:k:OBJ(iron crown):EGO(might)
-L:l:OBJ(RING):EGO(speed)
+L:l:OBJ(RING, DEPTH+20):EGO(speed)
 L:m:OBJ(leather gloves):EGO(thief)
 !SCRAMBLE(k,l,m)
 

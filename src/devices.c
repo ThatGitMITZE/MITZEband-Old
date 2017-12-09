@@ -2070,6 +2070,7 @@ static _effect_info_t _effect_info[] =
     {"BREATHE_SHARDS",  EFFECT_BREATHE_SHARDS,      70, 200,  4, BIAS_LAW},
     {"BREATHE_CHAOS",   EFFECT_BREATHE_CHAOS,       75, 250,  4, BIAS_CHAOS},
     {"BREATHE_DISEN",   EFFECT_BREATHE_DISEN,       60, 150,  8, 0},
+	{"BREATHE_INERTIA", EFFECT_BREATHE_INERTIA,     60, 200,  8, 0},
     {"BREATHE_TIME",    EFFECT_BREATHE_TIME,        90, 500, 32, 0},
     {"BREATHE_ELEMENTS", EFFECT_BREATHE_ELEMENTS,   60, 100, 64, 0},
 
@@ -5808,6 +5809,22 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         }
         break;
     }
+	case EFFECT_BREATHE_INERTIA:
+	{
+		int dam = _extra(effect, 50 + effect->power * 2);
+		if (name) return "Breathe Inertia";
+		if (desc) return "It breathes inertia.";
+		if (info) return info_damage(0, 0, _BOOST(dam));
+		if (value) return format("%d", 35 * dam);
+		if (color) return format("%d", res_color(RES_CONF));
+		if (cast)
+		{
+			if (!get_fire_dir(&dir)) return NULL;
+			fire_ball(GF_INERT, dir, _BOOST(dam), -2);
+			device_noticed = TRUE;
+		}
+		break;
+	}
     case EFFECT_BREATHE_TIME:
     {
         int dam = _extra(effect, 50 + effect->power*2);

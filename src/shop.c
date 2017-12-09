@@ -1441,14 +1441,9 @@ static void _display(_ui_context_ptr context)
     doc_insert(doc, "<color:keypress>s</color> to sell. ");
     doc_insert(doc, 
         "<color:keypress>x</color> to begin examining items.\n"
-        "<color:keypress>B</color> to buyout inventory. ");
-
-    if (mut_present(MUT_MERCHANTS_FRIEND))
-    {
-        doc_insert(doc,
-            "<color:keypress>S</color> to shuffle stock. "
-            "<color:keypress>R</color> to reserve an item.");
-    }
+        "<color:keypress>B</color> to buyout inventory. "
+		"<color:keypress>S</color> to shuffle stock. "
+        "<color:keypress>R</color> to reserve an item.");
     doc_newline(doc);
 
     doc_insert(doc,
@@ -1619,32 +1614,27 @@ static void _reserve_aux(shop_ptr shop, obj_ptr obj)
 
 static void _reserve(_ui_context_ptr context)
 {
-    if (p_ptr->wizard || mut_present(MUT_MERCHANTS_FRIEND))
+    for (;;)
     {
-        for (;;)
+        char    cmd;
+        slot_t  slot;
+        obj_ptr obj;
+
+        if (!msg_command("<color:y>Reserve which item <color:w>(<color:keypress>Esc</color> when done)</color>?</color>", &cmd)) break;
+        if (cmd < 'a' || cmd > 'z') continue;
+        slot = label_slot(cmd);
+        slot = slot + context->top - 1;
+        obj = inv_obj(context->shop->inv, slot);
+        if (!obj) continue;
+
+        if (obj->marked & OM_RESERVED)
         {
-            char    cmd;
-            slot_t  slot;
-            obj_ptr obj;
-
-            if (!msg_command("<color:y>Reserve which item <color:w>(<color:keypress>Esc</color> when done)</color>?</color>", &cmd)) break;
-            if (cmd < 'a' || cmd > 'z') continue;
-            slot = label_slot(cmd);
-            slot = slot + context->top - 1;
-            obj = inv_obj(context->shop->inv, slot);
-            if (!obj) continue;
-
-            if (obj->marked & OM_RESERVED)
-            {
-                msg_print("You have already reserved that item. Choose another.");
-                continue;
-            }
-            _reserve_aux(context->shop, obj);
-            break;
+            msg_print("You have already reserved that item. Choose another.");
+            continue;
         }
+        _reserve_aux(context->shop, obj);
+        break;
     }
-    else
-        msg_print("I will only reserve items in my stock for wizards or true friends of the merchant's guild.");
 }
 
 static bool _sell_aux(shop_ptr shop, obj_ptr obj)
@@ -1967,34 +1957,29 @@ static int _restock(shop_ptr shop, int target)
 
 static void _shuffle_stock(shop_ptr shop)
 {
-    if (p_ptr->wizard || mut_present(MUT_MERCHANTS_FRIEND))
+    if (!p_ptr->wizard)
     {
-        if (!p_ptr->wizard)
+        int        cost = _sell_price(shop, 5000);
+        string_ptr s;
+        char       c;
+        s = string_alloc_format("Shuffle stock for <color:R>%d</color> gp? <color:y>[y/n]</color>", cost);
+        c = msg_prompt(string_buffer(s), "ny", PROMPT_YES_NO);
+        string_free(s);
+        if (c == 'n') return;
+        if (cost > p_ptr->au)
         {
-            int        cost = _sell_price(shop, 5000);
-            string_ptr s;
-            char       c;
-            s = string_alloc_format("Shuffle stock for <color:R>%d</color> gp? <color:y>[y/n]</color>", cost);
-            c = msg_prompt(string_buffer(s), "ny", PROMPT_YES_NO);
-            string_free(s);
-            if (c == 'n') return;
-            if (cost > p_ptr->au)
-            {
-                msg_print("You don't have enough gold.");
-                return;
-            }
-            p_ptr->au -= cost;
-            stats_on_gold_services(cost);
-
-            p_ptr->redraw |= PR_GOLD;
-            if (prace_is_(RACE_MON_LEPRECHAUN))
-                p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
+            msg_print("You don't have enough gold.");
+            return;
         }
-        _cull(shop, 0);
-        _restock(shop, _stock_base(shop));
+        p_ptr->au -= cost;
+        stats_on_gold_services(cost);
+
+        p_ptr->redraw |= PR_GOLD;
+        if (prace_is_(RACE_MON_LEPRECHAUN))
+            p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
     }
-    else
-        msg_print("I will only shuffle my stock for wizards or true friends of the merchant's guild.");
+    _cull(shop, 0);
+    _restock(shop, _stock_base(shop));
 }
 
 /************************************************************************

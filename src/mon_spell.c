@@ -2365,6 +2365,15 @@ static void _summon_special(void)
             msg_format("%s summons his minions.", _current.name);
         r_idx = MON_SPELLWARP_AUTOMATON;
         break;
+	case MON_GERTRUDE:
+		num = 2;
+		if (_current.flags & MSC_SRC_PLAYER)
+			msg_print("You call upon your sisters for aid.");
+		else
+			msg_format("%s calls out to her sisters", _current.name);
+		r_idx = MON_AUDE;
+		r_idx2 = MON_HELGA;
+		break;
     }
     for (i = 0; i < num; i++)
     {
