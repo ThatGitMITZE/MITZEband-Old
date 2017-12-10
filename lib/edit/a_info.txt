@@ -3346,42 +3346,6 @@ E:BREATHE_ACID:50:40:120
 E:You breathe acid.
 D:A suit of utterly black scales, against which no metal or wood can rest.
 
-N:333:of Jupiter
-I:33:12:3
-W:60:15:40:50000
-P:0:1d1:0:0:15
-F:INT | DEX | CHR | HIDE_TYPE |
-F:RES_SHARDS | RES_SOUND | RES_LITE |
-F:LITE |
-D:A crown of massive gold, set with wondrous jewels of thought and warding,
-D: worn by the kings of ancient Numenor.
-
-N:334:of Mars
-I:34:3:2
-W:30:10:65:45000
-P:5:1d2:0:0:15
-F:STR | RES_ACID | RES_COLD |
-F:REFLECT | SUST_STR |
-
-N:335:of Venus
-I:40:0:3
-W:65:25:3:90000
-F:WIS | CHR | INFRA | HIDE_TYPE |
-F:SEE_INVIS | FREE_ACT |
-F:RES_ACID | RES_COLD | RES_ELEC |
-E:DISPEL_EVIL:50:300:250
-E:The amulet floods the area with goodness...
-D:The ancient heirloom of Ingwe, high lord of the Vanyar, against whom nothing
-D:of evil could stand.
-
-N:57:of Mercury
-I:31:3:0
-W:30:20:25:12000
-P:2:1d1:2:2:7
-F:RES_ACID | BRAND_ACID
-D:A set of handgear so corrosive that dissolves your opponent.
-
-
 # N: serial number : item name
 # I: tval : sval : pval
 # W: depth : rarity : weight : cost
