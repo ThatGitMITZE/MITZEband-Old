@@ -235,6 +235,7 @@ F:q_embassy.txt
 N:54:40:The Shopkeeper's Secret
 T:TOWN | GENERATE
 F:q_shopkeeper.txt
+G:FIND(charm)
 
 N:55:50:The Underground City
 T:TOWN | GENERATE

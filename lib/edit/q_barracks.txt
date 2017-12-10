@@ -28,7 +28,7 @@ L:c:MON(flying skull)
 L:d:MON(ghast)
 L:e:MON(ghoul)
 L:f:MON(ghoulking)
-L:k:OBJ(leather scale mail,DEPTH+25)
+L:k:OBJ(leather scale mail):EGO(elvenkind)
 L:l:OBJ(hard leather boots):EGO(levitation)
 L:$:OBJ(*)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
