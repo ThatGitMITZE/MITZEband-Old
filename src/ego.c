@@ -1997,7 +1997,7 @@ static void _ego_create_weapon(object_type *o_ptr, int level)
             _ego_create_weapon_slaying(o_ptr, level);
             break;
         case EGO_WEAPON_SHARPNESS:
-            if (o_ptr->tval != TV_POLEARM || o_ptr->tval != TV_SWORD)
+            if (o_ptr->tval != TV_POLEARM && o_ptr->tval != TV_SWORD)
                 done = FALSE;
             else
             {
