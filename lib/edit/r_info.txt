@@ -20547,7 +20547,7 @@ B:BITE:HURT(2d6):POISON(1d6)
 B:KICK:HURT(3d6)
 F:OPEN_DOOR | DROP_CORPSE |
 F:RES_ACID | RES_NETH | RES_POIS
-F:FOREST | NO_QUEST | ANIMAL  | FRIENDS (3d3)
+F:NO_QUEST | ANIMAL  | FRIENDS(3d3)
 S:FREQ_10
 S:BR_POIS | SHRIEK
 D:A hellish donkey with glowing red eyes, snorting acrid fumes and honking
@@ -20994,8 +20994,7 @@ B:BITE:HURT(6d2)
 B:BITE:HURT(12d1):PLASMA(1d12)
 F:RES_POIS | OPEN_DOOR | BASH_DOOR | RES_PLAS | NONLIVING |
 F:RES_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | CAN_FLY
-F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC | RAND_25 | FRIENDS(1d4)
-P:Copy:Beholder:Chaos-Warrior
+F:POS_HOLD_LIFE | POS_SEE_INVIS | POS_GAIN_AC | RAND_50 | FRIENDS(1d4)
 S:1_IN_3 | BO_PLASMA
 D:A giant one-eyed floating meatball, spitting plasma.
 
@@ -21821,12 +21820,12 @@ P:Body:Dragon
 S:FREQ_9 | CONFUSE | SCARE | BR_INERTIA | DETECT_OBJECTS 
 D:A large dragon with scales of gleaming silver.
 
-N:1209:Ancient silver dragon
+N:1210:Ancient silver dragon
 G:D:W
 I:120:15d100:20:100:200:500
 W:40:5:999:4000:0:0
-B:CLAW:HURT(4d10):INERTIA(1d10,50%)
-B:CLAW:HURT(4d10):INERTIA(1d10,50%)
+B:CLAW:HURT(4d10)
+B:CLAW:HURT(4d10)
 B:BITE:HURT(5d14):CUT(2d14)
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
@@ -21841,7 +21840,7 @@ D:A huge draconic form wreathed in a nimbus of light.
 
 # Crystal dragon variants
 
-N:1210:Ruby Dragon
+N:1211:Ruby Dragon
 G:D:B
 I:120:16d100:25:110:30:500
 W:45:3:999:8000:0:0
@@ -21857,11 +21856,11 @@ P:Copy:Half-Titan:Beastmaster
 P:Body:Dragon
 S:FREQ_10 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS 
 S:BR_FIRE |
-D:A huge crystalline dragon. Its claws could cut you to shreds and its
-D:teeth are razor sharp. Deep red hues reflect from it as it moves in
-D:the light.
+D:A huge crystalline dragon. Its claws could cut you to shreds and 
+D:its teeth are razor sharp. Deep red hues reflect from it as it 
+D:moves in the light.
 
-N:1211:Emerald Dragon
+N:1212:Emerald Dragon
 G:D:B
 I:120:16d100:25:110:30:500
 W:45:3:999:8000:0:0
@@ -21881,7 +21880,7 @@ D:A huge crystalline dragon. Its claws could cut you to shreds and its
 D:teeth are razor sharp. Deep green hues reflect from it as it moves in
 D:the light.
 
-N:1212:Amethyst Dragon
+N:1213:Amethyst Dragon
 G:D:B
 I:120:16d100:25:110:30:500
 W:45:3:999:8000:0:0
@@ -21903,7 +21902,7 @@ D:the light.
 
 # More dragon uniques
 
-N:1213:The Midnight Dragon
+N:1214:The Midnight Dragon
 G:D:d
 I:125:20d100:25:125:30:500
 W:50:3:999:8000:0:0
@@ -21924,7 +21923,7 @@ S:BR_ACID | BR_DARK  | BLIND
 D:A collosal dragon with scales black as midnight, it regards you 
 D:contemptously.
 
-N:1214:The Nightmare Dragon
+N:1215:The Nightmare Dragon
 G:D:v
 I:130:30d100:25:130:30:500
 W:66:3:999:8000:0:0
@@ -21937,7 +21936,7 @@ F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | CAN_FLY | ATTR_CLEAR
 F:RES_FIRE | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_DARK |
 F:EVIL | DRAGON | RES_ACID | NO_CONF | RES_COLD | NO_SLEEP | RIDING
 F:DROP_CORPSE | POS_GAIN_AC | POS_SEE_INVIS | DROP_GREAT | 
-F:RES_CHAOS | RES_NETHER | AURA_FEAR | REGENERATE | PASS_WALL |
+F:RES_CHAO | RES_NETH | AURA_FEAR | REGENERATE | PASS_WALL |
 P:Copy:Half-Titan:Beastmaster
 P:Body:Dragon
 S:FREQ_12 | CONFUSE | SCARE | DETECT_OBJECTS | BRAIN_SMASH

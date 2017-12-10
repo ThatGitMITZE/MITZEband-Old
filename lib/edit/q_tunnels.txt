@@ -22,7 +22,7 @@ L:.:FLOOR
 L:+:CLOSED_DOOR
 L:<:UP_STAIR
 L:k:OBJ(POTION)
-L:l:OBJ(flail):EGO(morgul)
+L:l:OBJ(HAFTED):EGO(morgul)
 L:a:MON(orc berserker)
 L:b:MON(orc warlord)
 L:c:MON(orc warlock)

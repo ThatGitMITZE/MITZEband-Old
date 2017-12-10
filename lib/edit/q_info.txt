@@ -222,6 +222,7 @@ G:KILL(mean looking mercenary, 5)
 N:51:15:I Hate Snakes!
 T:TOWN | GENERATE
 F:q_snakes.txt
+G:FIND(jones)
 
 N:52:25:The Old Barracks
 T:TOWN | GENERATE
@@ -242,6 +243,11 @@ F:q_underground.txt
 N:60:25:Clear the tunnels
 T:TOWN | GENERATE
 F:q_tunnels.txt
+
+N:61:35:Clear the wreckage
+T:TOWN | GENERATE
+F:q_shipwreck.txt
+G:FIND(rumour)
 
 #####################################################################
 # Fighters guild quests

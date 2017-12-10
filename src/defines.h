@@ -155,7 +155,7 @@
  * not just malloc() string data and let the C library handle things?
  */
 #define FAKE_NAME_SIZE  20 * 1024   /* max is 18532 (r_info) */
-#define FAKE_TEXT_SIZE  120 * 1024  /* max is 116771 (r_info) */
+#define FAKE_TEXT_SIZE  128 * 1024  /* max is 116771 (r_info) */
 #define FAKE_TAG_SIZE   3 * 1024    /* max is 2092 (f_info) */
 
 
@@ -4594,6 +4594,7 @@ extern int PlayerUID;
 #define MON_AUDE				1148
 #define MON_HELGA				1149
 #define MON_GERTRUDE            1150
+#define MON_NIGHTMARE_DRAGON    1215
 
 /* The Metal Babble guards the Arena dungeon, but this requires the guardian to be a unique
    monster or the dungeon never gets flagged as completed. Note, this messes up the needle
