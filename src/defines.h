@@ -1957,50 +1957,50 @@ enum {
 #define SV_POTION_DEC_CHR               21
 #define SV_POTION_DETONATIONS           22
 #define SV_POTION_DEATH                 23
-    #define SV_POTION_INFRAVISION           24
-    #define SV_POTION_DETECT_INVIS          25
-#define SV_POTION_SLOW_POISON           26
-    #define SV_POTION_CURE_POISON           27
-    #define SV_POTION_BOLDNESS              28
-    #define SV_POTION_SPEED                 29
-    #define SV_POTION_RESIST_HEAT           30
-    #define SV_POTION_RESIST_COLD           31
-    #define SV_POTION_HEROISM               32
-    #define SV_POTION_BERSERK_STRENGTH      33
-    #define SV_POTION_CURE_LIGHT            34
-    #define SV_POTION_CURE_SERIOUS          35
-    #define SV_POTION_CURE_CRITICAL         36
-    #define SV_POTION_HEALING               37
-    #define SV_POTION_STAR_HEALING          38
-    #define SV_POTION_LIFE                  39
+/* SV_POTION_FIRE */
+/* SV_POTION_ICE */
+#define SV_POTION_SIGHT					26
+#define SV_POTION_CURE_POISON           27
+#define SV_POTION_BOLDNESS              28
+#define SV_POTION_SPEED                 29
+#define SV_POTION_THERMAL               30
+#define SV_POTION_RESIST_POIS           31
+#define SV_POTION_HEROISM               32
+#define SV_POTION_BERSERK_STRENGTH      33
+#define SV_POTION_CURE_LIGHT            34
+#define SV_POTION_CURE_SERIOUS          35
+#define SV_POTION_CURE_CRITICAL         36
+#define SV_POTION_HEALING               37
+#define SV_POTION_STAR_HEALING          38
+#define SV_POTION_LIFE                  39
 #define SV_POTION_RESTORE_MANA          40
-    #define SV_POTION_RESTORE_EXP           41
-    #define SV_POTION_RES_STR               42
-    #define SV_POTION_RES_INT               43
-    #define SV_POTION_RES_WIS               44
-    #define SV_POTION_RES_DEX               45
-    #define SV_POTION_RES_CON               46
-    #define SV_POTION_RES_CHR               47
+#define SV_POTION_RESTORE_EXP           41
+#define SV_POTION_RES_STR               42
+#define SV_POTION_RES_INT               43
+#define SV_POTION_RES_WIS               44
+#define SV_POTION_RES_DEX               45
+#define SV_POTION_RES_CON               46
+#define SV_POTION_RES_CHR               47
 #define SV_POTION_INC_STR               48
 #define SV_POTION_INC_INT               49
 #define SV_POTION_INC_WIS               50
 #define SV_POTION_INC_DEX               51
 #define SV_POTION_INC_CON               52
 #define SV_POTION_INC_CHR               53
-/* xxx */
+#define SV_POTION_RES_ALL               54
 #define SV_POTION_AUGMENTATION          55
-    #define SV_POTION_ENLIGHTENMENT         56
-    #define SV_POTION_STAR_ENLIGHTENMENT    57
-    #define SV_POTION_SELF_KNOWLEDGE        58
+#define SV_POTION_ENLIGHTENMENT         56
+#define SV_POTION_STAR_ENLIGHTENMENT    57
+#define SV_POTION_SELF_KNOWLEDGE        58
 #define SV_POTION_EXPERIENCE            59
-    #define SV_POTION_RESISTANCE            60
-    #define SV_POTION_CURING                61
-    #define SV_POTION_INVULNERABILITY       62
+#define SV_POTION_RESISTANCE            60
+#define SV_POTION_CURING                61
+#define SV_POTION_INVULNERABILITY       62
 #define SV_POTION_NEW_LIFE              63
 #define SV_POTION_NEO_TSUYOSHI          64
 #define SV_POTION_TSUYOSHI              65
-    #define SV_POTION_POLYMORPH             66
-#define SV_POTION_BLOOD                    67
+#define SV_POTION_POLYMORPH             66
+#define SV_POTION_BLOOD                 67
 #define SV_POTION_GIANT_STRENGTH        68
 #define SV_POTION_STONE_SKIN            69
 #define SV_POTION_CLARITY               70

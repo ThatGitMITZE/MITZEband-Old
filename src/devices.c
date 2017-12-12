@@ -528,8 +528,8 @@ static cptr _do_potion(int sval, int mode)
             device_noticed = TRUE;
         }
         break;
-    case SV_POTION_INFRAVISION:
-        if (desc) return "It gives temporary infravision when you quaff it.";
+    case SV_POTION_SIGHT:
+        if (desc) return "It gives temporary see invisible and infravision and cures blindness when you quaff it.";
         if (info) return info_duration(_potion_power(100), _potion_power(100));
         if (cast)
         {
@@ -540,31 +540,11 @@ static cptr _do_potion(int sval, int mode)
             }
         }
         break;
-    case SV_POTION_DETECT_INVIS:
-        if (desc) return "It gives temporary see invisible when you quaff it.";
-        if (info) return info_duration(_potion_power(12), _potion_power(12));
-        if (cast)
-        {
-            int dur = _potion_power(12 + randint1(12));
-            if (set_tim_invis(p_ptr->tim_invis + dur, FALSE))
-            {
-                device_noticed = TRUE;
-            }
-        }
-        break;
-    case SV_POTION_SLOW_POISON:
-        if (desc) return "It reduces poison when you quaff it.";
-        if (cast)
-        {
-            if (set_poisoned(p_ptr->poisoned - MAX(80, p_ptr->poisoned / 3), TRUE))
-                device_noticed = TRUE;
-        }
-        break;
     case SV_POTION_CURE_POISON:
         if (desc) return "It cures poison when you quaff it.";
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned - MAX(500, p_ptr->poisoned / 2), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(400, p_ptr->poisoned / 2), TRUE))
                 device_noticed = TRUE;
         }
         break;
@@ -595,8 +575,8 @@ static cptr _do_potion(int sval, int mode)
                 set_fast(p_ptr->fast + 5, FALSE);
         }
         break;
-    case SV_POTION_RESIST_HEAT:
-        if (desc) return "You get temporary resistance to fire when you quaff it. This resistance is cumulative with equipment.";
+    case SV_POTION_THERMAL:
+        if (desc) return "You get temporary resistance to fire and cold when you quaff it. This resistance is cumulative with equipment.";
         if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
@@ -605,15 +585,19 @@ static cptr _do_potion(int sval, int mode)
             {
                 device_noticed = TRUE;
             }
+			if (set_oppose_cold(p_ptr->oppose_cold + dur, FALSE))
+			{
+				device_noticed = TRUE;
+			}
         }
         break;
-    case SV_POTION_RESIST_COLD:
-        if (desc) return "You get temporary resistance to cold when you quaff it. This resistance is cumulative with equipment.";
+    case SV_POTION_RESIST_POIS:
+        if (desc) return "You get temporary resistance to poison when you quaff it. This resistance is cumulative with equipment.";
         if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
             int dur = _potion_power(10 + randint1(10));
-            if (set_oppose_cold(p_ptr->oppose_cold + dur, FALSE))
+            if (set_oppose_cold(p_ptr->oppose_pois + dur, FALSE))
             {
                 device_noticed = TRUE;
             }
@@ -740,10 +724,10 @@ static cptr _do_potion(int sval, int mode)
         break;
     case SV_POTION_CLARITY:
         if (desc) return "It clears your mind a bit when you quaff it and cures confusion.";
-        if (info) return format("5d%d + %d", _potion_power(6), _potion_power(5));
+        if (info) return format("3d%d + %d", _potion_power(6), _potion_power(3));
         if (cast)
         {
-            int amt = _potion_power(damroll(5, 6) + 5);
+            int amt = _potion_power(damroll(3, 6) + 3);
 
             if (p_ptr->pclass == CLASS_RUNE_KNIGHT)
                 msg_print("You are unaffected.");
@@ -831,6 +815,18 @@ static cptr _do_potion(int sval, int mode)
             if (do_res_stat(A_CHR)) device_noticed = TRUE;
         }
         break;
+	case SV_POTION_RES_ALL:
+		if (desc) return "It restores your stats when you quaff it.";
+		if (cast)
+		{
+			if (do_res_stat(A_STR)) device_noticed = TRUE;
+			if (do_res_stat(A_INT)) device_noticed = TRUE;
+			if (do_res_stat(A_WIS)) device_noticed = TRUE;
+			if (do_res_stat(A_DEX)) device_noticed = TRUE;
+			if (do_res_stat(A_CON)) device_noticed = TRUE;
+			if (do_res_stat(A_CHR)) device_noticed = TRUE;
+		}
+		break;
     case SV_POTION_INC_STR:
         if (desc) return "It increases your strength when you quaff it.";
         if (cast)
@@ -1293,15 +1289,15 @@ static cptr _do_scroll(int sval, int mode)
         if (desc) return "It increases an armour's to-ac powerfully when you read it.";
         if (cast)
         {
-            if (!enchant_spell(0, 0, randint1(3) + 2)) return NULL;
+            if (!enchant_spell(0, 0, randint1(3) + 3)) return NULL;
             device_noticed = TRUE;
         }
         break;
     case SV_SCROLL_STAR_ENCHANT_WEAPON:
-        if (desc) return "It increases a weapon's to-hit and to-dam when you read it.";
+        if (desc) return "It increases a weapon's to-hit and to-dam powerfully when you read it.";
         if (cast)
         {
-            if (!enchant_spell(randint1(3), randint1(3), 0)) return NULL;
+            if (!enchant_spell(randint1(3) + 3, randint1(3) + 3, 0)) return NULL;
             device_noticed = TRUE;
         }
         break;

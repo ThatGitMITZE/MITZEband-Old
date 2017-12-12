@@ -70,6 +70,8 @@ static bool _book_will_buy(obj_ptr obj);
 static bool _book_create(obj_ptr obj, u32b mode);
 static bool _jeweler_will_buy(obj_ptr obj);
 static bool _jeweler_create(obj_ptr obj, u32b mode);
+static bool _shroomery_will_buy(obj_ptr obj);
+static bool _shroomery_create(obj_ptr obj, u32b mode);
 
 static _type_t _types[] = 
 {
@@ -322,6 +324,16 @@ static _type_t _types[] =
          { 12, "Argwynna of the Wood",     40000, 105, RACE_WOOD_ELF },
          { 13, "Mugbasha",                  5000, 120, RACE_KOBOLD },
          { 0 }}},
+
+	{ SHOP_SHROOMERY, "Mushroom Store", _shroomery_will_buy, _shroomery_create,
+		 { { 1, "Mysticus",              50000, 110, RACE_GNOME },
+		 { 2, "Snufl",                10000, 108, RACE_SNOTLING },
+		 { 3, "Karl",                     10000, 110, RACE_HALF_TROLL },
+		 { 4, "Myceana",      25000, 105, RACE_SPRITE },
+		 { 5, "Gordo",      20000, 110, RACE_HOBBIT },
+		 { 6, "Agaria",     40000, 105, RACE_WOOD_ELF },
+		 { 7, "Dumush",                  5000, 120, RACE_KOBOLD },
+		 { 0 } } },
 
     { SHOP_NONE }
 };
@@ -728,8 +740,8 @@ static bool _temple_stock_p(int k_idx)
     case TV_POTION:
         switch (k_info[k_idx].sval)
         {
-        case SV_POTION_RESIST_HEAT:
-        case SV_POTION_RESIST_COLD:
+        case SV_POTION_THERMAL:
+        case SV_POTION_RESIST_POIS:
         case SV_POTION_RESTORE_EXP:
         case SV_POTION_CURE_CRITICAL:
         case SV_POTION_CURE_SERIOUS:
@@ -1051,6 +1063,35 @@ static bool _jeweler_create(obj_ptr obj, u32b mode)
     int k_idx = _get_k_idx(_jeweler_stock_p, _mod_lvl(l1));
     return _create(obj, k_idx, _mod_lvl(l2), mode);
 }
+
+/************************************************************************
+* The Mushroomery
+***********************************************************************/
+
+static bool _shroomery_will_buy(obj_ptr obj)
+{
+	if (obj->tval != TV_FOOD) return FALSE;
+	return _will_buy(obj);
+}
+
+static bool _shroomery_stock_p(int k_idx)
+{
+	if (!_stock_p(k_idx))
+		return FALSE;
+	switch (k_info[k_idx].tval)
+	{
+	case TV_FOOD:
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static bool _shroomery_create(obj_ptr obj, u32b mode)
+{
+	int k_idx = _get_k_idx(_shroomery_stock_p, _mod_lvl(20));
+	return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
+}
+
 
 /************************************************************************
  * Shops

@@ -20651,8 +20651,8 @@ F:RES_FIRE | RES_POIS | RES_ELEC | RES_ACID | RES_COLD |
 F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST | SELF_DARK_2
 A:NEXUS(1d3)
 S:1_IN_3 |
-S:BA_POIS | TELE_SELF | HEAL | HASTE | BA_NETHER | CAUSE_3 | ANIM_DEAD
-S:BO_ICE | DISPEL_MAGIC | DRAIN_MANA | BO_MANA | BO_DARK
+S:BA_ACID | TELE_SELF | HEAL | HASTE | BA_NETHER | CAUSE_3 | ANIM_DEAD
+S:BA_POIS | DISPEL_MAGIC | DRAIN_MANA | BO_MANA |
 O:DROP_MAGE
 D:This battered old soul has wandered far and long from her coven Dulritch.
 D:The years have not been good to her, her eyes filled with weary hatred,

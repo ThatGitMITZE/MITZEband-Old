@@ -2859,13 +2859,11 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
         case SV_POTION_APPLE_JUICE:
             return TRUE;
 
-        case SV_POTION_INFRAVISION:
-        case SV_POTION_DETECT_INVIS:
-        case SV_POTION_SLOW_POISON:
+        case SV_POTION_SIGHT:
         case SV_POTION_CURE_POISON:
         case SV_POTION_BOLDNESS:
-        case SV_POTION_RESIST_HEAT:
-        case SV_POTION_RESIST_COLD:
+        case SV_POTION_THERMAL:
+        case SV_POTION_RESIST_POIS:
         case SV_POTION_HEROISM:
         case SV_POTION_BERSERK_STRENGTH:
         case SV_POTION_RES_STR:
@@ -2888,6 +2886,7 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
         case SV_POTION_RESISTANCE:
         case SV_POTION_INVULNERABILITY:
         case SV_POTION_NEW_LIFE:
+		case SV_POTION_CURING:
             /* All of the above potions have no effect when shattered */
             return FALSE;
         case SV_POTION_SLOWNESS:
@@ -2936,7 +2935,6 @@ bool potion_smash_effect(int who, int y, int x, int k_idx)
             dam = damroll(4, 3);
             break;
         case SV_POTION_CURE_CRITICAL:
-        case SV_POTION_CURING:
             dt = GF_OLD_HEAL;
             dam = damroll(6, 3);
             break;
