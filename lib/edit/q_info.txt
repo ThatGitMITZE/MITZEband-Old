@@ -261,7 +261,7 @@ F:q_trollslayer.txt
 N:57:35:Giant slayer
 T:TOWN
 W:giant
-G:KILL(rock giant, 10)
+G:KILL(lesser titan, 10)
 F:q_giantslayer.txt
 
 N:58:38:Dragon slayer
@@ -270,10 +270,10 @@ W:lonely
 G:KILL(ancient gold dragon, 10)
 F:q_dragonslayer.txt
 
-N:59:45:Demon slayer
+N:59:50:Demon slayer
 T:TOWN
 W:angband
-G:KILL(greater balrog, 10)
+G:KILL(barbazu, 10)
 F:q_demonslayer.txt
 
 # vim: filetype=qi :

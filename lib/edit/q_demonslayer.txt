@@ -1,8 +1,7 @@
 ?:[EQU $QUEST59 Taken InProgress]
 D:You're one of the strongest we've seen, so here's your
-D:final test - go to Angband and kill ten of Morgoth's
-D:greater balrogs. If you can do it, we'll sing songs
-D:to your glorious triumph.
+D:final test - go to Angband and kill ten Barbazu. If you
+D:can do it, we'll sing songs to your glorious triumph.
 ?:1
 
 ?:[EQU $QUEST59 Completed]
