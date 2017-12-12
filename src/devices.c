@@ -538,6 +538,11 @@ static cptr _do_potion(int sval, int mode)
             {
                 device_noticed = TRUE;
             }
+			if (set_tim_invis(p_ptr->tim_invis + dur, FALSE))
+			{
+				device_noticed = TRUE;
+			}
+			if (set_blind(0, TRUE)) device_noticed = TRUE;
         }
         break;
     case SV_POTION_CURE_POISON:

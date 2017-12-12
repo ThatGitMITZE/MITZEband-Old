@@ -21788,7 +21788,7 @@ D:is quite a bit of life indeed.
 N:1208:Young silver dragon
 G:d:W
 I:112:30d10:20:63:150:200
-W:36:5:999:1050:6000:590
+W:36:3:999:1050:6000:1209
 B:CLAW:HURT(1d8)
 B:CLAW:HURT(1d8)
 B:BITE:HURT(2d8):CUT(2d4)
@@ -21806,7 +21806,7 @@ D:tarnished silver hue, and light is reflected from its form.
 N:1209:Mature silver dragon
 G:d:W
 I:115:56d10:20:80:150:250
-W:37:5:999:1800:12000:645
+W:37:3:999:1800:12000:1210
 B:CLAW:HURT(1d4)
 B:CLAW:HURT(1d10)
 B:BITE:HURT(2d12):CUT(2d6)
@@ -21823,7 +21823,7 @@ D:A large dragon with scales of gleaming silver.
 N:1210:Ancient silver dragon
 G:D:W
 I:120:15d100:20:100:200:500
-W:40:5:999:4000:0:0
+W:40:3:999:4000:0:0
 B:CLAW:HURT(4d10)
 B:CLAW:HURT(4d10)
 B:BITE:HURT(5d14):CUT(2d14)

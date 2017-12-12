@@ -327,11 +327,11 @@ static _type_t _types[] =
 
 	{ SHOP_SHROOMERY, "Mushroom Store", _shroomery_will_buy, _shroomery_create,
 		 { { 1, "Mysticus",              50000, 110, RACE_GNOME },
-		 { 2, "Snufl",                10000, 108, RACE_SNOTLING },
+		 { 2, "Martin",                10000, 108, RACE_HUMAN },
 		 { 3, "Karl",                     10000, 110, RACE_HALF_TROLL },
-		 { 4, "Myceana",      25000, 105, RACE_SPRITE },
-		 { 5, "Gordo",      20000, 110, RACE_HOBBIT },
-		 { 6, "Agaria",     40000, 105, RACE_WOOD_ELF },
+		 { 4, "Mycella",				25000, 105, RACE_SPRITE },
+		 { 5, "Gordo",					20000, 110, RACE_HOBBIT },
+		 { 6, "Agaria",					40000, 105, RACE_WOOD_ELF },
 		 { 7, "Dumush",                  5000, 120, RACE_KOBOLD },
 		 { 0 } } },
 
@@ -1081,7 +1081,8 @@ static bool _shroomery_stock_p(int k_idx)
 	switch (k_info[k_idx].tval)
 	{
 	case TV_FOOD:
-		return TRUE;
+		if (k_info[k_idx].sval<SV_FOOD_MAX_MUSHROOM)
+			return TRUE;
 	}
 	return FALSE;
 }
@@ -1694,6 +1695,11 @@ static bool _sell_aux(shop_ptr shop, obj_ptr obj)
     string_free(s);
     if (c == 'n') return FALSE;
 
+	if (shop->type->id == SHOP_SHROOMERY && (prace_is_(RACE_DOPPELGANGER) || prace_is_(RACE_SNOTLING)))
+	{
+		msg_print("We don't serve your kind here.");
+		return FALSE;
+	}
     if (price > p_ptr->au)
     {
         msg_print("You do not have enough gold.");

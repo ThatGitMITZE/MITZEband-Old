@@ -186,6 +186,7 @@ N:*:Cure Poison:Dark Blue
 G:,:b
 I:80:12:500
 W:10:0:0:1:60
+F:TOWN
 A:10/1
 M:70:1d4
 D:It cures poison when you eat it.
@@ -194,6 +195,7 @@ N:*:Cure Blindness:Dark Green
 G:,:g
 I:80:13:500
 W:10:0:30:1:50
+F:TOWN
 A:10/1
 M:70:1d4
 D:It cures blindness when you eat it.
@@ -202,6 +204,7 @@ N:*:Cure Paranoia:Dark Red
 G:,:r
 I:80:14:500
 W:10:0:0:1:25
+F:TOWN
 A:10/1
 M:70:1d4
 D:It removes fear when you eat it.
@@ -210,6 +213,7 @@ N:*:Cure Confusion:Yellow
 G:,:y
 I:80:15:500
 W:10:0:40:1:50
+F:TOWN
 A:10/1
 M:70:1d4
 D:It cures confusion when you eat it.
@@ -242,11 +246,12 @@ N:*:Cure Serious Wounds:Wrinkled
 G:,:u
 I:80:16:500
 W:15:0:0:2:75
+F:TOWN
 A:15/1
 M:70:1d4
 D:It heals you a bit when you eat it.
 
-# SV_FOOD_MAX_MUSHROOM
+# SV_FOOD_MAX_MUSHROOM = 31
 
 ########################################################################
 # Food and Beverages (TV_FOOD)
