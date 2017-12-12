@@ -672,7 +672,12 @@ static bool _weapon_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_QUIVER, 0);
     else
         k_idx = _get_k_idx(_weapon_stock_p, l1);
-    return _create(obj, k_idx, l2, mode);
+    if (!_create(obj, k_idx, l2, mode)) return FALSE;
+	if (obj->to_a <= 0 && obj->to_h <= 0 && obj->to_d <= 0)
+	{
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /************************************************************************
@@ -740,8 +745,6 @@ static bool _temple_stock_p(int k_idx)
     case TV_POTION:
         switch (k_info[k_idx].sval)
         {
-        case SV_POTION_THERMAL:
-        case SV_POTION_RESIST_POIS:
         case SV_POTION_RESTORE_EXP:
         case SV_POTION_CURE_CRITICAL:
         case SV_POTION_CURE_SERIOUS:
@@ -808,19 +811,7 @@ static bool _alchemist_stock_p(int k_idx)
 
 static bool _alchemist_create(obj_ptr obj, u32b mode)
 {
-    int k_idx;
-    if (one_in_(3))
-        k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_WORD_OF_RECALL);
-    else if (one_in_(5))
-        k_idx = lookup_kind(TV_POTION, SV_POTION_RES_STR + randint0(6));
-    else if (one_in_(7))
-        k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_IDENTIFY);
-    else if (one_in_(10))
-        k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_TELEPORT);
-	else if (!easy_id && one_in_(20))
-        k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_IDENTIFY);
-    else
-        k_idx = _get_k_idx(_alchemist_stock_p, _mod_lvl(20));
+    int k_idx = _get_k_idx(_alchemist_stock_p, _mod_lvl(20));
     return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 

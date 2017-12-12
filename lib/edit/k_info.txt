@@ -2377,7 +2377,6 @@ G:?:w
 I:70:16:0
 W:15:0:0:5:250
 A:15/1
-F:TOWN
 M:50:1d6
 
 N:*:Enchant Weapon To-Hit:mipay sun
@@ -2385,7 +2384,6 @@ G:?:w
 I:70:17:0
 W:15:0:0:5:250
 A:15/1
-F:TOWN
 M:50:1d6
 
 N:*:Enchant Weapon To-Dam:batuni blaame
@@ -2393,7 +2391,6 @@ G:?:w
 I:70:18:0
 W:15:0:0:5:250
 A:15/1
-F:TOWN
 M:50:1d6
 
 N:*:*Enchant Armor*:klimon bieder
@@ -2700,7 +2697,7 @@ N:400:Water:Clear
 G:!:w
 I:75:0:200
 W:0:0:20:4:1
-A:0/1
+#A:0/1
 P:0:1d1:0:0:0
 F:FIXED_FLAVOR | TOWN
 M:100:3d5
@@ -2856,7 +2853,7 @@ M:100:1d5
 N:*:Seeing:White
 G:!:w
 I:75:26:0
-W:3:0:30:4:50
+W:3:0:30:4:40
 A:3/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3216,8 +3213,8 @@ M:20:1d3
 N:*:Clarity:Metallic
 G:!:w
 I:75:70:100
-W:20:0:60:4:100
-A:20/2:40/1
+W:20:0:60:4:50
+A:10/1:40/1
 P:0:1d1:0:0:0
 D:It clears your mind, restoring spell points a bit.
 F:TOWN
