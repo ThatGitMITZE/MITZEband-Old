@@ -3039,14 +3039,6 @@ P:0:1d1:0:0:0
 F:TOWN
 M:100:1d5
 
-N:*:Restoring:Cyan
-G:!:B
-I:75:48:0
-W:20:0:60:4:3000
-A:40/1
-P:0:1d1:0:0:0
-M:50:1d3
-
 N:*:Strength:Azure
 G:!:B
 I:75:48:0
@@ -3094,6 +3086,14 @@ W:30:0:0:4:30000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
+
+N:*:Restoring:Cyan
+G:!:B
+I:75:54:0
+W:20:0:60:4:3000
+A:40/1
+P:0:1d1:0:0:0
+M:50:1d3
 
 N:*:Augmentation:Viscous Pink
 G:!:R
