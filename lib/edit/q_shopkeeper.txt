@@ -22,7 +22,7 @@ L:+:CLOSED_DOOR
 L:.:FLOOR
 L:<:UP_STAIR
 L:^:TRAP(*, 25%)
-L:a:MON(mithril golem):OBJ(mithril-shod boots):EGO(dwarven)
+L:a:MON(mithril golem):OBJ(mithril shod boots):EGO(dwarven)
 L:b:MON(mithril golem):OBJ(mithril shield):EGO(dwarven)
 L:c:MON(mithril golem):OBJ(mithril plate):EGO(dwarven)
 L:d:MON(mithril golem):OBJ(mithril helmet):EGO(dwarven)
