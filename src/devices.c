@@ -2081,6 +2081,7 @@ static _effect_info_t _effect_info[] =
     {"BREATHE_CHAOS",   EFFECT_BREATHE_CHAOS,       75, 250,  4, BIAS_CHAOS},
     {"BREATHE_DISEN",   EFFECT_BREATHE_DISEN,       60, 150,  8, 0},
 	{"BREATHE_INERTIA", EFFECT_BREATHE_INERTIA,     60, 200,  8, 0},
+	{"BREATHE_WATER",   EFFECT_BREATHE_WATER,       65, 150,  8, 0},
     {"BREATHE_TIME",    EFFECT_BREATHE_TIME,        90, 500, 32, 0},
     {"BREATHE_ELEMENTS", EFFECT_BREATHE_ELEMENTS,   60, 100, 64, 0},
 
@@ -2362,7 +2363,7 @@ device_effect_info_t wand_effect_table[] =
 {
     /*                            Lvl Cost Rarity  Max  Difficulty Flags */
     {EFFECT_BOLT_MISSILE,           1,   3,     1,  20,    10,  0, _STOCK_TOWN},
-    {EFFECT_HEAL_MONSTER,           2,   3,     1,  20,     0,  0, 0},
+    {EFFECT_HEAL_MONSTER,           2,   3,     2,   0,     0,  0, 0},
     {EFFECT_BEAM_LITE_WEAK,         2,   3,     1,  20,    10,  0, _STOCK_TOWN},
     {EFFECT_BALL_POIS,              5,   4,     1,  20,    33,  0, _STOCK_TOWN},
     {EFFECT_SLEEP_MONSTER,          5,   5,     1,  20,    33,  0, _STOCK_TOWN},
@@ -2391,6 +2392,7 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BALL_NEXUS,            47,  14,     1,   0,    50, 10, _DROP_GOOD},
     {EFFECT_BREATHE_COLD,          50,  15,     1,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_BREATHE_FIRE,          50,  16,     1,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
+	{EFFECT_BREATHE_WATER,         50,  16,     2,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_BEAM_GRAVITY,          55,  32,     2,   0,    33,  0, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_METEOR,                55,  32,     2,   0,    50, 10, _DROP_GOOD | _NO_DESTROY},
     {EFFECT_BREATHE_ONE_MULTIHUED, 60,  17,     2,   0,    60, 10, _DROP_GOOD | _NO_DESTROY},
@@ -5826,11 +5828,25 @@ cptr do_effect(effect_t *effect, int mode, int boost)
 		if (desc) return "It breathes inertia.";
 		if (info) return info_damage(0, 0, _BOOST(dam));
 		if (value) return format("%d", 35 * dam);
-		if (color) return format("%d", res_color(RES_CONF));
 		if (cast)
 		{
 			if (!get_fire_dir(&dir)) return NULL;
 			fire_ball(GF_INERT, dir, _BOOST(dam), -2);
+			device_noticed = TRUE;
+		}
+		break;
+	}
+	case EFFECT_BREATHE_WATER:
+	{
+		int dam = _extra(effect, 50 + effect->power * 2);
+		if (name) return "Tsunami";
+		if (desc) return "It fires a torrent of water.";
+		if (info) return info_damage(0, 0, _BOOST(dam));
+		if (value) return format("%d", 35 * dam);
+		if (cast)
+		{
+			if (!get_fire_dir(&dir)) return NULL;
+			fire_ball(GF_WATER, dir, _BOOST(dam), -2);
 			device_noticed = TRUE;
 		}
 		break;

@@ -1759,7 +1759,7 @@ enum {
 #define SV_PAIR_OF_HARD_LEATHER_BOOTS    3
 #define SV_PAIR_OF_DRAGON_GREAVE         4
 #define SV_PAIR_OF_METAL_SHOD_BOOTS      5
-#define SV_PAIR_OF_MITHRIL_SHOD_BOOTS    5
+#define SV_PAIR_OF_MITHRIL_SHOD_BOOTS    6
 
 /* The "sval" codes for TV_CLOAK */
 #define SV_CLOAK                         1
@@ -1832,6 +1832,7 @@ enum {
 #define SV_DRAGON_SHINING               10
 #define SV_DRAGON_LAW                   12
 #define SV_DRAGON_BRONZE                14
+#define SV_DRAGON_SILVER                14
 #define SV_DRAGON_GOLD                  16
 #define SV_DRAGON_CHAOS                 18
 #define SV_DRAGON_BALANCE               20
@@ -1862,6 +1863,7 @@ enum {
 #define SV_LITE_ARMAGEDDON              21
 #define SV_LITE_HYDRA                   22
 #define SV_LITE_MIND                    23
+#define SV_LITE_ARKENSTONE              24
 
 #define SV_AMULT                         0
 #define SV_RING                          0
@@ -5618,6 +5620,7 @@ enum effect_e
     EFFECT_BREATHE_CHAOS,
     EFFECT_BREATHE_DISEN,
 	EFFECT_BREATHE_INERTIA,
+	EFFECT_BREATHE_WATER,
     EFFECT_BREATHE_TIME,
     EFFECT_BREATHE_ONE_MULTIHUED, /* DSM with random breath types ... */
     EFFECT_BREATHE_ONE_CHAOS,

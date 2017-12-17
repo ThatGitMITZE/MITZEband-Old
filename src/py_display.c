@@ -1991,6 +1991,7 @@ static void _build_statistics(doc_ptr doc)
         _device_counts_imp(doc, TV_WAND, EFFECT_TELEPORT_AWAY);
         _device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_COLD);
         _device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_FIRE);
+		_device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_WATER);
         _device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_ONE_MULTIHUED);
         _device_counts_imp(doc, TV_WAND, EFFECT_METEOR);
         _device_counts_imp(doc, TV_WAND, EFFECT_GENOCIDE_ONE);
