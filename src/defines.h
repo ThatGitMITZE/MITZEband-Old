@@ -4832,6 +4832,7 @@ extern int PlayerUID;
 #define DUNGEON_ARENA    25
 #define DUNGEON_WARREN   30
 #define DUNGEON_HIDEOUT  31
+#define DUNGEON_BATTLEFIELD  32
 
 #define DUNGEON_FEAT_PROB_NUM 3
 

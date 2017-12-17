@@ -28,7 +28,7 @@ A:360
 E:500
 
 # Maximum number of dungeon types in d_info.txt
-D:32
+D:48
 
 # Maximum size for "o_list[]"
 O:1024
