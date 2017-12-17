@@ -177,7 +177,7 @@ B:7:C:Blood-Knight:Owner
 B:7:C:Mauler:Owner
 
 B:8:N:Tower of Sorcery:Tanistil:Elf
-B:8:A:0:Identify possessions:100:800:i:26:0
+B:8:A:0:Identify possessions:100:500:i:26:0
 B:8:M:*:None
 B:8:M:Sorcery:Owner
 
@@ -209,8 +209,8 @@ B:12:C:*:None
 B:12:C:Paladin:Owner
 
 B:13:N:Trump Tower:Pelloi:Amberite
-B:13:A:0:Recall to dungeon:100:200:r:33:0
-#B:13:A:1:Teleport to dungeon-level:100000:1000000:t:34:0
+B:13:A:0:Recall to dungeon:20:50:r:33:0
+B:13:A:1:Teleport to dungeon-level:50000:100000:t:34:0
 B:13:M:*:None
 B:13:M:Trump:Owner
 

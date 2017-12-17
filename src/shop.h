@@ -26,6 +26,7 @@ enum
     SHOP_MUSEUM,
     SHOP_JEWELER,
 	SHOP_SHROOMERY,
+	SHOP_DRAGON
 };
 
 extern shop_ptr shop_alloc(int which);

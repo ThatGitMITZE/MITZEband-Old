@@ -545,12 +545,17 @@ static cptr _do_potion(int sval, int mode)
 			if (set_blind(0, TRUE)) device_noticed = TRUE;
         }
         break;
-    case SV_POTION_CURE_POISON:
-        if (desc) return "It cures poison when you quaff it.";
+    case SV_POTION_CURE_POISON: //anti-toxin
+        if (desc) return "It cures poison and grants temporary poison resistance when you quaff it.";
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned - MAX(400, p_ptr->poisoned / 2), TRUE))
+			int dur = _potion_power(10 + randint1(10));
+			if (set_poisoned(p_ptr->poisoned - MAX(400, p_ptr->poisoned / 2), TRUE))
                 device_noticed = TRUE;
+			if (set_oppose_pois(p_ptr->oppose_cold + dur, FALSE))
+			{
+				device_noticed = TRUE;
+			}
         }
         break;
     case SV_POTION_BOLDNESS:
@@ -596,16 +601,20 @@ static cptr _do_potion(int sval, int mode)
 			}
         }
         break;
-    case SV_POTION_RESIST_POIS:
-        if (desc) return "You get temporary resistance to poison when you quaff it. This resistance is cumulative with equipment.";
+    case SV_POTION_RESIST_POIS://acid/elec
+        if (desc) return "You get temporary resistance to acid and electricity when you quaff it. This resistance is cumulative with equipment.";
         if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
             int dur = _potion_power(10 + randint1(10));
-            if (set_oppose_cold(p_ptr->oppose_pois + dur, FALSE))
-            {
-                device_noticed = TRUE;
-            }
+			if (set_oppose_acid(p_ptr->oppose_fire + dur, FALSE))
+			{
+				device_noticed = TRUE;
+			}
+			if (set_oppose_elec(p_ptr->oppose_cold + dur, FALSE))
+			{
+				device_noticed = TRUE;
+			}
         }
         break;
     case SV_POTION_HEROISM:

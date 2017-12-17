@@ -1996,6 +1996,13 @@ static void _ego_create_weapon(object_type *o_ptr, int level)
         case EGO_WEAPON_SLAYING:
             _ego_create_weapon_slaying(o_ptr, level);
             break;
+		case EGO_WEAPON_BLESSED:
+			if (one_in_(2))
+				add_flag(o_ptr->flags, OF_ESP_GOOD);
+			if (one_in_(5))
+				add_flag(o_ptr->flags, OF_LITE);
+			_ego_create_weapon_slaying(o_ptr, level);
+			break;
         case EGO_WEAPON_SHARPNESS:
             if (o_ptr->tval != TV_POLEARM && o_ptr->tval != TV_SWORD)
                 done = FALSE;
@@ -2041,6 +2048,8 @@ static void _ego_create_weapon(object_type *o_ptr, int level)
             _ego_create_weapon_craft(o_ptr, level);
             break;
         case EGO_WEAPON_CRUSADE:
+			if (one_in_(4))
+				add_flag(o_ptr->flags, OF_LITE);
             if (one_in_(4) && level > 40)
                 add_flag(o_ptr->flags, OF_BLOWS);
             else if (one_in_(777) && level > 80)

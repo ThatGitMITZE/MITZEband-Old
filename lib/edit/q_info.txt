@@ -69,7 +69,7 @@ F:q_nature.txt
 N:14:5:Pest Control
 T:TOWN
 W:warren
-G:KILL(^warg$, 8)
+G:KILL(^warg$, 6)
 F:q_wargs.txt
 
 N:15:70:Eric's Stronghold
@@ -228,13 +228,13 @@ N:52:25:The Old Barracks
 T:TOWN | GENERATE
 F:q_barracks.txt
 
-N:53:40:The Elven Embassy
-T:TOWN | GENERATE
-F:q_embassy.txt
-
-N:54:40:The Shopkeeper's Secret
+N:53:35:The Shopkeeper's Secret
 T:TOWN | GENERATE
 F:q_shopkeeper.txt
+
+N:54:40:The Elven Embassy
+T:TOWN | GENERATE
+F:q_embassy.txt
 
 N:55:50:The Underground City
 T:TOWN | GENERATE
@@ -244,7 +244,7 @@ N:60:25:Clear the tunnels
 T:TOWN | GENERATE
 F:q_tunnels.txt
 
-N:61:35:Clear the wreckage
+N:61:30:Clear the wreckage
 T:TOWN | GENERATE
 F:q_shipwreck.txt
 

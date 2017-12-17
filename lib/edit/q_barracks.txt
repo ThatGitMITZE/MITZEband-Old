@@ -29,8 +29,8 @@ L:d:MON(ghast)
 L:e:MON(ghoul)
 L:f:MON(ghoulking)
 L:k:OBJ(leather scale mail, DEPTH+25):EGO(elemental)
-L:l:OBJ(hard leather boots):EGO(levitation)
-L:$:OBJ(*)
+L:l:OBJ(large iron chest)
+L:$:OBJ(*, DEPTH+10)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 M:X.................#..e....#l..b...kXXX
 M:X.#######+#########...d...#......S..XX

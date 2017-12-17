@@ -72,6 +72,8 @@ static bool _jeweler_will_buy(obj_ptr obj);
 static bool _jeweler_create(obj_ptr obj, u32b mode);
 static bool _shroomery_will_buy(obj_ptr obj);
 static bool _shroomery_create(obj_ptr obj, u32b mode);
+static bool _dragon_will_buy(obj_ptr obj);
+static bool _dragon_create(obj_ptr obj, u32b mode);
 
 static _type_t _types[] = 
 {
@@ -333,6 +335,13 @@ static _type_t _types[] =
 		 { 5, "Gordo",					20000, 110, RACE_HOBBIT },
 		 { 6, "Agaria",					40000, 105, RACE_WOOD_ELF },
 		 { 7, "Dumush",                  5000, 120, RACE_KOBOLD },
+		 { 0 } } },
+
+	{ SHOP_DRAGON, "Dragonskin Emporium", _dragon_will_buy, _dragon_create,
+		 { { 1, "Beowulf",              50000, 110, RACE_HUMAN },
+		 { 2, "George",                10000, 108, RACE_HUMAN },
+		 { 3, "Sigmund",                     10000, 110, RACE_HUMAN },
+		 { 4, "Conan",				25000, 105, RACE_BARBARIAN },
 		 { 0 } } },
 
     { SHOP_NONE }
@@ -673,7 +682,7 @@ static bool _weapon_create(obj_ptr obj, u32b mode)
     else
         k_idx = _get_k_idx(_weapon_stock_p, l1);
     if (!_create(obj, k_idx, l2, mode)) return FALSE;
-	if (obj->to_a <= 0 && obj->to_h <= 0 && obj->to_d <= 0)
+	if (obj->to_a < 0 || obj->to_h < 0)
 	{
 		return FALSE;
 	}
@@ -1081,6 +1090,56 @@ static bool _shroomery_stock_p(int k_idx)
 static bool _shroomery_create(obj_ptr obj, u32b mode)
 {
 	int k_idx = _get_k_idx(_shroomery_stock_p, _mod_lvl(20));
+	return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
+}
+
+/************************************************************************
+* The Dragon Emporium
+***********************************************************************/
+
+static bool _dragon_will_buy(obj_ptr obj)
+{
+	return obj_is_armor(obj) && _will_buy(obj);
+}
+
+static bool _dragon_stock_p(int k_idx)
+{
+	if (!_stock_p(k_idx))
+		return FALSE;
+	if (k_info[k_idx].tval == TV_DRAG_ARMOR)
+		return TRUE;
+}
+
+static bool _dragon_stock_aux_p(int k_idx)
+{
+	if (!_stock_p(k_idx))
+		return FALSE;
+	if (k_info[k_idx].tval == TV_DRAG_ARMOR)
+		return TRUE;
+	if (k_info[k_idx].tval == TV_CLOAK && k_info[k_idx].sval == SV_DRAGON_CLOAK)
+		return TRUE;
+	if (k_info[k_idx].tval == TV_HELM && k_info[k_idx].sval == SV_DRAGON_HELM)
+		return TRUE;
+	if (k_info[k_idx].tval == TV_BOOTS && k_info[k_idx].sval == SV_PAIR_OF_DRAGON_GREAVE)
+		return TRUE;
+	if (k_info[k_idx].tval == TV_GLOVES &&k_info[k_idx].sval == SV_SET_OF_DRAGON_GLOVES)
+		return TRUE;
+	if (k_info[k_idx].tval == TV_SHIELD &&k_info[k_idx].sval == SV_DRAGON_SHIELD)
+		return TRUE;
+	return FALSE;
+}
+
+static bool _dragon_create(obj_ptr obj, u32b mode)
+{
+	int k_idx;
+	if (one_in_(2))
+	{
+		k_idx = _get_k_idx(_dragon_stock_p, _mod_lvl(25));
+	}
+	else
+	{
+		k_idx = _get_k_idx(_dragon_stock_aux_p, _mod_lvl(15));
+	}
 	return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
 }
 

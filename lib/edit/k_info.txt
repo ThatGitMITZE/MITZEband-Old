@@ -245,7 +245,7 @@ D:It restores your strength when you eat it.
 N:*:Cure Serious Wounds:Wrinkled
 G:,:u
 I:80:16:500
-W:15:0:0:2:75
+W:15:0:0:2:30
 F:TOWN
 A:15/1
 M:70:1d4
@@ -433,7 +433,7 @@ I:23:13:0
 W:15:0:0:90:210
 A:15/3
 P:0:2d5:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Khopesh~
 G:|:W
@@ -485,7 +485,7 @@ I:23:19:0
 W:15:0:0:100:265
 A:15/2
 P:0:1d10:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Katana~
 G:|:W
@@ -537,7 +537,7 @@ I:23:25:0
 W:30:0:0:200:775
 A:30/1
 P:0:3d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 D:A great, double-edged broadsword which few can wield in one hand.
 
 N:*:& Flamberge~
@@ -546,7 +546,7 @@ I:23:26:0
 W:40:0:0:230:600
 A:40/2
 P:0:3d8:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& No-dachi~
 G:|:W
@@ -554,7 +554,7 @@ I:23:27:0
 W:35:0:0:190:579
 A:35/3
 P:0:5d4:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Executioner's Sword~
 G:|:r
@@ -572,7 +572,7 @@ I:23:29:0
 W:40:0:0:280:580
 A:40/3
 P:0:4d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Blade~ of Chaos
 G:|:v
@@ -590,7 +590,7 @@ I:23:31:4
 W:90:0:0:150:50000
 A:90/16
 P:0:6d6:10:10:0
-F:SHOW_MODS | VORPAL | TUNNEL
+F:SHOW_MODS | VORPAL | TUNNEL | RIDING
 
 N:*:& Poison Needle~
 G:|:g
@@ -681,7 +681,7 @@ I:22:6:0
 W:18:0:0:155:301
 A:18/2
 P:0:1d12:0:0:0
-F:SHOW_MODS | RIDING
+F:SHOW_MODS | RIDING | TOWN
 
 N:*:& Broad Spear~
 G:/:w
@@ -706,7 +706,7 @@ I:22:9:0
 W:25:0:0:150:408
 A:25/2
 P:0:2d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Beaked Axe~
 G:/:s
@@ -750,7 +750,7 @@ I:22:14:0
 W:25:0:0:175:330
 A:25/2
 P:0:2d8:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Halberd~
 G:/:s
@@ -768,7 +768,7 @@ I:22:16:0
 W:21:0:0:165:320
 A:21/1
 P:0:2d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Scythe~
 G:/:s
@@ -975,7 +975,7 @@ I:21:14:0
 W:20:0:0:160:310
 A:20/1
 P:0:1d12:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Lead-Filled Mace~
 G:\:D
@@ -1001,7 +1001,7 @@ I:21:18:0
 W:45:0:0:280:590
 A:45/1
 P:0:3d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 D:Two great bars of wood connected by a massive chain, needing two hands
 D:to properly wield.
 
@@ -1011,7 +1011,7 @@ I:21:19:0
 W:45:0:0:300:350
 A:45/3
 P:0:4d7:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Mace~ of Disruption
 G:\:v
@@ -1147,7 +1147,7 @@ I:19:13:0
 W:30:0:0:40:400
 P:0:x3.00:0:0:0
 A:30/2
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 D:As tall as a man, the longbow can drive an arrow through the heaviest
 D:armour.
 
@@ -1167,7 +1167,7 @@ I:19:24:0
 W:30:0:0:200:500
 P:0:x4.00:0:0:0
 A:40/2
-F:SHOW_MODS
+F:SHOW_MODS | TOWN
 
 N:*:& Gun~
 G:}:r
@@ -1432,6 +1432,7 @@ A:20/1
 P:4:1d2:0:2:0
 D:A set of double-lined leather boots, with toes and heels reinforced with
 D:iron, allowing the wearer to deal a swift kick.
+F:TOWN
 
 N:*:& Pair~ of Mithril Shod Boots
 G:]:B
@@ -1469,6 +1470,7 @@ G:]:s
 I:32:4:0
 W:16:0:0:30:60
 A:16/2
+F:TOWN
 P:4:1d2:0:0:0
 
 N:*:& Iron Helm~
@@ -1477,6 +1479,7 @@ I:32:5:0
 W:20:0:0:75:75
 A:20/1
 P:5:1d3:0:0:0
+F:TOWN
 D:A mighty helmet of heavy iron, completely enclosing the head.
 
 N:*:& Steel Helm~
@@ -1485,6 +1488,7 @@ I:32:6:0
 W:40:0:0:60:200
 A:40/1
 P:6:1d3:0:0:0
+F:TOWN
 D:This great helm covers the head and shoulders with plates of steel and a
 D:curtain of mail.
 
@@ -1653,6 +1657,7 @@ G:):U
 I:34:4:0
 W:15:0:0:100:100
 A:15/1
+F:TOWN
 P:6:1d2:0:0:0
 D:A large oval shield made of layered wooden strips with a thick leather
 D:covering.
@@ -1662,6 +1667,7 @@ G:):s
 I:34:5:0
 W:30:0:0:120:200
 A:30/1
+F:TOWN
 P:8:1d3:0:0:0
 D:An oval shield of wood covered by leather and rimmed with metal.  A large
 D:iron shield boss offers excellent hand protection.
@@ -1789,7 +1795,6 @@ I:36:8:0
 W:15:0:0:110:400
 A:15/1
 P:8:1d1:-1:0:0
-F:TOWN
 
 N:*:Cord Armour~
 G:(:y
@@ -1879,6 +1884,7 @@ G:[:s
 I:37:2:0
 W:20:0:0:200:500
 A:20/1
+F:TOWN
 P:12:1d4:-2:0:0
 
 N:*:Metal Scale Mail~
@@ -1896,6 +1902,7 @@ G:[:s
 I:37:4:0
 W:25:0:0:220:750
 A:25/1
+F:TOWN
 P:14:1d4:-2:0:0
 D:A sleeved hauberk of interlocking steel rings, well padded with leather.
 D:Chain mail takes skill to make, but offers good protection and relatively
@@ -1906,6 +1913,7 @@ G:[:s
 I:37:5:0
 W:25:0:0:230:700
 A:25/1
+F:TOWN
 P:15:1d4:-2:0:0
 
 N:*:Augmented Chain Mail~
@@ -1913,6 +1921,7 @@ G:[:s
 I:37:6:0
 W:30:0:0:270:900
 A:30/1
+F:TOWN
 P:16:1d4:-2:0:0
 D:A hauberk, leggings, and sleeves of interlocking steel rings,
 D:strategically reinforced at vital locations with a second layer
@@ -1923,6 +1932,7 @@ G:[:s
 I:37:7:0
 W:30:0:0:250:1000
 A:30/1
+F:TOWN
 P:16:1d4:-2:0:0
 
 N:*:Bar Chain Mail~
@@ -1930,6 +1940,7 @@ G:[:s
 I:37:8:0
 W:35:0:0:280:1020
 A:35/1
+F:TOWN
 P:18:1d4:-2:0:0
 
 N:*:Metal Brigandine Armour~
@@ -1937,6 +1948,7 @@ G:[:s
 I:37:9:0
 W:35:0:0:290:1100
 A:35/1
+F:TOWN
 P:19:1d4:-3:0:0
 
 N:*:Splint Mail~
@@ -1944,6 +1956,7 @@ G:[:D
 I:37:10:0
 W:35:0:0:250:1300
 A:35/1
+F:TOWN
 P:19:1d4:-2:0:0
 
 N:*:Do-maru~
@@ -1951,6 +1964,7 @@ G:[:s
 I:37:11:0
 W:40:0:0:290:1250
 A:40/2
+F:TOWN
 P:20:1d4:-2:0:0
 
 N:*:Partial Plate Armour~
@@ -1958,6 +1972,7 @@ G:[:W
 I:37:12:0
 W:45:0:0:260:1200
 A:45/1
+F:TOWN
 P:22:1d6:-3:0:0
 D:A steel corselet and vambraces over a skirt and leggings of chain.
 
@@ -1966,6 +1981,7 @@ G:[:W
 I:37:13:0
 W:45:0:0:340:1150
 A:45/1
+F:TOWN
 P:23:1d6:-3:0:0
 
 N:*:Haramakido~
@@ -1973,6 +1989,7 @@ G:[:D
 I:37:14:0
 W:32:0:0:280:920
 A:32/2
+F:TOWN
 P:17:1d4:-2:0:0
 
 N:*:Full Plate Armour~
@@ -1980,6 +1997,7 @@ G:[:W
 I:37:15:0
 W:45:0:0:380:1350
 A:45/1
+F:TOWN
 P:25:2d4:-3:0:0
 D:A full suit of carefully fitted plates, with hinged joints backed
 D:by chain, and light padding underneath.
@@ -1989,6 +2007,7 @@ G:[:D
 I:37:16:0
 W:45:0:0:320:1300
 A:45/2
+F:TOWN
 P:24:1d4:-2:0:0
 
 N:*:Ribbed Plate Armour~
@@ -1996,6 +2015,7 @@ G:[:W
 I:37:18:0
 W:50:0:0:380:1500
 A:50/1
+F:TOWN
 P:28:2d4:-3:0:0
 
 N:*:Mithril Chain Mail~
@@ -2495,15 +2515,16 @@ N:*:Holy Chant:nihum khomar
 G:?:w
 I:70:34:0
 W:10:0:50:5:40
-A:10/1
-F:TOWN
+#A:10/1
+#F:TOWN
 M:90:2d6
 
 N:*:Holy Prayer:wexab jahnag
 G:?:w
 I:70:35:0
 W:25:0:0:5:80
-#A:25/1
+A:25/1
+F:TOWN
 M:100:2d6
 
 N:*:Monster Confusion:blaata arze
@@ -2571,14 +2592,14 @@ N:*:Acquirement:klinej ere
 G:?:w
 I:70:46:0
 W:40:0:0:5:100000
-A:40/6
+A:40/3
 M:10:1d3
 
 N:*:*Acquirement*:snetrol uni
 G:?:w
 I:70:47:0
 W:60:0:0:5:200000
-A:60/16
+A:60/12
 
 N:*:Forest Creation:onip batsat
 G:?:w
@@ -2626,6 +2647,7 @@ G:?:w
 I:70:54:0
 W:30:0:0:5:1000
 A:30/2
+M:100:1d5
 
 N:*:Crafting:enchantus maximus
 G:?:w
@@ -2850,7 +2872,7 @@ M:100:1d5
 
 # add aura potions
 
-N:*:Seeing:White
+N:*:Sight:White
 G:!:w
 I:75:26:0
 W:3:0:30:4:40
@@ -2859,7 +2881,7 @@ P:0:1d1:0:0:0
 F:TOWN
 M:100:2d4
 
-N:*:Cure Poison:Violet
+N:*:Antidote:Violet
 G:!:v
 I:75:27:0
 W:5:0:50:4:75
@@ -2879,12 +2901,12 @@ M:100:2d3
 N:*:Speed:Magenta
 G:!:r
 I:75:29:0
-W:1:0:0:4:75
+W:1:0:0:4:105
 A:1/1:40/1
 P:0:1d1:0:0:0
 M:100:2d4
 
-N:*:Thermal Insensitivity:Red Speckled
+N:*:Resist Heat and Cold:Red Speckled
 G:!:r
 I:75:30:0
 W:1:0:60:4:50
@@ -2893,11 +2915,11 @@ P:0:1d1:0:0:0
 F:TOWN
 M:100:1d8
 
-N:*:Resist Poison:Silver Speckled
+N:*:Resist Acid and Electricity:Silver Speckled
 G:!:W
 I:75:31:0
-W:1:0:60:4:50
-A:1/1
+W:1:0:60:4:80
+A:5/1
 P:0:1d1:0:0:0
 F:TOWN
 M:100:1d8
@@ -2917,6 +2939,7 @@ I:75:33:0
 W:20:0:0:4:100
 A:20/3
 P:0:1d1:0:0:0
+F:TOWN
 M:100:1d5
 
 N:*:Cure Light Wounds:Gold

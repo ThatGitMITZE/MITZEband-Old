@@ -3,8 +3,8 @@ T:TOWN:NORMAL:NO_ROTATE
 %:t_pref.txt
 ############### Additional default terrain settings ###############
 # A test tile for debugging
-L:&:FLOOR
-#L:&:QUEST_ENTER(28)
+#L:&:FLOOR
+L:&:QUEST_ENTER(53)
 #L:&:MON(morgoth):OBJ(power dragon)
 
 # Default for Quest 1 = entrance is stone

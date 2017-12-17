@@ -12,7 +12,7 @@ D:Wow! Here's a trophy of your great victory.
 D:So you were never that good really.
 ?:1
 
-R:OBJ(bastard sword):EGO(daemon)
+R:OBJ(broad sword):EGO(daemon)
 
 ?:[EQU $RACE Dragon Hound Spider Ring Beholder Vortex]
 R:OBJ(^ring$):EGO(combat)

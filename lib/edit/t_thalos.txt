@@ -34,7 +34,7 @@ L:b:BUILDING_1(0)
 ?:1
 
 B:0:N:Library:Ibn Khaldun:Human?
-B:0:A:0:Research item:2000:2000:a:1:0
+B:0:A:0:Research item:1000:1000:a:1:0
 B:0:A:1:Town Overview:0:0:h:2:0
 B:0:A:2:Identify item:50:50:i:44:0
 
@@ -71,7 +71,7 @@ B:5:A:2:Special target:0:0:s:37:0
 B:5:A:3:Receive prize:0:0:c:40:0
 
 B:6:N:Weaponmaster:Torvald:Human
-B:6:A:0:Evaluate AC:1000:1000:a:46:0
+B:6:A:0:Evaluate AC:100:100:a:46:0
 
 B:7:N:Fighters Hall:Arrashaw:Beastman
 B:7:A:0:Enchant weapon:0:0:w:23:0
@@ -123,7 +123,7 @@ B:12:A:1:See Healers:0:150:h:28:0
 B:12:C:*:None
 B:12:C:Paladin:Owner
 
-B:13:N:Royal Society of Magic:Lord Itsukama:Human
+B:13:N:Royal Lyceum:Lord Itsukama:Human
 B:13:A:0:Request quest:0:0:q:6:0
 B:13:C:*:None
 
