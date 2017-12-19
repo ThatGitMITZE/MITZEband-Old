@@ -21901,7 +21901,7 @@ D:the light.
 
 # More dragon uniques
 
-N:1214:Midnight Dragon
+N:1214:The Midnight Dragon
 G:D:d
 I:125:20d100:25:125:30:500
 W:50:3:999:8000:0:0
@@ -21922,7 +21922,7 @@ S:BR_ACID | BR_DARK  | BLIND
 D:A collosal dragon with scales black as midnight, it regards you 
 D:contemptously.
 
-N:1215:Nightmare Dragon
+N:1215:The Nightmare Dragon
 G:D:v
 I:130:30d100:25:130:30:500
 W:66:3:999:8000:0:0

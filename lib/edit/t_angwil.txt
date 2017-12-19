@@ -28,7 +28,7 @@ L:u:PERMANENT
 L:v:TREE
 
 # Default for Quest 36 = entrance is tree
-L:s:TREE
+L:s:DIRT
 
 ############### Quest 19 - Doom Quest 1
 ?:[EQU $QUEST19 Taken]
