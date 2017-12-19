@@ -361,7 +361,7 @@ static void _piercing_shot(int cmd, variant *res)
         var_set_string(res, "An arrow pierces some monsters.");
         break;
     default:
-        _default(SP_RUSH, cmd, res);
+        _default(SP_PIERCE, cmd, res);
     }
 }
 static void _evil_shot(int cmd, variant *res)

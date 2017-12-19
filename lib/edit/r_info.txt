@@ -21966,7 +21966,7 @@ D: steed for his Ringwraiths.
 N:1217:Triceratops
 G:R:o
 I:111:100d10:20:70:100:700
-W:40:2:90:1000:0:0
+W:40:2:90:2500:0:0
 B:BUTT:HURT(4d6)
 B:CHARGE:HURT(4d6):CUT(2d6, 50%)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
@@ -21982,7 +21982,7 @@ D:It has very long very sharp head horns and a bony frill around its head.
 N:1218:Diplodocus
 G:R:g
 I:108:150d10:20:70:100:700
-W:40:2:90:1000:0:0
+W:40:2:90:3000:0:0
 B:BUTT:HURT(4d6)
 B:KICK:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
@@ -21997,7 +21997,7 @@ D:A long necked sauropod. It is very large.
 N:1219:Ankylosaur
 G:R:U
 I:108:120d10:20:110:100:700
-W:40:2:90:1000:0:0
+W:40:2:90:2500:0:0
 B:BITE:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
 B:CRUSH:HURT(4d6):STUN(4d6, 20%)
@@ -22025,15 +22025,15 @@ S:BERSERK
 D:A great winged reptile in search of prey.
 
 N:1221:Giant Land Sloth
-G:Y:w
+G:Y:U
 I:104:110d10:20:50:10:700
-W:30:2:90:1000:0:0
-B:CLAW:HURT(4d6):POISON(4d6)
-B:CLAW:HURT(4d6):POISON(4d6)
+W:30:2:90:500:0:0
+B:CLAW:HURT(4d6):POISON(4d6):CUT(2d6, 50%)
+B:CLAW:HURT(4d6):POISON(4d6):CUT(2d6, 50%)
 F:BASH_DOOR | WILD_GRASS
 F:ANIMAL | RES_POIS | KILL_WALL
 F:DROP_CORPSE | POS_GAIN_AC
-S:1_IN_10 | SLOW
+S:1_IN_5 | SLOW
 P:Copy:Human:Mauler
 P:Body:Elephant
 D:A lazy mammal tearing down obstacles with oversized claws rather than go around
@@ -22041,8 +22041,8 @@ D:A lazy mammal tearing down obstacles with oversized claws rather than go aroun
 N:1222:Glyptodont
 G:q:w
 I:107:80d10:20:80:10:700
-W:20:2:90:1000:0:0
-B:BITE:HURT(3d6):HURT(3d6)
+W:20:2:90:300:0:0
+B:BITE:HURT(3d6):HURT(3d6, 50%)
 F:BASH_DOOR | WILD_GRASS | FRIENDS(3d2)
 F:ANIMAL | RIDING |
 F:DROP_CORPSE | POS_GAIN_AC
@@ -22051,6 +22051,34 @@ P:Body:Elephant
 D:A giant armadillo-like creature shuffling along awkwardly beneath its massive
 D:armoured shell.
 
+N:1223:Dimetrodon
+G:R:U
+I:108:30d10:20:40:100:700
+W:15:2:90:200:0:0
+B:BITE:HURT(3d6)
+B:BITE:HURT(3d6)
+F:FRIENDS(1d4) |
+F:BASH_DOOR |
+F:ANIMAL | RIDING | WILD_SHORE
+F:DROP_CORPSE | POS_GAIN_AC
+P:Copy:Human:Mauler
+P:Body:Elephant
+D:This ridiculous looking creature has a large sail-like fin extending down its back.
+
+#A gesture torward corvids
+
+N:1224:Gorcrow
+G:B:d
+I:120:9d9:30:25:10:15
+W:9:2:40:22:0:0
+B:CLAW:HURT(1d4)
+B:CLAW:HURT(1d4)
+B:BITE:HURT(1d6)
+F:ANIMAL | CAN_FLY | WILD_ONLY | WILD_WASTE | WILD_MOUNTAIN | WILD_WOOD
+F:DROP_CORPSE | POS_GAIN_AC
+P:Copy:Human:Warrior
+P:Body:Bird
+D:A vicious breed of crow.
 
 
 # N: serial number : monster name
