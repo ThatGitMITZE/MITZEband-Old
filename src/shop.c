@@ -364,6 +364,7 @@ static bool _shop_is_basic(shop_ptr shop)
     {
     case SHOP_BLACK_MARKET:
     case SHOP_JEWELER:
+	case SHOP_DRAGON:
         return FALSE;
     }
     return TRUE;
@@ -1116,15 +1117,15 @@ static bool _dragon_stock_aux_p(int k_idx)
 		return FALSE;
 	if (k_info[k_idx].tval == TV_DRAG_ARMOR)
 		return TRUE;
-	if (k_info[k_idx].tval == TV_CLOAK && k_info[k_idx].sval == SV_DRAGON_CLOAK)
+	if ((k_info[k_idx].tval == TV_CLOAK) && (k_info[k_idx].sval == SV_DRAGON_CLOAK))
 		return TRUE;
-	if (k_info[k_idx].tval == TV_HELM && k_info[k_idx].sval == SV_DRAGON_HELM)
+	if ((k_info[k_idx].tval == TV_HELM) && (k_info[k_idx].sval == SV_DRAGON_HELM))
 		return TRUE;
-	if (k_info[k_idx].tval == TV_BOOTS && k_info[k_idx].sval == SV_PAIR_OF_DRAGON_GREAVE)
+	if ((k_info[k_idx].tval == TV_BOOTS) && (k_info[k_idx].sval == SV_PAIR_OF_DRAGON_GREAVE))
 		return TRUE;
-	if (k_info[k_idx].tval == TV_GLOVES &&k_info[k_idx].sval == SV_SET_OF_DRAGON_GLOVES)
+	if ((k_info[k_idx].tval == TV_GLOVES) && (k_info[k_idx].sval == SV_SET_OF_DRAGON_GLOVES))
 		return TRUE;
-	if (k_info[k_idx].tval == TV_SHIELD &&k_info[k_idx].sval == SV_DRAGON_SHIELD)
+	if ((k_info[k_idx].tval == TV_SHIELD) && (k_info[k_idx].sval == SV_DRAGON_SHIELD))
 		return TRUE;
 	return FALSE;
 }
