@@ -185,7 +185,7 @@ D:You take 10d10 damage and it decreases your strength when you eat it.
 N:*:Cure Poison:Dark Blue
 G:,:b
 I:80:12:500
-W:10:0:0:1:60
+W:10:0:0:1:120
 F:TOWN
 A:10/1
 M:70:1d4
@@ -194,7 +194,7 @@ D:It cures poison when you eat it.
 N:*:Cure Blindness:Dark Green
 G:,:g
 I:80:13:500
-W:10:0:30:1:50
+W:10:0:30:1:30
 F:TOWN
 A:10/1
 M:70:1d4
@@ -212,7 +212,7 @@ D:It removes fear when you eat it.
 N:*:Cure Confusion:Yellow
 G:,:y
 I:80:15:500
-W:10:0:40:1:50
+W:10:0:40:1:30
 F:TOWN
 A:10/1
 M:70:1d4
@@ -242,7 +242,7 @@ A:20/1
 M:70:1d4
 D:It restores your strength when you eat it.
 
-N:*:Cure Serious Wounds:Wrinkled
+N:*:Fast Recovery:Wrinkled
 G:,:u
 I:80:16:500
 W:15:0:0:2:30
@@ -2745,10 +2745,10 @@ M:100:1d5
 N:*:Slowness:Metallic Blue
 G:!:b
 I:75:4:50
-W:1:0:20:4:0
+W:1:0:20:4:1
 A:1/1
 P:0:1d1:0:0:0
-M:100:1d5
+M:100:2d3
 
 N:*:Salt Water:Orange Speckled
 G:!:o
@@ -2756,7 +2756,7 @@ I:75:5:0
 W:0:0:20:4:0
 A:0/1
 P:0:1d1:0:0:0
-M:100:1d5
+M:100:2d3
 
 N:*:Poison:Light Green
 G:!:G
@@ -2764,7 +2764,7 @@ I:75:6:0
 W:3:0:30:4:0
 A:3/1
 P:0:1d1:0:0:0
-M:100:1d5
+M:100:2d3
 
 N:*:Blindness:Indigo
 G:!:v
@@ -2772,20 +2772,20 @@ I:75:7:0
 W:0:0:20:4:0
 A:0/1
 P:0:1d1:0:0:0
-M:100:1d5
+M:100:2d3
 
 N:*:Booze:Light Blue
 G:!:B
 I:75:9:50
-W:0:0:20:4:0
+W:0:0:20:4:1
 A:0/1
 P:0:1d1:0:0:0
-M:100:1d5
+M:100:2d3
 
 N:*:Sleep:Hazy
 G:!:W
 I:75:11:100
-W:0:0:20:4:0
+W:0:0:20:4:1
 A:0/1
 P:0:1d1:0:0:0
 M:100:1d5
@@ -2887,6 +2887,7 @@ I:75:27:0
 W:5:0:50:4:75
 A:5/1
 P:0:1d1:0:0:0
+F:TOWN
 M:100:1d5
 
 N:*:Boldness:Purple
@@ -2901,7 +2902,7 @@ M:100:2d3
 N:*:Speed:Magenta
 G:!:r
 I:75:29:0
-W:1:0:0:4:105
+W:1:0:0:4:135
 A:1/1:40/1
 P:0:1d1:0:0:0
 M:100:2d4
@@ -2909,7 +2910,7 @@ M:100:2d4
 N:*:Resist Heat and Cold:Red Speckled
 G:!:r
 I:75:30:0
-W:1:0:60:4:50
+W:1:0:60:4:110
 A:1/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -2918,8 +2919,8 @@ M:100:1d8
 N:*:Resist Acid and Electricity:Silver Speckled
 G:!:W
 I:75:31:0
-W:1:0:60:4:80
-A:5/1
+W:1:0:60:4:200
+A:5/2
 P:0:1d1:0:0:0
 F:TOWN
 M:100:1d8
@@ -2945,7 +2946,7 @@ M:100:1d5
 N:*:Cure Light Wounds:Gold
 G:!:y
 I:75:34:50
-W:0:0:20:4:15
+W:0:0:20:4:20
 A:0/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -2954,7 +2955,7 @@ M:100:2d4
 N:*:Cure Serious Wounds:Gold Speckled
 G:!:y
 I:75:35:100
-W:10:0:30:4:40
+W:10:0:30:4:60
 A:10/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -2963,8 +2964,8 @@ M:100:2d4
 N:*:Cure Critical Wounds:Gray
 G:!:s
 I:75:36:100
-W:20:0:60:4:100
-A:20/1
+W:20:0:60:4:180
+A:20/2
 P:0:1d1:0:0:0
 F:TOWN
 M:100:2d4
@@ -3011,7 +3012,7 @@ M:100:2d4
 N:*:Restore Strength:Blue Speckled
 G:!:b
 I:75:42:0
-W:25:0:60:4:300
+W:25:0:60:4:220
 A:25/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3020,7 +3021,7 @@ M:100:1d5
 N:*:Restore Intelligence:Brown Speckled
 G:!:u
 I:75:43:0
-W:25:0:60:4:300
+W:25:0:60:4:220
 A:25/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3029,7 +3030,7 @@ M:100:1d5
 N:*:Restore Wisdom:Cloudy
 G:!:w
 I:75:44:0
-W:25:0:60:4:300
+W:25:0:60:4:220
 A:25/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3038,7 +3039,7 @@ M:100:1d5
 N:*:Restore Dexterity:Metallic Green
 G:!:g
 I:75:45:0
-W:25:0:60:4:300
+W:25:0:60:4:220
 A:25/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3047,7 +3048,7 @@ M:100:1d5
 N:*:Restore Constitution:Metallic Purple
 G:!:v
 I:75:46:0
-W:25:0:60:4:300
+W:25:0:60:4:220
 A:25/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3056,7 +3057,7 @@ M:100:1d5
 N:*:Restore Charisma:Cyan
 G:!:B
 I:75:47:0
-W:20:0:60:4:300
+W:20:0:60:4:220
 A:20/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3065,7 +3066,7 @@ M:100:1d5
 N:*:Strength:Azure
 G:!:B
 I:75:48:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3073,7 +3074,7 @@ M:25:1d2
 N:*:Intelligence:Black
 G:!:D
 I:75:49:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3081,7 +3082,7 @@ M:25:1d2
 N:*:Wisdom:Bubbling
 G:!:W
 I:75:50:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3089,7 +3090,7 @@ M:25:1d2
 N:*:Dexterity:Metallic Red
 G:!:r
 I:75:51:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3097,7 +3098,7 @@ M:25:1d2
 N:*:Constitution:Green
 G:!:g
 I:75:52:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3105,7 +3106,7 @@ M:25:1d2
 N:*:Charisma:Copper Speckled
 G:!:U
 I:75:53:0
-W:30:0:0:4:30000
+W:30:0:0:4:25000
 A:20/6:30/3
 P:0:1d1:0:0:0
 M:25:1d2
@@ -3167,7 +3168,7 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 N:*:Curing:Dark Blue
 G:!:b
 I:75:61:100
-W:10:0:0:4:40
+W:10:0:0:4:80
 A:10/1:20/1:30/1:40/1:50/1
 P:0:1d1:0:0:0
 F:TOWN
@@ -3236,7 +3237,7 @@ M:20:1d3
 N:*:Clarity:Metallic
 G:!:w
 I:75:70:100
-W:20:0:60:4:50
+W:20:0:60:4:150
 A:10/1:40/1
 P:0:1d1:0:0:0
 D:It clears your mind, restoring spell points a bit.
