@@ -1,7 +1,7 @@
 N:Clear the tunnels
 
 ?:[EQU $QUEST60 Taken InProgress]
-D:Thankyou for taking care of the orcs in the cave. I had my men
+D:Thank you for taking care of the orcs in the cave. I had my men
 D:search the area after you were finished and they discovered a
 D:secret trapdoor. We suspect this is where the orcs are coming
 D:from. Secure the tunnels leading to the cave and you will be
@@ -9,7 +9,7 @@ D:rewarded.
 ?:1
 
 ?:[EQU $QUEST60 Completed}
-D:Thankyou for your service to the city.
+D:You helped make the city safer from orcs.
 ?:1
 
 ?:[EQU $QUEST60 Failed]

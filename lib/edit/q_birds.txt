@@ -1,39 +1,44 @@
-?:[EQU $QUEST52 Taken InProgress]
-D:The next building will be the barracks. As you have noticed, there are
-D:a lot of lost souls wandering the ruined buildings. Therefore, this could
-D:be very dangerous as a lot of soldiers were quartered here.
+?:[EQU $QUEST62 Taken InProgress]
+D:There have been a flock of birds attacking people on the roads and carrying 
+D:away their valuables. We think they have a nest up in the hills to the south. 
+D:We need your help.
 ?:1
 
-?:[EQU $QUEST52 Completed]
-D:I hear there were some valuable items in the barracks. You can
-D:keep anything you found as your reward.
+?:[EQU $QUEST62 Completed]
+D:Now those devilish birds won't be harming innocent people.
 ?:1
 
-?:[EQU $QUEST52 Failed]
+?:[EQU $QUEST62 Failed]
 D:You have failed me, beware you do not do so again!
 ?:1
 
 T:QUEST:NORMAL
 L:X:PERMANENT
 L:,:DIRT
-L:,:RUBBLE
+L:;:RUBBLE
 L:+:CLOSED_DOOR
 L:.:FLOOR
+L:a:MON(^crow$)
+L:b:MON(^carrion$)
+L:c:MON(durthang)
+L:k:OBJ(skeleton)
+L:*:OBJ(ring, 10%):OBJ(*)
 L:<:UP_STAIR
-D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-D:XXXXX,,,,,,...............XXXXXXXXXXXX
-D:XXX,,,,;;;,,...............XXXXXXXXXXX
-D:XX..,,;1*a;,,..............XXXXXXXXXXX
-D:XX..,,;*aa;,,...a.........XXXXXXXXXXXX
-D:XX..,,;aaa;,,..........XXXXXXXXXXXXXXX
-D:XX...,,;;;,,,.........XXXXXXXXXXXXXXXX
-D:XXX...,,,,,,.......XXX.XXXXXXXXXXXXXXX
-D:XXXXX............XXXXXX..XXXX...XXXXXX
-D:XXXXXXXXXXXXXXXXXXXXXXXXX.XX.XXX.XXXXX
-D:XXXXXXXXXXXXXXXXXXXXXXXXX.X.XXXXX.XXXX
-D:XXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXX.XXXX
-D:XXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXX.XXXX
-D:X.....XXXXXXXXXXXXXXXXX...XXXXX...XXXX
-D:X.<....................XXXXXXXX.....XX
-D:X.....XXXXXXXXXXXXXXXXXXXXXXXXX*****XX
-D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+M:XXXXX,,,,,,...c...........XXXXXXXXXXXX
+M:XXX,,*,k,*,,...............XXXXXXXXXXX
+M:XX..,,**,*k,,..........a...XXXXXXXXXXX
+M:XX..,*,,c*,*,.............XXXXXXXXXXXX
+M:XX..,,k*,,*,,.......a..XXXXXXXXXXXXXXX
+M:XX...,,,k*,,,....a.....XXXXXXXXXXXXXXX
+M:XXX...,,,,,,.......XX...XXXXX...XXXXXX
+M:XXXXX............XXXXXX..XXX.....XXXXX
+M:XXXXXXXXXXXXXXXXXXXXXXXX..X..XXX..XXXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXX...XXXXX..XXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXX..XXXX..XXXX
+M:XXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXXX..XXX
+M:X.....XXXXX..XX.X..XXX.....XXX.k..k.kX
+M:X.<.......a............XXXXXXX*.kb.*.X
+M:X.....XXXXXXX..XXXX...XXXXXXXX.*.*.k.X
+M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+R:OBJ(ROD_BEAM_ELEC)

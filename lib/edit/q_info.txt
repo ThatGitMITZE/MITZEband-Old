@@ -69,7 +69,7 @@ F:q_nature.txt
 N:14:5:Pest Control
 T:TOWN
 W:warren
-G:KILL(^warg$, 6)
+G:KILL(^warg$, 8)
 F:q_wargs.txt
 
 N:15:70:Eric's Stronghold
@@ -247,6 +247,10 @@ F:q_tunnels.txt
 N:61:30:Clear the wreckage
 T:TOWN | GENERATE
 F:q_shipwreck.txt
+
+N:62:15:Crow's Nest
+T:TOWN | GENERATE
+F:q_birds.txt
 
 #####################################################################
 # Fighters guild quests
