@@ -2166,8 +2166,8 @@ D:surface, the less sense you are able to make of them.
 N:*:Silver Dragon Scale Mail~
 G:[:y
 I:38:15:0
-W:65:0:0:200:40000
-A:65/8
+W:70:0:0:200:40000
+A:70/8
 P:40:2d4:-2:0:10
 F:FREE_ACT |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD

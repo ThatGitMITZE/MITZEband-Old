@@ -1109,6 +1109,7 @@ static bool _dragon_stock_p(int k_idx)
 		return FALSE;
 	if (k_info[k_idx].tval == TV_DRAG_ARMOR)
 		return TRUE;
+	return FALSE;
 }
 
 static bool _dragon_stock_aux_p(int k_idx)
@@ -1133,15 +1134,15 @@ static bool _dragon_stock_aux_p(int k_idx)
 static bool _dragon_create(obj_ptr obj, u32b mode)
 {
 	int k_idx;
-	if (one_in_(2))
+	if (!one_in_(5))
 	{
-		k_idx = _get_k_idx(_dragon_stock_p, _mod_lvl(25));
+		k_idx = _get_k_idx(_dragon_stock_p, _mod_lvl(75));
 	}
 	else
 	{
-		k_idx = _get_k_idx(_dragon_stock_aux_p, _mod_lvl(15));
+		k_idx = _get_k_idx(_dragon_stock_aux_p, _mod_lvl(60));
 	}
-	return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
+	return _create(obj, k_idx, _mod_lvl(rand_range(1, 25)), mode);
 }
 
 

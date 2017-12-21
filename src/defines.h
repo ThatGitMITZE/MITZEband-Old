@@ -1745,8 +1745,8 @@ enum {
 #define SV_JINGASA                       4  /* 4 */
 #define SV_IRON_HELM                     5
 #define SV_STEEL_HELM                    6
-#define SV_DRAGON_HELM                   7
-#define SV_KABUTO                        8  /* 7 */
+#define SV_DRAGON_HELM                   8
+#define SV_KABUTO                        9  /* 9 */
 
 /* The "sval" codes for TV_CROWN */
 #define SV_IRON_CROWN                   10
@@ -1774,7 +1774,7 @@ enum {
 #define SV_SET_OF_STUDDED_GLOVES         2
 #define SV_SET_OF_GAUNTLETS              3
 #define SV_SET_OF_SPIKED_GAUNTLETS       4
-#define SV_SET_OF_MITHRIL_GAUNTLETS       5
+#define SV_SET_OF_MITHRIL_GAUNTLETS      5
 #define SV_SET_OF_DRAGON_GLOVES          6
 #define SV_SET_OF_CESTI                  7
 #define SV_HAND                          6
