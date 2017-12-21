@@ -24,20 +24,20 @@ L:G:MON(^ghost$)
 L:S:MON(spectre)
 L:a:MON(mummified orc)
 L:b:MON(banshee)
-L:c:MON(flying skull)
+L:c:MON(lost soul)
 L:d:MON(ghast)
 L:e:MON(ghoul)
 L:f:MON(ghoulking)
 L:k:OBJ(leather scale mail, DEPTH+25):EGO(elemental)
 L:l:OBJ(large iron chest)
-L:$:OBJ(*, DEPTH+10)
+L:$:OBJ(*, DEPTH+15)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 M:X.................#..e....#l..b...kXXX
 M:X.#######+#########...d...#......S..XX
 M:X.#..M......a#....+...d...#..........X
 M:X.#....c.....#....#.M.....#...M...G..X
 M:X.##+#########....##############+####X
-M:X.#..........#..d.#.......a..........X
+M:X.#..........#..d.#b......a..........X
 M:X.#...a..G...+....#....a.............X
 M:X.#..........#....#.........e...c....X
 M:X.############....#..................X
