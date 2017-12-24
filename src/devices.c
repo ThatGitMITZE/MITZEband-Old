@@ -601,17 +601,13 @@ static cptr _do_potion(int sval, int mode)
 			}
         }
         break;
-    case SV_POTION_RESIST_POIS://acid/elec
-        if (desc) return "You get temporary resistance to acid and electricity when you quaff it. This resistance is cumulative with equipment.";
+    case SV_POTION_RESIST_ELEC:
+        if (desc) return "You get temporary resistance to electricity when you quaff it. This resistance is cumulative with equipment.";
         if (info) return format("Dur d%d+%d", _potion_power(10), _potion_power(10));
         if (cast)
         {
             int dur = _potion_power(10 + randint1(10));
-			if (set_oppose_acid(p_ptr->oppose_fire + dur, FALSE))
-			{
-				device_noticed = TRUE;
-			}
-			if (set_oppose_elec(p_ptr->oppose_cold + dur, FALSE))
+			if (set_oppose_elec(p_ptr->oppose_elec + dur, FALSE))
 			{
 				device_noticed = TRUE;
 			}
@@ -2081,7 +2077,7 @@ static _effect_info_t _effect_info[] =
     {"BREATHE_CHAOS",   EFFECT_BREATHE_CHAOS,       75, 250,  4, BIAS_CHAOS},
     {"BREATHE_DISEN",   EFFECT_BREATHE_DISEN,       60, 150,  8, 0},
 	{"BREATHE_INERTIA", EFFECT_BREATHE_INERTIA,     60, 200,  8, 0},
-	{"BREATHE_WATER",   EFFECT_BREATHE_WATER,       65, 150,  8, 0},
+	{"BREATHE_WATER",   EFFECT_BREATHE_WATER,       65, 150,  8, BIAS_MAGE },
     {"BREATHE_TIME",    EFFECT_BREATHE_TIME,        90, 500, 32, 0},
     {"BREATHE_ELEMENTS", EFFECT_BREATHE_ELEMENTS,   60, 100, 64, 0},
 
@@ -2363,7 +2359,7 @@ device_effect_info_t wand_effect_table[] =
 {
     /*                            Lvl Cost Rarity  Max  Difficulty Flags */
     {EFFECT_BOLT_MISSILE,           1,   3,     1,  20,    10,  0, _STOCK_TOWN},
-    {EFFECT_HEAL_MONSTER,           2,   3,     2,   0,     0,  0, 0},
+    {EFFECT_HEAL_MONSTER,           2,   3,     1,  50,     0,  0, 0},
     {EFFECT_BEAM_LITE_WEAK,         2,   3,     1,  20,    10,  0, _STOCK_TOWN},
     {EFFECT_BALL_POIS,              5,   4,     1,  20,    33,  0, _STOCK_TOWN},
     {EFFECT_SLEEP_MONSTER,          5,   5,     1,  20,    33,  0, _STOCK_TOWN},
@@ -2376,7 +2372,7 @@ device_effect_info_t wand_effect_table[] =
     {EFFECT_BOLT_ELEC,             15,   7,     1,  30,    33,  0, 0},
     {EFFECT_BOLT_ACID,             17,   8,     1,  35,    33,  0, 0},
     {EFFECT_BOLT_FIRE,             19,   9,     1,  35,    33,  0, 0},
-    {EFFECT_HASTE_MONSTER,         20,   3,     1,  40,     0,  0, 0},
+    {EFFECT_HASTE_MONSTER,         20,   3,     1,  50,     0,  0, 0},
     {EFFECT_TELEPORT_AWAY,         20,  10,     1,   0,    10,  0, _COMMON},
     {EFFECT_DESTROY_TRAPS,         20,  10,     1,   0,    10,  0, 0},
     {EFFECT_CHARM_MONSTER,         25,  11,     1,  50,    33,  0, 0},
@@ -5842,7 +5838,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
 		if (name) return "Tsunami";
 		if (desc) return "It fires a torrent of water.";
 		if (info) return info_damage(0, 0, _BOOST(dam));
-		if (value) return format("%d", 35 * dam);
+		if (value) return format("%d", 30 * dam);
 		if (cast)
 		{
 			if (!get_fire_dir(&dir)) return NULL;

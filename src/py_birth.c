@@ -662,7 +662,7 @@ static _race_group_t _race_groups[_MAX_RACE_GROUPS] = {
     { "Angel/Demon",
         {RACE_ARCHON, RACE_BALROG, RACE_IMP, -1} },
     { "Orc/Troll/Giant",
-        {RACE_CYCLOPS, RACE_HALF_GIANT, RACE_HALF_OGRE, RACE_HALF_ORC,
+        {RACE_CYCLOPS, RACE_HALF_GIANT, RACE_OGRE, RACE_HALF_ORC,
          RACE_HALF_TITAN, RACE_HALF_TROLL, RACE_KOBOLD, RACE_SNOTLING, -1} },
     { "Undead",
         {RACE_SKELETON, RACE_SPECTRE, RACE_VAMPIRE, RACE_ZOMBIE, -1} },

@@ -16,29 +16,29 @@
 # Use lower case for all string lookups
 ########################################################################
 
-N:1:5:The Thieves' Hideout
+N:1:5:The Thieves' Hideout (Outpost)
 T:TOWN | GENERATE
 F:q_thieves.txt
 
-N:2:15:The Sewer
+N:2:15:The Sewer (Outpost)
 T:TOWN | GENERATE
 F:q_sewer.txt
 
-N:3:22:The Stranger
+N:3:22:The Stranger (Telmora)
 T:TOWN | GENERATE
 G:KILL(anti-paladin)
 F:q_antipaladin.txt
 
-N:4:30:The Vault
+N:4:30:The Vault (Telmora)
 T:TOWN | GENERATE
 G:FIND(sting)
 F:q_vault.txt
 
-N:5:35:The Barrow Downs
+N:5:35:The Barrow Downs (Telmora)
 T:TOWN | GENERATE
 F:q_barrow_downs.txt
 
-N:6:30:The Volcano
+N:6:30:The Volcano (Telmora)
 T:TOWN | GENERATE
 F:q_volcano.txt
 
@@ -54,106 +54,106 @@ W:angband
 G:KILL(serpent of chaos)
 F:q_serpent_of_chaos.txt
 
-N:10:65:The Node of Sorcery
+N:10:65:The Node of Sorcery (Zul)
 T:TOWN | GENERATE
 F:q_sorcery.txt
 
-N:11:65:The Node of Chaos
+N:11:65:The Node of Chaos (Zul)
 T:TOWN | GENERATE
 F:q_chaos.txt
 
-N:12:65:The Node of Nature
+N:12:65:The Node of Nature (Zul)
 T:TOWN | GENERATE
 F:q_nature.txt
 
-N:14:5:Pest Control
+N:14:5:Pest Control (Outpost)
 T:TOWN
 W:warren
 G:KILL(^warg$, 8)
 F:q_wargs.txt
 
-N:15:70:Eric's Stronghold
+N:15:70:Eric's Stronghold (Telmora)
 T:TOWN | GENERATE
 G:KILL(eric the usurper)
 F:q_eric.txt
 
-N:16:40:Assault on Montsalvat
+N:16:40:Assault on Montsalvat (Telmora)
 T:TOWN | GENERATE
 F:q_montsalvat.txt
 
-N:19:15:Doom Quest I
+N:19:15:Doom Quest I (Angwil)
 T:TOWN | GENERATE
 F:q_doom1.txt
 
-N:20:25:Vapor Quest
+N:20:25:Vapor Quest (Outpost)
 T:TOWN | GENERATE
 #F:q_vapor.txt
 F:q_vapor2.txt
 
-N:21:55:Doom Quest II
+N:21:55:Doom Quest II (Angwil)
 T:TOWN | GENERATE
 F:q_doom2.txt
 
-N:22:15:The Orc Camp
+N:22:15:The Orc Camp (Thalos)
 T:TOWN | GENERATE
 F:q_orcs.txt
 
-N:23:65:The Spawning Pits
+N:23:65:The Spawning Pits (Angwil)
 T:TOWN | GENERATE
 F:q_spawning_pits.txt
 
-N:24:50:The Rise and Fall of Micro$oft
+N:24:50:The Rise and Fall of Micro$oft (Angwil)
 T:TOWN | GENERATE
 G:KILL(bull gates)
 F:q_microsoft.txt
 
-N:25:45:The Haunted House
+N:25:45:The Haunted House (Outpost)
 T:TOWN | GENERATE
 F:q_haunted_house.txt
 
-N:26:50:The Killing Fields
+N:26:50:The Killing Fields (Telmora)
 T:TOWN | GENERATE
 G:KILL(maulotaur)
 F:q_killing_fields.txt
 
-N:27:50:The Old Castle
+N:27:50:The Old Castle (Outpost)
 T:TOWN | GENERATE
 F:q_old_castle.txt
 
-N:28:70:The Royal Crypt
+N:28:70:The Royal Crypt (Outpost)
 T:TOWN | GENERATE
 G:KILL(archlich, 5)
 F:q_crypt.txt
 
-N:29:25:Tengu and Death Swords
+N:29:25:Tengu and Death Swords (Morivant)
 T:TOWN | GENERATE
 F:q_tengu_death_swords.txt
 
-N:30:25:The Mimic's Treasure
+N:30:25:The Mimic's Treasure (Morivant)
 T:TOWN | GENERATE
 F:q_mimics_treasure.txt
 
-N:31:22:Old Man Willow Quest
+N:31:22:Old Man Willow Quest (Outpost)
 T:TOWN | GENERATE
 F:q_old_man_willow.txt
 
-N:32:25:The Dark Elven Lords
+N:32:25:The Dark Elven Lords (Morivant)
 T:TOWN | GENERATE
 F:q_dark_elves.txt
 
-N:33:45:The Cloning Pits
+N:33:45:The Cloning Pits (Outpost)
 T:TOWN | GENERATE
 F:q_cloning_pits.txt
 
-N:34:50:The Mountain Shrine
+N:34:50:The Mountain Shrine (Morivant)
 T:TOWN | GENERATE
 F:q_shrine.txt
 
-N:35:42:Dragon Quest
+N:35:42:Dragon Quest (Angwil)
 T:TOWN | GENERATE
 F:q_dragons.txt
 
-N:36:38:The Sand Pit
+N:36:38:The Sand Pit (Angwil)
 T:TOWN | GENERATE
 F:q_worms.txt
 
@@ -214,41 +214,41 @@ G:KILL(*)
 # New Quests adapted from Kangband
 #####################################################################
 
-N:50:5:Trouble at Home
+N:50:5:Trouble at Home (Outpost)
 T:TOWN | GENERATE
 F:q_inntrouble.txt
 G:KILL(mean looking mercenary, 5)
 
-N:51:15:I Hate Snakes!
+N:51:15:I Hate Snakes! (Morivant)
 T:TOWN | GENERATE
 F:q_snakes.txt
 G:FIND(jones)
 
-N:52:25:The Old Barracks
+N:52:25:The Old Barracks (Morivant)
 T:TOWN | GENERATE
 F:q_barracks.txt
 
-N:53:35:The Shopkeeper's Secret
+N:53:35:The Shopkeeper's Secret (Morivant)
 T:TOWN | GENERATE
 F:q_shopkeeper.txt
 
-N:54:40:The Elven Embassy
+N:54:40:The Elven Embassy (Morivant)
 T:TOWN | GENERATE
 F:q_embassy.txt
 
-N:55:50:The Underground City
+N:55:50:The Underground City (Morivant)
 T:TOWN | GENERATE
 F:q_underground.txt
 
-N:60:25:Clear the tunnels
+N:60:25:Clear the tunnels (Thalos)
 T:TOWN | GENERATE
 F:q_tunnels.txt
 
-N:61:30:Clear the wreckage
+N:61:30:Clear the wreckage (Thalos)
 T:TOWN | GENERATE
 F:q_shipwreck.txt
 
-N:62:15:Crow's Nest
+N:62:15:Crow's Nest (Outpost)
 T:TOWN | GENERATE
 F:q_birds.txt
 

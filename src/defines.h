@@ -570,7 +570,7 @@
 #define RACE_AMBERITE            8
 #define RACE_HIGH_ELF            9
 #define RACE_BARBARIAN          10
-#define RACE_HALF_OGRE          11
+#define RACE_OGRE               11
 #define RACE_HALF_GIANT         12
 #define RACE_HALF_TITAN         13
 #define RACE_CYCLOPS            14
@@ -1966,7 +1966,7 @@ enum {
 #define SV_POTION_BOLDNESS              28
 #define SV_POTION_SPEED                 29
 #define SV_POTION_THERMAL               30
-#define SV_POTION_RESIST_POIS           31
+#define SV_POTION_RESIST_ELEC           31
 #define SV_POTION_HEROISM               32
 #define SV_POTION_BERSERK_STRENGTH      33
 #define SV_POTION_CURE_LIGHT            34
@@ -2028,7 +2028,7 @@ enum {
 #define SV_FOOD_CURE_BLINDNESS          13
 #define SV_FOOD_CURE_PARANOIA           14
 #define SV_FOOD_CURE_CONFUSION          15
-#define SV_FOOD_CURE_SERIOUS            16
+#define SV_FOOD_FAST_RECOVERY           16
 #define SV_FOOD_RESTORE_STR             17
 #define SV_FOOD_RESTORE_CON             18
 #define SV_FOOD_RESTORING               19

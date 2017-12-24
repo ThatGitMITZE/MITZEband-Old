@@ -1987,8 +1987,8 @@ race_t *half_ogre_get_race(void)
 
     if (!init)
     {
-        me.name = "Half-Ogre";
-        me.desc = "Half-Ogres are big and ugly but possessed of a low cunning and great strength. "
+        me.name = "Ogre";
+        me.desc = "Ogres are big and ugly but possessed of a low cunning and great strength. "
                     "For warriors, they have all the necessary attributes, and they can even "
                     "become wizards: after all, they are related to Ogre Magi, from whom they "
                     "have learned the skill of setting trapped runes once their level is high "

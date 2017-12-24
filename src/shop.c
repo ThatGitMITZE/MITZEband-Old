@@ -168,7 +168,7 @@ static _type_t _types[] =
          { 23, "Eowilith the Fair",        25000, 115, RACE_VAMPIRE },
          { 24, "Huimog Balrog-Slayer",     30000, 112, RACE_SNOTLING },
          { 25, "Peadus the Cruel",          5000, 115, RACE_HUMAN },
-         { 26, "Vamog Slayer",             15000, 110, RACE_HALF_OGRE },
+         { 26, "Vamog Slayer",             15000, 110, RACE_OGRE },
          { 27, "Hooshnak the Vicious",     25000, 115, RACE_BEASTMAN },
          { 28, "Balenn War-Dancer",        30000, 112, RACE_BARBARIAN },
          { 0 }}},
@@ -190,9 +190,9 @@ static _type_t _types[] =
          { 14, "Atal the Wise",            30000, 109, RACE_HUMAN },
          { 15, "Ibenidd the Chaste",       10000, 109, RACE_HUMAN },
          { 16, "Eridish",                  15000, 110, RACE_HALF_TROLL },
-         { 17, "Vrudush the Shaman",       25000, 107, RACE_HALF_OGRE },
+         { 17, "Vrudush the Shaman",       25000, 107, RACE_OGRE },
          { 18, "Haob the Berserker",       30000, 109, RACE_BARBARIAN },
-         { 19, "Proogdish the Youthfull",  10000, 109, RACE_HALF_OGRE },
+         { 19, "Proogdish the Youthfull",  10000, 109, RACE_OGRE },
          { 20, "Lumwise the Mad",          15000, 110, RACE_YEEK },
          { 21, "Muirt the Virtuous",       25000, 107, RACE_KOBOLD },
          { 22, "Dardobard the Weak",       30000, 109, RACE_SPECTRE },
@@ -285,7 +285,7 @@ static _type_t _types[] =
          { 29, "Vosur the Wrinkled",       20000, 150, RACE_NIBELUNG },
          { 30, "Araord the Handsome",      20000, 150, RACE_AMBERITE },
          { 31, "Theradfrid the Loser",     30000, 150, RACE_HUMAN },
-         { 32, "One-Legged Eroolo",        30000, 150, RACE_HALF_OGRE }}},
+         { 32, "One-Legged Eroolo",        30000, 150, RACE_OGRE }}},
 
     { SHOP_BOOK, "Bookstore", _book_will_buy, _book_create,
         {{  1, "Dolaf the Greedy",         10000, 108, RACE_HUMAN },
@@ -1747,11 +1747,6 @@ static bool _sell_aux(shop_ptr shop, obj_ptr obj)
     string_free(s);
     if (c == 'n') return FALSE;
 
-	if (shop->type->id == SHOP_SHROOMERY && (prace_is_(RACE_DOPPELGANGER) || prace_is_(RACE_SNOTLING)))
-	{
-		msg_print("We don't serve your kind here.");
-		return FALSE;
-	}
     if (price > p_ptr->au)
     {
         msg_print("You do not have enough gold.");
@@ -1792,6 +1787,19 @@ static void _sell(_ui_context_ptr context)
         obj_ptr obj;
         int     amt = 1;
 
+		//ban obvious thing
+		if (context->shop->type->id == SHOP_SHROOMERY)
+		{
+			if (prace_is_(RACE_SNOTLING) || prace_is_(RACE_DOPPELGANGER)) {
+				msg_print("We don't serve your kind here.");
+				return FALSE;
+			}
+			if (p_ptr->prace == RACE_DOPPELGANGER) {
+				msg_print("I'm wise to your tricks. You can't have my mushrooms.");
+				return FALSE;
+			}
+		}
+
         if (!msg_command("<color:y>Buy which item <color:w>(<color:keypress>Esc</color> "
                          "to cancel)</color>?</color>", &cmd)) break;
         if (cmd < 'a' || cmd > 'z') continue;
@@ -1829,6 +1837,19 @@ static void _sellout(shop_ptr shop)
 {
     slot_t slot, max = inv_last(shop->inv, obj_exists);
     int    price, total_price = 0;
+
+	//ugh I copy/pasted this
+	if (shop->type->id == SHOP_SHROOMERY)
+	{
+		if (prace_is_(RACE_SNOTLING) || prace_is_(RACE_DOPPELGANGER)) {
+			msg_print("We don't serve your kind here.");
+			return;
+		}
+		if (p_ptr->prace == RACE_DOPPELGANGER) {
+			msg_print("I'm wise to your tricks. You can't have my mushrooms.");
+			return;
+		}
+	}
 
     if (1 && !get_check("Are you sure you want to buy the entire inventory of this store? "))
         return;

@@ -744,7 +744,7 @@ static bool _kind_is_utility(int k_idx)
         {
         case SV_POTION_SPEED:
         case SV_POTION_THERMAL:
-        case SV_POTION_RESIST_POIS:
+        case SV_POTION_RESIST_ELEC:
         case SV_POTION_RESISTANCE:
         case SV_POTION_HEROISM:
         case SV_POTION_CURE_SERIOUS:
