@@ -35,7 +35,7 @@ M:#.^^#....^...^..^...#
 M:#.^.+...0......8....#
 M:#####################
 
-R:OBJ(broad sword)
+R:OBJ(long sword)
 
 ?:[EQU $RACE Beholder Spider Ring]
 R:OBJ(^ring$):EGO(protection)

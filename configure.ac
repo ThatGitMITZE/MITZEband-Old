@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ComPosband, 7.0.3, https://github.com/OwenGHB/composband/issues)
+AC_INIT(ComPosband, 1.1.0, https://github.com/OwenGHB/composband/issues)
 AC_CONFIG_SRCDIR(src)
 
 AC_CANONICAL_HOST
