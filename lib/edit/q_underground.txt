@@ -6,7 +6,8 @@ D:the process.
 ?:1
 
 ?:[EQU $QUEST55 Completed]
-D:You have our undying gratitude for your heroic efforts.
+D:You have our undying gratitude for your heroic efforts. Here, take
+D:my old battle armour for your victory.
 ?:1
 
 ?:[EQU $QUEST55 Failed]
@@ -58,4 +59,5 @@ M:#....WWWWWWWWWWWWWWWWWWWWW......#.............+....a.....m#.......%.#
 M:#....WWWWWWWWWWWWWWWWWWWWW......###########################.......%.#
 M:#.................................................................%<#
 M:#####################################################################
-R:OBJ(potion of experience)
+
+R:OBJ(mithril plate):EGO(dwarven)

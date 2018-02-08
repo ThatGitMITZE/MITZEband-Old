@@ -9,7 +9,8 @@ D:cleaning in the ruins.
 
 ?:[EQU $QUEST51 Completed]
 D:I will sleep easier now I do not have to think about those
-D:snakes. If you found the whip, you may keep it as a reward.
+D:snakes. Hmm, I suppose you want a reward. How about those
+D:old boots? See if they fit.
 ?:1
 
 ?:[EQU $QUEST51 Failed]
@@ -27,7 +28,7 @@ L:a:MON(copperhead snake)
 L:b:MON(rattlesnake)
 L:c:MON(king cobra)
 L:d:MON(black mamba)
-L:k:ART(jones)
+L:k:OBJ:(whip):ART(*)
 
 # Dungeon layout
 M:################################
@@ -43,3 +44,4 @@ M:#----------,,,--------;;d-----##
 M:#<-----;;;;-------------;;;;-###
 M:################################
 
+R:OBJ(mithril shod boots):EGO(147)

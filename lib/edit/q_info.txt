@@ -284,36 +284,35 @@ F:q_demonslayer.txt
 # Mages guild quests
 #####################################################################
 
-N:61:25:Pumpkins (Thalos)
+N:61:15:Mushrooms (Thalos)
+T:TOWN
+W:icky
+G:KILL(magic mushroom, 10)
+F:q_mushrooms.txt
+
+N:62:25:Pumpkins (Thalos)
 T:TOWN
 W:witch
 G:KILL(pumpkin man, 10)
 F:q_pumpkins.txt
-#R:OBJ(scroll of spell)
 
-N:62:30:Tidy the Laboratory (Thalos)
+N:63:30:Tidy the Laboratory (Thalos)
 T:TOWN | GENERATE
 F:q_laboratory.txt
-#R:OBJ(soft leather gloves):EGO(wizard)
 
-N:63:35:Loose Quasit (Thalos)
-T:TOWN | GENERATE
-F:q_quasit.txt
-#R:OBJ(amulet):EGO(magi)
-
-N:64:38:Basilisk Den (Thalos)
+N:65:38:Basilisk Den (Thalos)
 T:TOWN | GENERATE
 F:q_basilisk.txt
 #R:OBJ(ring):EGO(wizardry)
 
-N:65:40:Crystal Fetch (Thalos)
+N:66:40:Crystal Fetch (Thalos)
 T:TOWN
 W:crystal
 G:KILL(great crystal drake, 10)
 F:q_crystal.txt
-#R:OBJ(wizardstaff):EGO(6)
+#R:OBJ(jeweled crown):EGO(magi)
 
-N:66:65:Renegade Master (Thalos)
+N:67:65:Renegade Master (Thalos)
 T:TOWN | GENERATE
 F:q_renegade.txt
 #R:OBJ(robe):EGO(sorcerer)

@@ -1,0 +1,18 @@
+?:[EQU $QUEST62 Taken InProgress]
+D:Oh you're back already, hmm. Next thing you should do is
+D:get me some pumpkins from the witch wood. They have
+D:interesting magical properties.
+?:1
+
+?:[EQU $QUEST62 Completed]
+D:Good work. Now I can finish my soup. Take one of our wizard
+D:staffs if you like we have plenty.
+?:1
+
+?:[EQU $QUEST62 Failed]
+D:You know what helps with pumpkins? Fire.
+?:1
+
+R:OBJ(wizardstaff)
+
+# vim: filetype=q :

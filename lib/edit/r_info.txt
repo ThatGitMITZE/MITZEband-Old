@@ -22081,6 +22081,24 @@ S:1_IN_9 | CAUSE_1
 D:A crook-beaked bird with bedraggled black feathers.  It mocks you, and you 
 D:realise that its scorn can kill.
 
+N:1225:Beer Elemental
+G:E:U
+I:110:25d8:12:40:50:200
+W:35:20:999:500:0:0
+B:ENGULF:CONFUSE(1d10)
+B:ENGULF:CONFUSE(1d10)
+B:ENGULF:POISON(1d10)
+F:FORCE_SLEEP | RAND_25 |
+F:EMPTY_MIND | COLD_BLOOD | CAN_FLY |
+F:KILL_BODY | KILL_ITEM | BASH_DOOR |
+F:EVIL | RES_WATE | RES_POIS | NONLIVING |
+F:NO_CONF | NO_SLEEP | NO_FEAR
+F:POS_GAIN_AC | POS_HOLD_LIFE
+P:Copy:Zombie:Rage-Mage
+S:1_IN_6 |
+S:BR_CONFUSION
+D:Someone has been using the equipment here for extracurricular pursuits
+
 
 # N: serial number : monster name
 # G: symbol : color

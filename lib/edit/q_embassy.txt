@@ -22,17 +22,17 @@ L:W:DEEP_WATER
 L:-:GRASS
 L:*:TRAP(*, 25%):OBJ(*)
 L:<:UP_STAIR
-L:a:MON(drider)
+L:a:MON(jade monk)
 L:b:MON(phase spider)
-L:c:OBJ(*, DEPTH+7):MON(jade monk)
-L:d:MON(^mystic$)
+L:c:OBJ(small steel chest, DEPTH+7):MON(^mystic$)
+L:d:MON(nexus spider)
 L:e:MON(^master mystic$)
-L:f:MON(nexus spider)
+L:f:MON(^mystic$)
 
-L:k:OBJ(*, DEPTH+20)
+L:k:OBJ(mirror shield)
 L:l:OBJ(small steel chest)
 L:m:OBJ(RING):EGO(defender)
-L:n:OBJ(large steel chest)
+L:n:OBJ(large steel chest, DEPTH+15)
 !:SCRAMBLE(k,l,m,n)
 
 # Dungeon layout
@@ -61,3 +61,4 @@ M:#..........#.........................................#..............#
 M:#..........#.........................................#.............*#
 M:#####################################################################
 
+R:OBJ(mithril gauntlets):EGO(dwarven)

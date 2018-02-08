@@ -1,0 +1,17 @@
+?:[EQU $QUEST61 Taken InProgress]
+D:Are you here to enrol? First thing I need from you is to go
+D:and get a pile of magic mushrooms. They grow in the icky cave.
+?:1
+
+?:[EQU $QUEST61 Completed]
+D:Good now I can finish my salad. Here read this and go find a
+D:class to attend.
+?:1
+
+?:[EQU $QUEST61 Failed]
+D:You know what helps with mushrooms? Other mushrooms.
+?:1
+
+R:OBJ(scroll of spell)
+
+# vim: filetype=q :

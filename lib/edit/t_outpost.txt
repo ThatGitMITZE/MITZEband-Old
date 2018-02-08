@@ -7,6 +7,9 @@ L:&:FLOOR
 #L:&:QUEST_ENTER(53)
 #L:&:OBJ(gold dragon):EGO(87)
 
+L:>:ENTRANCE(GLOW | MARK, 30)
+L:<:ENTRANCE(GLOW | MARK, 31)
+
 # Default for Quest 1 = entrance is stone
 L:z:PERMANENT
 
@@ -215,7 +218,7 @@ M:       WWWWWWWWWWWW                                                           
 M:     WWWWWWWWWWWWWWWW                                                                                                                                                                 ^^^^^^^^^^^^^   
 M:       WWWWWWWWWWWWW                                                                                                                                                               ^^^^^^^^^^^^^^^    
 M:       VWWWWWWWWWWV                                                                                                                                                               ^^^^^^^^^^^^^^^     
-M:         VWWWWWWWV                                                                                                                                                                 ^^^^^^^^^^^^^      
+M:         VWWWWWWWV                                                                                                                                                                 ^^^^^^^^^^^<^      
 M:            VVVWWWW                                                                                                                                                                  ^^^^^^^^^        
 M:                  WW                                                                                                                                                                                  
 
