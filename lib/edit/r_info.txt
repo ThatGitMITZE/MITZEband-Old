@@ -3485,7 +3485,7 @@ B:CLAW:HURT(1d8)
 B:CLAW:HURT(1d8)
 B:BITE:HURT(1d6)
 F:BASH_DOOR | WILD_GRASS | WILD_WOOD | WILD_MOUNTAIN | ANIMAL
-F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
+F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC | RIDING
 P:Copy:Human:Rogue
 P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
@@ -5217,7 +5217,7 @@ B:CLAW:HURT(1d10)
 B:BITE:HURT(1d10)
 B:BITE:HURT(1d10)
 F:BASH_DOOR | WILD_WOOD | WILD_GRASS | ANIMAL
-F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC
+F:DROP_SKELETON | DROP_CORPSE | POS_GAIN_AC | RIDING
 P:Copy:Dunadan:Rogue
 P:Skills:0:-7:0:0:0:0:0:0
 P:ExtraSkills:0:-4:0:0:0:0:0:0
@@ -20651,7 +20651,7 @@ F:NO_SLEEP | NO_CONF | FOREST | NO_QUEST
 A:DISINTEGRATE(1d3)
 S:1_IN_3 |
 S:BA_ACID | S_SPECIAL | POLYMORPH | CAUSE_4 | BRAIN_SMASH
-S:TRAPS | BO_MANA | TELE_OTHER |  HASTE_SELF | BLINK_OTHER
+S:TRAPS | BO_MANA | TELE_OTHER | HASTE | BLINK_OTHER
 O:DROP_MAGE
 D:This battered old soul has wandered far and long from her coven Dulritch.
 D:The years have not been good to her, her eyes filled with weary hatred,
@@ -21903,7 +21903,7 @@ D:the light.
 
 N:1214:The Midnight Dragon
 G:D:D
-I:125:20d100:25:125:30:500
+I:125:25d100:25:125:30:500
 W:50:3:999:8000:0:0
 B:CLAW:HURT(4d9)
 B:CLAW:HURT(4d9)
@@ -21924,7 +21924,7 @@ D:contemptously.
 
 N:1215:The Nightmare Dragon
 G:D:v
-I:130:30d100:25:130:30:500
+I:130:40d100:25:130:30:500
 W:66:3:999:8000:0:0
 B:CLAW:HURT(4d9)
 B:CLAW:HURT(4d9)
@@ -21966,7 +21966,7 @@ D: steed for his Ringwraiths.
 N:1217:Triceratops
 G:R:o
 I:111:100d10:20:70:10:700
-W:33:2:90:2500:0:0
+W:33:2:90:1500:0:0
 B:BUTT:HURT(4d6)
 B:CHARGE:HURT(4d6):CUT(2d6, 50%)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
@@ -21982,7 +21982,7 @@ D:It has very long very sharp head horns and a bony frill around its head.
 N:1218:Diplodocus
 G:R:g
 I:108:150d10:20:70:50:700
-W:34:2:90:3000:0:0
+W:34:2:90:2500:0:0
 B:BUTT:HURT(4d6)
 B:KICK:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
@@ -21997,7 +21997,7 @@ D:A long necked sauropod. It is very large.
 N:1219:Ankylosaur
 G:R:U
 I:108:120d10:20:110:50:700
-W:35:2:90:2500:0:0
+W:35:2:90:1500:0:0
 B:BITE:HURT(4d6)
 B:CRUSH:HURT(4d6):HURT(4d6, 20%)
 B:CRUSH:HURT(4d6):STUN(4d6, 20%)
@@ -22013,7 +22013,7 @@ D:It is covered in armor plating and has a huge clubbed tail.
 N:1220:Pteranodon
 G:R:w
 I:120:80d10:20:60:10:700
-W:30:2:90:1000:0:0
+W:30:2:90:800:0:0
 B:BITE:HURT(4d6)
 B:BITE:HURT(4d6)
 F:BASH_DOOR | WILD_GRASS

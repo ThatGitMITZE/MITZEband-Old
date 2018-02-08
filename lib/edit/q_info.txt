@@ -300,21 +300,19 @@ N:63:30:Tidy the Laboratory (Thalos)
 T:TOWN | GENERATE
 F:q_laboratory.txt
 
-N:65:38:Basilisk Den (Thalos)
+N:64:35:Basilisk Den (Thalos)
 T:TOWN | GENERATE
 F:q_basilisk.txt
-#R:OBJ(ring):EGO(wizardry)
 
-N:66:40:Crystal Fetch (Thalos)
+N:65:40:Crystal Quest (Thalos)
 T:TOWN
 W:crystal
-G:KILL(great crystal drake, 10)
+G:KILL(ruby dragon, 5)
 F:q_crystal.txt
-#R:OBJ(jeweled crown):EGO(magi)
 
-N:67:65:Renegade Master (Thalos)
-T:TOWN | GENERATE
-F:q_renegade.txt
+#N:66:65:Renegade Master (Thalos)
+#T:TOWN | GENERATE
+#F:q_renegade.txt
 #R:OBJ(robe):EGO(sorcerer)
 
 # vim: filetype=qi :

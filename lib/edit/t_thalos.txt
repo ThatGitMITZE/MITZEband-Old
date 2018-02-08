@@ -35,6 +35,43 @@ L:b:BUILDING_1(61)
 L:b:BUILDING_1(0)
 ?:1
 
+############### Quest Sequence #2
+############### Quest 61 - Mushrooms ###############
+?:[EQU $QUEST61 Untaken Taken Completed Failed]
+L:n:BUILDING_13(61)
+?:[EQU $QUEST61 Finished FailedDone]
+L:n:BUILDING_13(62)
+?:1
+############### Quest 62 - Pumpkins ###############
+?:[EQU $QUEST62 Taken Completed Failed]
+L:n:BUILDING_13(62)
+?:[EQU $QUEST62 Finished FailedDone]
+L:n:BUILDING_13(63)
+?:1
+############### Quest 63 - Laboratory ###############
+?:[EQU $QUEST63 Taken]
+L:x:QUEST_ENTER(63)
+?:[EQU $QUEST63 Taken Completed Failed]
+L:n:BUILDING_13(63)
+?:[EQU $QUEST63 Finished FailedDone]
+L:n:BUILDING_13(64)
+?:1
+############### Quest 64 - Basilisks ###############
+?:[EQU $QUEST64 Taken]
+L:w:QUEST_ENTER(64)
+?:[EQU $QUEST64 Taken Completed Failed]
+L:n:BUILDING_7(64)
+?:[EQU $QUEST64 Finished FailedDone]
+L:n:BUILDING_13(65)
+?:1
+############### Quest 65 - Crystals ###############
+?:[EQU $QUEST65 Taken Completed Failed]
+L:n:BUILDING_13(65)
+?:[EQU $QUEST65 Finished FailedDone]
+L:n:BUILDING_13(0)
+?:1
+
+
 B:0:N:Library:Ibn Khaldun:Human?
 B:0:A:0:Research item:1000:1000:a:1:0
 B:0:A:1:Town Overview:0:0:h:2:0
@@ -141,7 +178,7 @@ M:---VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 M:-----VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV--------
 M:--------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV----------
 M:---------------VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-------------
-M:------------------VVVVVVVVVVVVVVVVVVVVVVVV##VVVVVVVVVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV--------------
+M:-----------------wVVVVVVVVVVVVVVVVVVVVVVVV##VVVVVVVVVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV--------------
 M:-------------------VVVVVVVVVVVVVVVVVVVVVVVV##VVVVVVVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-----------------------------TTTT----
 M:--------------------VVVVVVVVVVVVVVVVVVVVVVVV######VVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV---------------------------------------------------T--TT-----TT-----------
 M:---------------------VVVVVVVVVVVVVVVVVVVVVVVV#############VVVVVVVVVVV#VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV-------------------------------------------------------TTT--TTT-TTT-----TTTT----
@@ -161,7 +198,7 @@ M:------------------------------------------------------------------------------
 M:-----####################################################################################################################-----------------------------------------------------------------------------
 M:-----#;;;;;;;;;;;;;,,,,.................................................................................................#-----------------------------------------------------------------------------
 M:-----#;;;;;;;;;,,,,,,...............................................-..----------.-...----..--..........................#-----------------------------------------------------------------------------
-M:-----#;;;;;,,,,,,..................................................-T--TTTTTTTT-T-T---T-TT--TT-.....#####...#####.......#-----------------------------------------------------------------------------
+M:-----#;;;;;,,,,,,.................................x................-T--TTTTTTTT-T-T---T-TT--TT-.....#####...#####.......#-----------------------------------------------------------------------------
 M:-----#;;;,,,,..........................#####.........#####........-T-TT--######TT---TTTWWWWWTTT-....#############.......#-----------------------------------------------------------------------------
 M:-----#;;,,,..........................#########.....#########........-T--..o####--T-T-WWWWWWWW,T-.....##-------##........#-----------------------------------------------------------------------------
 M:-----#;,,,.......###############....###########...###########......-T-T.T######,,,,,,WWWWWWWWTT-.....##--###--##........#-----------------------------------------------------------------------------

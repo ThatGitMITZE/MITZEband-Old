@@ -29,8 +29,8 @@ L:d:MON(nexus spider)
 L:e:MON(^master mystic$)
 L:f:MON(^mystic$)
 
-L:k:OBJ(mirror shield)
-L:l:OBJ(small steel chest)
+L:k:OBJ(AMULET)
+L:l:OBJ(leather scale):EGO(elvenkind)
 L:m:OBJ(RING):EGO(defender)
 L:n:OBJ(large steel chest, DEPTH+15)
 !:SCRAMBLE(k,l,m,n)
@@ -60,5 +60,3 @@ M:#.....f....+.........................................#.....f........#
 M:#..........#.........................................#..............#
 M:#..........#.........................................#.............*#
 M:#####################################################################
-
-R:OBJ(mithril gauntlets):EGO(dwarven)

@@ -49,4 +49,4 @@ M:X............#..M.#.......d.........XX
 M:X<...........#....#...............$XXX
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-R:OBJ(mithril shield):EGO(60)
+R:OBJ(mithril helm):EGO(118)
