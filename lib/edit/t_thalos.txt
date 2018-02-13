@@ -36,38 +36,38 @@ L:b:BUILDING_1(0)
 ?:1
 
 ############### Quest Sequence #2
-############### Quest 61 - Mushrooms ###############
-?:[EQU $QUEST61 Untaken Taken Completed Failed]
-L:n:BUILDING_13(61)
-?:[EQU $QUEST61 Finished FailedDone]
-L:n:BUILDING_13(62)
-?:1
-############### Quest 62 - Pumpkins ###############
-?:[EQU $QUEST62 Taken Completed Failed]
-L:n:BUILDING_13(62)
-?:[EQU $QUEST62 Finished FailedDone]
-L:n:BUILDING_13(63)
-?:1
-############### Quest 63 - Laboratory ###############
-?:[EQU $QUEST63 Taken]
-L:x:QUEST_ENTER(63)
-?:[EQU $QUEST63 Taken Completed Failed]
+############### Quest 63 - Mushrooms ###############
+?:[EQU $QUEST63 Untaken Taken Completed Failed]
 L:n:BUILDING_13(63)
 ?:[EQU $QUEST63 Finished FailedDone]
 L:n:BUILDING_13(64)
 ?:1
-############### Quest 64 - Basilisks ###############
-?:[EQU $QUEST64 Taken]
-L:w:QUEST_ENTER(64)
+############### Quest 64 - Pumpkins ###############
 ?:[EQU $QUEST64 Taken Completed Failed]
-L:n:BUILDING_7(64)
+L:n:BUILDING_13(64)
 ?:[EQU $QUEST64 Finished FailedDone]
 L:n:BUILDING_13(65)
 ?:1
-############### Quest 65 - Crystals ###############
+############### Quest 65 - Laboratory ###############
+?:[EQU $QUEST65 Taken]
+L:x:QUEST_ENTER(65)
 ?:[EQU $QUEST65 Taken Completed Failed]
 L:n:BUILDING_13(65)
 ?:[EQU $QUEST65 Finished FailedDone]
+L:n:BUILDING_13(66)
+?:1
+############### Quest 66 - Basilisks ###############
+?:[EQU $QUEST66 Taken]
+L:w:QUEST_ENTER(66)
+?:[EQU $QUEST66 Taken Completed Failed]
+L:n:BUILDING_13(66)
+?:[EQU $QUEST66 Finished FailedDone]
+L:n:BUILDING_13(67)
+?:1
+############### Quest 67 - Crystals ###############
+?:[EQU $QUEST67 Taken Completed Failed]
+L:n:BUILDING_13(67)
+?:[EQU $QUEST67 Finished FailedDone]
 L:n:BUILDING_13(0)
 ?:1
 

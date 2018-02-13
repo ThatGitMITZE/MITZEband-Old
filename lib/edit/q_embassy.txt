@@ -20,19 +20,19 @@ L:#:PERMANENT
 L:%:GRANITE
 L:W:DEEP_WATER
 L:-:GRASS
-L:*:TRAP(*, 25%):OBJ(*)
+L:*:OBJ(*, DEPTH+5)
 L:<:UP_STAIR
-L:a:MON(jade monk)
+L:a:MON(ivory monk)
 L:b:MON(phase spider)
 L:c:OBJ(small steel chest, DEPTH+7):MON(^mystic$)
 L:d:MON(nexus spider)
 L:e:MON(^master mystic$)
 L:f:MON(^mystic$)
 
-L:k:OBJ(AMULET)
-L:l:OBJ(leather scale):EGO(elvenkind)
+L:k:OBJ(BOOTS):EGO(elvenkind)
+L:l:OBJ(SOFT_ARMOR):EGO(elvenkind)
 L:m:OBJ(RING):EGO(defender)
-L:n:OBJ(large steel chest, DEPTH+15)
+L:n:OBJ(SHIELD):EGO(elvenkind)
 !:SCRAMBLE(k,l,m,n)
 
 # Dungeon layout

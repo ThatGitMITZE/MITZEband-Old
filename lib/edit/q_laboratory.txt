@@ -1,16 +1,16 @@
-?:[EQU $QUEST63 Taken InProgress]
+?:[EQU $QUEST65 Taken InProgress]
 D:You again. Tell you what, a couple of other students left
 D:the laboratory in a mess. Go and tidy it up! That should
 D:keep you busy.
 ?:1
 
-?:[EQU $QUEST63 Completed]
+?:[EQU $QUEST65 Completed]
 D:Hrm, you know you're meant to follow lab safety and wear
 D:gloves in there? Go to the stockroom and get yourself a
 D:pair.
 ?:1
 
-?:[EQU $QUEST63 Failed]
+?:[EQU $QUEST65 Failed]
 D:Ugh now who is going to clean up the mess in there.
 ?:1
 
@@ -32,12 +32,12 @@ L:h:MON(beer elemental)
 L:i:MON(quasit)
 L:s:OBJ(SCROLL, DEPTH+5)
 L:t:OBJ(JUNK)
-L:u:OBJ(LITE_AREA)
+L:u:OBJ(STAFF_LITE_AREA)
 L:v:OBJ(STAFF_DARKNESS)
 L:a:OBJ(RING, DEPTH+10):EGO(wizardry)
 L:b:OBJ(BOOK)
 L:c:OBJ(ROD_CLARITY)
-L:d:MON(death mold)
+L:d:MON(disenchanter mold)
 L:j:MON(ochre jelly)
 L:k:MON(silver jelly)
 !:SCRAMBLE(s,t,^,b)
