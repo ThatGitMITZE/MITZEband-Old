@@ -26,7 +26,7 @@ bool free_act_save_p(int ml)
 			return TRUE;
 		}
 	}
-	else
+	else if (p_ptr->free_act > 1)
     {
         equip_learn_flag(OF_FREE_ACT);
         return TRUE;
