@@ -9,7 +9,7 @@ D:the ruins and see if you can shed some light on the matter.
 ?:1
 
 ?:[EQU $QUEST53 Completed]
-D:Once again, we are in your debt. Here, take this shield as a reward.
+D:Once again, we are in your debt.
 ?:1
 
 ?:[EQU $QUEST53 Failed]

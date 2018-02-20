@@ -1,6 +1,6 @@
 ?:[EQU $QUEST64 Taken InProgress]
 D:Oh you're back already, hmm. Next thing you should do is
-D:get me some pumpkins from the witch wood. They have
+D:get me some pumpkins from the icky cave. They have
 D:interesting magical properties.
 ?:1
 

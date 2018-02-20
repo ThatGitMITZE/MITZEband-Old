@@ -957,7 +957,7 @@ enum {
 /* #define FF_HURT_COLD     46 */
 /* #define FF_HURT_ACID     47 */
 /* #define FF_ICE           48 */
-/* #define FF_ACID          49 */
+#define FF_ACID          49
 /* #define FF_OIL           50 */
 /* #define FF_XXX04      51 */
 #define FF_CAN_CLIMB     52

@@ -32,7 +32,7 @@ L:j:DEEP_WATER:MON(globefish)
 L:k:OBJ(large steel chest)
 L:l:OBJ(skeleton)
 L:m:OBJ(ring, DEPTH+10)
-L:n:OBJ(cutlass, DEPTH+25)
+L:n:OBJ(cutlass, DEPTH+15):ART(*)
 
 # Dungeon layout
 M:#################################################################

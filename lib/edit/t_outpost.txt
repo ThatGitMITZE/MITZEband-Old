@@ -3,8 +3,8 @@ T:TOWN:NORMAL:NO_ROTATE
 %:t_pref.txt
 ############### Additional default terrain settings ###############
 # A test tile for debugging
-L:&:FLOOR
-#L:&:QUEST_ENTER(53)
+#L:&:FLOOR
+L:&:QUEST_ENTER(19)
 #L:&:OBJ(gold dragon):EGO(87)
 
 L:>:ENTRANCE(GLOW | MARK, 30)

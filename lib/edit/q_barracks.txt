@@ -28,7 +28,7 @@ L:c:MON(lost soul)
 L:d:MON(ghast)
 L:e:MON(ghoul)
 L:f:MON(ghoulking)
-L:k:OBJ(leather scale mail, DEPTH+25):EGO(elemental)
+L:k:OBJ(leather scale mail, DEPTH+20):EGO(elemental)
 L:l:OBJ(large iron chest)
 L:$:OBJ(*, DEPTH+15)
 M:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
