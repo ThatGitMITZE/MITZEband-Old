@@ -31,8 +31,8 @@ L:i:DEEP_WATER:MON(ixitxachitl priest)
 L:j:DEEP_WATER:MON(globefish)
 L:k:OBJ(large steel chest)
 L:l:OBJ(skeleton)
-L:m:OBJ(ring, DEPTH+10)
-L:n:OBJ(cutlass, DEPTH+15):ART(*)
+L:m:OBJ(ring, DEPTH+10):ART(*)
+L:n:OBJ(cutlass, DEPTH+10):ART(*)
 
 # Dungeon layout
 M:#################################################################

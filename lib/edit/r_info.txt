@@ -22096,7 +22096,7 @@ F:POS_GAIN_AC | POS_HOLD_LIFE
 P:Copy:Zombie:Rage-Mage
 S:1_IN_6 |
 S:BR_CONFUSION
-D:Someone has been using the equipment here for extracurricular pursuits
+D:A frothing mass of ale set in motion by mysterious forces.
 
 
 # N: serial number : monster name

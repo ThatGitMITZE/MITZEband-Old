@@ -890,12 +890,12 @@ F:HIDE_TYPE
 
 N:207:of Archery
 T:RING
-W:10:*:3
+W:10:*:2
 F:HIDE_TYPE
 
 N:208:of Wizardry
 T:RING
-W:30:*:4
+W:20:*:2
 
 N:209:of Speed
 T:RING

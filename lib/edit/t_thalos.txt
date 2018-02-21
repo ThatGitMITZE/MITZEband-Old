@@ -4,11 +4,14 @@ T:TOWN:NORMAL:NO_ROTATE
 
 L:>:ENTRANCE(GLOW | MARK, 21)
 
-# Default for Quest 60 = entrance is grass
+# Default for Quest 60
 L:z:GRASS
 
-# Default for Quest 61 = entrance is grass
+# Default for Quest 61
 L:y:PERMANENT
+
+# Default for Quest 65
+L:x:FLOOR
 
 ############### Quest 22 - Orc Camp
 ?:[EQU $QUEST22 Taken]
@@ -40,12 +43,6 @@ L:b:BUILDING_1(0)
 ?:[EQU $QUEST63 Untaken Taken Completed Failed]
 L:n:BUILDING_13(63)
 ?:[EQU $QUEST63 Finished FailedDone]
-L:n:BUILDING_13(64)
-?:1
-############### Quest 64 - Pumpkins ###############
-?:[EQU $QUEST64 Taken Completed Failed]
-L:n:BUILDING_13(64)
-?:[EQU $QUEST64 Finished FailedDone]
 L:n:BUILDING_13(65)
 ?:1
 ############### Quest 65 - Laboratory ###############

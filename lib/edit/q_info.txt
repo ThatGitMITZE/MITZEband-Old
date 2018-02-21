@@ -81,7 +81,7 @@ N:16:40:Assault on Montsalvat (Telmora)
 T:TOWN | GENERATE
 F:q_montsalvat.txt
 
-N:19:20:Doom Quest I (Angwil)
+N:19:25:Doom Quest I (Angwil)
 T:TOWN | GENERATE
 F:q_doom1.txt
 
