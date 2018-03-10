@@ -22171,7 +22171,7 @@ D:A frothing mass of ale set in motion by mysterious forces.
 N:1229:Zoopi, the Cube King
 G:j:G
 I:120:33d22:24:36:1:200
-W:25:4:50:847:0:0
+W:25:4:999:847:0:0
 B:TOUCH:ACID(2d10)
 B:TOUCH:ACID(2d10)
 B:TOUCH:ACID(2d10)
@@ -22234,7 +22234,7 @@ D: hunting for is a backpack full of loot.
 N:1232:Lorgan, Chief of the Easterlings
 G:p:v
 I:120:11d176:25:120:10:150
-W:36:2:0:1200:0:0
+W:36:2:999:1200:0:0
 B:HIT:HURT(6d7)
 B:HIT:HURT(6d7)
 B:HIT:HURT(3d9)
