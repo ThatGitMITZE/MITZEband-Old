@@ -150,6 +150,7 @@ cptr do_law_spell(int spell, int mode)
             if (cast)
             {
                 if ((lisa) && (!identify_fully(NULL))) return NULL;
+                else if (lisa) return NULL;
                 else if (!ident_spell(NULL)) return NULL;
             }
         }
