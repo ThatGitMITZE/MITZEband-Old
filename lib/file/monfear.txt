@@ -423,7 +423,7 @@ magically summons special opponents!
 invokes a mana storm.
 invokes a darkness storm.
 invokes a starburst.
-throw a Psycho-Spear.
+throws a Psycho-Spear.
 invokes the Hand of Doom!
 casts a Globe of Invulnerability.
 #が自分の傷に集中した。
