@@ -314,7 +314,7 @@ static void _art_create_random(object_type *o_ptr, int level, int power)
     int     i;
     u32b    mode = CREATE_ART_NORMAL;
     point_t min_tbl[2] = { {20, 0}, {70, 50000} };
-    point_t max_tbl[5] = { {0, 5000}, {10, 10000}, {30, 30000}, {70, 110000}, {100, 200000} };
+    point_t max_tbl[5] = { {0, 5000}, {10, 10000}, {30, 30000}, {70, 110000}, {100, 160000} };
     int     min = interpolate(level, min_tbl, 2);
     int     max = interpolate(level, max_tbl, 5);
     int     pct = get_slot_power(o_ptr);
