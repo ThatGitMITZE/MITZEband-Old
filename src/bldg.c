@@ -2609,7 +2609,8 @@ static bool _reforge_artifact(void)
     int  cost;
     char o_name[MAX_NLEN];
     object_type *src, *dest;
-    int f = p_ptr->fame; /* 90K max kind of removed - stronger objects are allowed but get scaled down */
+    int f = ((p_ptr->fame <= 128) || (p_ptr->fame >= 224)) ? p_ptr->fame : (((p_ptr->fame - 128) * 3) / 4) + 128;
+    /* 90K max kind of removed - stronger objects are allowed but get scaled down */
     int src_max_power = f*150 + f*f*3/2;
     int dest_max_power = 0;
 
