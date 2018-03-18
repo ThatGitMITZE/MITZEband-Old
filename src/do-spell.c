@@ -3613,7 +3613,7 @@ static cptr do_death_spell(int spell, int mode)
         break;
 
     case 10:
-        if (name) return "Cloud kill";
+        if (name) return "Cloud Kill";
         if (desc) return "Generate a ball of poison centered on you.";
 
         {
@@ -3711,7 +3711,7 @@ static cptr do_death_spell(int spell, int mode)
         break;
 
     case 14:
-        if (name) return "Animate dead";
+        if (name) return "Animate Dead";
         if (desc) return "Resurrects nearby corpse and skeletons. And makes these your pets.";
 
         {
