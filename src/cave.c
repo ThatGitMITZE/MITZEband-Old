@@ -1262,7 +1262,7 @@ void map_info(int y, int x, byte *ap, char *cp, byte *tap, char *tcp)
                 {
                     a = TERM_WHITE;
                     *ap = a;
-                    *cp = r_ptr->d_char; /* non-graphics */
+                    *cp = (easy_mimics ? r_ptr->x_char : r_ptr->d_char); /* non-graphics */
                 }
                 /* Pets: Ideally, we could tweak the background. And what about tiles? */
                 else if (!use_graphics && (p_ptr->pet_extra_flags & PF_HILITE) && is_pet(m_ptr))
