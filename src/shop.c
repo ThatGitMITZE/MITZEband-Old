@@ -475,6 +475,11 @@ static bool _create(obj_ptr obj, int k_idx, int lvl, u32b mode)
     obj->ident |= IDENT_STORE;
     if (obj_value(obj) <= 0) return FALSE; /* Note: requires IDENT_STORE to work!!! */
 
+    if (mode & AM_SHUFFLING) /* Prevent shuffling for a [Sm amulet */
+    {
+        if ((k_info[k_idx].tval == TV_AMULET) && (have_flag(obj->flags, OF_NO_SUMMON))) return FALSE;
+    }
+
     /* discounts could screw up the special pricing in dragonskin emporium */
     if (k_info[k_idx].tval != TV_DRAG_ARMOR) _discount(obj);
 
