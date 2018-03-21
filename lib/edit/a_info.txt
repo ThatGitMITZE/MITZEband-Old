@@ -3472,7 +3472,7 @@ I:21:51:3
 W:60:1:20:40000
 P:0:2d4:14:16:0
 F:STR | DEX | CHR | REFLECT | RES_FEAR | FREE_ACT | RES_NEXUS | REGEN |
-F:DEC_INT | LIFE | TELEPATHY
+F:DEC_INT | LIFE | TELEPATHY | INSTA_ART | QUESTITEM
 D:It was carved out of a tree branch knocked down by a falling meteor.
 D:(You're not sure if that gives it any mystic superpowers, but you sure
 D:hope so.)
