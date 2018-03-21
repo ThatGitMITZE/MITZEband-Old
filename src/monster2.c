@@ -3185,6 +3185,9 @@ int place_monster_one(int who, int y, int x, int r_idx, int pack_idx, u32b mode)
 
         /* Require empty space (if not ghostly) */
         if (!monster_can_enter(y, x, r_ptr, 0)) return 0;
+
+        /* Avoid generating monsters on top of enclosed 1x1 pits */
+        if ((!character_dungeon) && (dungeon_type) && (cave[y][x].feat == feat_dark_pit)) return 0;
     }
 
     if (!p_ptr->inside_battle)
@@ -3608,6 +3611,9 @@ static bool mon_scatter(int r_idx, int *yp, int *xp, int y, int x, int max_dist)
                 /* Require empty space (if not ghostly) */
                 if (!monster_can_enter(ny, nx, r_ptr, 0))
                     continue;
+
+                /* Avoid generating monsters on top of enclosed 1x1 pits */
+                if ((!character_dungeon) && (dungeon_type) && (cave[ny][nx].feat == feat_dark_pit)) continue;
             }
             else
             {
