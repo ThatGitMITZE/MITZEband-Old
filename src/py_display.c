@@ -1199,11 +1199,11 @@ static void _build_uniques(doc_ptr doc)
 
             vec_sort(v, (vec_cmp_f)_compare_monsters);
 
-            doc_printf(doc, "  <color:G>%-40.40s <color:R>%3s</color></color>\n", "Uniques", "Lvl");
+            doc_printf(doc, "  <color:G>%-44.44s <color:R>%3s</color></color>\n", "Uniques", "Lvl");
             for (i = ct_uniques_dead - 1; i >= 0 && i >= ct_uniques_dead - 20; i--)
             {
                 monster_race *r_ptr = vec_get(v, i);
-                doc_printf(doc, "  %-40.40s %3d\n", (r_name + r_ptr->name), r_ptr->level);
+                doc_printf(doc, "  %-44.44s %3d\n", (r_name + r_ptr->name), r_ptr->level);
             }
         }
         else
