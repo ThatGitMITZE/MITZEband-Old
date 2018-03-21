@@ -354,7 +354,7 @@ bool _hit_mon(py_throw_ptr context, int m_idx)
             {
                 char m_name[80];
                 sound(SOUND_FLEE);
-                monster_desc(m_name, m_ptr, MD_PRON_VISIBLE | MD_OBJECTIVE);
+                monster_desc(m_name, m_ptr, MD_PRON_VISIBLE);
                 msg_format("%^s flees in terror!", m_name);
             }
             if (context->after_hit_f)
