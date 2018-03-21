@@ -2603,7 +2603,7 @@ void untouchable_mut(int cmd, variant *res)
         msg_print("You feel untouchable!");
         break;
     case SPELL_LOSE_MUT:
-        msg_print("Your feel touchable!");
+        msg_print("You feel touchable!");
         break;
     case SPELL_MUT_DESC:
         var_set_string(res, "You are untouchable and gain a bonus to AC.");
