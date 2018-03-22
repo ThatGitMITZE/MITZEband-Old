@@ -786,12 +786,17 @@ static bool _temple_stock_p(int k_idx)
 static bool _temple_create(obj_ptr obj, u32b mode)
 {
     int k_idx;
-    if (one_in_(3))
+    if (one_in_(4))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_WORD_OF_RECALL);
     else if (one_in_(7))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_REMOVE_CURSE);
     else if (one_in_(20))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE);
+    else if ((p_ptr->lev < 35) && (one_in_(10)))
+    {
+        if (p_ptr->lev < 20) k_idx = lookup_kind(TV_POTION, SV_POTION_CURE_SERIOUS);
+        else k_idx = lookup_kind(TV_POTION, SV_POTION_CURING);
+    }
     else
         k_idx = _get_k_idx(_temple_stock_p, _mod_lvl(20));
     return _create(obj, k_idx, _mod_lvl(rand_range(1, 15)), mode);
