@@ -14,6 +14,8 @@
 
 <color:R>A:</color> In Outpost, walk to the large building just outside the city walls and press 'q' to request a quest from the Count. Then walk to the building in the northeast of the city and press '>' at the quest entrance.
 
+(If you're playing in beginner mode or no_wilderness mode, walk to the small building in the northeast of the city and request the quest from the Mayor.)
+
 
 <color:G>Q:</color> Where do I find the other quests in the game?
 
@@ -52,7 +54,7 @@ At the opposite end, yeek tourists and snotling tourists are extremely weak comb
 
 <color:G>Q:</color> I have found lots of cool items, but the monsters I meet keep destroying them! Am I doing something wrong?
 
-<color:R>A:</color> Elemental resists help protect your inventory. With one level of resistance, the chances of an item being destroyed by that element are significantly reduced; with two levels of resistance, the item will only be destroyed if you're really unlucky; with three levels of resistance the item will be safe. Watch out for fire, acid, cold and electricity in the early game, and also chaos in the late game.
+<color:R>A:</color> Elemental resists help protect your inventory. With one level of resistance, the chances of an item being destroyed by that element are significantly reduced; with two levels of resistance, the item will only be destroyed if you're really unlucky; with three levels of resistance the item will be safe. Watch out for fire, acid, cold and electricity in the early game, and also chaos in the late game. Sound and shards can destroy potions.
 
 If you don't have the appropriate resist and don't want to risk losing the item, avoid monsters that might destroy it; or, if they only destroy items in melee, avoid melee and kill them with ranged attacks.
 
@@ -116,6 +118,25 @@ Also, monsters don't always move at their listed speed; watch out for hasted mon
 <color:R>A:</color> Empty rings and amulets are not directly useful, but they can be used as the base item for a potentially useful artifact reforge.
 
 
+<color:G>Q:</color> How does Free Action work in FrogComposband?
+
+<color:R>A:</color> Free Action provides protection from paralysis, a potentially lethal condition. One level of Free Action provides partial protection and helps recover faster if you do get paralyzed; two levels of Free Action provide complete protection against low-level monsters and very good protection against high-level monsters; three levels of Free Action provide complete protection against paralysis, except in the special case of the Ancient Foul Curse.
+
+How good "imperfect" Free Action (one level of protection in the early game, or one or two levels in the late game) is depends on the level of the attacking monster, and also on your saving throw. The better your saving throw is, the less of a risk you're taking by not having three levels of Free Action.
+
+In many other Angband variants one source of Free Action is enough to give complete paralysis immunity; if you've played such variants, be careful not to rely too much on a single Free Action source in FrogComposband.
+
+
+<color:G>Q:</color> Is there any way to gain paralysis immunity even against the Ancient Foul Curse?
+
+<color:R>A:</color> A good saving throw improves your chances of not being paralyzed by the curse. With a sufficiently good saving throw the chances of being paralyzed by the curse become zero. Anti-Magic items push your saving throw up to this level, but can be inconvenient for characters that rely heavily on magic.
+
+
+<color:G>Q:</color> How does See Invisible work in FrogComposband?
+
+<color:R>A:</color> Every level of See Invisible improves your chances of noticing an invisible creature. How good those chances become depends on the level of the monster (high-level monsters are harder to see) and on your Searching skill. Sometimes an invisible creature flickers in and out of sight - now you make the sight roll, the next turn you don't. If you have several sources of See Invisible and still have trouble seeing invisible creatures, you may need either Telepathy or an item that improves your Searching skill.
+
+
 <color:G>Q:</color> I tried to dual wield two weapons.  But I couldn't hit anything!
 
 <color:R>A:</color> You need to practice your dual wielding skill (proficiency level) and your weapon skills.  Hitting high level monsters many times will improve your skills.  Note that the information command '~' reveals your proficiency levels.  Some classes are very bad at dual-wielding, while others are much more adept at it or can become so with enough training. If you try to dual-wield on a sniper and it doesn't work out, don't let that discourage you from dual-wielding on a ninja.
@@ -128,7 +149,12 @@ Also, monsters don't always move at their listed speed; watch out for hasted mon
 
 <color:G>Q:</color> How do I increase my proficiency level?
 
-<color:R>A:</color> Proficiency level of a weapon will increase when you hit a monster whose level is high enough compared with your character level. Proficiency level of a spell will increase when you cast the spell at a dungeon level deep enough compared with the spell level. The needed conditions to increase riding proficiency are rather complex; generally, you need to hit a monster whose level is high enough compared with current riding proficiency level or to shoot a monster while riding on a high level mount.
+<color:R>A:</color> Proficiency level of a weapon will increase when you hit a monster whose level is high enough compared to your character level and to your current proficiency. Proficiency level of a spell will increase when you cast the spell at a dungeon level deep enough compared with the spell level. The needed conditions to increase riding proficiency are rather complex; generally, you need to hit a monster whose level is high enough compared with current riding proficiency level or to shoot a monster while riding on a high level mount.
+
+
+<color:G>Q:</color> I'm a level 15 ranger and have been shooting everybody from the beginning, but my short bow proficiency is still Beginner (+0). Is something wrong?
+
+<color:R>A:</color> Beginner (+0) doesn't sound great, but it's a lot better than Unskilled (-20), and is good enough you need to shoot monsters of native level 15 (or deeper) to get your proficiency up to +1.
 
 
 <color:G>Q:</color> I'm a fighter type and rely largely on melee. Which weapon should I use?
@@ -143,6 +169,11 @@ As you start finding {excellent} weapons and artifacts, you may well want to wie
 <color:R>A:</color> Some classes have a very strong preference for a certain weapon or type of weapon, to the extent that other weapons are marked as icky. The exact effects of wielding an icky weapon depend on class, but as a general rule you should always assume that an icky weapon will be worse than a non-icky one, at least from a melee perspective. In the specific case of Priests, however, the melee penalty is relatively small and the main drawback of an icky weapon is its effect on prayer fail rates.
 
 
+<color:G>Q:</color> I'm in a very dangerous spot, but there's a trap door right next to me. Is there any way I can deliberately fall through the trap door without making the automatic attempt to disarm it?
+
+<color:R>A:</color> Use the '-' key, followed by the direction, to deliberately walk into the trap.
+
+
 <color:G>Q:</color> How do I ride on a monster?
 
 <color:R>A:</color> At first, summon, charm or capture some suitable monster. Then use the pet menu command 'p'.
@@ -150,7 +181,7 @@ As you start finding {excellent} weapons and artifacts, you may well want to wie
 
 <color:G>Q:</color> How do I use a Capture Ball?
 
-<color:R>A:</color> Just equip it and activate 'A' to a dying monster.
+<color:R>A:</color> Equip it and activate ('A') to a dying monster.
 
 
 <color:G>Q:</color> I cannot hold a weapon and a shield without losing control of my horse.  My horse runs aimlessly!
@@ -168,6 +199,13 @@ Potions of New Life also cure mutations among their other effects, and potions o
 <color:G>Q:</color> How important is Telepathy?
 
 <color:R>A:</color> Full telepathy is extremely nice to have - it tells you about approaching threats, helps you locate fleeing or blinking enemies, and even allows you to spot monsters that might otherwise be invisible to you. However, it is still more of a convenience than something that you absolutely need, especially if you have easy and reliable access to Detection and have no or minimal problems seeing invisible creatures. A player without telepathy needs to detect monsters more often but can usually get by.
+
+
+<color:G>Q:</color> What does Reflection do? How important is it?
+
+<color:R>A:</color> It gives you a 75% chance of reflecting any incoming bolt or bolt-like attack. A reflected bolt will not damage you in any way, and may bounce back and damage the monster that fired it in the first place. Some monsters also have Reflection - in this case, they have a 75% chance of reflecting your bolt attacks, potentially back at you. If both you and the monster have Reflection, it's possible for a bolt to bounce between you two for a while... The main difference between monster reflection and player reflection is that monsters cannot reflect actual crossbow bolts (or arrows, sling ammo etc.) but you can reflect monster arrows.
+
+Reflection is very helpful (and remains useful throughout the game) but is never really absolutely needed. Early on, it's particularly useful in the Camelot dungeon, which has many dangerous bolt casters.
 
 
 <color:G>Q:</color> What do monsters' vampiric attacks do?
@@ -228,6 +266,23 @@ Reforge from strong slots to strong slots, weak slots to weak slots, and - if ne
 <color:G>Q:</color> When should I reforge?
 
 <color:R>A:</color> Reforging is at its best relatively late in the game, when you've both found many very strong artifacts and accrued enough fame to use them as source items. Don't be afraid of trying it out earlier, though, especially if you need something specific like a dark lamp.
+
+
+<color:G>Q:</color> What do Poison Needles do?
+
+<color:R>A:</color> Poison needles are a special weapon. A poison needle only gets one hit per turn and usually only deals 1 damage on that hit; however, poison needle hits have a small chance of instantly killing any monster in the game, no matter how strong, unless it is a unique. Poison needles are often used to kill metal babbles, which are very difficult to kill through any other means. (The Metal Babble at the bottom of the Arena dungeon is technically a unique, but is still susceptible to a poison needle kill.)
+
+Poison needles cannot be used in a reforge, and cannot be enchanted through any normal means. (Some classes, like Weaponsmiths, can use their special abilities to "enchant" a poison needle, but this has no actual effect on the needle's performance.) Poison needles have a 100% hit chance, unless the player is dual-wielding, in which case they have a 50% hit chance.
+
+
+<color:G>Q:</color> How do I create a character dump?
+
+<color:R>A:</color> If your character is still alive, press Shift+C for the character sheet, then press | to dump it. If you're dead, the tombstone screen offers easy character dumping - simply type the filename you want (usually something like "name.html" or "name_dead.html") and press Enter. If you died earlier and forgot to take a character dump, access the character sheet through the high score list (the '~' key, followed by the 'H' key) and then press '|' as before. If you're playing on the angband.live online server and have trouble dumping your character (users on some keyboard/browser combinations have experienced problems using the '|' key online), you can request help from your fellow players; the angband.live high score list is shared between all players, so anyone can use it to create a dump of your character.
+
+
+<color:G>Q:</color> I want to post my character dump to the ladder on angband.oook.cz. Should I use a TXT dump or an HTML dump?
+
+<color:R>A:</color> Use an HTML dump.
 
 
 <color:G>Q:</color> What is the genesis of FrogComposband?
