@@ -3032,7 +3032,7 @@ static void process_monster(int m_idx)
             do_move = FALSE;
 
             /* Break the ward */
-            if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
+            if (!is_pet(m_ptr) && (randint1(player_bold(ny, nx) ? BREAK_GLYPH * 2 / 3: BREAK_GLYPH) < r_ptr->level))
             {
                 /* Describe observable breakage */
                 if (c_ptr->info & CAVE_MARK)
