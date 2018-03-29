@@ -280,7 +280,8 @@ static bool _display_origin(object_type *o_ptr, doc_ptr doc)
         }
         case ORIGIN_ARENA_REWARD:
         {
-            doc_printf(doc, "Dropped by %s in the Thalos Arena.", pudottaja);
+            if (!no_wilderness) doc_printf(doc, "Dropped by %s in the Thalos Arena.", pudottaja);
+            else doc_printf(doc, "Dropped by %s in the Arena.", pudottaja);
             break;
         }
         case ORIGIN_NAGA:
@@ -310,7 +311,8 @@ static bool _display_origin(object_type *o_ptr, doc_ptr doc)
         }
         case ORIGIN_REFORGE:
         {
-            doc_printf(doc, "Reforged in Morivant.");
+            if (!no_wilderness) doc_printf(doc, "Reforged in Morivant.");
+            else doc_printf(doc, "Reforged at the Fighters' Hall.");
             break;
         }
         case ORIGIN_GAMBLE:
@@ -351,7 +353,7 @@ static bool _display_origin(object_type *o_ptr, doc_ptr doc)
             break;
         }
     }
-    if ((show_discovery) && (o_ptr->mitze_type) && (o_ptr->mitze_turn))
+    if ((show_discovery) && (o_ptr->mitze_type) && (o_ptr->mitze_turn) && (origin != ORIGIN_BIRTH))
     {
         int day = 0, hour = 0, min = 0;
         doc_printf(doc, "\n");
