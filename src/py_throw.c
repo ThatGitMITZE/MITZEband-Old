@@ -390,7 +390,15 @@ void _throw(py_throw_ptr context)
 
         if (!cave_have_flag_bold(y, x, FF_PROJECT))
         {
-            if (_hit_wall(context)) break;
+            if (_hit_wall(context)) 
+            {
+                /* Drop on the previous square to avoid objects flying through walls.
+                 * It's possible the previous square isn't actually part of the path,
+                 * in which case we need to improvise */
+                if (!context->path_pos) context->path[0] = GRID(py, px);
+                else context->path_pos--;
+                break;
+            }
         }
 
         /* careful ... leave path_pos on the last processed square
