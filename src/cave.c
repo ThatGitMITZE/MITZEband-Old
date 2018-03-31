@@ -4858,7 +4858,8 @@ void hit_mon_trap(int y, int x, int m_idx)
                 case 7: /* Piranha Trap */
                 {
                     int i, num;
-                    msg_print("Your trap explodes and suddenly the room is filled with water and piranhas!");
+                    if (p_ptr->inside_arena) msg_print("Your trap explodes, and suddenly the room is filled with water!");
+                    else msg_print("Your trap explodes and suddenly the room is filled with water and piranhas!");
                     project(PROJECT_WHO_TRAP, 10, y, x, 100, GF_DISINTEGRATE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP ));
                     project(PROJECT_WHO_TRAP, 10, y, x, 1, GF_WATER_FLOW, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP  | PROJECT_HIDE));
 
@@ -4910,7 +4911,8 @@ void hit_mon_trap(int y, int x, int m_idx)
                 case 7: /* Piranha Trap */
                 {
                     int i, num;
-                    msg_print("Your trap explodes and suddenly the room is filled with water and piranhas!");
+                    if (p_ptr->inside_arena) msg_print("Your trap explodes, and suddenly the room is filled with water!");
+                    else msg_print("Your trap explodes and suddenly the room is filled with water and piranhas!");
                     project(PROJECT_WHO_TRAP, 10, y, x, 50, GF_DISINTEGRATE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP ));
                     project(PROJECT_WHO_TRAP, 10, y, x, 1, GF_WATER_FLOW, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP  | PROJECT_HIDE));
 
@@ -4932,7 +4934,7 @@ void hit_mon_trap(int y, int x, int m_idx)
                 }
                 }
             }
-            else if (have_flag(f_info[c_ptr->mimic].flags, FF_ROGUE_TRAP_3))
+            else if ((have_flag(f_info[c_ptr->mimic].flags, FF_ROGUE_TRAP_3)) && (!p_ptr->inside_arena))
             {
                 switch (randint1(6))
                 {
@@ -5001,7 +5003,7 @@ void hit_mon_trap(int y, int x, int m_idx)
                 }
                 }
             }
-            else if (have_flag(f_info[c_ptr->mimic].flags, FF_SEMI_PUN))
+            else if ((have_flag(f_info[c_ptr->mimic].flags, FF_SEMI_PUN)) || ((have_flag(f_info[c_ptr->mimic].flags, FF_ROGUE_TRAP_3)) && (p_ptr->inside_arena)))
             {
                 msg_format("An invisible hand slaps %s with a large trout!", m_name);
                 project(PROJECT_WHO_TRAP, 0, m_ptr->fy, m_ptr->fx, p_ptr->lev + 32, GF_FORCE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP ));
