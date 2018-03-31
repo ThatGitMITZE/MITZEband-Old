@@ -478,6 +478,7 @@ static bool _create(obj_ptr obj, int k_idx, int lvl, u32b mode)
     if (mode & AM_SHUFFLING) /* Prevent shuffling for a [Sm amulet */
     {
         if ((k_info[k_idx].tval == TV_AMULET) && (have_flag(obj->flags, OF_NO_SUMMON))) return FALSE;
+        if ((object_is_mushroom(obj)) && ((prace_is_(RACE_SNOTLING)) || (p_ptr->prace == RACE_DOPPELGANGER))) return FALSE;
     }
 
     /* discounts could screw up the special pricing in dragonskin emporium */
