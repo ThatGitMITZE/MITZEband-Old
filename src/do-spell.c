@@ -6080,7 +6080,7 @@ static cptr do_daemon_spell(int spell, int mode)
         break;
 
     case 11:
-        if (name) return "Plasma bolt";
+        if (name) return "Plasma Bolt";
         if (desc) return "Fires a bolt or beam of plasma.";
 
         {
