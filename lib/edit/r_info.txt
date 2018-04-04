@@ -10267,7 +10267,7 @@ G:\:v
 I:100:50d10:30:40:0:150
 W:24:5:70:400:0:0
 B:CRUSH:HURT(5d8):HURT(5d8, 20%):STUN(2d3)
-F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NONLIVING |
+F:COLD_BLOOD | EVIL | NO_SLEEP | NO_CONF | NO_FEAR | NONLIVING | NASTY_GLYPH |
 F:RES_ACID | RES_COLD | RES_POIS | RES_NETH | RES_DARK | BASH_DOOR
 D:A foul iron hammer forged with body and souls of victims on the infernal anvil.
 
