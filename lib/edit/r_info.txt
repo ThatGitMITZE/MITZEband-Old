@@ -6886,7 +6886,7 @@ B:WAIL:EAT_GOLD
 B:WAIL:EAT_ITEM
 F:CHAR_MULTI | COLD_BLOOD | EVIL | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING |
 F:UNDEAD | FORCE_MAXHP | RES_FIRE | RES_ELEC | IM_POIS | RES_ACID | EMPTY_MIND |
-F:NEVER_MOVE | RES_NETH
+F:NEVER_MOVE | RES_NETH | NASTY_GLYPH
 S:1_IN_15
 S:S_DEMON | SHRIEK
 D:Often found in graveyards.
@@ -21854,8 +21854,8 @@ N:1211:Ruby serpent
 G:J:B
 I:120:16d100:25:110:30:500
 W:45:3:999:8000:0:0
-B:CLAW:HURT(4d9)
-B:CLAW:HURT(4d9)
+B:CRUSH:HURT(4d9)
+B:CRUSH:HURT(4d9)
 B:BITE:HURT(5d12):FIRE(3d12):CUT(5d12, 10%)
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | ATTR_CLEAR | RAND_25
@@ -21866,16 +21866,15 @@ S:FREQ_15 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS
 S:BR_FIRE |
 P:Copy:Ogre:Warrior-Mage
 P:Body:Naga
-D:A huge crystalline snake. Its claws could cut you to shreds and
-D:its teeth are razor sharp. Deep red hues reflect from it as it 
-D:moves in the light.
+D:A huge crystalline snake with razor-sharp fangs. Deep red hues reflect
+D:from it as it moves in the light.
 
 N:1212:Emerald serpent
 G:J:B
 I:120:16d100:25:110:30:500
 W:46:3:999:8000:0:0
-B:CLAW:HURT(4d9)
-B:CLAW:HURT(4d9)
+B:CRUSH:HURT(4d9)
+B:CRUSH:HURT(4d9)
 B:BITE:HURT(5d12):POISON(3d12):CUT(5d12, 10%)
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | ATTR_CLEAR | RAND_25
@@ -21886,16 +21885,15 @@ S:FREQ_15 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS
 S:BR_POISON |
 P:Copy:Ogre:Warrior-Mage
 P:Body:Naga
-D:A huge crystalline snake. Its claws could cut you to shreds and its
-D:teeth are razor sharp. Deep green hues reflect from it as it moves in
-D:the light.
+D:A huge crystalline snake with razor-sharp fangs. Deep green hues
+D:reflect from it as it moves in the light.
 
 N:1213:Amethyst serpent
 G:J:B
 I:120:16d100:25:110:30:500
 W:47:3:999:8000:0:0
-B:CLAW:HURT(4d9)
-B:CLAW:HURT(4d9)
+B:CRUSH:HURT(4d9)
+B:CRUSH:HURT(4d9)
 B:BITE:HURT(5d12):DARK(3d12):CUT(5d12, 10%)
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | RES_DISE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | ATTR_CLEAR | RAND_25
@@ -21906,9 +21904,8 @@ S:FREQ_15 | SLOW | CONFUSE | SCARE | BR_SHARDS | DETECT_OBJECTS
 S:BR_DISENCHANT | BR_DARK 
 P:Copy:Ogre:Warrior-Mage
 P:Body:Naga
-D:A huge crystalline snake. Its claws could cut you to shreds and its
-D:teeth are razor sharp. Deep purple hues reflect from it it as it moves in
-D:the light.
+D:A huge crystalline snake with razor-sharp fangs. Deep purple hues
+D:reflect from it as it moves in the light.
 
 # More dragon uniques
 
