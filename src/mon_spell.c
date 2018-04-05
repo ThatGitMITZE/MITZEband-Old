@@ -2211,14 +2211,14 @@ static void _summon_special(void)
         break;
     case MON_JUSTSHORN:
         if (_current.flags & MSC_SRC_PLAYER)
-            msg_print("You summon sheep!'");
+            msg_print("You summon sheep!");
         else
             msg_format("%s summons sheep!", _current.name);
         r_idx = MON_SHEEP;
         break;
     case MON_ZOOPI:
         if (_current.flags & MSC_SRC_PLAYER)
-            msg_print("You summon your minions!'");
+            msg_print("You summon your minions!");
         else
             msg_format("%s summons his minions!", _current.name);
         r_idx = MON_GELATINOUS_CUBE;
@@ -2325,7 +2325,7 @@ static void _summon_special(void)
         if (_current.flags & MSC_SRC_PLAYER)
             msg_print("You summon aid!");
         else
-            msg_format("%s summons aid!'", _current.name);
+            msg_format("%s summons aid!", _current.name);
         if (one_in_(3) && r_info[MON_ARES].max_num == 1)
         {
             num = 1;
