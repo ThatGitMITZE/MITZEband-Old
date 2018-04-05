@@ -3362,6 +3362,7 @@ void ego_finalize(object_type *o_ptr, int level, int power, int mode)
             else
             {
                 o_ptr->pval += randint1(e_ptr->max_pval);
+                if ((o_ptr->name2 == EGO_CLOAK_HERO) && (o_ptr->pval > 3)) o_ptr->pval = 3; /* prevent oppy elven cloaks */
             }
         }
 
