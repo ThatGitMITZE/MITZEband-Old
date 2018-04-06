@@ -793,10 +793,15 @@ static bool _temple_create(obj_ptr obj, u32b mode)
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_REMOVE_CURSE);
     else if (one_in_(20))
         k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE);
-    else if ((p_ptr->lev < 35) && (one_in_(10)))
+    else if (((p_ptr->lev < 40) || (no_wilderness)) && (one_in_(10)))
     {
         if (p_ptr->lev < 20) k_idx = lookup_kind(TV_POTION, SV_POTION_CURE_SERIOUS);
-        else k_idx = lookup_kind(TV_POTION, SV_POTION_CURING);
+        else if (p_ptr->lev < 35) k_idx = lookup_kind(TV_POTION, SV_POTION_CURING);
+        else k_idx = lookup_kind(TV_POTION, SV_POTION_HEROISM);
+    }
+    else if ((no_wilderness) && (p_ptr->lev > 20) && (one_in_(14)))
+    {
+        k_idx = lookup_kind(TV_POTION, SV_POTION_RESTORE_EXP);
     }
     else
         k_idx = _get_k_idx(_temple_stock_p, _mod_lvl(20));
