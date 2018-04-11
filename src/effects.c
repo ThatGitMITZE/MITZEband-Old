@@ -5776,10 +5776,13 @@ void do_poly_self(void)
         do_poly_wounds();
     }
 
+    if (no_scrambling && one_in_(2)) return;
+
     /* Note: earlier deductions may have left power < 0 already. */
     while (power > 0)
     {
         mutate_player();
+        if (no_scrambling) break;
         power--;
     }
 }
