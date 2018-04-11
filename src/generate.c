@@ -1350,6 +1350,7 @@ static bool level_gen(cptr *why)
         small = TRUE;
     else if (one_in_(SMALL_LEVEL))
         small = TRUE;
+    if ((dungeon_type == DUNGEON_ICKY) && (dun_level == 10)) small = TRUE;
 
     if (small)
     {
@@ -1359,6 +1360,11 @@ static bool level_gen(cptr *why)
         {
             hgt = 1;
             wid = 1;
+        }
+        else if ((dungeon_type == DUNGEON_ICKY) && (dun_level == 10)) 
+        { 
+            hgt = randint1(2); 
+            wid = 1; 
         }
         else
         {
