@@ -2229,6 +2229,8 @@ static void do_cmd_walk_aux(int dir, bool pickup)
     if (p_ptr->quick_walk)
         energy_use = energy_use * 60 / 100;
 
+    if (p_ptr->personality == PERS_CRAVEN) energy_use = energy_use * 21 / 25;
+
     if (prace_is_(RACE_MON_GOLEM))
         energy_use *= 2;
 
