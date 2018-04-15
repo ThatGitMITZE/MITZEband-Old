@@ -1825,7 +1825,7 @@ static cptr do_sorcery_spell(int spell, int mode)
         break;
 
     case 19:
-        if (name) return "Teleport to town";
+        if (name) return "Teleport to Town";
         if (desc) return "Teleport to a town which you choose in a moment. Can only be used outdoors.";
 
         {
