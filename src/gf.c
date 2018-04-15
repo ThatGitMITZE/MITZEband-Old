@@ -2380,8 +2380,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         if (seen) obvious = TRUE;
         _BABBLE_HACK()
         do_poly = TRUE;
-        if ((race->flags1 & RF1_UNIQUE) ||
-            (mon->mflag2 & MFLAG2_QUESTOR) ||
+        if ((race->flags1 & RF1_UNIQUE) || (race->flags7 & RF7_NAZGUL) ||
+            (race->flags7 & RF7_UNIQUE2) || (mon->mflag2 & MFLAG2_QUESTOR) ||
             (race->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
         {
             note = " is unaffected!";
@@ -4020,6 +4020,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
     /* "Unique" monsters cannot be polymorphed */
     if (race->flags1 & (RF1_UNIQUE)) do_poly = FALSE;
+    if (race->flags7 & (RF7_NAZGUL)) do_poly = FALSE;
+    if (race->flags7 & (RF7_UNIQUE2)) do_poly = FALSE;
 
     /* Quest monsters cannot be polymorphed */
     if (mon->mflag2 & MFLAG2_QUESTOR) do_poly = FALSE;
