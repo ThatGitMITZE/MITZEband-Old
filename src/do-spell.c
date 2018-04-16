@@ -4011,10 +4011,10 @@ static cptr do_death_spell(int spell, int mode)
 
     case 30:
         if (name) return "Nether Storm";
-        if (desc) return "Generate a huge ball of nether.";
+        if (desc) return "Generates a huge ball of nether.";
 
         {
-            int dam = spell_power(plev * 15 + p_ptr->to_d_spell);
+            int dam = spell_power(plev * 12 + p_ptr->to_d_spell + 5);
             int rad = spell_power(plev / 5);
 
             if (info) return info_damage(0, 0, dam);
@@ -4030,7 +4030,7 @@ static cptr do_death_spell(int spell, int mode)
 
     case 31:
         if (name) return "Wraithform";
-        if (desc) return "Becomes wraith form which gives ability to pass walls and makes all damages half.";
+        if (desc) return "Gives the ability to pass walls and reduces most damages by half.";
 
         {
             int base = spell_power(plev / 2);
