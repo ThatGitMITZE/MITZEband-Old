@@ -240,7 +240,11 @@ void chaos_warrior_reward(void)
         /* Extra chance to avoid the worst stuff */
         if ((type < 5) && (p_ptr->lev % 13))
         {
-            while ((type < 5) && (one_in_(type + (p_ptr->lev < 13) ? 1 : 2))) type++;
+            while (type < 5) 
+            {
+                if (!one_in_(type + ((p_ptr->lev < 13) ? 1 : 2))) break;
+                type++;
+            }
         }
 
         effect = chaos_rewards[p_ptr->chaos_patron][type];
@@ -661,7 +665,7 @@ static int _get_powers(spell_info* spells, int max)
 
 static void _gain_level(int new_level)
 {
-    if (new_level > 1)
+    if ((new_level > 1) && (p_ptr->personality != PERS_CHAOTIC)) /* avoid double reward */
         chaos_warrior_reward();
 }
 
