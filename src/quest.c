@@ -244,6 +244,21 @@ obj_ptr quest_get_reward(quest_ptr q)
             reward = room_grid_make_obj(letter, q->level);
             if (reward)
             {
+                if (object_is_cursed(reward)) /* Avoid cursed rewards */
+                {
+                    int yritys = 0;
+                    while (yritys < 12) /* Short loop in case a cursed reward is actually specified */
+                    {
+                        if (object_is_fixed_artifact(reward))
+                        {
+                            a_info[reward->name1].generated = FALSE;
+                        }
+                        obj_free(reward);
+                        reward = room_grid_make_obj(letter, q->level);
+                        if (!object_is_cursed(reward)) break;
+                        yritys++;
+                    }
+                }
                 object_origins(reward, ORIGIN_QUEST_REWARD);
                 reward->origin_place = (q->id * ORIGIN_MODULO);
             }
@@ -569,6 +584,13 @@ cptr quests_get_name(int id)
     quest_ptr q = quests_get(id);
     if (!q) return "";
     return kayttonimi(q);
+}
+
+int quests_get_level(int id)
+{
+    quest_ptr q = quests_get(id);
+    if (!q) return 0;
+    return q->level;
 }
 
 static int _quest_cmp_level(quest_ptr l, quest_ptr r)
