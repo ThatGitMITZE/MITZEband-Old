@@ -1417,6 +1417,7 @@ static void _device_counts_imp(doc_ptr doc, int tval, int effect)
         effect.power = entry->level;
         effect.difficulty = entry->level;
         effect.type = entry->type;
+        effect.extra = 0;
 
         doc_printf(
             doc,
@@ -1878,7 +1879,10 @@ static void _build_statistics(doc_ptr doc)
     /* Gold */
     doc_insert(doc, "             <color:y>    Gold</color>\n");
     doc_printf(doc, "  Found    : <color:w>%8d</color>\n", stats_gold_counts.found);
-    doc_printf(doc, "  Selling  : <color:w>%8d</color>\n", stats_gold_counts.selling);
+    if (!no_selling)
+        doc_printf(doc, "  Selling  : <color:w>%8d</color>\n", stats_gold_counts.selling);
+    else
+        doc_printf(doc, "  Alchemy  : <color:w>%8d</color>\n", stats_gold_counts.selling);
     doc_printf(doc, "  Winnings : <color:w>%8d</color> <color:w>%8d</color>\n",
         stats_gold_counts.winnings,
         stats_gold_counts.found + stats_gold_counts.selling + stats_gold_counts.winnings);
@@ -2028,6 +2032,7 @@ static void _build_statistics(doc_ptr doc)
         _device_counts_imp(doc, TV_STAFF, EFFECT_DESTRUCTION);
         _device_counts_imp(doc, TV_STAFF, EFFECT_HEAL_CURING);
         _device_counts_imp(doc, TV_STAFF, EFFECT_GENOCIDE);
+        _device_counts_imp(doc, TV_STAFF, EFFECT_CONFUSING_LITE);
         _device_counts_imp(doc, TV_STAFF, EFFECT_MANA_STORM);
         _device_counts_imp(doc, TV_STAFF, EFFECT_STARBURST);
         _device_counts_imp(doc, TV_STAFF, EFFECT_DARKNESS_STORM);
