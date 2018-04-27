@@ -379,7 +379,7 @@ cptr do_law_spell(int spell, int mode)
 
     case 21:
         if (name) return "Spin";
-        if (desc) return "Provides temporary resistance to nether and makes charming effects more poweful.";
+        if (desc) return "Provides temporary resistance to nether and makes charming effects more powerful.";
 
         {
             int base = spell_power(20);
