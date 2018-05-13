@@ -3224,9 +3224,9 @@ static void _smart_remove(mon_spell_cast_ptr cast)
     _smart_remove_annoy(spells->groups[MST_ANNOY], flags);
 }
 
-static bool _clean_shot(point_t src, point_t dest)
+static bool _clean_shot(point_t src, point_t dest, bool friend)
 {
-    return clean_shot(src.y, src.x, dest.y, dest.x, FALSE);
+    return clean_shot(src.y, src.x, dest.y, dest.x, friend);
 }
 static bool _summon_possible(point_t where)
 {
@@ -3382,7 +3382,7 @@ static void _ai_direct(mon_spell_cast_ptr cast)
         _remove_spell(spells, _id(MST_ANNOY, ANNOY_AMNESIA));
 
     /* require a direct shot to player for bolts */
-    if (!_clean_shot(cast->src, cast->dest))
+    if (!_clean_shot(cast->src, cast->dest, (is_pet(cast->mon) || is_friendly(cast->mon))))
     {
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
@@ -3690,49 +3690,22 @@ static point_t _project_pt(point_t start, point_t stop, int flags)
     get_project_point(start.y, start.x, &pt.y, &pt.x, flags);
     return pt;
 }
-static bool _small_ball_p(mon_spell_ptr spell)
+static bool _big_ball_p(mon_spell_ptr spell)
 {
     if (spell->id.type != MST_BALL) return FALSE;
-    if (spell->flags & MSF_BALL4) return FALSE;
+    if (spell->flags & MSF_BALL4) return TRUE;
+    return FALSE;
+}
+static bool _real_ball_p(mon_spell_ptr spell)
+{
+    if (spell->id.type != MST_BALL) return FALSE;
+    if (spell->flags & MSF_BALL0) return FALSE;
     return TRUE;
 }
-static void _ai_think_pet(mon_spell_cast_ptr cast)
+static void _avoid_hurting_player(mon_spell_cast_ptr cast)
 {
     mon_spells_ptr spells = cast->race->spells;
     mon_spell_ptr  spell;
-
-    assert(is_pet(cast->mon));
-
-    _remove_spell(spells, _id(MST_ANNOY, ANNOY_SHRIEK));
-    _remove_spell(spells, _id(MST_ANNOY, ANNOY_DARKNESS));
-    _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
-
-    if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
-    {
-        _remove_group(spells->groups[MST_TACTIC], NULL);
-        _remove_group(spells->groups[MST_ESCAPE], NULL);
-        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_TO));
-        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
-    }
-
-    if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
-    {
-        _remove_group(spells->groups[MST_BREATH], NULL);
-        _remove_group(spells->groups[MST_BALL], NULL);
-        _remove_group(spells->groups[MST_BOLT], NULL);
-        _remove_group(spells->groups[MST_BEAM], NULL);
-        _remove_group(spells->groups[MST_CURSE], NULL);
-    }
-
-    if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL))
-    {
-        _remove_group(spells->groups[MST_SUMMON], NULL);
-    }
-
-    /* Prevent collateral damage XXX PF_BALL_SPELL is a horrible misnomer XXX
-     * All the logic here is from the old mspells2.c code, which we still call
-     * (e.g. breath_direct) */
-    if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (cast->mon->id != p_ptr->riding))
     {
         if (spells->groups[MST_BALL])
         {
@@ -3741,9 +3714,14 @@ static void _ai_think_pet(mon_spell_cast_ptr cast)
 
             if (_projectable(player, explode))
             {
-                if (_distance(player, explode) <= 2)
-                    _remove_group(spells->groups[MST_BALL], _small_ball_p);
-                else
+                if (_distance(player, explode) > 4)
+                { /* No need to do anything - the ball will not hurt the player */
+                }
+                else if (_distance(player, explode) > 2) /* Allow small balls */
+                    _remove_group(spells->groups[MST_BALL], _big_ball_p);
+                else if (_distance(player, explode) > 0) /* Allow "balls" with no radius */
+                    _remove_group(spells->groups[MST_BALL], _real_ball_p);
+                else /* Paranoia */
                     _remove_group(spells->groups[MST_BALL], NULL);
             }
             else /* Glass walls and such have LOS but not PROJECT */
@@ -3787,6 +3765,45 @@ static void _ai_think_pet(mon_spell_cast_ptr cast)
             }
         }
     }
+}
+static void _ai_think_pet(mon_spell_cast_ptr cast)
+{
+    mon_spells_ptr spells = cast->race->spells;
+    mon_spell_ptr  spell;
+
+    assert(is_pet(cast->mon));
+
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_SHRIEK));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_DARKNESS));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
+
+    if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
+    {
+        _remove_group(spells->groups[MST_TACTIC], NULL);
+        _remove_group(spells->groups[MST_ESCAPE], NULL);
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_TO));
+        _remove_spell(spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
+    }
+
+    if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
+    {
+        _remove_group(spells->groups[MST_BREATH], NULL);
+        _remove_group(spells->groups[MST_BALL], NULL);
+        _remove_group(spells->groups[MST_BOLT], NULL);
+        _remove_group(spells->groups[MST_BEAM], NULL);
+        _remove_group(spells->groups[MST_CURSE], NULL);
+    }
+
+    if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL))
+    {
+        _remove_group(spells->groups[MST_SUMMON], NULL);
+    }
+
+    /* Prevent collateral damage XXX PF_BALL_SPELL is a horrible misnomer XXX */
+    if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (cast->mon->id != p_ptr->riding))
+    {
+        _avoid_hurting_player(cast);
+    }
 
     /* Special moves restriction */
     spell = mon_spells_find(spells, _id(MST_WEIRD, WEIRD_SPECIAL));
@@ -3798,6 +3815,23 @@ static void _ai_think_pet(mon_spell_cast_ptr cast)
                 spell->prob = 0;
         }
         else spell->prob = 0;
+    }
+}
+
+static void _ai_think_friend(mon_spell_cast_ptr cast)
+{
+    mon_spells_ptr spells = cast->race->spells;
+    mon_spell_ptr  spell;
+
+    assert(is_friendly(cast->mon));
+
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_SHRIEK));
+    _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
+
+    /* Prevent collateral damage XXX PF_BALL_SPELL is a horrible misnomer XXX */
+    if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL))
+    {
+        _avoid_hurting_player(cast);
     }
 }
 
@@ -3825,6 +3859,9 @@ static void _ai_think_mon(mon_spell_cast_ptr cast)
 
     if (is_pet(cast->mon))
         _ai_think_pet(cast);
+
+    else if (is_friendly(cast->mon))
+        _ai_think_friend(cast);
 
     /* Stupid monsters are done! */
     if (cast->race->flags2 & RF2_STUPID)
@@ -3862,7 +3899,7 @@ static void _ai_think_mon(mon_spell_cast_ptr cast)
         spell->prob = 0;
 
     /* require a direct shot for bolts */
-    if (!_clean_shot(cast->src, cast->dest))
+    if (!_clean_shot(cast->src, cast->dest, (is_pet(cast->mon) || is_friendly(cast->mon))))
     {
         _remove_group(spells->groups[MST_BOLT], NULL);
         _remove_spell(spells, _id(MST_BALL, GF_ROCKET));
