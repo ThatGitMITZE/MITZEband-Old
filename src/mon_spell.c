@@ -3821,9 +3821,10 @@ static void _ai_think_pet(mon_spell_cast_ptr cast)
 static void _ai_think_friend(mon_spell_cast_ptr cast)
 {
     mon_spells_ptr spells = cast->race->spells;
-    mon_spell_ptr  spell;
 
     assert(is_friendly(cast->mon));
+
+    if (cast->race->flags2 & RF2_STUPID) return; /* Your friend is stupid. What did you expect? */
 
     _remove_spell(spells, _id(MST_ANNOY, ANNOY_SHRIEK));
     _remove_spell(spells, _id(MST_ANNOY, ANNOY_TRAPS));
