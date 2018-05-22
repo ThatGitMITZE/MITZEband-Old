@@ -594,6 +594,12 @@ static void regenmana(int percent)
         s32b reduce_mana = 0;
         u32b reduce_mana_frac = (p_ptr->msp * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
 
+        if (percent < -47674L) /* Lose mana faster */
+        {
+            reduce_mana_frac *= ((0L - percent) / 4334);
+            reduce_mana_frac /= 11;
+        }
+
         /* Convert the unit (1/2^16) to (1/2^32) */
         s64b_LSHIFT(reduce_mana, reduce_mana_frac, 16);
 
@@ -1277,10 +1283,13 @@ static void process_world_aux_hp_and_sp(void)
         upkeep_factor += 100;
     }
 
-    /* Regenerate the mana */
-    upkeep_regen = (100 - upkeep_factor) * regen_amount;
+    /* Regenerate the mana
+     * Use PY_REGEN_NORMAL as multiplier for negative regen to avoid a
+     * situation where "regen-improving" things make mana loss even worse
+     * and regen-worsening things make it better */
+    upkeep_regen = (100 - upkeep_factor) * ((upkeep_factor > 100) ? PY_REGEN_NORMAL : regen_amount);
 
-    if (_fast_mana_regen())
+    if ((_fast_mana_regen()) && (upkeep_regen > 0))
         upkeep_regen = upkeep_regen * 2;
 
     regenmana(upkeep_regen);
