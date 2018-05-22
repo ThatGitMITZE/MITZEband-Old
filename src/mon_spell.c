@@ -3833,6 +3833,12 @@ static void _avoid_hurting_player(mon_spell_cast_ptr cast)
                     spell->prob = 0;
             }
         }
+        if (spells->groups[MST_TACTIC])
+        {
+            point_t pelaaja = point(px, py);
+            if ((_distance(cast->src, pelaaja) <= 5) && (_projectable(cast->src, pelaaja)))
+                _remove_group(spells->groups[MST_TACTIC], _jump_p);
+        }
     }
 }
 static void _ai_think_pet(mon_spell_cast_ptr cast)
