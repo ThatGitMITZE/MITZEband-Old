@@ -180,16 +180,51 @@ static s32b _abilities_q(u32b flgs[OF_ARRAY_SIZE])
 
 }
 
+static u32b _check_brand_and_score(u32b flgs[OF_ARRAY_SIZE], u32b flg, u32b score, int *count)
+{
+    u32b result = 0;
+    if (have_flag(flgs, flg))
+    {
+        (*count)++;
+        result = (score * 3) / (((*count) * 2) + 1);
+    }
+    return result;
+}
+
+/* Score off-weapon brands and slays */
 static s32b _brands_q(u32b flgs[OF_ARRAY_SIZE])
 {
-    double cost = 0.0;
+    u32b cost = 0;
     int count = 0;
 
-    /* These are what I would expect to pay */
-    cost += _check_flag_and_score(flgs, OF_BRAND_FIRE, 8000, &count);
-    cost += _check_flag_and_score(flgs, OF_BRAND_COLD, 8000, &count);
-    cost += _check_flag_and_score(flgs, OF_BRAND_ACID, 12000, &count);
-    cost += _check_flag_and_score(flgs, OF_BRAND_ELEC, 15000, &count);
+    /* Redone for 7.0.mango */
+    cost += _check_brand_and_score(flgs, OF_KILL_EVIL, 22000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_LIVING, 15000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_DEMON, 14000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_UNDEAD, 14000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_HUMAN, 14000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_DRAGON, 12500, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_GOOD, 10000, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_EVIL, 10000, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_POIS, 8500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_LIVING, 8500, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_ELEC, 7500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_DEMON, 7500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_UNDEAD, 7500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_HUMAN, 7500, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_ACID, 7000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_ANIMAL, 6500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_DRAGON, 6500, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_FIRE, 6000, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_COLD, 6000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_GIANT, 5500, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_GOOD, 5000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_TROLL, 4000, &count);
+    cost += _check_brand_and_score(flgs, OF_KILL_ORC, 4000, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_ANIMAL, 3250, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_GIANT, 2750, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_TROLL, 2000, &count);
+    cost += _check_brand_and_score(flgs, OF_SLAY_ORC, 2000, &count);
 
     return (u32b) cost;
 }
