@@ -2132,8 +2132,9 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
     if (o_ptr->name3 && object_is_known(o_ptr) && abbrev_all)
     {
         cptr  t = a_name + a_info[o_ptr->name3].name;
+        if ((strlen(t) > 2) && (t[0] == '&')) t += 2;
 
-        if (!o_ptr->art_name || !streq(t, quark_str(o_ptr->art_name)))
+        if (!o_ptr->art_name || !strpos(t, quark_str(o_ptr->art_name)))
         {
             {
                 char  buf[255];
