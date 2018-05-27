@@ -261,6 +261,11 @@ int gf_hell_dam(int dam)
 {
     return dam * _align_dam_pct(-p_ptr->align) / 100;
 }
+static bool _failed_charm_nopet_chance(mon_ptr mon)
+{
+    if ((one_in_((p_ptr->spin > 0) ? 10 : 5)) && (!p_ptr->uimapuku) && (!is_friendly(mon))) return TRUE;
+    return FALSE;
+}
 int gf_affect_p(int who, int type, int dam, int flags)
 {
     int          result = 0;
@@ -2661,8 +2666,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 }
                 else if ((mon->mflag2 & MFLAG2_NOPET) || randint1(race->level) > randint1(dam))
                 {
-                    if (one_in_(4))
-                        mon->mflag2 |= MFLAG2_NOPET;
+                    if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
                 }
                 else
                 {
@@ -2789,12 +2793,12 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             if (!is_friend) note = " resists!";
             obvious = FALSE;
-            if ((one_in_((p_ptr->spin > 0) ? 10 : 5)) && (!p_ptr->uimapuku) && (!is_friendly(mon))) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else if ((p_ptr->cursed & OFC_AGGRAVATE) && ((!p_ptr->uimapuku) || (!one_in_(3))))
         {
             if (!is_friend) note = " hates you too much!";
-            if ((one_in_((p_ptr->spin > 0) ? 10 : 5)) && (!p_ptr->uimapuku) && (!is_friendly(mon))) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else
         {
@@ -2820,99 +2824,17 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         break;
     }
     case GF_CONTROL_UNDEAD:
-        if (seen) obvious = TRUE;
-
-        dam += virtue_current(VIRTUE_UNLIFE)/10;
-        dam -= virtue_current(VIRTUE_INDIVIDUALISM)/20;
-
-        if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-        {
-            note = " is immune.";
-            dam = 0;
-            mon_lore_r(mon, RFR_RES_ALL);
-            break;
-        }
-
-        if ((race->flags1 & RF1_UNIQUE) || (race->flags7 & RF7_NAZGUL))
-            dam = dam * 2 / 3;
-
-        /* Attempt a saving throw */
-        if ((mon->mflag2 & MFLAG2_QUESTOR) ||
-            !(race->flags3 & RF3_UNDEAD) ||
-            (mon->mflag2 & MFLAG2_NOPET) ||
-            (race->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-        {
-            /* No obvious effect */
-            note = " is unaffected!";
-
-            obvious = FALSE;
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
-        }
-        else if (p_ptr->cursed & OFC_AGGRAVATE)
-        {
-            note = " hates you too much!";
-
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
-        }
-        else
-        {
-            note = " is in your thrall!";
-
-            set_pet(mon);
-        }
-        dam = 0;
-        break;
     case GF_CONTROL_DEMON:
-        if (seen) obvious = TRUE;
-
-        dam += virtue_current(VIRTUE_UNLIFE)/10;
-        dam -= virtue_current(VIRTUE_INDIVIDUALISM)/20;
-
-        if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
-        {
-            note = " is immune.";
-            dam = 0;
-            mon_lore_r(mon, RFR_RES_ALL);
-            break;
-        }
-
-        if ((race->flags1 & RF1_UNIQUE) || (race->flags7 & RF7_NAZGUL))
-            dam = dam * 2 / 3;
-
-        /* Attempt a saving throw */
-        if ((mon->mflag2 & MFLAG2_QUESTOR) ||
-            !(race->flags3 & RF3_DEMON) ||
-            (mon->mflag2 & MFLAG2_NOPET) ||
-            (race->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-        {
-            /* No obvious effect */
-            note = " is unaffected!";
-
-            obvious = FALSE;
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
-        }
-        else if (p_ptr->cursed & OFC_AGGRAVATE)
-        {
-            note = " hates you too much!";
-
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
-        }
-        else
-        {
-            note = " is in your thrall!";
-
-            set_pet(mon);
-        }
-
-        /* No "real" damage */
-        dam = 0;
-        break;
     case GF_CONTROL_ANIMAL:
         if (seen) obvious = TRUE;
 
-        dam += virtue_current(VIRTUE_NATURE)/10;
+        if (type == GF_CONTROL_ANIMAL) dam += virtue_current(VIRTUE_NATURE)/10;
+        else dam += virtue_current(VIRTUE_UNLIFE)/10;
         dam -= virtue_current(VIRTUE_INDIVIDUALISM)/20;
 
+        if (p_ptr->spin > 0) dam += MAX(25, dam * 2 / 5);
+        if (p_ptr->uimapuku) dam = dam * 3 / 2;
+            
         if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
         {
             note = " is immune.";
@@ -2926,40 +2848,39 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
         /* Attempt a saving throw */
         if ((mon->mflag2 & MFLAG2_QUESTOR) ||
-            !(race->flags3 & RF3_ANIMAL) ||
+            ((type == GF_CONTROL_UNDEAD) && (!(race->flags3 & RF3_UNDEAD))) ||
+            ((type == GF_CONTROL_DEMON) && (!(race->flags3 & RF3_DEMON))) ||
+            ((type == GF_CONTROL_ANIMAL) && (!(race->flags3 & RF3_ANIMAL))) ||
             (mon->mflag2 & MFLAG2_NOPET) ||
-            (race->flags3 & RF3_NO_CONF) ||
+            ((type == GF_CONTROL_ANIMAL) && (race->flags3 & RF3_NO_CONF)) ||
             (race->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
         {
             /* Memorize a flag */
-            if (race->flags3 & (RF3_NO_CONF))
+            if ((type == GF_CONTROL_ANIMAL) && (race->flags3 & RF3_NO_CONF))
             {
                 mon_lore_3(mon, RF3_NO_CONF);
             }
 
-            /* Resist */
             /* No obvious effect */
             note = " is unaffected!";
 
             obvious = FALSE;
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else if (p_ptr->cursed & OFC_AGGRAVATE)
         {
             note = " hates you too much!";
 
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else
         {
-            note = " is tamed!";
+            if (type == GF_CONTROL_ANIMAL) note = " is tamed!";
+            else note = " is in your thrall!";
 
             set_pet(mon);
-
-            if (race->flags3 & RF3_ANIMAL)
-                virtue_add(VIRTUE_NATURE, 1);
+            if (race->flags3 & RF3_ANIMAL) virtue_add(VIRTUE_NATURE, 1);
         }
-
         /* No "real" damage */
         dam = 0;
         break;
@@ -2979,14 +2900,12 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 else
                     note = " resists your control.";
                 obvious = FALSE;
-                if (one_in_(4))
-                    mon->mflag2 |= MFLAG2_NOPET;
+                if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
             }
             else if (p_ptr->cursed & OFC_AGGRAVATE)
             {
                 note = " finds you very aggravating!";
-                if (one_in_(4))
-                    mon->mflag2 |= MFLAG2_NOPET;
+                if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
             }
             else
             {
@@ -3009,6 +2928,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         dam -= virtue_current(VIRTUE_INDIVIDUALISM)/20;
 
         if (race->flags3 & (RF3_NO_CONF)) dam -= 30;
+        if (p_ptr->spin > 0) dam += MAX(25, dam * 2 / 5);
+        if (p_ptr->uimapuku) dam = dam * 3 / 2;
         if (dam < 1) dam = 1;
         msg_format("You stare into %s.", m_name_object);
         if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
@@ -3033,13 +2954,13 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             note = " is unaffected!";
 
             obvious = FALSE;
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else if (p_ptr->cursed & OFC_AGGRAVATE)
         {
             note = " hates you too much!";
 
-            if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
+            if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
         }
         else
         {
@@ -4041,7 +3962,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                  ((race->level+10) > randint1(dam)))
             {
                 /* Resist */
-                if (one_in_(4)) mon->mflag2 |= MFLAG2_NOPET;
+                if (_failed_charm_nopet_chance(mon)) mon->mflag2 |= MFLAG2_NOPET;
             }
             else
             {
