@@ -472,7 +472,16 @@ static int _race_class_ui(void)
         case '*':
             if (one_in_(847)) sprintf(player_name, "Epic Space Hero");
             else if (one_in_(8)) randname_make(RANDNAME_SCROLL, 4 + randint0(3), 5 + damroll(2, 5), player_name, sizeof(player_name), name_sections);
-            else randname_make(RANDNAME_TOLKIEN, 4 + randint0(3), 5 + damroll(2, 5), player_name, sizeof(player_name), name_sections);
+            else {
+                randname_make(RANDNAME_TOLKIEN, 4 + randint0(3), 5 + damroll(2, 5), player_name, sizeof(player_name), name_sections);
+                if ((strlen(player_name) < 7) && (one_in_(2 * (strlen(player_name) - 1))))
+                {
+                    char barrel2[32];
+                    randname_make(RANDNAME_TOLKIEN, 4, 14 - strlen(player_name), barrel2, sizeof(barrel2), name_sections);
+                    strcat(player_name, "-");
+                    strcat(player_name, barrel2);
+                }
+            }
             player_name[0] = toupper(player_name[0]);
             break;
         case 'n':
