@@ -901,7 +901,7 @@ static int _smith_enchant_armor(object_type *o_ptr)
         else color = 'R';
         doc_printf(_doc, "[%d,<color:%c>%+d</color>]\n", o_ptr->ac, color, to_a);
 
-        doc_insert(_doc, "      Use a/A to adust the amount of armor class to add.\n");
+        doc_insert(_doc, "      Use a/A to adjust the amount of armor class to add.\n");
 
         if (cost_a > avail_a) color = 'r';
         else color = 'G';
@@ -1052,8 +1052,8 @@ static int _smith_enchant_weapon(object_type *o_ptr)
         else color = 'R';
         doc_printf(_doc, ",<color:%c>%+d</color>)\n", color, to_d);
 
-        doc_insert(_doc, "      Use h/H to adust the amount of accuracy to add.\n");
-        doc_insert(_doc, "      Use d/D to adust the amount of damage to add.\n");
+        doc_insert(_doc, "      Use h/H to adjust the amount of accuracy to add.\n");
+        doc_insert(_doc, "      Use d/D to adjust the amount of damage to add.\n");
 
         if (cost_h > avail_h) color = 'r';
         else color = 'G';
@@ -1182,8 +1182,8 @@ static int _smith_add_slaying(object_type *o_ptr)
         else color = 'R';
         doc_printf(_doc, ",<color:%c>%+d</color>)\n", color, to_d);
 
-        doc_insert(_doc, "      Use h/H to adust the amount of accuracy to add.\n");
-        doc_insert(_doc, "      Use d/D to adust the amount of damage to add.\n");
+        doc_insert(_doc, "      Use h/H to adjust the amount of accuracy to add.\n");
+        doc_insert(_doc, "      Use d/D to adjust the amount of damage to add.\n");
 
         if (cost_h > avail_h) color = 'r';
         else color = 'G';
