@@ -429,7 +429,22 @@ bool quest_post_generate(quest_ptr q)
 
                 if (place_monster_aux(0, y, x, q->goal_idx, mode))
                 {
-                    m_list[hack_m_idx_ii].mflag2 |= MFLAG2_QUESTOR;
+                    if (m_list[hack_m_idx_ii].r_idx != q->goal_idx)
+                    {
+                        bool resolved = FALSE;
+                        /* Pray it's an escort issue */
+                        if (m_list[hack_m_idx_ii].pack_idx)
+                        {
+                            pack_info_t *pack_ptr = &pack_info_list[m_list[hack_m_idx_ii].pack_idx];
+                            if ((pack_ptr->leader_idx) && (m_list[pack_ptr->leader_idx].r_idx == q->goal_idx))
+                            {
+                                resolved = TRUE;
+                                m_list[pack_ptr->leader_idx].mflag2 |= MFLAG2_QUESTOR;
+                            }
+                        }
+                        if (!resolved) msg_print("Failed to mark questor correctly!");
+                    }
+                    else m_list[hack_m_idx_ii].mflag2 |= MFLAG2_QUESTOR;
                     break;
                 }
             }
