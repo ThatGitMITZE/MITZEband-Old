@@ -1224,6 +1224,7 @@ void quests_on_leave(void)
         if (!statistics_hack && (q->flags & QF_RETAKE))
         {
             fail = FALSE;
+            if ((coffee_break) && (q->level < 99)) fail = TRUE;
             if ((q->flags & QF_RANDOM) && (!coffee_break))
             {
                 cptr p = "If you like, you may choose to intentionally fail this quest. "
