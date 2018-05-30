@@ -20710,7 +20710,7 @@ D:spikes.
 N:1153:Hezrou
 G:U:g
 I:110:45d20:20:60:70:250
-W:41:3:125:2500:0:0
+W:41:3:125:2000:0:0
 B:HIT:HURT(3d4)
 B:HIT:HURT(3d4)
 F:DROP_90
@@ -20795,7 +20795,7 @@ D: hells, capable of a terrifying berserk fury.
 N:1158:Vrock
 G:U:s
 I:110:35d20:20:75:70:250
-W:40:2:125:2000:0:0
+W:40:2:125:1800:0:0
 B:HIT:HURT(3d4)
 B:CRUSH:HURT(8d12)
 B:CRUSH:HURT(8d12)
