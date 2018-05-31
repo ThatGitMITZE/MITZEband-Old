@@ -6037,19 +6037,26 @@ int take_hit(int damage_type, int damage, cptr hit_from)
     /* Hitpoint warning */
     if (p_ptr->chp < warning && !world_monster)
     {
-        sound(SOUND_WARN);
-
-        /* Hack -- stop the player on first crossing the threshold */
-        if (old_chp >= warning) 
+        if ((warning_hack_hp) && (warning_hack_hp < p_ptr->chp))
         {
-            msg_prompt("<color:v>*** LOW HITPOINT WARNING! ***</color> Press <color:y>Space</color> to continue.", " ", PROMPT_FORCE_CHOICE);
         }
         else
         {
-            cmsg_print(TERM_VIOLET, "*Ouch!*");
-            flush();
+            sound(SOUND_WARN);
+
+            /* Hack -- stop the player on first crossing the threshold */
+            if (old_chp >= warning) 
+            {
+                msg_prompt("<color:v>*** LOW HITPOINT WARNING! ***</color> Press <color:y>Space</color> to continue.", " ", PROMPT_FORCE_CHOICE);
+            }
+            else
+            {
+                cmsg_print(TERM_VIOLET, "*Ouch!*");
+                flush();
+            }
         }
     }
+    warning_hack_hp = 0;
     if (p_ptr->wild_mode && !p_ptr->leaving && (p_ptr->chp < MAX(warning, p_ptr->mhp/5)))
     {
         change_wild_mode();
