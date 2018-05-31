@@ -534,6 +534,13 @@ int politician_verify_spell(spell_info *loitsu)
 int politician_get_cost(const spell_info *loitsu)
 {
     if (!loitsu) return 0; /* paranoia */
+
+    /* Hack - filibuster cost
+     * Stopping filibustering actually costs nothing anyway, but we need to
+     * specify the cost as zero here or the player will get error messages
+     * like "you do not have enough hp" at low HP etc. */
+    if ((loitsu->cost == 39) && (p_ptr->filibuster)) return 0;
+
     switch (_get_toggle())
     {
         case POLLY_TOGGLE_XPCAST:
@@ -709,6 +716,14 @@ static int _get_powers(spell_info* spells, int max)
 static void _on_cast(const spell_info *spell)
 {
     int kulu = politician_get_cost(spell);
+    if (spell->cost == 39) /* ultra-hack */
+    {
+        p_ptr->filibuster = FALSE;
+        kulu = politician_get_cost(spell);
+        p_ptr->filibuster = TRUE;
+        /* always true if we get here, since switching filibuster off
+         * doesn't trigger on_cast */
+    }
     switch (_get_toggle())
     {
         case POLLY_TOGGLE_AUCAST:
