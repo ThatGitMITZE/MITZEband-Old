@@ -959,7 +959,7 @@ void do_alter_reality(void)
 
 
     /* Determine the level */
-    if ((!dungeon_type) && (quests_get_current()))
+    if ((ironman_downward) || ((!dungeon_type) && (quests_get_current())))
     {
         msg_print("The world seems to change for a moment!");
         p_ptr->alter_reality = 0;
