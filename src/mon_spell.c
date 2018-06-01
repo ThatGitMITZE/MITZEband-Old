@@ -4088,7 +4088,10 @@ static int _avg_spell_dam_aux(mon_spell_ptr spell, int hp, bool apply_resist)
 }
 int mon_spell_avg_dam(mon_spell_ptr spell, mon_race_ptr race, bool apply_resist)
 {
-    return _avg_spell_dam_aux(spell, _avg_hp(race), apply_resist);
+    int tulos = _avg_spell_dam_aux(spell, _avg_hp(race), apply_resist);
+    if ((tulos) && (apply_resist) && ((spell->id.effect == GF_POIS) || (spell->id.effect == GF_NUKE)))
+        tulos = tulos * 7 / 4; /* Poison adjustment */
+    return tulos;
 }
 int _avg_spell_dam(mon_ptr mon, mon_spell_ptr spell)
 {
