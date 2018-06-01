@@ -2104,6 +2104,25 @@ void have_nightmare(int r_idx)
     handle_stuff();
 }
 
+static void _recharge_player_items(void)
+{
+    slot_t slot;
+    if (p_ptr->pclass == CLASS_MAGIC_EATER)
+        magic_eater_restore_all();
+
+    for (slot = 1; slot <= pack_max(); slot++)
+    {
+        obj_ptr obj = pack_obj(slot);
+        if (obj && object_is_device(obj))
+        device_regen_sp_aux(obj, 1000);
+    }
+    for (slot = 1; slot <= equip_max(); slot++)
+    {
+        obj_ptr obj = equip_obj(slot);
+        if (obj && obj->timeout > 0)
+        obj->timeout = 0;
+    }
+}
 
 /*
  * inn commands
@@ -2162,8 +2181,6 @@ static bool inn_comm(int cmd)
                 }
                 else
                 {
-                    slot_t slot;
-
                     set_blind(0, TRUE);
                     set_confused(0, TRUE);
                     p_ptr->stun = 0;
@@ -2171,21 +2188,7 @@ static bool inn_comm(int cmd)
                     if (p_ptr->pclass != CLASS_RUNE_KNIGHT)
                         p_ptr->csp = p_ptr->msp;
 
-                    if (p_ptr->pclass == CLASS_MAGIC_EATER)
-                        magic_eater_restore_all();
-
-                    for (slot = 1; slot <= pack_max(); slot++)
-                    {
-                        obj_ptr obj = pack_obj(slot);
-                        if (obj && object_is_device(obj))
-                            device_regen_sp_aux(obj, 1000);
-                    }
-                    for (slot = 1; slot <= equip_max(); slot++)
-                    {
-                        obj_ptr obj = equip_obj(slot);
-                        if (obj && obj->timeout > 0)
-                            obj->timeout = 0;
-                    }
+                    _recharge_player_items();
 
                     if (prev_hour >= 6 && prev_hour <= 17)
                         msg_print("You awake refreshed for the evening.");
@@ -2831,6 +2834,18 @@ static bool _reforge_artifact(void)
 
     msg_print("After several hours, you are presented your new artifact...");
     game_turn += rand_range(5000, 15000);
+
+    /* The items we carried recharged during those hours */
+    _recharge_player_items();
+    if ((!p_ptr->poisoned) && (!p_ptr->cut))
+    {
+        set_blind(0, TRUE);
+        set_confused(0, TRUE);
+        p_ptr->stun = 0;
+        p_ptr->chp = p_ptr->mhp;
+        if (p_ptr->pclass != CLASS_RUNE_KNIGHT)
+            p_ptr->csp = p_ptr->msp;
+    }
 
     /* Update discovery details to apply to the reforged item
      * We do this after updating the turn to get the correct time */
