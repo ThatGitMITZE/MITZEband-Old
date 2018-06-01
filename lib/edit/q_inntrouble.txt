@@ -21,7 +21,7 @@ L:<:UP_STAIR
 L:.:FLOOR
 L:+:CLOSED_DOOR
 L:$:OBJ(*)
-L:&:MON(*, DEPTH+5)
+L:&:MON(*, DEPTH+5 | NO_GROUP | NO_UNIQUE)
 L:a:MON(mean looking mercenary)
 L:b:MON(singing)
 L:k:OBJ(elvish waybread)
