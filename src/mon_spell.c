@@ -1979,7 +1979,7 @@ static void _escape(void)
     case ESCAPE_TELE_SELF:
         if ((_current.flags & MSC_SRC_PLAYER) || (_current.mon->id == p_ptr->riding))
         {
-            if (_current.mon->id == p_ptr->riding) msg_format("%s teleports away.", _current.name);
+            if ((_current.mon) && (_current.mon->id == p_ptr->riding)) msg_format("%s teleports away.", _current.name);
             teleport_player(10 + 2*_current.race->level, 0);
         }
         else if (teleport_barrier(_current.mon->id))
