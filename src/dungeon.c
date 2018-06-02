@@ -62,6 +62,8 @@ byte value_check_aux1(object_type *o_ptr)
     /* Good "armor" bonus */
     if (o_ptr->to_a > 0) return FEEL_GOOD;
 
+    if (o_ptr->tval == TV_GLOVES || o_ptr->tval == TV_BOOTS) return FEEL_AVERAGE;
+
     /* Good "weapon" bonus */
     if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_GOOD;
 
