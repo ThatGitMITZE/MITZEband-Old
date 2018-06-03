@@ -13,6 +13,10 @@ suggesting the Chaotic personality and helping me devise it)
 * Improved wilderness design (borders between different types of terrain
 are now less ugly - say goodbye to rectangular oceans)
 
+* Adapted PosChengband-R's coffee-break mode (optional accelerated game)
+[faster exp gain and loot, no wilderness, forced descent but recall allowed]
+[it is currently possible to do DL99 and/or DL100 repeatedly]
+
 * The Craven personality now gives vulnerability to fear, but also a
 moderate quick walk (thanks to MITZE for this suggestion)
 
@@ -34,7 +38,8 @@ armors with to-AC of exactly +20 or weapons with to-hit/dam of exactly
 
 * Tweaked item valuation (some resists are now worth a bit more, others are
 now worth a bit less, and items with many high resists are worth a bit more
-in general)
+in general. Also, off-weapon slays were not properly valued, while off-weapon
+brands are now somewhat less valuable)
 
 * Made the Crow's Nest quest saner; it would previously give either heaps
 of good objects or very few good objects, now it's guaranteed to have a
@@ -45,9 +50,11 @@ moderate amount of them
 * Prevented the player from getting quite so many level-ups from Shadow
 Fairies and Tidy the Laboratory
 
-* Archers, rangers and snipers now get a short bow as their Warg reward
+* Added some new class-specific quest rewards (no, not for Sand Pit)
 
 * The default reward for Orc Camp is now a staff of enlightenment
+
+* Uniques and monster groups should no longer generate in Trouble at Home
 
 * Due to an oversight, being poly_selfed with no_scrambling on could have
 extremely bad, potentially lethal consequences; this has been fixed
@@ -64,11 +71,17 @@ friendly monsters as well as pets; this is only fair, given what happens
 when the player's spells cause collateral damage to friendly monsters...
 Monsters with the "stupid" flag are an exception to this.)
 
+* Fixed an old bug that caused quest monsters with escorts to not be
+correctly marked as questors, making them not reappear if destructed
+
 * Fixed a bug that caused ninja-lawyers to be encumbered by any armor at all,
 effectively lowering their max SP (thanks to OmniNegro for reporting this)
 
 * Fixed an old bug with rings and death-swords absorbing stacks of identical
 items (thanks to OmniNegro for reporting this)
+
+* Fixed an old bug with teleporting mounts (thanks to TauzentBlitz for
+reporting this)
 
 * Fixed an old bug that caused attacks by beholders on other monsters to
 be treated as attacks by the player (resulting in bizarre messages and
@@ -85,9 +98,20 @@ they levelled up in barbarian or dunadan form, but could only access those
 powers normally in human or demigod form). Doppelganger barbarians and
 dunedain no longer receive demigod powers on level-up
 
+* Fixed two old issues with possessors receiving monster lore on possessing
+a corpse. The first issue was that if the player never saw the monster alive,
+it would not count as seen, and would be ignored by the knowledge menu.
+(All possessed monsters are now marked as seen.) The second issue was that
+deprecated monsters were sometimes inappropriately generated (this should no
+longer happen), and they were also ignored by the knowledge menu. (Thanks
+to robinhood for reporting this)
+
 * It is no longer possible to get unlimited hits against a monster by
 letting it stair-follow the player repeatedly (thanks to Gwarl for reporting
 this exploit)
+
+* The use_old_target option no longer allows the player to ignore confusion
+while targetting (thanks to bostock for reporting this exploit)
 
 * Monsters not currently visible are now always displayed as white in the
 monster health bar, unless enhanced telepathy is used. This prevents the
@@ -122,6 +146,11 @@ Guild in Anambar
 
 * Improved gray-mages' spell UI
 
+* Improved weapon proficiency display (it is now possible to see the
+class-specific proficiency caps for each weapon in-game, and to view the
+player's current proficiency as a percentage of either full mastery or the
+class-specific cap)
+
 * Characters with levitation are no longer unable to deliberately jump into
 trap doors
 
@@ -136,7 +165,7 @@ effect but doesn't, they still get used up like before)
 
 * Made wands of tsunami slightly less overpowered
 
-* The Weaponsmith now stocks projectiles and quivers more often during the
+* The weapon shop now stocks projectiles and quivers more often during the
 very early game (thanks to CyclopsSlayer for bringing up the annoyance of
 not having any ammo)
 
@@ -155,6 +184,10 @@ of the spectre while in wraithform
 * All items in an object prompt are now guaranteed to have a slot label
 (previously, conflicts caused by an inscribed item overriding another
 object's slot label could cause objects to not have slot labels)
+
+* All carried items now recharge fully while the player waits for a reforge.
+(This is only fair, since sleeping in the inn has this effect, even on
+short naps that consume less game time than a reforge does)
 
 * Limited the number of active monster traps (or glyphs of warding) the
 player can concurrently have on a single level to 11, to discourage the
@@ -193,6 +226,9 @@ Unskilled (-20) is their maximum proficiency for that weapon). This has
 minimal effects on the game's balance or difficulty, but reduces
 proficiency-grinding tedium a bit
 
+* Axemasters can now master hatchets (however, some of their melee bonuses
+still don't apply to hatchets, only to larger axes)
+
 * Unidentified ammo is now automatically placed in the quiver if it is
 known to combine with ammo already in the quiver
 
@@ -213,6 +249,10 @@ high; and if the upkeep is totally excessive, pets may feel neglected and
 either dismiss themselves or turn hostile. (Thanks to vertigo for his
 feedback on pet upkeep)
 
+* Fixed a bizarre issue with mana loss (the hungrier the player was, the
+slower mana was lost; if the player was fainting from hunger, no mana was
+lost at all)
+
 * It is now possible to use capture balls on pet uniques and Nazguls
 
 * Added more talk lines for friendly monsters
@@ -223,13 +263,19 @@ summoning hostile monsters (note that summon hydras summons hostile reptiles
 rather than hostile hydras). Staves of Summon Monsters have a lower (1/10)
 hostility chance, but cannot summon non-hostile summoners
 
-* Added more random artifact names (mostly for lamps)
+* Player-aligned (or player-summoned) monsters no longer receive XP for
+killing other player-summoned monsters (plugging an exploit mentioned by
+wobbly)
+
+* Added more random artifact names (mostly for lamps and amulets)
 
 * Added a random player name generator (based on Vanilla's random
 artifact name generator). The generator mostly suggests Tolkienian-sounding
 names, but sometimes offers a Latin-sounding name instead
 
 * Changed hitpoint warning default from 30% to 50%
+
+* Cancelling a throw during the targetting phase no longer costs a turn
 
 * The object list now displays all town buildings, not just shops
 (partly copied from Composband 7.1.alpha). There is also a new option
