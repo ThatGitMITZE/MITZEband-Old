@@ -739,7 +739,7 @@ E:Your boots glow deep blue...
 N:62:of Thror
 I:30:6:3
 W:60:25:80:85000
-P:6:1d1:0:0:20
+P:6:1d1:0:2:20
 F:STR | CON | HIDE_TYPE | SPEED | XTRA_H_RES
 D:Sturdy footwear of leather and steel as enduring as the long-suffering
 D:Dwarven King-in-exile who wore them. Of dwarven make, the wearer of
@@ -2921,7 +2921,7 @@ F:DEX | CHR | STEALTH | RES_POIS | FREE_ACT | HIDE_TYPE
 N:277:'Stomper'
 I:30:6:3
 W:30:25:80:85000
-P:6:1d1:0:0:21
+P:6:1d1:0:2:21
 F:STR | CON | DEC_STEALTH | RES_SHARDS | RES_CONF | RES_NEXUS
 E:EARTHQUAKE:30:35
 E:You stomp your foot down powerfully...
@@ -3462,7 +3462,7 @@ D: make.)
 
 N:341:'Skynail'
 I:23:16:3
-W:60:60:150:150000
+W:60:55:150:150000
 P:0:4d6:19:12:0
 F:SLAY_EVIL | BRAND_FIRE | RES_COLD | RES_DARK | LITE | SHOW_MODS | RIDING |
 F:XTRA_RES_OR_POWER | SPEED | STR | DEX | RES_CHAOS | VORPAL
