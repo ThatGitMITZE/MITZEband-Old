@@ -8,7 +8,9 @@ mushroom of restoring#!E
 ~mushroom
 ?:1
 
+?:[LEQ $LEVEL 35]
 potions:resist heat and cold#!kq
+?:1
 potions:resistance#!kq
 potions:stone skin#!k
 potions:heroism
@@ -108,7 +110,7 @@ mirror shield
 weapons:poison needle
 diamond edge
 rune sword
-blade of chaos
+~blade of chaos
 
 ?unidentified dice boosted weapons
 ?unidentified dice boosted shooters
@@ -116,6 +118,10 @@ blade of chaos
 
 ~dice boosted weapons
 ~dice boosted shooters
+
+?:[EQU $CLASS Mauler]
+weapons more weight than 39
+?:1
 
 #########################################
 # Corpses
@@ -125,6 +131,10 @@ blade of chaos
 ~wanted corpses#Wanted!kkk
 wanted skeletons#Wanted!kkk
 ~corpses more level than 0
+
+?:[EQU $RACE Balrog Imp Demon]
+wanted human corpses#Wanted!EEEkkk
+?:1
 
 ?:[NOT [EQU $RACE Possessor]]
 wanted corpses#Wanted!kkk
