@@ -113,6 +113,12 @@ this exploit)
 * The use_old_target option no longer allows the player to ignore confusion
 while targetting (thanks to bostock for reporting this exploit)
 
+* Plugged an old exploit that allowed weaponsmiths to permanently remove
+slaying penalties from heavy body armor, cloaks of the bat etc. by adding a
+token amount of Slaying essence to the item and then removing that
+(there are some very specific circumstances in which this exploit can still
+work, but the advantage gained should be minuscule compared to before)
+
 * Monsters not currently visible are now always displayed as white in the
 monster health bar, unless enhanced telepathy is used. This prevents the
 health bar from accidentally revealing a monster's identity (thanks to
