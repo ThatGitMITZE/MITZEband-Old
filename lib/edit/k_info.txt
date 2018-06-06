@@ -1364,7 +1364,7 @@ A:30/4
 P:4:0d0:0:0:4
 F:IGNORE_ACID | IGNORE_COLD | IGNORE_FIRE | IGNORE_ELEC
 F:STEALTH | SEARCH
-D:A mantle made of curious silken material by the Galadrim that wondrously
+D:A mantle made of curious silken material by the Galadhrim that wondrously
 D:takes on the hues and shapes of its surroundings.
 
 N:*:& Fur Cloak~
