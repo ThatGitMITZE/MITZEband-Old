@@ -1114,8 +1114,9 @@ static void _build_race_history(doc_ptr doc)
     if (p_ptr->old_race1 || p_ptr->old_race2)
     {
         int i;
+        const char *slaji = get_race_aux(p_ptr->start_race, 0)->name;
 
-        doc_printf(doc, "\n You were born as %s.\n", get_race_aux(p_ptr->start_race, 0)->name);
+        doc_printf(doc, "\n You were born as %s %s.\n", is_a_vowel(slaji[0]) ? "an" : "a", slaji);
         for (i = 0; i < MAX_RACES; i++)
         {
             if (p_ptr->start_race == i) continue;
@@ -1127,7 +1128,10 @@ static void _build_race_history(doc_ptr doc)
             {
                 if (!(p_ptr->old_race2 & 1L << (i-32))) continue;
             }
-            doc_printf(doc, " You were a %s before.\n", get_race_aux(i, 0)->name);
+            {
+                const char *laji = get_race_aux(i, 0)->name;
+                doc_printf(doc, " You were %s %s before.\n", is_a_vowel(laji[0]) ? "an" : "a", laji);
+            }
         }
         doc_newline(doc);
     }
