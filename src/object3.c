@@ -579,7 +579,7 @@ s32b jewelry_cost(object_type *o_ptr, int options)
 
     if (have_flag(flgs, OF_WEAPONMASTERY))
     {
-        p += 10000 * pval;
+        p += (7500 + (2500 * ABS(pval))) * pval;
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * Weaponmastery: p = %d", p);
