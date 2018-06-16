@@ -1770,6 +1770,11 @@ static _obj_list_ptr _create_obj_list(void)
         info->subgroup = _SUBGROUP_HEADER;
         info->count = list->ct_feature;
         vec_add(list->list, info);
+
+        info = _obj_list_info_alloc();
+        info->group = _GROUP_FEATURE;
+        info->subgroup = _SUBGROUP_FOOTER;
+        vec_add(list->list, info);
     }
     vec_sort(list->list, (vec_cmp_f)_obj_list_comp);
 
