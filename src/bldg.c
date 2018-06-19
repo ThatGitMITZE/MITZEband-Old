@@ -2648,11 +2648,13 @@ static bool _gamble_shop_artifact(void)
 static obj_ptr _get_reforge_src(int max_power)
 {
     char buf[255];
+    char buf2[255];
     obj_prompt_t prompt = {0};
 
     sprintf(buf, "Use what artifact for reforging (Max Power = %d)? ", max_power);
+    sprintf(buf2, "You have no artifacts to reforge. (Max Power = %d) ", max_power);
     prompt.prompt = buf;
-    prompt.error = "You have no artifacts to reforge.";
+    prompt.error = buf2;
     prompt.filter = object_is_artifact;
     prompt.where[0] = INV_PACK;
     prompt.flags = INV_SHOW_VALUE;
