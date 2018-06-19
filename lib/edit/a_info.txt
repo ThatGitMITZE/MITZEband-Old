@@ -1591,7 +1591,7 @@ D:The robe of the great wizard Gandalf, also known as Incanus in the
 D:lands of the South. It is proof against elements, for neither the
 D:heat of the South, nor the ice of the North, nor the acidic pits of Dol
 D:Guldur were able to hold back the defiant Maia in the pursuit of
-D:his mission
+D:his mission.
 
 N:132:of Numenor
 I:33:12:3
@@ -2402,9 +2402,8 @@ F:BRAND_VAMP | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN |
 F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
 F:RES_POIS | RES_CONF | RES_CHAOS |
 E:RESTORING:40:750
-E:The bo staff glows a deep green...
-D:This is the staff of Aesculapius, who is a greek god of
-D:the medicine.
+E:'Asclepius! Ot-tiovno ok-lut!' The Bo Staff glows a deep green...
+D:This is the staff of Asclepius, Greek god of medicine.
 
 N:226:Spectral Dragon Scale Mail
 I:38:3:3
@@ -3506,6 +3505,22 @@ F:DEC_INT | LIFE | TELEPATHY | INSTA_ART | QUESTITEM
 D:It was carved out of a tree branch knocked down by a falling meteor.
 D:(You're not sure if that gives it any mystic superpowers, but you sure
 D:hope so.)
+
+N:346:of the Fell Rider
+I:32:2:3
+W:10:6:15:10000
+P:2:0d0:0:0:-2
+F:WIS | DEC_CHR | RES_FIRE | RES_LITE | SUST_INT | HIDE_TYPE |
+D:An old, timeworn leather cap, embroidered with the motto of Fell Livery
+D:Stable: 'FELL. The rider - it's you.'
+
+N:347:of the Vagabond
+I:21:12:4
+W:22:7:150:35000
+P:0:2d7:16:15:0
+F:CON | SUST_CON | RES_FEAR | REGEN | HOLD_LIFE | SLOW_DIGEST | HIDE_TYPE |
+F:BLESSED
+D:The lonely traveller's one true friend.
 
 # N: serial number : item name
 # I: tval : sval : pval
