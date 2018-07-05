@@ -2692,7 +2692,20 @@ static bool _reforge_artifact(void)
 
     if (coffee_break) /* Accelerated reforging */
     {
-        f += (p_ptr->lev * 3 / 2);
+        int i;
+        byte failed_quests = 0;
+        vec_ptr v = quests_get_random();
+        for (i = 0; i < vec_length(v); i++)
+        {
+            quest_ptr q = vec_get(v, i);
+            if (q->status == QS_FAILED || q->status == QS_FAILED_DONE)
+            {
+                failed_quests++;
+            }
+        }
+        vec_free(v);
+
+        if (failed_quests < 2) f += ((p_ptr->lev * 3 / 2) / (1 + failed_quests));
         src_max_power = f*150 + f*f*3/2;
     }
 
