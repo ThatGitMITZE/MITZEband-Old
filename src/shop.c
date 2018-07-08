@@ -1621,7 +1621,7 @@ static void _display(_ui_context_ptr context)
         doc_pos_create(r.x, r.y));
 }
 
-static int _add_obj(shop_ptr shop, obj_ptr obj);
+static int _add_obj(shop_ptr shop, obj_ptr obj, bool is_restock);
 static bool _buy_aux(shop_ptr shop, obj_ptr obj)
 {
     char       name[MAX_NLEN];
@@ -1692,7 +1692,7 @@ static bool _buy_aux(shop_ptr shop, obj_ptr obj)
     }
 
     price = obj_value(obj); /* correctly handle unidentified items */
-    if (price > 0 && _add_obj(shop, obj))
+    if (price > 0 && _add_obj(shop, obj, FALSE))
         inv_sort(shop->inv);
     else
         obj->number = 0;
@@ -2116,7 +2116,7 @@ static int _cull(shop_ptr shop, int target)
     return ct;
 }
 
-static int _add_obj(shop_ptr shop, obj_ptr obj) /* return number of new slots used (0 or 1) */
+static int _add_obj(shop_ptr shop, obj_ptr obj, bool is_restock) /* return number of new slots used (0 or 1) */
 {
     slot_t slot, max = inv_last(shop->inv, obj_exists);
     for (slot = 1; slot <= max; slot++)
@@ -2125,6 +2125,7 @@ static int _add_obj(shop_ptr shop, obj_ptr obj) /* return number of new slots us
         if (!dest) continue;
         if (obj_can_combine(dest, obj, INV_SHOP))
         {
+            if ((is_restock) && (dest->marked & OM_RESERVED)) return 0;
             obj_combine(dest, obj, INV_SHOP);
             obj->number = 0; /* forget spillover */
             return 0;
@@ -2169,7 +2170,7 @@ static int _restock(shop_ptr shop, int target, bool is_shuffle)
         if (shop->type->create_f(&forge, mode))
         {
             assert(obj_value(&forge) > 0);
-            ct += _add_obj(shop, &forge);
+            ct += _add_obj(shop, &forge, TRUE);
         }
     }
     inv_sort(shop->inv);
