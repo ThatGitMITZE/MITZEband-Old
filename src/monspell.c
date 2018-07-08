@@ -3458,7 +3458,7 @@ static void _ai_direct(mon_spell_cast_ptr cast)
     if (spell && cast->mon->mtimed[MTIMED_FAST])
         spell->prob = 0;
 
-    /* Uselss annoys? */
+    /* Useless annoys? */
     if (!p_ptr->csp)
         _remove_spell(spells, _id(MST_BALL, GF_DRAIN_MANA));
     if (p_ptr->blind)
@@ -3673,6 +3673,10 @@ static void _ai_think(mon_spell_cast_ptr cast)
     /* Hack: Restrict for special dungeons or town buildings */
     if (p_ptr->inside_arena || p_ptr->inside_battle)
         _remove_group(cast->race->spells->groups[MST_SUMMON], NULL);
+
+    /* Being tele-leveled out of giant slayer is too annoying */
+    if (quest_id_current())
+        _remove_spell(cast->race->spells, _id(MST_ANNOY, ANNOY_TELE_LEVEL));
 
     /* Generally, we require direct los to spell against the player.
      * However, smart monsters might splash, summon, heal or escape.
