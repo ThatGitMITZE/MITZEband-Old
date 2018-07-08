@@ -1293,7 +1293,7 @@ void fell_sorcery_mut(int cmd, variant *res)
         var_set_string(res, "Your spells will grow more powerful.");
         break;
     case SPELL_CALC_BONUS:
-        p_ptr->spell_power++;
+        p_ptr->spell_power += 2;
         break;
     default:
         default_spell(cmd, res);
