@@ -2050,10 +2050,15 @@ void break_curse(object_type *o_ptr)
         msg_print("The curse is broken!");
 
         o_ptr->curse_flags = 0L;
+        o_ptr->known_curse_flags = 0L;
 
         o_ptr->ident |= (IDENT_SENSE);
 
         o_ptr->feeling = FEEL_NONE;
+
+        p_ptr->update |= PU_BONUS;
+        p_ptr->window |= (PW_INVEN | PW_EQUIP);
+        p_ptr->redraw |= PR_EFFECTS;
     }
 }
 
