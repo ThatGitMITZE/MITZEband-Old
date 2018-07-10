@@ -475,7 +475,34 @@ static void _suppress_extra_pantheons(void)
     }
 
     /* Pick a random pantheon if one hasn't been selected yet */
-    if (game_pantheon >= PANTHEON_MAX) game_pantheon = randint1(PANTHEON_MAX - 1);
+    if (game_pantheon >= PANTHEON_MAX)
+    {
+        if (prace_is_(RACE_DEMIGOD))
+        {
+            switch (p_ptr->psubrace)
+            {
+                case DEMIGOD_APHRODITE:
+                case DEMIGOD_APOLLO:
+                case DEMIGOD_ARES:
+                case DEMIGOD_ARTEMIS:
+                case DEMIGOD_ATHENA:
+                case DEMIGOD_DEMETER:
+                case DEMIGOD_HADES:
+                case DEMIGOD_HEPHAESTUS:
+                case DEMIGOD_HERA:
+                case DEMIGOD_HERMES:
+                case DEMIGOD_POSEIDON:
+                case DEMIGOD_ZEUS:
+                    game_pantheon = PANTHEON_OLYMPIAN;
+                    break;
+                default:
+                    game_pantheon = randint1(PANTHEON_MAX - 1);
+                    break;
+            }            
+        }
+        else
+            game_pantheon = randint1(PANTHEON_MAX - 1);
+    }
 
     /* Wipe dungeons associated with other pantheons */
     for (i = 1; i < max_d_idx; i++)
