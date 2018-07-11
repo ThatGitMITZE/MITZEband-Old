@@ -78,10 +78,19 @@ static int _trim(int start_val, int hi_val, int very_hi_val, int item_lv)
 
 static void _sanitise_flags(object_type *o_ptr)
 {
+    int i;
     if (have_flag(o_ptr->flags, OF_LITE) && have_flag(o_ptr->flags, OF_DARKNESS))
     {
         if (one_in_(2)) remove_flag(o_ptr->flags, OF_DARKNESS);
         else remove_flag(o_ptr->flags, OF_LITE);
+    }
+    for (i = OF_STR; i <= OF_CHR; i++)
+    {
+        if (have_flag(o_ptr->flags, i) && have_flag(o_ptr->flags, i + OF_DEC_STR - OF_STR))
+        {
+            remove_flag(o_ptr->flags, i);
+            remove_flag(o_ptr->flags, i + OF_DEC_STR - OF_STR);
+        }
     }
 }
 
