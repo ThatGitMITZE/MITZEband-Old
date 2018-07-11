@@ -2287,6 +2287,13 @@ bool set_unwell(int v, bool do_dec)
     bool notice = FALSE;
     byte old_eff = 0, new_eff = 0;
 
+    /* Nonliving races don't get unwell */
+    if (get_race()->flags & RACE_IS_NONLIVING)
+    {
+        p_ptr->unwell = 0; /* paranoia */
+        return FALSE;
+    }
+
     /* Hack -- Force good values */
     v = (v > 100) ? 100 : (v < 0) ? 0 : v;
 
