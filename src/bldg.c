@@ -2744,6 +2744,8 @@ static bool _reforge_artifact(void)
     if (cost > 9000L * get_slot_weight(src))
         cost = 9000L * get_slot_weight(src);
 
+    if (coffee_break) cost -= (cost / 8);
+
     msg_format("Reforging will cost you %d gold.", cost);
     if (p_ptr->au < cost)
     {
