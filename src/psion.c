@@ -1563,8 +1563,8 @@ static _spell_t __spells[] =
     },
     { "Combat Transformation", _PSION_COMBAT_TRANSFORMATION, 20, {  
         { 13,  50, _combat_transformation1_spell },
-        { 49,  65, _combat_transformation2_spell },
-        { 78,  80, _combat_transformation3_spell },
+        { 47,  65, _combat_transformation2_spell },
+        { 86,  80, _combat_transformation3_spell },
         {130,  95, _combat_transformation4_spell },
         {195, 110, _combat_transformation5_spell }},
         "Combat Transformation is an offensive power, channelling your mental focus into "
