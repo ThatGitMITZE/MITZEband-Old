@@ -184,7 +184,7 @@ void werewolf_change_shape_spell(int cmd, variant *res)
 static power_info _wolfpowers[] = {
     { A_DEX, {  1,  1, 30, hound_sniff_spell } },
     { A_DEX, { 10,  0,  0, hound_stalk_spell}},
-    { A_DEX, { 20, 10, 30, hound_leap_spell}},
+    { A_DEX, { 25, 18, 30, hound_leap_spell}},
     {    -1, { -1, -1, -1, NULL}}
 };
 static power_info _default_power[] = {
