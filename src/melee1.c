@@ -592,6 +592,14 @@ bool make_attack_normal(int m_idx)
                     if (r_ptr->flags2 & RF2_THIEF)
                         mon_lore_2(m_ptr, RF2_THIEF);
 
+                    if (p_ptr->tim_inven_prot2)
+                    {
+                        msg_print("Your inventory is protected!");
+                        blinked = TRUE;
+                        obvious = TRUE;
+                        break;
+                    }
+
                     if (!p_ptr->paralyzed &&
                         (randint0(100) < (adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
                                   p_ptr->lev)))
