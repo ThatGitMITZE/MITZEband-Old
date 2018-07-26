@@ -2299,7 +2299,7 @@ bool destroy_area(int y1, int x1, int r, int power)
             c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
             /* Lose light and knowledge */
-            c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
+            if (!cave_perma_grid(c_ptr)) c_ptr->info &= ~(CAVE_MARK | CAVE_GLOW);
 
             if (!in_generate) /* Normal */
             {
