@@ -658,7 +658,7 @@ static void cast_shuffle(void)
     {
         msg_print("It's the picture of a strange monster.");
 
-        trump_summoning(1, FALSE, py, px, (dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+        trump_summoning(1, FALSE, py, px, (dun_level * 3 / 2), (SUMMON_BIZARRE1 + randint0(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
     }
     else if (die < 33)
     {
