@@ -5368,8 +5368,8 @@ bool craft_enchant(int max, int inc)
     else
     {
         virtue_add(VIRTUE_ENCHANTMENT, 1);
-        /* Minor Enchantment should not allow gold farming ... */
-        if (inc == 1 && object_is_nameless(prompt.obj))
+        /* Enchantment should not allow gold farming ... */
+        if (object_is_nameless(prompt.obj))
             prompt.obj->discount = 99;
         obj_release(prompt.obj, OBJ_RELEASE_ENCHANT);
     }
