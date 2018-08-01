@@ -2121,6 +2121,7 @@ static void _build_statistics(doc_ptr doc)
     {
         _device_counts_imp(doc, TV_WAND, EFFECT_STONE_TO_MUD);
         _device_counts_imp(doc, TV_WAND, EFFECT_TELEPORT_AWAY);
+        _device_counts_imp(doc, TV_WAND, EFFECT_DRAIN_LIFE);
         _device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_COLD);
         _device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_FIRE);
 		_device_counts_imp(doc, TV_WAND, EFFECT_BREATHE_WATER);
