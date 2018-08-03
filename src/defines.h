@@ -20,7 +20,7 @@
 #define VER_MINOR 0
 #define VER_PATCH "nougat"
 #define VER_EXTRA 0
-#define VERSION_IS_DEVELOPMENT (TRUE)
+#define VERSION_IS_DEVELOPMENT (FALSE)
 
 #define GAME_MODE_BEGINNER  0
 #define GAME_MODE_NORMAL    1
