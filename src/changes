@@ -114,6 +114,9 @@ work properly due to an old bug (thanks to bostock for reporting this)
 a shaft to connect random dungeon quests on consecutive levels; this has been
 fixed
 
+* Rush Attack (Ninja Nyusin, Hound Pounce/Leap, Mauler Close In, etc.)
+sometimes teleported the player through walls; this has been fixed
+
 * Improved valuation of unidentified items, and fixed a longstanding bug
 that allowed unidentified good, awful and average items to receive a value
 bonus intended only for artifacts
