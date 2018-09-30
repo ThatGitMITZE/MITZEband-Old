@@ -2086,6 +2086,7 @@ static void _build_statistics(doc_ptr doc)
     _group_counts_tval_imp(doc, TV_POTION, "Totals");
 
     doc_printf(doc, "\n  <color:G>Scrolls              Found Bought  Used  Dest</color>\n");
+    _object_counts_imp(doc, TV_SCROLL, SV_SCROLL_PHASE_DOOR);
     _object_counts_imp(doc, TV_SCROLL, SV_SCROLL_WORD_OF_RECALL);
     _object_counts_imp(doc, TV_SCROLL, SV_SCROLL_IDENTIFY);
     _object_counts_imp(doc, TV_SCROLL, SV_SCROLL_STAR_IDENTIFY);
