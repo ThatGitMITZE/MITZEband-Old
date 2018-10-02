@@ -4098,7 +4098,7 @@ static void _dispatch_command(int old_now_turn)
 
         case 'J':
         {
-            if ((!p_ptr->wild_mode) && (travel.x) && (travel.y) && ((px != travel.x) || (py != travel.y)) && (in_bounds(travel.x, travel.y)) && (get_check("Resume travelling? ")))
+            if ((!p_ptr->wild_mode) && (travel.x) && (travel.y) && ((px != travel.x) || (py != travel.y)) && (in_bounds(travel.y, travel.x)) && (get_check("Resume travelling? ")))
             travel_begin(TRAVEL_MODE_NORMAL, travel.x, travel.y);
             break;
         }
