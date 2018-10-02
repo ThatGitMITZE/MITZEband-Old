@@ -2501,7 +2501,7 @@ static point_t _choose_point_near(point_t src, point_t dest, _path_p filter)
 static void _summon(void)
 {
     int ct, i;
-    bool summoner_is_pet = is_pet(_current.mon);
+    bool summoner_is_pet = (((_current.mon) && (is_pet(_current.mon))) || (_current.flags & MSC_SRC_PLAYER));
     if (!_projectable(_current.src, _current.dest))
     {
         point_t new_dest = {0};
