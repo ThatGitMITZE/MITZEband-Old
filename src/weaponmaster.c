@@ -3245,10 +3245,6 @@ static void _get_flags(u32b flgs[OF_ARRAY_SIZE])
         {
             if (p_ptr->lev >= 45)
             {
-                add_flag(flgs, OF_RES_ACID);
-                add_flag(flgs, OF_RES_COLD);
-                add_flag(flgs, OF_RES_FIRE);
-                add_flag(flgs, OF_RES_ELEC);
                 add_flag(flgs, OF_REFLECT);
             }
         }
