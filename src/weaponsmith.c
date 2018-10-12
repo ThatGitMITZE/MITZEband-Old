@@ -443,6 +443,7 @@ static void _absorb_all(object_type *o_ptr, _absorb_essence_f absorb_f)
     new_obj.mitze_type = old_obj.mitze_type;
     new_obj.mitze_level = old_obj.mitze_level;
     new_obj.mitze_turn = old_obj.mitze_turn;
+    if (old_obj.discount < 99) new_obj.discount = old_obj.discount;
 
     if (old_obj.tval == TV_DRAG_ARMOR) new_obj.timeout = old_obj.timeout;
     obj_identify_fully(&new_obj);
