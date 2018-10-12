@@ -2147,6 +2147,10 @@ bool symbol_genocide(int power, bool player_cast)
         {
             if (msg_prompt("Really genocide Nagas? <color:y>[Y/N]</color>", "NY", PROMPT_DEFAULT) != 'Y') continue;
         }
+        else if ((rogue_like_commands) && (typ == 'X'))
+        {
+            if (msg_prompt("Really genocide Xorns? <color:y>[Y/N]</color>", "NY", PROMPT_DEFAULT) != 'Y') continue;
+        }
         okay = TRUE;
     }
 
