@@ -51,10 +51,10 @@
 V:2.8.1
 
 N:1:of Galadriel
-I:39:4:1
+I:39:4:5
 W:30:1:10:10000
 P:0:1d1:0:0:0
-F:SEARCH | INSTA_ART
+F:SEARCH | INSTA_ART | RES_DARK
 E:LITE_AREA:10:15
 E:The phial wells with clear light...
 D:A small crystal phial, with the light of Earendil's Star contained inside.
