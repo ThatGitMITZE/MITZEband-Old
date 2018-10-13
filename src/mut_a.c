@@ -1262,7 +1262,7 @@ void fearless_mut(int cmd, variant *res)
         msg_print("You begin to feel fear again.");
         break;
     case SPELL_MUT_DESC:
-        var_set_string(res, "You are completely fearless.");
+        var_set_string(res, "You are fearless.");
         break;
     case SPELL_CALC_BONUS:
         res_add(RES_FEAR);
