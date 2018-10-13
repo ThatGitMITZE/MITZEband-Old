@@ -1263,6 +1263,12 @@ static bool _string_match(cptr source, cptr pattern)
     assert(!_string_match("wand of light", "^wand of lightning balls$"));
 */
 
+static bool _is_polymorphed_demon(void)
+{
+    if (!p_ptr->mimic_form) return FALSE;
+    else return (get_true_race()->flags & RACE_IS_DEMON);
+}
+
 static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_name)
 {
     int j;
@@ -1429,7 +1435,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
         bool is_special = FALSE;
         if ( (get_race()->flags & RACE_IS_DEMON)
           || p_ptr->realm1 == REALM_DAEMON
-          || p_ptr->realm2 == REALM_DAEMON )
+          || p_ptr->realm2 == REALM_DAEMON || _is_polymorphed_demon())
         {
             if (o_ptr->tval == TV_CORPSE &&
                 o_ptr->sval == SV_CORPSE &&
