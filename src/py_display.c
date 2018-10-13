@@ -2439,6 +2439,9 @@ static void _build_options(doc_ptr doc)
     if (no_selling)
         doc_printf(doc, " No Selling:         On\n");
 
+    if (comp_mode)
+        doc_printf(doc, " Competition Mode:   On\n");
+
     if (p_ptr->noscore)
         doc_printf(doc, "\n <color:v>You have done something illegal.</color>\n");
 
