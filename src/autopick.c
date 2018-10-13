@@ -2277,9 +2277,15 @@ static void _get_obj(obj_ptr obj)
     }
 
     if (no_mogaminator) return;
-    if (delay_autopick_hack) return;
 
     idx = is_autopick(obj);
+
+    if (delay_autopick_hack)
+    {
+        auto_destroy_obj(obj, idx);
+        obj_release(obj, OBJ_RELEASE_QUIET);
+        return;
+    }
 
     /* AutoID (?unaware items) */
     if (idx >= 0 && autopick_list[idx].action & DO_AUTO_ID)
