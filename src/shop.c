@@ -2330,10 +2330,24 @@ static void _display_inv(doc_ptr doc, shop_ptr shop, slot_t top, int page_size)
                     if (show_prices)
                     {
                         int price = _sell_price(shop, value);
-                        doc_printf(doc, " <color:%c>%6d</color>", price <= p_ptr->au ? 'w' : 'D', price);
+                        if (price >= 1000000)
+                        {
+                            char tmp[10];
+                            big_num_display(price, tmp);
+                            doc_printf(doc, " <color:%c>%6s</color>", price <= p_ptr->au ? 'w' : 'D', tmp);
+                        }
+                        else doc_printf(doc, " <color:%c>%6d</color>", price <= p_ptr->au ? 'w' : 'D', price);
                     }
                     if (show_values)
-                        doc_printf(doc, " %6d", value);
+                    {
+                        if (value >= 1000000)
+                        {
+                            char tmp[10];
+                            big_num_display(value, tmp);
+                            doc_printf(doc, " %6s", tmp);
+                        }
+                        else doc_printf(doc, " %6d", value);
+                    }
                 }
             }
             doc_newline(doc);
