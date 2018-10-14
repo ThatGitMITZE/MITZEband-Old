@@ -53,17 +53,44 @@ static void _build_general1(doc_ptr doc)
 
     if (race_ptr->subname)
     {
+        char nimi[26];
+        int paikka;
+        bool ok_name = FALSE;
+        strncpy(nimi, get_race()->subname, sizeof(nimi));
+        if (strlen(get_race()->subname) < 25) ok_name = TRUE;
+        while (!ok_name)
+        {
+            paikka = strpos(",", nimi);
+            if (paikka) 
+            {
+                nimi[paikka - 1] = '\0';
+                break;
+            }
+            paikka = strpos(" the ", nimi);
+            if (paikka) 
+            {
+                nimi[paikka - 1] = '\0';
+                break;
+            }
+            paikka = strpos(" the", nimi);
+            if (paikka >= 20)
+            {
+                nimi[paikka - 1] = '\0';
+            }
+            break;
+        }
+
         if (p_ptr->prace == RACE_MON_RING)
-            doc_printf(doc, " Controlling: <color:B>%-26.26s</color>\n", race_ptr->subname);
+            doc_printf(doc, " Controlling: <color:B>%-26.26s</color>\n", nimi);
         else if (p_ptr->prace == RACE_MON_MIMIC)
         {
             if (p_ptr->current_r_idx == MON_MIMIC)
                 doc_printf(doc, " Mimicking  : <color:B>%-26.26s</color>\n", "Nothing");
             else
-                doc_printf(doc, " Mimicking  : <color:B>%-26.26s</color>\n", race_ptr->subname);
+                doc_printf(doc, " Mimicking  : <color:B>%-26.26s</color>\n", nimi);
         }
         else
-            doc_printf(doc, " Subrace    : <color:B>%-26.26s</color>\n", race_ptr->subname);
+            doc_printf(doc, " Subrace    : <color:B>%-26.26s</color>\n", nimi);
     }
     else
         doc_printf(doc, " Subrace    : <color:B>%-26.26s</color>\n", "None");
