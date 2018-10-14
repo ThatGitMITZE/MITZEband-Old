@@ -1670,6 +1670,11 @@ s16b get_mon_num_aux(int level, int min_level, u32b options)
                 if (r_info[MON_LUPART].cur_num > 0) continue;
             }
 
+            if (r_idx == MON_ZOMBI_SERPENT)
+            {
+                if (r_info[MON_SERPENT].max_num > 0) continue;
+            }
+
             /* No spamming summoning staves for tsuchinokos */
             if ((r_idx == MON_TSUCHINOKO) && (summon_specific_who == SUMMON_WHO_PLAYER)) continue;
         }
