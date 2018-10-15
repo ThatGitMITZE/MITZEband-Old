@@ -413,9 +413,9 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
         /* Drain vitality of humanoids */
         char o_name[MAX_NLEN];
 
-        object_desc(o_name, obj, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        object_desc(o_name, obj, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_SINGULAR));
 
-        msg_format("%^s is burnt to ashes. You absorb its vitality!", o_name);
+        msg_format("<color:%c>The %^s</color> is burnt to ashes. You absorb its vitality!", tval_to_attr_char(obj->tval), o_name);
         set_food(PY_FOOD_MAX - 1);
     }
     else if (prace_is_(RACE_SKELETON))
