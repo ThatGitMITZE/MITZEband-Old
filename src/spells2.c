@@ -2151,6 +2151,10 @@ bool symbol_genocide(int power, bool player_cast)
         {
             if (msg_prompt("Really genocide Xorns? <color:y>[Y/N]</color>", "NY", PROMPT_DEFAULT) != 'Y') continue;
         }
+        else if (!isalpha(typ))
+        {
+            if (msg_prompt("Confirm genocide? <color:y>[Y/N]</color>", "NY", PROMPT_DEFAULT) != 'Y') continue;
+        }
         okay = TRUE;
     }
 
