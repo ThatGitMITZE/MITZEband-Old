@@ -897,11 +897,12 @@ static void init_autopick(void)
 
 #define PT_DEFAULT 0
 #define PT_WITH_PNAME 1
+#define PT_WITH_OTHERNAME 2
 
 /*
  *  Get file name for autopick preference
  */
-static cptr pickpref_filename(int filename_mode)
+static cptr pickpref_filename(int filename_mode, char *other_base)
 {
     static const char namebase[] = "pickpref";
 
@@ -912,6 +913,13 @@ static cptr pickpref_filename(int filename_mode)
 
     case PT_WITH_PNAME:
         return format("%s-%s.prf", namebase, player_base);
+
+    case PT_WITH_OTHERNAME:
+    {
+        if (!other_base) return format("%s.prf", namebase);
+        if (streq(namebase, other_base)) return format("%s.prf", namebase);
+        return format("%s-%s.prf", namebase, other_base);
+    }
 
     default:
         return NULL;
@@ -931,7 +939,7 @@ void autopick_load_pref(bool disp_mes)
     init_autopick();
 
     /* Try a filename with player name */
-    my_strcpy(buf, pickpref_filename(PT_WITH_PNAME), sizeof(buf));
+    my_strcpy(buf, pickpref_filename(PT_WITH_PNAME, NULL), sizeof(buf));
 
     /* Load the file */
     err = process_autopick_file(buf);
@@ -946,7 +954,7 @@ void autopick_load_pref(bool disp_mes)
     if (0 > err)
     {
         /* Use default name */
-        my_strcpy(buf, pickpref_filename(PT_DEFAULT), sizeof(buf));
+        my_strcpy(buf, pickpref_filename(PT_DEFAULT, NULL), sizeof(buf));
 
         /* Load the file */
         err = process_autopick_file(buf);
@@ -2416,12 +2424,12 @@ static bool clear_auto_register(void)
     bool autoregister = FALSE;
     bool okay = TRUE;
 
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME, NULL));
     pref_fff = my_fopen(pref_file, "r");
 
     if (!pref_fff)
     {
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT, NULL));
         pref_fff = my_fopen(pref_file, "r");
     }
 
@@ -2579,13 +2587,13 @@ bool autopick_autoregister(object_type *o_ptr)
     }
 
     /* Try a filename with player name */
-    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+    path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME, NULL));
     pref_fff = my_fopen(pref_file, "r");
 
     if (!pref_fff)
     {
         /* Use default name */
-        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+        path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT, NULL));
         pref_fff = my_fopen(pref_file, "r");
         if (!pref_fff)
         {
@@ -3165,7 +3173,7 @@ static cptr *read_text_lines(cptr filename)
     int lines = 0;
     char buf[1024];
 
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+    path_build(buf, sizeof(buf), (streq("pickpref.prf", filename) ? ANGBAND_DIR_PREF : ANGBAND_DIR_USER), filename);
 
     /* Open the file */
     fff = my_fopen(buf, "r");
@@ -3211,8 +3219,8 @@ static void prepare_default_pickpref(void)
     FILE *user_fp;
     int i;
 
-    sprintf(buf_src, "%s", pickpref_filename(PT_DEFAULT));
-    sprintf(buf_dest, "%s", pickpref_filename(PT_WITH_PNAME));
+    sprintf(buf_src, "%s", pickpref_filename(PT_DEFAULT, NULL));
+    sprintf(buf_dest, "%s", pickpref_filename(PT_WITH_PNAME, NULL));
 
     /* Display messages */
     for (i = 0; messages[i]; i++) msg_print(messages[i]);
@@ -3258,21 +3266,28 @@ static void prepare_default_pickpref(void)
  * Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-static cptr *read_pickpref_text_lines(int *filename_mode_p)
+static cptr *read_pickpref_text_lines(int *filename_mode_p, char *other_base)
 {
     char buf[1024];
     cptr *lines_list;
 
+    if (((*filename_mode_p) == PT_WITH_OTHERNAME) && (other_base))
+    {
+        strcpy(buf, pickpref_filename(*filename_mode_p, other_base));
+        lines_list = read_text_lines(buf);
+        if (lines_list) return lines_list;
+    }
+
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
-    strcpy(buf, pickpref_filename(*filename_mode_p));
+    strcpy(buf, pickpref_filename(*filename_mode_p, NULL));
     lines_list = read_text_lines(buf);
 
     if (!lines_list)
     {
         /* Use default name */
         *filename_mode_p = PT_DEFAULT;
-        strcpy(buf, pickpref_filename(*filename_mode_p));
+        strcpy(buf, pickpref_filename(*filename_mode_p, NULL));
         lines_list = read_text_lines(buf);
     }
 
@@ -3280,7 +3295,7 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p)
     {
         /* There is no preference file in the user directory */
         *filename_mode_p = PT_WITH_PNAME;
-        strcpy(buf, pickpref_filename(*filename_mode_p));
+        strcpy(buf, pickpref_filename(*filename_mode_p, NULL));
 
         /* Copy the default autopick file to the user directory */
         prepare_default_pickpref();
@@ -4165,6 +4180,7 @@ enum {
     EC_QUIT = 1,
     EC_SAVEQUIT,
     EC_REVERT,
+    EC_LOAD,
     EC_HELP,
     EC_RETURN,
     EC_LEFT,
@@ -4268,6 +4284,7 @@ enum {
 static char MN_QUIT[] = "Quit without save";
 static char MN_SAVEQUIT[] = "Save & Quit";
 static char MN_REVERT[] = "Revert all changes";
+static char MN_LOAD[] = "Load preferences";
 static char MN_HELP[] = "Help";
 
 static char MN_MOVE[] =   "Move cursor";
@@ -4275,7 +4292,7 @@ static char MN_LEFT[] =   "Left     (Left Arrow key)";
 static char MN_DOWN[] =   "Down     (Down Arrow key)";
 static char MN_UP[] =     "Up       (Up Arrow key)";
 static char MN_RIGHT[] =  "Right    (Right Arrow key)";
-static char MN_BOL[] =    "Beggining of line";
+static char MN_BOL[] =    "Beginning of line";
 static char MN_EOL[] =    "End of line";
 static char MN_PGUP[] =   "Page up  (PageUp key)";
 static char MN_PGDOWN[] = "Page down(PageDown key)";
@@ -4356,6 +4373,7 @@ command_menu_type menu_data[] =
     {MN_QUIT, 0, KTRL('q'), EC_QUIT},
     {MN_SAVEQUIT, 0, KTRL('w'), EC_SAVEQUIT},
     {MN_REVERT, 0, KTRL('z'), EC_REVERT},
+    {MN_LOAD, 0, KTRL('j'), EC_LOAD},
 
     {MN_EDIT, 0, -1, -1},
     {MN_CUT, 1, KTRL('x'), EC_CUT},
@@ -4365,7 +4383,6 @@ command_menu_type menu_data[] =
     {MN_KILL_LINE, 1, KTRL('k'), EC_KILL_LINE},
     {MN_DELETE_CHAR, 1, KTRL('d'), EC_DELETE_CHAR},
     {MN_BACKSPACE, 1, KTRL('h'), EC_BACKSPACE},
-    {MN_RETURN, 1, KTRL('j'), EC_RETURN},
     {MN_RETURN, 1, KTRL('m'), EC_RETURN},
 
     {MN_SEARCH, 0, -1, -1},
@@ -5340,7 +5357,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
         if (!get_check("Discard all changes and revert to original file. Are you sure? ")) break;
 
         free_text_lines(tb->lines_list);
-        tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
+        tb->lines_list = read_pickpref_text_lines(&tb->filename_mode, NULL);
         tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
         tb->cx = tb->cy = 0;
         tb->mark = 0;
@@ -5348,6 +5365,34 @@ static bool do_editor_command(text_body_type *tb, int com_id)
         /* Text is not changed */
         tb->changed = FALSE;
         break;
+
+    case EC_LOAD:
+        {
+            char lataa_minut[80];
+            int pituus;
+            strcpy(lataa_minut, player_base);
+            if (!get_string("Load: ", lataa_minut, 78)) break;
+            pituus = strlen(lataa_minut);
+
+            /* Identify format
+             * Acceptable formats include [charname], [charname.prf],
+             * [pickpref-charname] and [pickpref-charname.prf] */
+            if (pituus > 9)
+            {
+                if (clip_and_locate("pickpref-", lataa_minut)) pituus -= 9;
+            }
+            if (pituus > 4 && strcmp(lataa_minut + pituus - 4, ".prf") == 0) lataa_minut[pituus - 4] = '\0';
+
+            free_text_lines(tb->lines_list);
+            tb->filename_mode = PT_WITH_OTHERNAME;
+            tb->lines_list = read_pickpref_text_lines(&tb->filename_mode, lataa_minut);
+            tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
+            tb->cx = tb->cy = 0;
+            tb->mark = 0;
+            tb->changed = TRUE;
+            tb->filename_mode = PT_WITH_PNAME;
+            break;
+        }
 
     case EC_HELP:
         /* Peruse the main help file */
@@ -6366,7 +6411,7 @@ void do_cmd_edit_autopick(void)
     }
 
     /* Read or initialize whole text */
-    tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
+    tb->lines_list = read_pickpref_text_lines(&tb->filename_mode, NULL);
 
     /* Reset cursor position if needed */
     for (i = 0; i < tb->cy; i++)
@@ -6472,7 +6517,7 @@ void do_cmd_edit_autopick(void)
     do_cmd_redraw();
 
     /* Get the filename of preference */
-    strcpy(buf, pickpref_filename(tb->filename_mode));
+    strcpy(buf, pickpref_filename(tb->filename_mode, NULL));
 
     if (quit == QUIT_AND_SAVE)
         write_text_lines(buf, tb->lines_list);
