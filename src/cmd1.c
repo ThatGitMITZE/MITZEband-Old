@@ -5116,6 +5116,15 @@ static bool _auto_detect_traps(void)
     if (p_ptr->pclass == CLASS_BERSERKER) return FALSE;
     if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_detect_traps()) return TRUE;
 
+    slot = pack_find_device(EFFECT_DETECT_TRAPS);
+    if (slot)
+    {
+        obj_ptr device = pack_obj(slot);
+        detect_traps(DETECT_RAD_DEFAULT, TRUE);
+        stats_on_use(device, 1);
+        device_decrease_sp(device, device->activation.cost);
+        return TRUE;
+    }
     slot = pack_find_obj(TV_SCROLL, SV_SCROLL_DETECT_TRAP);
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))
     {
@@ -5128,15 +5137,6 @@ static bool _auto_detect_traps(void)
             obj_release(scroll, 0);
             return TRUE;
         }
-    }
-    slot = pack_find_device(EFFECT_DETECT_TRAPS);
-    if (slot)
-    {
-        obj_ptr device = pack_obj(slot);
-        detect_traps(DETECT_RAD_DEFAULT, TRUE);
-        stats_on_use(device, 1);
-        device_decrease_sp(device, device->activation.cost);
-        return TRUE;
     }
     slot = pack_find_device(EFFECT_DETECT_ALL);
     if (slot)
@@ -5157,6 +5157,15 @@ static bool _auto_mapping(void)
     if (p_ptr->pclass == CLASS_BERSERKER) return FALSE;
     if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater_auto_mapping()) return TRUE;
 
+    slot = pack_find_device(EFFECT_ENLIGHTENMENT);
+    if (slot)
+    {
+        obj_ptr device = pack_obj(slot);
+        map_area(DETECT_RAD_MAP);
+        stats_on_use(device, 1);
+        device_decrease_sp(device, device->activation.cost);
+        return TRUE;
+    }
     slot = pack_find_obj(TV_SCROLL, SV_SCROLL_MAPPING);
     if (slot && !p_ptr->blind && !(get_race()->flags & RACE_IS_ILLITERATE))
     {
@@ -5169,15 +5178,6 @@ static bool _auto_mapping(void)
             obj_release(scroll, 0);
             return TRUE;
         }
-    }
-    slot = pack_find_device(EFFECT_ENLIGHTENMENT);
-    if (slot)
-    {
-        obj_ptr device = pack_obj(slot);
-        map_area(DETECT_RAD_MAP);
-        stats_on_use(device, 1);
-        device_decrease_sp(device, device->activation.cost);
-        return TRUE;
     }
     return FALSE;
 }
