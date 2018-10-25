@@ -98,6 +98,7 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     count = 0;
 
     cost += _check_flag_and_score(flgs, OF_MAGIC_MASTERY,  1500*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_MAGIC_RESISTANCE,  1500*mult, &count);
     cost += _check_flag_and_score(flgs, OF_STEALTH,  500*mult, &count);
     cost += _check_flag_and_score(flgs, OF_SPELL_CAP,  1000*mult, &count);
     cost += _check_flag_and_score(flgs, OF_SPELL_POWER,  2500*mult, &count);
