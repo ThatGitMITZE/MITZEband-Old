@@ -3289,6 +3289,13 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p, char *other_base)
         *filename_mode_p = PT_DEFAULT;
         strcpy(buf, pickpref_filename(*filename_mode_p, NULL));
         lines_list = read_text_lines(buf);
+
+        if (lines_list)
+        {
+            *filename_mode_p = PT_WITH_PNAME;
+            prepare_default_pickpref();
+            return lines_list;
+        }
     }
 
     if (!lines_list)
