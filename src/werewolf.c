@@ -111,6 +111,8 @@ static void _birth(void)
     _werewolf_form = 0;
     skills_innate_init("Claw", WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
     skills_innate_init("Bite", WEAPON_EXP_BEGINNER, WEAPON_EXP_MASTER);
+    py_birth_food();
+    py_birth_light();
 }
 
 void _werewolf_calc_innate_attacks(void)
