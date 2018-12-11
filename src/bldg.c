@@ -3696,6 +3696,8 @@ static void bldg_process_command(building_type *bldg, int i)
         if (do_res_stat(A_DEX)) paid = TRUE;
         if (do_res_stat(A_CON)) paid = TRUE;
         if (do_res_stat(A_CHR)) paid = TRUE;
+        if (restore_level()) paid = TRUE;
+        if (lp_player(1000)) paid = TRUE;
         break;
     case BACT_ENCHANT_ARROWS:
         enchant_item(item_tester_hook_ammo, bcost, 1, 1, 0, is_guild);
