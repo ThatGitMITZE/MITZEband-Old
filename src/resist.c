@@ -161,7 +161,7 @@ static int _randomize(int pct)
     if (pct != 100)
     {
         if (pct > 0)
-            pct = randnor(pct, pct/10);
+            pct = randnor(pct, pct/15);
         else if (pct < 0)
             pct = -randnor(-pct, -pct/10);
     }
