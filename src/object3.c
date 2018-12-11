@@ -150,8 +150,8 @@ static s32b _abilities_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_flag_and_score(flgs, OF_ESP_DEMON, 600, &count);
     cost += _check_flag_and_score(flgs, OF_ESP_DRAGON, 700, &count);
     cost += _check_flag_and_score(flgs, OF_ESP_HUMAN, 700, &count);
-    cost += _check_flag_and_score(flgs, OF_ESP_NONLIVING, 700, &count);
-	cost += _check_flag_and_score(flgs, OF_ESP_LIVING, 1000, &count);
+    cost += _check_flag_and_score(flgs, OF_ESP_NONLIVING, 1500, &count);
+    cost += _check_flag_and_score(flgs, OF_ESP_LIVING, 1500, &count);
 
     /* Sustains */
     count = 0;
@@ -173,6 +173,7 @@ static s32b _abilities_q(u32b flgs[OF_ARRAY_SIZE])
     count = 0;
     cost += _check_flag_and_score(flgs, OF_ESP_UNIQUE, 5000, &count);
     cost += _check_flag_and_score(flgs, OF_REFLECT, 5000, &count);
+    cost += _check_flag_and_score(flgs, OF_NIGHT_VISION, 6000, &count);
     cost += _check_flag_and_score(flgs, OF_ESP_EVIL, 3000, &count);
     cost += _check_flag_and_score(flgs, OF_DEC_MANA, 10000, &count);
     cost += _check_flag_and_score(flgs, OF_TELEPATHY, 10000, &count);
@@ -207,6 +208,7 @@ static s32b _brands_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_brand_and_score(flgs, OF_KILL_DRAGON, 12500, &count);
     cost += _check_brand_and_score(flgs, OF_KILL_GOOD, 10000, &count);
     cost += _check_brand_and_score(flgs, OF_SLAY_EVIL, 10000, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_VAMP, 10000, &count);
     cost += _check_brand_and_score(flgs, OF_BRAND_POIS, 8500, &count);
     cost += _check_brand_and_score(flgs, OF_SLAY_LIVING, 8500, &count);
     cost += _check_brand_and_score(flgs, OF_BRAND_ELEC, 7500, &count);
@@ -384,7 +386,8 @@ s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr, int optio
 
     if (have_flag(flgs, OF_AGGRAVATE))
     {
-        p = p * 8 / 10;
+        if (object_is_(o_ptr, TV_SOFT_ARMOR, SV_ABUNAI_MIZUGI)) p = p * 5 / 6;
+        else p = p * 8 / 10;
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * Aggravate: p = %d", p);
