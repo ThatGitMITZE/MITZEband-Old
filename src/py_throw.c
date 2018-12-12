@@ -161,12 +161,14 @@ bool _init_context(py_throw_ptr context)
 
     /* multiplier (required for range calc) */
     if (!context->mult)
+    {
         context->mult = 100;
-    if (p_ptr->mighty_throw)
-        context->mult += 100;
-    if (have_flag(context->flags, OF_THROWING))
-        context->mult += 100;
-    context->mult = context->mult * (100 + adj_str_td[p_ptr->stat_ind[A_STR]] - 128) / 100;
+        if (p_ptr->mighty_throw)
+            context->mult += 100;
+        if (have_flag(context->flags, OF_THROWING))
+            context->mult += 100;
+        context->mult = context->mult * (100 + adj_str_td[p_ptr->stat_ind[A_STR]] - 128) / 100;
+    }
 
     /* range */
     if (!context->range)
