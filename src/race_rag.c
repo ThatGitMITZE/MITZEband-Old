@@ -143,7 +143,7 @@ static bool _absorb(object_type *o_ptr)
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
     u32b flags[OF_ARRAY_SIZE];
     char o_name[MAX_NLEN];
-    bool tunnettu = obj_is_identified_fully(o_ptr);
+    bool tunnettu = (((obj_is_identified(o_ptr)) || (o_ptr->feeling == FEEL_AVERAGE)) && (obj_is_identified_fully(o_ptr))); /* bizarrely, an object can be "fully identified" without being "identified", so we need to check both */
     obj_essence_flags(o_ptr, flags);
 
     /* Check whether the item we are absorbing completes a quest */
