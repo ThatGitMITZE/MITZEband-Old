@@ -88,7 +88,7 @@ void res_calc_rag_bonuses(object_type *o_ptr)
     {
         _res_info_t m = _resist_map[i];
         if (m.flg != OF_INVALID && have_flag(o_ptr->flags, m.flg))
-            res_add_amt(i, rag_effect_pval(o_ptr, 0, m.flg, TRUE));
+            res_add_amt(i, rag_effect_pval(o_ptr, -1, m.flg, TRUE));
         if (m.im_flg != OF_INVALID && have_flag(o_ptr->flags, m.im_flg))
             res_add_immune(i);
     }
