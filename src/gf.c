@@ -1093,9 +1093,9 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
                 set_stun(p_ptr->stun + pienempi(50, dam/6 + randint1(dam/6)), FALSE);
 
-                while (!_plr_save(who, 0))
+                while ((!_plr_save(who, 0)) && (p_ptr->stat_cur[A_INT] > 3))
                     do_dec_stat(A_INT);
-                while (!_plr_save(who, 0))
+                while ((!_plr_save(who, 0)) && (p_ptr->stat_cur[A_WIS] > 3))
                     do_dec_stat(A_WIS);
 
                 if (!res_save_default(RES_CHAOS))
