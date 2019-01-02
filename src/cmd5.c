@@ -1237,7 +1237,8 @@ void do_cmd_browse(void)
     int     num = 0;
     rect_t  display = ui_menu_rect();
     byte    spells[64];
-    char    temp[62*4];
+    bool    _browse_loading_hack = FALSE;
+    char    temp[62*5];
 
     if (!(p_ptr->realm1 || p_ptr->realm2) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
     {
@@ -1290,11 +1291,17 @@ void do_cmd_browse(void)
                 prt("No spells to browse.", 0, 0);
             (void)inkey();
 
-
             /* Restore the screen */
             screen_load();
 
             return;
+        }
+
+        if (_browse_loading_hack)
+        {
+            screen_load();
+            screen_save();
+            print_spells(0, spells, num, display, use_realm);
         }
 
         /* Clear lines, position cursor  (really should use strlen here) */
@@ -1306,8 +1313,15 @@ void do_cmd_browse(void)
 
         roff_to_buf(do_spell(use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
+        _browse_loading_hack = FALSe;
+
         for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
         {
+            if (line > display.y + num + 3)
+            {
+                Term_erase(display.x, line + 1, display.cx);
+                _browse_loading_hack = TRUE;
+            }
             put_str(&temp[j], ++line, display.x);
         }
     }
