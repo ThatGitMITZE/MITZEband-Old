@@ -1313,7 +1313,7 @@ void do_cmd_browse(void)
 
         roff_to_buf(do_spell(use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
-        _browse_loading_hack = FALSe;
+        _browse_loading_hack = FALSE;
 
         for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
         {
