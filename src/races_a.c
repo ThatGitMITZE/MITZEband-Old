@@ -619,12 +619,12 @@ static void _boit_vomit_spell(int cmd, variant *res)
         break;
     case SPELL_CAST:
         msg_print("You throw up!");
-        if (p_ptr->food < PY_FOOD_FAINT + 15)
+        if (p_ptr->food < PY_FOOD_FAINT + 24)
         {
             take_hit(DAMAGE_NOESCAPE, 10, "vomiting on an empty stomach");
             energy_use += 15;
         }
-        set_food(MAX(1, MIN(p_ptr->food - 100, PY_FOOD_FAINT + 4)));
+        set_food(MAX(1, MIN(p_ptr->food - 100, PY_FOOD_FAINT + 12)));
         set_poisoned(0, TRUE);
         var_set_bool(res, TRUE);
         break;
