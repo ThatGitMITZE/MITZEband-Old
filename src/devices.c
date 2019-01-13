@@ -4803,7 +4803,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         break;
     case EFFECT_CURE_FEAR_POIS:
         if (name) return "Cure Fear and Poison";
-        if (desc) return "It cures poison and restores your courage in battle.";
+        if (desc) return "It reduces poisoning and restores your courage in battle.";
         if (value) return format("%d", 1250);
         if (color) return format("%d", res_color(RES_FEAR));
         if (cast)
