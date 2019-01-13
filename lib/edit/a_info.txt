@@ -1199,7 +1199,7 @@ W:30:33:360:100000
 P:0:3d10:3:21:0
 F:STR | DEX | CHR | HIDE_TYPE | FREE_ACT |
 F:SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS | RIDING
-D:"Forth Eorlingas!". To the field of Cormallen came Eorl the Young
+D:"Forth Eorlingas!". To the field of Celebrant came Eorl the Young
 D:to save beleaguered Gondor, and from his lance fled massive trolls
 D:and dire wolves.
 
