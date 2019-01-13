@@ -7781,7 +7781,7 @@ static cptr do_music_spell(int spell, int mode)
         }
 
         {
-            int power = spell_power(plev * 4);
+            int power = spell_power(plev * 3 + 10);
 
             if (info) return info_power(power);
 
@@ -7938,7 +7938,7 @@ static cptr do_music_spell(int spell, int mode)
 
     case 31:
         if (name) return "Fingolfin's Challenge";
-        if (desc) return "Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.";
+        if (desc) return "Temporarily makes you invulnerable to most attacks. Consumes an extra turn when the invulnerability ends.";
 
         /* Stop singing before start another */
         if (cast || fail) bard_stop_singing();
@@ -7972,6 +7972,9 @@ static cptr do_music_spell(int spell, int mode)
 
                 /* Window stuff */
                 p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+
+                /* Take an extra turn */
+                p_ptr->energy_need += ENERGY_NEED();
             }
         }
 
