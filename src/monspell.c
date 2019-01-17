@@ -3926,7 +3926,7 @@ static void _avoid_hurting_player(mon_spell_cast_ptr cast)
 
         if (spells->groups[MST_BREATH])
         {
-            int rad = cast->race->level >= 50 ? 3 : 2;
+            int rad = ((cast->race->level >= 50) || (cast->race->d_char == 'D')) ? 3 : 2;
 
             if (!breath_direct(cast->src.y, cast->src.x, cast->dest.y, cast->dest.x, rad, 0, TRUE))
                 _remove_group(spells->groups[MST_BREATH], NULL);
