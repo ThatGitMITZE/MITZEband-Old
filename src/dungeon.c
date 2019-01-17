@@ -2735,7 +2735,7 @@ static void process_world(void)
             wm_ptr = &m_list[win_m_idx];
 
             monster_desc(m_name, wm_ptr, 0);
-            msg_format("%s is the winner!", m_name);
+            msg_format("%^s is the winner!", m_name);
             /* Hack: Make sure the player sees this one! */
             auto_more_state = AUTO_MORE_PROMPT;
             msg_print(NULL);
