@@ -3632,6 +3632,7 @@ bool fire_ball_aux(int typ, int dir, int dam, int rad, int xtra_flgs)
         tx = target_col;
         ty = target_row;
     }
+    else if (rad < 0) flg &= ~(PROJECT_STOP); /* Breath attack */
 
     /* Analyze the "dir" and the "target". Hurt items on floor. */
     return (project(0, rad, ty, tx, dam, typ, flg));
