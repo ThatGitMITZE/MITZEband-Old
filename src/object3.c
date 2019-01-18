@@ -83,7 +83,7 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     cost += _check_flag_and_score(flgs, OF_INT,  500*mult, &count);
     cost += _check_flag_and_score(flgs, OF_WIS,  500*mult, &count);
     cost += _check_flag_and_score(flgs, OF_DEX,  550*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_CON,  600*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_CON,  650*mult, &count);
     cost += _check_flag_and_score(flgs, OF_CHR,  400*mult, &count);
 
     count = 0;
@@ -91,7 +91,7 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     cost -= _check_flag_and_score(flgs, OF_DEC_INT,  500*mult, &count);
     cost -= _check_flag_and_score(flgs, OF_DEC_WIS,  500*mult, &count);
     cost -= _check_flag_and_score(flgs, OF_DEC_DEX,  550*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_CON,  600*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_CON,  650*mult, &count);
     cost -= _check_flag_and_score(flgs, OF_DEC_CHR,  400*mult, &count);
 
     /* Skills */
@@ -102,7 +102,7 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     cost += _check_flag_and_score(flgs, OF_STEALTH,  500*mult, &count);
     cost += _check_flag_and_score(flgs, OF_SPELL_CAP,  1000*mult, &count);
     cost += _check_flag_and_score(flgs, OF_SPELL_POWER,  2500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_LIFE,  1000*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_LIFE,  1500*mult, &count);
 
 
     count = 0;
@@ -110,7 +110,7 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     cost -= _check_flag_and_score(flgs, OF_DEC_STEALTH,  500*mult, &count);
     cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_CAP,  1000*mult, &count);
     cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_POWER,  2500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_LIFE, 1000*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_LIFE, 1500*mult, &count);
 
     cost -= _check_flag_and_score(flgs, OF_DEC_SPEED, 1000*pval*pval, &count);
 
