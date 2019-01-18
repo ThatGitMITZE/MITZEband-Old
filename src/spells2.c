@@ -3958,14 +3958,14 @@ bool disarm_trap(int dir)
 
 bool heal_monster(int dir, int dam)
 {
-    int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+    int flg = PROJECT_STOP | PROJECT_KILL;
     return (project_hook(GF_OLD_HEAL, dir, dam, flg));
 }
 
 
 bool speed_monster(int dir)
 {
-    int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+    int flg = PROJECT_STOP | PROJECT_KILL;
     return (project_hook(GF_OLD_SPEED, dir, p_ptr->lev, flg));
 }
 
@@ -4588,7 +4588,7 @@ bool kawarimi(bool success)
     y = py;
     x = px;
 
-    teleport_player(10 + randint1(90), 0L);
+    teleport_player(5 + randint0(4) + 10 * randint0(8), 0L);
 
     if (p_ptr->pclass == CLASS_NINJA)
     {
