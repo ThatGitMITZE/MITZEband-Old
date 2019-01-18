@@ -2259,6 +2259,12 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
             add_flag(o_ptr->flags, OF_FREE_ACT);
         if (one_in_(2))
             add_flag(o_ptr->flags, OF_SEE_INVIS);
+        if ((randint1(150) < powers))
+        {
+            add_flag(o_ptr->flags, OF_LIFE);
+            has_pval = TRUE;
+            powers--;
+        }
         break;
 
     case TV_AMULET:
@@ -2756,6 +2762,36 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
         }
     };
 
+    /* Sometimes create rings as mixed blessings */
+    if ((o_ptr->tval == TV_RING) && (one_in_(15)))
+    {
+        bool jatka = TRUE;
+        if (one_in_(2))
+        {
+            if (o_ptr->to_h > 0) o_ptr->to_h = 0 - o_ptr->to_h;
+            else if (one_in_(4))
+            {
+                o_ptr->to_h = 0 - randint1(10);
+                o_ptr->to_d = (one_in_(2)) ? 0 - randint1(10) : randint1(7);
+                jatka = FALSE;
+            }
+        }
+        if ((jatka) && (one_in_(2)))
+        {
+            if (o_ptr->to_d > 0) o_ptr->to_d = 0 - o_ptr->to_d;
+            else if (one_in_(6))
+            {
+                o_ptr->to_d = 0 - randint1(10);
+                o_ptr->to_h = (one_in_(2)) ? 0 - randint1(10) : randint1(7);
+            }
+        }
+    }
+    if ((o_ptr->tval == TV_RING) && (one_in_(30)))
+    {
+        if (o_ptr->to_a > 0) o_ptr->to_a = 0 - o_ptr->to_a;
+        else if (one_in_(2)) o_ptr->to_a = 0 - randint1(12);
+    }
+
     if (has_pval)
     {
         if (have_flag(o_ptr->flags, OF_BLOWS))
@@ -2798,6 +2834,12 @@ s32b create_artifact(object_type *o_ptr, u32b mode)
         o_ptr->pval += randint1(2);
         if (o_ptr->pval > 6)
             o_ptr->pval = 6;
+    }
+
+    if (have_flag(o_ptr->flags, OF_LIFE) && o_ptr->pval > 2)
+    {
+        o_ptr->pval = randint1(2);
+        if (one_in_(WEIRD_LUCK)) o_ptr->pval++;
     }
 
     if (have_flag(o_ptr->flags, OF_WEAPONMASTERY) && o_ptr->pval > 2)
