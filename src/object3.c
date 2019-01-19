@@ -42,9 +42,17 @@ static s32b _activation_p(u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr)
     /* Make sure player has learned the activation before scoring it! */
     if (have_flag(flgs, OF_ACTIVATE) && obj_has_effect(o_ptr))
     {
+        s32b arvo;
         effect_t effect = obj_get_effect(o_ptr);
         assert(effect.type);
-        return effect_value(&effect);
+        arvo = effect_value(&effect);
+        if (effect.cost) /* Adjust slightly for good or bad timeout */
+        {
+            point_t tbl[8] = { {1, 150}, {3, 130}, {10, 120}, {30, 110}, {75, 100}, {160, 90}, {300, 80}, {450, 75} };
+            int mult = interpolate(effect.cost, tbl, 8);
+            arvo = arvo * mult / 100;
+        }
+        return arvo;
     }
     return 0;
 }
@@ -55,11 +63,11 @@ static s32b _aura_p(u32b flgs[OF_ARRAY_SIZE])
     s32b cost = 0;
     int count = 0;
 
-    cost += _check_flag_and_score(flgs, OF_AURA_FIRE,     1000, &count);
-    cost += _check_flag_and_score(flgs, OF_AURA_COLD,     1000, &count);
-    cost += _check_flag_and_score(flgs, OF_AURA_ELEC,     1500, &count);
-    cost += _check_flag_and_score(flgs, OF_AURA_SHARDS,   2000, &count);
-    cost += _check_flag_and_score(flgs, OF_AURA_REVENGE,  5000, &count);
+    cost += _check_flag_and_score(flgs, OF_AURA_FIRE,     1452, &count);
+    cost += _check_flag_and_score(flgs, OF_AURA_COLD,     1452, &count);
+    cost += _check_flag_and_score(flgs, OF_AURA_ELEC,     1694, &count);
+    cost += _check_flag_and_score(flgs, OF_AURA_SHARDS,   2420, &count);
+    cost += _check_flag_and_score(flgs, OF_AURA_REVENGE,  6050, &count);
 
     return cost;
 }
@@ -75,42 +83,43 @@ static s32b _stats_q(u32b flgs[OF_ARRAY_SIZE], int pval)
     if (pval < -10)
         pval = -10;
 
-    mult = pval + pval * ABS(pval) / 3; /* negative pvals should be removed ... */
+//    mult = pval + pval * ABS(pval) / 3; /* negative pvals should be removed ... */
+    mult = (pval * (pval + 1)) / 2 + pval;
 
     /* Stats */
     count = 0;
-    cost += _check_flag_and_score(flgs, OF_STR,  600*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_INT,  500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_WIS,  500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_DEX,  550*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_CON,  650*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_CHR,  400*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_STR,  400*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_INT,  333*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_WIS,  333*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_DEX,  367*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_CON,  433*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_CHR,  267*mult, &count);
 
     count = 0;
-    cost -= _check_flag_and_score(flgs, OF_DEC_STR,  600*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_INT,  500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_WIS,  500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_DEX,  550*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_CON,  650*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_CHR,  400*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_STR,  400*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_INT,  333*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_WIS,  333*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_DEX,  367*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_CON,  433*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_CHR,  267*mult, &count);
 
     /* Skills */
     count = 0;
 
-    cost += _check_flag_and_score(flgs, OF_MAGIC_MASTERY,  1500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_MAGIC_RESISTANCE,  1500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_STEALTH,  500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_SPELL_CAP,  1000*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_SPELL_POWER,  2500*mult, &count);
-    cost += _check_flag_and_score(flgs, OF_LIFE,  1500*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_MAGIC_MASTERY,  1000*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_MAGIC_RESISTANCE,  1000*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_STEALTH,  300*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_SPELL_CAP,  666*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_SPELL_POWER,  1666*mult, &count);
+    cost += _check_flag_and_score(flgs, OF_LIFE,  1000*mult, &count);
 
 
     count = 0;
-    cost -= _check_flag_and_score(flgs, OF_DEC_MAGIC_MASTERY,  1500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_STEALTH,  500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_CAP,  1000*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_POWER,  2500*mult, &count);
-    cost -= _check_flag_and_score(flgs, OF_DEC_LIFE, 1500*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_MAGIC_MASTERY,  1000*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_STEALTH,  300*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_CAP,  666*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_SPELL_POWER,  1666*mult, &count);
+    cost -= _check_flag_and_score(flgs, OF_DEC_LIFE, 1000*mult, &count);
 
     cost -= _check_flag_and_score(flgs, OF_DEC_SPEED, 1000*pval*pval, &count);
 
@@ -401,16 +410,6 @@ s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr, int optio
         if (cost_calc_hook)
         {
             sprintf(dbg_msg, "  * No Tele: p = %d", p);
-            cost_calc_hook(dbg_msg);
-        }
-    }
-
-    if (have_flag(flgs, OF_NO_MAGIC) && o_ptr->tval != TV_AMULET) /* XXX This isn't always bad! */
-    {
-        p = p * 9 / 10;
-        if (cost_calc_hook)
-        {
-            sprintf(dbg_msg, "  * No Magic: p = %d", p);
             cost_calc_hook(dbg_msg);
         }
     }
