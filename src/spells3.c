@@ -1245,17 +1245,20 @@ void apply_nexus(monster_type *m_ptr)
 
         case 6:
         {
-            if (randint0(100) < p_ptr->skills.sav)
+            if (!quest_id_current())
             {
-                msg_print("You resist the effects!");
+                if (randint0(100) < p_ptr->skills.sav)
+                {
+                    msg_print("You resist the effects!");
 
+                    break;
+                }
+
+                /* Teleport Level */
+                teleport_level(0);
                 break;
             }
-
-            /* Teleport Level */
-            teleport_level(0);
-            break;
-        }
+        } /* Fall through */
 
         case 7:
         {
@@ -1269,7 +1272,7 @@ void apply_nexus(monster_type *m_ptr)
                 msg_print("Your body starts to scramble...");
                 wild_talent_scramble();
             }
-            else if (no_wilderness || no_chris)
+            else if (no_wilderness || no_chris || quest_id_current())
             {
                 if (!no_scrambling) msg_print("Your body starts to scramble...");
                 mutate_player();
