@@ -1636,9 +1636,6 @@ static bool make_artifact_special(object_type *o_ptr)
         /* Artifact "rarity roll" */
         if (!one_in_(a_ptr->rarity)) continue;
 
-        /* We can't make Feanor rare enough with a byte */
-        if ((i == ART_FEANOR) && (!one_in_(3))) continue;
-
         /* Find the base object */
         k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
 
@@ -1680,7 +1677,7 @@ static bool make_artifact_special(object_type *o_ptr)
 static bool make_artifact(object_type *o_ptr)
 {
     int i;
-    int ref_level = dun_level;
+    int ref_level = ((opening_chest) ? object_level : dun_level);
     if (mut_present(MUT_BAD_LUCK)) ref_level -= (ref_level / (4 * randint1(4)));
 
 
@@ -1714,6 +1711,9 @@ static bool make_artifact(object_type *o_ptr)
         }
 
         if (!one_in_(a_ptr->rarity)) continue;
+
+        /* We can't make Feanor rare enough with a byte */
+        if ((i == ART_FEANOR) && (!one_in_(3))) continue;
 
         if ( random_artifacts
           && !(a_ptr->gen_flags & OFG_FIXED_ART)
