@@ -3423,7 +3423,7 @@ D:And you thought they'd made it up!
 
 N:336:of Bubo
 I:30:3:2
-W:30:20:40:50000
+W:30:22:40:50000
 P:3:1d1:0:0:14
 F:RES_FEAR | RES_COLD | RES_DARK | CON | STR | DEX | MAGIC_MASTERY
 E:SPEED:30:100
@@ -3468,7 +3468,7 @@ D: make.)
 N:341:'Skynail'
 I:23:16:3
 W:60:50:150:150000
-P:0:4d6:19:12:0
+P:0:4d6:19:14:0
 F:SLAY_EVIL | BRAND_FIRE | RES_COLD | RES_DARK | LITE | SHOW_MODS | RIDING |
 F:XTRA_RES_OR_POWER | SPEED | STR | DEX | RES_CHAOS | VORPAL | BLESSED |
 D:A shining blade so sturdy it could even hold the stars in place.
