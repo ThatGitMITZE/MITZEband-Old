@@ -628,6 +628,7 @@ static void _boit_vomit_spell(int cmd, variant *res)
             energy_use += 15;
         }
         set_food(MAX(1, MIN(p_ptr->food - 100, PY_FOOD_FAINT + 12)));
+        fire_ball(GF_POIS, 0, p_ptr->poisoned * 2 / 7, 1);
         set_poisoned(0, TRUE);
         var_set_bool(res, TRUE);
         break;
