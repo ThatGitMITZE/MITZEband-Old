@@ -19241,6 +19241,7 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_CHAO | RES_NEXU |
 F:DROP_CORPSE | POS_GAIN_AC | POS_SEE_INVIS | POS_TELEPATHY
 P:Copy:Archon:Paladin
 P:Body:Unicorn
+P:Speed:+15
 S:1_IN_3 |
 S:BLINK | HEAL | SHRIEK | SCARE | CONFUSE | BLIND |
 S:DARKNESS | AMNESIA | MIND_BLAST | BRAIN_SMASH |
@@ -20622,6 +20623,7 @@ S:BO_FIRE | TELE_SELF | HEAL | BA_FIRE | BO_ELEC | BA_ELEC
 S:BO_COLD | BA_COLD | BO_PLASMA | BO_ICE | TELE_TO |
 O:DROP_MAGE
 P:Copy:Dunadan:Mage
+P:Stats:0:0:0:0:0:6
 D:Her shimmering long hair, the color of corn-silk shimmers as it catches
 D:the sparks from the fire. Aude looks at you with moistened lips and half
 D:closed eyes issuing an invitation you somehow cannot resist.
@@ -23398,6 +23400,44 @@ P:Copy:Dunadan:Chaos-Warrior
 O:DROP_WARRIOR
 D:A black Numenorean who usurped the throne of Gondor, he is treacherous and
 D:evil.
+
+N:1287:Angelic quylthulg
+G:Q:w
+I:120:22d44:20:1:0:100
+W:61:5:999:4477:0:0
+F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW |
+F:INVISIBLE | EMPTY_MIND |
+F:ANIMAL | GOOD | STUPID |
+F:NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_2 |
+S:BLINK | TELE_SELF |
+S:S_ANGEL
+F:POS_SEE_INVIS | POS_TELEPATHY
+P:Copy:Human:Sorcerer
+P:Stats:0:0:0:0:0:8
+P:Body:Quylthulg
+D:A massive pile of pulsing flesh, glowing with a bright holy fire. (Is there
+D:nothing that Heaven will not try to pervert?)
+
+N:1288:Iku-Turso
+G:H:B
+I:130:42d121:25:128:10:500
+W:62:3:999:33880:0:0
+B:SPIT:DAM(2d25):ACID(4d12):BLIND
+B:CRUSH:HURT(10d13):ELEC(4d7):PARALYZE
+B:BUTT:HURT(7d12):STUN(4d7):SLOW
+B:BITE:HURT(6d9):ACID(4d12):CUT(6d9)
+F:UNIQUE | MALE | FORCE_SLEEP | FORCE_MAXHP | ANIMAL |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | RES_CHAO | RES_DARK |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | AQUATIC | RES_WATE | RES_SOUN |
+F:RES_ELEC | RES_FIRE | RES_COLD | RES_TIME | IM_ACID | NO_CONF | NO_SLEEP
+F:EVIL | DROP_CORPSE | POS_GAIN_AC
+S:1_IN_2 |
+S:TELE_TO | BA_WATER(1d124+62) | BR_ACID | BR_ELEC | BR_NEXUS
+D:Since the dawn of time has Iku-Turso lurked in the oceans: the gigantic
+D:terror of the open seas, umpteen-headed, umpteen-horned, his slimy tentacles
+D:reaching out to catch his prey; as if every other sea monster had been
+D:bundled together and scaled up.
 
 # N: serial number : monster name
 # G: symbol : color
