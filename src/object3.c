@@ -250,9 +250,9 @@ static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
     count = 0;
     cost += _check_flag_and_score(flgs, OF_RES_ACID, 3000, &count);
     cost += _check_flag_and_score(flgs, OF_RES_ELEC, 3000, &count);
-    cost += _check_flag_and_score(flgs, OF_RES_FIRE, 3000, &count);
+    cost += _check_flag_and_score(flgs, OF_RES_FIRE, 3500, &count);
     cost += _check_flag_and_score(flgs, OF_RES_COLD, 3000, &count);
-    cost += _check_flag_and_score(flgs, OF_RES_POIS, 3500, &count);
+    cost += _check_flag_and_score(flgs, OF_RES_POIS, 3000, &count);
     bigcount = count;
 
     /* High Resists */
