@@ -1220,6 +1220,11 @@ static int _get_spells(spell_info* spells, int max)
     return ct;
 }
 
+static void _get_flags(u32b flgs[OF_ARRAY_SIZE])
+{
+    add_flag(flgs, OF_SPELL_CAP);
+}
+
 static void _character_dump(doc_ptr doc)
 {
     spell_info spells[MAX_SPELLS];
@@ -1283,6 +1288,7 @@ class_t *rage_mage_get_class(void)
         me.birth = _birth;
         me.calc_bonuses = _calc_bonuses;
         me.get_spells = _get_spells;
+        me.get_flags = _get_flags;
         me.caster_info = _caster_info;
         me.player_action = _player_action;
         me.character_dump = _character_dump;
