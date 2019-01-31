@@ -1567,6 +1567,10 @@ void cornucopia_init(void)
     _loan_turn = 0;
     _deposit_turn = 0;
     _next_policy = 0;
+    _loaned = 0;
+    _repaid = 0;
+    _deposited = 0;
+    _withdrawn = 0;
     _cornucopia_ini_policies(-1);
 }
 
