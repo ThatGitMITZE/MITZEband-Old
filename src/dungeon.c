@@ -1399,7 +1399,7 @@ static void process_world_aux_hp_and_sp(void)
     if (magic_eater_regen(regen_amount))
         wild_regen = 20;
 
-    if ((p_ptr->csp == 0) && (p_ptr->csp_frac == 0))
+    if (((p_ptr->csp == 0) && (p_ptr->csp_frac == 0)) || (elemental_is_(ELEMENTAL_WATER)))
     {
         if (p_ptr->msp == 0 && !one_in_(5))
         {
