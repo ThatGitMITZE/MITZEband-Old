@@ -265,6 +265,7 @@ bool final_dump_origins; /* Show equipment origins in final dumps */
 bool always_dump_origins; /* Show equipment origins in all dumps */
 bool list_stairs;  /* Display stairs in object list */
 bool display_skill_num; /* Give skills numerically in char sheet */
+bool reforge_details; /* Show statistics before proceeding with reforge */
 
 /*** Game-Play Options ***/
 

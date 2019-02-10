@@ -4527,6 +4527,12 @@ bool _melee_attack_not_confirmed(monster_type *m_ptr)
     return FALSE;
 }
 
+bool _py_attack_exit(void)
+{
+    if (travel.mode != TRAVEL_MODE_NORMAL) travel_cancel_fully();
+    return FALSE;
+}
+
 bool py_attack(int y, int x, int mode)
 {
     bool            fear = FALSE;
@@ -4546,20 +4552,16 @@ bool py_attack(int y, int x, int mode)
     {
         msg_print("You have no melee attacks.");
         energy_use = 0;
-        if (travel.mode != TRAVEL_MODE_NORMAL)
-        {
-            travel.run = 0;
-            travel.mode = TRAVEL_MODE_NORMAL;
-        }
         if (!m_ptr->ml) energy_use = 50; /* bumping into an invisible monster shouldn't give a free turn */
-        return FALSE;
+        return _py_attack_exit();
     }
 
     if (prace_is_(MIMIC_MIST))
     {
         msg_print("You cannot attack while incorporeal.");
         energy_use = 0;
-        return FALSE;
+        if (!m_ptr->ml) energy_use = 50; /* bumping into an invisible monster shouldn't give a free turn */
+        return _py_attack_exit();
     }
 
     monster_desc(m_name, m_ptr, 0);
@@ -4574,19 +4576,19 @@ bool py_attack(int y, int x, int mode)
       && equip_find_art(ART_ZANTETSU))
     {
         msg_print("I can not attack women!");
-        return FALSE;
+        return _py_attack_exit();
     }
 
     if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
     {
-        msg_print("Something prevents you from attacking.");
-        return FALSE;
+        msg_print("Something prevents you from attacking!");
+        return _py_attack_exit();
     }
 
     if (_melee_attack_not_confirmed(m_ptr))
     {
         energy_use = 0;
-        return FALSE;
+        return _py_attack_exit();
     }
 
     else if ( !is_hostile(m_ptr)
@@ -4612,7 +4614,7 @@ bool py_attack(int y, int x, int mode)
             else
             {
                 msg_format("You stop to avoid hitting %s.", m_name);
-                return FALSE;
+                return _py_attack_exit();
             }
         }
     }

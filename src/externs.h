@@ -281,6 +281,7 @@ extern bool final_dump_origins; /* Show equipment origins in final dumps */
 extern bool always_dump_origins; /* Show equipment origins in all dumps */
 extern bool list_stairs; /* Display stairs in the object list */
 extern bool display_skill_num; /* Give skills numerically in char sheet */
+extern bool reforge_details; /* Show statistics before reforge */
 
 /*** Game-Play Options ***/
 
@@ -760,6 +761,7 @@ extern void do_cmd_travel(void);
 extern void travel_begin(int mode, int x, int y);
 extern void travel_wilderness_scroll(int new_x, int new_y);
 extern void travel_cancel(void);
+extern void travel_cancel_fully(void);
 extern void travel_end(void);
 extern int breakage_chance(object_type *o_ptr);
 
@@ -2017,6 +2019,7 @@ extern bool create_named_art(int a_idx, int y, int x, byte origin, int xtra);
 extern bool create_named_art_aux(int a_idx, object_type *o_ptr);
 extern bool create_named_art_aux_aux(int a_idx, object_type *o_ptr);
 extern bool create_replacement_art(int a_idx, object_type *o_ptr, byte origin);
+extern void get_reforge_powers(bool do_minmax, object_type *src, object_type *dest, int *swgt, int *dwgt, int *min_p, int *max_p, int *avg_bp, int fame);
 extern bool reforge_artifact(object_type *src, object_type *dest, int fame);
 extern void get_random_name(char *return_name, object_type *o_ptr, int power);
 extern int get_slot_weight(obj_ptr obj);

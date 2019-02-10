@@ -3703,7 +3703,7 @@ O:DROP_WARRIOR_SHOOT
 D:He is a large orc with powerful arms and deep black skin.
 
 N:245:Ochre jelly
-G:j:y
+G:j:U
 I:120:13d8:12:18:1:80
 W:13:3:50:40:400:286
 B:TOUCH:ACID(1d10)

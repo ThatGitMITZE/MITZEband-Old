@@ -4155,6 +4155,12 @@ void travel_cancel(void)
      * travel.mode = TRAVEL_MODE_NORMAL;*/
 }
 
+void travel_cancel_fully(void)
+{
+    travel.run = 0;
+    travel.mode = TRAVEL_MODE_NORMAL;
+}
+
 void travel_end(void)
 {
     travel.run = 0;
