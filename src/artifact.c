@@ -3317,46 +3317,65 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
     }
 }
 
+void get_reforge_powers(bool do_minmax, object_type *src, object_type *dest, int *swgt, int *dwgt, int *min_p, int *max_p, int *avg_bp, int fame)
+{
+    int base_power = obj_value_real(src);
+    int min_bp, max_bp;
+    *swgt = get_slot_weight(src);
+    *dwgt = get_dest_weight(dest);
+
+    if ((*swgt) > (*dwgt))
+        base_power = base_power * (*dwgt) / (*swgt);
+
+    /* Power sanity check */
+    base_power = MIN(base_power, 1125L * (*dwgt));
+
+    *avg_bp = base_power * 3/4 + ((base_power*MIN(255, fame) + 1) / 3000);
+
+    /* Pay a Power Tax! */
+    if (do_minmax)
+    {
+        min_bp = base_power*3/4 + 1;
+        max_bp = base_power*3/4 + (base_power*MIN(255, fame) / 1500);
+        if (min_bp < 1000) *min_p = 1;
+        else *min_p = 3 * min_bp / 4;
+        if (max_bp < 1000) *max_p = max_bp + 5000;
+        else *max_p = MAX(6000, 5 * max_bp / 4);
+    }
+    else
+    {
+        base_power = base_power*3/4 + randint1(base_power*MIN(255, fame)/1500);
+        /* Setup thresholds. For weak objects, it's better to use a generous range ... */
+        if (base_power < 1000)
+        {
+            *min_p = 1;
+            *max_p = base_power + 5000;
+        }
+        else
+        {
+            *min_p = 3 * base_power / 4;
+            *max_p = MAX(6000, 5 * base_power / 4);
+        }
+    }
+
+    if (mut_present(MUT_INSPIRED_SMITHING))
+    {
+        *min_p += ((*min_p) / 8);
+        *max_p += ((*max_p) / 12);
+    }
+}
+
 bool reforge_artifact(object_type *src, object_type *dest, int fame)
 {
     bool        result = FALSE;
     object_type forge = {0};
     object_type best = {0}, worst = {0};
-    int         base_power, best_power = -10000000, power = 0, worst_power = 10000000;
+    int         best_power = -10000000, power = 0, worst_power = 10000000;
     int         min_power, max_power;
     int         old_level, i;
-    int         src_weight = get_slot_weight(src);
-    int         dest_weight = get_dest_weight(dest);
+    int         src_weight, dest_weight, avg_bp;
 
-    /* Score the Original */
-    base_power = obj_value_real(src);
-
-    if (src_weight > dest_weight)
-        base_power = base_power * dest_weight / src_weight;
-
-    /* Power sanity check */
-    base_power = MIN(base_power, 1125L * dest_weight);
-
-    /* Pay a Power Tax! */
-    base_power = base_power*3/4 + randint1(base_power*MIN(255, fame)/1500);
-
-    /* Setup thresholds. For weak objects, it's better to use a generous range ... */
-    if (base_power < 1000)
-    {
-        min_power = 0;
-        max_power = base_power + 5000;
-    }
-    else
-    {
-        min_power = 3 * base_power / 4;
-        max_power = MAX(6000, 5 * base_power / 4);
-    }
-
-    if (mut_present(MUT_INSPIRED_SMITHING))
-    {
-        min_power += (min_power / 8);
-        max_power += (max_power / 12);
-    }
+    get_reforge_powers(FALSE, src, dest, &src_weight, &dest_weight, &min_power, &max_power, &avg_bp, fame);
 
     /* Better Fame means better results! */
     old_level = object_level;
