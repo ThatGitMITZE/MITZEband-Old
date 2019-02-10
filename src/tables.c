@@ -2268,6 +2268,9 @@ option_type option_info[] =
     { &display_skill_num,            FALSE,  OPT_PAGE_TEXT, 2, 22,
     "display_skill_num",            "Display skills as numbers in character sheet" },
 
+    { &reforge_details,              TRUE,  OPT_PAGE_TEXT, 2, 16,
+    "reforge_details",              "Show statistics before proceeding with a reforge" },
+
     /*** Game-Play ***/
 
     { &stack_force_notes,           TRUE,  OPT_PAGE_GAMEPLAY, 0, 8,
