@@ -307,8 +307,8 @@ static _flag_info_t _slay_flag_info[] = {
 static void _calc_weapon_bonuses(object_type *o_ptr, weapon_info_t *info_ptr)
 {
     info_ptr->to_dd = 3;
-    info_ptr->to_ds = 3 + (p_ptr->lev / 5);
-    info_ptr->to_d += (p_ptr->lev / 5);
+    info_ptr->to_ds = 3 + MIN(8, p_ptr->lev / 5);
+    info_ptr->to_d += MIN(6, p_ptr->lev / 5);
 }
 
 typedef struct {
@@ -358,10 +358,6 @@ _essence_req_t _vaatimus(int lippu)
             _aseta_vaatimus(&pyydetaan, 2, 2, 0);
             break;
 
-        case OF_IM_ACID:
-        case OF_IM_FIRE:
-        case OF_IM_COLD:
-        case OF_IM_ELEC:
         case OF_STEALTH:
         case OF_MAGIC_RESISTANCE:
         case OF_HOLD_LIFE:
@@ -399,7 +395,6 @@ _essence_req_t _vaatimus(int lippu)
         case OF_ESP_NONLIVING:
         case OF_ESP_UNIQUE:
         case OF_ESP_UNDEAD:
-        case OF_REFLECT:
         case OF_SLAY_EVIL:
         case OF_SLAY_GOOD:
         case OF_SLAY_UNDEAD:
@@ -420,7 +415,12 @@ _essence_req_t _vaatimus(int lippu)
             _aseta_vaatimus(&pyydetaan, 2, 1, 1);
             break;
 
+        case OF_REFLECT:
         case OF_NO_MAGIC:
+        case OF_IM_ACID:
+        case OF_IM_FIRE:
+        case OF_IM_COLD:
+        case OF_IM_ELEC:
             _aseta_vaatimus(&pyydetaan, 3, 1, 1);
             break;
 
@@ -977,6 +977,8 @@ static void _character_dump(doc_ptr doc)
     _dump_flag(doc, OF_NO_MAGIC, "Antimagic", FALSE);
     _dump_flag(doc, OF_LORE2, "Auto-Identify", FALSE);
     _dump_flag(doc, OF_REFLECT, "Reflection", FALSE);
+    _dump_flag(doc, OF_HOLD_LIFE, "Hold Life", FALSE);
+    _dump_flag(doc, OF_MAGIC_RESISTANCE, "Resist Magic", FALSE);
     _dump_flag(doc, OF_AURA_FIRE, "Aura Fire", FALSE);
     _dump_flag(doc, OF_AURA_ELEC, "Aura Elec", FALSE);
     _dump_flag(doc, OF_AURA_COLD, "Aura Cold", FALSE);
