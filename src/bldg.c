@@ -2878,6 +2878,10 @@ static bool _reforge_artifact(void)
         {
             c_put_str(TERM_RED, "Not recommended - no room for improvements", 10, 1);
         }
+        else if ((src_weight < dest_weight * 9 / 10) && (value < dest_weight * 1000L))
+        {
+            c_put_str(TERM_RED, "Not recommended - source item has lower type strength", 10, 1);
+        }
         /* Hack - there's no actual way to calculate a real expected score,
          * apart from generating a very large number of test artifacts and
          * calculating the average; but using that approach can cause the
