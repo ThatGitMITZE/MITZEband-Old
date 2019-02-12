@@ -3001,7 +3001,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         if (p_ptr->spin > 0) dam += MAX(25, dam * 2 / 5);
         if (p_ptr->uimapuku) dam = dam * 3 / 2;
             
-        if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
+        if ((race->flagsr & RFR_RES_ALL) || (mon->mflag2 & MFLAG2_NOPET) || p_ptr->inside_arena)
         {
             note = " is immune.";
             dam = 0;
@@ -3017,7 +3017,6 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             ((type == GF_CONTROL_UNDEAD) && (!(race->flags3 & RF3_UNDEAD))) ||
             ((type == GF_CONTROL_DEMON) && (!(race->flags3 & RF3_DEMON))) ||
             ((type == GF_CONTROL_ANIMAL) && (!(race->flags3 & RF3_ANIMAL))) ||
-            (mon->mflag2 & MFLAG2_NOPET) ||
             ((type == GF_CONTROL_ANIMAL) && (race->flags3 & RF3_NO_CONF)) ||
             (race->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
         {
@@ -3098,7 +3097,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         if (p_ptr->uimapuku) dam = dam * 3 / 2;
         if (dam < 1) dam = 1;
         msg_format("You stare into %s.", m_name_object);
-        if ((race->flagsr & RFR_RES_ALL) || p_ptr->inside_arena)
+        if ((race->flagsr & RFR_RES_ALL) || (mon->mflag2 & MFLAG2_NOPET) || p_ptr->inside_arena)
         {
             note = " is immune.";
             dam = 0;
@@ -3111,7 +3110,6 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
         /* Attempt a saving throw */
         if ((mon->mflag2 & MFLAG2_QUESTOR) ||
-            (mon->mflag2 & MFLAG2_NOPET) ||
              !monster_living(race) ||
              ((race->level+10) > randint1(dam)))
         {
