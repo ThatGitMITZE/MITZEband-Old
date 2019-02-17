@@ -635,7 +635,9 @@ void teleport_away_followable(int m_idx)
 
         if (follow)
         {
-            if (get_check("Do you follow it? "))
+            char mon_pron[MAX_NLEN];
+            monster_desc(mon_pron, m_ptr, MD_PRON_VISIBLE | MD_PRON_HIDDEN | MD_OBJECTIVE);
+            if (get_check(format("Do you follow %s? ", mon_pron)))
             {
                 if (one_in_(3))
                 {
@@ -2565,6 +2567,8 @@ bool mundane_spell(bool only_equip)
         }
     }
     p_ptr->update |= PU_BONUS;
+    p_ptr->window |= PW_EQUIP;
+    p_ptr->redraw |= PR_EFFECTS;
     android_calc_exp();
 
     return TRUE;
