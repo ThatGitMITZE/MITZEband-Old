@@ -1348,6 +1348,7 @@ static void _mon_desc(mon_ptr mon, char *buf, char color)
     tmp[0] = toupper(tmp[0]);
     sprintf(buf, "<color:%c>%s</color>", color, tmp);
 }
+
 static void _spell_cast_init(mon_spell_cast_ptr cast, mon_ptr mon)
 {
     cast->mon = mon;
@@ -2550,6 +2551,9 @@ static void _summon(void)
 }
 static void _weird_bird_p(void)
 {
+    char mon_name[MAX_NLEN] = "a strange monster";
+    if (_current.mon && _current.mon->id) monster_desc(mon_name, _current.mon, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+
     if (one_in_(3) || !(_current.flags & MSC_DIRECT))
     {
         msg_format("%s suddenly goes out of your sight!", _current.name);
@@ -2578,7 +2582,7 @@ static void _weird_bird_p(void)
         /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
            -- henkma
          */
-        get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name);
+        get_damage = take_hit(DAMAGE_NOESCAPE, dam, mon_name);
         if (get_damage > 0)
             weaponmaster_do_readied_shot(_current.mon);
 
@@ -2643,11 +2647,13 @@ static void _weird_bird_m(void)
         if (_current.mon2->id == p_ptr->riding)
         {
             int get_damage = 0;
+            char mon_name[MAX_NLEN] = "a strange monster";
+            if (_current.mon && _current.mon->id) monster_desc(mon_name, _current.mon, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 
             /* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
                -- henkma
              */
-            get_damage = take_hit(DAMAGE_NOESCAPE, dam, _current.name);
+            get_damage = take_hit(DAMAGE_NOESCAPE, dam, mon_name);
             if (get_damage > 0)
                 weaponmaster_do_readied_shot(_current.mon);
             if (IS_REVENGE() && get_damage > 0 && !p_ptr->is_dead)

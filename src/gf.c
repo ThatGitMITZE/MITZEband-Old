@@ -336,7 +336,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     mon_ptr      m_ptr = NULL;
     mon_race_ptr r_ptr = NULL;
     int          rlev = 1;
-    char         m_name[MAX_NLEN], m_name_subject[MAX_NLEN];
+    char         m_name[MAX_NLEN], m_name_subject[MAX_NLEN], m_name_real[MAX_NLEN];
     bool         aura = BOOL(flags & GF_AFFECT_AURA);
     bool         touch = BOOL(flags & (GF_AFFECT_AURA | GF_AFFECT_ATTACK));
     bool         fuzzy = p_ptr->blind && (flags & GF_AFFECT_SPELL);
@@ -351,6 +351,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
 
         monster_desc(m_name, m_ptr, 0);
         monster_desc(m_name_subject, m_ptr, MD_PRON_VISIBLE);
+        monster_desc(m_name_real, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
     }
     else
     {
@@ -386,7 +387,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                     do_dec_stat(A_CHR);
                 if (minus_ac()) dam = (dam + 1) / 2;
             }
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             inven_damage(who, set_acid_destroy, 3, RES_ACID);
         }
         update_smart_learn(who, RES_ACID);
@@ -403,7 +404,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                     do_dec_stat(A_STR);
             }
 
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             inven_damage(who, set_fire_destroy, 3, RES_FIRE);
         }
         update_smart_learn(who, RES_FIRE);
@@ -419,7 +420,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 if (!res_save_default(RES_COLD) && one_in_(stat_drain_odds))
                     do_dec_stat(A_STR);
             }
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             inven_damage(who, set_cold_destroy, 3, RES_COLD);
         }
         update_smart_learn(who, RES_COLD);
@@ -435,7 +436,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 if (!res_save_default(RES_ELEC) && one_in_(stat_drain_odds))
                     do_dec_stat(A_DEX);
             }
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             inven_damage(who, set_elec_destroy, 3, RES_ELEC);
         }
         update_smart_learn(who, RES_ELEC);
@@ -493,19 +494,19 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_MISSILE:
     case GF_BLOOD:  /* Monsters can't do this ... */
         if (fuzzy) msg_print("You are hit by something!");
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_HOLY_FIRE:
         if (touch) msg_format("You are <color:y>%s</color>!", p_ptr->align < -10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
         dam = gf_holy_dam(dam);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_HELL_FIRE:
         if (touch) msg_format("You are <color:D>%s</color>!", p_ptr->align > 10 ? "*burned*" : "burned");
         else if (fuzzy) msg_print("You are hit by something!");
         dam = gf_hell_dam(dam);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_ARROW:
         if (fuzzy) msg_print("You are hit by something sharp!");
@@ -514,12 +515,12 @@ int gf_affect_p(int who, int type, int dam, int flags)
             msg_print("You cut down the arrow!");
             break;
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_PLASMA:
         if (touch) msg_print("You are <color:R>burned</color>!");
         else if (fuzzy) msg_print("You are hit by something *HOT*!");
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
         {
             int k = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
@@ -550,7 +551,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             gf_affect_p(who, GF_UNLIFE, unlife, flags);
             dam -= unlife;
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_NETHER);
         break; }
     case GF_WATER:
@@ -564,7 +565,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 set_confused(p_ptr->confused + randint1(5) + 5, FALSE);
             inven_damage(who, set_cold_destroy, 3, RES_SOUND);
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_CHAOS:
         if (touch) msg_print("You are <color:v>unmade</color>!");
@@ -597,7 +598,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 inven_damage(who, set_fire_destroy, 2, RES_CHAOS);
             }
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_CHAOS);
         break;
     case GF_ROCK:
@@ -617,7 +618,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             }
             inven_damage(who, set_cold_destroy, 2, RES_SOUND);
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_SHARDS:
         if (touch) msg_print("You are <color:U>shredded</color>!");
@@ -626,7 +627,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         if (!res_save_default(RES_SHARDS) && !CHECK_MULTISHADOW())
             set_cut(p_ptr->cut + dam, FALSE);
         if (!touch) inven_damage(who, set_cold_destroy, 2, RES_SHARDS);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_SHARDS);
         break;
     case GF_SOUND:
@@ -639,7 +640,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             set_stun(p_ptr->stun + k, FALSE);
         }
         if (!touch) inven_damage(who, set_cold_destroy, 2, RES_SOUND);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_SOUND);
         break;
     case GF_BOMB: /* combined sound and shards, but damage is weird */
@@ -660,7 +661,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             inven_damage(who, set_cold_destroy, 2, RES_SHARDS);
             inven_damage(who, set_cold_destroy, 2, RES_SOUND);
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_SHARDS);
         update_smart_learn(who, RES_SOUND);
         break;
@@ -671,7 +672,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         dam = res_calc_dam(RES_CONF, dam);
         if (!res_save_default(RES_CONF) && !CHECK_MULTISHADOW())
             set_confused(p_ptr->confused + randint1(20) + 10, FALSE);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_CONF);
         break;
     case GF_DISENCHANT:
@@ -685,7 +686,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         }
         else if (!res_save(RES_DISEN, 31) && !CHECK_MULTISHADOW())
             apply_disenchant(0);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_DISEN);
         break;
     case GF_NEXUS:
@@ -694,21 +695,21 @@ int gf_affect_p(int who, int type, int dam, int flags)
         dam = res_calc_dam(RES_NEXUS, dam);
         if (!res_save_default(RES_NEXUS) && !CHECK_MULTISHADOW())
             apply_nexus(m_ptr);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_NEXUS);
         break;
     case GF_FORCE:
         if (fuzzy) msg_print("You are hit by kinetic force!");
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
             set_stun(p_ptr->stun + randint1(20), FALSE);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_CHICKEN:
         if (fuzzy) msg_print("You are hit by a chicken!");
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
             set_stun(p_ptr->stun + randint1(20), FALSE);
         if (!touch) inven_damage(who, set_cold_destroy, 2, RES_SOUND);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         fear_scare_p(m_ptr);
         update_smart_learn(who, RES_FEAR);
         if (!touch) update_smart_learn(who, RES_SOUND);
@@ -721,7 +722,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         if (!res_save_default(RES_SHARDS) && !CHECK_MULTISHADOW())
             set_cut(p_ptr->cut + (dam / 2), FALSE);
         inven_damage(who, set_cold_destroy, 3, RES_SHARDS);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_SHARDS);
         break;
     case GF_INERT:
@@ -734,14 +735,14 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 (void)p_inc_minislow(5);
             else (void)p_inc_minislow(1);
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_SLOW:
         if (touch) msg_print("You are <color:W>slowed</color>!");
         else if (fuzzy) msg_print("You are hit by something exhausting!");
         if (!CHECK_MULTISHADOW())
             (void)p_inc_minislow(1);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_LITE:
         if (touch) msg_print("You are <color:y>dazzled</color>!");
@@ -750,7 +751,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         if (!p_ptr->blind && !res_save_default(RES_LITE) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
             set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
 
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         if (prace_is_(RACE_MON_VAMPIRE))
             vampire_take_light_damage(dam);
 
@@ -772,7 +773,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         dam = res_calc_dam(RES_DARK, dam);
         if (!p_ptr->blind && !res_save_default(RES_DARK) && !res_save_default(RES_BLIND) && !CHECK_MULTISHADOW())
             set_blind(p_ptr->blind + randint1(5) + 2, FALSE);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         if (prace_is_(RACE_MON_VAMPIRE))
             vampire_take_dark_damage(dam);
         update_smart_learn(who, RES_DARK);
@@ -837,7 +838,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             }
         }
         dam = res_calc_dam(RES_TIME, dam);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         update_smart_learn(who, RES_TIME);
         break;
     case GF_STORM:
@@ -853,7 +854,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 set_stun(p_ptr->stun + k, FALSE);
             }
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_GRAVITY:
         if (touch) msg_print("You are <color:W>warped</color>!");
@@ -876,11 +877,11 @@ int gf_affect_p(int who, int type, int dam, int flags)
             dam = (dam * 2) / 3;
         }
         inven_damage(who, set_cold_destroy, 2, RES_SOUND);
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_DISINTEGRATE:
         if (fuzzy) msg_print("You are hit by pure energy!");
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_OLD_HEAL:
         if (fuzzy) msg_print("You are hit by something invigorating!");
@@ -947,15 +948,15 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_SEEKER:
     case GF_SUPER_RAY:
         if (fuzzy) msg_print("You are hit by pure magic!");
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_PSY_SPEAR:
         if (fuzzy) msg_print("You are hit by an energy!");
-        result = take_hit(DAMAGE_FORCE, dam, m_name);
+        result = take_hit(DAMAGE_FORCE, dam, m_name_real);
         break;
     case GF_METEOR:
         if (fuzzy) msg_print("Something falls from the sky on you!");
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         inven_damage(who, set_fire_destroy, 2, RES_FIRE);
         inven_damage(who, set_cold_destroy, 2, RES_SHARDS);
         break;
@@ -976,7 +977,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_DEATH_RAY:
         if (fuzzy) msg_print("You are hit by something extremely cold!");
         if (!(get_race()->flags & RACE_IS_NONLIVING))
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_DRAIN_MANA:
         if (CHECK_MULTISHADOW())
@@ -1048,7 +1049,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 p_ptr->redraw |= PR_MANA;
             }
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_BRAIN_SMASH:
         if (_plr_save(who, dam/3) && !CHECK_MULTISHADOW())
@@ -1080,7 +1081,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 }
                 p_ptr->redraw |= PR_MANA;
             }
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             if (!CHECK_MULTISHADOW())
             {
                 if (!res_save_default(RES_BLIND))
@@ -1111,7 +1112,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
             if (!_plr_save(who, dam/5))
                 set_stun(p_ptr->stun + pienempi(25, dam/6 + randint1(dam/6)), FALSE);
         }
-        result = take_hit(damage_type, dam, m_name);
+        result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_CAUSE_1:
         if (_plr_save(who, dam/5) && !CHECK_MULTISHADOW())
@@ -1124,7 +1125,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         else
         {
             if (!CHECK_MULTISHADOW()) curse_equipment(15, 0);
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
         }
         break;
     case GF_CAUSE_2:
@@ -1138,7 +1139,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         else
         {
             if (!CHECK_MULTISHADOW()) curse_equipment(25, MIN(rlev / 2 - 15, 5));
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
         }
         break;
     case GF_CAUSE_3:
@@ -1152,7 +1153,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         else
         {
             if (!CHECK_MULTISHADOW()) curse_equipment(33, MIN(rlev / 2 - 15, 15));
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
         }
         break;
     case GF_CAUSE_4:
@@ -1165,7 +1166,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         }
         else
         {
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
             if (!CHECK_MULTISHADOW()) set_cut(p_ptr->cut + damroll(10, 10), FALSE);
         }
         break;
@@ -1185,7 +1186,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
                 curse_equipment(40, 20);
             }
 
-            result = take_hit(damage_type, dam, m_name);
+            result = take_hit(damage_type, dam, m_name_real);
 
             if (p_ptr->chp < 1) p_ptr->chp = 1; /* Paranoia */
         }
