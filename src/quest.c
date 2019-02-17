@@ -797,6 +797,7 @@ void quests_on_birth(void)
 {
     vec_ptr v;
     int i, last = 0;
+    bool parity = TRUE;
 
     /* stale data from the last character */
     quests_cleanup();
@@ -815,9 +816,10 @@ void quests_on_birth(void)
         {
             lvl = rand_range(q->level - spread, q->level + spread);
             ++attempt;
-        } while (lvl <= last && attempt < 1000);
+        } while (((lvl <= last) || ((coffee_break) && (lvl >= 43) && ((lvl % 2) != parity))) && (attempt < 1000));
         last = lvl;
         q->level = lvl;
+        parity = (lvl % 2) ? TRUE : FALSE;
 
         if (q->goal == QG_KILL_MON)
         {
