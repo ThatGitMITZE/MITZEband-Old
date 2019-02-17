@@ -2725,6 +2725,7 @@ static bool _reforge_artifact(void)
     int src_max_power = reforge_limit();
     int dest_max_power = 0;
     int src_weight = 80;
+    int new_day, prev_day, prev_hour, prev_min;
 
     if (p_ptr->prace == RACE_MON_SWORD || p_ptr->prace == RACE_MON_RING || p_ptr->prace == RACE_MON_ARMOR)
     {
@@ -3073,7 +3074,28 @@ static bool _reforge_artifact(void)
     stats_on_gold_services(cost);
 
     msg_print("After several hours, you are presented your new artifact...");
+    extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
     game_turn += rand_range(5000, 15000);
+    prevent_turn_overflow();
+    extract_day_hour_min(&new_day, &prev_hour, &prev_min);
+    if (new_day != prev_day)
+    {
+        determine_today_mon(FALSE);
+        if (p_ptr->prace == RACE_WEREWOLF) werewolf_check_midnight();
+        if (ironman_nightmare)
+        {
+            msg_print("You fall asleep as you wait, and horrible visions flit through your mind...");
+            get_mon_num_prep(get_nightmare, NULL);
+            while(1)
+            {
+                have_nightmare(get_mon_num(MAX_DEPTH));
+                if (!one_in_(3)) break;
+            }
+
+            get_mon_num_prep(NULL, NULL);
+            msg_print("You awake screaming.");
+        }
+    }
 
     /* The items we carried recharged during those hours */
     _recharge_player_items();
