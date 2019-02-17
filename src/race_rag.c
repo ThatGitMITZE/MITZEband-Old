@@ -421,10 +421,10 @@ _essence_req_t _vaatimus(int lippu)
         case OF_IM_FIRE:
         case OF_IM_COLD:
         case OF_IM_ELEC:
+        case OF_LEVITATION:
             _aseta_vaatimus(&pyydetaan, 3, 1, 1);
             break;
 
-        case OF_LEVITATION:
         case OF_LORE2:
             _aseta_vaatimus(&pyydetaan, 4, 1, 1);
             break;
