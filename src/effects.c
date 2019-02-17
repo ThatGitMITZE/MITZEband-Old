@@ -5726,10 +5726,18 @@ void do_poly_wounds(void)
     hp_player(change);
     if (Nasty_effect)
     {
-        msg_print("A new wound was created!");
-        take_hit(DAMAGE_LOSELIFE, change / 2, "a polymorphed wound");
+        if (get_race()->flags & RACE_IS_NONLIVING)
+        { /* Nonliving characters can't bleed but can suffer other bodily harm */
+            msg_print("You suffer a new injury!");
+            take_hit(DAMAGE_LOSELIFE, change / 2, "a polymorphed wound");
+        }
+        else
+        {
+            msg_print("A new wound was created!");
+            take_hit(DAMAGE_LOSELIFE, change / 2, "a polymorphed wound");
 
-        set_cut(change, FALSE);
+            set_cut(change, FALSE);
+        }
     }
     else
     {
