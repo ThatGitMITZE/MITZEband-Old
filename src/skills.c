@@ -73,29 +73,29 @@ skill_desc_t skills_describe(int amt, int div)
             result.color = TERM_RED;
             break;
         case 2:
+        case 3:
             result.desc = "Poor";
             result.color = TERM_L_RED;
             break;
-        case 3:
         case 4:
+        case 5:
             result.desc = "Fair";
             result.color = TERM_ORANGE;
             break;
-        case 5:
+        case 6:
+        case 7:
             result.desc = "Good";
             result.color = TERM_YELLOW;
             break;
-        case 6:
+        case 8:
             result.desc = "Very Good";
             result.color = TERM_YELLOW;
             break;
-        case 7:
-        case 8:
+        case 9:
+        case 10:
             result.desc = "Excellent";
             result.color = TERM_L_GREEN;
             break;
-        case 9:
-        case 10:
         case 11:
         case 12:
         case 13:
