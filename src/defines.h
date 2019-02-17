@@ -17,9 +17,9 @@
 
 
 #define VER_MAJOR 7
-#define VER_MINOR 0
-#define VER_PATCH "cloudberry"
-#define VER_EXTRA 4
+#define VER_MINOR 1
+#define VER_PATCH "toffee"
+#define VER_EXTRA 0
 #define VERSION_IS_DEVELOPMENT (TRUE)
 
 #define GAME_MODE_BEGINNER  0
