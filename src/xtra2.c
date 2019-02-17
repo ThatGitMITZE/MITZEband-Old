@@ -520,6 +520,8 @@ byte get_monster_drop_ct(monster_type *m_ptr)
     {
         number *= 2;
         if (number > 7) number -= (number / 7);
+        if (((dun_level >= 46) || (p_ptr->max_plv >= 38)) && (number > 5) && (!(r_ptr->flags1 & RF1_DROP_GREAT))
+            && (!(r_ptr->flags1 & RF1_UNIQUE)) && (!(r_ptr->flags1 & RF1_ONLY_GOLD)) && (magik(MAX(10, (p_ptr->max_plv - 35) * 3)))) number -= 1;
     }
 
     if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena)
@@ -2405,6 +2407,7 @@ static void get_exp_from_mon(int dam, monster_type *m_ptr, bool mon_dead)
            coffee_mult = 3;
            if (!(r_ptr->flags2 & RF2_MULTIPLY)) coffee_mult = (((p_ptr->lev / 10) == 1) || ((p_ptr->lev >= 38))) ? 7 : 8;
            if (p_ptr->lev >= 42) coffee_mult = MIN(coffee_mult, 6);
+           if (p_ptr->lev >= 47) coffee_mult = MIN(coffee_mult, 5);
         }
         s64b_mul(&new_exp, &new_exp_frac, 0, coffee_mult);
     }
