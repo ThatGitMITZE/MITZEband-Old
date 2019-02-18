@@ -426,6 +426,7 @@ _essence_req_t _vaatimus(int lippu)
             break;
 
         case OF_LORE2:
+        case OF_SLOW_DIGEST:
             _aseta_vaatimus(&pyydetaan, 4, 1, 1);
             break;
 
