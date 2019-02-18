@@ -2838,7 +2838,7 @@ bool earthquake_aux(int cy, int cx, int r, int m_idx)
                 monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
                 /* Quest monsters */
-                if (m_ptr->mflag2 & MFLAG2_QUESTOR)
+                if ((m_ptr->mflag2 & MFLAG2_QUESTOR) || ((r_ptr->flags3 & RF3_AMBERITE) && (m_ptr->hp < 0)))
                 {
                     /* No wall on quest monsters */
                     map[16+yy-cy][16+xx-cx] = FALSE;
