@@ -2218,6 +2218,16 @@ bool autopick_auto_id(object_type *o_ptr)
         if (p_ptr->pclass == CLASS_ALCHEMIST && o_ptr->tval == TV_POTION)
             return TRUE;
 
+        slot = pack_find_device(EFFECT_IDENTIFY);
+        if (slot)
+        {
+            obj_ptr device = pack_obj(slot);
+            identify_item(o_ptr);
+            stats_on_use(device, 1);
+            device_decrease_sp(device, device->activation.cost);
+            return TRUE;
+        }
+
         slot = pack_find_obj(TV_SCROLL, SV_SCROLL_IDENTIFY);
         if (slot && !p_ptr->blind && !(race->flags & RACE_IS_ILLITERATE))
         {
@@ -2230,16 +2240,6 @@ bool autopick_auto_id(object_type *o_ptr)
                 obj_release(scroll, OBJ_RELEASE_DELAYED_MSG);
                 return TRUE;
             }
-        }
-
-        slot = pack_find_device(EFFECT_IDENTIFY);
-        if (slot)
-        {
-            obj_ptr device = pack_obj(slot);
-            identify_item(o_ptr);
-            stats_on_use(device, 1);
-            device_decrease_sp(device, device->activation.cost);
-            return TRUE;
         }
 
         if (p_ptr->auto_id_sp && p_ptr->csp >= p_ptr->auto_id_sp)
