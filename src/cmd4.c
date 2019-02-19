@@ -792,15 +792,18 @@ void do_cmd_options_aux(int page, cptr info)
 {
     char    ch;
     int     i, k = 0, n = 0, l;
-    int     opt[32];
+    int     opt[40];
     char    buf[80];
     bool    browse_only = (page == OPT_PAGE_BIRTH) && character_generated &&
                           (!p_ptr->wizard || !allow_debug_opts);
+    bool    scroll_mode;
+    byte    option_offset = 0;
+    byte    bottom_opt = Term->hgt - ((page == OPT_PAGE_AUTODESTROY) ? 5 : 2);
 
 /*    browse_only = FALSE; */
 
     /* Lookup the options */
-    for (i = 0; i < 32; i++) opt[i] = 0;
+    for (i = 0; i < 40; i++) opt[i] = 0;
 
     /* Scan the options */
     for (i = 0; option_info[i].o_desc; i++)
@@ -809,6 +812,7 @@ void do_cmd_options_aux(int page, cptr info)
         if (option_info[i].o_page == page) opt[n++] = i;
     }
 
+    scroll_mode = (n > bottom_opt);
 
     /* Clear screen */
     Term_clear();
@@ -828,8 +832,9 @@ void do_cmd_options_aux(int page, cptr info)
         if (page == OPT_PAGE_AUTODESTROY) c_prt(TERM_YELLOW, "Following options will protect items from easy auto-destroyer.", 9, 3);
 
         /* Display the options */
-        for (i = 0; i < n; i++)
+        for (i = option_offset; i < n; i++)
         {
+            int rivi;
             byte a = TERM_WHITE;
 
             /* Color current option */
@@ -872,15 +877,18 @@ void do_cmd_options_aux(int page, cptr info)
                     (*option_info[opt[i]].o_var ? "yes" : "no "),
                     option_info[opt[i]].o_text);
             }
-            if ((page == OPT_PAGE_AUTODESTROY) && i > 5) c_prt(a, buf, i + 5, 0);
-            else c_prt(a, buf, i + 2, 0);
+            if ((page == OPT_PAGE_AUTODESTROY) && i > 5) rivi = i + 5 - option_offset;
+            else rivi = i + 2 - option_offset;
+            if ((scroll_mode) && (rivi == Term->hgt - 1) && (i < n - 1)) c_prt(TERM_YELLOW, " (scroll down for more options)", rivi, 0);
+            else if ((scroll_mode) && (rivi == 2) && (i > 0)) c_prt(TERM_YELLOW, " (scroll up for more options)", rivi, 0);
+            else if (((rivi >= 2) && (rivi < Term->hgt - 1)) || ((rivi == Term->hgt - 1) && ((i == n - 1) || (!scroll_mode)))) c_prt(a, buf, rivi, 0);
         }
 
-        if ((page == OPT_PAGE_AUTODESTROY) && (k > 5)) l = 5;
+        if ((page == OPT_PAGE_AUTODESTROY) && (k > 5)) l = 3;
         else l = 0;
 
         /* Hilite current option */
-        move_cursor(k + 2 + l, 50);
+        move_cursor(k + 2 + l - option_offset, 50);
 
         /* Get a key */
         ch = inkey();
@@ -905,6 +913,11 @@ void do_cmd_options_aux(int page, cptr info)
             case '8':
             {
                 k = (n + k - 1) % n;
+                if (scroll_mode)
+                {
+                    if (k > bottom_opt - 1 + option_offset) option_offset = k - bottom_opt + 1; /* ((k == n - 1) ? 1 : 2); */
+                    else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                }
                 break;
             }
 
@@ -914,6 +927,11 @@ void do_cmd_options_aux(int page, cptr info)
             case '2':
             {
                 k = (k + 1) % n;
+                if (scroll_mode)
+                {
+                    if (k > bottom_opt - 2 + option_offset) option_offset = k - bottom_opt + ((k == n - 1) ? 1 : 2);
+                    else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                }
                 break;
             }
 
@@ -965,6 +983,11 @@ void do_cmd_options_aux(int page, cptr info)
                 {
                     (*option_info[opt[k]].o_var) = TRUE;
                     k = (k + 1) % n;
+                    if (scroll_mode)
+                    {
+                        if (k > bottom_opt - 2 + option_offset) option_offset = k - bottom_opt + ((k == n - 1) ? 1 : 2);
+                        else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                    }
                 }
                 break;
             }
@@ -1025,6 +1048,11 @@ void do_cmd_options_aux(int page, cptr info)
                 {
                     (*option_info[opt[k]].o_var) = FALSE;
                     k = (k + 1) % n;
+                    if (scroll_mode)
+                    {
+                        if (k > bottom_opt - 2 + option_offset) option_offset = k - bottom_opt + ((k == n - 1) ? 1 : 2);
+                        else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                    }
                 }
                 break;
             }
