@@ -26,7 +26,7 @@ bool py_throw(py_throw_ptr context)
 void _animate(py_throw_ptr context)
 {
     int x, y;
-    int msec = delay_factor * delay_factor * delay_factor;
+    int msec = delay_time();
 
     y = GRID_Y(context->path[context->path_pos]);
     x = GRID_X(context->path[context->path_pos]);
