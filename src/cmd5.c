@@ -839,6 +839,12 @@ void do_cmd_cast(void)
         return;
     }
 
+    if (pelko())
+    {
+        flush();
+        return;
+    }
+    
     /* Hex */
     if (p_ptr->realm1 == REALM_HEX)
     {
@@ -963,7 +969,7 @@ void do_cmd_cast(void)
     {
         if (flush_failure) flush();
 
-        msg_format("You failed to cast %s!", do_spell(use_realm, spell % 32, SPELL_NAME));
+        msg_format("You failed to %s %s!", spl_verb, do_spell(use_realm, spell % 32, SPELL_NAME));
         if (prompt_on_failure) msg_print(NULL);
 
         if (take_mana && prace_is_(RACE_DEMIGOD) && p_ptr->psubrace == DEMIGOD_ATHENA)
