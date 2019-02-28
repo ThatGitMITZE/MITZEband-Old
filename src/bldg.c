@@ -2288,7 +2288,7 @@ static void castle_quest(void)
     {
         string_ptr s = quest_get_description(quest);
         msg_format("<color:R>%s</color> (<color:U>Level %d</color>): %s",
-            quest->name, quest->level, string_buffer(s));
+            quest->name, quest->danger_level, string_buffer(s));
         string_free(s);
         quest->status = QS_FAILED_DONE;
         reinit_wilderness = TRUE;
@@ -2964,6 +2964,13 @@ static bool _reforge_artifact(void)
             adjustment -= MAX(0, ((nval / 2) - ABS(min_power - nval)) / 720);
         }
 
+        if (object_is_(dest, TV_HAFTED, SV_WIZSTAFF))
+        {
+            int muutos = ((8500 - ABS(min_power - 14000)) / 100);
+            if (muutos < 0) muutos /= 4;
+            adjustment2 -= muutos;
+        }
+
         if (object_is_bow(dest)) /* All bows are unique, so we need to estimate them one by one */
         {
             switch (dest->sval)
@@ -3009,6 +3016,7 @@ static bool _reforge_artifact(void)
             minpwg += 85;
         }
         minpwg = MAX(30, MIN(370, minpwg));
+
         arvio = (min_power * minpwg / 400) + (max_power * (400L - minpwg) / 400);
         if (dest->tval == TV_LITE) arvio += arvio / 75;
         else if (dest->tval == TV_RING) /* even worse */
@@ -3181,7 +3189,7 @@ static bool enchant_item(obj_p filter, int cost, int to_hit, int to_dam, int to_
     else
         maxenchant = 2 + p_ptr->lev/5;
 
-    /* Streamline. Nothing is more fun then enchanting Twilight (-40,-60)->(+10, +10), I 
+    /* Streamline. Nothing is more fun than enchanting Twilight (-40,-60)->(+10, +10), I
        admit. But other players might not share my love of carpal tunnel syndrome! */
     {
         int idx = -1;
@@ -3191,7 +3199,7 @@ static bool enchant_item(obj_p filter, int cost, int to_hit, int to_dam, int to_
         object_type copy = {0};
         menu_t menu = { "Enchant How Much?", NULL, 
                         "Amt      Cost", _enchant_menu_fn,
-                        choices, 25 };
+                        choices, 25, 0 };
 
         object_copy(&copy, prompt.obj);
         copy.curse_flags = 0;
