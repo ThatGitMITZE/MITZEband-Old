@@ -5337,7 +5337,7 @@ errr parse_edit_file(cptr name, parser_f parser, int options)
                     name, line_num, buf);
             }
             err = parser(buf, options);
-            if (err) /* report now for recursion */
+            if ((err) && (!(options & INIT_SILENT))) /* report now for recursion */
             {
                 cptr oops = (err > 0 && err < PARSE_ERROR_MAX) ? err_str[err] : "unknown";
 
