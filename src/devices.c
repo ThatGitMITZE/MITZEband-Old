@@ -394,6 +394,7 @@ static cptr _do_potion(int sval, int mode)
                 msg_print("The potion makes you vomit!");
                 set_food(PY_FOOD_STARVE - 1);
                 set_paralyzed(randint1(4), FALSE);
+                set_poisoned(0, TRUE);
                 device_noticed = TRUE;
             }
         }
@@ -1034,7 +1035,7 @@ static cptr _do_potion(int sval, int mode)
         }
         break;
     case SV_POTION_CURING: {
-        if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination when you quaff it.";
+        if (desc) return "It cures blindness, confusion, stunning, cuts and hallucination and reduces poisoning when you quaff it.";
         if (cast)
         {
             if (set_blind(0, TRUE)) device_noticed = TRUE;
@@ -4688,7 +4689,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_CURING:
     {
         if (name) return "Curing";
-        if (desc) return "It cures blindness, poison, confusion, stunning, cuts and hallucination.";
+        if (desc) return "It cures blindness, confusion, stunning, cuts and hallucination and reduces poisoning.";
         if (value) return format("%d", 1000);
         if (color) return format("%d", TERM_L_GREEN);
         if (cast)
@@ -4778,12 +4779,12 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         break;
     case EFFECT_CURE_POIS:
         if (name) return "Cure Poison";
-        if (desc) return "It cures poison.";
+        if (desc) return "It reduces poisoning.";
         if (value) return format("%d", 500);
         if (color) return format("%d", res_color(RES_POIS));
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(300, p_ptr->poisoned / 2), TRUE))
                 device_noticed = TRUE;
         }
         break;
@@ -4808,7 +4809,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         if (color) return format("%d", res_color(RES_FEAR));
         if (cast)
         {
-            if (set_poisoned(p_ptr->poisoned - MAX(10, p_ptr->poisoned / 10), TRUE))
+            if (set_poisoned(p_ptr->poisoned - MAX(100, p_ptr->poisoned / 5), TRUE))
                 device_noticed = TRUE;
             if (p_ptr->afraid)
             {
