@@ -490,7 +490,7 @@ static int _get_energy_blast_type(int power)
     { 
         int i;
         menu_t menu = { "Choose which effect?", NULL, NULL,
-                        _energy_blast_menu_fn, NULL, power};
+                        _energy_blast_menu_fn, NULL, power, 0};
         
         i = menu_choose(&menu);
         if (i >= 0)
@@ -1823,7 +1823,7 @@ static void _study(int level)
     int i;
     int ct = 0;
     menu_t menu = { "Gain which power?", "Browse which power?", NULL,
-                    _study_menu_fn, choices, 0};
+                    _study_menu_fn, choices, 0, 0};
 
     for (i = 0; ; i++)
     {
@@ -1911,7 +1911,7 @@ static int _choose_spell(void)
 {
     int i;
     menu_t menu = { "Use which power?", "Browse which power?", NULL,
-                    _choose_menu_fn, NULL, _num_spells_learned()};
+                    _choose_menu_fn, NULL, _num_spells_learned(), 0};
 
     i = menu_choose(&menu);
     if (i >= 0)
