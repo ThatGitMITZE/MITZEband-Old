@@ -31,7 +31,7 @@ static void _help_file(cptr name, _file_fn fn)
             VER_MAJOR, VER_MINOR, VER_PATCH);
 
     my_fclose(fp);
-    msg_format("Created %s", buf);
+    if (character_dungeon) msg_format("Created %s", buf);
 }
 
 static void _csv_file(cptr name, _file_fn fn)
@@ -58,7 +58,7 @@ static void _csv_file(cptr name, _file_fn fn)
     fn(fp);
 
     my_fclose(fp);
-    msg_format("Created %s", buf);
+    if (character_dungeon) msg_format("Created %s", buf);
 }
 
 /******************************************************************************
@@ -1805,6 +1805,8 @@ static void _generate_text_help(void)
 
 void generate_spoilers(void)
 {
+    int taso = p_ptr->lev;
+    p_ptr->lev = 35; /* stats may vary based on the player's level, we use 35 to at least be consistent */
     spoiler_hack = TRUE;
 
     _help_file("Races.txt", _races_help);
@@ -1832,6 +1834,7 @@ void generate_spoilers(void)
     _generate_html_help();
     _generate_text_help();
     spoiler_hack = FALSE;
+    p_ptr->lev = taso;
 }
 
 #endif
