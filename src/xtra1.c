@@ -1574,7 +1574,7 @@ static void prt_depth(void)
     }
     else if (quests_get_current() && !dungeon_type)
     {
-        sprintf(buf, "Quest: L%d", dun_level);
+        sprintf(buf, "Quest: L%d", quests_get_current()->danger_level);
         /* Level is "special" until completed */
         if (quests_get_current()->status < QS_COMPLETED)
             attr = TERM_L_BLUE;
