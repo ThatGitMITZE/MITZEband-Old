@@ -535,6 +535,7 @@ void possessor_cast(void)
         msg_print("You are too confused.");
         return;
     }
+    if (pelko()) return;
     if (mon_spell_cast_possessor(race))
         energy_use = 100;
 }

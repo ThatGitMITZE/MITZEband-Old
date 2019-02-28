@@ -437,6 +437,12 @@ static void rd_extra(savefile_ptr file)
     p_ptr->town_num = savefile_read_s16b(file);
 
     p_ptr->arena_number = savefile_read_s16b(file);
+    if (savefile_is_older_than(file, 7,1,0,2) && (p_ptr->arena_number > 32))
+    {
+        p_ptr->arena_number++;
+        if (p_ptr->arena_number > 34) p_ptr->arena_number++;
+        if (p_ptr->arena_number > 38) p_ptr->arena_number++;
+    }
     p_ptr->inside_arena = BOOL(savefile_read_s16b(file));
     p_ptr->inside_battle = BOOL(savefile_read_s16b(file));
     p_ptr->exit_bldg = savefile_read_byte(file);

@@ -250,7 +250,7 @@ static void _monster_toss_imp(_monster_toss_info *info)
 {
     char m_name[MAX_NLEN];
     u16b path[512];
-    int msec = delay_factor * delay_factor * delay_factor;
+    int msec = delay_time();
     int y, x, ny, nx, dam = 0;
     int cur_dis, ct;
     bool do_stun = FALSE;

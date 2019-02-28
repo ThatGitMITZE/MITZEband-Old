@@ -1645,6 +1645,10 @@ static void _bolt(void)
         ct = 4;
         flags &= ~PROJECT_REFLECTABLE;
     }
+    else if (_current.race->id == MON_KUNDRY && _spell_is_(_current.spell, MST_BOLT, GF_TIME))
+    {
+        flags &= ~PROJECT_REFLECTABLE;
+    }
     if (_current.spell->id.effect == GF_ATTACK)
         flags |= PROJECT_HIDE;
     for (i = 0; i < ct; i++)

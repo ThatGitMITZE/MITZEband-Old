@@ -138,6 +138,12 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
                 {
                     if (set_image(p_ptr->image + randint0(25) + 25, FALSE))
                         ident = TRUE;
+                    if (((p_ptr->csp > 0) || (p_ptr->csp_frac > 0)) && (player_mana_drainable()))
+                    {
+                        p_ptr->csp = 0;
+                        p_ptr->csp_frac = 0;
+                        ident = TRUE;
+                    }
                 }
                 break;
             }

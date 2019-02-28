@@ -179,6 +179,7 @@ bool predictable_energy_hack = FALSE;
 bool delay_autopick_hack = FALSE;
 bool monsters_damaged_hack = FALSE;
 bool shop_exit_hack = FALSE;
+byte spell_problem = 0;
 s16b run_count = 0;
 
 int current_flow_depth = 0;
@@ -235,6 +236,7 @@ bool fresh_after;    /* Flush output after monster's move */
 bool fresh_message;    /* Flush output after every message */
 bool hilite_player;    /* Hilite the player with the cursor */
 bool display_path;    /* Display actual path before shooting */
+bool square_delays;   /* Use delay factors based on squares */
 
 
 /*** Text Display Options ***/

@@ -501,7 +501,6 @@ struct monster_race
     s32b mexp;                /* Exp value for kill */
 
     s16b weight;
-    byte freq_spell;          /* Spell frequency */
     byte drop_theme;
 
     mon_spells_ptr spells;

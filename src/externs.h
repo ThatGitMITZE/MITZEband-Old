@@ -199,6 +199,7 @@ extern bool predictable_energy_hack;
 extern bool delay_autopick_hack;
 extern bool monsters_damaged_hack;
 extern bool shop_exit_hack;
+extern byte spell_problem;
 
 /*
  * Software options (set via the '=' command).  See "tables.c"
@@ -251,6 +252,7 @@ extern bool fresh_after;    /* Flush output after monster's move */
 extern bool fresh_message;    /* Flush output after every message */
 extern bool hilite_player;    /* Hilite the player with the cursor */
 extern bool display_path;    /* Display actual path before shooting */
+extern bool square_delays;   /* Use delay factors based on squares */
 
 
 /*** Text Display Options ***/
@@ -787,6 +789,7 @@ extern void fix_object_list(void);
 /* cmd4.c */
 extern cptr get_ordinal_number_suffix(int num);
 extern void toggle_easy_mimics(bool kayta);
+extern int delay_time(void);
 extern bool redraw_hack;
 extern void do_cmd_redraw(void);
 extern void do_cmd_knowledge_shooter(void);
@@ -2254,6 +2257,7 @@ extern race_t *get_race_aux(int prace, int psubrace);
 
 /* from gf.c */
 extern bool player_obviously_poly_immune(void);
+extern bool player_mana_drainable(void);
 
 /* Player Races */
 extern void mimic_race(int new_race, const char *msg);

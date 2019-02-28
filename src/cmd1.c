@@ -2778,7 +2778,7 @@ static void do_monster_knockback(int x, int y, int dist)
     if (dir != 5)
     {
         int i;
-        int msec = delay_factor * delay_factor * delay_factor;
+        int msec = delay_time();
 
         for (i = 0; i < dist; i++)
         {
@@ -4661,7 +4661,7 @@ bool py_attack(int y, int x, int mode)
     {
         int i, j;
         bool stop = FALSE;
-        int msec = delay_factor * delay_factor * delay_factor;
+        int msec = delay_time();
 
         for (i = 0; i < MAX_HANDS && !stop; i++)
         {
@@ -4707,7 +4707,7 @@ bool py_attack(int y, int x, int mode)
     {
     u16b    path[512];
     int        ct = project_path(path, 3, py, px, y, x, PROJECT_PATH | PROJECT_THRU);
-    int        msec = delay_factor * delay_factor * delay_factor;
+    int        msec = delay_time();
 
         int i, j, k;
 
@@ -4738,7 +4738,7 @@ bool py_attack(int y, int x, int mode)
                         {
                             char c = object_char(o_ptr);
                             byte a = object_attr(o_ptr);
-                            int msec = delay_factor * delay_factor * delay_factor;
+                            int msec = delay_time();
 
                             print_rel(c, a, ny, nx);
                             move_cursor_relative(ny, nx);
@@ -4912,7 +4912,7 @@ bool py_attack(int y, int x, int mode)
             {
                 int           ct = 3 + p_ptr->lev / 25;
                 int           x2, y2, dir, start_dir;
-                int           msec = delay_factor * delay_factor * delay_factor;
+                int           msec = delay_time();
 
                 start_dir = calculate_dir(px, py, x, y);
                 dir = start_dir;
@@ -6933,7 +6933,7 @@ void travel_step(void)
 
     travel.dir = dir;
     move_player(dir, always_pickup, easy_disarm);
-    Term_xtra(TERM_XTRA_DELAY, delay_factor * delay_factor * delay_factor);
+    Term_xtra(TERM_XTRA_DELAY, delay_time());
     Term_fresh();
     travel.run = old_run;
 

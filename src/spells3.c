@@ -1991,10 +1991,16 @@ static bool _alchemy_aux(obj_ptr obj, bool force)
 
     object_desc(o_name, obj, OD_COLOR_CODED);
 
+    if (object_is_shoukinkubi(obj))
+    {
+        msg_format("You consider pulverising %s, but quickly decide against it.", o_name);
+        return FALSE;
+    }
+
     /* Verify unless quantity given */
     if (!force)
     {
-        if (confirm_destroy || (obj_value(obj) > 0))
+        if (confirm_destroy || (obj_value(obj) > 0) || (obj->inscription))
         {
             sprintf(out_val, "Really turn %s to gold? ", o_name);
             if (!get_check(out_val)) return FALSE;
@@ -2021,7 +2027,7 @@ static bool _alchemy_aux(obj_ptr obj, bool force)
         if (no_selling) price /= 3;
         price *= obj->number;
 
-        msg_format("You turn %s to %d coins' worth of gold.", o_name, price);
+        msg_format("You turn %s to %d %s worth of gold.", o_name, price, (price == 1) ? "coin's" : "coins'");
 
         p_ptr->au += price;
         stats_on_gold_selling(price); /* ? */
@@ -2069,7 +2075,7 @@ bool alchemy(void)
             return TRUE;
         }
     }
-    if (_alchemy_aux(prompt.obj, force))
+    else if (_alchemy_aux(prompt.obj, force))
     {
         obj_zero(prompt.obj);
         obj_release(prompt.obj, 0);
@@ -4143,8 +4149,9 @@ bool curse_weapon(bool force, int slot)
  *
  * Note that this function is one of the more "dangerous" ones...
  */
-static s16b poly_r_idx(int r_idx)
+static s16b poly_r_idx(monster_type *m_ptr)
 {
+    int r_idx = m_ptr->r_idx;
     monster_race *r_ptr = &r_info[r_idx];
 
     int i, r, lev1, lev2;
@@ -4186,9 +4193,13 @@ static s16b poly_r_idx(int r_idx)
 
         /* Ignore unique monsters */
         if (r_ptr->flags1 & RF1_UNIQUE) continue;
+        if (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)) continue;
 
         /* Ignore monsters with incompatible levels */
         if ((r_ptr->level < lev1) || (r_ptr->level > lev2)) continue;
+
+        /* Try not to generate monsters in weird terrain */
+        if ((i < 600) && (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))) continue;
 
         /* Use that index */
         r_idx = r;
@@ -4207,7 +4218,7 @@ bool polymorph_monster(mon_ptr mon)
     int r_idx;
 
     if (mon->mflag2 & MFLAG2_QUESTOR) return FALSE;
-    r_idx = poly_r_idx(mon->r_idx);
+    r_idx = poly_r_idx(mon);
     if (r_idx != mon->r_idx || p_ptr->wizard)
         mon_change_race(mon, r_idx, "polymorphed");
     return TRUE;

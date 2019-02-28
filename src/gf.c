@@ -322,12 +322,21 @@ bool player_obviously_poly_immune(void)
     return FALSE;
 }
 
-/* Currently, water elementals are the only players with non-drainable
- * mana, but this could change in the future */
+/* Water elementals have non-drainable fake mana */
 bool player_mana_drainable(void)
 {
     if (elemental_is_(ELEMENTAL_WATER)) return FALSE;
+    if (mut_present(MUT_STRONG_MIND)) return FALSE;
     return TRUE;
+}
+
+static bool _mana_loss_save(monster_race *r_ptr)
+{
+    if (mut_present(MUT_STRONG_MIND)) return TRUE;
+    if ( prace_is_(RACE_DEMIGOD)
+        && p_ptr->psubrace == DEMIGOD_HERA
+        && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3)) return TRUE;
+    return FALSE;
 }
 
 int gf_affect_p(int who, int type, int dam, int flags)
@@ -520,6 +529,12 @@ int gf_affect_p(int who, int type, int dam, int flags)
     case GF_PLASMA:
         if (touch) msg_print("You are <color:R>burned</color>!");
         else if (fuzzy) msg_print("You are hit by something *HOT*!");
+
+        /* Resist hack */
+        if (prace_is_(RACE_MON_VORTEX) && p_ptr->current_r_idx == MON_PLASMA_VORTEX)
+        {
+            dam /= 3;
+        }
         result = take_hit(damage_type, dam, m_name_real);
         if (!res_save_default(RES_SOUND) && !CHECK_MULTISHADOW())
         {
@@ -881,6 +896,11 @@ int gf_affect_p(int who, int type, int dam, int flags)
         break;
     case GF_DISINTEGRATE:
         if (fuzzy) msg_print("You are hit by pure energy!");
+        /* Resist hack */
+        if (prace_is_(RACE_MON_VORTEX) && p_ptr->current_r_idx == MON_DISINTEGRATE_VORTEX)
+        {
+            dam /= 3;
+        }
         result = take_hit(damage_type, dam, m_name_real);
         break;
     case GF_OLD_HEAL:
@@ -988,9 +1008,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         {
             if (!touch) msg_print("Your mental fortress is impenetrable!");
         }
-        else if ( prace_is_(RACE_DEMIGOD)
-                && p_ptr->psubrace == DEMIGOD_HERA
-                && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
+        else if (_mana_loss_save(r_ptr))
         {
             if (!touch) msg_print("You keep your wits about you!");
         }
@@ -1061,9 +1079,7 @@ int gf_affect_p(int who, int type, int dam, int flags)
         }
         else
         {
-            if ( prace_is_(RACE_DEMIGOD)
-              && p_ptr->psubrace == DEMIGOD_HERA
-              && randint1(100) > r_ptr->level - 2*(p_ptr->stat_ind[A_WIS] + 3))
+            if (_mana_loss_save(r_ptr))
             {
                 if (!touch) msg_print("You keep your wits about you!");
             }
@@ -2302,7 +2318,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 {
                     /* Injure + mana drain */
                     monster_desc(killer, mon, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-                    if (!CHECK_MULTISHADOW())
+                    if ((!CHECK_MULTISHADOW()) && (player_mana_drainable()))
                     {
                         msg_print("Your psychic energy is drained!");
 
@@ -3355,7 +3371,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         }
         if (race->flagsr & RFR_RES_TELE)
         {
-            if (race->flagsr & RFR_RES_ALL)
+            if ((race->flagsr & RFR_RES_ALL) || (race->flags1 & RF1_UNIQUE))
             {
                 mon_lore_r(mon, RFR_RES_TELE);
                 note = " is unaffected!";

@@ -829,6 +829,7 @@ void display_weapon_info(doc_ptr doc, int hand)
  **********************************************************************/
 static cptr _effect_name(int which)
 {
+    gf_info_ptr gf;
     if (p_ptr->current_r_idx == MON_AETHER_VORTEX)
         return "Random";
 
@@ -855,6 +856,8 @@ static cptr _effect_name(int which)
     case GF_DRAIN_MANA: return "Drain Mana";
     case GF_TURN_ALL: return "Terrifies";
     }
+    gf = gf_lookup(which);
+    if (gf) return gf->name;
     return "Unknown";
 }
 

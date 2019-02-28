@@ -115,6 +115,11 @@ void mon_change_race(mon_ptr mon, int new_r_idx, cptr verb)
                 hallu_name = r_name + hallu_race->name;
                 cmsg_format(TERM_L_BLUE, "%^s %s into %s %s.", m_name, verb, is_a_vowel(hallu_name[0]) ? "an" : "a", r_name + hallu_race->name);
             }
+            else if (mon->nickname)
+            {
+                cptr my_desc = r_name + race->name; /* hack - no monster_desc() flags fully suppress the nickname */
+                cmsg_format(TERM_L_BLUE, "%^s %s into %s %s.", m_name, verb, is_a_vowel(my_desc[0]) ? "an" : "a", my_desc);
+            }
             else
             {
                 monster_desc(new_name, mon, MD_INDEF_VISIBLE);

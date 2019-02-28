@@ -38,7 +38,7 @@
 #define REW_SER_DEMO    35
 #define REW_SER_MONS    36
 
-int chaos_stats[MAX_PATRON] =
+int chaos_stats[MAX_CHAOS_PATRON] =
 {
     A_CON,  /* Slortar */
     A_CON,  /* Mabelode */
@@ -61,7 +61,7 @@ int chaos_stats[MAX_PATRON] =
     A_STR,  /* Khaine */
 };
 
-int chaos_rewards[MAX_PATRON][20] =
+int chaos_rewards[MAX_CHAOS_PATRON][20] =
 {
     /* Slortar the Old: */
     {

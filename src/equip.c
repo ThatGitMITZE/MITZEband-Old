@@ -181,7 +181,7 @@ static slot_t _prompt_wield_slot(obj_ptr obj)
     {
         int    idx;
         menu_t menu = { "Choose an equipment slot", NULL, NULL,
-                        _slot_menu_fn, slots, ct };
+                        _slot_menu_fn, slots, ct, 0 };
 
         idx = menu_choose(&menu);
         if (idx >= 0)
@@ -1312,6 +1312,8 @@ void equip_calc_bonuses(void)
                 amt -= obj->pval * 100;
             if (p_ptr->pclass == CLASS_MAULER && amt > 0)
                 amt = 0;
+            else if (prace_is_(RACE_MON_VORTEX) && amt > 0)
+                amt /= 2;
 
             switch (_template->slots[slot].type)
             {

@@ -362,6 +362,16 @@ void toggle_easy_mimics(bool kayta)
 }
 
 /*
+ * Calculate delay length
+ */
+int delay_time(void)
+{
+    if (square_delays) return (delay_factor * delay_factor * 2);
+    else return (delay_factor * delay_factor * delay_factor);
+}
+
+
+/*
  * Hack -- redraw the screen
  *
  * This command performs various low level updates, clears all the "extra"
@@ -1485,7 +1495,7 @@ void do_cmd_options(void)
                 /* Get a new value */
                 while (1)
                 {
-                    int msec = delay_factor * delay_factor * delay_factor;
+                    int msec = delay_time();
                     prt(format("Current base delay factor: %d (%d msec)",
                            delay_factor, msec), 22, 0);
 
@@ -3427,7 +3437,7 @@ static cptr monster_group_text[] =
     "Centipede",
     "Dragon",
     "Floating Eye",
-    "Feline",
+    "Feline/Fox",
     "Golem",
     "Hobbit/Elf/Dwarf",
     "Icky Thing",
@@ -4270,8 +4280,10 @@ static void do_cmd_knowledge_artifacts(void)
 
             if (i + art_top == art_cur)
                 attr = TERM_L_BLUE;
-            else if (!a_info[idx].found)
+            else if ((p_ptr->wizard) &&(!a_info[idx].generated))
                 attr = TERM_L_DARK;
+            else if (!a_info[idx].found)
+                attr = (p_ptr->wizard) ? TERM_GREEN : TERM_L_DARK;
             else
                 attr = tval_to_attr[forge.tval % 128];
 

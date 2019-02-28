@@ -2040,7 +2040,7 @@ void aggravate_monsters(int who)
  */
 bool genocide_aux(int m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
 {
-    int          msec = delay_factor * delay_factor * delay_factor;
+    int          msec = delay_time();
     monster_type *m_ptr = &m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool         resist = FALSE;

@@ -3426,9 +3426,16 @@ bool reforge_artifact(object_type *src, object_type *dest, int fame)
         {
             char buf[255], minibuf[2] = "\'";
             cptr oldname = a_name + a_info[src->name1].name;
-            sprintf(buf, minibuf);
-            strcat(buf, ((oldname[0] == '&') && (strlen(oldname) > 2)) ? oldname + 2 : oldname);
-            strcat(buf, minibuf);
+            if (strpos(" '", oldname)) /* The Pendant 'Efki', etc. */
+            {
+                sprintf(buf, oldname + strpos(" '", oldname));
+            }
+            else
+            {
+                sprintf(buf, minibuf);
+                strcat(buf, ((oldname[0] == '&') && (strlen(oldname) > 2)) ? oldname + 2 : oldname);
+                strcat(buf, minibuf);
+            }
             dest->art_name = quark_add(buf);
         }
         else dest->art_name = quark_add(a_name + a_info[src->name1].name);

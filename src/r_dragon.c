@@ -119,7 +119,7 @@ static int _choose_effect(int list[])
 
     {
         menu_t menu = { "Choose which effect?", NULL, NULL,
-                        _effect_menu_fn, list, ct};
+                        _effect_menu_fn, list, ct, 0};
         
         i = menu_choose(&menu);
         if (i >= 0)
