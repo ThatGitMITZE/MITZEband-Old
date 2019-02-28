@@ -19,7 +19,7 @@
 #define VER_MAJOR 7
 #define VER_MINOR 1
 #define VER_PATCH "toffee"
-#define VER_EXTRA 1
+#define VER_EXTRA 2
 #define VERSION_IS_DEVELOPMENT (TRUE)
 
 #define GAME_MODE_BEGINNER  0
@@ -89,7 +89,7 @@
 /*
  * Arena constants
  */
-#define MAX_ARENA_MONS        38    /* -KMW- */
+#define MAX_ARENA_MONS        41    /* excluding the babble */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT))
 
 
@@ -114,7 +114,9 @@
 
 
 /* The number of "patrons" available (for Chaos Warriors) */
-#define MAX_PATRON          16
+#define RANDOM_PATRON       16
+#define MAX_CHAOS_PATRON    16
+#define MAX_PATRON          17
 
 /* Number of entries in the sanity-blast descriptions */
 #define MAX_SAN_HORROR 20
@@ -3976,7 +3978,7 @@ extern int PlayerUID;
 #define INIT_XXXXXX2            0x02
 #define INIT_XXXXXX3            0x04
 #define INIT_SCROLL_WILDERNESS  0x08
-#define INIT_XXXXXX5            0x10
+#define INIT_SILENT             0x10
 #define INIT_DEBUG              0x20 /* error checking on dungeon files */
 
 /*
@@ -4454,6 +4456,7 @@ extern int PlayerUID;
 #define MON_DRACOLICH           701
 #define MON_G_TITAN             702
 #define MON_GREATER_TITAN       702
+#define MON_SPEC_TYRANNO        705
 #define MON_ENT                 708
 #define MON_HRU                 709
 #define MON_FAFNER              712
@@ -4468,6 +4471,7 @@ extern int PlayerUID;
 #define MON_HELL_KNIGHT         731
 #define MON_BULLGATES           732
 #define MON_SANTACLAUS          733
+#define MON_GREAT_UNCLE         736
 #define MON_LORD_CHAOS          737
 #define MON_KHAMUL              738
 #define MON_TINDALOS            739
@@ -4707,6 +4711,8 @@ extern int PlayerUID;
 #define MON_OSIRIS              1259
 #define MON_ISIS                1263
 #define MON_AMUN                1266
+#define MON_MUMMY_KING          1267
+#define MON_SHA                 1270
 #define MON_FISHROOSTER         1272
 #define MON_SEA_GIANT           1276
 #define MON_AEGIR               1277
