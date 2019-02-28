@@ -433,6 +433,13 @@ void alchemist_cast(int tval)
 {
 	object_type *o_ptr;
 
+	if (!fear_allow_magic())
+	{
+		msg_print("You are too scared!");
+		energy_use = alchemist_infusion_energy_use();
+		return;
+	}
+
 	if (!tval)
 		tval = TV_POTION;
 
