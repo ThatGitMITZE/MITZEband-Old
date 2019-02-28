@@ -1463,6 +1463,7 @@ void stair_creation(bool down_only)
 
     bool up = TRUE;
     bool down = TRUE;
+    bool force_shaft = FALSE;
     s16b dest_floor_id = 0;
 
 
@@ -1557,18 +1558,19 @@ void stair_creation(bool down_only)
     /* Extract destination floor data */
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
 
+    if ((coffee_break) || (d_info[dungeon_type].flags1 & DF1_ALL_SHAFTS)) force_shaft = TRUE;
 
     /* Create a staircase */
     if (up)
     {
-        cave_set_feat(py, px,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= dun_level - 2)) ?
+        cave_set_feat(py, px, ((force_shaft) ||
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= dun_level - 2))) ?
             feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
     }
     else
     {
-        cave_set_feat(py, px,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= dun_level + 2)) ?
+        cave_set_feat(py, px, ((force_shaft) ||
+            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= dun_level + 2))) ?
             feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
     }
 
