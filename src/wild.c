@@ -484,7 +484,8 @@ void wilderness_move_player(int old_x, int old_y)
        And thus, we gosh darn better update the travel flow before disturb() sets
        travel.run to 0 (prior to travel_step restoring it after we return!)
        In other words: Here is a cryptic sequencing issue with global variables! Do not move this!! */
-    if (travel.run)
+
+    if ((travel.run) || ((travel.x) && (travel.y) && (in_bounds(travel.y, travel.x))))
         travel_wilderness_scroll(travel.x - dx*WILD_SCROLL_CX, travel.y - dy*WILD_SCROLL_CY);
 
     if (do_disturb) disturb(0, 0);
