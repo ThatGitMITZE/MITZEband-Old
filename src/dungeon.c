@@ -1095,7 +1095,7 @@ static void process_world_aux_hp_and_sp(void)
     /*** Damage over Time ***/
 
     /* Take damage from cuts */
-    if (p_ptr->cut && !IS_INVULN())
+    if (p_ptr->cut && !IS_INVULN() && p_ptr->wild_mode)
     {
         cut_info_t cut = cut_info(p_ptr->cut);
         if (cut.dam)
@@ -1104,7 +1104,6 @@ static void process_world_aux_hp_and_sp(void)
             take_hit(DAMAGE_NOESCAPE, cut.dam, "a fatal wound");
         }
     }
-
 
     /* (Vampires) Take damage from sunlight. Note, Vampires are vulnerable
        to light so start with -50% resistance. Rather than res_save(RES_LIGHT)
@@ -3587,12 +3586,6 @@ static void _dispatch_command(int old_now_turn)
                 msg_print("Your spells are blocked!");
                 /*energy_use = 100;*/
             }
-            else if (!fear_allow_magic())
-            {
-                msg_print("You are too scared!");
-                energy_use = 100;
-                if (p_ptr->pclass == CLASS_ALCHEMIST) energy_use = alchemist_infusion_energy_use();
-            }
             else if ( dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC)
                    && p_ptr->pclass != CLASS_BERSERKER
                    && p_ptr->pclass != CLASS_BLOOD_KNIGHT
@@ -3642,6 +3635,7 @@ static void _dispatch_command(int old_now_turn)
             }
             else
             {
+                spell_problem = 0;
                 if (p_ptr->prace == RACE_MON_RING)
                     ring_cast();
                 else if (p_ptr->prace == RACE_MON_POSSESSOR || p_ptr->prace == RACE_MON_MIMIC)
@@ -3683,7 +3677,16 @@ static void _dispatch_command(int old_now_turn)
                     do_cmd_spell();
                 }
                 else
+                {
                     do_cmd_cast();
+                }
+                if (spell_problem & PWR_AFRAID)
+                {
+                    msg_print("You tremble in fear!");
+                    if (energy_use < 100) energy_use = 100;
+                    if (p_ptr->pclass == CLASS_ALCHEMIST) energy_use = alchemist_infusion_energy_use();
+                }
+                spell_problem = 0;
             }
             break;
 
@@ -4688,6 +4691,21 @@ static void process_player(void)
                 set_poisoned(p_ptr->poisoned - amt, TRUE);
             }
 
+            /* Cuts now work the same way poison does
+             * (except that cut healing is handled separately) */
+            if ((p_ptr->cut) && (!p_ptr->wild_mode))
+            {
+                /* Take damage from cuts */
+                if (!IS_INVULN())
+                {
+                    cut_info_t cut = cut_info(p_ptr->cut);
+                    if (cut.dam)
+                    {
+                        /*msg_format("<color:r> %d Cut Damage</color>", cut.dam);*/
+                        take_hit(DAMAGE_NOESCAPE, cut.dam, "a fatal wound");
+                    }
+                }
+            }
 
             if (p_ptr->free_turns)
             {
@@ -5023,7 +5041,7 @@ static void dungeon(bool load_game)
 #ifdef _DEBUG
         if (p_ptr->action == ACTION_GLITTER)
         {
-            int msec = delay_factor * delay_factor * delay_factor;
+            int msec = delay_time();
             Term_xtra(TERM_XTRA_DELAY, msec);
             Term_fresh();
         }
@@ -5378,6 +5396,20 @@ void play_game(bool new_game)
 
         /* Initialize object array */
         wipe_o_list();
+
+        /* Confirm unusual settings
+         * (players who play both coffee-break and normal games and start
+         * new games by loading old savefiles sometimes turn coffee-break off,
+         * but forget to turn no_wilderness and ironman_downward off) */
+        if ((!coffee_break) && (ironman_downward))
+        {
+            bool okei = get_check("Really play with ironman stairs? ");
+            if (!okei)
+            {
+                ironman_downward = FALSE;
+                if ((no_wilderness) && (!get_check("Really play with no wilderness? "))) no_wilderness = FALSE;
+            }
+        }
     }
     else
     {
