@@ -1209,7 +1209,7 @@ static int _get_spells(spell_info* spells, int max)
     int idx = -1;
     int ct = 0;
     menu_t menu = { "Use which group?", NULL, NULL,
-                    _book_menu_fn, _books, 4 };
+                    _book_menu_fn, _books, 4, 0 };
 
     idx = menu_choose(&menu);
     if (idx < 0) return 0;
