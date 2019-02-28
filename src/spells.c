@@ -718,6 +718,26 @@ static int _get_spell_table(spell_info* spells, int max)
     return ct;
 }
 
+static int _puhdista(spell_info* spells, int ct, byte liput)
+{
+    int i, confirmed_spells = 0;
+    byte vanha_paikka[MAX_SPELLS] = {0};
+    if (!liput) return ct; /* paranoia */
+    for (i = 0; i < ct; i++)
+    {
+        if ((get_spell_flags(spells[i].fn) & liput) == liput)
+        {
+            vanha_paikka[confirmed_spells] = i;
+            confirmed_spells++;
+        }
+    }
+    for (i = 0; i < ct; i++)
+    {
+        if ((i < confirmed_spells) && (i != vanha_paikka[i])) spells[i] = spells[vanha_paikka[i]];
+    }
+    return confirmed_spells;
+}
+
 void do_cmd_spell_browse(void)
 {
     spell_info spells[MAX_SPELLS];
@@ -741,6 +761,7 @@ void do_cmd_spell(void)
     int choice = 0;
     int max_cost = 0;
     bool poli = (p_ptr->pclass == CLASS_POLITICIAN);
+    spell_problem = 0;
 
     if (!caster)
     {
@@ -757,12 +778,6 @@ void do_cmd_spell(void)
     hp_caster = ((caster->options & CASTER_USE_HP) || (p_ptr->pclass == CLASS_NINJA_LAWYER));
     if (poli) hp_caster = (politician_get_toggle() == POLLY_TOGGLE_HPCAST);
 
-    if (p_ptr->confused)
-    {
-        msg_print("You are too confused!");
-        return;
-    }
-
     if ((p_ptr->riding) && (player_is_ninja))
     {
         msg_print("You cannot use ninjutsu while riding!");
@@ -774,11 +789,26 @@ void do_cmd_spell(void)
         set_action(ACTION_NONE);
     }
 
+    if (!fear_allow_magic()) spell_problem |= PWR_AFRAID;
+    if (p_ptr->confused) spell_problem |= PWR_CONFUSED;
+
     ct = _get_spell_table(spells, MAX_SPELLS);
     if (ct == 0)
     {
         /* User probably canceled the prompt for a spellbook */
+        spell_problem = 0;
         return;
+    }
+
+    if (spell_problem)
+    {
+        ct = _puhdista(spells, ct, spell_problem);
+        if (ct == 0)
+        {
+             if (spell_problem & PWR_CONFUSED) msg_print("You are too confused!");
+             else if (spell_problem & PWR_AFRAID) msg_print("You are too scared!");
+             return;
+        }
     }
 
     if (caster->options & CASTER_USE_CONCENTRATION)
@@ -904,27 +934,8 @@ void do_cmd_spell(void)
         p_ptr->redraw |= PR_MANA;
         p_ptr->redraw |= PR_HP;
         p_ptr->window |= PW_SPELL;
+        spell_problem = 0; /* successful cast */
     }
-}
-
-int _puhdista(spell_info* spells, int ct, byte liput)
-{
-    int i, confirmed_spells = 0;
-    byte vanha_paikka[MAX_SPELLS] = {0};
-    if (!liput) return ct; /* paranoia */
-    for (i = 0; i < ct; i++)
-    {
-        if ((get_spell_flags(spells[i].fn) & liput) == liput)
-        {
-            vanha_paikka[confirmed_spells] = i;
-            confirmed_spells++;
-        }
-    }
-    for (i = 0; i < ct; i++)
-    {
-        if ((i < confirmed_spells) && (i != vanha_paikka[i])) spells[i] = spells[vanha_paikka[i]];
-    }
-    return confirmed_spells;
 }
 
 byte do_cmd_power(void)
