@@ -2776,13 +2776,26 @@ static void _ego_create_body_armor(object_type *o_ptr, int level)
                 o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
                 o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
                 if (one_in_(4))
+                {
                     add_flag(o_ptr->flags, OF_CON);
+                    if (one_in_(4)) add_flag(o_ptr->flags, OF_SUST_CON);
+                }
                 if (one_in_(4))
                     add_flag(o_ptr->flags, OF_DEC_DEX);
+                if (one_in_(4))
+                    add_flag(o_ptr->flags, OF_SUST_STR);
                 if (one_in_(4))
                     add_flag(o_ptr->flags, OF_DEC_STEALTH);
                 if (one_in_(2))
                     add_flag(o_ptr->flags, OF_REGEN);
+                if (one_in_(3))
+                    add_flag(o_ptr->flags, OF_RES_DARK);
+                if (one_in_(600 / MAX(10, MIN(100, level))))
+                    add_flag(o_ptr->flags, OF_RES_DISEN);
+                if (one_in_(300 / MAX(20, MIN(60, level))))
+                    add_flag(o_ptr->flags, OF_RES_BLIND);
+                if (one_in_(300 / MAX(20, MIN(60, level))))
+                    add_flag(o_ptr->flags, OF_FREE_ACT);
             }
             break;
         case EGO_BODY_URUK_HAI:
