@@ -560,9 +560,6 @@ void chaos_warrior_reward(void)
                 case 3:
                     if (prace_is_(RACE_MON_SWORD) || prace_is_(RACE_MON_RING) || prace_is_(RACE_MON_ARMOR))
                     {
-                        msg_format("The voice of %s booms out:",
-                            chaos_patrons[p_ptr->chaos_patron]);
-                        msg_print("'Now shalt thou pay for annoying me.'");
                         nonlethal_ty_substitute(TRUE);
                     }
                     else if (one_in_(2))
