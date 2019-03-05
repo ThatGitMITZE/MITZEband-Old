@@ -682,8 +682,8 @@ static void _update_object(int slot)
 static void _calc_bonuses(void) 
 {
     p_ptr->no_cut = TRUE;
-    p_ptr->to_a += p_ptr->lev / 2;
-    p_ptr->dis_to_a += p_ptr->lev / 2;
+    p_ptr->to_a += p_ptr->lev / 2 + 5;
+    p_ptr->dis_to_a += p_ptr->lev / 2 + 5;
     res_add_amt(RES_BLIND, 2);
     res_add_amt(RES_POIS, 2);
 
@@ -1055,10 +1055,10 @@ race_t *mon_armor_get_race(void)
     }
 
     me.subname = (p_ptr->current_r_idx == MON_SEXY_SWIMSUIT) ? "Sexy Swimsuit" : NULL;
-    me.stats[A_STR] = -2;
-    me.stats[A_INT] = -2;
-    me.stats[A_WIS] = -2;
-    me.stats[A_DEX] = -2;
+    me.stats[A_STR] = -1;
+    me.stats[A_INT] = -1;
+    me.stats[A_WIS] = -1;
+    me.stats[A_DEX] = -1;
     me.stats[A_CON] = -2;
     me.stats[A_CHR] = -4;
     me.life = 95 + p_ptr->lev / 10;
