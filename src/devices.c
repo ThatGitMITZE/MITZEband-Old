@@ -3516,6 +3516,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
     case EFFECT_TELEPORT_AWAY:
         if (name) return "Teleport Other";
         if (desc) return "It fires a beam that teleports all affected monsters away.";
+        if (info) return format("dist %d", MAX_SIGHT * 5);
         if (value) return format("%d", 1500);
         if (cast)
         {
@@ -3855,7 +3856,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 100);
         if (name) return "Banish Evil";
         if (desc) return "It attempts to teleport all visible evil monsters away.";
-        if (info) return info_power(_BOOST(power));
+        if (info) return format("dist %d", _BOOST(power));
         if (value) return format("%d", 50*power);
         if (color) return format("%d", TERM_L_DARK);
         if (cast)
@@ -3873,7 +3874,7 @@ cptr do_effect(effect_t *effect, int mode, int boost)
         int power = _extra(effect, 150);
         if (name) return "Banish";
         if (desc) return "It teleports all monsters in sight away unless resisted.";
-        if (info) return info_power(_BOOST(power));
+        if (info) return format("dist %d", _BOOST(power));
         if (value) return format("%d", 70*power);
         if (color) return format("%d", TERM_L_BLUE);
         if (cast)
