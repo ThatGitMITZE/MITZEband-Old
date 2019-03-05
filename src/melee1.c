@@ -422,6 +422,11 @@ bool make_attack_normal(int m_idx)
                     effect_dam -= effect_dam/3;
                 }
 
+                if ((effect_dam > 50) && (m_ptr->mflag & MFLAG_NICE)) /* Limit nice melee */
+                {
+                    effect_dam = 25 + (effect_dam / 2);
+                }
+
                 if (track_werewolf_dam) werewolf_hurt_max = MAX(werewolf_hurt_max, effect_dam / 2);
 
                 switch (effect->effect)
