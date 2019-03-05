@@ -402,6 +402,24 @@ bool quest_post_generate(quest_ptr q)
             q->status = QS_FINISHED;
             return TRUE;
         }
+        else if ((r_ptr->flags1 & RF1_UNIQUE) && (unique_is_friend(q->goal_idx))) /* this can happen at least with Eric if you befriend him in his quest */
+        {
+            int i, ct = (q->level/(coffee_break ? 13 : 25)) + 1;
+            cmsg_format(TERM_L_BLUE, "Your friend %s, protector of this level, allows you free passage and gives you presents.", r_name + r_ptr->name);
+            q->completed_lev = (prace_is_(RACE_ANDROID)) ? p_ptr->lev : p_ptr->max_plv;
+            q->completed_turn = game_turn;
+            q->status = QS_FINISHED;
+            if ((q->level > 14) && (q->level < 25) && (one_in_(5))) ct++;
+            for (i = 0; i < ct; i++)
+            {
+                obj_t forge = {0};
+                if (make_object(&forge, AM_GOOD | AM_GREAT | AM_TAILORED | AM_QUEST, ORIGIN_ANGBAND_REWARD))
+                    pack_carry(&forge);
+                else
+                    msg_print("Software Bug ... you missed out on your reward!");
+            }
+            return TRUE;
+        }
 
         if (!(r_ptr->flags1 & RF1_FRIENDS))
             mode |= PM_ALLOW_GROUP; /* allow escorts but not friends */
