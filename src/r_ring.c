@@ -1300,6 +1300,8 @@ void ring_cast(void)
         return;
     }
 
+    energy_use = 100;
+
     p_ptr->csp -= spell.cost;
 
     if (randint0(100) < spell.fail)
@@ -1316,9 +1318,9 @@ void ring_cast(void)
         if (!effect_use(&effect, _boost(spell.effect)))
         {
             p_ptr->csp += spell.cost;
+            energy_use = 0;
         }
     }
-    energy_use = 100;
     p_ptr->redraw |= PR_MANA;
     p_ptr->redraw |= PR_HP;
     p_ptr->window |= PW_SPELL;
