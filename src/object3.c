@@ -187,7 +187,7 @@ static s32b _abilities_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_flag_and_score(flgs, OF_DEC_MANA, 10000, &count);
     cost += _check_flag_and_score(flgs, OF_TELEPATHY, 10000, &count);
 
-    return (u32b) cost;
+    return (s32b) cost;
 
 }
 
@@ -215,9 +215,9 @@ static s32b _brands_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_brand_and_score(flgs, OF_KILL_UNDEAD, 14000, &count);
     cost += _check_brand_and_score(flgs, OF_KILL_HUMAN, 14000, &count);
     cost += _check_brand_and_score(flgs, OF_KILL_DRAGON, 12500, &count);
+    cost += _check_brand_and_score(flgs, OF_BRAND_VAMP, 12500, &count);
     cost += _check_brand_and_score(flgs, OF_KILL_GOOD, 10000, &count);
     cost += _check_brand_and_score(flgs, OF_SLAY_EVIL, 10000, &count);
-    cost += _check_brand_and_score(flgs, OF_BRAND_VAMP, 10000, &count);
     cost += _check_brand_and_score(flgs, OF_BRAND_POIS, 8500, &count);
     cost += _check_brand_and_score(flgs, OF_SLAY_LIVING, 8500, &count);
     cost += _check_brand_and_score(flgs, OF_BRAND_ELEC, 7500, &count);
@@ -238,7 +238,7 @@ static s32b _brands_q(u32b flgs[OF_ARRAY_SIZE])
     cost += _check_brand_and_score(flgs, OF_SLAY_TROLL, 2000, &count);
     cost += _check_brand_and_score(flgs, OF_SLAY_ORC, 2000, &count);
 
-    return (u32b) cost;
+    return (s32b) cost;
 }
 
 static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
@@ -315,9 +315,7 @@ static s32b _resistances_q(u32b flgs[OF_ARRAY_SIZE])
         cost += (kerroin * ylim);
     }
      
-    if (cost < 0) cost = 0;
-
-    return (u32b) cost;
+    return (s32b) cost;
 }
 
 s32b _finalize_p(s32b p, u32b flgs[OF_ARRAY_SIZE], object_type *o_ptr, int options)
