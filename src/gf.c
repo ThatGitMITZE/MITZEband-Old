@@ -1629,7 +1629,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     case GF_UNLIFE:
         if (monster_living(race) /* && some sort of save */)
         {
-            mon->mpower -= dam;
+            mon->mpower = MAX(MIN(100, mon->mpower), mon->mpower - dam);
             if (seen_msg) msg_format("%^s grows less powerful.", m_name);
             if (!(flags & GF_AFFECT_SPELL) && who == GF_WHO_PLAYER)
                 lp_player(dam);
