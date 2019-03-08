@@ -1254,7 +1254,7 @@ void dispel_magic_spell(int cmd, variant *res)
         var_set_string(res, "Dispel Magic");
         break;
     case SPELL_DESC:
-        var_set_string(res, "Dispels all magics which is effecting a monster.");
+        var_set_string(res, "Dispels one monster, negating invulnerability spheres and temporary speed effects.");
         break;
     case SPELL_CAST:
     {
