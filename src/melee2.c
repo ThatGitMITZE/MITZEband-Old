@@ -2296,9 +2296,20 @@ static void process_monster(int m_idx)
         if (m_ptr->hp < m_ptr->maxhp/3)
         {
             char m_name[80];
+            bool skip = FALSE;
             monster_desc(m_name, m_ptr, 0);
 
-            if (is_riding_mon && riding_pinch < 2)
+            for (i = 0; i < MAX_MON_BLOWS; i++)
+            {
+                if (r_ptr->blows[i].method == RBM_EXPLODE)
+                {
+                    skip = TRUE;
+                    break;
+                }
+            }
+
+            if (skip) {} /* Kamikaze pets fight to death */
+            else if (is_riding_mon && riding_pinch < 2)
             {
                 msg_format("%^s seems to be in so much pain, and trying to escape from your restriction.", m_name);
                 riding_pinch++;
