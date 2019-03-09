@@ -2866,6 +2866,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
     int             dd, ds, old_hp;
     bool            hit_ct = 0;
     bool            poison_needle = FALSE;
+    bool            insta_kill = FALSE;
 
     if (!c_ptr->m_idx)
     {
@@ -3587,6 +3588,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 {
                     k = m_ptr->hp + 1;
                     msg_format("You hit %s on a fatal spot!", m_name_object);
+                    insta_kill = TRUE;
                 }
                 else k = 1;
             }
@@ -3619,6 +3621,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     {
                         k = m_ptr->hp + 1;
                         msg_format("You hit %s on a fatal spot!", m_name_object);
+                        insta_kill = TRUE;
                     }
                 }
             }
@@ -3646,6 +3649,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 {
                     k = m_ptr->hp + 1;
                     msg_format("You hit %s on a fatal spot!", m_name_object);
+                    insta_kill = TRUE;
                 }
             }
 
@@ -3782,7 +3786,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
             if (mode == WEAPONMASTER_CRUSADERS_STRIKE)
                 k = k * 3 / 2;
 
-            if (p_ptr->stun)
+            if ((p_ptr->stun) && (!insta_kill))
                 k -= k * MIN(100, p_ptr->stun) / 150;
 
             dam_tot += k;
