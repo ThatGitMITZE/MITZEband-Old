@@ -5914,6 +5914,8 @@ enum {
     ORIGIN_CAN_OF_TOYS,         /* found in a can of toys */
     ORIGIN_BLOOD,               /* blood pool */
     ORIGIN_CORNUCOPIA,          /* Cornucopia replacement */
+    ORIGIN_CRAFTING,            /* created by crafting */
+    ORIGIN_MUNDANITY,           /* created by mundanity */
 
     ORIGIN_MAX
 };
