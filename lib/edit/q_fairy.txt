@@ -51,7 +51,7 @@ R:OBJ(hard leather cap):EGO(seeing)
 ?:[EQU $RACE Ring Centipede]
 R:OBJ(amulet):EGO(dwarven necklace)
 
-?:[EQU $RACE Beholder Quylthulg]
+?:[EQU $RACE Beholder]
 R:OBJ(feanorian lamp)
 
 ?:[EQU $RACE Death-Sword]
