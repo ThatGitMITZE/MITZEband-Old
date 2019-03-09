@@ -668,6 +668,18 @@ void display_weapon_info(doc_ptr doc, int hand)
 
     doc_printf(cols[0], " %-7.7s: %d.%d lbs\n", "Weight", o_ptr->weight/10, o_ptr->weight%10);
 
+    if (object_is_(o_ptr, TV_SWORD, SV_POISON_NEEDLE)) /* special case */
+    {
+        doc_insert(cols[0], " Blows  : 1.00\n");
+        doc_insert(cols[0], " Damage : 1\n");
+        doc_insert(cols[1], "<color:G>Accuracy</color>\n");
+        doc_printf(cols[1], "  %d%%", (1000 / MAX(1, p_ptr->weapon_ct) + 5) / 10);
+        doc_insert_cols(doc, cols, 2, 1);
+        doc_free(cols[0]);
+        doc_free(cols[1]);
+        return;
+    }
+
     if (weaponmaster_get_toggle() == TOGGLE_SHIELD_BASH)
     {
         assert(o_ptr->tval == TV_SHIELD);
