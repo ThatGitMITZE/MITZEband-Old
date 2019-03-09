@@ -1001,7 +1001,7 @@ static bool _gain_spell(int book)
     spell_info spells[_SPELLS_PER_BOOK];
     int        indices[_SPELLS_PER_BOOK];
     int        which;
-    int        ct = 0, skip = 0, i;
+    int        ct = 0, i;
 
     /* Build a list of learnable spells. Spells can only be
        learned once (no spell skills) and we only display spells
