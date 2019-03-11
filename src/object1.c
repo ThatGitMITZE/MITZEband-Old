@@ -360,19 +360,35 @@ static bool _object_gives_esdm(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE],  bo
     }
 }
 
-static void _obj_esdm_flags(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE])
+static void _obj_esdm_flags(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE], bool display)
 {
     if (have_flag(flgs, OF_DEC_MANA))
     {
         if (!_object_gives_esdm(o_ptr, flgs, FALSE)) remove_flag(flgs, OF_DEC_MANA);
     }
-    else if (_object_gives_esdm(o_ptr, flgs, FALSE)) add_flag(flgs, OF_DEC_MANA);
+    else if (_object_gives_esdm(o_ptr, flgs, FALSE))
+    {
+        if ((!display) || (obj_is_identified(o_ptr)) || (have_flag(o_ptr->known_flags, OF_DEC_MANA))) add_flag(flgs, OF_DEC_MANA);
+        else if (o_ptr->loc.where == INV_EQUIP) /* learn flag on equipped item */
+        {
+            add_flag(flgs, OF_DEC_MANA);
+            add_flag(o_ptr->known_flags, OF_DEC_MANA);
+        }
+    }
 
     if (have_flag(flgs, OF_EASY_SPELL))
     {
         if (!_object_gives_esdm(o_ptr, flgs, TRUE)) remove_flag(flgs, OF_EASY_SPELL);
     }
-    else if (_object_gives_esdm(o_ptr, flgs, TRUE)) add_flag(flgs, OF_EASY_SPELL);
+    else if (_object_gives_esdm(o_ptr, flgs, TRUE))
+    {
+        if ((!display) || (obj_is_identified(o_ptr)) || (have_flag(o_ptr->known_flags, OF_EASY_SPELL))) add_flag(flgs, OF_EASY_SPELL);
+        else if (o_ptr->loc.where == INV_EQUIP) /* learn flag on equipped item */
+        {
+            add_flag(flgs, OF_EASY_SPELL);
+            add_flag(o_ptr->known_flags, OF_EASY_SPELL);
+        }
+    }
 }
 
 /* We don't do this in regular obj_flags() and obj_flags_known() partly
@@ -382,13 +398,13 @@ static void _obj_esdm_flags(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE])
 void obj_flags_effective(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE])
 {
     obj_flags(o_ptr, flgs);
-    _obj_esdm_flags(o_ptr, flgs);
+    _obj_esdm_flags(o_ptr, flgs, FALSE);
 }
 
 void obj_flags_display(object_type *o_ptr, u32b flgs[OF_ARRAY_SIZE])
 {
     obj_flags_known(o_ptr, flgs);
-    _obj_esdm_flags(o_ptr, flgs);
+    _obj_esdm_flags(o_ptr, flgs, TRUE);
 }
 
 static void _obj_flags_purify(u32b flgs[OF_ARRAY_SIZE])
