@@ -3526,7 +3526,7 @@ static void _move_monster(int m_idx)
         if (p_ptr->lev >= 20 && p_ptr->speciality_equip)
         {
             monster_type *m_ptr = &m_list[m_idx];
-            if (m_ptr->cdis == 1)
+            if ((m_ptr->cdis == 1) && (is_hostile(m_ptr)))
             {
                 char m_name[80];
                 monster_desc(m_name, m_ptr, 0);
