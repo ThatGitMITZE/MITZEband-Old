@@ -95,7 +95,7 @@ void _equip_on_change_form(void)
     inv_free(temp);
     inv_free(temp2);
 
-    p_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
+    p_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA | PU_HP;
     p_ptr->redraw |= PR_EQUIPPY;
     p_ptr->window |= PW_INVEN | PW_EQUIP;
 }
