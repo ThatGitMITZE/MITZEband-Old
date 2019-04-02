@@ -1114,8 +1114,11 @@ void do_cmd_spell(void)
             {	
                 /* Give back the spell cost, since the user canceled the spell
                  * There is no CASTER_USE_SP flag so we need to check all the alternatives */
-                if ((!hp_caster) && (!poli) && (!(caster->options & (CASTER_USE_AU | CASTER_USE_CONCENTRATION)))) 
+                if ((!hp_caster) && (!poli) && (!(caster->options & (CASTER_USE_AU | CASTER_USE_CONCENTRATION))))
+                {
                     p_ptr->csp += spell->cost;
+                    p_ptr->redraw |= PR_MANA;
+                }
                 return;
             }
             spell_stats_on_cast(spell);
