@@ -3513,16 +3513,16 @@ static void _calc_torch_imp(object_type *o_ptr)
             else
                 p_ptr->cur_lite -= 3;
         }
+        else if (o_ptr->name1 || o_ptr->art_name || o_ptr->name3)
+        {
+            p_ptr->cur_lite += 3;
+        }
         else if (o_ptr->sval == SV_LITE_TORCH && o_ptr->xtra4 > 0)
             p_ptr->cur_lite += 1;
         else if (o_ptr->sval == SV_LITE_LANTERN && o_ptr->xtra4 > 0)
             p_ptr->cur_lite += 2;
         else if (o_ptr->sval == SV_LITE_FEANOR)
             p_ptr->cur_lite += 2;
-        else if (o_ptr->name1 || o_ptr->art_name || o_ptr->name3)
-        {
-            p_ptr->cur_lite += 3;
-        }
         if (have_flag(flgs, OF_LITE)) p_ptr->cur_lite++;
         if (o_ptr->sval == SV_LITE_EYE) p_ptr->cur_lite -= 10;
     }
