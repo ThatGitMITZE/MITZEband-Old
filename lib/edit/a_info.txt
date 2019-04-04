@@ -1457,7 +1457,7 @@ F:INT | WIS | HIDE_TYPE | SPELL_CAP
 F:SLAY_EVIL | RES_LITE | LITE | SEE_INVIS | SHOW_MODS
 E:IDENTIFY:10:10
 E:Your quarterstaff glows yellow...
-D:The radiant golden staff of an Istari of legend, this wizard's companion
+D:The radiant golden staff of an Istar of legend, this wizard's companion
 D:grants keen sight and the knowledge of many hidden things.
 
 N:120:of Gandalf
