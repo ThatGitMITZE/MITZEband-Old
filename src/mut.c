@@ -716,7 +716,6 @@ bool mut_demigod_pred(int mut_idx)
             return TRUE;
         break;
 
-    case MUT_WEAPON_SKILLS:
     case MUT_SUBTLE_CASTING:
     case MUT_PEERLESS_SNIPER:
     case MUT_UNYIELDING:
@@ -740,6 +739,10 @@ bool mut_demigod_pred(int mut_idx)
     case MUT_INSPIRED_SMITHING:
     case MUT_STRONG_MIND:
         return TRUE;
+        break;
+
+    case MUT_WEAPON_SKILLS:
+        if (p_ptr->pclass != CLASS_SKILLMASTER) return TRUE;
         break;
 
     case MUT_INFERNAL_DEAL:
