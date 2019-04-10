@@ -2422,7 +2422,7 @@ void mon_check_kill_unique(int m_idx)
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!(m_ptr->smart & (1U << SM_CLONED)))
+    if ((!(m_ptr->smart & (1U << SM_CLONED))) && (!p_ptr->inside_battle))
     {
         /* When the player kills a Unique, it stays dead */
         if (r_ptr->flags1 & RF1_UNIQUE)
