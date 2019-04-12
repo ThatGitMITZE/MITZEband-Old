@@ -865,7 +865,7 @@ bool karrot_replace_art(object_type *o_ptr)
             if (uusi_tyyppi) tyyppi = uusi_tyyppi;
         }
 
-        if (randint1(MIN(324, happy)) > 308 + randint0(16))
+        if (randint1(MIN(324, happy - 300)) > 308 + randint0(16))
         {
             if (!a_info[ART_UROG].generated)
             {
