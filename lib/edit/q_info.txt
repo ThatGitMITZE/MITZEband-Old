@@ -388,7 +388,7 @@ T:TOWN | GENERATE | DANGER_LEVEL_55
 F:q_htower.txt
 
 N:84:15:Bear Problem (Outpost)
-T:TOWN | GENERATE
+T:TOWN | GENERATE | DANGER_LEVEL_16
 F:q_bears.txt
 
 N:85:55:Doom Quest II\: Hell in Angwil
@@ -414,7 +414,7 @@ G:KILL(cyclops)
 F:q_cyclo.txt
 
 N:90:45:Dark Academy (Thalos)
-T:TOWN | GENERATE | DANGER_LEVEL_42
+T:TOWN | GENERATE
 F:q_acadmy.txt
 
 N:91:38:The Pit of Despair (Angwil)
