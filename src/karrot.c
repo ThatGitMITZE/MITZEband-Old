@@ -808,6 +808,7 @@ static int _karrot_happy_score(void)
         }
     }
     rspct = MIN(MIN(120 + (10 * osumat), 180 + osumat), (pisteet * 100 / ptaso)) + (osumat * mult) - (hudit * MIN(4, hudit)) + (MAX(p_ptr->max_plv, osumat * 5 / 3) * 2);
+    if (osumat == MAX_KT_QUEST) rspct = MAX(rspct, 311); /* paranoia */
     return MAX(1, rspct);
 }
 
