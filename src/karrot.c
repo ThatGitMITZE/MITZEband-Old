@@ -31,7 +31,7 @@ void _dragon_pack_init(void)
 
 inv_ptr _get_pack(void)
 {
-    if (_pack_initialized) return NULL;
+    if (!_pack_initialized) return NULL;
     return _dragon_pack;
 }
 
