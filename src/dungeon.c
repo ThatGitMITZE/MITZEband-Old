@@ -3598,7 +3598,7 @@ static void _dispatch_command(int old_now_turn)
                 flush();
                 /*energy_use = 100;*/
             }
-            else if (beorning_is_(BEORNING_FORM_BEAR))
+            else if ((beorning_is_(BEORNING_FORM_BEAR)) && (p_ptr->pclass != CLASS_DUELIST))
             {
                 msg_print("You cannot use magic in bear shape!");
                 flush();
@@ -3647,7 +3647,7 @@ static void _dispatch_command(int old_now_turn)
                 energy_use = 0;
             }
             else if (IS_SHERO() && p_ptr->pclass != CLASS_BERSERKER && p_ptr->pclass != CLASS_BLOOD_KNIGHT && p_ptr->pclass != CLASS_RAGE_MAGE
-             && p_ptr->pclass != CLASS_ALCHEMIST)
+             && p_ptr->pclass != CLASS_ALCHEMIST && ((!beorning_is_(BEORNING_FORM_BEAR) || (p_ptr->pclass != CLASS_DUELIST))))
             {
                 if (flush_failure) flush();
                 msg_format("You cannot think clearly!");
