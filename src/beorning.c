@@ -90,6 +90,8 @@ static void _beorning_equip_on_change_form(void)
     inv_free(temp);
     inv_free(temp2);
 
+    if (_beorning_form == BEORNING_FORM_BEAR) p_ptr->shero = 1; /* show AC right */
+
     p_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA | PU_HP;
     p_ptr->redraw |= PR_EQUIPPY | PR_EFFECTS;
     p_ptr->window |= PW_INVEN | PW_EQUIP;
