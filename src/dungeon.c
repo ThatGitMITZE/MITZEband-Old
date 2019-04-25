@@ -5028,7 +5028,7 @@ static void dungeon(bool load_game)
     p_ptr->leaving_dungeon = 0;
 
     /* Run Exo's patch */
-    if ((autosave_l) && (!load_game)) updatecharinfoS();
+    if (autosave_l) updatecharinfoS();
 
     /* Main loop */
     while (TRUE)
