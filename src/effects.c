@@ -6189,20 +6189,20 @@ int take_hit(int damage_type, int damage, cptr hit_from)
 
 
     /* Tera-Hack:  Duelist Nemesis */
-    if ( p_ptr->pclass == CLASS_DUELIST
+/*    if ( p_ptr->pclass == CLASS_DUELIST
       && p_ptr->duelist_target_idx
       && p_ptr->duelist_target_idx == hack_m_idx
       && p_ptr->lev >= 45
       && damage > p_ptr->chp )
     {
-        nemesis_hack = TRUE;  /* Stops monster melee back in make_attack_normal in melee1.c */
+        nemesis_hack = TRUE;
         damage = 0;
         msg_print("Nemesis!!!!  You cannot be slain by your current target!");
-        set_stun(99, FALSE); /* 100 is Knocked Out */
+        set_stun(99, FALSE);
         msg_format("%^s is no longer your current target.", duelist_current_challenge());
         p_ptr->duelist_target_idx = 0;
         p_ptr->redraw |= PR_STATUS;
-    }
+    } */
     
     /* Rage Mage: "Rage Fueled" */
     if ( p_ptr->pclass == CLASS_RAGE_MAGE
