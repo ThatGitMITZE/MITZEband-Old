@@ -2371,6 +2371,8 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
             if (prace_is_(RACE_MON_GOLEM))
                 ac = ac * (100 - p_ptr->lev) / 100;
 
+            p_inc_fatigue(MUT_EASY_TIRING, 50);
+
             if ((fuiuchi) || ((sleep_hit) && (j == 0) && (p_ptr->personality == PERS_SNEAKY)) || (test_hit_norm(chance, ac, m_ptr->ml)))
             {
                 int dd = a->dd + p_ptr->innate_attack_info.to_dd;
