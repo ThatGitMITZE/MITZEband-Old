@@ -1304,6 +1304,9 @@ static bool do_cmd_tunnel_aux(int y, int x)
         /* Keep trying */
         else
         {
+            /* Don't continue if it's completely futile */
+            if (p_ptr->skill_dig > power) more = TRUE;
+
             if (tree)
             {
                 /* We may continue chopping */
@@ -1314,11 +1317,8 @@ static bool do_cmd_tunnel_aux(int y, int x)
             else
             {
                 /* We may continue tunnelling */
-                msg_format("You tunnel into the %s.", name);
+                msg_format("You %stunnel into the %s.", more ? "" : "futilely attempt to ", name);
             }
-
-            /* Don't continue if it's completely futile */
-            if (p_ptr->skill_dig > power) more = TRUE;
         }
     }
 
