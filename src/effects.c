@@ -6292,6 +6292,7 @@ int take_hit(int damage_type, int damage, cptr hit_from)
             {
                 char dummy[1024];
                 sprintf(dummy, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
+                clip_and_locate(" (Foe)", dummy);
                 my_strcpy(p_ptr->died_from, dummy, sizeof p_ptr->died_from);
             }
 
