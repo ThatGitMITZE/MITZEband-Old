@@ -2366,9 +2366,9 @@ void sanity_blast(monster_type *m_ptr, bool necro)
             (void)set_paralyzed(randint1(4), FALSE);
         }
         else equip_learn_flag(OF_FREE_ACT);
-        while (randint0(100) > p_ptr->skills.sav)
+        while ((randint0(100) > p_ptr->skills.sav) && (p_ptr->stat_cur[A_INT] > 3))
             (void)do_dec_stat(A_INT);
-        while (randint0(100) > p_ptr->skills.sav)
+        while ((randint0(100) > p_ptr->skills.sav) && (p_ptr->stat_cur[A_WIS] > 3))
             (void)do_dec_stat(A_WIS);
         if (!res_save_default(RES_CHAOS))
         {
