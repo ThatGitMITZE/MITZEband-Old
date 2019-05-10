@@ -6939,6 +6939,7 @@ void travel_step(void)
     point_t pt_best = {0};
     int py_old=py;
     int px_old=px;
+    bool ongelma = FALSE;
 
     find_prevdir = travel.dir;
 
@@ -6987,13 +6988,18 @@ void travel_step(void)
         return;
     }
 
+    command_dir = dir;
+    if (get_rep_dir(&dir, FALSE) == GET_DIR_RANDOM)
+    {
+        ongelma = TRUE;
+    }
     travel.dir = dir;
     move_player(dir, always_pickup, easy_disarm);
     Term_xtra(TERM_XTRA_DELAY, delay_time());
     Term_fresh();
     travel.run = old_run;
 
-    if (((py == travel.y) && (px == travel.x)) || ((py == py_old)&&(px == px_old)))
+    if (((py == travel.y) && (px == travel.x)) || ((py == py_old)&&(px == px_old)) || (ongelma))
     {
         travel_end();
     }
