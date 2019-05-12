@@ -2437,6 +2437,10 @@ static bool _travel_next_obj(int mode)
                     return FALSE;
                 continue; /* paranoia ... we should have destroyed this object */
             }
+
+            /* Avoid loop when we try to destroy indestructible items */
+            if ((!(autopick_list[j].action & DO_AUTOPICK)) && (object_is_artifact(o_ptr)) && ((obj_is_identified(o_ptr)) || (o_ptr->ident & IDENT_SENSE)))
+                continue;
         }
 
         dist = distance(py, px, o_ptr->loc.y, o_ptr->loc.x);
@@ -2470,10 +2474,7 @@ void do_cmd_autoget(void)
      * enter a shop) */
     if (cave[py][px].o_idx || p_ptr->wizard)
     {
-        if (pack_get_floor())
-            energy_use = 100;
-        else /* Pack is full or the user canceled the easy_floor menu */
-            return;
+        if (!pack_get_floor()) return;
     }
     /* Now, auto pickup nearby objects by iterating
      * the travel command */
@@ -4179,7 +4180,7 @@ void travel_cancel_fully(void)
 void travel_end(void)
 {
     travel.run = 0;
-    if (travel.mode != TRAVEL_MODE_NORMAL && _travel_next_obj(travel.mode))
+    if ((travel.mode != TRAVEL_MODE_NORMAL) && (!p_ptr->confused) && (!p_ptr->move_random) && (_travel_next_obj(travel.mode)))
     {
         /* paranoia ... but don't get stuck */
         if (travel.x == px && travel.y == py)
