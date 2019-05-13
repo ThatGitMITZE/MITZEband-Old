@@ -918,9 +918,15 @@ static int _get_spell_table(spell_info* spells, int max)
     race_t  *race_ptr = get_race();
 
     if (race_ptr->get_spells != NULL) /* Monster Races ... */
+    {
+        inkey_xtra = FALSE;
         ct = (race_ptr->get_spells)(spells, max);
+    }
     else if (class_ptr->get_spells != NULL)
+    {
+        inkey_xtra = FALSE;
         ct = (class_ptr->get_spells)(spells, max);
+    }
 
     _add_extra_costs(spells, ct);
     return ct;
@@ -1011,6 +1017,8 @@ void do_cmd_spell(void)
         if (p_ptr->pclass == CLASS_DISCIPLE) msg_print("The Purples have not taught you any spells yet!");
         return;
     }
+
+    inkey_xtra = TRUE;
 
     if (spell_problem)
     {
