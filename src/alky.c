@@ -143,6 +143,9 @@ static void _birth(void)
 	_CHEM[_CTIER0] = 240; 
 	_CHEM[_CTIER1] = 120;
 
+	_alchemist_hero = 0;
+	_alchemist_shero = 0;
+
 	py_birth_obj_aux(TV_SWORD, SV_SHORT_SWORD, 1);
 	py_birth_obj_aux(TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR, 1);
 	py_birth_obj_aux(TV_POTION, SV_POTION_SPEED, 1);
