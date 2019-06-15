@@ -1966,7 +1966,7 @@ void monster_desc(char *desc, monster_type *m_ptr, int mode)
         /* It could be a Unique */
         if ( (r_ptr->flags1 & RF1_UNIQUE)
           && !(p_ptr->image && !(mode & MD_IGNORE_HALLU))
-          && (!(m_ptr->mflag2 & MFLAG2_FUZZY) || (mode & MD_TRUE_NAME)) )
+          && (!(m_ptr->mflag2 & MFLAG2_FUZZY) || (mode & MD_TRUE_NAME) || (mode & MD_IGNORE_HALLU)) )
         {
             /* Start with the name (thus nominative and objective) */
             if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
