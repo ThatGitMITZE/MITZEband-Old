@@ -2277,6 +2277,7 @@ extern race_t *get_race_aux(int prace, int psubrace);
 /* from gf.c */
 extern bool player_obviously_poly_immune(void);
 extern bool player_mana_drainable(void);
+extern int charm_pow_modify(int dam, monster_type *mon);
 
 /* Player Races */
 extern void mimic_race(int new_race, const char *msg);
