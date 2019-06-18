@@ -91,7 +91,7 @@ score_ptr score_current(void)
     score->personality = _str_copy(personality->name);
 
     score->gold = p_ptr->au;
-    score->turns = player_turn;
+    score->turns = game_turn;
     score->clvl = p_ptr->max_plv;
     score->dlvl = dun_level;
     score->dungeon = _str_copy(map_name());
