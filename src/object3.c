@@ -1408,7 +1408,7 @@ s32b weapon_cost(object_type *o_ptr, int options)
     if (have_flag(flgs, OF_INFRA)) y += 400;
     if (have_flag(flgs, OF_TUNNEL))
     {
-        if (o_ptr->tval == TV_DIGGING && pval == 1)
+        if (o_ptr->tval == TV_DIGGING && pval <= 2)
         {
             /* ?? Shovels and picks ... */
             y += 150;
