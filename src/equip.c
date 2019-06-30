@@ -60,9 +60,14 @@ static bool _object_is_combat_ring(obj_ptr obj)
     if (!obj) return FALSE;
     if (obj->tval != TV_RING) return FALSE;
     obj_flags_known(obj, flags);
-    if (obj->name2 == EGO_RING_ARCHERY) return FALSE;
+    if ((obj->name2 == EGO_RING_ARCHERY) || (obj->name2 == EGO_RING_WIZARDRY)) return FALSE;
     else if (have_flag(flags, OF_WEAPONMASTERY)) return TRUE;
     else if ((object_is_known(obj)) && ((obj->to_h) || (obj->to_d))) return TRUE;
+    else if (have_flag(flags, OF_BRAND_FIRE)) return TRUE;
+    else if (have_flag(flags, OF_BRAND_ELEC)) return TRUE;
+    else if (have_flag(flags, OF_BRAND_COLD)) return TRUE;
+    else if (have_flag(flags, OF_BRAND_ACID)) return TRUE;
+    else if (have_flag(flags, OF_BRAND_VAMP)) return TRUE;
     return FALSE;
 }
 
