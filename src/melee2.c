@@ -4463,6 +4463,9 @@ void monster_gain_exp(int m_idx, int s_idx)
         (is_friendly(m_ptr)) || (m_ptr->mflag2 & MFLAG2_PLAYER_SUMMONED)))
         return;
 
+    /* No XP for killing a fellow friendly */
+    if ((!is_hostile(m_ptr)) && (!is_hostile(sm_ptr))) return;
+
     new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
     if (m_idx == p_ptr->riding) new_exp = (new_exp + 1) / 2;
     if (!dun_level) new_exp /= 5;
