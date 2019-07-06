@@ -6,6 +6,7 @@
 /* Slots on the equipment template now *match* slots in our inventory. */
 static equip_template_ptr _template = NULL;
 static inv_ptr _inv = NULL;
+static bool _id_pack_hack = FALSE;
 
 static bool _object_is_amulet(obj_ptr obj)
     { return obj->tval == TV_AMULET || obj->tval == TV_WHISTLE; }
@@ -533,6 +534,12 @@ void equip_wield_ui(void)
 
         _wield_after(slot);
         obj_release(obj, OBJ_RELEASE_QUIET);
+        if (_id_pack_hack)
+        {
+            pack_overflow();
+            identify_pack();
+            _id_pack_hack = FALSE;
+        }
     }
 }
 
@@ -671,6 +678,7 @@ static void _wield_after(slot_t slot)
 {
     char    o_name[MAX_NLEN];
     obj_ptr obj = inv_obj(_inv, slot);
+    u32b flgs[OF_ARRAY_SIZE];
 
     obj_learn_equipped(obj);
     stats_on_equip(obj);
@@ -717,11 +725,15 @@ static void _wield_after(slot_t slot)
 
     if (object_is_melee_weapon(obj) || _object_is_ring(obj)) _ring_finger_sanity_check();
 
+    obj_flags(obj, flgs);
+    if (have_flag(flgs, OF_LORE2)) _id_pack_hack = TRUE;
+
     p_ptr->update |= PU_BONUS;
     p_ptr->update |= PU_TORCH;
     p_ptr->update |= PU_MANA;
     p_ptr->redraw |= PR_EQUIPPY;
     p_ptr->window |= PW_INVEN | PW_EQUIP;
+
     android_calc_exp();
 }
 
