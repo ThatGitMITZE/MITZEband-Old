@@ -5601,7 +5601,18 @@ void play_game(bool new_game)
 
         do_cmd_redraw();  /* Not sure why this is required?! */
 
-        msg_print("<color:B>Welcome!</color> You begin life in the town where you may purchase "
+        if (thrall_mode)
+        msg_print("<color:B>Welcome!</color> You begin your adventure deep in the dungeon, "
+                  "a runaway slave of this dark pit's demonic masters. Your attempts to "
+                  "gather supplies for your escape have been detected, and now everybody "
+                  "is on high alert... \n"
+                  "This is the message line where important information is "
+                  "communicated to you while you play the game. "
+                  "Press <color:y>SPACE</color> every time you see a <color:B>-more-</color> prompt and "
+                  "you are finished reading the current messages. "
+                  "Press <color:y>CTRL+P</color> to review recent messages. "
+                  "You may press <color:y>?</color> at any time for help.\n\n");
+        else msg_print("<color:B>Welcome!</color> You begin life in the town where you may purchase "
                   "supplies for the dangers that await you.\n"
                   "This is the message line where important information is "
                   "communicated to you while you play the game. "
