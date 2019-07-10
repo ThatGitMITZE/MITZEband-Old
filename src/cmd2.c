@@ -4005,12 +4005,12 @@ static bool travel_flow_aux(int y, int x, int n, bool wall)
     n += _travel_flow_bonus(f_ptr);
 
     /* Ignore "pre-stamped" entries */
-    if ((travel.cost[y][x] != TRAVEL_UNABLE) && (travel.cost[y][x] <= n)) return wall;
+    if ((travel.cost[y][x] > TRAVEL_UNABLE) || ((travel.cost[y][x] < TRAVEL_UNABLE) && (travel.cost[y][x] <= n))) return wall;
 
     /* Ignore "walls" and "rubble" (include "secret doors") */
     if (have_flag(f_ptr->flags, FF_WALL) ||
         have_flag(f_ptr->flags, FF_CAN_DIG) ||
-        (have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic) ||
+        is_hidden_door(c_ptr) ||
         (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
     {
         if (!wall) return wall;
