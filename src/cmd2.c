@@ -4252,7 +4252,7 @@ void do_cmd_get_nearest(void)
         if ((o_ptr->loc.y == py) && (o_ptr->loc.x == px)) continue;
         if ((o_ptr->loc.y == by) && (o_ptr->loc.x == bx)) continue;
 
-        if (max_autopick > 0)
+        if ((max_autopick > 1) && (!no_mogaminator))
         {
             auto_pick_idx = is_autopick(o_ptr);
             if ((auto_pick_idx < 0) ||
