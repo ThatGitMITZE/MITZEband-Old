@@ -4248,7 +4248,7 @@ void do_cmd_get_nearest(void)
             (o_ptr->feeling != FEEL_ENCHANTED)) continue;
         if (!in_bounds(o_ptr->loc.y, o_ptr->loc.x)) continue; /* paranoia */
         _itms++;
-        if ((by) && (distance(py, px, o_ptr->loc.y, o_ptr->loc.x) >= by)) continue;
+        if ((by) && (MAX(ABS(py - o_ptr->loc.y), ABS(px - o_ptr->loc.x)) >= best)) continue;
         if ((o_ptr->loc.y == py) && (o_ptr->loc.x == px)) continue;
         if ((o_ptr->loc.y == by) && (o_ptr->loc.x == bx)) continue;
 
