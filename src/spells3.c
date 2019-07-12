@@ -2673,7 +2673,7 @@ static bool _obj_recharge_src(object_type *o_ptr)
     return FALSE;
 }
 
-static void _recharge_aux(object_type *o_ptr, int amt, int power)
+static void _recharge_aux(object_type *o_ptr, int amt, int power, bool from_player)
 {
     int fail_odds = 0;
     int lev = o_ptr->activation.difficulty;
@@ -2693,6 +2693,7 @@ static void _recharge_aux(object_type *o_ptr, int amt, int power)
          * I plan on removing the town recharging service to compensate for this
          * generosity, though. */
          msg_print("Failed!");
+         if ((from_player) && (device_sp(o_ptr) > 0)) device_decrease_sp(o_ptr, device_sp(o_ptr));
          return;
     }
 
@@ -2753,11 +2754,11 @@ bool recharge_from_player(int power)
         p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA);
     }
     else if (p_ptr->pclass == CLASS_BLOOD_MAGE)
-        take_hit(DAMAGE_NOESCAPE, amt, "recharging");
+        take_hit(DAMAGE_USELIFE, amt, "recharging");
     else
         sp_player(-amt);
 
-    _recharge_aux(prompt.obj, amt, power);
+    _recharge_aux(prompt.obj, amt, power, TRUE);
     obj_release(prompt.obj, 0);
     return TRUE;
 }
@@ -2820,7 +2821,7 @@ bool recharge_from_device(int power)
         destroy = FALSE;
     }
 
-    _recharge_aux(dest_ptr, amt, power);
+    _recharge_aux(dest_ptr, amt, power, FALSE);
 
     if (destroy)
     {
