@@ -1439,11 +1439,15 @@ static int _patron_ui(void)
         else
         {
             if (cmd == '*') i = RANDOM_PATRON;
-            if (cmd == '\r') i = (p_ptr->pclass == CLASS_DISCIPLE) ? DISCIPLE_YEQREZH : RANDOM_PATRON;
+            else if (cmd == '\r') i = (p_ptr->pclass == CLASS_DISCIPLE) ? DISCIPLE_YEQREZH : RANDOM_PATRON;
             else i = A2I(cmd) + alku;
             if ((alku <= i && i < loppu) || (i == RANDOM_PATRON))
             {
-                if (i == RANDOM_PATRON) i = _random_patron();
+                if (i == RANDOM_PATRON)
+                {
+                    if (p_ptr->pclass == CLASS_DISCIPLE) p_ptr->psubclass = MAX_PURPLE_PATRON + 1;
+                    i = _random_patron();
+                }
                 p_ptr->chaos_patron = i;
                 if (p_ptr->pclass == CLASS_DISCIPLE) p_ptr->psubclass = i;
                 return UI_OK;
