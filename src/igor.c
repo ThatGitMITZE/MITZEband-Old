@@ -144,7 +144,7 @@ static bool _igor_carry(object_type *o_ptr)
     }
     inv_add_at(_igor_body, o_ptr, slot);
     
-    obj_release(o_ptr, OBJ_RELEASE_QUIET);
+    if (!_igor_birth_hack) obj_release(o_ptr, OBJ_RELEASE_QUIET);
 
     if (_igor_birth_hack) return TRUE;
 
@@ -822,6 +822,8 @@ static void _birth(void)
         q_ptr->loc.where = INV_TMP_ALLOC;
         obj_identify_fully(q_ptr);
         (void)_igor_carry(q_ptr);
+        msg_print("Here we go?");
+        obj_release(q_ptr, OBJ_RELEASE_QUIET);
     }
     mut_gain(MUT_LIMP);
     mut_lock(MUT_LIMP);
