@@ -795,6 +795,7 @@ static bool _dissect_corpse(void)
 static void _birth(void)
 {
     int i;
+    object_type forge[_IB_MAX_ACTIVE];
 
     _do_init_pack = TRUE;
     _igor_pack_init();
@@ -807,21 +808,20 @@ static void _birth(void)
     py_birth_food();
     py_birth_light();
     _igor_birth_hack = TRUE;
-    for (i = 1; i <= _IB_MAX_ACTIVE; i++)
+    for (i = 0; i < _IB_MAX_ACTIVE; i++)
     {
-        object_type forge;
-        object_prep(&forge, lookup_kind(TV_CORPSE, _ibtosval(i)));
-        forge.xtra4 = 0;
-        forge.number = 1;
-        if (i == _IB_HANDS)
+        object_prep(&forge[i], lookup_kind(TV_CORPSE, _ibtosval(i + 1)));
+        forge[i].xtra4 = 0;
+        forge[i].number = 1;
+        if (i == (_IB_HANDS - 1))
         {
-            forge.pval = 2;
-            add_flag(forge.flags, OF_DEX);
+            forge[i].pval = 2;
+            add_flag(forge[i].flags, OF_DEX);
         }
-        object_origins(&forge, ORIGIN_BIRTH);
-        forge.loc.where = INV_TMP_ALLOC;
-        obj_identify_fully(&forge);
-        (void)_igor_carry(&forge);
+        object_origins(&forge[i], ORIGIN_BIRTH);
+        forge[i].loc.where = INV_TMP_ALLOC;
+        obj_identify_fully(&forge[i]);
+        (void)_igor_carry(&forge[i]);
     }
     mut_gain(MUT_LIMP);
     mut_lock(MUT_LIMP);
