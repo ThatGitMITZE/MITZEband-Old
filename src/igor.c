@@ -822,8 +822,7 @@ static void _birth(void)
         q_ptr->loc.where = INV_TMP_ALLOC;
         obj_identify_fully(q_ptr);
         (void)_igor_carry(q_ptr);
-        obj_free(q_ptr);
-//        obj_release(q_ptr, OBJ_RELEASE_QUIET);
+        /* No need to call obj_release() to free the memory (indeed, it causes crashes on Linux) */
     }
     mut_gain(MUT_LIMP);
     mut_lock(MUT_LIMP);
