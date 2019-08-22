@@ -120,7 +120,7 @@ static bool _igor_carry(object_type *o_ptr)
 {
     slot_t slot = _igor_object_body_slot(o_ptr);
     object_type *ulos;
-    msg_format("Sopiva paikka: %d", slot);
+//    msg_format("Sopiva paikka: %d", slot);
     if ((slot < 1) || (slot > _IB_MAX_ACTIVE)) return FALSE;
     ulos = inv_obj(_igor_body, slot);
     if ((ulos) && (ulos->k_idx))
@@ -145,8 +145,6 @@ static bool _igor_carry(object_type *o_ptr)
     inv_add_at(_igor_body, o_ptr, slot);
     
     obj_release(o_ptr, OBJ_RELEASE_QUIET);
-
-    msg_format("Exiting... (%d) Birth hack: %s", slot, _igor_birth_hack ? "Yes" : "No");
 
     if (_igor_birth_hack) return TRUE;
 
@@ -797,7 +795,6 @@ static bool _dissect_corpse(void)
 static void _birth(void)
 {
     int i;
-    object_type forge[_IB_MAX_ACTIVE];
 
     _do_init_pack = TRUE;
     _igor_pack_init();
@@ -812,19 +809,19 @@ static void _birth(void)
     _igor_birth_hack = TRUE;
     for (i = 0; i < _IB_MAX_ACTIVE; i++)
     {
-        object_prep(&forge[i], lookup_kind(TV_CORPSE, _ibtosval(i + 1)));
-        msg_format("Yritys: %d Indeksi: %d", i, ((&forge[i]) && (forge[i].k_idx)) ? forge[i].k_idx : 0);
-        forge[i].xtra4 = 0;
-        forge[i].number = 1;
+        object_type forge, *q_ptr = &forge;
+        object_prep(q_ptr, lookup_kind(TV_CORPSE, _ibtosval(i + 1)));
+        q_ptr->xtra4 = 0;
+        q_ptr->number = 1;
         if (i == (_IB_HANDS - 1))
         {
-            forge[i].pval = 2;
-            add_flag(forge[i].flags, OF_DEX);
+            q_ptr->pval = 2;
+            add_flag(q_ptr->flags, OF_DEX);
         }
-        object_origins(&forge[i], ORIGIN_BIRTH);
-        forge[i].loc.where = INV_TMP_ALLOC;
-        obj_identify_fully(&forge[i]);
-        (void)_igor_carry(&forge[i]);
+        object_origins(q_ptr, ORIGIN_BIRTH);
+        q_ptr->loc.where = INV_TMP_ALLOC;
+        obj_identify_fully(q_ptr);
+        (void)_igor_carry(q_ptr);
     }
     mut_gain(MUT_LIMP);
     mut_lock(MUT_LIMP);
