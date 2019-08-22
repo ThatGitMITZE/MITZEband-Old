@@ -146,6 +146,8 @@ static bool _igor_carry(object_type *o_ptr)
     
     obj_release(o_ptr, OBJ_RELEASE_QUIET);
 
+    msg_format("Exiting... (%d) Birth hack: %s", slot, _igor_birth_hack ? "Yes" : "No");
+
     if (_igor_birth_hack) return TRUE;
 
     p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA | PU_HP);
@@ -811,6 +813,7 @@ static void _birth(void)
     for (i = 0; i < _IB_MAX_ACTIVE; i++)
     {
         object_prep(&forge[i], lookup_kind(TV_CORPSE, _ibtosval(i + 1)));
+        msg_format("Yritys: %d Indeksi: %d", i, ((&forge[i]) && (forge[i].k_idx)) ? forge[i].k_idx : 0);
         forge[i].xtra4 = 0;
         forge[i].number = 1;
         if (i == (_IB_HANDS - 1))
