@@ -822,8 +822,8 @@ static void _birth(void)
         q_ptr->loc.where = INV_TMP_ALLOC;
         obj_identify_fully(q_ptr);
         (void)_igor_carry(q_ptr);
-        msg_print("Here we go?");
-        obj_release(q_ptr, OBJ_RELEASE_QUIET);
+        obj_free(q_ptr);
+//        obj_release(q_ptr, OBJ_RELEASE_QUIET);
     }
     mut_gain(MUT_LIMP);
     mut_lock(MUT_LIMP);
