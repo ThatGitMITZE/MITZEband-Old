@@ -209,6 +209,27 @@ bool mon_matches_obj_res(monster_race *r_ptr, int which)
     return FALSE;
 }
 
+static bool _igor_prob(int _in, bool unique, int taito)
+{
+    static bool lippu = FALSE;
+    s32b prob;
+    if (!_in)
+    {
+        lippu = FALSE;
+        return FALSE;
+    }
+    if (_in < 0) return FALSE;
+    prob = 4620 / _in;
+    if (unique) prob += (prob / 6);
+    if ((!lippu) && (taito > 40)) prob += (prob / (600 / taito));
+    if (randint0(4620) < prob)
+    {
+        lippu = TRUE;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static bool _dissect_corpse(void)
 {
     obj_prompt_t prompt = {0};
@@ -298,6 +319,7 @@ static bool _dissect_corpse(void)
         q_ptr->to_h = 0;
         q_ptr->to_d = 0;
         q_ptr->to_a = 0;
+        (void)_igor_prob(0, 0, 0);
 
         switch (tyyppi)
         {
@@ -333,7 +355,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if ((one_in_(4)) && (randint0(200) < taito))
+                if ((randint0(200) < taito) && (_igor_prob(4, unique, taito)))
                 {
                     int _wis = r_ptr->body.stats[A_WIS];
                     if (_wis)
@@ -362,7 +384,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if (one_in_(2))
+                if (_igor_prob(2, unique, taito))
                 {
                     int i, _chr = r_ptr->body.stats[A_CHR];
                     for (i = 0; i < 5; i++)
@@ -414,7 +436,7 @@ static bool _dissect_corpse(void)
                     }
                     if (q_ptr->xtra5) lippu = TRUE;
                 }
-                if ((one_in_(3)) && (r_ptr->flags9 & RF9_POS_TELEPATHY) && (randint0(1500) < voima))
+                if ((r_ptr->flags9 & RF9_POS_TELEPATHY) && (randint0(1500) < voima) && (_igor_prob(3, unique, taito)))
                 {
                     if (randint0(600) < voima)
                     {
@@ -424,7 +446,7 @@ static bool _dissect_corpse(void)
                     add_esp_weak(q_ptr, FALSE);
                     lippu = TRUE;
                 }
-                if ((voima + taito > 100) && (((!lippu) && (one_in_(4))) || (one_in_(44))))
+                if ((voima + taito > 100) && (((!lippu) && (_igor_prob(4, unique, taito))) || (one_in_(44))))
                 {
                     int i;
                     while (1)
@@ -455,9 +477,9 @@ static bool _dissect_corpse(void)
                 {
                     add_flag(q_ptr->flags, OF_VULN_LITE);
                     if (randint0(2000) < voima) add_flag(q_ptr->flags, OF_NIGHT_VISION);
-                    if ((r_ptr->flagsr & RFR_RES_DARK) && (one_in_(4))) add_flag(q_ptr->flags, OF_RES_DARK);
+                    if ((r_ptr->flagsr & RFR_RES_DARK) && (_igor_prob(4, unique, taito))) add_flag(q_ptr->flags, OF_RES_DARK);
                 }
-                else if ((r_ptr->flagsr & RFR_RES_DARK) && (one_in_(7))) add_flag(q_ptr->flags, OF_RES_DARK);
+                else if ((r_ptr->flagsr & RFR_RES_DARK) && (_igor_prob(7, unique, taito))) add_flag(q_ptr->flags, OF_RES_DARK);
                 if (r_ptr->flagsr & (RFR_RES_LITE))
                 {
                     if ((randint0(120) < voima) && (randint0(120) < taito))
@@ -470,7 +492,7 @@ static bool _dissect_corpse(void)
                             add_flag(q_ptr->flags, OF_RES_LITE);
                     }
                 }
-                if (one_in_(4))
+                if (_igor_prob(4, unique, taito))
                 {
                     int _inf = r_ptr->body.infra;
                     if (_inf > 0)
@@ -506,11 +528,11 @@ static bool _dissect_corpse(void)
                 {
                     if (!one_in_(3)) add_flag(q_ptr->flags, OF_RES_POIS);
                 }
-                if ((randint0(100) < taito) && (randint0(100) < voima) && (one_in_((r_ptr->d_char == 'J') ? 5 : 10)))
+                if ((randint0(100) < taito) && (randint0(100) < voima) && (_igor_prob((r_ptr->d_char == 'J') ? 5 : 10, unique, taito)))
                 {
                     add_flag(q_ptr->flags, OF_SLOW_DIGEST);
                 }
-                if ((r_ptr->flags2 & RF2_REGENERATE) && (randint0(100) < voima) && (randint0(100) < taito) && (one_in_(4)))
+                if ((r_ptr->flags2 & RF2_REGENERATE) && (randint0(100) < voima) && (randint0(100) < taito) && (_igor_prob(4, unique, taito)))
                 {
                     add_flag(q_ptr->flags, OF_REGEN);
                 }
@@ -530,7 +552,7 @@ static bool _dissect_corpse(void)
             }
             case _IB_HEART:
             {
-                if (one_in_(5))
+                if (_igor_prob(5, unique, taito))
                 {
                     int _con = r_ptr->body.stats[A_CON];
                     if (_con)
@@ -584,9 +606,9 @@ static bool _dissect_corpse(void)
                 }
                 if ((r_ptr->flagsr & RFR_IM_ELEC) || ((r_ptr->flagsr & RFR_RES_ELEC) && (!(r_ptr->flags2 & RF2_HUMAN)) && (one_in_(8))))
                 {
-                    if (one_in_(2)) add_flag(q_ptr->flags, OF_RES_ELEC);
+                    if (_igor_prob(2, unique, taito)) add_flag(q_ptr->flags, OF_RES_ELEC);
                 }
-                if ((r_ptr->flags3 & RF3_NO_SLEEP) && (one_in_(5)) && (randint0(100) < voima))
+                if ((r_ptr->flags3 & RF3_NO_SLEEP) && (randint0(100) < voima) && (_igor_prob(5, unique, taito)))
                 {
                     add_flag(q_ptr->flags, OF_FREE_ACT);
                 }
@@ -594,7 +616,7 @@ static bool _dissect_corpse(void)
             }
             case _IB_HANDS:
             {
-                if (one_in_(4))
+                if (_igor_prob(4, unique, taito))
                 {
                     int _dex = r_ptr->body.stats[A_DEX];
                     if (_dex)
@@ -605,7 +627,7 @@ static bool _dissect_corpse(void)
                         if (_my_pval > 1) _my_pval = trim(_my_pval, 1, 3, merkki ? voima : 70);
                         while (_my_pval > 0)
                         {
-                            if ((merkki) && (one_in_(7)))
+                            if ((merkki) && (_igor_prob(7, unique, taito)))
                             {
                                 add_flag(q_ptr->flags, OF_SUST_DEX);
                                 break;
@@ -622,7 +644,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if (one_in_(7))
+                if (_igor_prob(7, unique, taito))
                 {
                     int _str = r_ptr->body.stats[A_STR];
                     if (_str)
@@ -633,7 +655,7 @@ static bool _dissect_corpse(void)
                         if (_my_pval > 1) _my_pval = trim(_my_pval, 1, 3, merkki ? voima : 70);
                         while (_my_pval > 0)
                         {
-                            if ((merkki) && (one_in_(7)))
+                            if ((merkki) && (_igor_prob(7, unique, taito)))
                             {
                                 add_flag(q_ptr->flags, OF_SUST_STR);
                                 break;
@@ -650,7 +672,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if (one_in_(6))
+                if (_igor_prob(6, unique, taito))
                 {
                     int _thn = r_ptr->body.skills.thn + (((r_ptr->level + 10) / 20) * r_ptr->body.extra_skills.thn);
                     int i, _thd = r_ptr->body.stats[A_STR] - 4;
@@ -703,7 +725,7 @@ static bool _dissect_corpse(void)
                 q_ptr->sval = SV_BODY_LEGS; /* paranoia */
                 q_ptr->k_idx = lookup_kind(TV_CORPSE, SV_BODY_LEGS);
 
-                if (one_in_((r_ptr->d_char == 'h') ? 3 : 6))
+                if (_igor_prob((r_ptr->d_char == 'h') ? 3 : 6, unique, taito))
                 {
                     int _stl = r_ptr->body.skills.stl + (((r_ptr->level + 10) / 20) * r_ptr->body.extra_skills.stl);
                     if (_stl)
@@ -721,7 +743,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if ((randint1(100) < r_ptr->level) && (randint1(150) < taito))
+                if ((randint1(100) < r_ptr->level) && (randint1(unique ? 130 : 150) < taito))
                 {
                     int _spd = r_ptr->speed - 110;
 
@@ -741,7 +763,7 @@ static bool _dissect_corpse(void)
                         }
                     }
                 }
-                if ((r_ptr->ac > 100) && (randint1(363) < taito))
+                if ((r_ptr->ac > 100) && (randint1(unique ? 242 : 363) < taito))
                 {
                     int _ac = (r_ptr->ac - 91) / 10;
                     q_ptr->to_a = m_bonus(_ac, MIN(taito, voima + 45));
@@ -751,7 +773,7 @@ static bool _dissect_corpse(void)
                     if (!one_in_(3)) add_flag(q_ptr->flags, OF_RES_COLD);
                     if (one_in_(3)) add_flag(q_ptr->flags, OF_RES_FEAR);
                 }
-                if (one_in_(q_ptr->pval ? 10 : 4))
+                if (_igor_prob(q_ptr->pval ? 10 : 4, unique, 0))
                 {
                     int _con = r_ptr->body.stats[A_CON];
                     if (_con)
@@ -762,7 +784,7 @@ static bool _dissect_corpse(void)
                         if (_my_pval > 1) _my_pval = trim(_my_pval, 1, 2, merkki ? voima : 70);
                         if (_my_pval > 0)
                         {
-                            if ((merkki) && (one_in_(4)))
+                            if ((merkki) && (_igor_prob(4, unique, taito)))
                             {
                                 add_flag(q_ptr->flags, OF_SUST_CON);
                                 break; /* Watch out! */
