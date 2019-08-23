@@ -868,6 +868,7 @@ void _igor_calc_innate_attacks(void)
         if ((o_ptr) && (o_ptr->xtra4 != _oldh))
         {
             monster_race *r_ptr;
+            _bite.effect[1] = GF_NONE;
             if ((!o_ptr->xtra4) || (o_ptr->xtra4 >= max_r_idx))
             {
                 _oldh = o_ptr->xtra4;
