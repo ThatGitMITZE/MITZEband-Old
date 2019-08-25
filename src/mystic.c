@@ -556,7 +556,7 @@ class_t *mystic_get_class(void)
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
     skills_t bs = { 45,  34,  36,   5,  32,  24,  64,  60};
-    skills_t xs = { 15,  11,  10,   0,   0,   0,  18,  18};
+    skills_t xs = { 15,  10,  10,   0,   0,   0,  18,  18};
 
         me.name = "Mystic";
         me.desc = "Mystics are masters of bare handed fighting, like Monks. However, they "
