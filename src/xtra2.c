@@ -975,7 +975,7 @@ void monster_death(int m_idx, bool drop_item)
         }
     }
 
-    if (p_ptr->prace == RACE_MON_MIMIC && !(m_ptr->smart & SM_CLONED))
+    if ((p_ptr->prace == RACE_MON_MIMIC) && (!cloned))
         mimic_on_kill_monster(m_ptr->r_idx);
 
     if ( vampiric_drain_hack
@@ -990,9 +990,12 @@ void monster_death(int m_idx, bool drop_item)
     if (p_ptr->prace == RACE_MON_POSSESSOR && p_ptr->current_r_idx == MON_POSSESSOR_SOUL)
         corpse_chance = 2;
 
+    if ((prace_is_(RACE_IGOR)) && (r_ptr->flags2 & RF2_MULTIPLY))
+        corpse_chance = MAX(corpse_chance + 1, r_ptr->r_akills + 1);
+
     if ( (_mon_is_wanted(m_idx) || (one_in_(corpse_chance) && !do_vampire_servant))
       && (r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))
-      && !(p_ptr->inside_arena || p_ptr->inside_battle || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+      && !(p_ptr->inside_arena || p_ptr->inside_battle || cloned || (((m_ptr->r_idx == today_mon) || (prace_is_(RACE_IGOR))) && (is_pet(m_ptr)))))
     {
         /* Assume skeleton */
         bool corpse = FALSE;
