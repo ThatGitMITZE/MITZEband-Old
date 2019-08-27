@@ -115,6 +115,17 @@ Note that the armor you wear will always be susceptible to damage from acid atta
 <color:R>A:</color> Berserkers gain the class power 'Recall' at level 10.  Press 'U' (original keyset) or 'O' (Roguelike keyset) to use class powers.
 
 
+<color:G>Q:</color> What are the main advantages and disadvantages of the various types of magical item (potions, scrolls, rods, wands and staves) compared to each other?
+
+<color:R>A:</color> Scrolls are relatively plentiful, bypass fear checks, and cannot be drained by charge-drainers like rods, wands and staves; but they're vulnerable to destruction from fire and acid, are consumed on use, cannot be used while blind or confused, and have a slightly higher minimum fail rate. An individual scroll doesn't weigh much, but a large pile of scrolls will be heavier than a single rod or staff with the same purpose would.
+
+Rods have few charges, and many of the best rods have high fail rates, but they are indestructible and recharge faster than wands and staves do. Rods are also somewhat less susceptible to charge-draining than staves and wands.
+
+Staves and wands are fairly similar to each other in principle - both have more charges than rods, but don't recharge as fast. Direct comparison between a staff and a wand is seldom necessary, as they have different effects with different purposes. Wands can be destroyed by electricity and chaos, while staves can be destroyed by acid, fire, toxic waste or chaos. Staves are the device most likely to be used while confused or blind, although rods and wands can also be used this way if needed.
+
+Potions are the only magical item that can always be used with no possibility of failing, making them highly valuable in emergencies. But a potion is easily destroyed as three separate resists - cold, sound and shards - must be covered to keep it safe from all elements; and your supply of really good potions, once lost, is not easy to replenish.
+
+
 <color:G>Q:</color> Why do Ninjas start the game with Iron Spikes?
 
 <color:R>A:</color> Ninjas (and Ninja-Lawyers) can use Iron Spikes as shuriken; use the 'v' command to throw a spike. (Other classes can also use spikes as throwing weapons, but will only do marginal damage; they are much more useful for a ninja.)
@@ -277,6 +288,13 @@ In some very unusual cases your resistance may not be checked at all, or a speci
 However, many side-effects of exotic elements can be blocked or mitigated by resisting appropriate normal elements. For example, Shard resistance works against the cuts from Ice and Rocks, Sound resistance works against most elemental stunning effects as well as potion destruction from Water, and Cold resistance works against potion destruction from Ice.
 
 
+<color:G>Q:</color> Staves of Destruction are supposed to be great, yet mine doesn't seem to do anything when I use it! What's wrong?
+
+<color:R>A:</color> A number of items and spells do nothing when used on a town quest level (any quest level not located inside a dungeon). In addition to Destruction, this includes all Genocide and Mass Genocide effects, as well as Teleport Level.
+
+Destruction also does not work in the wilderness or in the Witch Wood. This is because outdoors there's no ceiling to bring down!
+
+
 <color:G>Q:</color> What do monsters' vampiric attacks do?
 
 <color:R>A:</color> They drain life from you, thereby healing the monster, increasing its maximum HP and consuming your life points.
@@ -331,7 +349,7 @@ Potions of New Life also remove all your mutations, and reroll all your internal
 
 <color:R>A:</color> Since your life rating is based on 49 random rolls, one for each character level, the life with the better end result at CL 50 is not necessarily better all the way through. Your old life might have had high rolls early on and lower rolls for the late levels, and your new life might be the opposite.
 
-The other possible explanation is that you rolled a lower CON stat cap and your constitution went down as a result.
+The other possible explanation is that you rolled a lower CON stat cap and your constitution decreased as a result.
 
 
 <color:G>Q:</color> How do internal stat caps (for STR, INT, WIS etc.) work?
