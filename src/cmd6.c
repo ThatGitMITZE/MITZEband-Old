@@ -470,6 +470,8 @@ static void do_cmd_eat_food_aux(obj_ptr obj)
     {
         obj->number--;
         obj_release(obj, 0);
+        p_ptr->window |= (PW_INVEN);
+        p_ptr->update |= (PU_BONUS);
     }
 }
 
