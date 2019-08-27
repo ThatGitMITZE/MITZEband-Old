@@ -74,6 +74,7 @@ static slot_t _igor_object_body_slot(object_type *o_ptr)
     if (o_ptr->name1 == ART_EYE_OF_VECNA) return _IB_EYES;
     if (o_ptr->name1 == ART_ALL_SEEING_EYE) return _IB_EYES;
     if (o_ptr->name1 == ART_HYPNO) return _IB_EYES;
+    if (o_ptr->name1 == ART_LERNEAN) return _IB_EYES;
     if (o_ptr->name1 == ART_HAND_OF_VECNA) return _IB_HANDS;
     if (o_ptr->tval != TV_CORPSE) return 0;
     if (o_ptr->sval > SV_BODY_EARS) return 0;
