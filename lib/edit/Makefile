@@ -84,7 +84,7 @@ CONFIG = a_info.txt \
 	q_troll2.txt \
 	q_trollslayer.txt \
 	q_tunnels.txt \
-	q_undeground.txt \
+	q_underground.txt \
 	q_vapor2.txt \
 	q_vapor.txt \
 	q_vault.txt \
@@ -95,7 +95,7 @@ CONFIG = a_info.txt \
 	q_wtower.txt \
 	r_info.txt \
 	s_info.txt \
-	t_anambar.txt \
+	t_ana.txt \
 	t_angwil.txt \
 	t_basic.txt \
 	t_info.txt \
