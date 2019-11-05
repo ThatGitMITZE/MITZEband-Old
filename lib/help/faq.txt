@@ -227,7 +227,6 @@ As you start finding {excellent} weapons and artifacts, you may well want to wie
 <color:R>A:</color> It allows you to reach Master proficiency with all weapons, including icky ones. However, the icky weapons will still be considered icky and incur the same icky-wield penalties.
 
 
-
 <color:G>Q:</color> Some weapons have slays (like Slay Orc) or brands (like Viper's Fang). What do these mean?
 
 <color:R>A:</color> Slays and brands do extra damage against the appropriate monsters (so Slay Orc does extra damage against orcs, and Viper's Fang does extra damage against monsters who don't resist poison). Slays and brands work by multiplying the weapon's dice (which makes them much more valuable on a 5d6 blade of chaos than on a 1d5 dagger).
