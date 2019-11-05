@@ -265,7 +265,7 @@ bool psion_process_monster(int m_idx)
         else
         {
             msg_format("Your ego whip lashes %s!", m_name);
-            result = mon_take_hit(m_idx, spell_power(30*m_ptr->ego_whip_pow), &fear, NULL);
+            result = mon_take_hit(m_idx, spell_power(30*m_ptr->ego_whip_pow), DAM_TYPE_SPELL, &fear, NULL);
             m_ptr->ego_whip_ct--;
             if (!projectable(py, px, m_ptr->fy, m_ptr->fx))
                 mon_anger(m_ptr);
