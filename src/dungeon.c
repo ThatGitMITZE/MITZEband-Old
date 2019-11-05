@@ -4562,6 +4562,7 @@ static void process_player(void)
         p_ptr->counter = FALSE;
         monsters_damaged_hack = FALSE;
         p_ptr->nice = FALSE;
+        shuffling_hack_hp = p_ptr->chp;
 
         player_turn++;
 
