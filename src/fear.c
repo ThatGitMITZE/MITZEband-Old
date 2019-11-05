@@ -228,7 +228,7 @@ bool fear_allow_shoot(void)
 static int _plev(void)
 {
     int l = p_ptr->lev;
-    if (p_ptr->personality == PERS_CRAVEN)
+    if (personality_is_(PERS_CRAVEN))
         l = MAX(1, l - 5);
     if (l <= 40)
         return 5 + l;
