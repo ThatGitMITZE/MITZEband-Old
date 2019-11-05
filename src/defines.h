@@ -251,10 +251,9 @@
 
 /*
  * OPTION: Maximum number of "quarks" (see "io.c")
- * Default: assume at most 512 different inscriptions are used
+ * Default: assume at most 2048 different inscriptions/randart names are used
  */
-#define QUARK_MAX       1024
-/* Was 512... 256 quarks added for random artifacts */
+#define QUARK_MAX       2048
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -920,6 +919,7 @@ enum {
     PERS_FRAGILE,
     PERS_SNEAKY,
     PERS_NOBLE,
+    PERS_SPLIT,
     MAX_PERSONALITIES,
 };
 
@@ -5105,7 +5105,7 @@ enum mon_save_fields_e {
 #define IS_RESIST_MAGIC() (p_ptr->resist_magic || wild_has_power(WILD_MAGIC_RESIST))
 #define IS_STONE_SKIN() (p_ptr->shield || wild_has_power(WILD_STONE_SKIN))
 #define IS_PASSWALL() (p_ptr->kabenuke || wild_has_power(WILD_PASSWALL))
-#define IS_REVENGE() (p_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE) || wild_has_power(WILD_REVENGE) || weaponmaster_get_toggle() == TOGGLE_SHIELD_REVENGE || psion_backlash())
+#define IS_REVENGE() ((!melee_challenge) && (p_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE) || wild_has_power(WILD_REVENGE) || weaponmaster_get_toggle() == TOGGLE_SHIELD_REVENGE || psion_backlash()))
 #define IS_WRAITH() (p_ptr->wraith_form || wild_has_power(WILD_WRAITH))
 
 /* Multishadow effects is determined by turn */
@@ -6114,3 +6114,9 @@ enum
 #define SMALL_LVL_HUGE 11
 #define SMALL_LVL_RESPECTFUL_HUGE 12
 #define SMALL_LVL_MAX 12
+
+#define DAM_TYPE_MELEE 0
+#define DAM_TYPE_ARCHERY 1
+#define DAM_TYPE_SPELL 2
+#define DAM_TYPE_WIZARD 3
+#define DAM_TYPE_AURA 4
