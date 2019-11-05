@@ -930,7 +930,7 @@ static void do_cmd_wiz_zap(void)
         if (m_ptr->cdis <= MAX_SIGHT)
         {
             bool fear = FALSE;
-            mon_take_hit(i, m_ptr->hp + 1, &fear, NULL);
+            mon_take_hit(i, m_ptr->hp + 1, DAM_TYPE_WIZARD, &fear, NULL);
             /*delete_monster_idx(i);*/
         }
     }
@@ -1226,7 +1226,7 @@ static void _wiz_stats_kill(int level)
 
         r_ptr->r_sights++;
         _stats_note_monster_level(level, r_ptr->level);
-        mon_take_hit(i, m_ptr->hp + 1, &fear, NULL);
+        mon_take_hit(i, m_ptr->hp + 1, DAM_TYPE_WIZARD, &fear, NULL);
         if (slot) rune_sword_kill(equip_obj(slot), r_ptr);
     }
 }
@@ -1586,7 +1586,7 @@ void do_cmd_debug(void)
 
     /* Blue-Mage spells */
     case 'E':
-        do_cmd_wiz_blue_mage();
+        if (p_ptr->pclass == CLASS_BLUE_MAGE) do_cmd_wiz_blue_mage();
         break;
 
     /* View item info */
