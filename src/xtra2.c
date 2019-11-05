@@ -270,6 +270,9 @@ void check_experience(void)
             if (mut_present(MUT_CHAOS_GIFT))
                 chaos_warrior_reward();
 
+            if (p_ptr->personality == PERS_SPLIT)
+                split_shuffle(FALSE);
+
             /* N.B. The class hook or the Chaos Gift mutation may result in a race
                change (stupid Chaos-Warriors), so we better always requery the player's
                race to make sure the correct racial hook is called. */
@@ -1231,7 +1234,7 @@ void monster_death(int m_idx, bool drop_item)
     case MON_MORGOTH:
     case MON_ONE_RING:
         /* Reward for "lazy" player */
-        if (p_ptr->personality == PERS_LAZY)
+        if (personality_is_(PERS_LAZY))
         {
             int a_idx = 0, yritys = 0;
             artifact_type *a_ptr = NULL;
@@ -2524,7 +2527,7 @@ void mon_check_kill_unique(int m_idx)
  * monster worth more than subsequent monsters. This would also need
  * to induce changes in the monster recall code.
  */
-bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
+bool mon_take_hit(int m_idx, int dam, int type, bool *fear, cptr note)
 {
     monster_type    *m_ptr = &m_list[m_idx];
     monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -2554,6 +2557,12 @@ bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note)
             m_ptr2->mflag2 |= MFLAG2_AWARE;
         }
     }
+
+    if ((melee_challenge) && (dam > 0) && (type != DAM_TYPE_MELEE) && (type != DAM_TYPE_WIZARD) && (type != DAM_TYPE_AURA))
+    {
+        dam = 0;
+    }
+    if ((no_melee_challenge) && (dam > 0) && (type == DAM_TYPE_MELEE)) dam = 0;
 
     if (!(r_ptr->flags7 & RF7_KILL_EXP))
     {
