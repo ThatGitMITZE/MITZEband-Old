@@ -6466,6 +6466,8 @@ void do_cmd_edit_autopick(void)
         tb->old_wid = tb->wid;
         tb->old_hgt = tb->hgt;
 
+        if ((!rogue_like_commands) && (numpad_as_cursorkey)) autopick_inkey_hack = 1;
+
         /* Get a command */
         key = inkey_special(TRUE);
 

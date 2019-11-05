@@ -2765,6 +2765,7 @@ static void _weird(void)
     case MON_BANORLUPART: {
         int hp = (_current.mon->hp + 1) / 2;
         int maxhp = _current.mon->maxhp/2;
+        bool viesti = _current.mon->ml;
 
         if ( p_ptr->inside_arena
           || p_ptr->inside_battle
@@ -2780,7 +2781,7 @@ static void _weird(void)
         m_list[hack_m_idx_ii].hp = hp;
         m_list[hack_m_idx_ii].maxhp = maxhp;
 
-        msg_print("Banor=Rupart splits in two!");
+        if (viesti) msg_print("Banor=Rupart splits in two!");
 
         break; }
 
@@ -2788,6 +2789,7 @@ static void _weird(void)
     case MON_LUPART: {
         int k, hp = 0, maxhp = 0;
         point_t where;
+        bool viesti = FALSE;
 
         if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) return;
         for (k = 1; k < m_max; k++)
@@ -2797,6 +2799,7 @@ static void _weird(void)
                 mon_ptr mon = &m_list[k];
                 hp += mon->hp;
                 maxhp += mon->maxhp;
+                if (mon->ml) viesti = TRUE;
                 if (mon->r_idx != _current.race->id)
                     where = point(mon->fx, mon->fy);
                 delete_monster_idx(mon->id);
@@ -2809,7 +2812,7 @@ static void _weird(void)
         _current.mon->hp = hp;
         _current.mon->maxhp = maxhp;
 
-        msg_print("Banor and Rupart combine into one!");
+        if (viesti) msg_print("Banor and Rupart combine into one!");
 
         break; }
     }

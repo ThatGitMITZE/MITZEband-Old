@@ -1681,8 +1681,16 @@ void object_desc(char *buf, object_type *o_ptr, u32b mode)
         /* Is it a new random artifact ? */
         if (o_ptr->art_name)
         {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_str(t, quark_str(o_ptr->art_name));
+            if (o_ptr->art_name == 1) /* Out-of-room emergency quark */
+            {
+                char tmpbuf[20] = " 'Nameless Thing'";
+                t = object_desc_str(t, tmpbuf);
+            }
+            else
+            {
+                t = object_desc_chr(t, ' ');
+                t = object_desc_str(t, quark_str(o_ptr->art_name));
+            }
         }
 
         /* Grab any artifact name */

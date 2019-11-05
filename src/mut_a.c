@@ -3226,7 +3226,7 @@ void weapon_skills_mut(int cmd, variant *res)
         var_set_string(res, "You may master any weapon.");
         break;
     case SPELL_HELP_DESC:
-        var_set_string(res, "Allows you to reach full proficiency with any weapon.");
+        var_set_string(res, "Allows you to reach full proficiency with any weapon (but does not make icky weapons non-icky).");
         break;
     default:
         default_spell(cmd, res);

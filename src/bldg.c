@@ -1801,9 +1801,8 @@ static bool _is_wanted_monster(int r_idx)
     if (idx >= 0) return TRUE;
     return FALSE;
 }
-static void _forge_wanted_monster_prize(obj_ptr obj, int r_idx)
+static void _forge_wanted_monster_prize(obj_ptr obj, int r_idx, int idx)
 {
-    int idx = _wanted_monster_idx(r_idx);
     int tval = prize_list[idx].tval;
     int sval = prize_list[idx].sval;
 
@@ -1840,7 +1839,16 @@ static void _process_wanted_corpse(obj_ptr obj)
     sprintf(buf, "Hand %s over? ", name);
     if (!get_check(buf)) return;
 
-    _forge_wanted_monster_prize(&prize, r_idx);
+    kubi_r_idx[kubi_idx] += 10000;
+
+    /* Count number of unique corpses already handed */
+    for (num = 0, k = 0; k < MAX_KUBI; k++)
+    {
+        if (kubi_r_idx[k] >= 10000) num++;
+    }
+
+    _forge_wanted_monster_prize(&prize, r_idx, no_wanted_points ? kubi_idx : num - 1);
+
     if (obj->tval == TV_CAPTURE)
     {
         r_info[r_idx].max_num = 0;
@@ -1855,15 +1863,11 @@ static void _process_wanted_corpse(obj_ptr obj)
 
     virtue_add(VIRTUE_JUSTICE, 5);
     p_ptr->fame++;
-    kubi_r_idx[kubi_idx] += 10000;
 
-    /* Count number of unique corpses already handed */
-    for (num = 0, k = 0; k < MAX_KUBI; k++)
+    if (!no_wanted_points)
     {
-        if (kubi_r_idx[k] >= 10000) num++;
+        msg_format("You have turned in %d wanted monster%s.", num, num > 1 ? "s" : "");
     }
-
-    msg_format("You earned %d point%s total.", num, num > 1 ? "s" : "");
 
     object_desc(name, &prize, OD_COLOR_CODED);
     /*msg_format("You get %s.", name);*/
@@ -2141,7 +2145,9 @@ static bool inn_comm(int cmd)
     switch (cmd)
     {
         case BACT_FOOD: /* Buy food & drink */
-            msg_print("The barkeep gives you some gruel and a beer.");
+            if ((prace_is_(RACE_BALROG)) || (prace_is_(RACE_MON_DEMON)))
+                msg_print("The barkeep offers you some very fresh meat, which you gratefully wolf down.");
+            else msg_print("The barkeep gives you some gruel and a beer.");
 
             (void)set_food(PY_FOOD_MAX - 1);
             break;
@@ -2191,7 +2197,11 @@ static bool inn_comm(int cmd)
 
                     _recharge_player_items();
 
-                    if (prev_hour >= 6 && prev_hour <= 17)
+                    if ((prace_is_(RACE_MON_POSSESSOR)) && (p_ptr->current_r_idx == MON_AUDE))
+                    {
+                        msg_format("You awaken smiling and much refreshed after a good%s... sleep?%s", (prev_hour >= 6 && prev_hour <= 17) ? " evening's" : " night's", mut_present(MUT_NO_INHIBITIONS) ? " (You really like that No Inhibitions mutation!)" : "");
+                    }
+                    else if (prev_hour >= 6 && prev_hour <= 17)
                         msg_print("You awake refreshed for the evening.");
                     else
                         msg_print("You awake refreshed for the new day.");
@@ -2846,6 +2856,8 @@ static bool _reforge_artifact(void)
             }
         }
     }
+
+    clear_bldg(5, 18);
 
     if (reforge_details)
     {

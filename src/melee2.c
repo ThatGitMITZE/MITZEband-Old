@@ -224,6 +224,8 @@ void mon_take_hit_mon(int m_idx, int dam, bool *fear, cptr note, int who)
 
     if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 0);
 
+    if ((melee_challenge) && (!is_pet(m_ptr))) dam = 0;
+
     if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
     {
         if (seen)
@@ -1576,6 +1578,8 @@ bool mon_attack_mon(int m_idx, int t_idx)
     if (r_ptr->flags1 & RF1_NEVER_BLOW) return FALSE;
 
     if (d_info[dungeon_type].flags1 & DF1_NO_MELEE) return (FALSE);
+
+    if ((melee_challenge) && (!is_pet(t_ptr))) return FALSE;
 
     /* Total armor */
     ac = mon_ac(t_ptr);

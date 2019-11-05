@@ -353,7 +353,7 @@ static void _monster_toss_imp(_monster_toss_info *info)
                 if (dam < 0) dam = 0;
                 dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-                if (mon_take_hit(c_ptr->m_idx, dam, &fear, extract_note_dies(real_r_ptr(m_ptr2))))
+                if (mon_take_hit(c_ptr->m_idx, dam, DAM_TYPE_ARCHERY, &fear, extract_note_dies(real_r_ptr(m_ptr2))))
                 {
                     /* Dead monster */
                     x = nx;
@@ -408,10 +408,10 @@ static void _monster_toss_imp(_monster_toss_info *info)
         cave[m_ptr->fy][m_ptr->fx].m_idx = info->m_idx;
         lite_spot(m_ptr->fy, m_ptr->fx);
     }
-    if (dam)
+    if ((dam) && (!no_melee_challenge))
     {
         bool fear = FALSE;
-        if (mon_take_hit(info->m_idx, dam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
+        if (mon_take_hit(info->m_idx, dam, DAM_TYPE_MELEE, &fear, extract_note_dies(real_r_ptr(m_ptr))))
         {
             /* Dead monster */
         }

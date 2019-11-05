@@ -374,6 +374,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
 
     if (!possessor_can_attack()) return;
     if (!foe) return;
+    if (no_melee_check()) return;
 
     set_monster_csleep(foe->id, 0);
     monster_desc(m_name_subject, foe, MD_PRON_VISIBLE);
@@ -470,7 +471,7 @@ void possessor_attack(point_t where, bool *fear, bool *mdeath, int mode)
                     dam = mon_damage_mod(foe, dam, FALSE);
                     if (dam > 0)
                         anger_monster(foe);
-                    *mdeath = mon_take_hit(foe->id, dam, fear, NULL);
+                    *mdeath = mon_take_hit(foe->id, dam, DAM_TYPE_MELEE, fear, NULL);
                     break;
                 case RBE_EAT_GOLD:
                 case RBE_EAT_ITEM:

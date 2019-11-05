@@ -211,6 +211,7 @@ void _grasp_spell(int cmd, variant *res)
         if (!cave[target_row][target_col].m_idx) break;
         if (!player_has_los_bold(target_row, target_col)) break;
         if (!projectable(py, px, target_row, target_col)) break;
+        
 
         var_set_bool(res, TRUE);
 
@@ -235,7 +236,7 @@ void _grasp_spell(int cmd, variant *res)
         }
         msg_format("You grasp %s.", m_name);
         teleport_monster_to(m_idx, py, px, 100, TELEPORT_PASSIVE);
-        mon_take_hit(m_idx, damroll(10, 10), &fear, extract_note_dies(real_r_ptr(m_ptr)));
+        mon_take_hit(m_idx, damroll(10, 10), DAM_TYPE_MELEE, &fear, extract_note_dies(real_r_ptr(m_ptr)));
         break;
     }
     default:

@@ -149,7 +149,7 @@ void py_birth_obj(object_type *o_ptr)
     /* Big hack for sexy players ... only wield the starting whip,
      * but carry the alternate weapon. Previously, sexy characters
      * would usually start off dual-wielding (ineffectual and confusing)*/
-    if ( p_ptr->personality == PERS_SEXY
+    if ( personality_includes_(PERS_SEXY)
       && p_ptr->prace != RACE_MON_SWORD
       && object_is_melee_weapon(o_ptr)
       && !object_is_(o_ptr, TV_HAFTED, SV_WHIP) )
@@ -468,7 +468,7 @@ static int _race_class_ui(void)
         switch (cmd)
         {
         case '\r':
-            if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || ((p_ptr->personality == PERS_CHAOTIC) && (p_ptr->pclass != CLASS_DISCIPLE)))
+            if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || ((personality_includes_(PERS_CHAOTIC)) && (p_ptr->pclass != CLASS_DISCIPLE)))
             {
                 if (_patron_ui() != UI_OK) break;
             }
@@ -585,11 +585,118 @@ static int _race_class_ui(void)
 /************************************************************************
  * 2.1) Personality
  ***********************************************************************/ 
-static vec_ptr _pers_choices(void);
+static vec_ptr _pers_choices(bool split);
+
+static void _split_pers_ui(byte _old)
+{
+    byte laskuri = 0, _status[MAX_PERSONALITIES] = {0};
+    vec_ptr v = _pers_choices(TRUE);
+    split_copy_status(_status, FALSE);
+    for (;;)
+    {
+        int cmd, i, split = vec_length(v) + 1;
+        doc_ptr cols[2];
+
+        doc_clear(_doc);
+        _race_class_top(_doc);
+
+        cols[0] = doc_alloc(20);
+        cols[1] = doc_alloc(20);
+
+        if (split > 7)
+            split = (split + 1)/2;
+        for (i = 0; i < vec_length(v); i++)
+        {
+            personality_ptr pers_ptr = vec_get(v, i);
+            doc_printf(
+                cols[i < split ? 0 : 1],
+                "  <color:%c>%c</color>) <color:%c>%s</color>\n",
+                _status[pers_ptr->id] ? 'y' : 'w',
+                I2A(i),
+                _status[pers_ptr->id] ? 'y' : 'w',
+                pers_ptr->name
+            );
+        }
+
+        doc_insert(_doc, "<color:G>Toggle Personalities (choose 2 or more; ENTER to accept)</color>\n");
+        doc_insert_cols(_doc, cols, 2, 1);
+        doc_insert(_doc, "     Use SHIFT+choice to display help topic\n");
+
+        doc_free(cols[0]);
+        doc_free(cols[1]);
+
+        _sync_term(_doc);
+
+        cmd = _inkey();
+
+        if ((cmd == '\r') || (cmd == ESCAPE))
+        {
+            int testi = 0;
+            laskuri = 0;
+            for (i = 0; ((i < MAX_PERSONALITIES) && (laskuri < 2)); i++)
+            {
+                if (_status[i])
+                {
+                    laskuri++;
+                    testi = i;
+                }
+            }
+            if (laskuri == 1)
+            {
+                p_ptr->personality = testi;
+                break;
+            }
+            else if (laskuri == 0)
+            {
+                if (cmd == ESCAPE)
+                {
+                    p_ptr->personality = _old;
+                    break;
+                }
+            }
+            else break;
+        }
+        else if (cmd == '\t') _inc_rcp_state();
+        else if (cmd == '=') _birth_options();
+        else if (cmd == '?') doc_display_help("Personalities.txt", NULL);
+        else if (isupper(cmd))
+        {
+            i = A2I(tolower(cmd));
+            if (0 <= i && i < vec_length(v))
+            {
+                personality_ptr pers_ptr = vec_get(v, i);
+                doc_display_help("Personalities.txt", pers_ptr->name);
+            }
+        }
+        else
+        {
+            if (cmd == '*') i = randint0(vec_length(v));
+            else i = A2I(cmd);
+            if (0 <= i && i < vec_length(v))
+            {
+                personality_ptr pers_ptr = vec_get(v, i);
+                _status[pers_ptr->id] = 1 - _status[pers_ptr->id];
+            }
+        }
+    }
+    if (laskuri >= 2)
+    {
+        p_ptr->personality = PERS_SPLIT;
+        split_copy_status(_status, TRUE);
+    }
+    else if (p_ptr->personality == PERS_SPLIT)
+    {
+        p_ptr->personality = _old;
+        /* But what if _old was also Split... */
+        if (p_ptr->personality == PERS_SPLIT) p_ptr->personality = PERS_ORDINARY;
+    }
+    vec_free(v);
+}
 
 static void _pers_ui(void)
 {
-    vec_ptr v = _pers_choices();
+    byte _old = p_ptr->personality;
+    vec_ptr v = _pers_choices(FALSE);
     for (;;)
     {
         int cmd, i, split = vec_length(v) + 1;
@@ -653,6 +760,11 @@ static void _pers_ui(void)
         }
     }
     vec_free(v);
+
+    if (p_ptr->personality == PERS_SPLIT)
+    {
+        _split_pers_ui(_old);
+    }
 //    if ((p_ptr->personality == PERS_CHAOTIC) && (p_ptr->pclass != CLASS_DISCIPLE)) (void)_patron_ui();
 }
 
@@ -661,7 +773,7 @@ static int _pers_cmp(personality_ptr l, personality_ptr r)
     return strcmp(l->name, r->name);
 }
 
-static vec_ptr _pers_choices(void)
+static vec_ptr _pers_choices(bool split)
 {
     vec_ptr v = vec_alloc(NULL);
     int i;
@@ -669,6 +781,7 @@ static vec_ptr _pers_choices(void)
     {
         personality_ptr pers_ptr = get_personality_aux(i);
         if (pers_ptr->flags & DEPRECATED) continue;
+        if ((split) && ((i == PERS_MUNCHKIN) || (i == PERS_SPLIT))) continue;
         vec_add(v, pers_ptr);
     }
     vec_sort(v, (vec_cmp_f)_pers_cmp);
@@ -1697,9 +1810,15 @@ static void _mon_race_group_ui(void)
                 _race_group_ptr g_ptr = &_mon_race_groups[i];
                 if (_count(g_ptr->ids) == 1)
                 {
+                    int old_id = p_ptr->prace, old_sub = p_ptr->psubrace;
                     p_ptr->prace = g_ptr->ids[0];
                     if (_mon_subrace_ui() == UI_OK)
                         break;
+                    else
+                    {
+                        p_ptr->prace = old_id;
+                        p_ptr->psubrace = old_sub;
+                    }
                 }
                 else if (_mon_race_ui(g_ptr->ids) == UI_OK)
                     break;
@@ -1771,7 +1890,9 @@ static int _mon_race_ui(int ids[])
                     p_ptr->psubrace = 0;
                 }
                 if (_mon_subrace_ui() == UI_CANCEL)
+                {
                     p_ptr->prace = old_id;
+                }
                 else
                     return UI_OK;
             }
@@ -1823,10 +1944,14 @@ static int _mon_dragon_ui(void)
 {
     int rc;
     assert(p_ptr->prace == RACE_MON_DRAGON);
-    rc = _subrace_ui_aux(DRAGON_MAX, "Dragon Subrace", "Dragons.txt", NULL);
-    if (rc == UI_OK)
-        rc = _dragon_realm_ui();
-    return rc;
+    for (;;)
+    {
+        rc = _subrace_ui_aux(DRAGON_MAX, "Dragon Subrace", "Dragons.txt", NULL);
+        if (rc == UI_OK)
+            rc = _dragon_realm_ui();
+        else return UI_CANCEL;
+        if (rc == UI_OK) return rc;
+    }
 }
 
 static int _dragon_realm_ui(void)
@@ -2089,7 +2214,7 @@ static cptr _stat_desc(int stat)
     static char buf[10];
     if (stat < 3) stat = 3;
     if (stat > 40) stat = 40;
-    if (stat < 19)
+    if ((stat < 19) || (decimal_stats))
         sprintf(buf, "%2d", stat);
     else
         sprintf(buf, "18/%d", 10*(stat - 18));

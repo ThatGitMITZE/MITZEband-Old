@@ -83,7 +83,8 @@ void self_knowledge(void)
     {
         char stat_desc[80];
 
-        sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
+        if (decimal_stats) sprintf(stat_desc, "%s %d", stat_names[v_nr], (p_ptr->stat_max_max[v_nr]-18)/10+18);
+        else sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
 
         strcpy(s_string[v_nr], stat_desc);
 
@@ -3925,6 +3926,7 @@ bool lite_line(int dir)
 bool drain_life(int dir, int dam)
 {
     int flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
+    if (melee_challenge) return FALSE;
     return (project_hook(GF_OLD_DRAIN, dir, dam, flg));
 }
 

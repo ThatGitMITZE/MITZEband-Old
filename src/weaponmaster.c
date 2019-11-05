@@ -1882,7 +1882,7 @@ void _circle_kick(void)
                 if (dam > 0)
                 {
                     bool fear;
-                    mon_take_hit(c_ptr->m_idx, dam, &fear, NULL);
+                    mon_take_hit(c_ptr->m_idx, dam, DAM_TYPE_MELEE, &fear, NULL);
 
                     anger_monster(m_ptr);
                 }
@@ -1928,6 +1928,7 @@ static void _circle_kick_spell(int cmd, variant *res)
             msg_print("Failed! You do not feel comfortable with your weapon.");
             return;
         }
+        if (no_melee_check()) return; 
         _circle_kick();
         var_set_bool(res, TRUE);
         break;

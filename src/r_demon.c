@@ -427,6 +427,28 @@ static void _marilith_calc_innate_attacks(void) {
     }
 }
 
+static void _marilith_calc_weapon_bonuses(object_type *o_ptr, weapon_info_t *info_ptr)
+{
+    int slot;
+    if (p_ptr->current_r_idx != MON_MARILITH) return;
+    if ((!o_ptr) || (!o_ptr->k_idx)) return; /* paranoia */
+
+    /* Penalize shields */
+    for (slot = equip_find_first(object_is_shield); slot; slot = equip_find_next(object_is_shield, slot))
+    {
+        int kasi = equip_which_hand(o_ptr);
+        info_ptr->icky_wield = TRUE;
+        info_ptr->to_h -= 20;
+        info_ptr->to_d -= 10;
+
+        /* Extra-penalize the weapon in the same pair of arms */
+        if ((kasi != HAND_NONE) && ((kasi / 2) == (equip_which_hand(equip_obj(slot)) / 2)))
+        {
+            info_ptr->to_h -= 24;
+        }
+    }
+}
+
 static void _marilith_calc_bonuses(void) {
     p_ptr->align -= 200;
 
@@ -574,6 +596,7 @@ static race_t *_marilith_get_race_t(void)
         me.calc_innate_attacks = _marilith_calc_innate_attacks;
         me.get_spells = _marilith_get_spells;
         me.calc_bonuses = _marilith_calc_bonuses;
+        me.calc_weapon_bonuses = _marilith_calc_weapon_bonuses;
         me.get_flags = _marilith_get_flags;
         me.gain_level = _marilith_gain_level;
         me.caster_info = _caster_info;

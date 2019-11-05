@@ -2250,7 +2250,7 @@ static void do_cmd_walk_aux(int dir, bool pickup)
     if (p_ptr->quick_walk)
         energy_use = energy_use * 60 / 100;
 
-    if (p_ptr->personality == PERS_CRAVEN) energy_use = energy_use * 21 / 25;
+    if (personality_is_(PERS_CRAVEN)) energy_use = energy_use * 21 / 25;
 
     if (prace_is_(RACE_MON_GOLEM))
         energy_use *= 2;
@@ -3464,6 +3464,8 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                     }
                 }
 
+                if (melee_challenge) hit = FALSE;
+
                 if (hit)
                 {
                     bool fear = FALSE;
@@ -3620,7 +3622,7 @@ void do_cmd_fire_aux2(obj_ptr bow, obj_ptr arrows, int sx, int sy, int tx, int t
                     }
                     if (p_ptr->stun)
                         tdam -= tdam * MIN(100, p_ptr->stun) / 150;
-                    if (mon_take_hit(c_ptr->m_idx, tdam, &fear, NULL))
+                    if (mon_take_hit(c_ptr->m_idx, tdam, DAM_TYPE_ARCHERY, &fear, NULL))
                     {
                         /* Dead monster ... abort firing additional shots */
                         i = num_shots;

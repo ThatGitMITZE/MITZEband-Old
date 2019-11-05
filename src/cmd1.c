@@ -376,7 +376,7 @@ void death_scythe_miss(object_type *o_ptr, int hand, int mode)
 }
 
 /*
- * Determine if the player "hits" a monster (normal combat).
+ * Determine if the player "hits" a monster (ranged combat).
  * Note -- Always miss 5%, always hit 5%, otherwise random.
  */
 bool test_hit_fire(int chance, int ac, int vis)
@@ -385,6 +385,7 @@ bool test_hit_fire(int chance, int ac, int vis)
 
     /* Never hit */
     if (chance <= 0) return (FALSE);
+    if (melee_challenge) return (FALSE);
 
     /* Invisible monsters are harder to hit */
     if (!vis) chance = (chance + 1) / 2;
@@ -396,7 +397,7 @@ bool test_hit_fire(int chance, int ac, int vis)
     if (k < 10) return (k < 5);
 
     /* Punish lazy characters */
-    if ((p_ptr->personality == PERS_LAZY) && (one_in_(20))) return (FALSE);
+    if ((personality_is_(PERS_LAZY)) && (one_in_(20))) return (FALSE);
 
     /* Power competes against armor */
     if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
@@ -429,7 +430,7 @@ bool test_hit_norm(int chance, int ac, int vis)
     if (k < 10) return (k < 5);
 
     /* Punish lazy characters */
-    if ((p_ptr->personality == PERS_LAZY) && (one_in_(20))) return (FALSE);
+    if ((personality_is_(PERS_LAZY)) && (one_in_(20))) return (FALSE);
 
     /* Power must defeat armor */
     if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
@@ -1666,7 +1667,7 @@ static int _check_hit(int power)
     if (k < 10) return (k < 5);
 
     /* Punish lazy characters */
-    if ((p_ptr->personality == PERS_LAZY) && (one_in_(20))) return (TRUE);
+    if ((personality_is_(PERS_LAZY)) && (one_in_(20))) return (TRUE);
 
     /* Paranoia -- No power */
     if (power <= 0) return (FALSE);
@@ -2387,7 +2388,7 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
 
             p_inc_fatigue(MUT_EASY_TIRING, 50);
 
-            if ((fuiuchi) || ((sleep_hit) && (j == 0) && (p_ptr->personality == PERS_SNEAKY)) || (test_hit_norm(chance, ac, m_ptr->ml)))
+            if ((fuiuchi) || ((sleep_hit) && (j == 0) && (personality_is_(PERS_SNEAKY))) || (test_hit_norm(chance, ac, m_ptr->ml)))
             {
                 int dd = a->dd + p_ptr->innate_attack_info.to_dd;
 
@@ -2646,10 +2647,10 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                     switch (e)
                     {
                     case GF_MISSILE:
-                        *mdeath = mon_take_hit(m_idx, dam, fear, NULL);
+                        *mdeath = mon_take_hit(m_idx, dam, DAM_TYPE_MELEE, fear, NULL);
                         break;
                     case GF_DISENCHANT:
-                        *mdeath = mon_take_hit(m_idx, dam, fear, NULL);
+                        *mdeath = mon_take_hit(m_idx, dam, DAM_TYPE_MELEE, fear, NULL);
                         if (!(*mdeath) && one_in_(7))
                             dispel_monster_status(m_idx);
                         break;
@@ -2691,6 +2692,7 @@ static void innate_attacks(s16b m_idx, bool *fear, bool *mdeath, int mode)
                             else
                             {
                                 msg_format("You <color:D>drain life</color> from %s!", m_name_object);
+                                vampirism_hack = m_ptr->hp;
                                 vamp_player(amt);
                             }
                             drain_amt += amt;
@@ -2986,7 +2988,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
         p_ptr->painted_target_ct = 0;
     }
 
-    if ((p_ptr->personality == PERS_SNEAKY) && (MON_CSLEEP(m_ptr)) && (m_ptr->ml))
+    if ((personality_is_(PERS_SNEAKY)) && (MON_CSLEEP(m_ptr)) && (m_ptr->ml))
         sleep_hit = TRUE;
 
 	switch (p_ptr->pclass)
@@ -3856,7 +3858,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                 k *= 1 + (num_blow + 2)/3;
 
                 /* First hit the chosen target */
-                if (mon_take_hit(c_ptr->m_idx, k, fear, NULL))
+                if (mon_take_hit(c_ptr->m_idx, k, DAM_TYPE_MELEE, fear, NULL))
                 {
                     *mdeath = TRUE;
                     ct += 20;
@@ -3880,7 +3882,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
 
                     if (c_ptr2->m_idx && (m_ptr2->ml || cave_have_flag_bold(y2, x2, FF_PROJECT)))
                     {
-                        if (mon_take_hit(c_ptr2->m_idx, k, &fear2, NULL))
+                        if (mon_take_hit(c_ptr2->m_idx, k, DAM_TYPE_MELEE, &fear2, NULL))
                             ct += 10;
                     }
                 }
@@ -3892,7 +3894,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                     msg_print("****END REAPING****");
             }
             /* Damage, check for fear and death */
-            else if (mon_take_hit(c_ptr->m_idx, k, fear, NULL))
+            else if (mon_take_hit(c_ptr->m_idx, k, DAM_TYPE_MELEE, fear, NULL))
             {
                 *mdeath = TRUE;
 
@@ -4017,7 +4019,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                                     dam = 25;
                                 }
                                 msg_format("%^s is wounded.", m_name_subject);
-                                mon_take_hit(m_idx, dam * (max - ct), fear, NULL);
+                                mon_take_hit(m_idx, dam * (max - ct), DAM_TYPE_MELEE, fear, NULL);
                                 break;
                             }
                             else
@@ -4198,6 +4200,7 @@ static bool py_attack_aux(int y, int x, bool *fear, bool *mdeath, s16b hand, int
                                 drain_msg = FALSE;
                             }
                             drain_heal = (drain_heal * mutant_regenerate_mod) / 100;
+                            vampirism_hack = m_ptr->hp;
                             vamp_player(drain_heal);
                             obj_learn_slay(o_ptr, OF_BRAND_VAMP, "is <color:D>Vampiric</color>");
                         }
@@ -4596,6 +4599,13 @@ bool _py_attack_exit(void)
     return FALSE;
 }
 
+bool no_melee_check(void)
+{
+    if (!no_melee_challenge) return FALSE;
+    msg_print("You would never hit anybody!");
+    return TRUE;
+}
+
 bool py_attack(int y, int x, int mode)
 {
     bool            fear = FALSE;
@@ -4610,6 +4620,13 @@ bool py_attack(int y, int x, int mode)
     disturb(0, 0);
 
     energy_use = 100;
+
+    if (no_melee_check())
+    {
+        energy_use = 0;
+        if (!m_ptr->ml) energy_use = 50; /* bumping into an invisible monster shouldn't give a free turn */
+        return _py_attack_exit();
+    }
 
     if (!p_ptr->weapon_ct && !p_ptr->innate_attack_ct && !possessor_can_attack())
     {

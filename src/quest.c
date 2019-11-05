@@ -1343,6 +1343,7 @@ void quests_on_kill_mon(mon_ptr mon)
             mon_ptr m = &m_list[i];
             if (!m->r_idx) continue;
             if (m == mon) continue;
+            if (m->hp < 0) continue; /* mon is dead but somehow has not been removed yet */
             if (is_hostile(m)) done = FALSE;
         }
         if (done)

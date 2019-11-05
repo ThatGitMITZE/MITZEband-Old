@@ -14,7 +14,7 @@ int hit_chance_innate(int to_h, int ac)
         ac = ac * (100 - p_ptr->lev) / 100;
 
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
-    if (p_ptr->personality == PERS_LAZY) odds = (19 * odds + 10) / 20;
+    if (personality_is_(PERS_LAZY)) odds = (19 * odds + 10) / 20;
     if (odds < 50) odds = 50;
     return (odds+5)/10;
 }
@@ -31,7 +31,7 @@ int hit_chance(int hand, int to_h, int ac)
     if (chance <= 0) return 0;
 
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
-    if (p_ptr->personality == PERS_LAZY) odds = (19 * odds + 10) / 20;
+    if (personality_is_(PERS_LAZY)) odds = (19 * odds + 10) / 20;
     if (odds < 50) odds = 50;
     return (odds+5)/10;
 }
@@ -44,9 +44,10 @@ int throw_hit_chance(int to_h, int ac, int range)
     if (p_ptr->stun)
         chance -= chance * MIN(100, p_ptr->stun) / 150;
     if (chance <= 0) return 0;
+    if (melee_challenge) return 0;
 
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
-    if (p_ptr->personality == PERS_LAZY) odds = (19 * odds + 10) / 20;
+    if (personality_is_(PERS_LAZY)) odds = (19 * odds + 10) / 20;
     if (odds < 50) odds = 50;
     return (odds+5)/10;
 }
@@ -60,6 +61,8 @@ int bow_hit_chance(int to_h, int ac)
     if (p_ptr->stun)
         chance -= chance * MIN(100, p_ptr->stun) / 150;
     if (chance <= 0) return 0;
+    if (melee_challenge) return 0;
+
     if (p_ptr->concent)
     {
         ac *= (10 - p_ptr->concent);
@@ -67,7 +70,7 @@ int bow_hit_chance(int to_h, int ac)
     }
 
     odds = 95*(chance - ac*3/4)*1000/(chance*100);
-    if (p_ptr->personality == PERS_LAZY) odds = (19 * odds + 10) / 20;
+    if (personality_is_(PERS_LAZY)) odds = (19 * odds + 10) / 20;
     if (odds < 50) odds = 50;
     return (odds+5)/10;
 }
@@ -606,6 +609,7 @@ void display_weapon_info(doc_ptr doc, int hand)
 
     if (p_ptr->weapon_info[hand].wield_how == WIELD_NONE) return;
     if (!o_ptr) return;
+    if (no_melee_challenge) return;
 
     dd = o_ptr->dd + p_ptr->weapon_info[hand].to_dd;
     ds = o_ptr->ds + p_ptr->weapon_info[hand].to_ds;

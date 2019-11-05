@@ -186,6 +186,7 @@ extern s16b m_cnt;
 extern s16b hack_m_idx;
 extern s16b hack_m_idx_ii;
 extern s16b warning_hack_hp;
+extern s16b shuffling_hack_hp;
 extern byte poison_warning_hack;
 extern s16b run_count;
 extern int hack_max_m_dam;
@@ -206,6 +207,8 @@ extern bool no_karrot_hack;
 extern bool allow_special3_hack;
 extern byte troika_spell_hack;
 extern byte spell_problem;
+extern s16b vampirism_hack;
+extern byte autopick_inkey_hack;
 
 /*
  * Software options (set via the '=' command).  See "tables.c"
@@ -292,6 +295,7 @@ extern bool display_skill_num; /* Give skills numerically in char sheet */
 extern bool reforge_details; /* Show statistics before reforge */
 extern bool auto_sticky_labels; /* Automatically make power labels sticky */
 extern bool show_power; /* Display device powers in inventory */
+extern bool decimal_stats;
 
 /*** Game-Play Options ***/
 
@@ -379,6 +383,9 @@ extern bool even_proportions;
 extern bool no_big_dungeons;
 extern bool thrall_mode;
 extern bool wacky_rooms;
+extern bool melee_challenge;
+extern bool no_melee_challenge;
+extern bool no_wanted_points;
 
 /*** Easy Object Auto-Destroyer ***/
 
@@ -751,6 +758,7 @@ extern critical_t critical_throw(int weight, int plus);
 
 extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, s16b hand, int mode, bool thrown);
 extern void search(void);
+extern bool no_melee_check(void);
 extern bool py_attack(int y, int x, int mode);
 extern bool pattern_seq(int c_y, int c_x, int n_y, int n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
@@ -1905,7 +1913,7 @@ extern cptr extract_note_dies(monster_race *r_ptr);
 extern void monster_death(int m_idx, bool drop_item);
 extern bool get_monster_drop(int m_idx, object_type *o_ptr);
 extern byte get_monster_drop_ct(monster_type *m_ptr);
-extern bool mon_take_hit(int m_idx, int dam, bool *fear, cptr note);
+extern bool mon_take_hit(int m_idx, int dam, int type, bool *fear, cptr note);
 extern void mon_check_kill_unique(int m_idx);
 extern void resize_map(void);
 extern void redraw_window(void);
@@ -2275,6 +2283,13 @@ extern bool magic_barrier_aux(mon_ptr m_ptr);
 extern bool multiply_barrier(int m_idx);
 
 /* personalities.c */
+extern bool personality_is_(int idx);
+extern bool personality_includes_(int idx);
+extern void split_shuffle(bool birth);
+extern void split_copy_status(byte status[MAX_PERSONALITIES], bool uusi);
+extern void split_save(savefile_ptr file);
+extern void split_load(savefile_ptr file);
+extern void split_dump(doc_ptr doc, int mode);
 extern personality_ptr get_personality_aux(int index);
 extern personality_ptr get_personality(void);
 

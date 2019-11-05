@@ -1189,7 +1189,6 @@ s32b obj_value_real(object_type *o_ptr)
     if (o_ptr->tval == TV_QUIVER) return quiver_cost(o_ptr, COST_REAL);
     if (object_is_device(o_ptr)) return device_value(o_ptr, COST_REAL);
 
-
     /* Hack -- "worthless" items */
     if (!k_info[o_ptr->k_idx].cost) return (0L);
 
@@ -2373,7 +2372,7 @@ bool apply_magic(object_type *o_ptr, int lev, u32b mode)
 
     if ((o_ptr->tval == TV_SOFT_ARMOR) &&
         (o_ptr->sval == SV_ABUNAI_MIZUGI) &&
-        (p_ptr->personality == PERS_SEXY || demigod_is_(DEMIGOD_APHRODITE)))
+        (personality_includes_(PERS_SEXY) || demigod_is_(DEMIGOD_APHRODITE)))
     {
         o_ptr->pval = 3;
         add_flag(o_ptr->flags, OF_STR);
@@ -3948,7 +3947,7 @@ bool make_gold(object_type *j_ptr, bool do_boost)
         int kerroin = interpolate(dun_level, skaala, 5);
         au = au * kerroin / 100;
     }
-    if (p_ptr->personality == PERS_NOBLE) au += (au / 4);
+    if (personality_is_(PERS_NOBLE)) au += (au / 4);
     if (au > MAX_SHORT)
         au = MAX_SHORT - randint0(1000);
     j_ptr->pval = au;

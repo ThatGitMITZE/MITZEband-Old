@@ -315,7 +315,7 @@ int skills_weapon_max(int tval, int sval)
     if (p_ptr->prace == RACE_TONBERRY && tval == TV_SWORD && sval == SV_SABRE)
         return WEAPON_EXP_MASTER;
 
-    if (p_ptr->personality == PERS_SEXY && tval == TV_HAFTED && sval == SV_WHIP)
+    if (personality_is_(PERS_SEXY) && tval == TV_HAFTED && sval == SV_WHIP)
         return WEAPON_EXP_MASTER;
 
     if (demigod_is_(DEMIGOD_POSEIDON) && tval == TV_POLEARM && sval == SV_TRIDENT)
@@ -1023,7 +1023,7 @@ void skills_on_birth(void)
             if (p_ptr->weapon_exp[i][j] == 0) p_ptr->weapon_exp[i][j] = MIN(WEAPON_EXP_BEGINNER / 2, s_info[class_idx].w_max[i][j]);
         }
     }
-    if (p_ptr->personality == PERS_SEXY)
+    if (personality_includes_(PERS_SEXY))
         p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = MAX(WEAPON_EXP_BEGINNER, p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP]);
     for (i = 0; i < 10; i++)
         p_ptr->skill_exp[i] = s_info[class_idx].s_start[i];

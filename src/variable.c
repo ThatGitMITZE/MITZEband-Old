@@ -168,6 +168,7 @@ s16b hack_m_idx_ii = 0;
 int  hack_max_m_dam = 0;
 char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 s16b warning_hack_hp = 0;
+s16b shuffling_hack_hp = 0;
 byte poison_warning_hack = 0;
 
 int total_friends = 0;
@@ -184,8 +185,10 @@ bool shop_exit_hack = FALSE;
 bool no_karrot_hack = FALSE;
 bool allow_special3_hack = FALSE;
 byte troika_spell_hack = 0;
+s16b vampirism_hack = 1000;
 byte spell_problem = 0;
 s16b run_count = 0;
+byte autopick_inkey_hack = 0;
 
 int current_flow_depth = 0;
 
@@ -275,6 +278,7 @@ bool display_skill_num; /* Give skills numerically in char sheet */
 bool reforge_details; /* Show statistics before proceeding with reforge */
 bool auto_sticky_labels; /* Automatically make power labels sticky */
 bool show_power; /* Display device powers in inventory */
+bool decimal_stats; /* Decimalized stat display */
 
 /*** Game-Play Options ***/
 
@@ -361,6 +365,9 @@ bool even_proportions;
 bool no_big_dungeons;
 bool thrall_mode;
 bool wacky_rooms;
+bool melee_challenge;
+bool no_melee_challenge;
+bool no_wanted_points;
 
 /*** Easy Object Auto-Destroyer ***/
 

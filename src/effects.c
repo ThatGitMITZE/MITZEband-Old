@@ -265,6 +265,7 @@ bool p_inc_minislow(int lisays)
     bool tulos;
 
     if (p_ptr->is_dead) return FALSE; /* paranoia */
+    if (p_ptr->no_slow) return FALSE;
 
     p_ptr->minislow = _inc_minislow(p_ptr->minislow, lisays);
     tulos = (p_ptr->minislow != vanha);
@@ -5567,6 +5568,8 @@ bool lp_player(int num)
  * and then, if any is left over, to recovering hit points */
 bool vamp_player(int num)
 {
+    if (num > vampirism_hack) num = vampirism_hack;
+    vampirism_hack = 1000;
     if (p_ptr->clp + num <= 1000)
         return lp_player(num);
     else if (p_ptr->clp < 1000)
@@ -6357,6 +6360,14 @@ int take_hit(int damage_type, int damage, cptr hit_from)
 
         /* Dead */
         return damage;
+    }
+
+    if ((p_ptr->personality == PERS_SPLIT) && (shuffling_hack_hp > 0) && (p_ptr->chp <= (p_ptr->mhp / 4)) &&
+        (p_ptr->chp < (shuffling_hack_hp / 2)) && ((shuffling_hack_hp - p_ptr->chp) >= (p_ptr->mhp / 5)) &&
+        (randint0(p_ptr->mhp / 3) >= p_ptr->chp))
+    {
+        split_shuffle(FALSE);
+        shuffling_hack_hp = 0;
     }
 
     /* Hitpoint warning */
