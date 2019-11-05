@@ -4681,8 +4681,6 @@ bool multiply_monster(int m_idx, bool clone, u32b mode)
 
 /*
  * Dump a message describing a monster's reaction to damage
- *
- * Technically should attempt to treat "Beholder"'s as jelly's
  */
 void message_pain(int m_idx, int dam)
 {
@@ -4699,7 +4697,7 @@ void message_pain(int m_idx, int dam)
     monster_desc(m_name, m_ptr, 0);
 
     /* Notice non-damage */
-    if (dam == 0)
+    if ((dam == 0) || (melee_challenge)) /* Assume only called from spells/ranged attacks */
     {
         msg_format("%^s is unharmed.", m_name);
 
