@@ -207,6 +207,29 @@ static int calc_adj_dex_ta(void)
  */
 void cnv_stat(int val, char *out_val)
 {
+    if (decimal_stats)
+    {
+        if (val < 18)
+        {
+            sprintf(out_val, "    %2d", val);
+            return;
+        }
+        else
+        {
+            int bonus = (val - 18);
+
+            if (bonus >= 220)
+            {
+                sprintf(out_val, "  %4s", "****");
+                return;
+            }
+            else
+            {
+                sprintf(out_val, "  %2d.%01d", (bonus / 10) + 18, (bonus % 10));
+                return;
+            }
+        }
+    }
     /* Above 18 */
     if (val > 18)
     {
@@ -3695,6 +3718,7 @@ void calc_bonuses(void)
     bool old_esp_unique = p_ptr->esp_unique;
     bool old_esp_magical = p_ptr->esp_magical;
     s16b old_see_inv = p_ptr->see_inv;
+    bool icky_lock = FALSE;
 
     /* Save the old armor class */
     s16b old_dis_ac = p_ptr->dis_ac;
@@ -5238,12 +5262,16 @@ void calc_bonuses(void)
         {
             if (p_ptr->weapon_info[i].icky_wield)
             {
-                msg_print("You do not feel comfortable with your weapon.");
+                if (!icky_lock) msg_print("You do not feel comfortable with your weapon.");
+                icky_lock = TRUE;
                 if (hack_mind)
                     virtue_add(VIRTUE_FAITH, -1);
             }
             else if (p_ptr->weapon_info[i].wield_how != WIELD_NONE)
-                msg_print("You feel comfortable with your weapon.");
+            {
+                if (!icky_lock) msg_print("You feel comfortable with your weapon.");
+                icky_lock = TRUE;
+            }
             else
                 msg_print("You feel more comfortable after removing your weapon.");
 
