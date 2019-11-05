@@ -1813,7 +1813,31 @@ void sound(int val)
     Term_xtra(TERM_XTRA_SOUND, val);
 }
 
+/*
+ * Cancel macro action on the queue
+ */
+static void forget_macro_action(void)
+{
+    if (!parse_macro) return;
 
+    /* Drop following macro action string */
+    while (TRUE)
+    {
+        char ch;
+
+        /* End loop if no key ready */
+        if (Term_inkey(&ch, FALSE, TRUE)) break;
+
+        /* End loop if no key ready */
+        if (ch == 0) break;
+
+        /* End of "macro action" */
+        if (ch == 30) break;
+    }
+
+    /* No longer inside "macro action" */
+    parse_macro = FALSE;
+}
 
 /*
  * Helper function called only from "inkey()"
@@ -1989,6 +2013,27 @@ static char inkey_aux(void)
     /* Get the length of the action */
     n = strlen(act);
 
+    if ((autopick_inkey_hack == 1) && (n == 2) && ((act[0] == '.') || (act[0] == ';')))
+    {
+        int skey = 0;
+        switch (act[1])
+        {
+            case '8': skey = (SKEY_UP & ~SKEY_MASK); break;
+            case '2': skey = (SKEY_DOWN & ~SKEY_MASK); break;
+            case '4': skey = (SKEY_LEFT & ~SKEY_MASK); break;
+            case '6': skey = (SKEY_RIGHT & ~SKEY_MASK); break;
+            default: break;
+        }
+        if (skey)
+        {
+            autopick_inkey_hack = 2;
+            forget_macro_action();
+            return ((char)skey);
+        }
+    }
+
+    autopick_inkey_hack = 0;
+
     /* Push the macro "action" onto the key queue */
     while (n > 0)
     {
@@ -2004,34 +2049,6 @@ static char inkey_aux(void)
     /* Hack -- Force "inkey()" to call us again */
     return (0);
 }
-
-
-/*
- * Cancel macro action on the queue
- */
-static void forget_macro_action(void)
-{
-    if (!parse_macro) return;
-
-    /* Drop following macro action string */
-    while (TRUE)
-    {
-        char ch;
-
-        /* End loop if no key ready */
-        if (Term_inkey(&ch, FALSE, TRUE)) break;
-
-        /* End loop if no key ready */
-        if (ch == 0) break;
-
-        /* End of "macro action" */
-        if (ch == 30) break;
-    }
-
-    /* No longer inside "macro action" */
-    parse_macro = FALSE;
-}
-
 
 /*
  * Mega-Hack -- special "inkey_next" pointer. XXX XXX XXX
@@ -4774,6 +4791,13 @@ int inkey_special(bool numpad_cursor)
 
     /* Get a keypress */
     key = inkey();
+
+    if (autopick_inkey_hack == 2)
+    {
+        autopick_inkey_hack = 0;
+        return (((int)key) | SKEY_MASK);
+    }
+    else autopick_inkey_hack = 0;
 
     /* Examine trigger string */
     trig_len = strlen(inkey_macro_trigger_string);
