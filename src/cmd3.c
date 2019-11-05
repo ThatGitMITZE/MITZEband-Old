@@ -1298,6 +1298,12 @@ static void _list_monsters_aux(_mon_list_ptr list, rect_t display_rect, int mode
         else
             cmd = inkey_special(TRUE);
 
+        if (rogue_like_commands)
+        {
+            if (cmd == 'j') cmd = SKEY_DOWN;
+            else if (cmd == 'k') cmd = SKEY_UP;
+        }
+
         switch (cmd)
         {
         /* Monster Recall */
@@ -1577,7 +1583,7 @@ static void _list_monsters_aux(_mon_list_ptr list, rect_t display_rect, int mode
             }
         }
 
-        /* Exit on unkown key? */
+        /* Exit on unknown key? */
         if (!handled && quick_messages && mode != MON_LIST_PROBING) /* Hey, it cost mana to get here! */
             done = TRUE;
     }
@@ -1986,6 +1992,13 @@ void do_cmd_list_objects(void)
             Term_gotoxy(display_rect.x, display_rect.y + pos);
 
             cmd = inkey_special(TRUE);
+
+            if (rogue_like_commands)
+            {
+                if (cmd == 'j') cmd = SKEY_DOWN;
+                else if (cmd == 'k') cmd = SKEY_UP;
+            }
+
             switch (cmd)
             {
             case '?':
