@@ -44,7 +44,9 @@ static void _build_general1(doc_ptr doc)
 
     doc_printf(doc, " Name       : <color:B>%s</color>\n", player_name);
     doc_printf(doc, " Sex        : <color:B>%s</color>\n", sex_info[p_ptr->psex].title);
-    doc_printf(doc, " Personality: <color:B>%s</color>\n", pers_ptr->name);
+    if (p_ptr->personality == PERS_SPLIT)
+        split_dump(doc, 0);
+    else doc_printf(doc, " Personality: <color:B>%s</color>\n", pers_ptr->name);
 
     if (race_ptr->mimic)
         doc_printf(doc, " Race       : <color:B>[%s]</color>\n", race_ptr->name);
@@ -2496,6 +2498,12 @@ static void _build_options(doc_ptr doc)
     if (wacky_rooms)
         doc_printf(doc, " Wacky Rooms:        On\n");
 
+    if (melee_challenge)
+        doc_printf(doc, " Melee Challenge:    On\n");
+
+    if (no_melee_challenge)
+        doc_printf(doc, " No-Melee Challenge: On\n");
+
     if (increase_density)
         doc_printf(doc, " Dense Small Levels: On\n");
 
@@ -2662,6 +2670,7 @@ void py_display_character_sheet(doc_ptr doc)
     doc_newline(doc);
 
     _build_general(doc);
+    if (p_ptr->personality == PERS_SPLIT) split_dump(doc, 1);
     _build_equipment(doc);
     _build_melee(doc);
     _build_shooting(doc);
