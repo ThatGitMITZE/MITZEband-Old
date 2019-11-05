@@ -67,8 +67,17 @@ With this option enabled, you start the game on level 90 of R'lyeh (or level 90 
 <topic:wacky_rooms><color:U>Always generate very unusual rooms</color> <color:D>(wacky_rooms)</color>
 If this option is enabled, every room becomes a vault (except in a few dungeons with special generation rules), vaults are allowed to generate extremely out-of-depth monsters and floor items, and extremely small levels are made slightly larger (to accommodate the vaults). This option is purposely game-unbalancing, and is intended for experienced players who have found they actually like the game unbalanced now and then.
 
+<topic:melee_challenge><color:U>Monsters can only be damaged in melee</color> <color:D>(melee_challenge)</color>
+With this option on, hostile monsters will be protected from any damage except player melee damage and auras. Status effects and genocide will apply normally. Monster infighting is limited since monsters cannot damage each other.
+
+<topic:no_melee_challenge><color:U>Monsters cannot be damaged in melee</color> <color:D>(no_melee_challenge)</color>
+With this option on, player melee is disabled; weapons can still be wielded, but not used to attack a monster. This option has no effect on monster infighting, including melee between two monsters. (Turning on both Melee Challenge and No-Melee Challenge is probably not recommended...)
+
 <topic:enable_virtues><color:U>Enable virtues</color> <color:D>(enable_virtues)</color>
 Turns on the virtue system. Virtues can help or hinder the player; among other things, they affect spell fail rates, the strength of many magical effects, and the friendliness of some monsters.
+
+<topic:no_wanted_points><color:U>Deeper wanted uniques give better rewards</color> <color:D>(no_wanted_points)</color>
+With this option on, the reward for turning in a wanted corpse depends on the unique's position on the list of all wanted uniques (deeper uniques give better rewards); with the option off, the rewards depend on the total number of wanted uniques turned in. Turning the option off is not recommended if the <color:keyword>reduce_uniques</color> option is on, since the best rewards would then be completely inaccessible.
 
 <topic:preserve_mode><color:U>Preserve artifacts</color> <color:D>(preserve_mode)</color>
 In non-preserve mode, once a fixed artifact is generated (either on the dungeon floor or in a monster drop), it will never be generated again during that game. This means that if you miss the artifact by leaving the level before you pick it up it is gone forever. On the other hand, in preserve mode this behavior is only exhibited once you have identified the artifact; it is therefore safer to leave a level before it is completely explored, as any undiscovered fixed artifact can be regenerated on a subsequent level.
@@ -262,18 +271,21 @@ This option will display a status bar on the main screen that details your curre
 This option will display a status bar on the main screen that details your current state of hunger. For example:
   <color:U>,</color>[<color:R>**</color>-------]
 
+<topic:decimal_stats><color:U>Display stats as decimals</color> <color:D>(decimal_stats)</color>
+This option will display stats above 18 as decimals (for example, <color:G>39.7</color> instead of <color:G>18/217</color>).
+
 <topic:compress_savefile><color:U>Compress messages in savefiles</color> <color:D>(compress_savefile)</color>
 Compress the savefile, by only saving the most recent "messages" that the player has received. This can cut the size of the savefile by a drastic amount, but will result in the loss of message information.
 
 <topic:abbrev_extra><color:U>Describe obj's extra resistances by abbreviation</color> <color:D>(abbrev_extra)</color>
-When an *identified* equipment is displayed, an abbreviation string for the object's extra resitances and extra abilities are added as fake inscriptions of the object.
+When an *identified* equipment is displayed, an abbreviation string for the object's extra resistances and extra abilities are added as fake inscriptions of the object.
 
 A word "EXTRA" means that the ability must not be obvious from the objects name. For example, a pair of boots of Levitation sometimes has EXTRA shard resistance. But fire resistance of an armor of Resist Fire is not an EXTRA resistance.
 
 The list of abbreviations for each resistances and abilities are described in <link:objects.txt#InscriptionAbbrev>.
 
 <topic:abbrev_all><color:U>Describe obj's all resistances by abbreviation</color> <color:D>(abbrev_all)</color>
-When an *identified* equipment is displayed, an abbreviation string for all the object's resitances and abilities are added as fake inscriptions of the object.
+When an *identified* equipment is displayed, an abbreviation string for all the object's resistances and abilities are added as fake inscriptions of the object.
 
 The list of abbreviations for each resistances and abilities are described in <link:objects.txt#InscriptionAbbrev>.
 
