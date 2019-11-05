@@ -2234,6 +2234,9 @@ option_type option_info[] =
     { &display_food_bar,            FALSE,  OPT_PAGE_TEXT, 1, 13,
     "display_food_bar",             "Display detailed food status" },
 
+    { &decimal_stats,               FALSE,  OPT_PAGE_TEXT, 2, 25,
+    "decimal_stats",                "Display stats as decimals" },
+
 //    { &display_percentages,         FALSE,  OPT_PAGE_TEXT, 1, 10,
 //    "display_percentages",          "Display percentages rather than status bars" },
 
@@ -2438,8 +2441,17 @@ option_type option_info[] =
     { &wacky_rooms,                 FALSE, OPT_PAGE_BIRTH, 1, 22,
     "wacky_rooms",                  "Always generate very unusual rooms (*)" },
 
+    { &melee_challenge,             FALSE, OPT_PAGE_BIRTH, 2, 21,
+    "melee_challenge",              "Monsters can only be damaged in melee (*)" },
+
+    { &no_melee_challenge,          FALSE, OPT_PAGE_BIRTH, 2, 23,
+    "no_melee_challenge",           "Monsters cannot be damaged in melee (*)" },
+
     { &enable_virtues,              FALSE, OPT_PAGE_BIRTH, 6, 13,
     "enable_virtues",               "Enable the virtue system" },
+
+    { &no_wanted_points,            TRUE, OPT_PAGE_BIRTH, 2, 24,
+    "no_wanted_points",             "Deeper wanted uniques give better rewards" },
 
     { &preserve_mode,               TRUE,  OPT_PAGE_BIRTH, 6, 14,
     "preserve_mode",                "Preserve artifacts (*)" },
