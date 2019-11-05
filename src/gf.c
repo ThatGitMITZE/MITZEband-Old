@@ -1355,6 +1355,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     point_t       where = point(mon->fx, mon->fy);
     monster_type *caster_ptr = (who > 0) ? &m_list[who] : NULL;
     bool          touch = BOOL(flags & (GF_AFFECT_AURA | GF_AFFECT_ATTACK));
+    bool          no_harm = ((melee_challenge) && ((!touch) || (who)) && (!is_pet(mon)));
 
     monster_race *race = mon_race(mon);
 
@@ -2568,6 +2569,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             if (dragon_vamp_hack)
                 dragon_vamp_amt += dam;
+            vampirism_hack = mon->hp;
             do_time = (dam+7)/8;
         }
         break;
@@ -3266,7 +3268,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             break;
         }
         /* Hurt by light */
-        if (race->flags3 & (RF3_HURT_LITE))
+        if ((race->flags3 & (RF3_HURT_LITE)) && (!no_harm))
         {
             /* Obvious effect */
             if (seen) obvious = TRUE;
@@ -3293,7 +3295,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             dam *= 2; dam /= (randint1(6)+6);
             mon_lore_r(mon, RFR_RES_LITE);
         }
-        else if (race->flags3 & (RF3_HURT_LITE))
+        else if ((race->flags3 & (RF3_HURT_LITE)) && (!no_harm))
         {
             mon_lore_3(mon, RF3_HURT_LITE);
             note = " cringes from the light!";
@@ -3658,13 +3660,13 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                     msg_format("%^s appears healthier.", killer);
                 }
             }
-            else
+            else if (!no_harm)
             {
                 msg_format("You draw psychic energy from %s.", m_name_object);
                 hp_player(dam);
             }
         }
-        else msg_format("%^s is unaffected.", m_name);
+        else if (seen_msg) msg_format("%^s is unaffected.", m_name);
         dam = 0;
         break;
     case GF_ANTIMAGIC: { /* Formerly restricted to rage-mage. But now, mon vs mon */
@@ -3694,7 +3696,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         }
         if (save)
         {
-            msg_format("%^s resists!", m_name);
+            if (seen_msg) msg_format("%^s resists!", m_name);
             dam = 0;
             mon->anti_magic_ct = 0;
             return TRUE;
@@ -3703,7 +3705,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             int dur = 2 + randint1(2);
             mon->anti_magic_ct = dur;
-            msg_format("%^s can no longer cast spells!", m_name);
+            if (seen_msg) msg_format("%^s can no longer cast spells!", m_name);
             dam = 0;
             return TRUE;
         }
@@ -3876,7 +3878,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
             save = ((randint0(100 + (caster_lev / 2)) < (race->level + 35))
                 && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)));
         }
-        if (save)
+        if ((save) || (no_harm))
         {
             note = " is unaffected!";
             dam = 0;
@@ -4126,7 +4128,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
     case GF_PHOTO:
         if (!who) msg_format("You take a photograph of %s.", m_name);
         /* Hurt by light */
-        if (race->flags3 & (RF3_HURT_LITE))
+        if ((race->flags3 & (RF3_HURT_LITE)) && (!no_harm))
         {
             /* Obvious effect */
             if (seen) obvious = TRUE;
@@ -4245,7 +4247,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         note = " is unharmed.";
 
     /* Check for death */
-    if (dam > mon->hp)
+    if ((dam > mon->hp) && (!no_harm))
     {
         /* Extract method of death */
         note = note_dies;
@@ -4380,6 +4382,8 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         /* Wake the monster up */
         (void)set_monster_csleep(mon->id, 0);
 
+        if ((melee_challenge) && (!is_pet(mon))) dam = 0;
+
         /* Hurt the monster */
         mon->hp -= dam;
 
@@ -4446,7 +4450,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
 
         /* Hacks  ... these effects probably belong in the gargantuan switch statement above ... sigh */
         /* Hack: The Draining Blast power gives hitpoints back. */
-        if (type == GF_ELDRITCH_DRAIN && monster_living(race))
+        if (type == GF_ELDRITCH_DRAIN && monster_living(race) && !no_harm)
         {
             int heal = dam;
             if (heal > mon->hp)
@@ -4468,7 +4472,7 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                     The problem here is that many attacks, like Slow Monster, do no physical damage, but
                     rely on mon_take_hit to do other things, like wake up sleeping monsters (or reveal
                     player ring mimics). This code needs refactoring ...*/
-        if (/*dam &&*/ mon_take_hit(mon->id, dam, &fear, note_dies))
+        if (/*dam &&*/ mon_take_hit(mon->id, dam, ((no_harm) || (!melee_challenge)) ? DAM_TYPE_SPELL : DAM_TYPE_MELEE, &fear, note_dies))
         {
             /* Dead monster */
         }
@@ -4478,6 +4482,13 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
         {
             if (note == note_dies) /* Hack around crap code design ... Above we assumed monster would die but alas, we were wrong! */
                 note = NULL;
+
+            if ((note) && (no_harm)) /* Hack */
+            {
+                if (streq(" resists.", note)) note = NULL;
+                else if (streq(" shudders.", note)) note = NULL;
+                else if (streq(" is hit hard.", note)) note = NULL;
+            }
 
             /* HACK - anger the monster before showing the sleep message */
             if (do_sleep) anger_monster(mon);
