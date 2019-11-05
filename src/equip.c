@@ -69,6 +69,7 @@ static bool _object_is_combat_ring(obj_ptr obj)
     else if (have_flag(flags, OF_BRAND_COLD)) return TRUE;
     else if (have_flag(flags, OF_BRAND_ACID)) return TRUE;
     else if (have_flag(flags, OF_BRAND_VAMP)) return TRUE;
+    else if (have_flag(flags, OF_BLOWS)) return TRUE;
     return FALSE;
 }
 
