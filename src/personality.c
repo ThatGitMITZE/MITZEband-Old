@@ -1035,7 +1035,7 @@ void split_copy_status(byte status[MAX_PERSONALITIES], bool uusi)
     {
         for (i = 0; i < MAX_PERSONALITIES; i++)
         {
-            status[i] = _split_status[i];
+            status[i] = MIN(1, _split_status[i]);
         }
     }    
 }
