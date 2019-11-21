@@ -1045,15 +1045,13 @@ void split_shuffle(bool birth)
      byte _new_status[MAX_PERSONALITIES] = {0}, laskuri = 0, i;
      int prob;
      byte muutos = 0;
-     if ((birth) || (!one_in_(7)))
+     bool vaihto = (one_in_(7)) ? FALSE : TRUE;
+     for (i = 0; i < MAX_PERSONALITIES; i++)
      {
-         for (i = 0; i < MAX_PERSONALITIES; i++)
+         if (_split_status[i])
          {
-             if (_split_status[i])
-             {
-                 laskuri++;
-                 if (one_in_(laskuri)) _split_dominant = i;
-             }
+             laskuri++;
+             if ((one_in_(laskuri)) && ((birth) || (vaihto))) _split_dominant = i;
          }
      }
 //     msg_format("Dominant personality: %s", get_personality_aux(_split_dominant)->name);
