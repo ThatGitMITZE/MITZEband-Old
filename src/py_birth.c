@@ -3113,7 +3113,7 @@ static void _birth_finalize(void)
     /* Everybody gets a chaos patron. The chaos warrior is obvious,
      * but anybody else can acquire MUT_CHAOS_GIFT during the game */
     if ((p_ptr->chaos_patron == RANDOM_PATRON) || ((p_ptr->pclass != CLASS_CHAOS_WARRIOR) &&
-        (p_ptr->pclass != CLASS_DISCIPLE) && (p_ptr->personality != PERS_CHAOTIC)) || ((p_ptr->pclass == CLASS_DISCIPLE) && (p_ptr->chaos_patron < MIN_PURPLE_PATRON)) ||
+        (p_ptr->pclass != CLASS_DISCIPLE) && (!personality_includes_(PERS_CHAOTIC))) || ((p_ptr->pclass == CLASS_DISCIPLE) && (p_ptr->chaos_patron < MIN_PURPLE_PATRON)) ||
         ((p_ptr->pclass != CLASS_DISCIPLE) && (p_ptr->chaos_patron > MAX_CHAOS_PATRON)))
         p_ptr->chaos_patron = _random_patron();
 
