@@ -2172,8 +2172,11 @@ static void auto_destroy_obj(object_type *o_ptr, int autopick_idx)
         int idx = is_autopick(o_ptr);
         msg_autopick(idx, "Destroy");
     }
-    object_desc(name, o_ptr, OD_COLOR_CODED);
-    msg_format("Auto-destroying %s.", name);
+    if (o_ptr->k_idx)
+    {
+        object_desc(name, o_ptr, OD_COLOR_CODED);
+        msg_format("Auto-destroying %s.", name);
+    }
     /* Note: It turns out to be convenient to delay destruction after
      * all. But rather than waiting until notice_stuff(), we need
      * only wait until obj_release(). Otherwise, clients need to think
