@@ -256,7 +256,7 @@ static object_type *_choose(cptr verb, int tval, int options)
         if (cmd == ESCAPE || cmd == 'q' || cmd == 'Q')
             done = TRUE;
 
-        if (options & _ALLOW_SWITCH)
+        if ((options & _ALLOW_SWITCH) && (_magic_eater_label_slot((unsigned char)cmd) == -1))
         {
             if (cmd == 'w' || cmd == 'W')
                 which_tval = TV_WAND;
