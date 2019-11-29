@@ -50,7 +50,6 @@ CONFIG = a_info.txt \
 	q_info.txt \
 	q_inntrouble.txt \
 	q_killing_fields.txt \
-	q_laboratory.txt \
 	q_lights.txt \
 	q_logrus_master.txt \
 	q_meta.txt \
