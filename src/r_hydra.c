@@ -122,8 +122,17 @@ static void _breathe_spell(int cmd, variant *res)
         var_set_string(res, "Breathe");
         break;
     case SPELL_DESC:
-        var_set_string(res, format("Breathes %s at your opponent.", gf_name(_breath_effect())));
+    {
+        char elname[32] = "software bugs";
+        gf_info_ptr gf = gf_lookup(_breath_effect());
+        if ((gf) && (gf->name))
+        {
+           strcpy(elname, gf->name);
+           str_tolower(elname);
+        }
+        var_set_string(res, format("Breathes %s at your opponent.", elname));
         break;
+    }
     case SPELL_INFO:
         var_set_string(res, info_damage(0, 0, _breath_amount()));
         break;
