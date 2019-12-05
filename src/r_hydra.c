@@ -315,8 +315,8 @@ race_t *mon_hydra_get_race(void)
 
     if (!init)
     {           /* dis, dev, sav, stl, srh, fos, thn, thb */
-    skills_t bs = { 25,  21,  35,   1,  10,   7,  62,  30};
-    skills_t xs = { 12,  10,  10,   0,   0,   0,  25,   7};
+    skills_t bs = { 25,  21,  35,   1,  10,   7,  61,  30};
+    skills_t xs = { 12,  10,  10,   0,   0,   0,  17,   7};
 
         me.skills = bs;
         me.extra_skills = xs;
@@ -352,7 +352,7 @@ race_t *mon_hydra_get_race(void)
     me.stats[A_DEX] = (rank + 1)/2;
     me.stats[A_CON] = rank;
     me.stats[A_CHR] =  0;
-    me.life = 100 + 3*rank;
+    me.life = 99 + 3*rank;
     me.equip_template = mon_get_equip_template();
 
     return &me;
