@@ -534,7 +534,7 @@ static option_type cheat_info[CHEAT_MAX] =
  */
 static void do_cmd_options_cheat(cptr info)
 {
-    char    ch;
+    int    ch;
 
     int        i, k = 0, n = CHEAT_MAX;
 
@@ -577,15 +577,18 @@ static void do_cmd_options_cheat(cptr info)
         autopick_inkey_hack = 1;
 
         /* Get a key */
-        ch = inkey();
+        ch = inkey_special(TRUE);
 
         /*
          * HACK - Try to translate the key into a direction
          * to allow using the roguelike keys for navigation.
          */
-        dir = get_keymap_dir(ch, FALSE);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
-            ch = I2D(dir);
+        if (ch < 256)
+        {
+            dir = get_keymap_dir(ch, FALSE);
+            if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+                ch = I2D(dir);
+        }
 
         /* Analyze */
         switch (ch)
@@ -597,6 +600,7 @@ static void do_cmd_options_cheat(cptr info)
 
             case '-':
             case '8':
+            case SKEY_UP:
             {
                 k = (n + k - 1) % n;
                 break;
@@ -606,14 +610,28 @@ static void do_cmd_options_cheat(cptr info)
             case '\n':
             case '\r':
             case '2':
+            case SKEY_DOWN:
             {
                 k = (k + 1) % n;
+                break;
+            }
+
+            case SKEY_TOP:
+            {
+                k = MAX(0, k - 10);
+                break;
+            }
+
+            case SKEY_BOTTOM:
+            {
+                k = MIN(n - 1, k + 10);
                 break;
             }
 
             case 'y':
             case 'Y':
             case '6':
+            case SKEY_RIGHT:
             {
                 p_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
                 (*cheat_info[k].o_var) = TRUE;
@@ -624,6 +642,7 @@ static void do_cmd_options_cheat(cptr info)
             case 'n':
             case 'N':
             case '4':
+            case SKEY_LEFT:
             {
                 (*cheat_info[k].o_var) = FALSE;
                 k = (k + 1) % n;
@@ -802,7 +821,7 @@ static void do_cmd_options_autosave(cptr info)
  */
 void do_cmd_options_aux(int page, cptr info)
 {
-    char    ch;
+    int     ch;
     int     i, k = 0, n = 0, l;
     int     opt[40];
     char    buf[80];
@@ -910,15 +929,18 @@ void do_cmd_options_aux(int page, cptr info)
         autopick_inkey_hack = 1;
 
         /* Get a key */
-        ch = inkey();
+        ch = inkey_special(TRUE);
 
         /*
          * HACK - Try to translate the key into a direction
          * to allow using the roguelike keys for navigation.
          */
-        dir = get_keymap_dir(ch, FALSE);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
-            ch = I2D(dir);
+        if (ch < 256)
+        {
+            dir = get_keymap_dir(ch, FALSE);
+            if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+                ch = I2D(dir);
+        }
 
         /* Analyze */
         switch (ch)
@@ -930,6 +952,7 @@ void do_cmd_options_aux(int page, cptr info)
 
             case '-':
             case '8':
+            case SKEY_UP:
             {
                 k = (n + k - 1) % n;
                 if (scroll_mode)
@@ -944,8 +967,31 @@ void do_cmd_options_aux(int page, cptr info)
             case '\n':
             case '\r':
             case '2':
+            case SKEY_DOWN:
             {
                 k = (k + 1) % n;
+                if (scroll_mode)
+                {
+                    if (k > bottom_opt - 2 + option_offset) option_offset = k - bottom_opt + ((k == n - 1) ? 1 : 2);
+                    else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                }
+                break;
+            }
+
+            case SKEY_TOP:
+            {
+                k = MAX(0, k - 10);
+                if (scroll_mode)
+                {
+                    if (k > bottom_opt - 1 + option_offset) option_offset = k - bottom_opt + 1; /* ((k == n - 1) ? 1 : 2); */
+                    else if ((k < option_offset) || ((k > 0) && (k == option_offset))) option_offset = MAX(0, k - 3);
+                }
+                break;
+            }
+
+            case SKEY_BOTTOM:
+            {
+                k = MIN(n - 1, k + 10);
                 if (scroll_mode)
                 {
                     if (k > bottom_opt - 2 + option_offset) option_offset = k - bottom_opt + ((k == n - 1) ? 1 : 2);
@@ -957,6 +1003,7 @@ void do_cmd_options_aux(int page, cptr info)
             case 'y':
             case 'Y':
             case '6':
+            case SKEY_RIGHT:
             {
                 if (browse_only) break;
                 if (option_info[opt[k]].o_var == &random_artifacts)
@@ -1031,6 +1078,7 @@ void do_cmd_options_aux(int page, cptr info)
             case 'n':
             case 'N':
             case '4':
+            case SKEY_LEFT:
             {
                 if (browse_only) break;
                 if (option_info[opt[k]].o_var == &random_artifacts)
