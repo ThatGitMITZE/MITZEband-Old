@@ -978,6 +978,9 @@ void do_cmd_options_aux(int page, cptr info)
                 break;
             }
 
+            case '7':
+            case '9':
+            case SKEY_PGUP:
             case SKEY_TOP:
             {
                 k = MAX(0, k - 10);
@@ -989,6 +992,9 @@ void do_cmd_options_aux(int page, cptr info)
                 break;
             }
 
+            case '1':
+            case '3':
+            case SKEY_PGDOWN:
             case SKEY_BOTTOM:
             {
                 k = MIN(n - 1, k + 10);
