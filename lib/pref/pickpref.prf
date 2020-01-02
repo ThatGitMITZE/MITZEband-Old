@@ -176,6 +176,10 @@ corpses
 # Spellbooks
 #########################################
 
+?:[AND [EQU $SELLING Off] [NOT [EQU $CLASS Skillmaster]]]
+!unreadable spellbooks
+?:1
+
 ?:[EQU $CLASS Sorcerer]
 fourth spellbooks#!sdk
 third spellbooks#!k
