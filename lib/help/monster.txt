@@ -282,7 +282,7 @@ At grossly excessive upkeep levels (starting around 500%), a red <color:keyword>
 </indent>
   <indent><color:U>Pet Evolution</color>
 
-Pets, like players, receive experience from damaging and killing hostile monsters. With enough experience, some pets may <color:keyword>evolve</color> into stronger monsters. For example, your baby multi-hued dragon might become a young multi-hued dragon, then a mature multi-hued dragon, and eventually a mighty Wyrm of Many Colours!
+Pets, like players, receive experience when they kill a hostile monster. With enough experience, some pets may <color:keyword>evolve</color> into stronger monsters; for example, your baby multi-hued dragon might become a young multi-hued dragon, then a mature multi-hued dragon, and eventually a mighty Wyrm of Many Colours!
 
 One problem, though: evolving into very strong forms takes a long time, and placing a pet into a Capture Ball causes the pet to lose all experience. It will not devolve back into its original form, but loses any progress it had made towards the next form.
 </indent>
