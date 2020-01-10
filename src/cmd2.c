@@ -2239,21 +2239,24 @@ static void do_cmd_walk_aux(int dir, bool pickup)
 
     /* Hack -- In small scale wilderness it takes MUCH more time to move */
     if (p_ptr->wild_mode) energy_use *= ((MAX_HGT + MAX_WID) / 2);
-    if (mut_present(MUT_LIMP)) energy_use += (energy_use / 9);
+    if (!p_ptr->riding)
+    {
+        if (mut_present(MUT_LIMP)) energy_use += (energy_use / 9);
 
-    if (p_ptr->action == ACTION_QUICK_WALK) energy_use = (p_ptr->pclass == CLASS_NINJA_LAWYER) ? 
-         energy_use * (60-(p_ptr->lev/2)) / 100 : energy_use * (45-(p_ptr->lev/2)) / 100;
-    if (p_ptr->action == ACTION_STALK) energy_use = energy_use * (150 - p_ptr->lev) / 100;
-    if (weaponmaster_get_toggle() == TOGGLE_SHADOW_STANCE)
-        energy_use = energy_use * (45-(p_ptr->lev/2)) / 100;
+        if (p_ptr->action == ACTION_QUICK_WALK) energy_use = (p_ptr->pclass == CLASS_NINJA_LAWYER) ? 
+             energy_use * (60-(p_ptr->lev/2)) / 100 : energy_use * (45-(p_ptr->lev/2)) / 100;
+        if (p_ptr->action == ACTION_STALK) energy_use = energy_use * (150 - p_ptr->lev) / 100;
+        if (weaponmaster_get_toggle() == TOGGLE_SHADOW_STANCE)
+            energy_use = energy_use * (45-(p_ptr->lev/2)) / 100;
 
-    if (p_ptr->quick_walk)
-        energy_use = energy_use * 60 / 100;
+        if (p_ptr->quick_walk)
+            energy_use = energy_use * 60 / 100;
 
-    if (personality_is_(PERS_CRAVEN)) energy_use = energy_use * 21 / 25;
+        if (personality_is_(PERS_CRAVEN)) energy_use = energy_use * 21 / 25;
 
-    if (prace_is_(RACE_MON_GOLEM))
-        energy_use *= 2;
+        if (prace_is_(RACE_MON_GOLEM))
+            energy_use *= 2;
+    }
 
     move_player(dir, pickup, FALSE);
 }
