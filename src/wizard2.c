@@ -1832,6 +1832,33 @@ void do_cmd_debug(void)
         gain_exp(command_arg ? command_arg : (p_ptr->exp + 1));
         break;
 
+    case 'X':
+    {
+        char tmp_val[80];
+        long tmp_long;
+        /* Query */
+        if (!get_string("Experience: ", tmp_val, 9)) break;
+
+        /* Extract */
+        tmp_long = atol(tmp_val);
+
+        /* Verify */
+        if (tmp_long < 0) tmp_long = 0L;
+        if (tmp_long > 99999999L) tmp_long = 99999999L;
+        if (p_ptr->prace != RACE_ANDROID)
+        {
+            /* Save */
+            p_ptr->max_exp = tmp_long;
+            p_ptr->exp = tmp_long;
+
+            /* Update */
+            check_experience();
+            p_ptr->max_plv = p_ptr->lev;
+            do_cmd_redraw();
+        }
+        break;
+    }
+
     /* Zap Monsters (Genocide) */
     case 'z':
         do_cmd_wiz_zap();
