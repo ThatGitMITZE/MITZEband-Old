@@ -248,6 +248,12 @@ void check_experience(void)
     while ((p_ptr->lev < PY_MAX_LEVEL) &&
            (p_ptr->exp >= exp_requirement(p_ptr->lev)))
     {
+        if (level_inc_stat) /* check for delays from weird stuff */
+        {
+            gain_chosen_stat();
+            level_inc_stat = FALSE;
+        }
+
         p_ptr->lev++;
 
         if (p_ptr->pclass == CLASS_WILD_TALENT) wild_talent_fix_up();
@@ -262,10 +268,10 @@ void check_experience(void)
             sound(SOUND_LEVEL);
             cmsg_format(TERM_L_GREEN, "Welcome to level %d.", p_ptr->lev);
 
+            if ((p_ptr->max_plv % 5) == 0) level_inc_stat = TRUE;
+
             if (class_ptr->gain_level != NULL)
                 (class_ptr->gain_level)(p_ptr->lev);
-
-            level_inc_stat = TRUE;
 
             if (mut_present(MUT_CHAOS_GIFT))
                 chaos_warrior_reward();
@@ -306,11 +312,8 @@ void check_experience(void)
 
         if (level_inc_stat)
         {
-            if(p_ptr->max_plv % 5 == 0)
-            {
-                gain_chosen_stat();
-                level_inc_stat = FALSE;
-            }
+            gain_chosen_stat();
+            level_inc_stat = FALSE;
         }
         p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
         p_ptr->redraw |= (PR_LEV);
