@@ -1212,7 +1212,7 @@ static cptr _do_scroll(int sval, int mode)
         }
         break;
     case SV_SCROLL_CURSE_WEAPON:
-        if (desc) return "It makes your wielding weapon (Shattered) when you read it.";
+        if (desc) return "It blasts your current melee weapon when you read it.";
         if (cast)
         {
             int slot = equip_random_slot(object_is_melee_weapon);
