@@ -863,10 +863,11 @@ void _igor_calc_innate_attacks(void)
     {
         static innate_attack_t _bite = {0};
         static int _oldh = 0;
+        static int _oldl = -11;
         static bool _exists = FALSE;
         object_type *o_ptr = inv_obj(_igor_body, _IB_HEAD);
 
-        if ((o_ptr) && (o_ptr->xtra4 != _oldh))
+        if ((o_ptr) && ((o_ptr->xtra4 != _oldh) || (to_h != _oldl)))
         {
             monster_race *r_ptr;
             _bite.effect[1] = GF_NONE;
@@ -874,10 +875,12 @@ void _igor_calc_innate_attacks(void)
             {
                 _oldh = o_ptr->xtra4;
                 _exists = FALSE;
+                _oldl = to_h;
                 break;
             }
             r_ptr = &r_info[o_ptr->xtra4];
             _oldh = o_ptr->xtra4;
+            _oldl = to_h;
             _exists = FALSE;
             if ((r_ptr->name) && (!(r_ptr->flags1 & RF1_NEVER_BLOW)))
             {
@@ -909,8 +912,8 @@ void _igor_calc_innate_attacks(void)
                     _exists = TRUE;
                     _bite.dd = _md;
                     _bite.ds = _ms;
-                    _bite.to_d += 2;
-                    _bite.to_h += to_h;
+                    _bite.to_d = 2;
+                    _bite.to_h = to_h;
 
                     _bite.weight = 60;
                     calc_innate_blows(&_bite, 100);
@@ -931,20 +934,23 @@ void _igor_calc_innate_attacks(void)
     {
         static innate_attack_t _claw = {0};
         static int _oldg = 0;
+        static int _oldl = -11;
         static bool _exists = FALSE;
         object_type *o_ptr = inv_obj(_igor_body, _IB_HANDS);
 
-        if ((o_ptr) && (o_ptr->xtra4 != _oldg))
+        if ((o_ptr) && ((o_ptr->xtra4 != _oldg) || (to_h != _oldl)))
         {
             monster_race *r_ptr;
             if ((!o_ptr->xtra4) || (o_ptr->xtra4 >= max_r_idx))
             {
                 _oldg = o_ptr->xtra4;
                 _exists = FALSE;
+                _oldl = to_h;
                 break;
             }
             r_ptr = &r_info[o_ptr->xtra4];
             _oldg = o_ptr->xtra4;
+            _oldl = to_h;
             _exists = FALSE;
             if ((r_ptr->name) && (!(r_ptr->flags1 & RF1_NEVER_BLOW)))
             {
@@ -976,8 +982,8 @@ void _igor_calc_innate_attacks(void)
                     _exists = TRUE;
                     _claw.dd = _md;
                     _claw.ds = _ms;
-                    _claw.to_d += 2;
-                    _claw.to_h += to_h;
+                    _claw.to_d = 2;
+                    _claw.to_h = to_h;
 
                     _claw.weight = 60;
                     calc_innate_blows(&_claw, 100);
