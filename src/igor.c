@@ -1237,15 +1237,15 @@ static void _igor_stomach_breathe_spell(int cmd, variant *res)
     }
     if ((cmd == SPELL_INFO) || (cmd == SPELL_CAST))
     {
-        byte head_support = 2;
+        byte head_support = 3;
         object_type *nuppi = inv_obj(_igor_body, _IB_HEAD);
         int voima = 0;
         
         if ((nuppi) && (nuppi->xtra5 == tummy->xtra5))
         {
-            head_support = 3;
-            if (nuppi->xtra4 == tummy->xtra4) head_support = 4;
-            if ((nuppi->xtra4 > 0) && (tummy->xtra4 > 0) && (nuppi->xtra4 < max_r_idx) && (nuppi->xtra5 < max_r_idx)) voima = (r_info[tummy->xtra4].level * 2 + r_info[nuppi->xtra4].level + 2) / 3;
+            head_support = 5;
+            if (nuppi->xtra4 == tummy->xtra4) head_support = 7;
+            if ((nuppi->xtra4 > 0) && (tummy->xtra4 > 0) && (nuppi->xtra4 < max_r_idx) && (tummy->xtra4 < max_r_idx)) voima = (r_info[tummy->xtra4].level * 2 + r_info[nuppi->xtra4].level + 2) / 3;
         }
         else if ((tummy->xtra4 > 0) && (tummy->xtra4 < max_r_idx))
         {
@@ -1267,7 +1267,7 @@ static void _igor_stomach_breathe_spell(int cmd, variant *res)
                   break;
         }
         pow *= head_support;
-        pow /= 6;
+        pow /= 9;
     }
     switch (cmd)
     {
