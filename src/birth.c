@@ -115,6 +115,12 @@ int calc_exp_factor(void)
         exp = exp * realm->exp / 100;
     }
 
+    if (coffee_break == SPEED_INSTA_COFFEE) /* Does not really lend itself to extreme XP mods - flatten the scale a bit */
+    {
+        exp -= (exp / 5);
+        exp += 20;
+    }
+
     return exp;
 }
 
