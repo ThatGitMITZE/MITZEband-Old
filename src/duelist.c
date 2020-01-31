@@ -488,7 +488,7 @@ void strafing_spell(int cmd, variant *res)
  * Spell Table
  ****************************************************************/
 
-#define MAX_DUELIST_SPELLS    8
+#define MAX_DUELIST_SPELLS    9
 
 static spell_info _spells[MAX_DUELIST_SPELLS] = 
 {
@@ -501,13 +501,11 @@ static spell_info _spells[MAX_DUELIST_SPELLS] =
     { 40,  60,  0, _isolation_spell },
     { 45,  60,  0, _darting_duel_spell },
     { 48,  80,  0, _phase_charge_spell },
+    {-1,  -1,  -1, NULL}
 }; 
 
 static int _get_spells(spell_info* spells, int max)
 {
-    int i;
-    int ct = 0;
-    int stat_idx = p_ptr->stat_ind[A_DEX];
     cptr msg = duelist_equip_error();
 
     if (msg)
@@ -516,23 +514,7 @@ static int _get_spells(spell_info* spells, int max)
         return 0;
     }
     
-    /* Initialize a (copied) spell list with current casting costs and fail rates */
-    for (i = 0; i < MAX_DUELIST_SPELLS; i++)
-    {
-        spell_info *base = &_spells[i];
-        if (ct >= max) break;
-        if (base->level <= p_ptr->lev)
-        {
-            spell_info* current = &spells[ct];
-            current->fn = base->fn;
-            current->level = base->level;
-            current->cost = base->cost;
-
-            current->fail = calculate_fail_rate(base->level, base->fail, stat_idx);            
-            ct++;
-        }
-    }
-    return ct;
+    return get_spells_aux(spells, MIN(max, MAX_DUELIST_SPELLS), _spells);
 }
 
 static void _calc_bonuses(void)
