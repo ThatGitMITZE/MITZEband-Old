@@ -195,7 +195,7 @@ void quest_complete(quest_ptr q, point_t p)
             else
                 msg_print("Software Bug ... you missed out on your reward!");
         }
-        if ((coffee_break == SPEED_INSTA_COFFEE) && (q->flags & QF_RANDOM))
+        if ((coffee_break == SPEED_INSTA_COFFEE) && ((q->flags & QF_RANDOM) || (q->id == QUEST_OBERON)))
         {
             int num = 0;
             if (q->id == QUEST_OBERON) num = 11;
@@ -217,7 +217,7 @@ void quest_complete(quest_ptr q, point_t p)
 
                 object_origins(&forge, ORIGIN_ANGBAND_REWARD);
 
-                forge.number = MAX(1, num - 8);
+                forge.number = 1 + (num / 10);
 
                 drop_near(&forge, -1, p.y, p.x);
             }
