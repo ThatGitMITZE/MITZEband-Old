@@ -59,23 +59,6 @@ scrolls:banish
 #!identified rings
 #!identified amulets
 
-rods:angelic healing#@zh!sdk
-rods:heroic speed#@zs!sdk
-?staves:healing#@uh!sdk
-?staves:speed#@us!sdk
-?staves:destruction#@ud!sdk
-?staves:confusing lights#@uz!sdk
-?wands:rocket#@ar!sdk
-?wands:disintegrate#@ad!sdk
-
-?:[LEQ $LEVEL 45]
-?staves:cure wounds#@uu!sdk
-?:1
-
-?:[OR [EQU $CLASS Mage High-Mage Sorcerer] [EQU $RACE Beholder Lich] ]
-wizardstaff
-?:1
-
 ?:[AND [EQU $SELLING Off] [EQU $CLASS Berserker]]
 !nameless shooters
 !scrolls
@@ -87,6 +70,25 @@ wizardstaff
 !rods
 !wands
 !staves
+?:1
+
+?:[NOT [EQU $CLASS Berserker]]
+rods:angelic healing#@zh!sdk
+rods:heroic speed#@zs!sdk
+?staves:healing#@uh!sdk
+?staves:speed#@us!sdk
+?staves:destruction#@ud!sdk
+?staves:confusing lights#@uz!sdk
+?wands:rocket#@ar!sdk
+?wands:disintegrate#@ad!sdk
+?:1
+
+?:[AND [LEQ $LEVEL 45] [NOT [EQU $CLASS Berserker]] ]
+?staves:cure wounds#@uu!sdk
+?:1
+
+?:[OR [EQU $CLASS Mage High-Mage Sorcerer] [EQU $RACE Beholder Lich] ]
+wizardstaff
 ?:1
 
 ?unidentified rods
