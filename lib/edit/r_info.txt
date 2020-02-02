@@ -14046,22 +14046,19 @@ D:This ancient shadow of death wilts any living thing it passes.
 N:805:Omarax the Eye Tyrant
 G:e:y
 I:130:65d100:30:80:10:100
-W:73:4:999:16000:0:0
-B:GAZE:DAM(2d6):DRAIN_EXP(40d6)
-B:GAZE:DAM(2d6):DRAIN_CHARGES
-B:GAZE:DAM(2d6):LOSE_INT
-B:GAZE:DRAIN_MANA(7d10)
+W:73:4:999:29282:0:0
+B:GAZE:BRAIN_SMASH(7d6):DRAIN_MANA(9d9):CONFUSE:DRAIN_EXP(40d6)
+B:GAZE:BRAIN_SMASH(7d6):TERRIFY:PARALYZE:CONFUSE
+B:GAZE:BRAIN_SMASH(7d6):DRAIN_CHARGES:AMNESIA(25%):LOSE_INT
+B:GAZE:DAM(6d9):DISENCHANT:STUN(2d3):LOSE_WIS(50%)
 F:UNIQUE | MALE | CAN_SPEAK | RES_TELE
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:SMART | BASH_DOOR |
-F:EVIL | RES_POIS |
-F:NO_CONF | NO_SLEEP
+F:EVIL | RES_POIS | NO_CONF | NO_SLEEP
 F:POS_TELEPATHY | POS_GAIN_AC
 P:Copy:High-Elf:Warrior-Mage
 P:Body:Eye8
-S:1_IN_2 |
-S:BLIND | SLOW | CONFUSE | SCARE | DRAIN_MANA | MIND_BLAST | AMNESIA |
-S:DARKNESS | BA_DARK | BO_ACID | BO_FIRE | BO_COLD | S_KIN
+S:FREQ_40 | GAZE | BRAIN_SMASH(150) | S_KIN | BO_MANA | BA_DARK | DISPEL_MAGIC
 D:A disembodied eye, floating in the air. His gaze seems to shred your
 D:soul and his spells crush your will. He is ancient, his history steeped
 D:in forgotten evils, his atrocities numerous and sickening.
