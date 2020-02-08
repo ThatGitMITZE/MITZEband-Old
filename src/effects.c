@@ -5941,6 +5941,9 @@ void change_race(int new_race, cptr effect_msg)
             race_ptr->gain_level(p_ptr->lev);    /* This is OK ... Just make sure we get to choose racial powers on poly */
     }
 
+    /* Check changes to body template (e.g. Centaurs) */
+    equip_on_change_race();
+
     p_ptr->redraw |= (PR_BASIC);
 
     p_ptr->update |= (PU_BONUS);
