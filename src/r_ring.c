@@ -1506,6 +1506,8 @@ static void _calc_bonuses(void)
         p_ptr->sh_elec++;
     if (_essences[OF_AURA_COLD] >= 7)
         p_ptr->sh_cold++;
+    if (_essences[OF_AURA_SHARDS] >= 7)
+        p_ptr->sh_cold++;
 }
 
 static void _calc_stats(s16b stats[MAX_STATS])
@@ -1612,6 +1614,8 @@ static void _get_flags(u32b flgs[OF_ARRAY_SIZE])
         add_flag(flgs, OF_AURA_ELEC);
     if (_essences[OF_AURA_COLD] >= 7)
         add_flag(flgs, OF_AURA_COLD);
+    if (_essences[OF_AURA_SHARDS] >= 7)
+        p_ptr->sh_shards++;
 
     if (_essences[OF_IM_ACID] >= 2)
         add_flag(flgs, OF_IM_ACID);
@@ -1775,6 +1779,7 @@ static void _character_dump(doc_ptr doc)
     _dump_ability_flag(doc, OF_AURA_FIRE, 7, "Aura Fire");
     _dump_ability_flag(doc, OF_AURA_ELEC, 7, "Aura Elec");
     _dump_ability_flag(doc, OF_AURA_COLD, 7, "Aura Cold");
+    _dump_ability_flag(doc, OF_AURA_SHARDS, 7, "Aura Shards");
     for (i = 0; i < 6; i++) /* Assume in order */
         _dump_ability_flag(doc, OF_SUST_STR + i, 5, format("Sustain %s", stat_name_true[A_STR + i]));
 
