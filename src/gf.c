@@ -4327,6 +4327,20 @@ bool gf_affect_m(int who, mon_ptr mon, int type, int dam, int flags)
                 if (seen) obvious = TRUE;
                 /* Why, in the name of all sanity, would you do this??!
                  * dam = 0;*/
+
+                /* Update names */
+                if (flags & GF_AFFECT_SPELL)
+                {
+                    monster_desc(m_name, mon, 0);
+                    monster_desc(m_name_object, mon, 0);
+                }
+                else
+                {
+                    monster_desc(m_name, mon, MD_PRON_VISIBLE);
+                    monster_desc(m_name_object, mon, MD_PRON_VISIBLE | MD_OBJECTIVE);
+                }
+                /* Get the monster possessive ("his"/"her"/"its") */
+                monster_desc(m_poss, mon, MD_PRON_VISIBLE | MD_POSSESSIVE);
             }
             else
             {
