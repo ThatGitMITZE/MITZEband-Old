@@ -5526,6 +5526,7 @@ void play_game(bool new_game)
 
         /* Load system pref files before displaying anything */
         load_user_pref_files();
+        Term_xtra(TERM_XTRA_REACT, 0);
 
         /* Roll up a new character */
         player_birth();
