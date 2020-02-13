@@ -5524,6 +5524,9 @@ void play_game(bool new_game)
         /* Hack -- seed for town layout */
         seed_town = randint0(0x10000000);
 
+        /* Load system pref files before displaying anything */
+        load_user_pref_files();
+
         /* Roll up a new character */
         player_birth();
 
