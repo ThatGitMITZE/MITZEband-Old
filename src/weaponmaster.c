@@ -3390,7 +3390,7 @@ static void _calc_weapon_bonuses(object_type *o_ptr, weapon_info_t *info_ptr)
 
     _init_blows_calc(o_ptr, info_ptr);
 
-    if (!spec1) info_ptr->icky_wield = TRUE;
+    if (_weaponmaster_object_is_icky(o_ptr)) info_ptr->icky_wield = TRUE;
 
     /* (+L/5, +L/5) for all weaponmasters replacing 'Signature Weapon' */
     if (spec1 && p_ptr->speciality_equip)
