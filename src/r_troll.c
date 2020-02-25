@@ -446,7 +446,7 @@ race_t *mon_troll_get_race(int psubrace)
 
         me.name = "Troll";
         me.desc =     
-            "Trolls are disgusting creatures: Big, strong and stupid. They make excellent warriors "
+            "Trolls are disgusting creatures: big, strong and stupid. They make excellent warriors, "
             "but are hopeless with magical devices. Trolls have incredible powers of regeneration.";
 
         me.infra = 5;
