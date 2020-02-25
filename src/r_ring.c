@@ -1823,15 +1823,15 @@ race_t *mon_ring_get_race(void)
 
         me.name = "Ring";
         me.desc = "Rings are sentient creatures animated by magical means.\n \n"
-                    "Rings cannot wear normal equipment. Rather, they simply are a ring, "
-                    "magically enchanted. They gain resistances, attributes and spells "
-                    "by absorbing the magic from jewelry they find (rings or amulets).\n \n"
-                    "Rings also have a small arsenal of innate spells. Since the ring "
-                    "is unable to move on its own it will need to lure a nearby monster "
+                    "Rings cannot wear normal equipment; rather, they simply are a ring, "
+                    "magically enchanted. Rings have a small arsenal of innate powers. Since the ring "
+                    "is unable to move on its own, it will need to lure a nearby monster "
                     "into wearing it. Magic rings tend to corrupt their owners, and over time, "
                     "the ring-bearer will find that his will is not his own!\n \n"
-                    "Rings have no physical attacks. Instead, they may blast enemies with mighty "
-                    "spells (once learned, of course). Or, they may simply lie back and let their "
+                    "Rings can absorb magic from the jewelry (rings or amulets) that they find, "
+                    "and gain resistances, attributes and additional spells this way. "
+                    "Rings have no physical attacks; instead, they may blast enemies with mighty "
+                    "spells (once absorbed, of course), or they may simply lie back and let their "
                     "current bearer do the fighting for them.";
 
         me.stats[A_STR] = -3;
