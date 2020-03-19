@@ -144,7 +144,7 @@ static void _destroy_aux(obj_ptr obj, cptr fmt)
     msg_format(fmt, o_name);
 
     stats_on_p_destroy(obj, 1);
-    obj->number--;
+    obj_dec_number(obj, 1, TRUE);
     obj_release(obj, 0);
 }
 
