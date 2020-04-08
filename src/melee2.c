@@ -2415,7 +2415,10 @@ static void process_monster(int m_idx)
         return;
 
     if (m_ptr->r_idx == MON_SHURYUUDAN)
+    {
         mon_take_hit_mon(m_idx, 1, &fear, " explodes into tiny shreds.", m_idx);
+        if (!m_list[m_idx].r_idx) return;
+    }
 
     if (((is_pet(m_ptr)) || (is_friendly(m_ptr))) && (!p_ptr->inside_battle))
     {
