@@ -1799,6 +1799,7 @@ static _obj_list_ptr _create_obj_list(void)
         int                auto_pick_idx;
 
         if (!o_ptr->k_idx) continue;
+        if (!o_ptr->number) continue; /* Object list crashes on piles of 0 */
         if (!(o_ptr->marked & OM_FOUND)) continue;
         if (o_ptr->tval == TV_GOLD) continue;
 
