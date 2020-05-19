@@ -1899,6 +1899,7 @@ static void _annoy_m(void)
     case ANNOY_WORLD:
         if (_current.flags & MSC_SRC_PLAYER)
             cast_spell(stop_time_spell);
+        break;
     case ANNOY_NO_AIR:
         if (_current.flags & MSC_SRC_PLAYER)
             set_no_air(NO_AIR_MAX, FALSE);
