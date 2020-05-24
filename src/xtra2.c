@@ -5421,12 +5421,12 @@ int get_rep_dir(int *dp, bool under)
                 dir = ddd[randint0(8)];
             }
         }
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+        else if ((p_ptr->riding_ryoute) && (r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
         {
             /* Random direction */
             dir = ddd[randint0(8)];
         }
-        else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+        else if ((p_ptr->riding_ryoute) && (r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
         {
             /* Random direction */
             dir = ddd[randint0(8)];
