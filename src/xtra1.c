@@ -1340,7 +1340,7 @@ static void prt_status(void)
         if (hex_spelling(HEX_ICE_ARMOR)) ADD_FLG(BAR_SHCOLD);
         if (hex_spelling(HEX_RUNESWORD)) ADD_FLG(BAR_RUNESWORD);
         if (hex_spelling(HEX_BUILDING)) ADD_FLG(BAR_BUILD);
-        if ((hex_spelling(HEX_ANTI_TELE)) || (mummy_get_toggle() == MUMMY_TOGGLE_ANTITELE)) ADD_FLG(BAR_ANTITELE);
+        if (hex_spelling(HEX_ANTI_TELE)) ADD_FLG(BAR_ANTITELE);
         if (hex_spelling(HEX_SHOCK_CLOAK)) ADD_FLG(BAR_SHELEC);
         if (hex_spelling(HEX_SHADOW_CLOAK)) ADD_FLG(BAR_SHSHADOW);
         if (hex_spelling(HEX_CONFUSION)) ADD_FLG(BAR_ATTKCONF);
@@ -1358,6 +1358,7 @@ static void prt_status(void)
             if (p_ptr->magic_num2[1] == 2) ADD_FLG(BAR_REVENGE);
         }
     }
+    else if (mummy_get_toggle() == MUMMY_TOGGLE_ANTITELE) ADD_FLG(BAR_ANTITELE);
 
     /* Calculate length */
     for (i = 0; bar[i].sstr; i++)
