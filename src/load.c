@@ -315,7 +315,7 @@ static void rd_options(savefile_ptr file)
         else pantheon_count = 2;
     }
 
-    /* shops_mark_unseen was formerly empty_levels, with opposite default */
+    /* shops_mark_unseen was formerly empty_levels */
     if (savefile_is_older_than(file, 7, 1, 2, 11))
     {
         if (ironman_empty_levels) generate_empty = EMPTY_ALWAYS;
@@ -323,8 +323,8 @@ static void rd_options(savefile_ptr file)
         if (shops_mark_unseen)
         {
             shops_mark_unseen = FALSE;
-            if (!ironman_empty_levels) generate_empty = EMPTY_NEVER;
         }
+        else if (!ironman_empty_levels) generate_empty = EMPTY_NEVER;
     }
 
     /*** Window Options ***/
