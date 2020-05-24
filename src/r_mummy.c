@@ -350,7 +350,7 @@ static void _curse_item_spell(int cmd, variant *res)
     case SPELL_NAME: var_set_string(res, "Curse Item"); break;
     case SPELL_DESC: var_set_string(res, "Curses a single item, consuming 3 turns."); break;
     case SPELL_CAST: var_set_bool(res,_curse_item_aux()); break;
-    case SPELL_ENERGY: var_set_int(res, 300);
+    case SPELL_ENERGY: var_set_int(res, 300); break;
     default: default_spell(cmd, res);break;}
 }
 
@@ -761,7 +761,11 @@ static void _unleash_spell(int cmd, variant *res){
     }
     case SPELL_CAST:{ 
         if (_curse_boost_capped > 2) var_set_bool(res, _unleash()); 
-        else msg_print("There isn't enough malice in you... "); var_set_bool(res, FALSE); 
+        else
+        {
+            msg_print("There isn't enough malice in you... ");
+            var_set_bool(res, FALSE);
+        }
         break;
     }
     default:default_spell(cmd, res); break;
