@@ -447,13 +447,13 @@ static bool _inflict_curse_aux(int pow, monster_type *m_ptr, int m_idx, bool DoD
     }
 
     ct = 0;
-    while (ct <= rolls)
+//    msg_format("Rolls: %d", rolls);
+    while (ct < rolls)
     {
         if ((!m_ptr) || (!m_ptr->r_idx)) return TRUE;
-        ct++;
         dmg = plev + _curse_boost_capped;
         dType = -1;
-        switch (nopat[ct-1])
+        switch (nopat[ct])
         {
             case 13: dType = GF_DEATH_RAY; dmg = spell_power(plev * 200); break;
             case 11: dType = GF_BLOOD_CURSE; break;
@@ -467,10 +467,13 @@ static bool _inflict_curse_aux(int pow, monster_type *m_ptr, int m_idx, bool DoD
             case 1: dType = GF_OLD_SLOW; break;
             default: break;
         }
-        p = (nopat[ct-1] + 1) / 2;
+        p = (nopat[ct] + 1) / 2;
+        ct++;
 
-        if (r_info[m_idx].flags1 & RF1_UNIQUE){ // if it is an unique, give some refund for high-powered ones...
-            if (p == 6 || p == 3 || p == 7){ refunds++; continue; }
+//        msg_format("Roll %d: %d", ct, nopat[ct - 1]);
+
+        if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE){ // if it is an unique, give some refund for high-powered ones...
+            if (p == 5 || p == 3 || p == 7){ refunds++; continue; }
         }
         if (dType > 0){
             u32b liput = PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP;
@@ -1307,7 +1310,7 @@ static void _calc_bonuses_aux(void)
             boost = 0;
             removable = 0;
         }
-        else
+        else if (boost)
         {
             boost -= (boost * malus / 10);
             removable -= (removable * malus / 10);
