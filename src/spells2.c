@@ -2324,6 +2324,7 @@ void _get_earthquake_feats(int *_feats, bool tree)
                     if (!f_ptr->name) continue;
                     if (have_flag(f_ptr->flags, FF_PERMANENT)) continue;
                     if (have_flag(f_ptr->flags, FF_CREVASSE)) continue;
+                    if ((have_flag(f_ptr->flags, FF_FLOOR)) && ((i == 0) || (!d_ptr->wild_type))) continue;
                     _feats[i] = _tf[i];
                 }
             }
