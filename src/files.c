@@ -2993,11 +2993,12 @@ s32b score_mult(void)
 
     /* Bonuses for arena success */
     {
-        s32b arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS + 2);
+        s32b arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS + 3);
         s32b div = MAX_ARENA_MONS + 2;
-        if (arena_win == div) mult += 1500;
+        if (arena_win > div) mult += 1500; /* babble kill */
+        else if (arena_win >= MAX_ARENA_MONS) mult += 1000; /* GWOP kill with or without babble loss */
         else if (arena_win > 0) mult += (arena_win * 1000L / div);
-        else if (arena_win < 0)
+        else if (arena_win < 0) /* lost before meeting the babble */
         {
             mult += (MIN(-1 - arena_win, MAX_ARENA_MONS) * 1000L / div);
             mult -= 500;
