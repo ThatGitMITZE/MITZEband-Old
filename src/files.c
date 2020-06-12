@@ -2972,7 +2972,15 @@ s32b score_mult(void)
     {
         s32b dead = (s32b)ct_uniques(CTU_COUNT_DEAD) * 1000L;
         s32b total = ct_uniques(CTU_COUNT_DEAD | CTU_COUNT_LIVING);
-        if (dead == total) mult += 2500;
+        if (dead == (total * 1000L))
+        {
+            s32b bonus = 2500L;
+            if ((reduce_uniques) && (reduce_uniques_pct > 0) && (reduce_uniques_pct < 100))
+            {
+                bonus = 1000 + (10 * reduce_uniques_pct);
+            }
+            mult += bonus;
+        }
         else if (dead > 0) mult += (dead / total);
     }
 
