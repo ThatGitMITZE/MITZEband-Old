@@ -1735,6 +1735,8 @@ int ct_uniques(int mode)
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name) continue;
         if ((r_ptr->flagsx & RFX_SUPPRESS) && (!(mode & CTU_INCLUDE_SUPPRESSED))) continue;
+        if ((r_ptr->flagsx & RFX_SUPPRESS) && (!(mode & CTU_INCLUDE_SUPPRESSED))) continue;
+        if ((r_ptr->dungeon) && (r_ptr->dungeon < max_d_idx) && (d_info[r_ptr->dungeon].flags1 & DF1_SUPPRESSED) && ((!no_wilderness) || (r_ptr->dungeon == DUNGEON_AUSSIE))) continue;
         if ((r_ptr->rarity > 100) && (!(mode & CTU_INCLUDE_RARE))) continue;
         if (r_ptr->flags1 & RF1_UNIQUE)
         {
