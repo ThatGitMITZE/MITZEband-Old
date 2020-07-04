@@ -3219,7 +3219,7 @@ static void place_extra_bold_aux(int y, int x)
     place_extra_bold(y, x);
     if ((atlantis_hack) && (cave[y][x].mimic))
     {
-        set_cave_feat(y, x, (cave[y][x].mimic >= max_f_idx) ? cave[y][x].mimic : (cave[y][x].mimic % max_f_idx));
+        set_cave_feat(y, x, (cave[y][x].mimic < max_f_idx) ? cave[y][x].mimic : (cave[y][x].mimic % max_f_idx));
         cave[y][x].mimic = 0;
     }
 }
