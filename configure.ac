@@ -217,8 +217,8 @@ AC_ARG_ENABLE(sdl_mixer,
 dnl Multi-color support
 AC_ARG_ENABLE(xtra_colours,
     [AS_HELP_STRING([--disable-xtra-colours],     [Limits colours to 16 (default: disabled)])],
-    [limit_colours=$enableval],
-    [limit_colours=no])
+    [enable_xtra_colours=$enableval],
+    [enable_xtra_colours=yes])
 
 
 MAINFILES="\$(BASEMAINFILES)"
@@ -365,7 +365,7 @@ if test "$enable_stats" = "yes"; then
 fi
 
 dnl Support more than 16 colours
-if test "x$limit_colours" != xyes; then
+if test "x$enable_xtra_colours" != xno; then
     AC_DEFINE(ALLOW_XTRA_COLOURS, 1, [Define to 1 if more than 16 colours are supported.])
 fi
 
@@ -473,7 +473,7 @@ else
     echo "- SDL sound                               Disabled"
 fi
 
-if test "$limit_colours" = "yes"; then
+if test "x$enable_xtra_colours" = "xno"; then
     echo "- Limit colours to 16                     Yes"
 else
     echo "- Limit colours to 16                     No"
