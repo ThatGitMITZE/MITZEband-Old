@@ -922,6 +922,7 @@ int get_spell_table(power_info* spells, int max, bool with_class)
     }
     else if ((with_class) && (p_ptr->pclass == CLASS_WILD_TALENT))
     {
+        inkey_xtra = FALSE;
         ct = wild_talent_get_spells(spells);
     }
     else if ((with_class) && (class_ptr->get_spells != NULL))
