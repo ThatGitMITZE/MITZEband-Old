@@ -702,9 +702,9 @@ bool make_attack_normal(int m_idx)
                         if (object_is_artifact(obj)) continue;
 
                         object_desc(o_name, obj, OD_OMIT_PREFIX | OD_NAME_ONLY | OD_COLOR_CODED);
-                        msg_format("%sour %s was eaten!",
+                        msg_format("%sour %s %s eaten!",
                                ((obj->number > 1) ? "One of y" : "Y"),
-                               o_name);
+                               o_name, (((obj->number == 1) && (have_flag(obj->flags, OF_PLURAL))) ? "were" : "was"));
 
                         obj->number--;
                         obj_release(obj, OBJ_RELEASE_QUIET);
