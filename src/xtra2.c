@@ -968,6 +968,7 @@ void monster_death(int m_idx, bool drop_item)
 
             q_ptr->origin_type = ORIGIN_ARENA_REWARD;
             q_ptr->origin_xtra = m_ptr->r_idx;
+            identify_item(q_ptr);
             (void)drop_near(q_ptr, -1, y, x);
         }
 
