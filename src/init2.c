@@ -26,9 +26,11 @@
 #endif
 
 #if defined (WINDOWS) && !defined (CYGWIN)
-# define my_mkdir(path, perms) mkdir(path)
+# define my_mkdir(path, perms)
+# define mkdir(path)
 #elif defined(HAVE_MKDIR) || defined(MACH_O_CARBON) || defined (CYGWIN)
-# define my_mkdir(path, perms) mkdir(path, perms)
+# define my_mkdir(path, perms)
+# define mkdir(path, perms)
 #else
 # define my_mkdir(path, perms) FALSE
 #endif
@@ -291,10 +293,25 @@ bool dir_create(const char *path)
             if (dir_exists(buf)) continue;
 
             /* The parent doesn't exist, so create it or fail */
-            if (my_mkdir(buf, 0755) != 0) return FALSE;
+			my_mkdir(buf, 0755);
+			if ( dir_exists(buf) ) 
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
         }
     }
-    return my_mkdir(path, 0755) == 0 ? TRUE : FALSE;
+	if ( dir_exists(path) )
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 #else /* HAVE_STAT */
 bool dir_create(const char *path) { return FALSE; }
