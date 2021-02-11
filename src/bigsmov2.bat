@@ -342,6 +342,7 @@ move ..\lib\help\start.txt ..\lib\help\start.txt
 move ..\lib\help\tang.txt ..\lib\help\tang.txt
 move ..\lib\help\town.txt ..\lib\help\town.txt
 move ..\lib\help\version.txt ..\lib\help\version.txt
+move ..\lib\help\vers_frog.txt ..\lib\help\vers_frog.txt
 move ..\lib\help\warlocks.txt ..\lib\help\Warlocks.txt
 move ..\lib\file\a_cursed.txt ..\lib\file\a_cursed.txt
 move ..\lib\file\a_high.txt ..\lib\file\a_high.txt
