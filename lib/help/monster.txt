@@ -1,6 +1,6 @@
 <style:title>Monsters</style>
 
-Encounters with monsters are the backbone of FrogComposband. It is mostly by killing monsters that you acquire treasures, gain experience and become more powerful; but not all monsters are hateful enemies who need to die.
+Encounters with monsters are the backbone of MITZEband. It is mostly by killing monsters that you acquire treasures, gain experience and become more powerful; but not all monsters are hateful enemies who need to die.
 
 <indent><color:U>Monster Races</color>
 
@@ -258,7 +258,7 @@ Although all player characters have some chance to resist sanity blasting, only 
 
 <topic:Pets><style:heading>Pets and Riding</style>
 
-What could be nicer than a loyal pet? People sometimes worry their pets will trample them underfoot; but in FrogComposband, <color:G>pets will never attack you by mistake</color>. You can walk around safely as your pet Great Hell Wyrm obliterates your enemies. Better still, some pets can summon new pets.
+What could be nicer than a loyal pet? People sometimes worry their pets will trample them underfoot; but in MITZEband, <color:G>pets will never attack you by mistake</color>. You can walk around safely as your pet Great Hell Wyrm obliterates your enemies. Better still, some pets can summon new pets.
 
 One might think that pets can make the game much easier. It is of course highly satisfying to send your pet Wyrm into a troll pit and wait outside listening for the howls of agony and terror, the sounds of guts splattering, bones crunching and so on; but one should not expect to gain much experience from this. You only earn full experience when you deliver the death blow yourself.
 
@@ -293,7 +293,7 @@ Your pets are fairly well trained and will respond to a variety of commands such
 Here is a list of available pet commands:
 
 <style:keyword>Dismiss Pets</style>
-  <indent>Dismiss specified pets. Dismissed pets will immediately disappear from the current level. FrogComposband asks you whether you want to dismiss each pet in order from high level named pets to low level unnamed pets. You can press 'U' to dismiss all unnamed pets.</indent>
+  <indent>Dismiss specified pets. Dismissed pets will immediately disappear from the current level. MITZEband asks you whether you want to dismiss each pet in order from high level named pets to low level unnamed pets. You can press 'U' to dismiss all unnamed pets.</indent>
 
 <style:keyword>Specify Target of Pet</style>
   <indent>Choose a target monster; all your pets will begin to chase the target. This command causes pets to pathfind much more aggressively in cases where enemies are not in their line of sight.</indent>

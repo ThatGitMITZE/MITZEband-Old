@@ -72,6 +72,7 @@ tang.txt \
 town_contents.txt \
 town.txt \
 version.txt \
+vers_frog.txt \
 vers_old.txt \
 Warlocks.txt \
 Weaponmasters.txt
