@@ -614,7 +614,7 @@ The No Wilderness Option
 
 Diverse dungeons are fun, multiple towns are fun, and the wilderness is 
 fun; but sometimes you might want to just forget about them all and 
-select the No Wilderness option. Maybe you are new to FrogComposband, 
+select the No Wilderness option. Maybe you are new to MITZEband, 
 and want to learn the basics in a simplified version of the game before 
 moving on to the full version. (Beginner Mode automatically turns on 
 coffee-break mode, which turns off the wilderness - though sometimes, 

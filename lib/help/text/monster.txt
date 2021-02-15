@@ -1,6 +1,6 @@
 Monsters
 
-Encounters with monsters are the backbone of FrogComposband. It is 
+Encounters with monsters are the backbone of MITZEband. It is 
 mostly by killing monsters that you acquire treasures, gain experience 
 and become more powerful; but not all monsters are hateful enemies who 
 need to die.
@@ -384,7 +384,7 @@ blasting, only a handful ever become fully immune to it.
 Pets and Riding
 
 What could be nicer than a loyal pet? People sometimes worry their pets 
-will trample them underfoot; but in FrogComposband, pets will never 
+will trample them underfoot; but in MITZEband, pets will never 
 attack you by mistake. You can walk around safely as your pet Great 
 Hell Wyrm obliterates your enemies. Better still, some pets can summon 
 new pets.
@@ -474,7 +474,7 @@ are fun!
   
   Dismiss Pets
     Dismiss specified pets. Dismissed pets will immediately disappear 
-    from the current level. FrogComposband asks you whether you want to 
+    from the current level. MITZEband asks you whether you want to 
     dismiss each pet in order from high level named pets to low level 
     unnamed pets. You can press 'U' to dismiss all unnamed pets.
   

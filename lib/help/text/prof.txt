@@ -1,6 +1,6 @@
 The Proficiency System
 
-FrogComposband has a number of independent proficiency systems - weapon 
+MITZEband has a number of independent proficiency systems - weapon 
 proficiency, spell proficiency, riding proficiency, martial arts 
 proficiency and dual-wielding proficiency. All of these are closely 
 related and have many similarities; in particular, your proficiency is 

@@ -1,12 +1,12 @@
 The Newbie Guide
 
-Welcome to FrogComposband! This guide will attempt to give you a quick 
+Welcome to MITZEband! This guide will attempt to give you a quick 
 overview of the game and get you started on your path to slay the 
 dreaded Serpent of Chaos.
 
 Overview
 
-FrogComposband is a single-player role-playing game where you, the 
+MITZEband is a single-player role-playing game where you, the 
 brave adventurer, attempt to save (or conquer?) the world by defeating 
 evil monsters including, eventually, the Serpent of Chaos. The road is 
 long, and the path is treacherous. Many have tried and failed, and the 
@@ -1229,7 +1229,7 @@ dungeon.
   
   In many other games, you are required to take notes on the 
   weaknesses, strengths, spells, etc. of a given monster; but 
-  FrogComposband takes these notes for you automatically. Every time 
+  MITZEband takes these notes for you automatically. Every time 
   you find out something new about a monster (like that it can breathe 
   fire), this is added to your knowledge of the monster. There are 
   several ways to look over this knowledge; you can type '/', then the 
@@ -1246,7 +1246,7 @@ dungeon.
   
   On Death
   
-  Death in FrogComposband is permanent. Saving is meant only to let you 
+  Death in MITZEband is permanent. Saving is meant only to let you 
   pick up where you left off; if you die, your savefile is marked. The 
   next time you try to use the savefile, you will get the new character 
   dialogue. Ancestors of dead characters will retain their monster 
