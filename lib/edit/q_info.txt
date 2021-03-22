@@ -5,7 +5,7 @@
 #
 
 ########################################################################
-# FrogComposband Quests (cf quest.h and quest.c)
+# MITZEband Quests (cf quest.h and quest.c)
 #
 # N:id:lvl:name
 # T:type flags

@@ -12,6 +12,7 @@
 # This includes vaults, special rooms and various kinds of wilderness encounters.
 # (v stands for vaults. Formerly, only vaults were specified in this file.
 # I added support for regular rooms and wilderness encounters for Poschengband).
+# --chris
 
 # === Understanding v_info.txt ===
 
