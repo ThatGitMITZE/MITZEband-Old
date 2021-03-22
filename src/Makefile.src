@@ -5,9 +5,9 @@
 # across a range of different makefiles, to cut down on maintenance.
 #
 
-VERSION = 7.1.salmiak
-COPYRIGHT = (c) 1995-2020 Angband contributors
-PROGNAME = frogcomposband
+VERSION = v0.0.official
+COPYRIGHT = (c) 1995-2021 Angband contributors
+PROGNAME = MITZEband
 
 HEADERS = \
     h-basic.h \

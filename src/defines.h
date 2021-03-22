@@ -13,13 +13,13 @@
 /*
  * Name of the version/variant
  */
-#define VERSION_NAME "FrogComposband"
+#define VERSION_NAME "MITZEband"
 
 
-#define VER_MAJOR 7
-#define VER_MINOR 1
-#define VER_PATCH "salmiak"
-#define VER_EXTRA 3
+#define VER_MAJOR 0
+#define VER_MINOR 0
+#define VER_PATCH "official"
+#define VER_EXTRA 0
 #define VERSION_IS_DEVELOPMENT (TRUE)
 
 #define GAME_MODE_BEGINNER  0

@@ -2744,7 +2744,7 @@ void py_display_character_sheet(doc_ptr doc)
 {
     _add_html_header(doc);
 
-    doc_insert(doc, "<style:wide>  [FrogComposband <$:version> Character Dump]\n");
+    doc_insert(doc, "<style:wide>  [MITZEband <$:version> Character Dump]\n");
     if (p_ptr->total_winner)
         doc_insert(doc, "              <color:B>***WINNER***</color>\n");
     else if (p_ptr->is_dead)

@@ -1868,9 +1868,9 @@ bool do_riding(bool force)
              case 1: { msg_print("In your dreams."); break; }
              case 2: 
              case 3: { msg_print("No can do."); break; }
-             case 4: { msg_print("What game do you think you're playing, Leisure Suit Larry?"); break; }
-             case 5: { msg_print("What game do you think you're playing, Frogspawn?"); break; }
-             default: { msg_print("Feature turned off due to the controversy aroused by the release of FrogComposband 6.9.cream."); break; }
+             case 4: { msg_print("Whoa now, this ain't no Leisure Suit Larry game you're playing here!"); break; }
+             case 5: { msg_print("What do you think you're playing? Frogspawn?"); break; }
+             default: { msg_print("Hey! This game isn't rated for that!"); break; }
             }
             return FALSE;
         }
