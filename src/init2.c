@@ -259,46 +259,48 @@ bool dir_exists(const char *path)
 #ifdef HAVE_STAT
 bool dir_create(const char *path)
 {
-    const char *ptr;
-    char buf[512];
+	const char *ptr;
+	char buf[512];
 
-    /* If the directory already exists then we're done */
-    if (dir_exists(path)) return TRUE;
+	/* If the directory already exists then we're done */
+	if (dir_exists(path)) return TRUE;
 
-    #ifdef WINDOWS
-    /* If we're on windows, we need to skip past the "C:" part. */
-    if (isalpha(path[0]) && path[1] == ':') path += 2;
-    #endif
+	#ifdef WINDOWS
+	/* If we're on windows, we need to skip past the "C:" part. */
+	if (isalpha(path[0]) && path[1] == ':') path += 2;
+	#endif
 
-    /* Iterate through the path looking for path segements. At each step,
-     * create the path segment if it doesn't already exist. */
-    for (ptr = path; *ptr; ptr++) {
-        if (*ptr == PATH_SEPC) {
-            /* Find the length of the parent path string */
-            size_t len = (size_t)(ptr - path);
+	/* Iterate through the path looking for path segements. At each step,
+	* create the path segment if it doesn't already exist. */
+	for (ptr = path; *ptr; ptr++)
+	{
+		if (*ptr == PATH_SEPC)
+		{
+			/* Find the length of the parent path string */
+			size_t len = (size_t)(ptr - path);
 
-            /* Skip the initial slash */
-            if (len == 0) continue;
+			/* Skip the initial slash */
+			if (len == 0) continue;
 
-            /* If this is a duplicate path separator, continue */
-            if (*(ptr - 1) == PATH_SEPC) continue;
+			/* If this is a duplicate path separator, continue */
+			if (*(ptr - 1) == PATH_SEPC) continue;
 
-            /* We can't handle really big filenames */
-            if (len - 1 > 512) return FALSE;
+			/* We can't handle really big filenames */
+			if (len - 1 > 512) return FALSE;
 
-            /* Create the parent path string, plus null-padding */
-            my_strcpy(buf, path, len + 1);
+			/* Create the parent path string, plus null-padding */
+			my_strcpy(buf, path, len + 1);
 
-            /* Skip if the parent exists */
-            if (dir_exists(buf)) continue;
+			/* Skip if the parent exists */
+			if (dir_exists(buf)) continue;
 
-            /* The parent doesn't exist, so create it or fail */
+			/* The parent doesn't exist, so create it or fail */
 			if (my_mkdir(buf, 0755))
 			{
 				return FALSE;
 			}
-        }
-    }
+		}
+	}
 	if (!my_mkdir(path, 0755))
 	{
 		return TRUE;
