@@ -293,18 +293,13 @@ bool dir_create(const char *path)
             if (dir_exists(buf)) continue;
 
             /* The parent doesn't exist, so create it or fail */
-			my_mkdir(buf, 0755);
-			if ( dir_exists(buf) ) 
-			{
-				return TRUE;
-			}
-			else
+			if (my_mkdir(buf, 0755))
 			{
 				return FALSE;
 			}
         }
     }
-	if ( dir_exists(path) )
+	if (!my_mkdir(path, 0755))
 	{
 		return TRUE;
 	}
