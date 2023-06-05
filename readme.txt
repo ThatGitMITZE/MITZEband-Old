@@ -4,6 +4,8 @@
     event shall the MITZEband author(s) owe you a new keyboard, or
     be liable to you for any other direct, indirect, punitive, magical
     or other injuries or damages of any nature whatsoever.
+    
+    Also fuck you Omni.
 
 ----- How to install -----
 
